@@ -22,7 +22,7 @@ from ..forms import (
 )
 from ..mixins import ProjectImportMixin
 from ..models import Project, Visibility
-from ..utils import filter_tasks_or_views_for_project
+from ..sync import filter_tasks_or_views_for_project
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 import pytest
 
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
 
 
 @pytest.mark.django_db

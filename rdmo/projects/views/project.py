@@ -20,7 +20,8 @@ from rdmo.questions.models import Catalog
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
-from ..utils import filter_tasks_or_views_for_project, get_upload_accept
+from ..sync import filter_tasks_or_views_for_project
+from ..utils import get_upload_accept
 
 logger = logging.getLogger(__name__)
 

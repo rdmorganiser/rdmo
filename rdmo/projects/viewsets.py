@@ -76,12 +76,12 @@ from .serializers.v1 import (
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
 from .signals import value_created, value_deleted, value_updated
+from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
     compute_set_prefix_from_set_value,
     copy_project,
-    filter_tasks_or_views_for_project,
     get_contact_message,
     get_upload_accept,
     send_contact_message,

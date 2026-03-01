@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from rdmo.views.models import View
 
-from .sync_utils import sync_task_or_view_to_projects
+from ..sync import sync_task_or_view_to_projects
 
 
 @receiver(post_save, sender=View)

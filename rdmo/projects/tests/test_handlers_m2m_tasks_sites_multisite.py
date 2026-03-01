@@ -1,8 +1,8 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_sites_and_tasks
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_sites_and_tasks
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 

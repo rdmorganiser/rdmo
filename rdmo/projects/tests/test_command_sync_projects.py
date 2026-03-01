@@ -2,10 +2,10 @@ import pytest
 
 from django.core.management import call_command
 
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
-from rdmo.projects.tests.helpers.project_sync.assert_cli_output import assert_sync_projects_show_has_output
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.assert_cli_output import assert_sync_projects_show_has_output
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 

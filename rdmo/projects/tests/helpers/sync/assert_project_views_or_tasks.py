@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 
-from rdmo.projects.handlers.sync_utils import get_related_field_name_on_model_for_instance
 from rdmo.projects.models import Project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -18,10 +17,22 @@ def assert_other_projects_unchanged(other_projects, initial_tasks_state):
 def assert_all_projects_are_synced_with_instance_m2m_field(instance: Task | View, field: str) -> None:
     # View/Task .catalogs, .sites or .groups
     instance_field = getattr(instance, field)
-    # Project .catalog, .site or .groups
-    instance_project_field = get_related_field_name_on_model_for_instance(Project, instance_field.model)
-    # Project tasks or views
-    m2m_field = get_related_field_name_on_model_for_instance(Project, instance)
+
+    if field == 'sites':
+        instance_project_field = 'site'
+    elif field == 'catalogs':
+        instance_project_field = 'catalog'
+    elif field == 'groups':
+        instance_project_field = 'groups'
+    else:
+        raise RuntimeError("field needs to be 'site', 'catalog' or 'groups'")
+
+    if isinstance(instance, Task):
+        m2m_field = 'tasks'
+    elif isinstance(instance, View):
+        m2m_field = 'views'
+    else:
+        raise RuntimeError('instance needs to be a Task or View')
 
     for project in Project.objects.all():
         # Project tasks or views

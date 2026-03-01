@@ -14,7 +14,7 @@ from rdmo.views.models import View
 from ..forms import ProjectForm
 from ..mixins import ProjectImportMixin
 from ..models import Membership, Project
-from ..utils import filter_tasks_or_views_for_project
+from ..sync import filter_tasks_or_views_for_project
 
 logger = logging.getLogger(__name__)
 
