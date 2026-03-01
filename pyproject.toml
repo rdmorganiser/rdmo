@@ -80,7 +80,7 @@ allauth = [
 dev = [
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
-  "setuptools>=73,<81",
+  "setuptools>=73,<83",
 ]
 gunicorn = [
   "gunicorn>=23.0,<24.0",
