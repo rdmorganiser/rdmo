@@ -76,12 +76,12 @@ from .serializers.v1 import (
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
 from .signals import value_created, value_deleted, value_updated
+from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
     compute_set_prefix_from_set_value,
     copy_project,
-    filter_tasks_or_views_for_project,
     get_contact_message,
     get_upload_accept,
     send_contact_message,
@@ -406,17 +406,16 @@ class ProjectViewSet(ModelViewSet):
         membership = Membership(project=project, user=self.request.user, role='owner')
         membership.save()
 
-
         # add all tasks to project
         if self.request.data.get('tasks') is None:
             if not settings.PROJECT_TASKS_SYNC:
-                for task in filter_tasks_or_views_for_project(Task, project).filter_availability(self.request.user):
+                for task in filter_tasks_or_views_for_project(Task, project):
                     project.tasks.add(task)
 
         if self.request.data.get('views') is None:
             # add all views to project
             if not settings.PROJECT_VIEWS_SYNC:
-                for view in filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user):
+                for view in filter_tasks_or_views_for_project(View, project):
                     project.views.add(view)
 
 

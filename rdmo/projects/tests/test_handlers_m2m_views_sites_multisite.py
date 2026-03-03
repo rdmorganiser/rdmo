@@ -1,18 +1,16 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_sites_and_views
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_sites_and_views
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
-pytestmark = pytest.mark.usefixtures("enable_multisite")
-
 
 @pytest.mark.django_db
-def test_project_views_sync_when_updating_view_sites_multisite(settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
-    assert settings.MULTISITE is True
+def test_project_views_sync_when_updating_view_sites_multisite(settings):
+    settings.PROJECT_VIEWS_SYNC = True
+    settings.MULTISITE = True
 
     P, V, S = arrange_projects_sites_and_views()
     # === Initial state ===

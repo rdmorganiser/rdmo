@@ -2,6 +2,7 @@ from rdmo.projects.models import Project
 
 PROJECT_SHOW_TEMPLATE = 'Project "{}" [id={}]:'
 
+
 def assert_sync_projects_show_has_output(out_lines: list[str]):
     """
     Assert that all expected project show headers and required '- Tasks:' and '- Views:' markers

@@ -1,15 +1,15 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_groups_and_tasks
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_groups_and_tasks
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_task_groups(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_tasks_sync_when_updating_task_groups(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     P, T, G = arrange_projects_groups_and_tasks()
     # === Initial state ===

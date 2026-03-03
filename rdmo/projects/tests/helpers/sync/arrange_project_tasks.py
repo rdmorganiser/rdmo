@@ -16,9 +16,9 @@ T_uri = "http://example.com/test/tasks/sync{}"
 def _suppress_project_task_sync():
     """Silence automatic project/task sync during test setup."""
     with (
-        patch('rdmo.projects.handlers.sync_utils.sync_task_or_view_to_projects'),
+        patch('rdmo.projects.sync.sync_task_or_view_to_projects'),
         patch('rdmo.projects.handlers.task_changed.sync_task_or_view_to_projects')
-        ):
+    ):
         yield
 
 def arrange_projects_catalogs_and_tasks():
@@ -107,6 +107,7 @@ def arrange_projects_sites_and_tasks():
             P[n].tasks.set([T[n]])
 
     return P, T, S
+
 
 def arrange_projects_groups_and_tasks():
     with _suppress_project_task_sync():

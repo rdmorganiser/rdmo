@@ -3,9 +3,10 @@ import re
 import pytest
 
 from django.contrib.auth.models import Group, User
-from django.urls import reverse
+from django.urls import resolve, reverse
 
 from rdmo.questions.models import Catalog
+from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..forms import CatalogChoiceField
@@ -65,7 +66,8 @@ project_id = 1
 parent_id = 3
 parent_ancestors = [2, 3]
 catalog_id = 1
-
+view_id = 1
+task_id = 1
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -287,6 +289,66 @@ def test_project_create_parent_post(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('sync', [True, False])
+def test_project_create_post_tasks(db, client, settings, username, password, sync):
+    settings.PROJECT_TASKS_SYNC = sync
+
+    client.login(username=username, password=password)
+
+    task = Task.objects.get(id=task_id)
+    task.available = False
+    task.save()
+
+    url = reverse('project_create')
+    data = {
+        'title': 'A new project',
+        'description': 'Some description',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    if password:
+        project = Project.objects.get(id=resolve(response.url).kwargs.get('pk'))
+
+        if username in ('editor', 'reviewer', 'api'):
+            available_tasks = Task.objects.filter(sites=site_id)
+        else:
+            available_tasks = Task.objects.filter(sites=site_id).exclude(id=task_id)
+
+        assert {t.id for t in available_tasks} == {t.id for t in project.tasks.all()}
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('sync', [True, False])
+def test_project_create_post_views(db, client, settings, username, password, sync):
+    settings.PROJECT_VIEWS_SYNC = sync
+
+    client.login(username=username, password=password)
+
+    view = View.objects.get(id=view_id)
+    view.available = False
+    view.save()
+
+    url = reverse('project_create')
+    data = {
+        'title': 'A new project',
+        'description': 'Some description',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    if password:
+        project = Project.objects.get(id=resolve(response.url).kwargs.get('pk'))
+
+        if username in ('editor', 'reviewer', 'api'):
+            available_views = View.objects.filter(sites=site_id)
+        else:
+            available_views = View.objects.filter(sites=site_id).exclude(id=view_id)
+
+        assert {v.id for v in available_views} == {v.id for v in project.views.all()}
+
+
+@pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_project_update_get(db, client, username, password, project_id):
     client.login(username=username, password=password)
@@ -334,8 +396,6 @@ def test_project_update_post(db, client, username, password, project_id):
 def test_project_update_post_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
-
-    print(project, project_id, Project.objects.get(pk=parent_id))
 
     url = reverse('project_update', args=[project_id])
     data = {
@@ -466,8 +526,9 @@ def test_project_update_tasks_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_tasks_get_not_allowed(db, client, settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_update_tasks_get_not_allowed(db, client, settings):
+    settings.PROJECT_TASKS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -502,8 +563,9 @@ def test_project_update_tasks_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).tasks.values('id')) == list(project.tasks.values('id'))
 
 
-def test_project_update_tasks_post_not_allowed(db, client, settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_update_tasks_post_not_allowed(db, client, settings):
+    settings.PROJECT_TASKS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_tasks', args=[project_id])
@@ -532,8 +594,9 @@ def test_project_update_views_get(db, client, settings, username, password, proj
             assert response.status_code == 302
 
 
-def test_project_update_views_get_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_update_views_get_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_views', args=[project_id])
@@ -569,8 +632,9 @@ def test_project_update_views_post(db, client, settings, username, password, pro
         assert list(Project.objects.get(pk=project_id).views.values('id')) == list(project.views.values('id'))
 
 
-def test_project_update_views_post_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_update_views_post_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
+
     client.login(username='owner', password='owner')
 
     url = reverse('project_update_views', args=[project_id])

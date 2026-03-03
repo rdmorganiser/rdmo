@@ -20,7 +20,8 @@ from rdmo.questions.models import Catalog
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
-from ..utils import filter_tasks_or_views_for_project, get_upload_accept
+from ..sync import filter_tasks_or_views_for_project
+from ..utils import get_upload_accept
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['tasks_available'] = project.tasks.exists()
         else:
             context['tasks_available'] = (
-                filter_tasks_or_views_for_project(Task, project).filter_availability(self.request.user).exists()
+                filter_tasks_or_views_for_project(Task, project).exists()
             )
 
         if settings.PROJECT_VIEWS_SYNC:
@@ -75,7 +76,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['views_available'] = project.views.exists()
         else:
             context['views_available'] = (
-                filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user).exists()
+                filter_tasks_or_views_for_project(View, project).exists()
             )
 
         ancestors_import = []

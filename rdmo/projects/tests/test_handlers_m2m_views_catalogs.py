@@ -1,15 +1,15 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
 
 @pytest.mark.django_db
-def test_project_views_sync_when_updating_catalogs_on_a_view(settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_views_sync_when_updating_catalogs_on_a_view(settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     P, C, V = arrange_projects_catalogs_and_views()
     # === Initial state ===

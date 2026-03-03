@@ -1,4 +1,3 @@
-
 P_TITLE = "Sync P{}"  # title of newly created test projects
 G_title = "Sync G{}"
 U_title = "Sync U{}"
