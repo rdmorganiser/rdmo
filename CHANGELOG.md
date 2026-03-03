@@ -1,5 +1,26 @@
 # Changelog 📔
 
+## [RDMO 2.4.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.1) (March 15, 2026)
+
+### Breaking changes ⚠️
+
+* Plugins should now use the signals in `rdmo/projects/signals.py` instead of `post_save` of the `Value` model, since
+  the latter will trigger when copying projects or creating snapshots, which leads to unintended creation of
+  `Value` instances (see https://github.com/rdmorganiser/rdmo-plugins-orcid/issues/2).
+
+### Bug fixes 🐛
+
+* Fix filtering of tasks and views when creating new projects and refactor sync functionality (#1518).
+* Fix removal of blank inputs in the interview (#1532).
+* Fix manual input of dates in the date picker widget in the interview and the filter in the projects table (#1539).
+* Fix catalog export template.
+
+**Milestones**:
+[2.4.1](https://github.com/rdmorganiser/rdmo/milestone/27?closed=1),
+
+**Commit history**: [2.3.2...2.4.0](https://github.com/rdmorganiser/rdmo/compare/2.3.2...2.4.0)
+
+
 ## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (December 15, 2025)
 
 ### Main improvements ⭐
