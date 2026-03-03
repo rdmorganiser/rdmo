@@ -49,8 +49,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   }
 
   const handleRawChange = useDebouncedCallback((event) => {
-    const value = event.target.value
-    const date = parse(value, getDateFormat(), new Date())
+    const date = parse(event.target.value, getDateFormat(), new Date())
     if (isValid(date)) {
       handleChange(date)
     }
