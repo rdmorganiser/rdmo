@@ -68,18 +68,6 @@ const ProjectForm = ({
     [catalogs]
   )
 
-  const mergeParentOptions = (prevOptions, newOptions) => {
-    const merged = [...prevOptions]
-
-    newOptions.forEach(opt => {
-      if (!merged.some(p => p.value === opt.value)) {
-        merged.push(opt)
-      }
-    })
-
-    return merged
-  }
-
   const saveProject = (newFormData) => {
     if (mode === 'create') {
       return dispatch(createProject(newFormData))
@@ -127,7 +115,7 @@ const ProjectForm = ({
             value: project.id,
             label: project.title
           }))
-        setParentOptions(prev => mergeParentOptions(prev, options))
+        setParentOptions(options)
         callback(options)
       })
   }, 500)
@@ -139,7 +127,13 @@ const ProjectForm = ({
         const options = results
           .filter(p => !project?.id || p.id !== project?.id)
           .map(p => ({ value: p.id, label: p.title }))
-        setParentOptions(prev => mergeParentOptions(prev, options))
+        if (project?.parent && !options.some(opt => opt.value === formData.parent)) {
+          options.unshift({
+            value: project.parent,
+            label: project.parent_title
+          })
+        }
+        setParentOptions(options)
       })
     }
   }
