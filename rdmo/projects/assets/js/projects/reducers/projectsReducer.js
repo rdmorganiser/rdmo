@@ -31,8 +31,8 @@ export default function projectsReducer(state = initialState, action) {
       const normalized = {
         ...action.project,
         last_changed: action.project.last_changed ?? action.project.updated,
-        ancestors: action.project.ancestors || [{ id: action.project.id, title: action.project.title }],
-        current_role: action.project.current_role || 'owner'
+        // ancestors: action.project.ancestors || [{ id: action.project.id, title: action.project.title }],
+        // current_role: action.project.current_role || 'owner'
       }
       return {
         ...state,

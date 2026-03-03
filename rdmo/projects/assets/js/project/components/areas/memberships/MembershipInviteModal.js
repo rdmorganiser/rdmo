@@ -8,7 +8,6 @@ import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
 import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
-import { roleOptions } from '../../../../common/constants/roles'
 
 const initialForm = { lookup: '', role: 'author' }
 
@@ -18,6 +17,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
   const { project } = useSelector((state) => state.project.project) || {}
   const errors = useFieldErrors()
   const perms = project?.permissions || {}
+  const roleOptions = useSelector((state) => state.roles?.roles) || []
 
   const [formData, setFormData] = useState(initialForm)
   const [silently, setSilently] = useState(false)
@@ -49,7 +49,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
       title={gettext('Invite member to project')}
       show={show}
       onClose={onClose}
-      onSubmit={() => {}} // render the Modal's submit button
+      onSubmit={() => { }} // render the Modal's submit button
       submitLabel={gettext('Invite member')}
       submitProps={{ type: 'submit', form: 'invite-member-form' }}
       size="modal-lg"
