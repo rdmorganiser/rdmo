@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
-import { formatISO, set } from 'date-fns'
+import { parse, formatISO, set, isValid } from 'date-fns'
 
 import { Link, Select } from 'rdmo/core/assets/js/components'
 import useDatePicker from '../../hooks/useDatePicker'
@@ -71,6 +71,14 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
     projectsActions.fetchProjects()
   }
 
+  const handleDateChangeRaw = (type, position, event) => {
+    const value = event.target.value
+    const date = parse(value, dateFormat, new Date())
+    if (isValid(date)) {
+      handleDateChange(type, position, date)
+    }
+  }
+
   return (
     <>
       {showFilters && (
@@ -103,6 +111,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                           isClearable
                           locale={getLocale()}
                           onChange={date => handleDateChange('created', 'start', date)}
+                          onChangeRaw={event => handleDateChangeRaw('created', 'start', event)}
                           placeholderText={gettext('Select start date')}
                           selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
                         />
@@ -116,6 +125,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                           isClearable
                           locale={getLocale()}
                           onChange={date => handleDateChange('created', 'end', date)}
+                          onChangeRaw={event => handleDateChangeRaw('created', 'end', event)}
                           placeholderText={gettext('Select end date')}
                           selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
                         />
@@ -137,6 +147,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                         isClearable
                         locale={getLocale()}
                         onChange={date => handleDateChange('last_changed', 'start', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed', 'start', event)}
                         placeholderText={gettext('Select start date')}
                         selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
                       />
@@ -150,6 +161,7 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                         isClearable
                         locale={getLocale()}
                         onChange={date => handleDateChange('last_changed', 'end', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed', 'end', event)}
                         placeholderText={gettext('Select end date')}
                         selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
                       />
