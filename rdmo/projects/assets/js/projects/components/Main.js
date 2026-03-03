@@ -15,7 +15,6 @@ import ProjectForm from '../../project/components/areas/information/ProjectForm'
 import ProjectDeleteModal from '../../project/components/areas/information/ProjectDeleteModal'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
-import { roleOptions } from '../../common/constants/roles'
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -209,17 +208,27 @@ const Main = () => {
     : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
 
   const columnWidths = myProjects
-    ? ['40%', '18%', '18%', '18%', '6%']
+    ? ['40%', '16%', '20%', '18%', '6%']
     : ['30%', '16%', '16%', '16%', '16%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const rolesString = roleOptions.find(option => option.value == row.current_role)?.label || ''
+      const highestRoleString = (row.highest_role && row.highest_role.project_id != row.id) ? (
+        <>
+          {row.highest_role.role_display} {gettext('of')}{' '}
+          <a href={`${baseUrl}/project/${row.highest_role.project_id}`}>
+            {row.highest_role.project_title}
+          </a>
+        </>
+      ) : null
 
       return <>
         {
-          rolesString && <div>{rolesString}</div>
+          row.current_role && <div>{row.current_role.role_display}</div>
+        }
+        {
+          row.highest_role && <div className="text-secondary">{highestRoleString}</div>
         }
         {
           row.visibility && <div className="text-secondary">{row.visibility}</div>
@@ -240,17 +249,9 @@ const Main = () => {
     created: content => useFormattedDateTime(content, language),
     last_changed: content => useFormattedDateTime(content, language),
     actions: (_content, row) => {
-      // const rowUrl = `${baseUrl}/projects/${row.id}`
-      // const params = `?next=${window.location.pathname}`
       const perms = row.permissions || {}
       return (
         <div className="d-flex align-items-center gap-1">
-          {/* <Link
-            href={`${rowUrl}/copy/`}
-            className="bi bi-copy"
-            title={labels.copy}
-            onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
-          /> */}
           <Link
             className="bi bi-copy"
             title={labels.copy}
@@ -279,14 +280,6 @@ const Main = () => {
               }}
             />
           }
-          {/* {perms.can_delete_project &&
-            <Link
-              href={`${rowUrl}/delete/`}
-              className="bi bi-trash"
-              title={labels.delete}
-              onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
-            />
-          } */}
         </div>
       )
     }
