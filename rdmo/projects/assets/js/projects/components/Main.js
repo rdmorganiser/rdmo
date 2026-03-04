@@ -392,6 +392,7 @@ const Main = () => {
           </Modal>
           <ProjectDeleteModal
             project={selectedProject}
+            id={selectedProject?.id}
             show={showDelete}
             onClose={handleCloseDelete}
             onDeleted={() => dispatch(projectsActions.refetchLoadedPages())}
