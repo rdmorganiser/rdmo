@@ -18,8 +18,8 @@ const ProjectDeleteModal = ({
 
   const handleDelete = () => {
     const action = id
-      ? deleteProject(id)   // list case
-      : deleteProject()     // old behaviour (uses meta projectId)
+      ? deleteProject(id)
+      : deleteProject()
 
     return dispatch(action).then(() => {
       onClose()
