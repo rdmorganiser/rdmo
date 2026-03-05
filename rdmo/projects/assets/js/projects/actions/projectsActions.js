@@ -94,8 +94,6 @@ export function copyProject(id, data) {
   return function (dispatch) {
     dispatch(addToPending('copyProject'))
     dispatch({ type: COPY_PROJECT_INIT })
-    // remove id from original project's formData
-    delete data.id
 
     return ProjectsApi.copyProject(id, data)
       .then(project => {
