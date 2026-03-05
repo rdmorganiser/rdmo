@@ -16,6 +16,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const dispatch = useDispatch()
 
   const config = useSelector(state => state.config)
+  const roleOptions = useSelector(state => state.roles?.roles) || []
 
   const {
     dateRange,
@@ -30,6 +31,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
 
   const resetAllFilters = () => {
     dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(configActions.deleteConfig('params.role'))
     dispatch(configActions.deleteConfig('params.created_after'))
     setStartDate('created', null)
     dispatch(configActions.deleteConfig('params.created_before'))
@@ -54,6 +56,12 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const selectedCatalog = get(config, 'params.catalog', '')
   const updateCatalogFilter = (value) => {
     value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
+    dispatch(projectsActions.fetchProjects())
+  }
+
+  const selectedRole = get(config, 'params.role', '')
+  const updateRoleFilter = (value) => {
+    value ? dispatch(configActions.updateConfig('params.role', value)) : dispatch(configActions.deleteConfig('params.role'))
     dispatch(projectsActions.fetchProjects())
   }
 
@@ -84,13 +92,22 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
       {showFilters && (
         <div className="mt-2">
           <div className="row">
-            <div className={`col-md-${isAdminOrSiteManager ? 4 : 8}`}>
+            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
               <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
               <Select
                 onChange={updateCatalogFilter}
                 options={catalogOptions ?? []}
                 placeholder={gettext('Select catalog')}
                 value={selectedCatalog}
+              />
+            </div>
+            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
+              <label className="form-label text-secondary">{gettext('Filter by role')}</label>
+              <Select
+                onChange={updateRoleFilter}
+                options={roleOptions}
+                placeholder={gettext('Select role')}
+                value={selectedRole}
               />
             </div>
             {isAdminOrSiteManager && (
