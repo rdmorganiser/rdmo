@@ -1,11 +1,19 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { fetchElement } from '../../actions/elementActions'
 
 import { ExtendLink, CodeLink } from '../common/Links'
 
 import useBool from '../../hooks/useBool'
 
-const AttributeInfo = ({ attribute, elements, elementActions }) => {
+const AttributeInfo = ({ attribute }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendAttributes, toggleAttributes] = useBool(false)
   const [extendConditions, toggleConditions] = useBool(false)
@@ -21,110 +29,103 @@ const AttributeInfo = ({ attribute, elements, elementActions }) => {
   const questions = elements.questions.filter(e => attribute.questions.includes(e.id))
   const tasks = elements.tasks.filter(e => attribute.tasks.includes(e.id))
 
-  const fetchAttribute = (attribute) => elementActions.fetchElement('attributes', attribute.id)
-  const fetchCondition = (condition) => elementActions.fetchElement('conditions', condition.id)
-  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
-  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
-  const fetchQuestion = (question) => elementActions.fetchElement('questions', question.id)
-  const fetchTask = (task) => elementActions.fetchElement('tasks', task.id)
+  const fetchAttribute = (attribute) => dispatch(fetchElement('attributes', attribute.id))
+  const fetchCondition = (condition) => dispatch(fetchElement('conditions', condition.id))
+  const fetchPage = (page) => dispatch(fetchElement('pages', page.id))
+  const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
+  const fetchQuestion = (question) => dispatch(fetchElement('questions', question.id))
+  const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
-    <div className="element-info">
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used for <b>%s values</b> in <b>one project</b>.',
-            'This attribute is used for <b>%s values</b> in <b>%s projects</b>.',
-            attribute.projects_count), [attribute.values_count, attribute.projects_count])}} />
+    <div className="mb-2">
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used for <b>%s values</b> in <b>one project</b>.',
+          'This attribute is used for <b>%s values</b> in <b>%s projects</b>.',
+          attribute.projects_count), [attribute.values_count, attribute.projects_count])} />
       </p>
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute has <b>one descendant</b>.',
-            'This attribute has <b>%s descendants</b>.',
-            attributes.length
-          ), [attributes.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute has <b>one descendant</b>.',
+          'This attribute has <b>%s descendants</b>.',
+          attributes.length
+        ), [attributes.length])} />
         {attributes.length > 0 && <ExtendLink extend={extendAttributes} onClick={toggleAttributes} />}
       </p>
       {
         extendAttributes && attributes.map((attribute, index) => (
-          <p key={index}>
-            <CodeLink className="code-domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one condition</b>.',
-            'This attribute is used in <b>%s conditions</b>.',
-            conditions.length), [conditions.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one condition</b>.',
+          'This attribute is used in <b>%s conditions</b>.',
+          conditions.length), [conditions.length])} />
         {conditions.length > 0 && <ExtendLink extend={extendConditions} onClick={toggleConditions} />}
       </p>
       {
         extendConditions && conditions.map((condition, index) => (
           <p key={index}>
-            <CodeLink className="code-conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
+            <CodeLink type="conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one page</b>.',
-            'This attribute is used in <b>%s pages</b>.',
-            pages.length), [pages.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one page</b>.',
+          'This attribute is used in <b>%s pages</b>.',
+          pages.length), [pages.length])} />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
         extendPages && pages.map((page, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one questionset</b>.',
-            'This attribute is used in <b>%s questionsets</b>.',
-            questionsets.length), [questionsets.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one questionset</b>.',
+          'This attribute is used in <b>%s questionsets</b>.',
+          questionsets.length), [questionsets.length])} />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />}
       </p>
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one question</b>.',
-            'This attribute is used in <b>%s questions</b>.',
-            questions.length), [questions.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one question</b>.',
+          'This attribute is used in <b>%s questions</b>.',
+          questions.length), [questions.length])} />
         {questions.length > 0 && <ExtendLink extend={extendQuestions} onClick={toggleQuestions} />}
       </p>
       {
         extendQuestions && questions.map((question, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
-            'This attribute is used in <b>one task</b>.',
-            'This attribute is used in <b>%s tasks</b>.',
-            tasks.length), [tasks.length])}} />
+      <p className="mb-1">
+        <Html html={interpolate(ngettext(
+          'This attribute is used in <b>one task</b>.',
+          'This attribute is used in <b>%s tasks</b>.',
+          tasks.length), [tasks.length])} />
         {tasks.length > 0 && <ExtendLink extend={extendTasks} onClick={toggleTasks} />}
       </p>
       {
         extendTasks && tasks.map((task, index) => (
-          <p key={index}>
-            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))
       }
@@ -133,9 +134,7 @@ const AttributeInfo = ({ attribute, elements, elementActions }) => {
 }
 
 AttributeInfo.propTypes = {
-  attribute: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  attribute: PropTypes.object.isRequired
 }
 
 export default AttributeInfo

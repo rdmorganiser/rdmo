@@ -1,10 +1,12 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Tabs, Tab } from 'react-bootstrap'
-import get from 'lodash/get'
+
+import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import CodeMirror from './common/CodeMirror'
 import Checkbox from './common/Checkbox'
+import LanguageTabs from './common/LanguageTabs'
 import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
@@ -19,108 +21,97 @@ import DeleteViewModal from '../modals/DeleteViewModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditView = ({ config, view, elements, elementActions }) => {
+const EditView = ({ view }) => {
+  const dispatch = useDispatch()
 
-  const { sites, groups } = config
-  const { elementAction, catalogs } = elements
+  const { sites, groups, settings } = useSelector((state) => state.config)
+  const { elementAction, catalogs } = useSelector((state) => state.elements)
 
-  const updateView = (key, value) => elementActions.updateElement(view, {[key]: value})
-  const storeView = (back) => elementActions.storeElement('views', view, elementAction, back)
-  const deleteView = () => elementActions.deleteElement('views', view)
+  const updateView = (key, value) => dispatch(updateElement(view, {[key]: value}))
+  const storeView = (back) => dispatch(storeElement('views', view, elementAction, back))
+  const deleteView = () => dispatch(deleteElement('views', view))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <ViewInfo view={view} elements={elements} />
+  const info = <ViewInfo view={view} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card card-tile">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {view.id ? gettext('Edit view') : gettext('Create view')}
+          </strong>
           <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
-        {
-          view.id ? <>
-            <strong>{gettext('View')}{': '}</strong>
-            <code className="code-views">{view.uri}</code>
-          </> : <strong>{gettext('Create view')}</strong>
-        }
       </div>
 
       {
-        view.id && <div className="panel-body panel-border">
+        view.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={view} field="uri_prefix"
-                       onChange={updateView} />
+            <UriPrefix element={view} field="uri_prefix" onChange={updateView} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={view} field="uri_path"
-                  onChange={updateView} />
+            <Text element={view} field="uri_path" onChange={updateView} />
           </div>
         </div>
 
-        <Textarea config={config} element={view} field="comment"
-                  rows={4} onChange={updateView} />
+        <Textarea element={view} field="comment" rows={4} onChange={updateView} />
 
         <div className="row">
           <div className="col-sm-4">
-            <Checkbox config={config} element={view} field="locked"
-                      onChange={updateView} />
+            <Checkbox element={view} field="locked" onChange={updateView} />
           </div>
           <div className="col-sm-4">
-            <Checkbox config={config} element={view} field="available"
-                      onChange={updateView} />
+            <Checkbox element={view} field="available" onChange={updateView} />
           </div>
           <div className="col-sm-4">
-            <Number config={config} element={view} field="order"
-                    onChange={updateView} />
+            <Number element={view} field="order" onChange={updateView} />
           </div>
         </div>
 
-        <Tabs id="#view-tabs" defaultActiveKey={0} animation={false}>
-          {
-            config.settings && config.settings.languages.map(([lang_code, lang], index) => (
-              <Tab className="pt-10" key={index} eventKey={index} title={lang}>
-                <Text config={config} element={view} field={`title_${lang_code }`}
-                      onChange={updateView} />
-                <Textarea config={config} element={view} field={`help_${lang_code }`}
-                          rows={8} onChange={updateView} />
-              </Tab>
-            ))
-          }
-        </Tabs>
+        <LanguageTabs render={(langCode) => (
+          <>
+            <Text element={view} field={`title_${langCode}`} onChange={updateView} />
+            <Textarea element={view} field={`help_${langCode}`} rows={8} onChange={updateView} className="mb-0"/>
+          </>
+        )} />
 
-        <Select config={config} element={view} field="catalogs"
-                options={catalogs} onChange={updateView} isMulti />
+        <Select element={view} field="catalogs" options={catalogs} onChange={updateView} isMulti />
 
-        {get(config, 'settings.groups') && <Select config={config} element={view} field="groups"
-                                                   options={groups} onChange={updateView} isMulti />}
+        {
+          settings.groups && (
+            <Select element={view} field="groups" options={groups} onChange={updateView} isMulti />
+          )
+        }
+        {
+          settings.multisite && (
+            <>
+              <Select element={view} field="sites" options={sites} onChange={updateView} isMulti />
+              <Select element={view} field="editors" options={sites} onChange={updateView} isMulti />
+            </>
+          )
+        }
 
-        {get(config, 'settings.multisite') && <Select config={config} element={view} field="sites"
-                                                      options={sites} onChange={updateView} isMulti />}
-
-        {get(config, 'settings.multisite') && <Select config={config} element={view} field="editors"
-                                                      options={sites} onChange={updateView} isMulti />}
-
-        <CodeMirror config={config} element={view} field="template"
-                    onChange={updateView} />
+        <CodeMirror element={view} field="template" onChange={updateView} />
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {view.id && <DeleteButton onClick={openDeleteModal} disabled={view.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeView} disabled={view.read_only} back={true}/>
         </div>
-        {view.id && <DeleteButton onClick={openDeleteModal} disabled={view.read_only} />}
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}
@@ -130,10 +121,7 @@ const EditView = ({ config, view, elements, elementActions }) => {
 }
 
 EditView.propTypes = {
-  config: PropTypes.object.isRequired,
-  view: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  view: PropTypes.object.isRequired
 }
 
 export default EditView

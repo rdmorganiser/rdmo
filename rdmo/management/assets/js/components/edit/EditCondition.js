@@ -1,6 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
@@ -16,123 +20,118 @@ import DeleteConditionModal from '../modals/DeleteConditionModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditCondition = ({ config, condition, elements, elementActions }) => {
+const EditCondition = ({ condition }) => {
+  const dispatch = useDispatch()
 
-  const { sites, relations } = config
-  const { elementAction, parent, attributes, options } = elements
+  const { sites, relations, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, attributes, options } = useSelector((state) => state.elements)
 
-  const updateCondition = (key, value) => elementActions.updateElement(condition, {[key]: value})
-  const storeCondition = (back) => elementActions.storeElement('conditions', condition, elementAction, back)
-  const deleteCondition = () => elementActions.deleteElement('conditions', condition)
+  const updateCondition = (key, value) => dispatch(updateElement(condition, {[key]: value}))
+  const storeCondition = (back) => dispatch(storeElement('conditions', condition, elementAction, back))
+  const deleteCondition = () => dispatch(deleteElement('conditions', condition))
 
-  const editAttribute = (attribute) => elementActions.fetchElement('attributes', attribute)
-  const createAttribute = () => elementActions.createElement('attributes', { condition })
+  const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
+  const createAttribute = () => dispatch(createElement('attributes', { condition }))
 
-  const editOption = (option) => elementActions.fetchElement('options', option)
+  const editOption = (option) => dispatch(fetchElement('options', option))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <ConditionInfo condition={condition} elements={elements} elementActions={elementActions} />
+  const info = <ConditionInfo condition={condition} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card card-tile">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {condition.id ? gettext('Edit condition') : gettext('Create condition')}
+          </strong>
           <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {
-          condition.id ? <>
-            <strong>{gettext('Condition')}{': '}</strong>
-            <code className="code-conditions">{condition.uri}</code>
-          </> : <strong>{gettext('Create condition')}</strong>
-        }
       </div>
 
       {
-        parent && parent.optionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the option set <code class="code-options">%s</code>.'), [parent.optionset.uri])
-          }} />
+        parent && parent.optionset && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This condition will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])} />
         </div>
       }
       {
-        parent && parent.page && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the page <code class="code-questions">%s</code>.'), [parent.page.uri])
-          }} />
+        parent && parent.page && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This condition will be added to the page <code class="code-questions">%s</code>.'),
+            [parent.page.uri])} />
         </div>
       }
       {
-        parent && parent.questionset && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the question set <code class="code-questions">%s</code>.'), [parent.questionset.uri])
-          }} />
+        parent && parent.questionset && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This condition will be added to the question set <code class="code-questions">%s</code>.'),
+            [parent.questionset.uri])} />
         </div>
       }
       {
-        parent && parent.question && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
-          }} />
+        parent && parent.question && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This condition will be added to the question <code class="code-questions">%s</code>.'),
+            [parent.question.uri])} />
         </div>
       }
       {
-        parent && parent.task && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This condition will be added to the task <code class="code-tasks">%s</code>.'), [parent.task.uri])
-          }} />
+        parent && parent.task && <div className="card-body border-bottom">
+          <Html html={interpolate(gettext(
+            'This condition will be added to the task <code class="code-tasks">%s</code>.'),
+          [parent.task.uri])} />
         </div>
       }
 
       {
-        condition.id && <div className="panel-body panel-border">
+        condition.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={condition} field="uri_prefix"
-                       onChange={updateCondition} />
+            <UriPrefix element={condition} field="uri_prefix" onChange={updateCondition} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={condition} field="uri_path"
-                  onChange={updateCondition} />
+            <Text element={condition} field="uri_path" onChange={updateCondition} />
           </div>
         </div>
 
-        <Textarea config={config} element={condition} field="comment"
-                  rows={4} onChange={updateCondition} />
+        <Textarea element={condition} field="comment" rows={4} onChange={updateCondition} />
 
-        <Checkbox config={config} element={condition} field="locked"
-                  onChange={updateCondition} />
+        <Checkbox element={condition} field="locked" onChange={updateCondition} />
 
-        <Select config={config} element={condition} field="source" createText={gettext('Create new attribute')}
+        <Select element={condition} field="source" createText={gettext('Create new attribute')}
                 options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <Select config={config} element={condition} field="relation"
-                options={relations} onChange={updateCondition} />
+        <Select element={condition} field="relation" options={relations} onChange={updateCondition} />
 
-        <Text config={config} element={condition} field="target_text" onChange={updateCondition} />
+        <Text element={condition} field="target_text" onChange={updateCondition} />
 
-        <Select config={config} element={condition} field="target_option"
-                options={options} onChange={updateCondition} onEdit={editOption} />
+        <Select element={condition} field="target_option" options={options} onChange={updateCondition} onEdit={editOption} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={condition} field="editors"
-                                                      options={sites} onChange={updateCondition} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={condition} field="editors" options={sites} onChange={updateCondition} isMulti />
+          )
+        }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
         </div>
-        {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}
@@ -142,10 +141,7 @@ const EditCondition = ({ config, condition, elements, elementActions }) => {
 }
 
 EditCondition.propTypes = {
-  config: PropTypes.object.isRequired,
-  condition: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  condition: PropTypes.object.isRequired
 }
 
 export default EditCondition

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import ReactSelect from 'react-select'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
@@ -11,18 +12,26 @@ import Link from 'rdmo/core/assets/js/components/Link'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Select = ({ config, element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
+
+const Select = ({ element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
+  const { meta } = useSelector((state) => state.config)
+
   const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
-        warnings = get(element, ['warnings', field]),
+        label = getLabel(element, field, meta),
+        help = getHelp(element, field, meta),
         errors = get(element, ['errors', field])
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
+  const className = classNames('d-flex align-items-center gap-2', {
+    'is-invalid': !isEmpty(errors)
   })
+
+  const selectClassNames = {
+    control: () => classNames('form-control', {
+      'is-invalid': !isEmpty(errors)
+    })
+  }
 
   const selectOptions = options.map(option => ({
     value: option.id,
@@ -31,10 +40,6 @@ const Select = ({ config, element, field, options, createText, isMulti, onChange
 
   const selectValue = isArray(element[field]) ? selectOptions.filter(option => (element[field].includes(option.value)))
                                               : selectOptions.find(option => (option.value == element[field]))
-
-  const styles = onEdit && selectValue ? {
-    container: provided => ({...provided, marginRight: 8 + 12})
-  } : {}
 
   const handleChange = (option) => {
     if (isNil(option)) {
@@ -47,44 +52,42 @@ const Select = ({ config, element, field, options, createText, isMulti, onChange
   }
 
   return (
-    <div className={className}>
-      <div className="mb-5">
+    <div className="mb-3">
+      <div className="mb-2">
         <strong id={id}>{label}</strong>
       </div>
 
-      <div className="select-item">
+      <div className={className}>
+        <div className="flex-grow-1">
+          <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+                       options={selectOptions} value={selectValue} isMulti={isMulti} isClearable={true}
+                       onChange={handleChange} isDisabled={element.read_only} aria-labelledby={id} />
+        </div>
         {
-          onEdit && selectValue && <div className="select-item-options">
-            <Link className="fa fa-pencil" title={gettext('Edit')}
+          onEdit && selectValue && <div>
+            <Link className="bi bi-pencil" title={gettext('Edit')}
                   onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
           </div>
         }
-
-        <ReactSelect classNamePrefix="react-select" className="react-select" isClearable={true}
-                     options={selectOptions} value={selectValue} isMulti={isMulti}
-                     onChange={handleChange} styles={styles} isDisabled={element.read_only} aria-labelledby={id} />
       </div>
-
 
       {
         onCreate &&
-        <button type="button" className="btn btn-success btn-xs mt-10" onClick={onCreate} disabled={isNil(element.id)}
-                title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-          {createText}
-        </button>
+        <div className="mt-2">
+          <button type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
+                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+            {createText}
+          </button>
+        </div>
       }
 
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }
 
 Select.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   options: PropTypes.array,

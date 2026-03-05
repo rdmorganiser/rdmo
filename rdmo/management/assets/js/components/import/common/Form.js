@@ -1,21 +1,28 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import isUndefined from 'lodash/isUndefined'
+
+import { updateElement } from '../../../actions/importActions'
 
 import Key from './Key'
 import UriPath from './UriPath'
 import UriPrefix from './UriPrefix'
 
-const Form = ({ config, element, updateElement }) => {
+const Form = ({ element }) => {
+  const dispatch = useDispatch()
+
+  const handleChange = (key, value) => dispatch(updateElement(element, {[key]: value}))
+
   return (
-    <div className="row mt-10">
+    <div className="row">
       <div className="col-sm-6">
-        <UriPrefix config={config} element={element} onChange={updateElement} />
+        <UriPrefix element={element} onChange={handleChange} />
       </div>
       <div className="col-sm-6">
         {
-          isUndefined(element.uri_path) ? <Key config={config} element={element} onChange={updateElement} />
-                                        : <UriPath config={config} element={element} onChange={updateElement} />
+          isUndefined(element.uri_path) ? <Key element={element} onChange={handleChange} />
+                                        : <UriPath element={element} onChange={handleChange} />
         }
       </div>
     </div>
@@ -23,9 +30,7 @@ const Form = ({ config, element, updateElement }) => {
 }
 
 Form.propTypes = {
-  config: PropTypes.object.isRequired,
-  element: PropTypes.object.isRequired,
-  updateElement: PropTypes.func.isRequired
+  element: PropTypes.object.isRequired
 }
 
 export default Form

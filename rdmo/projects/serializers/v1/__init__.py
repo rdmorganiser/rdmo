@@ -1,16 +1,21 @@
+from collections.abc import Mapping
+from typing import Any
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
+from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
+from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
+from rdmo.views.models import View
 
+from ...constants import ROLE_CHOICES
 from ...models import (
     Integration,
     IntegrationOption,
@@ -28,24 +33,84 @@ from ...validators import ProjectParentValidator, ValueConflictValidator, ValueQ
 
 class ProjectUserSerializer(serializers.ModelSerializer):
 
+    current = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
+    socialaccounts = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
         fields = [
             'id',
+            'current',
+            'username',
+            'first_name',
+            'last_name',
+            'full_name',
+            'email',
+            'socialaccounts'
         ]
-        if settings.USER_API:
-            fields += [
-                'username',
-                'first_name',
-                'last_name',
-                'full_name',
-                'email'
-            ]
 
     def get_full_name(self, obj) -> str:
         return get_full_name(obj)
+
+    def get_socialaccounts(self, obj) -> list[dict[str, str]]:
+        if settings.SOCIALACCOUNT:
+            return [{
+                'provider': socialaccount.provider,
+                'uid': socialaccount.uid
+            } for socialaccount in obj.socialaccount_set.all()]
+        else:
+            return []
+
+    def get_current(self, obj) -> bool:
+        request = self.context.get('request')
+        if request:
+            return obj == request.user
+
+
+class ProjectAncestorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'title'
+        )
+
+
+class ProjectHierarchySerializer(serializers.ModelSerializer):
+
+    current = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'current',
+            'title',
+            'permissions',
+            'children',
+        )
+
+    def get_current(self, obj):
+        project = self.context.get('project')
+        if project:
+            return project.id == obj.id
+
+    def get_permissions(self, obj) -> dict[str, bool]:
+        request = self.context.get('request')
+        return {
+            'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+            'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+            'can_delete_project': request.user.has_perm('projects.delete_project_object', obj)
+        }
+
+    def get_children(self, obj):
+        # get the children from the cached mptt tree
+        serializer = ProjectHierarchySerializer(obj.get_children(), many=True, read_only=True, context=self.context)
+        return serializer.data
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -61,13 +126,20 @@ class ProjectSerializer(serializers.ModelSerializer):
             return Project.objects.filter_user(self.context['request'].user)
 
     catalog = CatalogField(required=True)
-    parent = ParentField(required=False)
+
+    parent = ParentField(required=False, allow_null=True)
+    parent_title = serializers.CharField(source='parent.title', read_only=True)
 
     owners = ProjectUserSerializer(many=True, read_only=True)
     managers = ProjectUserSerializer(many=True, read_only=True)
     authors = ProjectUserSerializer(many=True, read_only=True)
     guests = ProjectUserSerializer(many=True, read_only=True)
 
+    ancestors = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
+
+    current_role = serializers.SerializerMethodField()
+    highest_role = serializers.SerializerMethodField()
     last_changed = serializers.DateTimeField(read_only=True)
 
     visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
@@ -80,20 +152,24 @@ class ProjectSerializer(serializers.ModelSerializer):
             'description',
             'catalog',
             'catalog_uri',
-            'snapshots',
             'parent',
+            'parent_title',
             'owners',
             'managers',
             'authors',
             'guests',
             'created',
             'updated',
+            'current_role',
+            'highest_role',
             'last_changed',
             'site',
             'views',
             'progress_total',
             'progress_count',
-            'visibility'
+            'visibility',
+            'ancestors',
+            'permissions',
         )
         read_only_fields = (
             'snapshots',
@@ -102,11 +178,99 @@ class ProjectSerializer(serializers.ModelSerializer):
             ProjectParentValidator()
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance:
+            # this prefetches the ancestors of all instances for the serializer in one
+            # query and caches them in the project instances
+            projects = self.instance if isinstance(self.instance, list) else [self.instance]
+            prefetched = Project.objects.prefetch_ancestors(projects)
+            for project in projects:
+                project._cached_ancestors = prefetched[project.id]
+
     def validate_views(self, value):
         """Block updates to views if syncing is enabled."""
         if settings.PROJECT_VIEWS_SYNC and value:
-            raise ValidationError(_('Editing views is disabled.'))
+            raise serializers.ValidationError(_('Editing views is disabled.'))
         return value
+
+    def get_permissions(self, obj) -> dict[str, bool]:
+        request = self.context.get('request')
+        return {
+            'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+            'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+            'can_delete_project': request.user.has_perm('projects.delete_project_object', obj),
+            'can_leave_project': request.user.has_perm('projects.leave_project_object', obj),
+            'can_export_project': request.user.has_perm('projects.export_project_object', obj),
+            'can_import_project': request.user.has_perm('projects.import_project_object', obj),
+            'can_view_visibility': request.user.has_perm('projects.view_visibility_object', obj),
+            'can_add_visibility': request.user.has_perm('projects.add_visibility_object', obj),
+            'can_change_visibility': request.user.has_perm('projects.change_visibility_object', obj),
+            'can_delete_visibility': request.user.has_perm('projects.delete_visibility_object', obj),
+            'can_view_membership': request.user.has_perm('projects.view_membership_object', obj),
+            'can_add_membership': request.user.has_perm('projects.add_membership_object', obj),
+            'can_change_membership': request.user.has_perm('projects.change_membership_object', obj),
+            'can_delete_membership': request.user.has_perm('projects.delete_membership_object', obj),
+            'can_view_invite': request.user.has_perm('projects.view_invite_object', obj),
+            'can_add_invite': request.user.has_perm('projects.add_invite_object', obj),
+            'can_change_invite': request.user.has_perm('projects.change_invite_object', obj),
+            'can_delete_invite': request.user.has_perm('projects.delete_invite_object', obj),
+            'can_view_integration': request.user.has_perm('projects.view_integration_object', obj),
+            'can_add_integration': request.user.has_perm('projects.add_integration_object', obj),
+            'can_change_integration': request.user.has_perm('projects.change_integration_object', obj),
+            'can_delete_integration': request.user.has_perm('projects.delete_integration_object', obj),
+            'can_view_issue': request.user.has_perm('projects.view_issue_object', obj),
+            'can_add_issue': request.user.has_perm('projects.add_issue_object', obj),
+            'can_change_issue': request.user.has_perm('projects.change_issue_object', obj),
+            'can_delete_issue': request.user.has_perm('projects.delete_issue_object', obj),
+            'can_view_snapshot': request.user.has_perm('projects.view_snapshot_object', obj),
+            'can_add_snapshot': request.user.has_perm('projects.add_snapshot_object', obj),
+            'can_change_snapshot': request.user.has_perm('projects.change_snapshot_object', obj),
+            'can_delete_snapshot': request.user.has_perm('projects.delete_snapshot_object', obj),
+            'can_rollback_snapshot': request.user.has_perm('projects.rollback_snapshot_object', obj),
+            'can_export_snapshot': request.user.has_perm('projects.export_snapshot_object', obj),
+            'can_view_value': request.user.has_perm('projects.view_value_object', obj),
+            'can_add_value': request.user.has_perm('projects.add_value_object', obj),
+            'can_change_value': request.user.has_perm('projects.change_value_object', obj),
+            'can_delete_value': request.user.has_perm('projects.delete_value_object', obj)
+        }
+
+    def get_current_role(self, obj):
+        if hasattr(obj, 'current_role') and obj.current_role is not None:
+            return {
+                'role': obj.current_role,
+                'role_display': dict(ROLE_CHOICES)[obj.current_role]
+            }
+
+    def get_highest_role(self, obj):
+        if hasattr(obj, 'highest_role') and obj.highest_role is not None:
+            return {
+                'role': obj.highest_role,
+                'role_display': dict(ROLE_CHOICES)[obj.highest_role],
+                'project_id': obj.highest_role_project_id,
+                'project_title': obj.highest_role_project_title,
+                'membership_id': obj.highest_role_membership_id,
+            }
+
+    def get_ancestors(self, obj) -> list[dict[str, Any]]:
+        return ProjectAncestorSerializer(obj.get_cached_ancestors(), many=True, context=self.context).data
+
+
+class ProjectListSerializer(ProjectSerializer):
+
+    class Meta:
+        model = Project
+        fields = ProjectSerializer.Meta.fields
+        read_only_fields = ProjectSerializer.Meta.read_only_fields
+
+    def get_permissions(self, obj) -> dict[str, bool]:
+        request = self.context.get('request')
+        return {
+            'can_view_project': request.user.has_perm('projects.view_project_object', obj),
+            'can_change_project': request.user.has_perm('projects.change_project_object', obj),
+            'can_delete_project': request.user.has_perm('projects.delete_project_object', obj)
+        }
 
 
 class ProjectCopySerializer(ProjectSerializer):
@@ -130,6 +294,8 @@ class ProjectVisibilitySerializer(serializers.ModelSerializer):
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):
 
+    user = ProjectUserSerializer(read_only=True)
+
     class Meta:
         model = Membership
         fields = (
@@ -139,12 +305,66 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectMembershipCreateSerializer(UserLookupSerializer, serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
+    email = serializers.EmailField(source='user.email', read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role',
+            'lookup',  # write-only
+            'first_name',  # read-only
+            'last_name',  # read-only
+            'email',  # read-only
+        )
+
+    def validate_user(self, value):
+        if self.context["view"].project.memberships.filter(user=value).exists():
+            raise serializers.ValidationError(_("The user is already a member of the project."))
+        return value
+
+    def validate(self, data):
+        lookup = data.pop("lookup", None)
+        if lookup:
+            if data.get("user"):
+                raise serializers.ValidationError(_("Cannot combine `lookup` and `user`."))
+            user, _email = self.resolve_lookup(lookup)
+            self.validate_user(user)
+            data["user"] = user
+
+        user = data.get("user")
+        if not user:
+            raise serializers.ValidationError(_("User must be provided via `user` or `lookup`."))
+
+        return data
+
+
 class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Membership
         fields = (
             'role',
+        )
+
+
+class ProjectMembershipHierarchySerializer(serializers.ModelSerializer):
+
+    user = ProjectUserSerializer(read_only=True)
+    project = ProjectAncestorSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role',
+            'project'
         )
 
 
@@ -194,7 +414,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
 class ProjectInviteSerializer(serializers.ModelSerializer):
 
-    timestamp = serializers.DateTimeField(read_only=True)
+    user = ProjectUserSerializer(read_only=True)
 
     class Meta:
         model = Invite
@@ -203,6 +423,25 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
             'user',
             'email',
             'role',
+            'timestamp'
+        )
+
+
+class ProjectInviteCreateSerializer(UserLookupSerializer, serializers.ModelSerializer):
+    timestamp = serializers.DateTimeField(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all(), allow_null=True, required=False
+    )
+    email = serializers.EmailField(required=False, allow_null=True)
+
+    class Meta:
+        model = Invite
+        fields = (
+            'id',
+            'user',
+            'email',
+            'role',
+            'lookup',
             'timestamp'
         )
 
@@ -217,20 +456,37 @@ class ProjectInviteSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        user = data.get('user')
-        email = data.get('email')
+        User = get_user_model()
 
-        if not user and not email:
-            raise serializers.ValidationError(_('Either user or e-mail needs to be provided.'))
-        elif user and email:
+        lookup = data.pop('lookup', None)
+
+        if lookup:
+            if data.get('user') or data.get('email'):
+                raise serializers.ValidationError(
+                    _('lookup must not be combined with user or email.'),
+                )
+            user, email = self.resolve_lookup(lookup)
+            if user:
+                self.validate_user(user)
+            if email:
+                self.validate_email(email)
+            data["user"], data["email"] = user, email
+
+        user = data.get("user")
+        email = data.get("email")
+
+        if not user and not email and not lookup:
+            raise serializers.ValidationError(_('Either user, e-mail or lookup needs to be provided.'))
+        elif user and email and not lookup:
             raise serializers.ValidationError(_('User and e-mail are mutually exclusive.'))
-        elif user:
+
+        if user:
             data['email'] = user.email
-        elif email:
-            usermodel = get_user_model()
+
+        if email:
             try:
-                data['user'] = usermodel.objects.get(email=email)
-            except usermodel.DoesNotExist:
+                data['user'] = User.objects.get(email=email)
+            except User.DoesNotExist:
                 data['user'] = None
 
         return data
@@ -286,7 +542,9 @@ class ProjectSnapshotSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'description'
+            'description',
+            'created',
+            'updated'
         )
 
 
@@ -320,6 +578,60 @@ class ProjectValueSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectViewsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = View
+        fields = (
+            'id',
+            'title',
+            'help'
+        )
+
+
+class ProjectAttachmentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'created',
+            'updated',
+            'file_name',
+            'file_url'
+        )
+
+
+class ProjectAnswersSerializer(serializers.Serializer):
+
+    html = serializers.CharField(read_only=True)
+    attachments = ProjectAttachmentSerializer(many=True, read_only=True)
+
+
+class ProjectViewSerializer(serializers.ModelSerializer):
+
+    html = serializers.SerializerMethodField()
+    attachments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = View
+        fields = (
+            'id',
+            'title',
+            'help',
+            'html',
+            'attachments'
+        )
+
+    def get_html(self, obj):
+        return self.context.get('html', '')
+
+    def get_attachments(self, obj):
+        attachments = self.context.get('attachments', [])
+        serializer = ProjectAttachmentSerializer(attachments, many=True, read_only=True)
+        return serializer.data
+
+
 class MembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -330,6 +642,7 @@ class MembershipSerializer(serializers.ModelSerializer):
             'user',
             'role'
         )
+
 
 
 class IntegrationSerializer(serializers.ModelSerializer):

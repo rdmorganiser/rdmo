@@ -1,0 +1,25 @@
+:root {
+    --rdmo-font: 'Open sans', sans-serif;
+    --rdmo-font-headline: 'Roboto Slab', serif;
+
+    --rdmo-font-size-smaller: 0.8em;
+    --rdmo-font-size-small: 0.9em;
+    --rdmo-font-size-large: 1.1em;
+    --rdmo-font-size-large: 1.2em;
+
+    --rdmo-box-shadow: 0.25rem 0.25rem 1rem #eee;
+
+    --rdmo-body-bg: #fff;
+    --rdmo-body-color: #333;
+
+    --rdmo-navbar-bg: #101F70;
+    --rdmo-navbar-color: #aaa;
+    --rdmo-navbar-hover-color: #fff;
+
+    --rdmo-sidebar-bg: #efefef;
+    --rdmo-sidebar-color: var(--rdmo-body-color);
+
+    --rdmo-link-color: #337ab7;
+    --rdmo-link-decoration: none;
+    --rdmo-link-hover-color: #2a5d90;
+}

@@ -4,6 +4,8 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
+import * as actionTypes from './actionTypes'
+
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
@@ -96,15 +98,15 @@ export function fetchElements(elementType) {
 }
 
 export function fetchElementsInit(elementType) {
-  return {type: 'elements/fetchElementsInit', elementType}
+  return {type: actionTypes.FETCH_ELEMENTS_INIT, elementType}
 }
 
 export function fetchElementsSuccess(elements) {
-  return {type: 'elements/fetchElementsSuccess', elements}
+  return {type: actionTypes.FETCH_ELEMENTS_SUCCESS, elements}
 }
 
 export function fetchElementsError(error) {
-  return {type: 'elements/fetchElementsError', error}
+  return {type: actionTypes.FETCH_ELEMENTS_ERROR, error}
 }
 
 // fetch element
@@ -366,15 +368,15 @@ export function fetchElement(elementType, elementId, elementAction=null) {
 }
 
 export function fetchElementInit(elementType, elementId, elementAction) {
-  return {type: 'elements/fetchElementInit', elementType, elementId, elementAction}
+  return {type: actionTypes.FETCH_ELEMENT_INIT, elementType, elementId, elementAction}
 }
 
 export function fetchElementSuccess(elements) {
-  return {type: 'elements/fetchElementSuccess', elements}
+  return {type: actionTypes.FETCH_ELEMENT_SUCCESS, elements}
 }
 
 export function fetchElementError(error) {
-  return {type: 'elements/fetchElementError', error}
+  return {type: actionTypes.FETCH_ELEMENT_ERROR, error}
 }
 
 // store element
@@ -450,15 +452,15 @@ export function storeElement(elementType, element, elementAction = null, back = 
 }
 
 export function storeElementInit(element) {
-  return {type: 'elements/storeElementInit', element}
+  return {type: actionTypes.STORE_ELEMENT_INIT, element}
 }
 
 export function storeElementSuccess(element) {
-  return {type: 'elements/storeElementSuccess', element}
+  return {type: actionTypes.STORE_ELEMENT_SUCCESS, element}
 }
 
 export function storeElementError(element, error) {
-  return {type: 'elements/storeElementError', element, error}
+  return {type: actionTypes.STORE_ELEMENT_ERROR, element, error}
 }
 
 // createElement
@@ -599,15 +601,15 @@ export function createElement(elementType, parent={}) {
 }
 
 export function createElementInit(elementType) {
-  return {type: 'elements/createElementInit', elementType}
+  return {type: actionTypes.CREATE_ELEMENT_INIT, elementType}
 }
 
 export function createElementSuccess(elements) {
-  return {type: 'elements/createElementSuccess', elements}
+  return {type: actionTypes.CREATE_ELEMENT_SUCCESS, elements}
 }
 
 export function createElementError(error) {
-  return {type: 'elements/createElementError', error}
+  return {type: actionTypes.CREATE_ELEMENT_ERROR, error}
 }
 
 // delete element
@@ -677,21 +679,21 @@ export function deleteElement(elementType, element) {
 }
 
 export function deleteElementInit(element) {
-  return {type: 'elements/deleteElementInit', element}
+  return {type: actionTypes.DELETE_ELEMENT_INIT, element}
 }
 
 export function deleteElementSuccess(element) {
-  return {type: 'elements/deleteElementSuccess', element}
+  return {type: actionTypes.DELETE_ELEMENT_SUCCESS, element}
 }
 
 export function deleteElementError(element, error) {
-  return {type: 'elements/deleteElementError', element, error}
+  return {type: actionTypes.DELETE_ELEMENT_ERROR, element, error}
 }
 
 // update elements
 
 export function updateElement(element, values) {
-  return {type: 'elements/updateElement', element, values}
+  return {type: actionTypes.UPDATE_ELEMENT, element, values}
 }
 
 // move elements

@@ -1,7 +1,8 @@
 import { useState, useMemo, useCallback } from 'react'
 import { enGB, de, it, es, fr } from 'date-fns/locale'
 import { camelCase } from 'lodash'
-import lang from 'rdmo/core/assets/js/utils/lang'
+
+import { language } from 'rdmo/core/assets/js/utils'
 
 const useDatePicker = () => {
   const [dateRange, setDateRange] = useState({
@@ -12,11 +13,11 @@ const useDatePicker = () => {
   })
 
   const dateFormat = useMemo(() => {
-    return lang === 'de' ? 'dd.MM.yyyy' : 'dd/MM/yyyy'
+    return language === 'de' ? 'dd.MM.yyyy' : 'dd/MM/yyyy'
   }, [])
 
   const getLocale = () => {
-    switch (lang) {
+    switch (language) {
       case 'de':
         return de
       case 'it':

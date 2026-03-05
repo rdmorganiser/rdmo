@@ -1,0 +1,51 @@
+@import '../breakpoints';
+
+nav.navbar {
+    --rdmo-nav-link-hover-bg: var(--rdmo-sidebar-bg);
+
+    --bs-navbar-color: var(--rdmo-navbar-color);
+    --bs-navbar-hover-color: var(--rdmo-navbar-hover-color);
+
+    --bs-navbar-brand-color: var(--bs-navbar-color);
+    --bs-navbar-brand-hover-color: var(--bs-navbar-hover-color);
+
+    --bs-navbar-active-color: var(--bs-navbar-hover-color);
+    --bs-navbar-active-hover-color: var(--bs-navbar-hover-color);
+
+    background-color: var(--rdmo-navbar-bg);
+
+    .container-fluid {
+        @media only screen and (min-width: $grid-breakpoint-md) {
+            padding-left: 2.5rem;
+            padding-right: 3rem;
+        }
+    }
+
+    .dropdown-menu {
+        --bs-nav-link-color: var(--rdmo-link-color);
+        --bs-nav-link-hover-color: var(--rdmo-link-hover-color);
+        --bs-nav-link-active-color: var(--rdmo-link-color);
+
+        .nav-link:hover:not(.active) {
+            background-color: var(--rdmo-nav-link-hover-bg);
+        }
+    }
+
+    .nav-link:focus:not(.active):not(:hover) {
+        color: var(--bs-navbar-color);
+    }
+}
+
+nav.nav-pills {
+    --rdmo-nav-link-hover-bg: #ddd;
+
+    --bs-nav-link-color: var(--rdmo-link-color);
+    --bs-nav-link-hover-color: var(--rdmo-link-hover-color);
+
+    --bs-nav-pills-link-active-color: #fff;
+    --bs-nav-pills-link-active-bg: var(--rdmo-link-color);
+
+    .nav-link:hover:not(.active) {
+        background-color: var(--rdmo-nav-link-hover-bg);
+    }
+}

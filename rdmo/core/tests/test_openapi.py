@@ -10,6 +10,7 @@ users = (
     'anonymous'
 )
 
+n_path = 137
 
 @pytest.mark.parametrize('username', users)
 def test_openapi_schema(db, client, login, settings, username):
@@ -21,8 +22,7 @@ def test_openapi_schema(db, client, login, settings, username):
         assert response.status_code == 200
         schema = yaml.safe_load(response.content)
         assert schema['openapi'] == '3.0.3'
-        assert len(schema['paths']) > 120
-        assert len(schema['paths']) < 140
+        assert len(schema['paths']) == 140
     else:
         assert response.status_code == 302
 

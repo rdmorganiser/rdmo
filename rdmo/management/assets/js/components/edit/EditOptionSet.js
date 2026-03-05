@@ -1,6 +1,10 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
 
 import Checkbox from './common/Checkbox'
 import Number from './common/Number'
@@ -19,104 +23,100 @@ import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
 
 import useDeleteModal from '../../hooks/useDeleteModal'
 
-const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
+const EditOptionSet = ({ optionset }) => {
+  const dispatch = useDispatch()
 
-  const { sites, providers } = config
-  const { elementAction, parent, conditions, options } = elements
+  const { sites, providers, settings } = useSelector((state) => state.config)
+  const { elementAction, parent, conditions, options } = useSelector((state) => state.elements)
 
-  const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
-  const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, elementAction, back)
-  const deleteOptionSet = () => elementActions.deleteElement('optionsets', optionset)
+  const updateOptionSet = (key, value) => dispatch(updateElement(optionset, {[key]: value}))
+  const storeOptionSet = (back) => dispatch(storeElement('optionsets', optionset, elementAction, back))
+  const deleteOptionSet = () => dispatch(deleteElement('optionsets', optionset))
 
-  const editOption = (value) => elementActions.fetchElement('options', value.option)
-  const createOption = () => elementActions.createElement('options', { optionset })
+  const editOption = (value) => dispatch(fetchElement('options', value.option))
+  const createOption = () => dispatch(createElement('options', { optionset }))
 
-  const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
-  const createCondition = () => elementActions.createElement('conditions', { optionset })
+  const editCondition = (condition) => dispatch(fetchElement('conditions', condition))
+  const createCondition = () => dispatch(createElement('conditions', { optionset }))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
-  const info = <OptionSetInfo optionset={optionset} elements={elements} elementActions={elementActions} />
+  const info = <OptionSetInfo optionset={optionset} />
 
   return (
-    <div className="panel panel-default panel-edit">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card card-tile">
+      <div className="card-header">
+        <div className="d-flex flex-wrap align-items-center gap-2">
+          <strong className="flex-grow-1">
+            {optionset.id ? gettext('Edit optionset') : gettext('Create optionset')}
+          </strong>
           <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {
-          optionset.id ? <>
-            <strong>{gettext('Option set')}{': '}</strong>
-            <code className="code-options">{optionset.uri}</code>
-          </> : <strong>{gettext('Create option set')}</strong>
-        }
       </div>
 
       {
-        parent && parent.question && <div className="panel-body panel-border">
-          <p dangerouslySetInnerHTML={{
-            __html:interpolate(gettext('This option set will be added to the question <code class="code-questions">%s</code>.'), [parent.question.uri])
-          }} />
+        parent && parent.question && <div className="card-body border-bottom">
+        <Html html={interpolate(gettext(
+          'This option set will be added to the question <code class="code-questions">%s</code>.'),
+          [parent.question.uri])} />
         </div>
       }
 
       {
-        optionset.id && <div className="panel-body panel-border">
+        optionset.id && <div className="card-body border-bottom">
           { info }
         </div>
       }
 
-      <div className="panel-body">
+      <div className="card-body pb-0">
         <div className="row">
           <div className="col-sm-6">
-            <UriPrefix config={config} element={optionset} field="uri_prefix"
-                       onChange={updateOptionSet} />
+            <UriPrefix element={optionset} field="uri_prefix" onChange={updateOptionSet} />
           </div>
           <div className="col-sm-6">
-            <Text config={config} element={optionset} field="uri_path"
-                  onChange={updateOptionSet} />
+            <Text element={optionset} field="uri_path" onChange={updateOptionSet} />
           </div>
         </div>
 
-        <Textarea config={config} element={optionset} field="comment"
-                  rows={4} onChange={updateOptionSet} />
+        <Textarea element={optionset} field="comment" rows={4} onChange={updateOptionSet} />
 
         <div className="row">
           <div className="col-sm-6">
-            <Checkbox config={config} element={optionset} field="locked"
-                      onChange={updateOptionSet} />
+            <Checkbox element={optionset} field="locked" onChange={updateOptionSet} />
           </div>
           <div className="col-sm-6">
-            <Number config={config} element={optionset} field="order"
-                    onChange={updateOptionSet} />
+            <Number element={optionset} field="order" onChange={updateOptionSet} />
           </div>
         </div>
 
-        <OrderedMultiSelect config={config} element={optionset} field="options" options={options}
+        <OrderedMultiSelect element={optionset} field="options" options={options}
                             addText={gettext('Add existing option')} createText={gettext('Create new option')}
                             onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
 
-        <MultiSelect config={config} element={optionset} field="conditions" options={conditions}
+        <MultiSelect element={optionset} field="conditions" options={conditions}
                      addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
-        <Select config={config} element={optionset} field="provider_key"
-                options={providers} onChange={updateOptionSet} />
+        <Select element={optionset} field="provider_key" options={providers} onChange={updateOptionSet} />
 
-        {get(config, 'settings.multisite') && <Select config={config} element={optionset} field="editors"
-                                                      options={sites} onChange={updateOptionSet} isMulti />}
+        {
+          settings.multisite && (
+            <Select element={optionset} field="editors"
+                    options={sites} onChange={updateOptionSet} isMulti />
+          )
+        }
       </div>
 
-      <div className="panel-footer">
-        <div className="pull-right">
-          <BackButton />
+      <div className="card-footer">
+        <div className="d-flex align-items-center gap-2">
+          {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
+          <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
         </div>
-        {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}
@@ -126,10 +126,7 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 }
 
 EditOptionSet.propTypes = {
-  config: PropTypes.object.isRequired,
-  optionset: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  optionset: PropTypes.object.isRequired
 }
 
 export default EditOptionSet

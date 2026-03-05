@@ -6,11 +6,12 @@ import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/c
 
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+import projectsReducer from '../reducers/projectsReducer'
+import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
-import projectsReducer from '../reducers/projectsReducer'
-
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 
 import * as projectsActions from '../actions/projectsActions'
@@ -22,8 +23,9 @@ export default function configureStore() {
   const rootReducer = combineReducers({
     config: configReducer,
     currentUser: userReducer,
+    pending: pendingReducer,
     projects: projectsReducer,
-    pending: pendingReducer
+    settings: settingsReducer,
   })
 
   const initialState = {
@@ -49,6 +51,7 @@ export default function configureStore() {
       })
 
     Promise.all([
+      store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(userActions.fetchCurrentUser()),
       store.dispatch(projectsActions.fetchCatalogs())
     ]).then(() => {

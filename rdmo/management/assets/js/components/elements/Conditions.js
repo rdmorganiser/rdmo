@@ -1,7 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { useDispatch, useSelector } from 'react-redux'
+import { get, isEmpty } from 'lodash'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
@@ -9,25 +12,29 @@ import { BackButton, NewButton } from '../common/Buttons'
 
 import Condition from '../element/Condition'
 
-const Conditions = ({ config, conditions, configActions, elementActions}) => {
+const Conditions = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.conditions.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.conditions.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const config = useSelector((state) => state.config)
+  const conditions = useSelector((state) => state.elements.conditions)
 
-  const createCondition = () => elementActions.createElement('conditions')
+  const updateFilterString = (value) => dispatch(updateConfig('filter.conditions.search', value))
+  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.conditions.uri_prefix', value))
+  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+
+  const createCondition = () => dispatch(createElement('conditions'))
 
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card card-tile">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
+          <strong className="me-auto">{gettext('Conditions')}</strong>
           <BackButton />
           <NewButton onClick={createCondition} />
         </div>
-        <strong>{gettext('Conditions')}</strong>
       </div>
 
-      <div className="panel-body">
+      <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.conditions.search', '')} onChange={updateFilterString}
@@ -46,24 +53,20 @@ const Conditions = ({ config, conditions, configActions, elementActions}) => {
         </div>
       </div>
 
-      <ul className="list-group">
       {
-        conditions.map((condition, index) => (
-          <Condition key={index} config={config} condition={condition}
-                     configActions={configActions} elementActions={elementActions}
-                     filter="conditions" filterEditors={true} />
-        ))
+        !isEmpty(conditions) && (
+          <ul className="list-group list-group-flush">
+          {
+            conditions.map((condition, index) => (
+              <Condition key={index} config={config} condition={condition}
+                         filter="conditions" filterEditors={true} />
+            ))
+          }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
-}
-
-Conditions.propTypes = {
-  config: PropTypes.object.isRequired,
-  conditions: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Conditions

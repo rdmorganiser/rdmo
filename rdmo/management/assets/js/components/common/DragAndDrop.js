@@ -1,7 +1,10 @@
 import React, { useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+
+import { dropElement } from '../../actions/elementActions'
 
 const Drag = ({ element, show=true }) => {
   const dragRef = useRef(null)
@@ -13,8 +16,12 @@ const Drag = ({ element, show=true }) => {
 
   drag(dragRef)
 
-  return show && <span className="element-link drag">
-    <i className="fa fa-arrows drag" ref={dragRef} aria-hidden="true"></i>
+  const className = classNames('bi bi-arrows-move drag', {
+    'disabled': element.read_only
+  })
+
+  return show && <span className="drag">
+    <i className={className} ref={dragRef} aria-hidden="true"></i>
   </span>
 }
 
@@ -23,7 +30,9 @@ Drag.propTypes = {
   show: PropTypes.bool
 }
 
-const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) => {
+const Drop = ({ element, indent=0, mode='in', children=null }) => {
+  const dispatch = useDispatch()
+
   const dropRef = useRef(null)
 
   let accept
@@ -49,7 +58,7 @@ const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) =
       isOver: monitor.isOver()
     }),
     drop: (item) => {
-      elementActions.dropElement(item, element, mode)
+      dispatch(dropElement(item, element, mode))
     },
   }), [element])
 
@@ -65,13 +74,12 @@ const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) =
   if (mode == 'in') {
     return <div className={dropClassName} ref={dropRef}>{children}</div>
   } else {
-    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: 30 * indent }}></div>
+    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: `${indent}rem` }}></div>
   }
 }
 
 Drop.propTypes = {
   element: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired,
   mode: PropTypes.string,
   indent: PropTypes.number,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])

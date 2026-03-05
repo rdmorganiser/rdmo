@@ -39,3 +39,16 @@ def get_inactive_providers(context=None):
             for provider in get_providers(context)
             if provider.id not in providers
         ]
+
+
+@register.simple_tag(takes_context=True)
+def get_current_provider_ids(context={}):
+    try:
+        return [account.provider for account in context['form'].accounts]
+    except (KeyError, AttributeError):
+        return []
+
+
+@register.simple_tag()
+def sign_in_text(provider_name):
+    return _('Sign in with %s') % provider_name
