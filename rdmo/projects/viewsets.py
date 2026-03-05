@@ -32,7 +32,7 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
-from .constants import ROLE_CHOICES
+from .constants import ROLE_CHOICES, ROLE_RANKS
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -165,12 +165,9 @@ class ProjectViewSet(ModelViewSet):
             Membership.objects.filter(project=OuterRef('pk'), user=self.request.user).values('role')
         )
 
-        # create a numbered list of the ROLE_CHOICES
-        role_ranks = list(enumerate(reversed([role for role, _ in ROLE_CHOICES])))
-
         # create a case for the highest role in the hierarchy, and the other way around
         role_rank_case = Case(
-            *[When(role=role, then=rank) for rank, role in role_ranks], output_field=IntegerField()
+            *[When(role=role, then=rank) for role, rank in ROLE_RANKS.items()], output_field=IntegerField()
         )
 
         # prepare subquery for the highest role in the hierarchy for the current user
@@ -204,6 +201,9 @@ class ProjectViewSet(ModelViewSet):
             # when Greatest returns a value, then Coalesce will return this value
             last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
         )
+
+        # order queryset by last_changed by default
+        queryset = queryset.order_by('last_changed')
 
         # cache queryset and return
         self._cached_queryset = queryset
@@ -631,6 +631,27 @@ class ProjectViewSet(ModelViewSet):
             'class_name': class_name,
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+
+        # in order to return all the fields from the subqueries, we need to re-fetch the project
+        # from the database again, and inject it into the the response
+        project = self.get_queryset().get(pk=response.data['id'])
+        response.data = self.get_serializer(project).data
+        return response
+
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        # in order to return all the fields from the subqueries, we need to re-fetch the project
+        # from the database again, and inject it into the the response
+        project = self.get_queryset().get(pk=response.data['id'])
+        response.data = self.get_serializer(project).data
+        return response
+
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))

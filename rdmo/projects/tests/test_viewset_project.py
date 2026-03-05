@@ -5,6 +5,8 @@ from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from ..models import Membership, Project, Snapshot, Value, Visibility
+from .helpers.ordering import get_projects_ordered_by_last_changed
+from .helpers.roles import get_project_roles
 
 users = (
     ('owner', 'owner'),
@@ -93,10 +95,13 @@ def test_list(db, client, username, password):
         if username == 'user':
             assert sorted([item['id'] for item in response.json().get('results')]) == projects_visible
         else:
-            values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
-                                         .values_list('id', flat=True)
-            assert response_data['count'] == len(values_list)
-            assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+            project_ids = list(
+                get_projects_ordered_by_last_changed()
+                    .filter(id__in=view_project_permission_map.get(username, []))
+                    .values_list('id', flat=True)
+            )
+            assert response_data['count'] == len(project_ids)
+            assert [item['id'] for item in response_data['results']] == project_ids[:page_size]
     else:
         assert response.status_code == 401
 
@@ -115,13 +120,31 @@ def test_list_user(db, client, username, password):
 
         if username == 'user':
             # only the visible project
-            assert [item['id'] for item in response_data['results']] == [12]
+            project_ids = list(
+                get_projects_ordered_by_last_changed()
+                    .filter(id__in=[12])
+                    .values_list('id', flat=True)
+            )
+
+            assert [item['id'] for item in response_data['results']] == project_ids
         elif username in ['manager', 'author', 'guest']:
             # only memberships and visible
-            assert [item['id'] for item in response_data['results']] == [1, 3, 5, 12]
+            project_ids = list(
+                get_projects_ordered_by_last_changed()
+                    .filter(id__in=[1, 3, 5, 12])
+                    .values_list('id', flat=True)
+            )
+
+            assert [item['id'] for item in response_data['results']] == project_ids
         else:
-            assert response_data['count'] == len(owner_projects)
-            assert [item['id'] for item in response_data['results']] == list(owner_projects[:page_size])
+            project_ids = list(
+                get_projects_ordered_by_last_changed()
+                    .filter(id__in=owner_projects)
+                    .values_list('id', flat=True)
+            )
+
+            assert response_data['count'] == len(project_ids)
+            assert [item['id'] for item in response_data['results']] == project_ids[:page_size]
     else:
         assert response.status_code == 401
 
@@ -160,10 +183,14 @@ def test_user(db, client, username, password):
         if username in ['admin', 'site', 'api', 'user']:
             assert sorted([item['id'] for item in response.json().get('results')]) == projects_visible
         else:
-            values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
-                                         .values_list('id', flat=True)
-            assert response_data['count'] == len(values_list)
-            assert [item['id'] for item in response_data['results']] == list(values_list[:page_size])
+            project_ids = list(
+                get_projects_ordered_by_last_changed()
+                    .filter(id__in=view_project_permission_map.get(username, []))
+                    .values_list('id', flat=True)
+            )
+
+            assert response_data['count'] == len(project_ids)
+            assert [item['id'] for item in response_data['results']] == project_ids[:page_size]
     else:
         assert response.status_code == 401
 
@@ -172,14 +199,31 @@ def test_user(db, client, username, password):
 @pytest.mark.parametrize('project_id', projects)
 def test_detail(db, client, username, password, project_id):
     client.login(username=username, password=password)
+    project = Project.objects.get(pk=project_id)
+    project_ancestors = project.get_ancestors()
+
+    current_role, highest_role = get_project_roles(project, project_ancestors, username)
 
     url = reverse(urlnames['detail'], args=[project_id])
     response = client.get(url)
+    response_data = response.json()
 
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 200
-        assert isinstance(response.json(), dict)
-        assert response.json().get('id') == project_id
+        assert response_data.get('id') == project_id
+
+        if current_role:
+            assert response_data['current_role']['role'] == current_role
+        else:
+            assert response_data['current_role'] is None
+
+        if highest_role:
+            assert response_data['highest_role']['role'] == highest_role
+        else:
+            assert response_data['highest_role'] is None
+
+        assert [p['id'] for p in response_data['ancestors']] == [p.id for p in project_ancestors] + [project_id]
+
     else:
         if password:
             assert response.status_code == 404
@@ -198,11 +242,23 @@ def test_create(db, client, username, password):
         'catalog': catalog_id
     }
     response = client.post(url, data)
+    response_data = response.json()
 
     if password:
         assert response.status_code == 201
-        assert isinstance(response.json(), dict)
-        assert Project.objects.get(id=response.json().get('id'))
+        assert Project.objects.get(id=response_data['id'])
+
+        assert response_data['title'] == data['title']
+        assert response_data['description'] == data['description']
+        assert response_data['catalog'] == data['catalog']
+        assert response_data['current_role']['role'] == 'owner'
+        assert response_data['highest_role']['role'] == 'owner'
+        assert response_data['ancestors'] == [
+            {
+                'id': response_data['id'],
+                'title': data['title']
+            }
+        ]
     else:
         assert response.status_code == 401
 
@@ -428,6 +484,9 @@ def test_copy_parent(db, files, client, project_id):
 def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
+    project_ancestors = project.get_ancestors()
+
+    current_role, highest_role = get_project_roles(project, project_ancestors, username)
 
     url = reverse(urlnames['detail'], args=[project_id])
     data = {
@@ -436,11 +495,27 @@ def test_update(db, client, username, password, project_id):
         'catalog': project.catalog.id
     }
     response = client.put(url, data, content_type='application/json')
+    response_data = response.json()
 
     if project_id in change_project_permission_map.get(username, []):
         assert response.status_code == 200
-        assert Project.objects.get(id=project_id).title == 'New title'
-        assert Project.objects.get(id=project_id).description == project.description
+
+        assert response_data['title'] == data['title']
+        assert response_data['description'] == data['description']
+        assert response_data['catalog'] == data['catalog']
+
+        if current_role:
+            assert response_data['current_role']['role'] == current_role
+        else:
+            assert response_data['current_role'] is None
+
+        if highest_role:
+            assert response_data['highest_role']['role'] == highest_role
+        else:
+            assert response_data['highest_role'] is None
+
+        assert [p['id'] for p in response_data['ancestors']] == [p.id for p in project_ancestors] + [project_id]
+
     else:
         if project_id in view_project_permission_map.get(username, []):
             assert response.status_code == 403
