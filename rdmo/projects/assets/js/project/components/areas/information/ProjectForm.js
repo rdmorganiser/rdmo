@@ -9,7 +9,7 @@ import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
-import { createProject } from '../../../../projects/actions/projectsActions'
+import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
@@ -45,7 +45,7 @@ const ProjectForm = ({
   const [parentFetchError, setParentFetchError] = useState(null)
 
   useEffect(() => {
-    if (mode !== 'create') return
+    if (mode !== 'copy') return
     if (!initialProject?.parent) return
 
     ProjectApi.fetchProject(initialProject.parent)
@@ -73,6 +73,10 @@ const ProjectForm = ({
       return dispatch(createProject(newFormData))
     }
 
+    if (mode === 'copy') {
+      return dispatch(copyProject(initialProject.id, newFormData))
+    }
+
     const originalParent = project?.parent ?? null
     const currentParent = newFormData.parent ?? null
 
@@ -92,7 +96,7 @@ const ProjectForm = ({
     const updatedFormData = { ...formData, [key]: value }
     setFormData(updatedFormData)
 
-    if (submitMode !== 'auto' || mode !== 'edit') return
+    if (submitMode !== 'auto') return
 
     if (key === 'description') {
       debouncedSaveLong(updatedFormData)
@@ -299,7 +303,7 @@ ProjectForm.propTypes = {
   disabled: PropTypes.bool,
   formId: PropTypes.string,
   initialProject: PropTypes.object,
-  mode: PropTypes.oneOf(['create', 'edit']),
+  mode: PropTypes.oneOf(['edit', 'copy', 'create']),
   onSaved: PropTypes.func,
   submitMode: PropTypes.oneOf(['auto', 'submit']),
 }
