@@ -338,6 +338,7 @@ def test_create_catalog_not_available(db, client):
 @pytest.mark.parametrize('project_id', projects)
 def test_create_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
+    project_ancestors = Project.objects.get(id=project_id).get_ancestors().values_list('id', flat=True)
 
     url = reverse(urlnames['list'])
     data = {
@@ -347,11 +348,14 @@ def test_create_parent(db, client, username, password, project_id):
         'parent': project_id
     }
     response = client.post(url, data)
+    response_data = response.json()
 
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 201
         assert isinstance(response.json(), dict)
-        assert Project.objects.get(id=response.json().get('id'))
+        assert Project.objects.get(id=response_data['id'])
+        assert response_data['parent'] == project_id
+        assert [p['id'] for p in response_data['ancestors']] == [*project_ancestors, project_id, response_data['id']]
     else:
         if password:
             assert response.status_code == 400
@@ -541,6 +545,7 @@ def test_copy_catalog_not_available(db, client):
 
     assert response.status_code == 400
 
+
 @pytest.mark.parametrize('project_id', projects)
 def test_copy_parent(db, files, client, project_id):
     client.login(username='owner', password='owner')
@@ -554,9 +559,11 @@ def test_copy_parent(db, files, client, project_id):
         'parent': parent_id
     }
     response = client.post(url, data, content_type='application/json')
+    response_data = response.json()
 
     assert response.status_code == 201
-
+    assert response_data['parent'] == parent_id
+    assert [p['id'] for p in response_data['ancestors']] == [*parent_ancestors, response_data['id']]
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
@@ -621,6 +628,7 @@ def test_update_parent(db, client, username, password, project_id):
         'parent': parent_id
     }
     response = client.put(url, data, content_type='application/json')
+    response_data = response.json()
 
     if project_id in change_project_permission_map.get(username, []):
         if parent_id in view_project_permission_map.get(username, []):
@@ -630,6 +638,7 @@ def test_update_parent(db, client, username, password, project_id):
             else:
                 assert response.status_code == 200
                 assert Project.objects.get(pk=project_id).parent_id == parent_id
+                assert [p['id'] for p in response_data['ancestors']] == [*parent_ancestors, project_id]
         else:
             assert response.status_code == 404
             assert Project.objects.get(pk=project_id).parent == project.parent
