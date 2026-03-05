@@ -100,7 +100,7 @@ def copy_project(instance, site, owners):
     for value in values:
         value.id = None
         value.project = project
-        value.created = timestamp
+        value.updated = timestamp
 
         if value.file:
             # file values cannot be bulk created since we need their id and only postgres provides that (reliably)
@@ -117,7 +117,6 @@ def copy_project(instance, site, owners):
     for snapshot, snapshot_values in snapshots.items():
         snapshot.id = None
         snapshot.project = project
-        snapshot.created = timestamp
         snapshot.save(copy_values=False)
 
         project_snapshot_values = []
@@ -125,7 +124,7 @@ def copy_project(instance, site, owners):
             value.id = None
             value.project = project
             value.snapshot = snapshot
-            value.created = timestamp
+            value.updated = timestamp
 
             if value.file:
                 value.save()
