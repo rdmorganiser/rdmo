@@ -5,6 +5,7 @@ import {
   FETCH_FILETYPES_ERROR, FETCH_FILETYPES_INIT, FETCH_FILETYPES_SUCCESS,
   FETCH_IMPORT_URLS_ERROR, FETCH_IMPORT_URLS_INIT, FETCH_IMPORT_URLS_SUCCESS,
   CREATE_PROJECT_ERROR, CREATE_PROJECT_INIT, CREATE_PROJECT_SUCCESS,
+  COPY_PROJECT_ERROR, COPY_PROJECT_INIT, COPY_PROJECT_SUCCESS,
   UPDATE_PROJECT_ERROR, UPDATE_PROJECT_INIT
 } from '../actions/actionTypes'
 
@@ -27,20 +28,17 @@ export default function projectsReducer(state = initialState, action) {
         hasNext: action.projects.next !== null
       }
     }
-    case CREATE_PROJECT_SUCCESS: {
-      const normalized = {
-        ...action.project,
-        last_changed: action.project.last_changed ?? action.project.updated,
-        // ancestors: action.project.ancestors || [{ id: action.project.id, title: action.project.title }],
-        // current_role: action.project.current_role || 'owner'
+    case CREATE_PROJECT_SUCCESS:
+    case COPY_PROJECT_SUCCESS:
+      {
+        return {
+          ...state,
+          projects: [action.project, ...state.projects.filter(p => p.id !== action.project.id)]
+        }
       }
-      return {
-        ...state,
-        projects: [normalized, ...state.projects.filter(p => p.id !== normalized.id)]
-      }
-    }
     case FETCH_PROJECTS_ERROR:
     case CREATE_PROJECT_ERROR:
+    case COPY_PROJECT_ERROR:
     case FETCH_INVITATIONS_ERROR:
     case FETCH_CATALOGS_ERROR:
     case FETCH_FILETYPES_ERROR:
@@ -52,6 +50,7 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_FILETYPES_INIT:
     case FETCH_IMPORT_URLS_INIT:
     case CREATE_PROJECT_INIT:
+    case COPY_PROJECT_INIT:
     case UPDATE_PROJECT_INIT:
       return { ...state, errors: [] }
     case FETCH_INVITATIONS_SUCCESS:
