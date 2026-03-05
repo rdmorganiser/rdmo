@@ -32,6 +32,7 @@ const Main = () => {
   const { show: showEdit, open: openEdit, close: closeEdit } = useModal()
   const { show: showCreate, open: openCreate, close: closeCreate } = useModal()
   const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
+  const { show: showCopy, open: openCopy, close: closeCopy } = useModal()
 
   if (!projectsObject.ready) return null
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -50,20 +51,32 @@ const Main = () => {
     onClose: closeImport
   }
 
-  const handleCloseCreate = () => {
-    setSelectedProject(null)
-    closeCreate()
-  }
-
   const createModalProps = {
     title: gettext('Create new project'),
     show: showCreate,
-    onClose: handleCloseCreate,
+    onClose: closeCreate,
     onSubmit: () => { },
     submitLabel: gettext('Create project'),
     submitProps: {
       type: 'submit',
       form: 'project-create-form'
+    }
+  }
+
+  const handleCloseCopy = () => {
+    setSelectedProject(null)
+    closeCopy()
+  }
+
+  const copyModalProps = {
+    title: gettext('Copy project'),
+    show: showCopy,
+    onClose: handleCloseCopy,
+    onSubmit: () => { },
+    submitLabel: gettext('Copy project'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-copy-form'
     }
   }
 
@@ -257,7 +270,7 @@ const Main = () => {
             title={labels.copy}
             onClick={() => {
               setSelectedProject(row)
-              openCreate()
+              openCopy()
             }}
           />
           {perms.can_change_project &&
@@ -378,6 +391,20 @@ const Main = () => {
               />
             )}
           </Modal>
+          <Modal {...copyModalProps}>
+            {selectedProject && (
+              <ProjectForm
+                key={`copy-${selectedProject.id}`}
+                disabled={false}
+                formId='project-copy-form'
+                submitMode="submit"
+                mode="copy"
+                initialProject={selectedProject}
+                catalogs={catalogs ?? []}
+                onSaved={handleCloseCopy}
+              />
+            )}
+          </Modal>
           <Modal {...createModalProps}>
             <ProjectForm
               key={`create-${showCreate}`}
@@ -385,9 +412,8 @@ const Main = () => {
               formId='project-create-form'
               submitMode="submit"
               mode="create"
-              initialProject={selectedProject ?? null}
               catalogs={catalogs ?? []}
-              onSaved={handleCloseCreate}
+              onSaved={closeCreate}
             />
           </Modal>
           <ProjectDeleteModal

@@ -21,7 +21,10 @@ import {
   UPLOAD_PROJECT_SUCCESS,
   CREATE_PROJECT_ERROR,
   CREATE_PROJECT_INIT,
-  CREATE_PROJECT_SUCCESS
+  CREATE_PROJECT_SUCCESS,
+  COPY_PROJECT_ERROR,
+  COPY_PROJECT_INIT,
+  COPY_PROJECT_SUCCESS,
 } from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -82,6 +85,26 @@ export function createProject(data) {
       .catch(error => {
         dispatch(removeFromPending('createProject'))
         dispatch({ type: CREATE_PROJECT_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function copyProject(id, data) {
+  return function (dispatch) {
+    dispatch(addToPending('copyProject'))
+    dispatch({ type: COPY_PROJECT_INIT })
+    // remove id from original project's formData
+    delete data.id
+
+    return ProjectsApi.copyProject(id, data)
+      .then(project => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch({ type: COPY_PROJECT_SUCCESS, project })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch({ type: COPY_PROJECT_ERROR, error })
         throw error
       })
   }

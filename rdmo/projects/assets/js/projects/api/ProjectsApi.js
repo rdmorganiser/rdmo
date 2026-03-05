@@ -19,6 +19,10 @@ class ProjectsApi extends BaseApi {
     return this.post('/api/v1/projects/projects/', data)
   }
 
+  static copyProject(id, data) {
+    return this.post(`/api/v1/projects/projects/${id}/copy/`, data)
+  }
+
   static fetchCatalogs() {
     return fetch('/api/v1/projects/catalogs/').then(response => {
       if (response.ok) {
