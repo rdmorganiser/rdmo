@@ -401,7 +401,10 @@ const Main = () => {
                 mode="copy"
                 initialProject={selectedProject}
                 catalogs={catalogs ?? []}
-                onSaved={handleCloseCopy}
+                onSaved={() => {
+                  handleCloseCopy()
+                  dispatch(projectsActions.refetchLoadedPages())
+                }}
               />
             )}
           </Modal>
