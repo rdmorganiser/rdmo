@@ -9,6 +9,8 @@ import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
+import { Tooltip } from 'rdmo/core/assets/js/_bs53/components'
+
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
@@ -64,7 +66,26 @@ const ProjectForm = ({
   const catalogOptions = useMemo(
     () => (catalogs || [])
       .filter(c => c.available)
-      .map(c => ({ value: c.id, label: c.title })),
+      .map(c => ({
+        value: c.id,
+        label: (
+          <>
+            {c.title}{' '}
+            <Tooltip
+              title={c.help || gettext('No help available for this catalog.')}
+              placement="right"
+            >
+              <i
+                className="bi bi-info-circle ms-2"
+                tabIndex={0}
+                role="img"
+                aria-label={gettext('Catalog help')}
+                style={{ cursor: 'pointer' }}
+              />
+            </Tooltip>
+          </>
+        )
+      })),
     [catalogs]
   )
 
