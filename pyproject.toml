@@ -83,7 +83,7 @@ dev = [
   "setuptools>=73,<81",
 ]
 gunicorn = [
-  "gunicorn>=23.0,<24.0",
+  "gunicorn>=23.0,<26.0",
 ]
 ldap = [
   "django-auth-ldap>=4.5,<6.0",
