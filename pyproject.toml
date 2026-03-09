@@ -16,7 +16,7 @@ keywords = [
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "AUTHORS"]
 authors = [
-  {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
+  {name = "RDMO Community and individual contributors", email = "contact@rdmo.org"},
 ]
 requires-python = ">=3.10"
 classifiers = [
