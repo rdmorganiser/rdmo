@@ -2,46 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import classNames from 'classnames'
-import { parse, format, isValid } from 'date-fns'
-import { enGB, de, it, es, fr } from 'date-fns/locale'
+import { format, isValid, parseISO } from 'date-fns'
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty } from 'lodash'
 
-import lang from 'rdmo/core/assets/js/utils/lang'
+import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
 import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
-
-  const getLocale = () => {
-    switch (lang) {
-      case 'de':
-        return de
-      case 'it':
-        return it
-      case 'es':
-        return es
-      case 'fr':
-        return fr
-      default:
-        return enGB
-    }
-  }
-
-  const getDateFormat = () => {
-    switch (lang) {
-      case 'de':
-        return 'dd.MM.yyyy'
-      case 'it':
-        return 'dd/MM/yyyy'
-      case 'es':
-        return 'dd/MM/yyyy'
-      case 'fr':
-        return 'dd/MM/yyyy'
-      default:
-        return 'dd/MM/yyyy'
-    }
-  }
 
   const handleChange = (date) => {
     const text = format(date, 'yyyy-MM-dd')
@@ -49,7 +19,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   }
 
   const handleRawChange = useDebouncedCallback((event) => {
-    const date = parse(event.target.value, getDateFormat(), new Date())
+    const date = parseDate(event.target.value)
     if (isValid(date)) {
       handleChange(date)
     }
@@ -61,13 +31,16 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
     'default': isDefaultValue(question, value)
   })
 
+  const getSelected = () => isEmpty(value.text) ? null : parseISO(value.text)
+
   return (
     <div className="interview-input date-input">
       <div className="buttons-wrapper">
         {buttons}
         <DatePicker
           className={classnames}
-          selected={value.text}
+          selected={getSelected()}
+          openToDate={getSelected()}
           onChange={(date) => handleChange(date)}
           onChangeRaw={(event) => handleRawChange(event)}
           locale={getLocale()}
