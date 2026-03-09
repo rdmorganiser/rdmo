@@ -1,6 +1,6 @@
 # Changelog 📔
 
-## [RDMO 2.4.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.1) (March 15, 2026)
+## [RDMO 2.4.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.1) (March 9, 2026)
 
 ### Breaking changes ⚠️
 
@@ -14,12 +14,13 @@
 * Fix removal of blank inputs in the interview (#1532).
 * Fix manual input of dates in the date picker widget in the interview and the filter in the projects table (#1539).
 * Fix catalog export template.
+* Fix timestamps of snapshots in copied projects: Snapshots and values will keep their original
+  `created` timestamp, but will update their `updated` timestamp.
 
 **Milestones**:
-[2.4.1](https://github.com/rdmorganiser/rdmo/milestone/27?closed=1),
+[2.4.1](https://github.com/rdmorganiser/rdmo/milestone/27?closed=1)
 
-**Commit history**: [2.3.2...2.4.0](https://github.com/rdmorganiser/rdmo/compare/2.3.2...2.4.0)
-
+**Commit history**: [2.4.0...2.4.1](https://github.com/rdmorganiser/rdmo/compare/2.4.0...2.4.1)
 
 ## [RDMO 2.4.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.0) (December 15, 2025)
 
