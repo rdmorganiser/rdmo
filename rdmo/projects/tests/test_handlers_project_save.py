@@ -1,12 +1,12 @@
 import pytest
 
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
 
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     P, C, T = arrange_projects_catalogs_and_tasks()
     # === Initial state ===
@@ -26,8 +26,8 @@ def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings, enabl
 
 
 @pytest.mark.django_db
-def test_project_views_sync_when_changing_a_catalog_on_a_project(settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_project_views_sync_when_changing_a_catalog_on_a_project(settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     P, C, V = arrange_projects_catalogs_and_views()
     # === Initial state ===

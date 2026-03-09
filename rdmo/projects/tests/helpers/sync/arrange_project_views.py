@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
 
 from rdmo.projects.models import Membership, Project
-from rdmo.projects.tests.helpers.project_sync.constants import P_TITLE, one_two_three
+from rdmo.projects.tests.helpers.sync.constants import P_TITLE, one_two_three
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
@@ -14,10 +14,11 @@ from rdmo.views.models import View
 def _suppress_project_view_sync():
     """Silence automatic project/view sync during test setup."""
     with (
-        patch('rdmo.projects.handlers.sync_utils.sync_task_or_view_to_projects'),
+        patch('rdmo.projects.sync.sync_task_or_view_to_projects'),
         patch('rdmo.projects.handlers.view_changed.sync_task_or_view_to_projects')
-        ):
+    ):
         yield
+
 
 def arrange_projects_catalogs_and_views():
     with _suppress_project_view_sync():

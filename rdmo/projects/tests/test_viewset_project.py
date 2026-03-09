@@ -4,6 +4,9 @@ from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
 from django.urls import reverse
 
+from rdmo.tasks.models import Task
+from rdmo.views.models import View
+
 from ..models import Membership, Project, Snapshot, Value, Visibility
 
 users = (
@@ -76,6 +79,10 @@ owner_id = 5
 owner_projects = [1, 2, 3, 4, 5, 10, 12]
 
 page_size = 5
+
+site_id = 1
+view_id = 1
+task_id = 1
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -298,6 +305,76 @@ def test_create_parent(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('sync', [True, False])
+def test_create_tasks(db, client, settings, username, password, project_id, sync):
+    settings.PROJECT_TASKS_SYNC = sync
+
+    client.login(username=username, password=password)
+
+    task = Task.objects.get(id=task_id)
+    task.available = False
+    task.save()
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    if password:
+        assert response.status_code == 201
+
+        project = Project.objects.get(id=response.json().get('id'))
+
+        if username in ('admin', 'api'):
+            available_tasks = Task.objects.filter(sites=site_id)
+        else:
+            available_tasks = Task.objects.filter(sites=site_id).exclude(id=task_id)
+
+        assert {t.id for t in available_tasks} == {t.id for t in project.tasks.all()}
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('sync', [True, False])
+def test_create_views(db, client, settings, username, password, project_id, sync):
+    settings.PROJECT_VIEWS_SYNC = sync
+
+    client.login(username=username, password=password)
+
+    view = View.objects.get(id=view_id)
+    view.available = False
+    view.save()
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+
+    if password:
+        assert response.status_code == 201
+
+        project = Project.objects.get(id=response.json().get('id'))
+
+        if username in ('admin', 'api'):
+            available_views = View.objects.filter(sites=site_id)
+        else:
+            available_views = View.objects.filter(sites=site_id).exclude(id=view_id)
+
+        assert {v.id for v in available_views} == {v.id for v in project.views.all()}
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_copy(db, files, client, username, password, project_id):
     client.login(username=username, password=password)
 
@@ -490,8 +567,8 @@ def test_update_parent(db, client, username, password, project_id):
         assert Project.objects.get(pk=project_id).parent == project.parent
 
 
-def test_update_project_views_not_allowed(db, client, settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_update_project_views_not_allowed(db, client, settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     client.login(username='owner', password='owner')
     url = reverse(urlnames['detail'], args=[project_id])

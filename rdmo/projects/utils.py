@@ -6,7 +6,6 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
@@ -14,8 +13,6 @@ from django.utils.timezone import now
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
-from rdmo.tasks.managers import TaskQuerySet
-from rdmo.views.managers import ViewQuerySet
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +100,7 @@ def copy_project(instance, site, owners):
     for value in values:
         value.id = None
         value.project = project
-        value.created = timestamp
+        value.updated = timestamp
 
         if value.file:
             # file values cannot be bulk created since we need their id and only postgres provides that (reliably)
@@ -120,7 +117,6 @@ def copy_project(instance, site, owners):
     for snapshot, snapshot_values in snapshots.items():
         snapshot.id = None
         snapshot.project = project
-        snapshot.created = timestamp
         snapshot.save(copy_values=False)
 
         project_snapshot_values = []
@@ -128,7 +124,7 @@ def copy_project(instance, site, owners):
             value.id = None
             value.project = project
             value.snapshot = snapshot
-            value.created = timestamp
+            value.updated = timestamp
 
             if value.file:
                 value.save()
@@ -371,15 +367,3 @@ def send_contact_message(request, subject, message):
     send_mail(subject, message,
               to=settings.PROJECT_CONTACT_RECIPIENTS,
               cc=[request.user.email], reply_to=[request.user.email])
-
-
-def filter_tasks_or_views_for_project(task_or_view, project) -> TaskQuerySet | ViewQuerySet:
-    queryset = ( task_or_view.objects
-        .filter(Q(catalogs=None) | Q(catalogs=project.catalog))
-        .filter(Q(groups=None) | Q(groups__in=project.groups))
-    )
-
-    if settings.MULTISITE:
-        return  queryset.filter(sites=project.site)
-    else:
-        return  queryset.filter(Q(sites=None) | Q(sites=project.site))

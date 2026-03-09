@@ -1,35 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
-import { formatISO, set } from 'date-fns'
+import { formatISO, set, isValid, parseISO } from 'date-fns'
+import { get } from 'lodash'
+
+import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
 import { Link, Select } from 'rdmo/core/assets/js/components'
-import useDatePicker from '../../hooks/useDatePicker'
 
 const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsActions }) => {
-  const {
-    dateRange,
-    dateFormat,
-    getLocale,
-    setStartDate,
-    setEndDate
-  } = useDatePicker()
-
   const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
   const toggleFilters = () => configActions.updateConfig('showFilters', !showFilters)
 
   const resetAllFilters = () => {
     configActions.deleteConfig('params.catalog')
     configActions.deleteConfig('params.created_after')
-    setStartDate('created', null)
     configActions.deleteConfig('params.created_before')
-    setEndDate('created', null)
     configActions.deleteConfig('params.last_changed_after')
-    setStartDate('last_changed', null)
     configActions.deleteConfig('params.last_changed_before')
-    setEndDate('last_changed', null)
     configActions.updateConfig('params.page', '1')
     projectsActions.fetchProjects()
   }
@@ -43,32 +31,43 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
         </span>
       ),
     }))
+
   const selectedCatalog = get(config, 'params.catalog', '')
+
   const updateCatalogFilter = (value) => {
     value ? configActions.updateConfig('params.catalog', value) : configActions.deleteConfig('params.catalog')
     projectsActions.fetchProjects()
   }
 
-  // Abstract function to handle date change
-  const handleDateChange = (type, position, date) => {
-    if (position === 'start') {
-      setStartDate(type, date)
+  const handleDateChange = (type, date) => {
+    if (type.endsWith('_after')) {
       if (date) {
         const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-        configActions.updateConfig(`params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' }))
+        configActions.updateConfig(`params.${type}`, formatISO(startOfDayDate, { representation: 'complete' }))
       } else {
-        configActions.deleteConfig(`params.${type}_after`)
+        configActions.deleteConfig(`params.${type}`)
       }
-    } else if (position === 'end') {
-      setEndDate(type, date)
+    } else if (type.endsWith('_before')) {
       if (date) {
         const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
-        configActions.updateConfig(`params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' }))
+        configActions.updateConfig(`params.${type}`, formatISO(endOfDayDate, { representation: 'complete' }))
       } else {
-        configActions.deleteConfig(`params.${type}_before`)
+        configActions.deleteConfig(`params.${type}`)
       }
     }
     projectsActions.fetchProjects()
+  }
+
+  const handleDateChangeRaw = (type, event) => {
+    const date = parseDate(event.target.value, type.endsWith('_before'))
+    if (isValid(date)) {
+      handleDateChange(type, date)
+    }
+  }
+
+  const getSelected = (type) => {
+    const selected = get(config, `params.${type}`)
+    return selected ? parseISO(selected) : null
   }
 
   return (
@@ -98,26 +97,30 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                         <DatePicker
                           autoComplete="off"
                           className="form-control"
-                          dateFormat={dateFormat}
-                          id="created-start-date-picker"
+                          dateFormat={getDateFormat()}
+                          id="created-after-date-picker"
                           isClearable
                           locale={getLocale()}
-                          onChange={date => handleDateChange('created', 'start', date)}
+                          onChange={date => handleDateChange('created_after', date)}
+                          onChangeRaw={event => handleDateChangeRaw('created_after', event)}
                           placeholderText={gettext('Select start date')}
-                          selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
+                          selected={getSelected('created_after')}
+                          openToDate={getSelected('created_after')}
                         />
                       </div>
                       <div className="col-md-6">
                         <DatePicker
                           autoComplete="off"
                           className="form-control"
-                          dateFormat={dateFormat}
-                          id="created-end-date-picker"
+                          dateFormat={getDateFormat()}
+                          id="created-before-date-picker"
                           isClearable
                           locale={getLocale()}
-                          onChange={date => handleDateChange('created', 'end', date)}
+                          onChange={date => handleDateChange('created_before', date)}
+                          onChangeRaw={event => handleDateChangeRaw('created_before', event)}
                           placeholderText={gettext('Select end date')}
-                          selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
+                          selected={getSelected('created_before')}
+                          openToDate={getSelected('created_before')}
                         />
                       </div>
                     </div>
@@ -132,26 +135,30 @@ const ProjectFilters = ({ catalogs, config, configActions, isManager, projectsAc
                       <DatePicker
                         autoComplete="off"
                         className="form-control"
-                        dateFormat={dateFormat}
-                        id="last-changed-start-date-picker"
+                        dateFormat={getDateFormat()}
+                        id="last-changed-after-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('last_changed', 'start', date)}
+                        onChange={date => handleDateChange('last_changed_after', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed_after', event)}
                         placeholderText={gettext('Select start date')}
-                        selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
+                        selected={getSelected('last_changed_after')}
+                        openToDate={getSelected('last_changed_after')}
                       />
                     </div>
                     <div className="col-md-6">
                       <DatePicker
                         autoComplete="off"
                         className="form-control"
-                        dateFormat={dateFormat}
-                        id="last-changed-end-date-picker"
+                        dateFormat={getDateFormat()}
+                        id="last-changed-before-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('last_changed', 'end', date)}
+                        onChange={date => handleDateChange('last_changed_before', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed_before', event)}
                         placeholderText={gettext('Select end date')}
-                        selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
+                        selected={getSelected('last_changed_before')}
+                        openToDate={getSelected('last_changed_before')}
                       />
                     </div>
                   </div>

@@ -44,16 +44,6 @@ class ProjectQuerySet(TreeQuerySet):
         else:
             return self.none()
 
-    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
-        catalogs_filter = Q()
-        if exclude_null:
-          catalogs_filter &= Q(catalog__isnull=False)
-        if catalogs:
-            catalogs_filter &= Q(catalog__in=catalogs)
-        if exclude_catalogs:
-            catalogs_filter &= ~Q(catalog__in=exclude_catalogs)
-        return self.filter(catalogs_filter)
-
     def filter_groups(self, groups):
         if not groups:
             return self
@@ -70,31 +60,6 @@ class ProjectQuerySet(TreeQuerySet):
         memberships = Membership.objects.filter(role='owner', user__in=users)
         # projects that have those memberships
         return self.filter(memberships__in=memberships).distinct()
-
-    def filter_projects_for_task_or_view(self, instance):
-        # projects that have an unavailable catalog should be disregarded
-        qs = self.filter(catalog__available=True)
-
-        # when View/Task is not available it should not show for any project
-        if not instance.available:
-            return self.none()
-
-        # when View/Task has any catalogs it can be filtered for those
-        if instance.catalogs.exists():
-            qs = qs.filter(catalog__in=instance.catalogs.all())
-
-        # when View/Task has any sites it can be filtered for those
-        if instance.sites.exists():
-            qs = qs.filter(site__in=instance.sites.all())
-        elif settings.MULTISITE:
-            # when View/Task has no sites in a multi-site, it should not appear at all
-            return self.none()
-
-        # when  has any groups it can be filtered for those
-        if instance.groups.exists():
-            qs = qs.filter_groups(instance.groups.all())
-
-        return qs
 
 
 class MembershipQuerySet(models.QuerySet):
@@ -252,6 +217,7 @@ class ValueQuerySet(models.QuerySet):
             sets[attribute].add((set_prefix, set_index))
         return sets
 
+
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
     def get_queryset(self):
@@ -260,14 +226,8 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
     def filter_user(self, user, filter_for_user=False):
         return self.get_queryset().filter_user(user, filter_for_user)
 
-    def filter_catalogs(self, catalogs=None, exclude_catalogs=None, exclude_null=True):
-        return self.get_queryset().filter_catalogs(catalogs=catalogs, exclude_catalogs=exclude_catalogs,
-                                                   exclude_null=exclude_null)
     def filter_groups(self, groups):
         return self.get_queryset().filter_groups(groups)
-
-    def filter_projects_for_task_or_view(self, instance):
-        return self.get_queryset().filter_projects_for_task_or_view(instance)
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):
