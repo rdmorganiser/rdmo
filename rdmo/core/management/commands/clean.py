@@ -24,7 +24,7 @@ class Command(BaseCommand):
             self.remove_path('rdmo.egg-info')
 
         if options['command'] in ['all', 'git']:
-            subprocess.call(['git', 'clean', '-dfx'], cwd='rdmo')
+            subprocess.check_call(['git', 'clean', '-dfx'], cwd='rdmo')
 
         if options['command'] in ['all', 'media']:
             self.remove_path(settings.MEDIA_ROOT)

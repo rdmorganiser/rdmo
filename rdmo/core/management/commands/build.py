@@ -24,4 +24,4 @@ class Command(BaseCommand):
         call_command('npm', 'run', 'build:dist')
 
         # build the python package
-        subprocess.call(['/bin/bash', '-c', f'{sys.executable} -m build'])
+        subprocess.check_call(['/bin/bash', '-c', f'{sys.executable} -m build'])
