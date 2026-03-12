@@ -4,7 +4,7 @@ import {
   FETCH_CATALOGS_ERROR, FETCH_CATALOGS_INIT, FETCH_CATALOGS_SUCCESS,
   FETCH_FILETYPES_ERROR, FETCH_FILETYPES_INIT, FETCH_FILETYPES_SUCCESS,
   FETCH_IMPORT_URLS_ERROR, FETCH_IMPORT_URLS_INIT, FETCH_IMPORT_URLS_SUCCESS,
-  CREATE_PROJECT_ERROR, CREATE_PROJECT_INIT, CREATE_PROJECT_SUCCESS,
+  CREATE_PROJECT_ERROR, CREATE_PROJECT_INIT,
   COPY_PROJECT_ERROR, COPY_PROJECT_INIT,
   UPDATE_PROJECT_ERROR, UPDATE_PROJECT_INIT
 } from '../actions/actionTypes'
@@ -28,13 +28,6 @@ export default function projectsReducer(state = initialState, action) {
         hasNext: action.projects.next !== null
       }
     }
-    case CREATE_PROJECT_SUCCESS:
-      {
-        return {
-          ...state,
-          projects: [action.project, ...state.projects.filter(p => p.id !== action.project.id)]
-        }
-      }
     case FETCH_PROJECTS_ERROR:
     case CREATE_PROJECT_ERROR:
     case COPY_PROJECT_ERROR:

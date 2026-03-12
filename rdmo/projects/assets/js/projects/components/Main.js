@@ -230,7 +230,7 @@ const Main = () => {
       const highestRoleString = (row.highest_role && row.highest_role.project_id != row.id) ? (
         <>
           {row.highest_role.role_display} {gettext('of')}{' '}
-          <a href={`${baseUrl}/project/${row.highest_role.project_id}`}>
+          <a href={`${baseUrl}/projects/${row.highest_role.project_id}`}>
             {row.highest_role.project_title}
           </a>
         </>
@@ -401,10 +401,7 @@ const Main = () => {
                 mode="copy"
                 initialProject={selectedProject}
                 catalogs={catalogs ?? []}
-                onSaved={() => {
-                  handleCloseCopy()
-                  dispatch(projectsActions.refetchLoadedPages())
-                }}
+                onSaved={handleCloseCopy}
               />
             )}
           </Modal>
