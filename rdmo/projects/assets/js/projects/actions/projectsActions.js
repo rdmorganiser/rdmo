@@ -1,4 +1,5 @@
 import ProjectsApi from '../api/ProjectsApi'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import {
   FETCH_PROJECTS_ERROR,
@@ -81,6 +82,8 @@ export function createProject(data) {
       .then(project => {
         dispatch(removeFromPending('createProject'))
         dispatch({ type: CREATE_PROJECT_SUCCESS, project })
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
       })
       .catch(error => {
         dispatch(removeFromPending('createProject'))
@@ -99,6 +102,8 @@ export function copyProject(id, data) {
       .then(project => {
         dispatch(removeFromPending('copyProject'))
         dispatch({ type: COPY_PROJECT_SUCCESS, project })
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
       })
       .catch(error => {
         dispatch(removeFromPending('copyProject'))
@@ -109,19 +114,39 @@ export function copyProject(id, data) {
 }
 
 export function refetchLoadedPages() {
-  return function (dispatch, getState) {
-    const { params } = getState().config
-    const currentPage = parseInt(params?.page ?? '1', 10)
+  const pendingId = 'fetchProjects'
 
-    return dispatch(fetchProjects()).then(() => {
-      let chain = Promise.resolve()
-      for (let p = 2; p <= currentPage; p++) {
-        chain = chain
-          .then(() => dispatch(configActions.updateConfig('params.page', p.toString())))
-          .then(() => dispatch(fetchProjects(false)))
-      }
-      return chain
-    })
+  return function (dispatch, getState) {
+    const { params, myProjects } = getState().config
+    const currentPage = parseInt(params?.page ?? '1', 10)
+    const baseParams = { ...(params || {}) }
+
+    const fetchPage = (nextParams) => (
+      myProjects
+        ? ProjectsApi.fetchUserProjects(nextParams)
+        : ProjectsApi.fetchProjects(nextParams)
+    )
+
+    dispatch(addToPending(pendingId))
+
+    return Promise.all(
+      Array.from({ length: currentPage }, (_, index) => {
+        const page = (index + 1).toString()
+        return fetchPage({ ...baseParams, page })
+      })
+    )
+      .then(responses => {
+        const lastResponse = responses[responses.length - 1]
+
+        const mergedProjects = {
+          ...lastResponse,
+          results: responses.flatMap(response => response.results)
+        }
+
+        return dispatch(fetchProjectsSuccess(mergedProjects, false))
+      })
+      .catch(error => dispatch(fetchProjectsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
