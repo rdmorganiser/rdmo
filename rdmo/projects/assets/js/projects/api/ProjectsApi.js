@@ -15,6 +15,14 @@ class ProjectsApi extends BaseApi {
     return this.get(url)
   }
 
+  static createProject(data) {
+    return this.post('/api/v1/projects/projects/', data)
+  }
+
+  static copyProject(id, data) {
+    return this.post(`/api/v1/projects/projects/${id}/copy/`, data)
+  }
+
   static fetchCatalogs() {
     return fetch('/api/v1/projects/catalogs/').then(response => {
       if (response.ok) {
@@ -42,30 +50,30 @@ class ProjectsApi extends BaseApi {
     formData.append('method', 'upload_file')
     formData.append('uploaded_file', file)
     return fetch(baseUrl + url, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': Cookies.get('csrftoken'),
-        },
-        body: formData
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': Cookies.get('csrftoken'),
+      },
+      body: formData
     }).catch(error => {
-        throw new Error(`API error: ${error.message}`)
+      throw new Error(`API error: ${error.message}`)
     }).then(response => {
-        if (response.ok) {
-            if (response.url) {
-                // open in new window:
-                // window.open(response.url, '_blank')
-                // open in same window:
-                window.location.href = response.url
-            } else {
-                throw new Error('Response does not contain a URL')
-            }
-        } else if (response.status == 400) {
-            return response.json().then(errors => {
-                throw new Error(`Validation error: ${JSON.stringify(errors)}`)
-            })
+      if (response.ok) {
+        if (response.url) {
+          // open in new window:
+          // window.open(response.url, '_blank')
+          // open in same window:
+          window.location.href = response.url
         } else {
-            throw new Error(`API error: ${response.statusText} (${response.status})`)
+          throw new Error('Response does not contain a URL')
         }
+      } else if (response.status == 400) {
+        return response.json().then(errors => {
+          throw new Error(`Validation error: ${JSON.stringify(errors)}`)
+        })
+      } else {
+        throw new Error(`API error: ${response.statusText} (${response.status})`)
+      }
     })
   }
 

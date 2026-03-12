@@ -11,6 +11,7 @@ import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 
 import projectReducer from '../reducers/projectReducer'
+import rolesReducer from '../../common/reducers/rolesReducer'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
@@ -21,6 +22,7 @@ import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
 import * as projectActions from '../actions/projectActions'
+import * as rolesActions from '../../common/actions/rolesActions'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -40,6 +42,7 @@ export default function configureStore() {
     settings: settingsReducer,
     templates: templateReducer,
     user: userReducer,
+    roles: rolesReducer
   })
 
   const initialState = {
@@ -69,7 +72,8 @@ export default function configureStore() {
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
-      store.dispatch(projectActions.fetchProject())
+      store.dispatch(projectActions.fetchProject()),
+      store.dispatch(rolesActions.fetchRoles())
     ]).then(() => {
       const permissions = store.getState().project.project.project.permissions
       if (permissions.can_view_invite) {

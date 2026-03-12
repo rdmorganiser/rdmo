@@ -8,16 +8,15 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 import Select from 'rdmo/core/assets/js/components/Select'
 
 import { updateProjectMember, updateProjectInvite } from '../../../actions/projectActions'
-import { roleOptions } from '../../../../common/constants/roles'
 
-import MembershipDeleteModal  from './MembershipDeleteModal'
+import MembershipDeleteModal from './MembershipDeleteModal'
 
 const MembershipTable = ({ persons, type }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
-
+  const roleOptions = useSelector((state) => state.roles?.roles) || []
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
   const [modalState, setModalState] = useState(null)
 
@@ -89,7 +88,7 @@ const MembershipTable = ({ persons, type }) => {
                       onChange={(newRole) => {
                         if (!newRole) return
                         (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole }))
-                                                 : dispatch(updateProjectInvite(person.id, { role: newRole }))
+                          : dispatch(updateProjectInvite(person.id, { role: newRole }))
                       }}
                       isClearable={false}
                       isDisabled={(
@@ -98,7 +97,7 @@ const MembershipTable = ({ persons, type }) => {
                         ) : !perms.can_change_invite
                       )}
                     />
-                }
+                  }
                 </td>
                 <td className="text-end">
                   {showActions && (
@@ -114,9 +113,9 @@ const MembershipTable = ({ persons, type }) => {
                     </button>
                   )}
                 </td>
-            </tr>
+              </tr>
             )
-        })}
+          })}
         </tbody>
       </table>
       {
