@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const semver = require('semver')
 
-// get the engines from package.json and check that we are actualy on the correct node version
+// get the engines from package.json and check that we are actually on the correct node version
 const engines = require('./package.json').engines
 if (engines?.node && !semver.satisfies(process.version, engines.node)) {
   console.error(`Required Node ${engines.node}, but running ${process.version}`)
