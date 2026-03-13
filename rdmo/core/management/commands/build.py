@@ -11,7 +11,7 @@ from packaging.version import parse
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('--pretend-version', dest='pretend_version', type=parse)
+        parser.add_argument('version', nargs='?', type=parse)
 
     def handle(self, *args, **options):
         try:
@@ -19,8 +19,8 @@ class Command(BaseCommand):
         except ImportError as e:
             raise CommandError('build is not installed.') from e
 
-        if options['pretend_version'] is not None:
-            os.environ['SETUPTOOLS_SCM_PRETEND_VERSION'] = str(options['pretend_version'])
+        if options['version'] is not None:
+            os.environ['SETUPTOOLS_SCM_PRETEND_VERSION'] = str(options['version'])
 
         # delete dist and rdmo.egg-info
         call_command('clean', 'build')

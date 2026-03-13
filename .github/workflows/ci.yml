@@ -42,7 +42,7 @@ jobs:
     # build the webpack bundle
     - uses: actions/setup-node@v6
       with:
-        node-version: 22
+        node-version: 22.22
         cache: npm
     - run: npm ci && npm run build:dist
     - name: Build and inspect package
