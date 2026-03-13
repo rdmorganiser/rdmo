@@ -1,5 +1,17 @@
 # Changelog 📔
 
+## [RDMO 2.4.2](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.2) (March 13, 2026)
+
+### Maintenance and Dependencies 🔧
+
+* Revert copy-webpack-plugin upgrade, which caused missing static files in RDMO 2.4.1.
+* Add additional checks to `build` management script.
+
+**Milestones**:
+[2.4.2](https://github.com/rdmorganiser/rdmo/milestone/28?closed=1)
+
+**Commit history**: [2.4.1...2.4.2](https://github.com/rdmorganiser/rdmo/compare/2.4.1...2.4.2)
+
 ## [RDMO 2.4.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.1) (March 9, 2026)
 
 ### Breaking changes ⚠️
