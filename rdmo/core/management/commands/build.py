@@ -1,17 +1,26 @@
+import os
 import subprocess
 import sys
 
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
+from packaging.version import parse
+
 
 class Command(BaseCommand):
+
+    def add_arguments(self, parser):
+        parser.add_argument('--pretend-version', dest='pretend_version', type=parse)
 
     def handle(self, *args, **options):
         try:
             import build  # noqa: F401
         except ImportError as e:
             raise CommandError('build is not installed.') from e
+
+        if options['pretend_version'] is not None:
+            os.environ['SETUPTOOLS_SCM_PRETEND_VERSION'] = str(options['pretend_version'])
 
         # delete dist and rdmo.egg-info
         call_command('clean', 'build')
@@ -23,5 +32,5 @@ class Command(BaseCommand):
         call_command('npm', 'ci')
         call_command('npm', 'run', 'build:dist')
 
-        # build the python package
-        subprocess.call(['/bin/bash', '-c', f'{sys.executable} -m build'])
+        # # build the python package
+        subprocess.check_call(['/bin/bash', '-c', f'{sys.executable} -m build'])
