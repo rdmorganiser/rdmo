@@ -10,6 +10,7 @@ version to build the front-end assets.
 ### Maintenance and Dependencies 🔧
 
 * Fix `npm` management script and build with correct node version.
+* Upgrade `node` from `22.16` to `22.22`
 * Upgrade copy-webpack-plugin upgrade.
 
 **Milestones**:
