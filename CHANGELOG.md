@@ -1,5 +1,23 @@
 # Changelog 📔
 
+## [RDMO 2.4.3](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.3) (March 16, 2026)
+
+### Important ⚠️
+
+Due to an errors in our release process, RDMO 2.4.1 and RDMO 2.4.2 used an outdated Node.js
+version to build the front-end assets.
+
+### Maintenance and Dependencies 🔧
+
+* Fix `npm` management script and build with correct node version.
+* Upgrade `node` from `22.16` to `22.22`
+* Upgrade copy-webpack-plugin upgrade.
+
+**Milestones**:
+[2.4.3](https://github.com/rdmorganiser/rdmo/milestone/29?closed=1)
+
+**Commit history**: [2.4.2...2.4.3](https://github.com/rdmorganiser/rdmo/compare/2.4.2...2.4.3)
+
 ## [RDMO 2.4.2](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.2) (March 13, 2026)
 
 ### Maintenance and Dependencies 🔧
