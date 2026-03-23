@@ -77,7 +77,7 @@ class QuestionSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, s
     markdown_fields = ('help', 'text')
 
     model = serializers.SerializerMethodField()
-    conditions = ConditionSerializer(default=None, many=True)
+    conditions = ConditionSerializer(default=list, many=True)
     optionsets = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
@@ -125,7 +125,7 @@ class QuestionSetSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    conditions = ConditionSerializer(default=None, many=True)
+    conditions = ConditionSerializer(default=list, many=True)
     elements = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
 
@@ -164,7 +164,7 @@ class PageSerializer(ElementModelSerializerMixin, MarkdownSerializerMixin, seria
     markdown_fields = ('title', 'help')
 
     model = serializers.SerializerMethodField()
-    conditions = ConditionSerializer(default=None, many=True)
+    conditions = ConditionSerializer(default=list, many=True)
     elements = serializers.SerializerMethodField()
     section = serializers.SerializerMethodField()
     prev_page = serializers.SerializerMethodField()
