@@ -1,5 +1,22 @@
 # Changelog 📔
 
+## [RDMO 2.4.4](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.4) (March 24, 2026)
+
+### Bug fixes 🐛
+
+Due to a breaking change in
+[Django Rest Framework 3.17.0](https://github.com/encode/django-rest-framework/releases/tag/3.17.0)
+several bugs needed to be fixed (#1567):
+
+* Refactor `REST_FRAMEWORK` settings
+* Fix page serializers
+* Pin Django Rest Framework minor version
+
+**Milestones**:
+[2.4.4](https://github.com/rdmorganiser/rdmo/milestone/30?closed=1)
+
+**Commit history**: [2.4.3...2.4.4](https://github.com/rdmorganiser/rdmo/compare/2.4.3...2.4.4)
+
 ## [RDMO 2.4.3](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.3) (March 16, 2026)
 
 ### Important ⚠️
