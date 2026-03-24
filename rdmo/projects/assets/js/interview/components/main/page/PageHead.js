@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { capitalize, isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, upperFirst } from 'lodash'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
@@ -122,7 +122,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 !disabled && (
                   <li>
                     <a href="" title={labels.add} className="add-set" onClick={handleOpenCreateModal}>
-                      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
+                      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
                     </a>
                   </li>
                 )
@@ -153,7 +153,7 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
         ) : (
           !disabled && (
             <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
-              <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {capitalize(page.verbose_name)}
+              <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
             </button>
           )
         )

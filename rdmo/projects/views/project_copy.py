@@ -21,10 +21,7 @@ class ProjectCopyView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     permission_required = ('projects.add_project', 'projects.view_project_object')
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site() \
-                                  .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user) \
-                                  .order_by('-available', 'order')
+        catalogs = Catalog.objects.filter_for_user(self.request.user)
         projects = Project.objects.filter_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()

@@ -2,21 +2,10 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
 from rdmo.core.tests.utils import get_obj_perms_status_code
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
-
-status_map = {
-    'list': {
-        'default': 405, 'anonymous': 401
-    },
-    'create': {
-        'default': 200, 'anonymous': 401
-    },
-    'create_error': {
-        'default': 400, 'anonymous': 401
-    }
-}
 
 catalog_uri_paths = [
     'catalog',
@@ -36,7 +25,10 @@ def test_list(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.get(url)
-    assert response.status_code == status_map['list'].get(username, status_map['list']['default']), response.json()
+    if status_map['upload-import'].get(username) == 200:
+        assert response.status_code == 405, response.json()
+    else:
+        assert response.status_code == status_map['upload-import'].get(username), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -48,7 +40,7 @@ def test_create_create(db, client, username, password, json_data, delete_all_obj
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
 
-    assert response.status_code == status_map['create'].get(username, status_map['create']['default']), response.json()
+    assert response.status_code == status_map['upload-import'].get(username), response.json()
 
     if response.status_code == 200:
         for element in response.json():
@@ -66,12 +58,12 @@ def test_create_update(db, client, username, password, json_data):
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
 
-    assert response.status_code == status_map['create'].get(username, status_map['create']['default']), response.json()
+    assert response.status_code == status_map['upload-import'].get(username), response.json()
 
     if response.status_code == 200:
         for element in response.json():
             assert element.get('created') is False
-            obj_perm_status_code = get_obj_perms_status_code(element.get('uri_path'), username, 'update')
+            obj_perm_status_code = get_obj_perms_status_code(element.get('uri_path'), username, 'upload-import')
             if obj_perm_status_code == 200:
                 assert element.get('updated') is True
             else:
@@ -91,9 +83,9 @@ def test_create_update_certain_catalog(db, client, username, password, catalog_u
     url = reverse(urlnames['list'])
     response = client.post(url, instance_data, content_type='application/json')
 
-    assert response.status_code == status_map['create'].get(username, status_map['create']['default']), response.json()
+    assert response.status_code == status_map['upload-import'].get(username), response.json()
     if response.status_code == 200:
-        obj_perm_status_code = get_obj_perms_status_code(catalog_uri_path, username, 'update')
+        obj_perm_status_code = get_obj_perms_status_code(catalog_uri_path, username, 'upload-import')
         for element in response.json():
             assert element.get('created') is False
             if obj_perm_status_code == 200:
@@ -108,8 +100,11 @@ def test_create_empty(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.post(url, {}, content_type='application/json')
-    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), \
-           response.json()
+    if status_map['upload-import'].get(username) == 200:
+        assert response.status_code == 400, response.json()
+        assert 'This field may not be blank.' in response.json()['elements'], response.json()['elements']
+    else:
+        assert response.status_code == status_map['upload-import'].get(username), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -120,5 +115,8 @@ def test_create_error(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.post(url, json_data, content_type='application/json')
-    assert response.status_code == status_map['create_error'].get(username, status_map['create_error']['default']), \
-           response.json()
+    if status_map['upload-import'].get(username) == 200:
+        assert response.status_code == 400, response.json()
+        assert 'This field may not be blank.' in response.json()['elements'], response.json()['elements']
+    else:
+        assert response.status_code == status_map['upload-import'].get(username), response.json()

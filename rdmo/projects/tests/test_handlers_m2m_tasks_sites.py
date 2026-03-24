@@ -1,15 +1,15 @@
 import pytest
 
 from rdmo.projects.models import Project
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_sites_and_tasks
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_sites_and_tasks
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
 
 @pytest.mark.django_db
-def test_project_tasks_sync_when_updating_task_sites(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_project_tasks_sync_when_updating_task_sites(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     P, T, S = arrange_projects_sites_and_tasks()
     # === Initial state ===
@@ -47,7 +47,7 @@ def test_project_tasks_sync_when_updating_task_sites(settings, enable_project_ta
     assert set(P[1].tasks.all()) == set()  # removed
     assert set(P[2].tasks.all()) == {T[2], T[1]}  # stays
     assert set(P[3].tasks.all()) == {T[3]}
-    assert_all_projects_are_synced_with_instance_m2m_field(T[2], 'sites')
+    assert_all_projects_are_synced_with_instance_m2m_field(T[1], 'sites')
 
     # === Update: remove C2 and add C3 to V1 → it should appear in P1 and P3 ===
     T[1].sites.remove(S[2])  # V1 → []

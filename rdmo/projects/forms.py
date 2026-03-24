@@ -135,7 +135,7 @@ class ProjectUpdateVisibilityForm(forms.ModelForm):
             else:
                 self.instance.delete()
         else:
-            visibility, created = Visibility.objects.update_or_create(project=self.project)
+            visibility, _created = Visibility.objects.update_or_create(project=self.project)
 
             if settings.MULTISITE:
                 if self.user.has_perm('projects.change_visibility'):
@@ -275,7 +275,7 @@ class MembershipCreateForm(forms.Form):
                                         label=_('User'),
                                         help_text=_('The username or e-mail of the new user.'))
     role = forms.CharField(widget=forms.RadioSelect(choices=ROLE_CHOICES),
-                           initial='author')
+                           initial='author', label=_('Role'))
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
@@ -328,7 +328,7 @@ class MembershipCreateForm(forms.Form):
                 role=self.cleaned_data.get('role')
             )
         else:
-            invite, created = Invite.objects.get_or_create(
+            invite, _created = Invite.objects.get_or_create(
                 project=self.project,
                 user=self.cleaned_data.get('user'),
                 email=self.cleaned_data.get('email')

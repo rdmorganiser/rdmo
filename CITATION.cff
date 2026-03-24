@@ -1,5 +1,9 @@
 cff-version: 1.1.0
-message: If you refer to this software in a publication, please cite it as below.
+message: Please cite RDMO in publications using its DOI.
+
+title: Research Data Management Organiser (RDMO)
+abstract: A tool to support the planning, implementation, and organization of research data management.
+
 authors:
   - family-names: Klar
     given-names:  Jochen
@@ -39,7 +43,6 @@ authors:
     given-names:  Harry
     orcid:        https://orcid.org/0000-0002-2366-8316
 
-title: Research Data Management Organiser (RDMO)
 doi: 10.5281/zenodo.596581
 license: Apache-2.0
 repository-code: https://github.com/rdmorganiser/rdmo

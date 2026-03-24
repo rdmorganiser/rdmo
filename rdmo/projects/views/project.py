@@ -16,10 +16,11 @@ from django.views.generic.edit import FormMixin
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
-from rdmo.tasks.models import Task
-from rdmo.views.models import View
 
+from ...tasks.models import Task
+from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
+from ..sync import filter_tasks_or_views_for_project
 from ..utils import get_upload_accept
 
 logger = logging.getLogger(__name__)
@@ -60,19 +61,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             memberships = memberships.prefetch_related('user__socialaccount_set')
 
         integrations = Integration.objects.filter(project__in=ancestors)
-        context['catalogs'] = Catalog.objects.filter_current_site() \
-                                             .filter_group(self.request.user) \
-                                             .filter_availability(self.request.user)
+        context['catalogs'] = Catalog.objects.filter_for_user(self.request.user)
 
         if settings.PROJECT_TASKS_SYNC:
             # tasks should be synced, the user can not change them
             context['tasks_available'] = project.tasks.exists()
         else:
             context['tasks_available'] = (
-                Task.objects
-                    .filter_for_project(project)
-                    .filter_availability(self.request.user)
-                    .exists()
+                filter_tasks_or_views_for_project(Task, project).exists()
             )
 
         if settings.PROJECT_VIEWS_SYNC:
@@ -80,10 +76,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['views_available'] = project.views.exists()
         else:
             context['views_available'] = (
-                View.objects
-                    .filter_for_project(project)
-                    .filter_availability(self.request.user)
-                    .exists()
+                filter_tasks_or_views_for_project(View, project).exists()
             )
 
         ancestors_import = []

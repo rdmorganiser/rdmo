@@ -49,11 +49,8 @@ from .permissions import (
 )
 from .progress import (
     compute_navigation,
-    compute_next_relevant_page,
+    compute_page,
     compute_progress,
-    compute_sets,
-    compute_show_page,
-    resolve_conditions,
 )
 from .serializers.v1 import (
     IntegrationSerializer,
@@ -78,6 +75,8 @@ from .serializers.v1 import (
 )
 from .serializers.v1.overview import CatalogSerializer, ProjectOverviewSerializer
 from .serializers.v1.page import PageSerializer
+from .signals import value_created, value_deleted, value_updated
+from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
@@ -176,17 +175,20 @@ class ProjectViewSet(ModelViewSet):
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
+        project.catalog.prefetch_elements()
 
-        section = None
-        if section_id is not None:
+        # if a section is provided, check if it actually exists in the catalog
+        if section_id is None:
+            section = None
+        else:
             try:
                 section = project.catalog.sections.get(pk=section_id)
             except ObjectDoesNotExist as e:
                 raise NotFound() from e
 
-        project.catalog.prefetch_elements()
+        # compute navigation from the answer tree
+        navigation = compute_navigation(project, section)
 
-        navigation = compute_navigation(section, project)
         return Response(navigation)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
@@ -284,18 +286,26 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def answers(self, request, pk=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+        return Response(project.get_answer_tree(verbose=request.GET.getlist('verbose')))
+
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
-            # compute the progress, but store it only, if it has changed
             project.catalog.prefetch_elements()
+
+            # compute the progress, but store it only, if it has changed
             progress_count, progress_total = compute_progress(project)
             if progress_count != project.progress_count or progress_total != project.progress_total:
                 project.progress_count, project.progress_total = progress_count, progress_total
                 project.save()
+
         try:
             ratio = project.progress_count / project.progress_total
         except ZeroDivisionError:
@@ -396,19 +406,16 @@ class ProjectViewSet(ModelViewSet):
         membership = Membership(project=project, user=self.request.user, role='owner')
         membership.save()
 
-
         # add all tasks to project
         if self.request.data.get('tasks') is None:
             if not settings.PROJECT_TASKS_SYNC:
-                tasks = Task.objects.filter_for_project(project).filter_availability(self.request.user)
-                for task in tasks:
+                for task in filter_tasks_or_views_for_project(Task, project):
                     project.tasks.add(task)
 
         if self.request.data.get('views') is None:
             # add all views to project
             if not settings.PROJECT_VIEWS_SYNC:
-                views = View.objects.filter_for_project(project).filter_availability(self.request.user)
-                for view in views:
+                for view in filter_tasks_or_views_for_project(View, project):
                     project.views.add(view)
 
 
@@ -524,6 +531,18 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         'option',
         'option__uri',
     )
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        value_created.send(sender=Value, instance=serializer.instance)
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        value_updated.send(sender=Value, instance=serializer.instance)
+
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        value_deleted.send(sender=Value, instance=instance)
 
     def get_queryset(self):
         return self.project.values.filter(snapshot=None).select_related('attribute', 'option')
@@ -704,28 +723,17 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def retrieve(self, request, *args, **kwargs):
         page = self.get_object()
-        catalog = self.project.catalog
-        values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
+        direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
+        computed_page_id = compute_page(self.project, page, direction)
 
-        sets = compute_sets(values)
-        resolved_conditions = resolve_conditions(catalog, values, sets)
-
-        # check if the current page meets conditions
-        if compute_show_page(page, resolved_conditions):
+        if computed_page_id == page.id:
             serializer = self.get_serializer(page)
             return Response(serializer.data)
+        elif computed_page_id is not None:
+            url = reverse('v1-projects:project-page-detail', args=[self.project.id, computed_page_id])
+            return HttpResponseRedirect(url, status=303)
         else:
-            # determine the direction of navigation (previous or next)
-            direction = 'prev' if is_truthy(request.GET.get('back')) else 'next'
-
-            # find the next relevant page with from pages and resolved conditions
-            next_relevant_page = compute_next_relevant_page(page, direction, catalog, resolved_conditions)
-
-            if next_relevant_page is not None:
-                url = reverse('v1-projects:project-page-detail', args=[self.project.id, next_relevant_page.id])
-                return HttpResponseRedirect(url, status=303)
-
-            # end of catalog, if no next relevant page is found
+            # if no page was found, we are probably at the end of the catalog
             return Response({
                 'detail': 'No Page matches the given query.',
                 'done': True
@@ -923,6 +931,13 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
     serializer_class = CatalogSerializer
 
     def get_queryset(self):
-        return Catalog.objects.filter_current_site() \
-                              .filter_group(self.request.user) \
-                              .order_by('-available', 'order')
+        queryset = (
+            Catalog.objects.filter_current_site().filter_group(self.request.user)
+        )
+        availability_subquery = Subquery(
+            queryset.filter_availability(self.request.user).values('pk')
+        )
+        return (
+            queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
+            .order_by('-available', 'order', 'id').distinct()
+        )

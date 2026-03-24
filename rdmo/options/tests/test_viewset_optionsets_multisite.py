@@ -29,7 +29,7 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -40,7 +40,7 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'nested'), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -119,14 +119,17 @@ def test_update_m2m_multisite(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete_multisite(db, client, username, password):
+def test_delete(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
     for instance in instances:
+        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'delete'), response.json()
+        assert response.status_code == get_obj_perms_status_code(
+            instance, username, 'delete', editors=editors
+        ), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -137,7 +140,7 @@ def test_detail_export(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.content
+        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
 
         if response.status_code == 200:
             root = et.fromstring(response.content)

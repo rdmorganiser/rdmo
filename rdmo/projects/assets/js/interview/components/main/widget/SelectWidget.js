@@ -26,7 +26,7 @@ const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disa
               <SelectInput
                 question={question}
                 value={value}
-                options={gatherOptions(question)}
+                options={gatherOptions(question, currentSet)}
                 disabled={disabled}
                 creatable={creatable}
                 updateValue={updateValue}

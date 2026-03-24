@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 
 
-def send_mail(subject, message, from_email=None, to=[], cc=[], bcc=[], reply_to=None, attachments=[]):
+def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, reply_to=None, attachments=None):
     site = Site.objects.get_current()
     subject = f'[{site.name}] ' + subject
 

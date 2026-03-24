@@ -7,7 +7,10 @@ from .constants import PERMISSIONS
 class CurrentSiteQuerySetMixin:
 
     def filter_current_site(self):
-        return self.filter(models.Q(sites=None) | models.Q(sites=settings.SITE_ID))
+        if settings.MULTISITE:
+            return self.filter(sites=settings.SITE_ID)
+        else:
+            return self.filter(models.Q(sites=None) | models.Q(sites=settings.SITE_ID))
 
 
 class GroupsQuerySetMixin:
@@ -20,10 +23,7 @@ class GroupsQuerySetMixin:
 class AvailabilityQuerySetMixin:
 
     def filter_availability(self, user):
-        model = str(self.model._meta)
-        permissions = PERMISSIONS[model]
-
-        if user.has_perms(permissions):
+        if user.has_perms(PERMISSIONS[self.model._meta.label_lower]):
             return self
         else:
             return self.filter(available=True)

@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.projects.handlers.sync_utils import sync_task_or_view_to_projects
 from rdmo.projects.models import Project
+from rdmo.projects.sync import sync_task_or_view_to_projects
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 

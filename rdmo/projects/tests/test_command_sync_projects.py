@@ -2,21 +2,21 @@ import pytest
 
 from django.core.management import call_command
 
-from rdmo.projects.tests.helpers.project_sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
-from rdmo.projects.tests.helpers.project_sync.arrange_project_views import arrange_projects_catalogs_and_views
-from rdmo.projects.tests.helpers.project_sync.assert_cli_output import assert_sync_projects_show_has_output
-from rdmo.projects.tests.helpers.project_sync.assert_project_views_or_tasks import (
+from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.assert_cli_output import assert_sync_projects_show_has_output
+from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
 
 PROJECT_SHOW_TEMPLATE = 'Project "{}" [id={}]:'
 
 @pytest.mark.django_db
-def test_command_sync_projects_for_tasks(settings, enable_project_tasks_sync):
-    assert settings.PROJECT_TASKS_SYNC
+def test_command_sync_projects_for_tasks(settings):
+    settings.PROJECT_TASKS_SYNC = True
 
     # Arrange: pre-linked projects and catalog-based task relationships
-    P, C, T = arrange_projects_catalogs_and_tasks()
+    P, _, T = arrange_projects_catalogs_and_tasks()
 
     # Arrange: project.tasks are in a random initial state
     P[1].tasks.set([T[1], T[2], T[3]])
@@ -37,11 +37,11 @@ def test_command_sync_projects_for_tasks(settings, enable_project_tasks_sync):
 
 
 @pytest.mark.django_db
-def test_command_sync_projects_for_views(settings, enable_project_views_sync):
-    assert settings.PROJECT_VIEWS_SYNC
+def test_command_sync_projects_for_views(settings):
+    settings.PROJECT_VIEWS_SYNC = True
 
     # Arrange: pre-linked projects and catalog-based view relationships
-    P, C, V = arrange_projects_catalogs_and_views()
+    P, _, V = arrange_projects_catalogs_and_views()
 
     # Arrange: project.views are in a random initial state
     P[1].views.set([V[1], V[2]])
@@ -61,7 +61,8 @@ def test_command_sync_projects_for_views(settings, enable_project_views_sync):
 
 
 @pytest.mark.django_db
-def test_command_sync_projects_show_and_tasks_displays_output(settings, enable_project_tasks_sync, capsys):
+def test_command_sync_projects_show_and_tasks_displays_output(settings, capsys):
+    settings.PROJECT_TASKS_SYNC = True
 
     call_command('sync_projects', '--tasks', '--show')
 
@@ -69,9 +70,9 @@ def test_command_sync_projects_show_and_tasks_displays_output(settings, enable_p
     assert_sync_projects_show_has_output(out_lines)
 
 
-
 @pytest.mark.django_db
-def test_command_sync_projects_show_and_views_displays_output(settings, enable_project_views_sync, capsys):
+def test_command_sync_projects_show_and_views_displays_output(settings, capsys):
+    settings.PROJECT_VIEWS_SYNC = True
 
     call_command('sync_projects', '--views', '--show')
 
@@ -79,19 +80,14 @@ def test_command_sync_projects_show_and_views_displays_output(settings, enable_p
     assert_sync_projects_show_has_output(out_lines)
 
 
-
 @pytest.mark.django_db
-def test_command_sync_projects_for_tasks_and_views_with_show(
-        settings,
-        enable_project_tasks_sync, enable_project_views_sync,
-        capsys
-    ):
-    assert settings.PROJECT_TASKS_SYNC
-    assert settings.PROJECT_VIEWS_SYNC
+def test_command_sync_projects_for_tasks_and_views_with_show(settings, capsys):
+    settings.PROJECT_TASKS_SYNC = True
+    settings.PROJECT_VIEWS_SYNC = True
 
     # Arrange task and view state
-    P1, C1, T = arrange_projects_catalogs_and_tasks()
-    P2, C2, V = arrange_projects_catalogs_and_views()
+    P1, _, T = arrange_projects_catalogs_and_tasks()
+    P2, _, V = arrange_projects_catalogs_and_views()
 
     # Arrange random desynced state
     P1[1].tasks.set([T[1], T[2], T[3]])

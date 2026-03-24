@@ -1,3 +1,4 @@
+import platform
 import subprocess
 
 from django.core.management.base import BaseCommand
@@ -10,6 +11,7 @@ class Command(BaseCommand):
         parser.add_argument('--js', action='store_true')
 
     def handle(self, *args, **options):
+        poedit = ['open', '-a', 'POEdit'] if platform.system() == 'Darwin' else ['poedit']
         locale = options['locale']
         file = 'djangojs' if options['js'] else 'django'
-        subprocess.check_call(['poedit', f'rdmo/locale/{locale}/LC_MESSAGES/{file}.po'])
+        subprocess.check_call([*poedit, f'rdmo/locale/{locale}/LC_MESSAGES/{file}.po'])

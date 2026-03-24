@@ -22,6 +22,7 @@ from ..forms import (
 )
 from ..mixins import ProjectImportMixin
 from ..models import Project, Visibility
+from ..sync import filter_tasks_or_views_for_project
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +34,7 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site() \
-                                  .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user) \
-                                  .order_by('order')
+        catalogs = Catalog.objects.filter_for_user(self.request.user)
         projects = Project.objects.filter_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
@@ -106,10 +104,7 @@ class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateV
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site() \
-                                  .filter_group(self.request.user) \
-                                  .filter_availability(self.request.user) \
-                                  .order_by('order')
+        catalogs = Catalog.objects.filter_for_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -130,10 +125,9 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_for_project(self.object).filter_availability(self.request.user)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
-            'tasks': tasks
+            'tasks': filter_tasks_or_views_for_project(Task, self.object)
         })
         return form_kwargs
 
@@ -153,10 +147,9 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
-        views = View.objects.filter_for_project(self.object).filter_availability(self.request.user)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
-            'views': views
+            'views': filter_tasks_or_views_for_project(View, self.object)
         })
         return form_kwargs
 

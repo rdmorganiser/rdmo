@@ -1,6 +1,5 @@
 import pytest
 
-from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from rdmo.questions.models import Catalog
@@ -16,13 +15,23 @@ users = (
     ('anonymous', None),
 )
 
-urlnames = {
-    'list': 'v1-projects:catalog-list',
-    'user': 'v1-projects:catalog-user'
+view_project_catalog_permission_map = {  # id, available
+    'owner': [(1, True)],
+    'manager': [(1, True)],
+    'author': [(1, True)],
+    'guest': [(1, True)],
+    'user': [(1, True)],
+    'editor': [(1, True)],
+    'reviewer': [(1, True)],
+    'api': [(1, True),(2, False)],
+    'site': [(1, True)]
 }
 
-catalog_id = 1
+urlnames = {
+    'list': 'v1-projects:catalog-list',
+}
 
+other_sites_catalogs = [(3, True), (4, True)]
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -33,13 +42,33 @@ def test_list(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert isinstance(response.json(), list)
-
         data = response.json()
-        site = Site.objects.get_current()
-        catalogs = Catalog.objects.filter(sites=site)
+        assert isinstance(data, list)
+        assert view_project_catalog_permission_map[username] == [(i['id'],i['available']) for i in data]
+    else:
+        assert response.status_code == 401
 
-        assert {c['id'] for c in data} == {c.id for c in catalogs}
-        assert {c['available'] for c in data} == {c.available for c in catalogs}
+
+@pytest.mark.parametrize('username,password', users)
+def test_list_with_cleared_sites(db, client, settings, username, password):
+    client.login(username=username, password=password)
+
+    for catalog in Catalog.objects.exclude(sites=settings.SITE_ID):
+        catalog.sites.clear()
+
+    url = reverse(urlnames['list'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+        catalogs = view_project_catalog_permission_map[username] + other_sites_catalogs
+        if any(not available for _id,available in catalogs):  # api sees an available=False catalog
+            catalogs = sorted(
+                catalogs,
+                key=lambda i: (not i[1], i[0]),
+            )
+        assert catalogs == [(i['id'],i['available']) for i in data]
     else:
         assert response.status_code == 401

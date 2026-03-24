@@ -19,7 +19,7 @@ class SearchFilter(BaseFilterBackend):
             if 'uri' in view.search_fields:
                 q |= Q(uri__contains=search)
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _, lang_field in get_languages():
                 if lang_code == get_language():
                     for search_field in ['title', 'text']:
                         if search_field in view.search_fields:

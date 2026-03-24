@@ -47,7 +47,7 @@ class OptionRendererMixin:
             self.render_text_element(xml, 'uri_path', {}, option['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, option['comment'])
 
-            for lang_code, lang_string, lang_field in get_languages():
+            for lang_code, _lang_string, _lang_field in get_languages():
                 self.render_text_element(xml, 'text', {'lang': lang_code}, option[f'text_{lang_code}'])
                 self.render_text_element(xml, 'help', {'lang': lang_code}, option[f'help_{lang_code}'])
                 self.render_text_element(xml, 'default_text', {'lang': lang_code}, option[f'default_text_{lang_code}'])

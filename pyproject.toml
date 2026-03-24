@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools", "wheel"]
+requires = ["setuptools", "setuptools_scm"]
 
 [project]
 name = "rdmo"
@@ -13,21 +13,20 @@ keywords = [
   "research data",
   "research data management",
 ]
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE", "AUTHORS"]
 authors = [
-  {name = "RDMO Arbeitsgemeinschaft", email = "rdmo-team@listserv.dfn.de"},
+  {name = "RDMO Community and individual contributors", email = "contact@rdmo.org"},
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Web Environment",
   "Framework :: Django :: 4.2",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -40,7 +39,7 @@ dependencies = [
   # dependencies with major version on zero are declared with
   # major.minor.patch, because they can potentially introduce breaking changes
   # in minor version updates anytime
-  "defusedcsv>=2.0,<3.0",
+  "defusedcsv>=2.0,<4.0",
   "defusedxml>=0.7.1,<1.0",
   "django>=4.2,<5.0",
   "django-cleanup>=8.0,<10.0",
@@ -64,21 +63,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-allauth = [
-  "django-allauth[socialaccount,openid]>=64.1.0,<65.10.0",
+all = [
+  "rdmo[allauth,dev,gunicorn,ldap,mysql,openapi,postgres,pytest]"
+]
+recommended = [
+  "rdmo[allauth,gunicorn,postgres,openapi]"
 ]
 ci = [
-  "rdmo[dev]",
+  "rdmo[allauth,dev,openapi,pytest]",
   "pytest-github-actions-annotate-failures>=0.2.0,<0.4.0",
 ]
+allauth = [
+  "django-allauth[socialaccount,openid]>=64.1.0,<65.15.0",
+]
 dev = [
-  "build>=1.0,<2.0",
   "pipdeptree>=2.13,<3.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<81",
-  "twine>=5.1.1,<7.0",
-  "wheel>=0.42,<0.46",
-  "rdmo[allauth,openapi,pytest]",
 ]
 gunicorn = [
   "gunicorn>=23.0,<24.0",
@@ -89,20 +90,20 @@ ldap = [
 mysql = [
   "mysqlclient>=2.2,<3.0",
 ]
+openapi = [
+  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
+]
 postgres = [
   "psycopg[binary]>=3.1,<4.0",
 ]
 pytest = [
-  "pytest>=8.0,<9.0",
-  "pytest-cov>=4.1,<7.0",
-  "pytest-django>=4.5,<5.0",
-  "pytest-mock>=3.11,<4.0",
-  "pytest-playwright>=0.4.3,<0.8.0",
-  "pytest-randomly>=3.15,<4.0",
-  "pytest-xdist>=3.3,<4.0",
-]
-openapi = [
-  "drf-spectacular[sidecar]>=0.28.0,<1.0.0"
+  "pytest>=9.0,<10.0",
+  "pytest-cov>=7.0,<8.0",
+  "pytest-django>=4.11,<5.0",
+  "pytest-mock>=3.15,<4.0",
+  "pytest-playwright>=0.7.2,<0.8.0",
+  "pytest-randomly>=4.0,<5.0",
+  "pytest-xdist>=3.8,<4.0",
 ]
 
 [project.urls]
@@ -123,8 +124,8 @@ exclude = ["*assets*", "*tests*"]
 [tool.setuptools.package-data]
 "*" = ["*"]
 
-[tool.setuptools.dynamic]
-version = {attr = "rdmo.__version__"}
+[tool.setuptools_scm]
+version_scheme = "release-branch-semver"
 
 [tool.ruff]
 line-length = 120
@@ -147,9 +148,6 @@ select = [
   "INT"   # flake8-gettext
 ]
 ignore = [
-  "B006",   # mutable-argument-default
-  "B007",   # unused-loop-control-variable
-  "B018",   # useless-expression
   "RUF012", # mutable-class-default
 ]
 
@@ -193,26 +191,20 @@ rest_framework = ["rest_framework"]
 ]
 
 [tool.ruff.lint.flake8-pytest-style]
-fixture-parentheses = false
 parametrize-names-type = "csv"
 
-[tool.pytest.ini_options]
+[tool.pytest]
+strict = true
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo/*/tests"]
 pythonpath = [".", "testing"]
-addopts = '-p no:randomly -m "not e2e"'
+addopts = ["-ra", "-p no:randomly", "-m", "not e2e"]
 markers = [
   "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
 ]
 filterwarnings = [
   # fail on RemovedInDjango50Warning exception
   "error::django.utils.deprecation.RemovedInDjango50Warning",
-
-  # ignore warnings raised from within coreapi 2.3.3
-  "ignore:pkg_resources is deprecated as an API:DeprecationWarning",
-
-  # ignore warning from rest_framework about coreapi
-  "ignore:CoreAPI compatibility is deprecated and will be removed in DRF 3.17:rest_framework.RemovedInDRF317Warning",
 
   # ignore warnings raised by widget_tweaks.py
   "ignore:'maxsplit' is passed as positional argument",
@@ -241,4 +233,10 @@ exclude_lines = [
 default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
   "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
+]
+
+[tool.check-wheel-contents] # Ref: https://github.com/jwodder/check-wheel-contents
+ignore = [
+  "W002", # wheel contains duplicate files
+  "W004", # module is not located at importable path
 ]

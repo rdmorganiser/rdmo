@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        for name, permissions in GROUPS:
+        for name, _ in GROUPS:
             group, created = Group.objects.get_or_create(name=name)
 
             if created:
