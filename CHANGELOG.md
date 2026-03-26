@@ -1,6 +1,6 @@
 # Changelog 📔
 
-## [RDMO 2.4.4](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.4) (March 24, 2026)
+## [RDMO 2.4.4](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.4) (March 26, 2026)
 
 ### Bug fixes 🐛
 
