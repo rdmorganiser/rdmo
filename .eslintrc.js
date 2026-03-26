@@ -54,14 +54,9 @@ module.exports = {
     ],
 
     // Indent by 2 spaces
-    'indent': [
-      'error',
-      2,
-      {
-        'SwitchCase': 1,
-        'offsetTernaryExpressions': true
-      }
-    ],
+    'indent': ['error', 2, {
+      'SwitchCase': 1,
+    }],
 
     // Import order
     'simple-import-sort/imports': ['error', {
