@@ -4,14 +4,27 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil, uniqueId } from 'lodash'
 
-const Input = ({ type = 'text', className, debounce, label, placeholder, help, isDisabled, errors, value, onChange }) => {
+const Input = ({
+  type = 'text',
+  className,
+  debounce,
+  label,
+  placeholder,
+  help,
+  isDisabled,
+  errors,
+  value,
+  onChange
+}) => {
   const id = uniqueId('input-')
 
   // store the value in a local state (only when debouncing)
   const [inputValue, setInputValue] = isNil(debounce) ? [value, () => {}] : useState(value)
 
   // use the debounce hook on the onChange callback (only when debouncing)
-  const callOnChange = isNil(debounce) ? (value) => onChange(value): useDebouncedCallback((value) => onChange(value), debounce)
+  const callOnChange = isNil(debounce) ? (
+    (value) => onChange(value)
+  ): useDebouncedCallback((value) => onChange(value), debounce)
 
   // update the local state if the value prop changes (only when debouncing)
   useEffect(() => setInputValue(value), [value])

@@ -4,12 +4,26 @@ import ReactSelect from 'react-select'
 import classNames from 'classnames'
 import { isArray, isEmpty, isNil, uniqueId } from 'lodash'
 
-const Select = ({ className, label, help, placeholder, isClearable, isDisabled, isMulti, options, errors, value, onChange }) => {
+const Select = ({
+  className,
+  label,
+  help,
+  placeholder,
+  isClearable,
+  isDisabled,
+  isMulti,
+  options,
+  errors,
+  value,
+  onChange
+}) => {
   const id = uniqueId('select-')
 
   // lookup value(s) in the options array
   const getValue = () => (
-    isArray(value) ? options.filter(option => (value.includes(option.value))): options.find(option => (option.value == value))
+    isArray(value) ? (
+      options.filter(option => (value.includes(option.value)))
+    ): options.find(option => (option.value == value))
   )
 
   const handleChange = (option) => {
