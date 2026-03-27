@@ -385,9 +385,9 @@ const Main = () => {
                 formId='project-edit-form'
                 submitMode="submit"
                 mode="edit"
-                initialProject={selectedProject}
+                currentProject={selectedProject}
                 catalogs={catalogs ?? []}
-                onSaved={() => {
+                onSave={() => {
                   handleCloseEdit()
                   dispatch(projectsActions.refetchLoadedPages())
                 }}
@@ -402,9 +402,9 @@ const Main = () => {
                 formId='project-copy-form'
                 submitMode="submit"
                 mode="copy"
-                initialProject={selectedProject}
+                currentProject={selectedProject}
                 catalogs={catalogs ?? []}
-                onSaved={handleCloseCopy}
+                onSave={handleCloseCopy}
               />
             )}
           </Modal>
@@ -416,7 +416,7 @@ const Main = () => {
               submitMode="submit"
               mode="create"
               catalogs={catalogs ?? []}
-              onSaved={closeCreate}
+              onSave={closeCreate}
             />
           </Modal>
           <ProjectDeleteModal

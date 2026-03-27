@@ -54,13 +54,13 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
       ),
     }))
   const selectedCatalog = get(config, 'params.catalog', '')
-  const updateCatalogFilter = (value) => {
+  const handleCatalogFilterChange = (value) => {
     value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
     dispatch(projectsActions.fetchProjects())
   }
 
   const selectedRole = get(config, 'params.role', '')
-  const updateRoleFilter = (value) => {
+  const handleRoleFilterChange = (value) => {
     value ? dispatch(configActions.updateConfig('params.role', value)) : dispatch(configActions.deleteConfig('params.role'))
     dispatch(projectsActions.fetchProjects())
   }
@@ -95,7 +95,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
             <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
               <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
               <Select
-                onChange={updateCatalogFilter}
+                onChange={handleCatalogFilterChange}
                 options={catalogOptions ?? []}
                 placeholder={gettext('Select catalog')}
                 value={selectedCatalog}
@@ -104,7 +104,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
             <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
               <label className="form-label text-secondary">{gettext('Filter by role')}</label>
               <Select
-                onChange={updateRoleFilter}
+                onChange={handleRoleFilterChange}
                 options={roleOptions}
                 placeholder={gettext('Select role')}
                 value={selectedRole}
