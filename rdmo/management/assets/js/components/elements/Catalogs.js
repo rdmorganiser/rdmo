@@ -53,16 +53,18 @@ const Catalogs = () => {
               options={getUriPrefixes(catalogs)} />
           </div>
           {
-            config.settings.multisite && <>
-              <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
-                  options={config.sites} />
-              </div>
-              <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                  options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
-              </div>
-            </>
+            config.settings.multisite && (
+              <>
+                <div className="col-sm-2">
+                  <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                    options={config.sites} />
+                </div>
+                <div className="col-sm-2">
+                  <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                </div>
+              </>
+            )
           }
         </div>
         <div className="input-group input-group-sm">

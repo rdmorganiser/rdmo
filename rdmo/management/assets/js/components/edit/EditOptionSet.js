@@ -56,19 +56,23 @@ const EditOptionSet = ({ optionset }) => {
       </div>
 
       {
-        parent && parent.question && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This option set will be added to the question <code class="code-questions">%s</code>.'),
-            [parent.question.uri])
-          } />
-        </div>
+        parent && parent.question && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This option set will be added to the question <code class="code-questions">%s</code>.'),
+              [parent.question.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        optionset.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        optionset.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

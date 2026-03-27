@@ -19,7 +19,7 @@ const DeleteOptionModal = ({ option, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-options">{option.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

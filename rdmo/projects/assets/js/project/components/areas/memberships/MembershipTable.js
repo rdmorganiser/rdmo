@@ -81,24 +81,26 @@ const MembershipTable = ({ persons, type }) => {
                   </td>
                   <td>
                     {
-                      hierarchyRole ?<div className="mb-1">{hierarchyRole}</div>:<Select
-                        options={roleOptions}
-                        value={person.role}
-                        onChange={
-                          (newRole) => {
-                            if (!newRole) return
-                            (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole })): dispatch(updateProjectInvite(person.id, { role: newRole }))
+                      hierarchyRole ?<div className="mb-1">{hierarchyRole}</div>:(
+                        <Select
+                          options={roleOptions}
+                          value={person.role}
+                          onChange={
+                            (newRole) => {
+                              if (!newRole) return
+                              (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole })): dispatch(updateProjectInvite(person.id, { role: newRole }))
+                            }
                           }
-                        }
-                        isClearable={false}
-                        isDisabled={
-                          (
-                            (type === 'memberships') ? (
-                              !perms.can_change_membership || (isOwner && !isAdminOrSiteManager)
-                            ) : !perms.can_change_invite
-                          )
-                        }
-                      />
+                          isClearable={false}
+                          isDisabled={
+                            (
+                              (type === 'memberships') ? (
+                                !perms.can_change_membership || (isOwner && !isAdminOrSiteManager)
+                              ) : !perms.can_change_invite
+                            )
+                          }
+                        />
+                      )
                     }
                   </td>
                   <td className="text-end">

@@ -65,7 +65,7 @@ const FieldRowDiffs = ({ element, field }) => {
     },
   }
 
-  return (changed &&
+  return (changed && (
     <div className="field-diff mt-1">
       <ReactDiffViewer
         styles={newStyles}
@@ -77,18 +77,23 @@ const FieldRowDiffs = ({ element, field }) => {
         hideLineNumbers={hideLineNumbers}
       />
       {
-        !isEmpty(warnings) && <>
-          <Warnings elementWarnings={fieldDiffData.warnings}
-            elementModel={element.model} elementURI={element.uri}
-            showTitle={true} shouldShowURI={false}/>
-        </>
+        !isEmpty(warnings) && (
+          <>
+            <Warnings elementWarnings={fieldDiffData.warnings}
+              elementModel={element.model} elementURI={element.uri}
+              showTitle={true} shouldShowURI={false}/>
+          </>
+        )
       }
       {
-        !isEmpty(errors) && <>
-          <Errors element={fieldDiffData} />
-        </>
+        !isEmpty(errors) && (
+          <>
+            <Errors element={fieldDiffData} />
+          </>
+        )
       }
     </div>
+  )
   )
 }
 

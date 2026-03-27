@@ -48,7 +48,7 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
               <input className="form-check-input" type="checkbox" id="import-filter-changed"
                 checked={filterChanged} onChange={updateFilterChanged}/>
               <label className="form-check-label" htmlFor="import-filter-changed">
-                { filterCheckBoxText }
+                {filterCheckBoxText}
               </label>
             </div>
             <div>

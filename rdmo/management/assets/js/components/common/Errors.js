@@ -11,7 +11,7 @@ const MainErrors = ({ errors }) => {
             <strong>{gettext('One or more errors occurred:')}</strong>
           </p>
           <ul className="mb-0">
-            { errors.map((error, index) => <li key={index}>{error}</li>) }
+            {errors.map((error, index) => <li key={index}>{error}</li>)}
           </ul>
         </div>
       </div>

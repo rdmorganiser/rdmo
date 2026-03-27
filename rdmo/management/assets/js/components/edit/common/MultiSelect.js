@@ -77,11 +77,13 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
                     aria-labelledby={id} onChange={option => handleChange(option, index)} />
                 </div>
                 {
-                  onEdit && <div className="d-flex align-items-center gap-1">
-                    <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
-                    <Link className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
-                      disabled={element.read_only} />
-                  </div>
+                  onEdit && (
+                    <div className="d-flex align-items-center gap-1">
+                      <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
+                      <Link className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
+                        disabled={element.read_only} />
+                    </div>
+                  )
                 }
               </div>
             )
@@ -96,12 +98,13 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
         </button>
 
         {
-          onCreate &&
-          <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
-            disabled={element.read_only || isNil(element.id)}
-            title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {createText}
-          </button>
+          onCreate && (
+            <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
+              disabled={element.read_only || isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {createText}
+            </button>
+          )
         }
       </div>
 

@@ -250,26 +250,28 @@ const ProjectForm = ({
 
       <div className="mb-3">
         {
-          submitMode === 'auto' &&
-          < div className="form-check form-switch">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="parentToggle"
-              checked={enableParent}
-              disabled={disabled}
-              onChange={(e) => setEnableParent(e.target.checked)}
-            />
+          submitMode === 'auto' && (
+            < div className="form-check form-switch">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="parentToggle"
+                checked={enableParent}
+                disabled={disabled}
+                onChange={(e) => setEnableParent(e.target.checked)}
+              />
+              <label className="form-label fw-bold m-0" htmlFor="parentToggle">
+                {gettext('Select parent project')}
+              </label>
+            </div>
+          )
+        }
+        {
+          submitMode == 'submit' && (
             <label className="form-label fw-bold m-0" htmlFor="parentToggle">
               {gettext('Select parent project')}
             </label>
-          </div>
-        }
-        {
-          submitMode == 'submit' &&
-          <label className="form-label fw-bold m-0" htmlFor="parentToggle">
-            {gettext('Select parent project')}
-          </label>
+          )
         }
         <div className="form-text">
           <Html html={templates.project_view_parent_help} />

@@ -57,7 +57,7 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -66,7 +66,7 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
           {
             <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
               <div className="card-body">
-                { elementNode }
+                {elementNode}
               </div>
             </div>
           }

@@ -19,7 +19,7 @@ const DeleteConditionModal = ({ condition, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-conditions">{condition.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

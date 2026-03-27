@@ -11,9 +11,11 @@ const QuestionHelp = ({ question }) => {
     'text-muted': question.is_optional
   })
 
-  return <div className={classnames} >
-    <Html id={getQuestionHelpId(question)} html={question.help} />
-  </div>
+  return (
+    <div className={classnames} >
+      <Html id={getQuestionHelpId(question)} html={question.help} />
+    </div>
+  )
 }
 
 QuestionHelp.propTypes = {

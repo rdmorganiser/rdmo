@@ -5,7 +5,7 @@ const FilterString = ({ value, onChange, label }) => {
   return (
     <div className="input-group mb-2">
       <input type="text" className="form-control" placeholder={label} aria-label={label}
-        value={ value } onChange={e => onChange(e.target.value)}></input>
+        value={value} onChange={e => onChange(e.target.value)}></input>
       <button className="btn btn-light border" onClick={() => onChange('')}
         title={gettext('Reset')} aria-label={gettext('Reset')}>
         <strong className="bi bi-x-lg"></strong>

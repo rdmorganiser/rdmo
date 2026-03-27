@@ -98,9 +98,11 @@ const MembershipInviteModal = ({ show, onClose }) => {
                 </label>
                 <Tooltip
                   title={
-                    <Html
-                      html={templates[`project_view_${value}_info`]}
-                    />
+                    (
+                      <Html
+                        html={templates[`project_view_${value}_info`]}
+                      />
+                    )
                   }
                   placement="right"
                 >

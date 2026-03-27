@@ -38,7 +38,7 @@ const ErrorsAggregated = ({ elements }) => {
 
   const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
-  return ( uniqueErrors.length > 0 &&
+  return ( uniqueErrors.length > 0 && (
     <div className="card text-bg-danger mt-2">
       <div className="card-header cursor-pointer" onClick={updateShowErrors}>
         <div className="d-flex align-items-center">
@@ -56,6 +56,7 @@ const ErrorsAggregated = ({ elements }) => {
         )
       }
     </div>
+  )
   )
 }
 

@@ -55,9 +55,11 @@ const EditCatalog = ({ catalog }) => {
       </div>
 
       {
-        catalog.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        catalog.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

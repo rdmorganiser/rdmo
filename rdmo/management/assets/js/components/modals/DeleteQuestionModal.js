@@ -19,7 +19,7 @@ const DeleteQuestionModal = ({ question, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-questions">{question.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

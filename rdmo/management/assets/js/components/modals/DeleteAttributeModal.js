@@ -19,7 +19,7 @@ const DeleteAttributeModal = ({ attribute, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-domain">{attribute.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

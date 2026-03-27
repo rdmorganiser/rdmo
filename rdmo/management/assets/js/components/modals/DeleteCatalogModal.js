@@ -19,7 +19,7 @@ const DeleteCatalogModal = ({ catalog, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-questions">{catalog.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('Those projects will not be usable afterwards.')} {gettext('This action cannot be undone!')}
     </p>

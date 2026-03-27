@@ -49,19 +49,23 @@ const EditOption = ({ option }) => {
       </div>
 
       {
-        parent && parent.optionset && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This option will be added to the option set <code class="code-options">%s</code>.'),
-            [parent.optionset.uri])
-          } />
-        </div>
+        parent && parent.optionset && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This option will be added to the option set <code class="code-options">%s</code>.'),
+              [parent.optionset.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        option.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        option.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

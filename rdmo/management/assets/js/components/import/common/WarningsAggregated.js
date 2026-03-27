@@ -36,7 +36,7 @@ const WarningsAggregated = ({ elements }) => {
 
   const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
-  return ( aggregatedWarnings.length > 0 &&
+  return ( aggregatedWarnings.length > 0 && (
     <div className="card text-bg-warning mt-2">
       <div className="card-header cursor-pointer" onClick={updateShowWarnings}>
         <div className="d-flex align-items-center">
@@ -58,6 +58,7 @@ const WarningsAggregated = ({ elements }) => {
         )
       }
     </div>
+  )
   )
 }
 
