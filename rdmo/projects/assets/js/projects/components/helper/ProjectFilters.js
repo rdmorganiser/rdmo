@@ -43,13 +43,15 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
     }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const handleCatalogFilterChange = (value) => {
-    value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
+    value ? (dispatch(configActions.updateConfig('params.catalog', value))
+    ) : dispatch(configActions.deleteConfig('params.catalog'))
     dispatch(projectsActions.fetchProjects())
   }
 
   const selectedRole = get(config, 'params.role', '')
   const handleRoleFilterChange = (value) => {
-    value ? dispatch(configActions.updateConfig('params.role', value)) : dispatch(configActions.deleteConfig('params.role'))
+    value ? (dispatch(configActions.updateConfig('params.role', value))
+    ) : dispatch(configActions.deleteConfig('params.role'))
     dispatch(projectsActions.fetchProjects())
   }
 
@@ -192,11 +194,13 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
             showFilters ? gettext('Hide additional filters') : gettext('Show additional filters')
           }
         </button>
-        {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
-          <button type="button" className="link font-small" onClick={resetAllFilters}>
-            <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
-          </button>
-        )}
+        {
+          showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
+            <button type="button" className="link font-small" onClick={resetAllFilters}>
+              <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
+            </button>
+          )
+        }
       </div>
     </>
   )
