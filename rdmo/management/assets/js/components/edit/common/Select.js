@@ -38,7 +38,9 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
     label: option.uri || option.text || option.name
   }))
 
-  const selectValue = isArray(element[field]) ? selectOptions.filter(option => (element[field].includes(option.value))): selectOptions.find(option => (option.value == element[field]))
+  const selectValue = isArray(element[field]) ? (
+    selectOptions.filter(option => (element[field].includes(option.value)))
+  ) : selectOptions.find(option => (option.value == element[field]))
 
   const handleChange = (option) => {
     if (isNil(option)) {

@@ -12,7 +12,7 @@ import UriPrefix from './UriPrefix'
 const Form = ({ element }) => {
   const dispatch = useDispatch()
 
-  const handleChange = (key, value) => dispatch(updateElement(element, {[key]: value}))
+  const handleChange = (key, value) => dispatch(updateElement(element, { [key]: value }))
 
   return (
     <div className="row">
@@ -21,7 +21,9 @@ const Form = ({ element }) => {
       </div>
       <div className="col-sm-6">
         {
-          isUndefined(element.uri_path) ? <Key element={element} onChange={handleChange} />: <UriPath element={element} onChange={handleChange} />
+          isUndefined(element.uri_path) ? (
+            <Key element={element} onChange={handleChange} />
+          ) : <UriPath element={element} onChange={handleChange} />
         }
       </div>
     </div>

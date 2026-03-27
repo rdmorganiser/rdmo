@@ -117,7 +117,14 @@ const NestedCatalog = ({ catalog }) => {
               const sectionOrder = sectionInfo ? sectionInfo.order : undefined
 
               return (
-                <Section key={index} section={section} display="nested" filter="catalog" indent={0} order={sectionOrder} />
+                <Section
+                  key={index}
+                  section={section}
+                  display="nested"
+                  filter="catalog"
+                  indent={0}
+                  order={sectionOrder}
+                />
               )
             })
           }

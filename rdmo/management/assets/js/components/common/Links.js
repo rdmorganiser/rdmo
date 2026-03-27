@@ -273,5 +273,19 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { AddLink, AvailableLink, CodeLink, CopyLink, EditLink, ErrorLink, ExportLink, ExtendLink, LockedLink,          NestedLink, ShowElementsLink,
-  ShowLink, ToggleCurrentSiteLink, WarningLink }
+export {
+  AddLink,
+  AvailableLink,
+  CodeLink,
+  CopyLink,
+  EditLink,
+  ErrorLink,
+  ExportLink,
+  ExtendLink,
+  LockedLink,
+  NestedLink,
+  ShowElementsLink,
+  ShowLink,
+  ToggleCurrentSiteLink,
+  WarningLink
+}

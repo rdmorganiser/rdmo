@@ -16,14 +16,14 @@ import { Drag, Drop } from '../common/DragAndDrop'
 import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import {
-  AddLink,          CodeLink, CopyLink, EditLink, ExportLink,
-  LockedLink, NestedLink, ShowElementsLink 
+  AddLink, CodeLink, CopyLink, EditLink, ExportLink,
+  LockedLink, NestedLink, ShowElementsLink
 } from '../common/Links'
 
 import Page from './Page'
 
 
-const Section = ({ section, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+const Section = ({ section, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -39,7 +39,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
   const fetchEdit = () => dispatch(fetchElement('sections', section.id))
   const fetchCopy = () => dispatch(fetchElement('sections', section.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('sections', section.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('sections', {...section, locked: !section.locked }))
+  const toggleLocked = () => dispatch(storeElement('sections', { ...section, locked: !section.locked }))
   const toggleShowElements = () => dispatch(toggleElements(section))
 
   const createPage = () => dispatch(createElement('pages', { section }))
@@ -56,15 +56,21 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
-          <NestedLink title={gettext('View section nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <NestedLink
+            title={gettext('View section nested')}
+            href={nestedUrl} onClick={fetchNested}
+            show={display != 'nested'}
+          />
           <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
-          <LockedLink title={
-            section.locked ? gettext('Unlock section'): gettext('Lock section')
-          }
-          locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+          <LockedLink
+            title={
+              section.locked ? gettext('Unlock section') : gettext('Lock section')
+            }
+            locked={section.locked} onClick={toggleLocked} disabled={section.read_only}
+          />
           <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
           <Drag element={section} show={display == 'nested'} />

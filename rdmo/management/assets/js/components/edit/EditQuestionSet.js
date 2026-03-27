@@ -86,7 +86,12 @@ const EditQuestionSet = ({ questionset }) => {
           <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeQuestionSet}
+            disabled={questionset.read_only}
+            back={true}
+          />
         </div>
       </div>
 
@@ -160,7 +165,7 @@ const EditQuestionSet = ({ questionset }) => {
           addText={addElementText} createText={createQuestionText}
           altCreateText={createQuestionSetText}
           onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
-          onEdit={editElement}/>
+          onEdit={editElement} />
 
         <MultiSelect element={questionset} field="conditions" options={conditions}
           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
@@ -178,7 +183,12 @@ const EditQuestionSet = ({ questionset }) => {
           {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
           <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeQuestionSet}
+            disabled={questionset.read_only}
+            back={true}
+          />
         </div>
       </div>
 

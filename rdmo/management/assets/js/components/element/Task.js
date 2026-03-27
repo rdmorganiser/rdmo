@@ -14,9 +14,17 @@ import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
-import { AvailableLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, ToggleCurrentSiteLink } from '../common/Links'
+import {
+  AvailableLink,
+  CodeLink,
+  CopyLink,
+  EditLink,
+  ExportLink,
+  LockedLink,
+  ToggleCurrentSiteLink
+} from '../common/Links'
 
-const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) => {
+const Task = ({ task, filter = false, filterSites = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -31,8 +39,8 @@ const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) =>
 
   const fetchEdit = () => dispatch(fetchElement('tasks', task.id))
   const fetchCopy = () => dispatch(fetchElement('tasks', task.id, 'copy'))
-  const toggleAvailable = () => dispatch(storeElement('tasks', {...task, available: !task.available }))
-  const toggleLocked = () => dispatch(storeElement('tasks', {...task, locked: !task.locked }))
+  const toggleAvailable = () => dispatch(storeElement('tasks', { ...task, available: !task.available }))
+  const toggleLocked = () => dispatch(storeElement('tasks', { ...task, locked: !task.locked }))
   const toggleCurrentSite = () => dispatch(storeElement('tasks', task, 'toggle-site'))
 
   const fetchCondition = (index) => dispatch(fetchElement('conditions', task.conditions[index]))
@@ -53,14 +61,15 @@ const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) =>
             <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
             <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
             <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
-            <AvailableLink title={
-              task.available ? gettext('Make task unavailable'): gettext('Make task available')
-            }
-            available={task.available} locked={task.locked} onClick={toggleAvailable}
-            disabled={task.read_only} />
+            <AvailableLink
+              title={
+                task.available ? gettext('Make task unavailable') : gettext('Make task available')
+              }
+              available={task.available} locked={task.locked} onClick={toggleAvailable}
+              disabled={task.read_only} />
             <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
               onClick={toggleCurrentSite}
-              show={config.settings.multisite}/>
+              show={config.settings.multisite} />
             <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
               locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
             <ExportLink title={gettext('Export task')} exportUrl={exportUrl}

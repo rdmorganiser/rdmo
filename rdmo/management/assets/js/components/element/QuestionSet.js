@@ -16,12 +16,12 @@ import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import {
   AddLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink,
-  NestedLink, ShowElementsLink 
+  NestedLink, ShowElementsLink
 } from '../common/Links'
 
 import Question from './Question'
 
-const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -40,7 +40,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
   const fetchEdit = () => dispatch(fetchElement('questionsets', questionset.id))
   const fetchCopy = () => dispatch(fetchElement('questionsets', questionset.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('questionsets', questionset.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('questionsets', {...questionset, locked: !questionset.locked }))
+  const toggleLocked = () => dispatch(storeElement('questionsets', { ...questionset, locked: !questionset.locked }))
   const toggleShowElements = () => dispatch(toggleElements(questionset))
 
   const createQuestionSet = () => dispatch(createElement('questionsets', { questionset }))
@@ -63,7 +63,12 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
-          <NestedLink title={gettext('View question set nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <NestedLink
+            title={gettext('View question set nested')}
+            href={nestedUrl}
+            onClick={fetchNested}
+            show={display != 'nested'}
+          />
           <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
@@ -144,7 +149,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return (
                   <QuestionSet key={index} config={config} questionset={element}
-                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
+                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
                 )
               } else {
                 const questionInfo = questionset.questions.find(info => info.question === element.id)

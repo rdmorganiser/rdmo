@@ -15,14 +15,14 @@ import { Drag, Drop } from '../common/DragAndDrop'
 import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import {
-  AddLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink, NestedLink,
-  ShowElementsLink 
+  AddLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, NestedLink,
+  ShowElementsLink
 } from '../common/Links'
 
 import Question from './Question'
 import QuestionSet from './QuestionSet'
 
-const Page = ({ page, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -41,7 +41,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
   const fetchEdit = () => dispatch(fetchElement('pages', page.id))
   const fetchCopy = () => dispatch(fetchElement('pages', page.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('pages', page.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('pages', {...page, locked: !page.locked }))
+  const toggleLocked = () => dispatch(storeElement('pages', { ...page, locked: !page.locked }))
   const toggleShowElements = () => dispatch(toggleElements(page))
 
   const createQuestionSet = () => dispatch(createElement('questionsets', { page }))
@@ -64,7 +64,12 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
-          <NestedLink title={gettext('View page nested')} href={nestedUrl} onClick={fetchNested} show={display != 'nested'} />
+          <NestedLink
+            title={gettext('View page nested')}
+            href={nestedUrl}
+            onClick={fetchNested}
+            show={display != 'nested'}
+          />
           <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
