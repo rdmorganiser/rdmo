@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import Html from 'rdmo/core/assets/js/components/Html'
 import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
 
-import { createProjectMember, sendProjectInvite, clearProjectErrors } from '../../../actions/projectActions'
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const initialForm = { lookup: '', role: 'author' }
@@ -71,69 +72,77 @@ const MembershipInviteModal = ({ show, onClose }) => {
             value={formData.lookup}
             onChange={(e) => setField('lookup', e.target.value)}
           />
-          {errors.lookup?.map((err, i) => (
-            <div key={i} className="text-danger mt-1">{err}</div>
-          ))}
+          {
+            errors.lookup?.map((err, i) => (
+              <div key={i} className="text-danger mt-1">{err}</div>
+            ))
+          }
         </div>
         {/* Role */}
         <div className="mb-3">
           <label className="form-label fw-bold">{gettext('Role')}</label>
-          {roleOptions.map(({ value, label }) => (
-            <div className="form-check d-flex align-items-center" key={value}>
-              <input
-                className="form-check-input"
-                type="radio"
-                id={`role-${value}`}
-                name="role"
-                value={value}
-                checked={formData.role === value}
-                onChange={() => setField('role', value)}
-              />
-              <label className="form-check-label ms-2" htmlFor={`role-${value}`}>
-                {label}
-              </label>
-              <Tooltip
-                title={
-                  <Html
-                    html={templates[`project_view_${value}_info`]}
-                  />
-                }
-                placement="right"
-              >
-                <i
-                  className="bi bi-info-circle ms-2"
-                  tabIndex={0}
-                  role="img"
-                  aria-label={gettext('Role information')}
-                  style={{ cursor: 'pointer' }}
+          {
+            roleOptions.map(({ value, label }) => (
+              <div className="form-check d-flex align-items-center" key={value}>
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id={`role-${value}`}
+                  name="role"
+                  value={value}
+                  checked={formData.role === value}
+                  onChange={() => setField('role', value)}
                 />
-              </Tooltip>
-            </div>
-          ))}
-          {errors.role?.map((err, i) => (
-            <div key={i} className="text-danger mt-1">{err}</div>
-          ))}
+                <label className="form-check-label ms-2" htmlFor={`role-${value}`}>
+                  {label}
+                </label>
+                <Tooltip
+                  title={
+                    <Html
+                      html={templates[`project_view_${value}_info`]}
+                    />
+                  }
+                  placement="right"
+                >
+                  <i
+                    className="bi bi-info-circle ms-2"
+                    tabIndex={0}
+                    role="img"
+                    aria-label={gettext('Role information')}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Tooltip>
+              </div>
+            ))
+          }
+          {
+            errors.role?.map((err, i) => (
+              <div key={i} className="text-danger mt-1">{err}</div>
+            ))
+          }
         </div>
         {/* Add member silently */}
-        {perms.can_add_membership && (
-          <div>
-            <label className="form-label fw-bold">{gettext('Add member silently')}</label>
-            <Html html={templates.project_view_invite_member_silently_help} />
-            <div className="form-check mt-1">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="silently"
-                name="silently"
-                checked={silently}
-                onChange={(e) => setSilently(e.target.checked)}
-              />
-              <label className="form-check-label" htmlFor="silently">
-                {gettext('Add member silently')}
-              </label>
+        {
+          perms.can_add_membership && (
+            <div>
+              <label className="form-label fw-bold">{gettext('Add member silently')}</label>
+              <Html html={templates.project_view_invite_member_silently_help} />
+              <div className="form-check mt-1">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="silently"
+                  name="silently"
+                  checked={silently}
+                  onChange={(e) => setSilently(e.target.checked)}
+                />
+                <label className="form-check-label" htmlFor="silently">
+                  {gettext('Add member silently')}
+                </label>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
         {
           !isEmpty(errors) && (
             <div className="mt-3">

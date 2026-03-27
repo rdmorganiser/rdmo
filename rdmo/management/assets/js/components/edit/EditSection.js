@@ -1,10 +1,16 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import SectionInfo from '../info/SectionInfo'
+import DeleteSectionModal from '../modals/DeleteSectionModal'
 
 import Checkbox from './common/Checkbox'
 import LanguageTabs from './common/LanguageTabs'
@@ -13,14 +19,6 @@ import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import SectionInfo from '../info/SectionInfo'
-import DeleteSectionModal from '../modals/DeleteSectionModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditSection = ({ section }) => {
   const dispatch = useDispatch()
@@ -59,9 +57,11 @@ const EditSection = ({ section }) => {
 
       {
         parent && parent.catalog && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This section will be added to the catalog <code class="code-questions">%s</code>.'),
-          [parent.catalog.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This section will be added to the catalog <code class="code-questions">%s</code>.'),
+            [parent.catalog.uri])
+          } />
         </div>
       }
 
@@ -85,16 +85,18 @@ const EditSection = ({ section }) => {
 
         <Checkbox element={section} field="locked" onChange={updateSection} />
 
-        <LanguageTabs render={(langCode) => (
-          <div>
-            <Text element={section} field={`title_${langCode}`} onChange={updateSection} />
-            <Text element={section} field={`short_title_${langCode}`} onChange={updateSection} />
-          </div>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <div>
+              <Text element={section} field={`title_${langCode}`} onChange={updateSection} />
+              <Text element={section} field={`short_title_${langCode}`} onChange={updateSection} />
+            </div>
+          )
+        } />
 
         <OrderedMultiSelect element={section} field="pages" options={pages}
-                            addText={addPageText} createText={createPageText}
-                            onChange={updateSection} onCreate={createPage} onEdit={editPage} />
+          addText={addPageText} createText={createPageText}
+          onChange={updateSection} onCreate={createPage} onEdit={editPage} />
 
         {
           settings.multisite && (
@@ -113,7 +115,7 @@ const EditSection = ({ section }) => {
       </div>
 
       <DeleteSectionModal section={section} info={info} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteSection} />
+        onClose={closeDeleteModal} onDelete={deleteSection} />
     </div>
   )
 }

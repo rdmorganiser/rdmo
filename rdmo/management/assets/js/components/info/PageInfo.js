@@ -1,14 +1,13 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
-
-import { ExtendLink, CodeLink } from '../common/Links'
-
 import useBool from '../../hooks/useBool'
+
+import { CodeLink, ExtendLink } from '../common/Links'
 
 const PageInfo = ({ page }) => {
   const dispatch = useDispatch()
@@ -24,10 +23,12 @@ const PageInfo = ({ page }) => {
   return (
     <div className="mb-2">
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This page is used in <b>one section</b>.',
-          'This page is used in <b>%s sections</b>.',
-          sections.length), [sections.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This page is used in <b>one section</b>.',
+            'This page is used in <b>%s sections</b>.',
+            sections.length), [sections.length])
+        } />
         {sections.length > 0 && <ExtendLink extend={extendSections} onClick={toggleSections} />}
       </p>
       {

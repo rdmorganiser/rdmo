@@ -1,11 +1,17 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { isUndefined, orderBy } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import QuestionSetInfo from '../info/QuestionSetInfo'
+import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
 
 import Checkbox from './common/Checkbox'
 import LanguageTabs from './common/LanguageTabs'
@@ -16,20 +22,12 @@ import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import QuestionSetInfo from '../info/QuestionSetInfo'
-import DeleteQuestionSetModal from '../modals/DeleteQuestionSetModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
-
 const EditQuestionSet = ({ questionset }) => {
   const dispatch = useDispatch()
 
   const { sites, settings } = useSelector((state) => state.config)
   const { elementAction, parent, attributes,
-          conditions, questions, questionsets } = useSelector((state) => state.elements)
+    conditions, questions, questionsets } = useSelector((state) => state.elements)
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
   const elementOptions = questions.map(question => ({
@@ -94,16 +92,20 @@ const EditQuestionSet = ({ questionset }) => {
 
       {
         parent && parent.page && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This question set will be added to the page <code class="code-questions">%s</code>.'),
-          [parent.page.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This question set will be added to the page <code class="code-questions">%s</code>.'),
+            [parent.page.uri])
+          } />
         </div>
       }
       {
         parent && parent.questionset && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This question set will be added to the question set <code class="code-questions">%s</code>.'),
-          [parent.questionset.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This question set will be added to the question set <code class="code-questions">%s</code>.'),
+            [parent.questionset.uri])
+          } />
         </div>
       }
 
@@ -134,32 +136,34 @@ const EditQuestionSet = ({ questionset }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <>
-            <Text element={questionset} field={`title_${langCode}`} onChange={updateQuestionSet} />
-            <Textarea element={questionset} field={`help_${langCode}`} rows={4} onChange={updateQuestionSet} />
-            <Text element={questionset} field={`verbose_name_${langCode}`} onChange={updateQuestionSet} />
-          </>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <>
+              <Text element={questionset} field={`title_${langCode}`} onChange={updateQuestionSet} />
+              <Textarea element={questionset} field={`help_${langCode}`} rows={4} onChange={updateQuestionSet} />
+              <Text element={questionset} field={`verbose_name_${langCode}`} onChange={updateQuestionSet} />
+            </>
+          )
+        } />
 
         <Select element={questionset} field="attribute" createText={gettext('Create new attribute')}
-                options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
+          options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect element={questionset} field="elements"
-                            values={elementValues} options={elementOptions}
-                            addText={addElementText} createText={createQuestionText}
-                            altCreateText={createQuestionSetText}
-                            onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
-                            onEdit={editElement}/>
+          values={elementValues} options={elementOptions}
+          addText={addElementText} createText={createQuestionText}
+          altCreateText={createQuestionSetText}
+          onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
+          onEdit={editElement}/>
 
         <MultiSelect element={questionset} field="conditions" options={conditions}
-                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
-                     onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
+          addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
+          onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
 
         {
           settings.multisite && (
             <Select element={questionset} field="editors" options={sites} onChange={updateQuestionSet} isMulti />
-            )
+          )
         }
       </div>
 
@@ -173,7 +177,7 @@ const EditQuestionSet = ({ questionset }) => {
       </div>
 
       <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}
-                              onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
+        onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
     </div>
   )
 }

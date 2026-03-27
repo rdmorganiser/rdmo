@@ -9,9 +9,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix } from '../common/Filter'
 import Section from '../element/Section'
 
 const Sections = () => {
@@ -46,16 +45,16 @@ const Sections = () => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.sections.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter sections')} />
+              label={gettext('Filter sections')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.sections.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(sections)} />
+              options={getUriPrefixes(sections)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                          options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
             </div>
           }
         </div>
@@ -70,12 +69,12 @@ const Sections = () => {
       {
         !isEmpty(sections) && (
           <ul className="list-group list-group-flush">
-          {
-            sections.map((section, index) => (
-              <Section key={index} config={config} section={section}
-                       filter="sections" filterEditors={true} />
-            ))
-          }
+            {
+              sections.map((section, index) => (
+                <Section key={index} config={config} section={section}
+                  filter="sections" filterEditors={true} />
+              ))
+            }
           </ul>
         )
       }

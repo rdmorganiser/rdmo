@@ -1,6 +1,6 @@
 import React from 'react'
-import ReactSelect from 'react-select'
 import PropTypes from 'prop-types'
+import ReactSelect from 'react-select'
 import classNames from 'classnames'
 import { isArray, isEmpty, isNil, uniqueId } from 'lodash'
 
@@ -9,8 +9,7 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
 
   // lookup value(s) in the options array
   const getValue = () => (
-    isArray(value) ? options.filter(option => (value.includes(option.value)))
-      : options.find(option => (option.value == value))
+    isArray(value) ? options.filter(option => (value.includes(option.value))): options.find(option => (option.value == value))
   )
 
   const handleChange = (option) => {
@@ -29,12 +28,16 @@ const Select = ({ className, label, help, placeholder, isClearable, isDisabled, 
 
       <ReactSelect
         classNamePrefix="react-select"
-        className={classNames('react-select', {
-          'is-invalid': !isEmpty(errors)
-        })}
-        classNames={{
-          control: () => classNames('form-control')
-        }}
+        className={
+          classNames('react-select', {
+            'is-invalid': !isEmpty(errors)
+          })
+        }
+        classNames={
+          {
+            control: () => classNames('form-control')
+          }
+        }
         placeholder={placeholder}
         isClearable={isClearable}
         isDisabled={isDisabled}

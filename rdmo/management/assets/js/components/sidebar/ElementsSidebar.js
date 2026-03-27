@@ -1,18 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { isNil, isEmpty, invert } from 'lodash'
+import { invert, isEmpty, isNil } from 'lodash'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 import Select from 'rdmo/core/assets/js/components/Select'
 
 import { fetchElements } from '../../actions/elementActions'
 import { uploadFile } from '../../actions/importActions'
-
-import { elementTypes, elementModules } from '../../constants/elements'
-
-import { buildApiPath, buildPath } from '../../utils/location'
+import { elementModules, elementTypes } from '../../constants/elements'
 import { getExportParams } from '../../utils/filter'
+import { buildApiPath, buildPath } from '../../utils/location'
 
 const navigation = {
   catalogs: gettext('Catalogs'),
@@ -49,8 +47,7 @@ const ElementsSidebar = () => {
   const { elementType, elementId } = useSelector((state) => state.elements)
 
   const model = invert(elementTypes)[elementType]
-  const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export')
-                                     : buildApiPath(elementModules[model], elementType, elementId, 'export')
+  const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export'): buildApiPath(elementModules[model], elementType, elementId, 'export')
   const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
 
   const handleExport = (key) => {
@@ -118,9 +115,9 @@ const ElementsSidebar = () => {
         {
           Object.entries(navigation).map(([et, label]) => (
             <Link key={et}
-                  href={buildPath(et)}
-                  className={classNames('nav-link text-start', { active: elementType === et })}
-                  onClick={() => dispatch(fetchElements(et))}>
+              href={buildPath(et)}
+              className={classNames('nav-link text-start', { active: elementType === et })}
+              onClick={() => dispatch(fetchElements(et))}>
               <div className="d-flex align-items-center gap-2">
                 <i className={`bi bi-${icons[et]}`} aria-hidden="true" />
                 {label}
@@ -152,7 +149,7 @@ const ElementsSidebar = () => {
 
       <div className="text-muted px-3">
         <input className="form-control" type="file" id="fileUpload" name="uploaded_file"
-               onChange={handleFileUpload} />
+          onChange={handleFileUpload} />
       </div>
     </div>
   )

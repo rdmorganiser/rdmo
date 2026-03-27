@@ -1,5 +1,5 @@
-import thunk from 'redux-thunk'
 import Cookies from 'js-cookie'
+import thunk from 'redux-thunk'
 import isEmpty from 'lodash/isEmpty'
 
 export const configureMiddleware = () => {

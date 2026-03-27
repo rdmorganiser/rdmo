@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 const Truncate = ({ text }) => {

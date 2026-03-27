@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { uniqueId } from 'lodash'
 
-import { CodeLink } from '../../common/Links'
 import { elementModules, verboseNames } from '../../../constants/elements'
+
+import { CodeLink } from '../../common/Links'
 
 const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
   const id = uniqueId('import-checkbox-')
@@ -14,7 +15,7 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
     <>
       <div className="form-check">
         <input type="checkbox" htmlFor={id} className="form-check-input" checked={element.import}
-               onChange={toggleImport} />
+          onChange={toggleImport} />
         <label className="form-check-label" htmlFor={id}>{verboseNames[element.model]}</label>
       </div>
 

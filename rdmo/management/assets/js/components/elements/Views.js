@@ -9,9 +9,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix} from '../common/Filter'
 import View from '../element/View'
 
 const Views = () => {
@@ -47,21 +46,21 @@ const Views = () => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.views.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter views')} />
+              label={gettext('Filter views')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.views.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(views)} />
+              options={getUriPrefixes(views)} />
           </div>
           {
             config.settings.multisite && <>
               <div className="col-sm-2">
                 <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
-                            options={config.sites} />
+                  options={config.sites} />
               </div>
               <div className="col-sm-2">
                 <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                            options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                  options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             </>
           }
@@ -77,12 +76,12 @@ const Views = () => {
       {
         !isEmpty(views) && (
           <ul className="list-group list-group-flush">
-          {
-            views.map((view, index) => (
-              <View key={index} config={config} view={view}
-                    filter="views" filterSites={true} filterEditors={true} />
-            ))
-          }
+            {
+              views.map((view, index) => (
+                <View key={index} config={config} view={view}
+                  filter="views" filterSites={true} filterEditors={true} />
+              ))
+            }
           </ul>
         )
       }

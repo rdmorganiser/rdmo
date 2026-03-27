@@ -1,7 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { Dropdown } from 'bootstrap'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isNil } from 'lodash'
 
@@ -40,14 +40,14 @@ const SnapshotsDropdown = ({ onChange }) => {
 
       <ul className="dropdown-menu">
         <button className={classNames('dropdown-item', { active: isNil(snapshotId) })}
-                onClick={(event) => handleClick(event, null)}>
+          onClick={(event) => handleClick(event, null)}>
           {currentLabel}
         </button>
         {
           snapshots.map((snapshot) => (
             <li key={snapshot.id}>
               <button className={classNames('dropdown-item', {active: snapshot.id == snapshotId})}
-                      onClick={(event) => handleClick(event, snapshot)}>
+                onClick={(event) => handleClick(event, snapshot)}>
                 {snapshot.title}
               </button>
             </li>

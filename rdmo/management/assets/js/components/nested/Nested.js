@@ -1,14 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 import NestedAttribute from './NestedAttribute'
 import NestedCatalog from './NestedCatalog'
 import NestedOptionSet from './NestedOptionSet'
 import NestedPage from './NestedPage'
 import NestedQuestionSet from './NestedQuestionSet'
 import NestedSection from './NestedSection'
-
-import useScrollEffect from '../../hooks/useScrollEffect'
 
 const Nested = () => {
   const { element, elementType } = useSelector((state) => state.elements)

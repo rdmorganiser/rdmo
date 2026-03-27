@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
@@ -8,17 +8,19 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, dropElement, toggleElements } from '../../actions/elementActions'
-
+import { createElement, dropElement, fetchElement, storeElement, toggleElements } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
-import Page from './Page'
-import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink,
-         CodeLink, ShowElementsLink } from '../common/Links'
-import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
+import { ElementErrors } from '../common/Errors'
+import { ReadOnlyIcon } from '../common/Icons'
+import {
+  AddLink,          CodeLink, CopyLink, EditLink, ExportLink,
+  LockedLink, NestedLink, ShowElementsLink 
+} from '../common/Links'
+
+import Page from './Page'
 
 
 const Section = ({ section, display='list', indent=0, filter=false, filterEditors=false, order }) => {
@@ -59,11 +61,12 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
           <EditLink title={gettext('Edit section')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy section')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add page')} onClick={createPage} disabled={section.read_only} />
-          <LockedLink title={section.locked ? gettext('Unlock section')
-                                            : gettext('Lock section')}
-                      locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
+          <LockedLink title={
+            section.locked ? gettext('Unlock section'): gettext('Lock section')
+          }
+          locked={section.locked} onClick={toggleLocked} disabled={section.read_only} />
           <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={config.settings.export_formats} full={true} />
           <Drag element={section} show={display == 'nested'} />
         </div>
       </div>
@@ -99,7 +102,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
           {
             !isEmpty(section.elements) &&
             <Drop element={section.elements[0]} indent={indent + 1} mode="before"
-                  dropElement={(...args) => dispatch(dropElement(...args))} />
+              dropElement={(...args) => dispatch(dropElement(...args))} />
           }
           {
             showElements && section.elements.map((page, index) => {

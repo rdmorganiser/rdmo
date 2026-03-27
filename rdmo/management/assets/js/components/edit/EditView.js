@@ -1,25 +1,23 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { deleteElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
 
-import CodeMirror from './common/CodeMirror'
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import ViewInfo from '../info/ViewInfo'
+import DeleteViewModal from '../modals/DeleteViewModal'
+
 import Checkbox from './common/Checkbox'
+import CodeMirror from './common/CodeMirror'
 import LanguageTabs from './common/LanguageTabs'
 import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import ViewInfo from '../info/ViewInfo'
-import DeleteViewModal from '../modals/DeleteViewModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditView = ({ view }) => {
   const dispatch = useDispatch()
@@ -79,12 +77,14 @@ const EditView = ({ view }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <>
-            <Text element={view} field={`title_${langCode}`} onChange={updateView} />
-            <Textarea element={view} field={`help_${langCode}`} rows={8} onChange={updateView} className="mb-0"/>
-          </>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <>
+              <Text element={view} field={`title_${langCode}`} onChange={updateView} />
+              <Textarea element={view} field={`help_${langCode}`} rows={8} onChange={updateView} className="mb-0"/>
+            </>
+          )
+        } />
 
         <Select element={view} field="catalogs" options={catalogs} onChange={updateView} isMulti />
 
@@ -115,7 +115,7 @@ const EditView = ({ view }) => {
       </div>
 
       <DeleteViewModal view={view} info={info} show={showDeleteModal}
-                       onClose={closeDeleteModal} onDelete={deleteView} />
+        onClose={closeDeleteModal} onDelete={deleteView} />
     </div>
   )
 }

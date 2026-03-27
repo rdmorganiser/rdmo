@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
@@ -8,14 +8,13 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement } from '../../actions/elementActions'
-
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
-import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
-import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
+import { ElementErrors } from '../common/Errors'
+import { ReadOnlyIcon } from '../common/Icons'
+import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/Links'
 
 const Question = ({ question, display='list', indent=0, filter=false, filterEditors=false, order }) => {
   const dispatch = useDispatch()
@@ -72,9 +71,9 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
           <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
           <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
-                      locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
+            locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
           <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={config.settings.export_formats} full={true} />
           <Drag element={question} show={display == 'nested'} />
         </div>
       </div>
@@ -120,27 +119,27 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
       {
         !isEmpty(question.warning) && (
           <ul className="list-unstyled mb-0">
-          {
-            question.warning.no_attribute && (
-              <li className="text-danger">
-                {gettext('Error: No attribute is set for this question!')}
-              </li>
-            )
-          }
-          {
-            question.warning.double_attribute && (
-              <li className="text-danger">
-                {gettext('Error: The attribute for this question is used several times (in this catalog).')}
-              </li>
-            )
-          }
-          {
-            question.warning.missing_languages && (
-              <li className="text-warning">
-                {gettext('Warning: Some of the language specific fields are not set properly.')}
-              </li>
-            )
-          }
+            {
+              question.warning.no_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: No attribute is set for this question!')}
+                </li>
+              )
+            }
+            {
+              question.warning.double_attribute && (
+                <li className="text-danger">
+                  {gettext('Error: The attribute for this question is used several times (in this catalog).')}
+                </li>
+              )
+            }
+            {
+              question.warning.missing_languages && (
+                <li className="text-warning">
+                  {gettext('Warning: Some of the language specific fields are not set properly.')}
+                </li>
+              )
+            }
           </ul>
         )
       }

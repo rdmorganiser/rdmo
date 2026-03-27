@@ -2,12 +2,11 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 
-import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { Link } from 'rdmo/core/assets/js/components'
-
-import { buildPath } from '../utils/location'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { navigateDashboard } from '../actions/projectActions'
+import { buildPath } from '../utils/location'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
@@ -52,34 +51,34 @@ const Sidebar = () => {
       </div>
 
       <div className="flex-lg-grow-1">
-      {
-        menuItems.map((group, groupIndex) => (
-          <div key={groupIndex}>
-            {
-              group.title && <h3 className="d-none d-lg-block font-normal px-3 my-3">{group.title}</h3>
-            }
+        {
+          menuItems.map((group, groupIndex) => (
+            <div key={groupIndex}>
+              {
+                group.title && <h3 className="d-none d-lg-block font-normal px-3 my-3">{group.title}</h3>
+              }
 
-            <nav className="nav nav-pills nav-fill flex-column">
-            {
-              group.items.map((item, itemIndex) => (
-                <Link
-                  key={itemIndex}
-                  href={buildPath({ area: item.area })}
-                  title={item.name}
-                  className={classNames('nav-link', { active: area === item.area })}
-                  onClick={() => dispatch(navigateDashboard({ area: item.area }))}
-                >
-                  <div className="d-flex align-items-center gap-2">
-                    <i className={`bi ${item.icon}`}></i>
-                    <span className="d-none d-lg-inline">{item.name}</span>
-                  </div>
-                </Link>
-              ))
-            }
-            </nav>
-          </div>
-        ))
-      }
+              <nav className="nav nav-pills nav-fill flex-column">
+                {
+                  group.items.map((item, itemIndex) => (
+                    <Link
+                      key={itemIndex}
+                      href={buildPath({ area: item.area })}
+                      title={item.name}
+                      className={classNames('nav-link', { active: area === item.area })}
+                      onClick={() => dispatch(navigateDashboard({ area: item.area }))}
+                    >
+                      <div className="d-flex align-items-center gap-2">
+                        <i className={`bi ${item.icon}`}></i>
+                        <span className="d-none d-lg-inline">{item.name}</span>
+                      </div>
+                    </Link>
+                  ))
+                }
+              </nav>
+            </div>
+          ))
+        }
       </div>
 
       <hr />

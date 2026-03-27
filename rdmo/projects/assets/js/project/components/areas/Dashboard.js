@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { TileGrid } from '../helper'
 
 import Tooltip from 'rdmo/core/assets/js/_bs53/components/Tooltip'
+
+import { TileGrid } from '../helper'
 
 const Dashboard = () => {
   const [tileSize, setTileSize] = useState('normal')

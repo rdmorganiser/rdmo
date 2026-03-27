@@ -54,4 +54,4 @@ const verboseNames = {
   'views.view': gettext('View')
 }
 
-export { elementTypes, elementModules, codeClass, verboseNames }
+export { codeClass, elementModules, elementTypes, verboseNames }

@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
-import CreatableSelect from 'react-select/creatable'
 import CreatableAsyncSelect from 'react-select/async-creatable'
-
-import PropTypes from 'prop-types'
+import CreatableSelect from 'react-select/creatable'
 import classNames from 'classnames'
-import { isEmpty, isNil } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty, isNil } from 'lodash'
+
+import { projectId } from '../../../utils/meta'
+import { getValueOption } from '../../../utils/options'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
+import { isDefaultValue } from '../../../utils/value'
 
 import ProjectApi from '../../../api/ProjectApi'
-import { projectId } from '../../../utils/meta'
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
-import { getValueOption } from '../../../utils/options'
 
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'

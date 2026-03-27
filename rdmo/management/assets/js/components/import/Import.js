@@ -4,16 +4,16 @@ import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
+import { useImportElements } from '../../hooks/useImportElements'
+import filterElements from '../../utils/importFilters'
+
+import ErrorsAggregated from './common/ErrorsAggregated'
+import ImportFilters from './common/ImportFilters'
+import ImportInfo from './common/ImportInfo'
+import WarningsAggregated from './common/WarningsAggregated'
+
 import ImportElement from './ImportElement'
 import ImportSuccessElement from './ImportSuccessElement'
-
-import WarningsAggregated from './common/WarningsAggregated'
-import ErrorsAggregated from './common/ErrorsAggregated'
-import ImportInfo from './common/ImportInfo'
-import ImportFilters from './common/ImportFilters'
-
-import filterElements from '../../utils/importFilters'
-import { useImportElements } from '../../hooks/useImportElements'
 
 
 const Import = () => {
@@ -36,26 +36,26 @@ const Import = () => {
   const filteredElements = filterElements(elements, selectFilterChanged, selectedUriPrefix, searchString)
 
   return (
-    <div className='card'>
-      <div className='card-header'>
-        <div className='d-flex align-items-center gap-2'>
+    <div className="card">
+      <div className="card-header">
+        <div className="d-flex align-items-center gap-2">
           <strong>{gettext('Import from')}</strong>
           <div className="flex-grow-1">
             <code className="code-import">{file.name}</code>
           </div>
 
           <ImportInfo elementsLength={elements.length} createdLength={createdElements.length}
-                      updatedLength={updatedElements.length} changedLength={changedElements.length}
-                      warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
+            updatedLength={updatedElements.length} changedLength={changedElements.length}
+            warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
         </div>
       </div>
       <div className="card-body">
         <ImportFilters elements={elements} changedElements={changedElements}
-                       filteredElements={filteredElements} success={success} />
+          filteredElements={filteredElements} success={success} />
         <WarningsAggregated elements={importWarnings} />
         <ErrorsAggregated elements={importErrors} />
       </div>
-      <ul className='list-group list-group-flush'>
+      <ul className="list-group list-group-flush">
         {
           filteredElements.map((element, index) => {
             if (success) {

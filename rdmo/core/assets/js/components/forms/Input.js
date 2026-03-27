@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty, isNil, uniqueId } from 'lodash'
-
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty, isNil, uniqueId } from 'lodash'
 
 const Input = ({ type = 'text', className, debounce, label, placeholder, help, isDisabled, errors, value, onChange }) => {
   const id = uniqueId('input-')
@@ -12,8 +11,7 @@ const Input = ({ type = 'text', className, debounce, label, placeholder, help, i
   const [inputValue, setInputValue] = isNil(debounce) ? [value, () => {}] : useState(value)
 
   // use the debounce hook on the onChange callback (only when debouncing)
-  const callOnChange = isNil(debounce) ? (value) => onChange(value)
-                                       : useDebouncedCallback((value) => onChange(value), debounce)
+  const callOnChange = isNil(debounce) ? (value) => onChange(value): useDebouncedCallback((value) => onChange(value), debounce)
 
   // update the local state if the value prop changes (only when debouncing)
   useEffect(() => setInputValue(value), [value])
@@ -32,9 +30,11 @@ const Input = ({ type = 'text', className, debounce, label, placeholder, help, i
       <input
         id={id}
         type={type}
-        className={classNames('form-control', {
-          'is-invalid': !isEmpty(errors)
-        })}
+        className={
+          classNames('form-control', {
+            'is-invalid': !isEmpty(errors)
+          })
+        }
         placeholder={placeholder}
         disabled={isDisabled}
         value={inputValue}

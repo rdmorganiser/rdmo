@@ -13,9 +13,11 @@ const Textarea = ({ rows, className, label, placeholder, help, disabled, errors,
       <textarea
         rows={rows}
         id={id}
-        className={classNames('form-control', {
-          'is-invalid': !isEmpty(errors)
-        })}
+        className={
+          classNames('form-control', {
+            'is-invalid': !isEmpty(errors)
+          })
+        }
         placeholder={placeholder}
         disabled={disabled}
         value={value}

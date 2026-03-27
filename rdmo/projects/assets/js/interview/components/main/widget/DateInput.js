@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import classNames from 'classnames'
-import { enGB, de, it, es, fr } from 'date-fns/locale'
+import { de, enGB, es, fr, it } from 'date-fns/locale'
 
-import lang from 'rdmo/core/assets/js/utils/lang'
 import { getDateFromDatetime } from 'rdmo/core/assets/js/utils/date'
+import lang from 'rdmo/core/assets/js/utils/lang'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 const DateInput = ({ question, value, disabled, updateValue, buttons }) => {

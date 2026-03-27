@@ -1,15 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-
-import { get } from 'lodash'
 import DatePicker from 'react-datepicker'
+import { useDispatch, useSelector } from 'react-redux'
 import { formatISO, set } from 'date-fns'
+import { get } from 'lodash'
 
-import { Select } from 'rdmo/core/assets/js/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import * as projectsActions from '../../actions/projectsActions'
+import { Select } from 'rdmo/core/assets/js/components'
 
+import * as projectsActions from '../../actions/projectsActions'
 import useDatePicker from '../../hooks/useDatePicker'
 
 const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
@@ -89,42 +88,77 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
 
   return (
     <>
-      {showFilters && (
-        <div className="mt-2">
-          <div className="row">
-            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
-              <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
-              <Select
-                onChange={handleCatalogFilterChange}
-                options={catalogOptions ?? []}
-                placeholder={gettext('Select catalog')}
-                value={selectedCatalog}
-              />
-            </div>
-            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
-              <label className="form-label text-secondary">{gettext('Filter by role')}</label>
-              <Select
-                onChange={handleRoleFilterChange}
-                options={roleOptions}
-                placeholder={gettext('Select role')}
-                value={selectedRole}
-              />
-            </div>
-            {isAdminOrSiteManager && (
+      {
+        showFilters && (
+          <div className="mt-2">
+            <div className="row">
+              <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
+                <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
+                <Select
+                  onChange={handleCatalogFilterChange}
+                  options={catalogOptions ?? []}
+                  placeholder={gettext('Select catalog')}
+                  value={selectedCatalog}
+                />
+              </div>
+              <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
+                <label className="form-label text-secondary">{gettext('Filter by role')}</label>
+                <Select
+                  onChange={handleRoleFilterChange}
+                  options={roleOptions}
+                  placeholder={gettext('Select role')}
+                  value={selectedRole}
+                />
+              </div>
+              {
+                isAdminOrSiteManager && (
+                  <div className="col-md-4">
+                    <label className="form-label text-secondary">{gettext('Filter by created date')}</label>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <DatePicker
+                          autoComplete="off"
+                          className="form-control"
+                          dateFormat={dateFormat}
+                          id="created-start-date-picker"
+                          isClearable
+                          locale={getLocale()}
+                          onChange={date => handleDateChange('created', 'start', date)}
+                          placeholderText={gettext('Select start date')}
+                          selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <DatePicker
+                          autoComplete="off"
+                          className="form-control"
+                          dateFormat={dateFormat}
+                          id="created-end-date-picker"
+                          isClearable
+                          locale={getLocale()}
+                          onChange={date => handleDateChange('created', 'end', date)}
+                          placeholderText={gettext('Select end date')}
+                          selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
               <div className="col-md-4">
-                <label className="form-label text-secondary">{gettext('Filter by created date')}</label>
+                <label className="form-label text-secondary">{gettext('Filter by last changed date')}</label>
                 <div className="row">
                   <div className="col-md-6">
                     <DatePicker
                       autoComplete="off"
                       className="form-control"
                       dateFormat={dateFormat}
-                      id="created-start-date-picker"
+                      id="last-changed-start-date-picker"
                       isClearable
                       locale={getLocale()}
-                      onChange={date => handleDateChange('created', 'start', date)}
+                      onChange={date => handleDateChange('last_changed', 'start', date)}
                       placeholderText={gettext('Select start date')}
-                      selected={dateRange.createdStart ?? get(config, 'params.created_after', '')}
+                      selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
                     />
                   </div>
                   <div className="col-md-6">
@@ -132,62 +166,33 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                       autoComplete="off"
                       className="form-control"
                       dateFormat={dateFormat}
-                      id="created-end-date-picker"
+                      id="last-changed-end-date-picker"
                       isClearable
                       locale={getLocale()}
-                      onChange={date => handleDateChange('created', 'end', date)}
+                      onChange={date => handleDateChange('last_changed', 'end', date)}
                       placeholderText={gettext('Select end date')}
-                      selected={dateRange.createdEnd ?? get(config, 'params.created_before', '')}
+                      selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
                     />
                   </div>
                 </div>
               </div>
-            )}
-            <div className="col-md-4">
-              <label className="form-label text-secondary">{gettext('Filter by last changed date')}</label>
-              <div className="row">
-                <div className="col-md-6">
-                  <DatePicker
-                    autoComplete="off"
-                    className="form-control"
-                    dateFormat={dateFormat}
-                    id="last-changed-start-date-picker"
-                    isClearable
-                    locale={getLocale()}
-                    onChange={date => handleDateChange('last_changed', 'start', date)}
-                    placeholderText={gettext('Select start date')}
-                    selected={dateRange.lastChangedStart ?? get(config, 'params.last_changed_after', '')}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <DatePicker
-                    autoComplete="off"
-                    className="form-control"
-                    dateFormat={dateFormat}
-                    id="last-changed-end-date-picker"
-                    isClearable
-                    locale={getLocale()}
-                    onChange={date => handleDateChange('last_changed', 'end', date)}
-                    placeholderText={gettext('Select end date')}
-                    selected={dateRange.lastChangedEnd ?? get(config, 'params.last_changed_before', '')}
-                  />
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <div className="d-flex justify-content-between mt-2">
         <button type="button" className="link font-small" onClick={toggleFilters}>
           <i className="bi bi-filter"></i> {
             showFilters ? gettext('Hide additional filters') : gettext('Show additional filters')
           }
         </button>
-        {showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
-          <button type="button" className="link font-small" onClick={resetAllFilters}>
-            <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
-          </button>
-        )}
+        {
+          showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
+            <button type="button" className="link font-small" onClick={resetAllFilters}>
+              <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
+            </button>
+          )
+        }
       </div>
     </>
   )

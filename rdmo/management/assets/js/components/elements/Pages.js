@@ -9,9 +9,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix } from '../common/Filter'
 import Page from '../element/Page'
 
 const Pages = () => {
@@ -50,16 +49,16 @@ const Pages = () => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.pages.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter pages')} />
+              label={gettext('Filter pages')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.pages.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(pages)} />
+              options={getUriPrefixes(pages)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                          options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
             </div>
           }
         </div>
@@ -80,12 +79,12 @@ const Pages = () => {
       {
         !isEmpty(pages) && (
           <ul className="list-group list-group-flush">
-          {
-            pages.map((page, index) => (
-              <Page key={index} config={config} page={page}
-                    filter="pages" filterEditors={true} />
-            ))
-          }
+            {
+              pages.map((page, index) => (
+                <Page key={index} config={config} page={page}
+                  filter="pages" filterEditors={true} />
+              ))
+            }
           </ul>
 
         )

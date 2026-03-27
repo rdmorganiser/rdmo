@@ -1,7 +1,9 @@
 import Cookies from 'js-cookie'
-import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
+
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 class ProjectsApi extends BaseApi {
 

@@ -1,11 +1,17 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { isUndefined, orderBy } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import PageInfo from '../info/PageInfo'
+import DeletePageModal from '../modals/DeletePageModal'
 
 import Checkbox from './common/Checkbox'
 import LanguageTabs from './common/LanguageTabs'
@@ -16,20 +22,12 @@ import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
 
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import PageInfo from '../info/PageInfo'
-import DeletePageModal from '../modals/DeletePageModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
-
 const EditPage = ({ page }) => {
   const dispatch = useDispatch()
 
   const { sites, settings } = useSelector((state) => state.config)
   const { elementAction, parent, attributes,
-          conditions, questions, questionsets } = useSelector((state) => state.elements)
+    conditions, questions, questionsets } = useSelector((state) => state.elements)
 
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
   const elementOptions = questions.map(question => ({
@@ -94,9 +92,11 @@ const EditPage = ({ page }) => {
 
       {
         parent && parent.section && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This page will be added to the section <code class="code-questions">%s</code>.'),
-          [parent.section.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This page will be added to the section <code class="code-questions">%s</code>.'),
+            [parent.section.uri])
+          } />
         </div>
       }
 
@@ -127,28 +127,30 @@ const EditPage = ({ page }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <>
-            <Text element={page} field={`title_${langCode}`} onChange={updatePage} />
-            <Text element={page} field={`short_title_${langCode}`} onChange={updatePage} />
-            <Textarea element={page} field={`help_${langCode}`} rows={4} onChange={updatePage} />
-            <Text element={page} field={`verbose_name_${langCode}`} onChange={updatePage} />
-          </>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <>
+              <Text element={page} field={`title_${langCode}`} onChange={updatePage} />
+              <Text element={page} field={`short_title_${langCode}`} onChange={updatePage} />
+              <Textarea element={page} field={`help_${langCode}`} rows={4} onChange={updatePage} />
+              <Text element={page} field={`verbose_name_${langCode}`} onChange={updatePage} />
+            </>
+          )
+        } />
 
         <Select element={page} field="attribute" createText={gettext('Create new attribute')}
-                options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
+          options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
 
         <OrderedMultiSelect element={page} field="elements"
-                            values={elementValues} options={elementOptions}
-                            addText={addElementText} createText={createQuestionText}
-                            altCreateText={createQuestionSetText}
-                            onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
-                            onEdit={editElement} />
+          values={elementValues} options={elementOptions}
+          addText={addElementText} createText={createQuestionText}
+          altCreateText={createQuestionSetText}
+          onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
+          onEdit={editElement} />
 
         <MultiSelect element={page} field="conditions" options={conditions}
-                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
-                     onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
+          addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
+          onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
 
         {
           settings.multisite && (
@@ -167,7 +169,7 @@ const EditPage = ({ page }) => {
       </div>
 
       <DeletePageModal page={page} info={info} show={showDeleteModal}
-                       onClose={closeDeleteModal} onDelete={deletePage} />
+        onClose={closeDeleteModal} onDelete={deletePage} />
     </div>
   )
 }

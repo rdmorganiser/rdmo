@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
-import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 import { rollbackSnapshot } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
@@ -41,9 +41,11 @@ const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
           `<p>${gettext('This action cannot be undone!')}</p>`
         }
       />
-      {errors.non_field_errors?.map((err, i) => (
-        <div key={i} className="text-danger mt-1">{err}</div>
-      ))}
+      {
+        errors.non_field_errors?.map((err, i) => (
+          <div key={i} className="text-danger mt-1">{err}</div>
+        ))
+      }
     </Modal>
   )
 }

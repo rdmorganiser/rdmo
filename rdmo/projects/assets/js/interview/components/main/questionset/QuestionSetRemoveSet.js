@@ -17,14 +17,14 @@ const QuestionRemoveSet = ({ questionset, currentSet, disabled, deleteSet }) => 
   return !disabled && questionset.is_collection && (
     <>
       <button type="button" className="btn btn-link btn-remove-set"
-              title={'Remove block'} aria-label={'Remove block'}
-              onClick={modal.open}>
+        title={'Remove block'} aria-label={'Remove block'}
+        onClick={modal.open}>
         <i className="fa fa-times fa-btn" aria-hidden="true"></i>
       </button>
 
       <Modal title={gettext('Remove block')} show={modal.show} submitLabel={gettext('Remove')}
-             submitProps={{className: 'btn btn-danger'}}
-             onClose={modal.close} onSubmit={handleRemoveSet}>
+        submitProps={{className: 'btn btn-danger'}}
+        onClose={modal.close} onSubmit={handleRemoveSet}>
         <p>{gettext('You are about to permanently remove this block.')}</p>
         <p className="text-danger">{gettext('This action cannot be undone!')}</p>
       </Modal>

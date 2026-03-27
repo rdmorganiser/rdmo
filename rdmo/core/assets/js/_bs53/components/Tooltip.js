@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
+import { renderToString } from 'react-dom/server'
 import { Tooltip as BootstrapTooltip } from 'bootstrap'
 
 const Tooltip = ({ title, children, placement = 'bottom', tooltipProps = {} }) => {

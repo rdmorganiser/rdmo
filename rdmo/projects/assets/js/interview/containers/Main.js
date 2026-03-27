@@ -1,23 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
-import { hasErrors, isReady } from '../utils/interview'
-
-import Breadcrumb from '../components/main/Breadcrumb'
-import Contact from '../components/main/Contact'
-import Done from '../components/main/Done'
-import Page from '../components/main/page/Page'
-import Errors from '../components/main/Errors'
+import { bindActionCreators } from 'redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import * as contactActions from '../actions/contactActions'
 import * as interviewActions from '../actions/interviewActions'
+import { hasErrors, isReady } from '../utils/interview'
+
+import Breadcrumb from '../components/main/Breadcrumb'
+import Contact from '../components/main/Contact'
+import Done from '../components/main/Done'
+import Errors from '../components/main/Errors'
+import Page from '../components/main/page/Page'
 
 const Main = ({ config, settings, templates, project, interview, contact,
-                interviewActions, contactActions }) => {
+  interviewActions, contactActions }) => {
 
   if (hasErrors(project, interview)) {
     return (

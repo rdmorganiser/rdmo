@@ -22,4 +22,4 @@ const getHelp = (element, field, meta) => {
   }
 }
 
-export { getId, getLabel, getHelp }
+export { getHelp, getId, getLabel }
