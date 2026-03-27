@@ -234,7 +234,7 @@ export function fetchImportUrlsError(error) {
 }
 
 export function fetchInvitations() {
-  const pendingId = 'fetchImportUrls'
+  const pendingId = 'fetchInvitations'
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
