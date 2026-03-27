@@ -3,6 +3,8 @@ import { TileGrid } from '../helper'
 
 import Tooltip from 'rdmo/core/assets/js/_bs53/components/Tooltip'
 
+import PluginForm from '../helper/PluginForm'
+
 const Dashboard = () => {
   const [tileSize, setTileSize] = useState('normal')
 
@@ -23,6 +25,8 @@ const Dashboard = () => {
     { title: 'Tile 6', content: <p>Content 6</p> },
   ]
 
+  const html = '<form><input class="form-control mb-3" type="text" name="input" /><button type="submit" class="btn btn-primary">Submit</button></form>'
+
   return (
     <div>
       <h1>{gettext('Dashboard')}</h1>
@@ -39,6 +43,8 @@ const Dashboard = () => {
             <span>TOOLTIP</span>
           </Tooltip>
         </div>
+
+        <PluginForm html={html} />
       </div>
     </div>
   )
