@@ -20,7 +20,7 @@ const PendingInvitations = ({ invitations }) => {
 
         <div className="d-flex gap-2">
           <div className="me-auto">
-            {roleLabel && `(${roleLabel})`}
+            {roleLabel && interpolate(gettext('Role: %s'), [roleLabel])}
           </div>
 
           <button

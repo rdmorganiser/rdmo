@@ -90,7 +90,7 @@ const Main = () => {
     show: showEdit,
     onClose: handleCloseEdit,
     onSubmit: () => { },
-    submitLabel: gettext('Save'),
+    submitLabel: gettext('Update project'),
     submitProps: {
       type: 'submit',
       form: 'project-edit-form'
@@ -229,7 +229,7 @@ const Main = () => {
     role: (_content, row) => {
       const highestRoleString = (row.highest_role && row.highest_role.project_id != row.id) ? (
         <>
-          {row.highest_role.role_display} {gettext('of')}{' '}
+          {interpolate(gettext('%s of '), [row.highest_role.role_display])}
           <a href={`${baseUrl}/projects/${row.highest_role.project_id}`}>
             {row.highest_role.project_title}
           </a>
