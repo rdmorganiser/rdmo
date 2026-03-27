@@ -80,7 +80,7 @@ const ProjectForm = ({
                 tabIndex={0}
                 role="img"
                 aria-label={gettext('Catalog help')}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'help' }}
               />
             </Tooltip>
           </>
@@ -166,7 +166,7 @@ const ProjectForm = ({
   return (
     <form id={formId} className="container mt-3" onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
       <Input
-        className="mb-3 form-label fw-bold"
+        className="mb-3 form-label"
         label={gettext('Title')}
         help={<Html html={templates.project_view_title_help} />}
         value={formData.title || ''}
@@ -176,7 +176,7 @@ const ProjectForm = ({
       />
 
       <Textarea
-        className="mb-3 form-label fw-bold"
+        className="mb-3 form-label"
         label={gettext('Description')}
         help={<Html html={templates.project_view_description_help} />}
         rows={4}
@@ -207,8 +207,8 @@ const ProjectForm = ({
       */}
 
       <div className="mb-3">
-        <label className="form-label fw-bold">{gettext('Catalog')}</label>
-        <div className="form-text">{gettext('The catalog used for this project.')}</div>
+        <label className="form-label mb-0">{gettext('Catalog')}</label>
+        <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
 
         {selectCatalog == 'select' ? (
           <Select

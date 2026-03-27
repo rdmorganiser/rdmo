@@ -53,6 +53,7 @@ const Main = () => {
 
   const createModalProps = {
     title: gettext('Create new project'),
+    size: 'modal-lg',
     show: showCreate,
     onClose: closeCreate,
     onSubmit: () => { },
@@ -70,6 +71,7 @@ const Main = () => {
 
   const copyModalProps = {
     title: gettext('Copy project'),
+    size: 'modal-lg',
     show: showCopy,
     onClose: handleCloseCopy,
     onSubmit: () => { },
@@ -87,6 +89,7 @@ const Main = () => {
 
   const editModalProps = {
     title: gettext('Update project'),
+    size: 'modal-lg',
     show: showEdit,
     onClose: handleCloseEdit,
     onSubmit: () => { },
