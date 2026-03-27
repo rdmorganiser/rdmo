@@ -48,56 +48,68 @@ const EditAttribute = ({ attribute }) => {
       </div>
 
       {
-        parent && parent.attribute && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This attribute will be added to the attribute <code class="code-domain">%s</code>.'),
-            [parent.attribute.uri])
-          } />
-        </div>
+        parent && parent.attribute && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This attribute will be added to the attribute <code class="code-domain">%s</code>.'),
+              [parent.attribute.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        parent && parent.page && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This attribute will be added to the page <code class="code-questions">%s</code>.'),
-            [parent.page.uri])
-          } />
-        </div>
+        parent && parent.page && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This attribute will be added to the page <code class="code-questions">%s</code>.'),
+              [parent.page.uri])
+            } />
+          </div>
+        )
       }
       {
-        parent && parent.questionset && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This attribute will be added to the question set <code class="code-questions">%s</code>.'),
-            [parent.questionset.uri])
-          } />
-        </div>
+        parent && parent.questionset && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This attribute will be added to the question set <code class="code-questions">%s</code>.'),
+              [parent.questionset.uri])
+            } />
+          </div>
+        )
       }
       {
-        parent && parent.question && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This attribute will be added to the question <code class="code-questions">%s</code>.'),
-            [parent.question.uri])
-          } />
-        </div>
+        parent && parent.question && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This attribute will be added to the question <code class="code-questions">%s</code>.'),
+              [parent.question.uri])
+            } />
+          </div>
+        )
       }
       {
-        parent && parent.condition && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This attribute will be added to the condition <code class="code-conditions">%s</code>.'),
-            [parent.condition.uri])
-          } />
-        </div>
+        parent && parent.condition && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This attribute will be added to the condition <code class="code-conditions">%s</code>.'),
+              [parent.condition.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        attribute.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        attribute.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

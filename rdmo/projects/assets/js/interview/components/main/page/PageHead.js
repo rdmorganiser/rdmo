@@ -159,57 +159,59 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
       }
 
       {
-        !disabled && <>
-          <PageHeadFormModal
-            title={gettext('Create tab')}
-            submitLabel={gettext('Create')}
-            submitColor="success"
-            show={createModal.show}
-            attribute={page.attribute}
-            reuse={true}
-            onClose={createModal.close}
-            onSubmit={handleCreate}
-          />
-          <PageHeadFormModal
-            title={gettext('Copy tab')}
-            submitLabel={gettext('Copy')}
-            submitColor="info"
-            show={copyModal.show}
-            attribute={page.attribute}
-            onClose={copyModal.close}
-            onSubmit={handleCopy}
-          />
-          {
-            currentSetValue && (
-              <PageHeadFormModal
-                title={gettext('Update tab')}
-                submitLabel={gettext('Update')}
-                submitColor="primary"
-                show={updateModal.show}
-                attribute={page.attribute}
-                initial={currentSetValue.text}
-                onClose={updateModal.close}
-                onSubmit={handleUpdate}
-              />
-            )
-          }
-          {
-            currentSetValue && (
-              <PageHeadReuseModal
-                show={importModal.show}
-                attribute={page.attribute}
-                onClose={importModal.close}
-                onSubmit={handleImport}
-              />
-            )
-          }
-          <PageHeadDeleteModal
-            name={currentSetValue ? currentSetValue.text : null}
-            show={deleteModal.show}
-            onClose={deleteModal.close}
-            onSubmit={handleDelete}
-          />
-        </>
+        !disabled && (
+          <>
+            <PageHeadFormModal
+              title={gettext('Create tab')}
+              submitLabel={gettext('Create')}
+              submitColor="success"
+              show={createModal.show}
+              attribute={page.attribute}
+              reuse={true}
+              onClose={createModal.close}
+              onSubmit={handleCreate}
+            />
+            <PageHeadFormModal
+              title={gettext('Copy tab')}
+              submitLabel={gettext('Copy')}
+              submitColor="info"
+              show={copyModal.show}
+              attribute={page.attribute}
+              onClose={copyModal.close}
+              onSubmit={handleCopy}
+            />
+            {
+              currentSetValue && (
+                <PageHeadFormModal
+                  title={gettext('Update tab')}
+                  submitLabel={gettext('Update')}
+                  submitColor="primary"
+                  show={updateModal.show}
+                  attribute={page.attribute}
+                  initial={currentSetValue.text}
+                  onClose={updateModal.close}
+                  onSubmit={handleUpdate}
+                />
+              )
+            }
+            {
+              currentSetValue && (
+                <PageHeadReuseModal
+                  show={importModal.show}
+                  attribute={page.attribute}
+                  onClose={importModal.close}
+                  onSubmit={handleImport}
+                />
+              )
+            }
+            <PageHeadDeleteModal
+              name={currentSetValue ? currentSetValue.text : null}
+              show={deleteModal.show}
+              onClose={deleteModal.close}
+              onSubmit={handleDelete}
+            />
+          </>
+        )
       }
     </div>
   )

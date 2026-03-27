@@ -75,7 +75,7 @@ const OptionSet = ({ optionset, display='list', filter=false, filterEditors=fals
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'plain':

@@ -82,7 +82,7 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -93,16 +93,17 @@ const Section = ({ section, display='list', indent=0, filter=false, filterEditor
               <Drop element={section}>
                 <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--indent-factor))` }}>
                   <div className="card-body">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
             )
           }
           {
-            !isEmpty(section.elements) &&
-            <Drop element={section.elements[0]} indent={indent + 1} mode="before"
-              dropElement={(...args) => dispatch(dropElement(...args))} />
+            !isEmpty(section.elements) && (
+              <Drop element={section.elements[0]} indent={indent + 1} mode="before"
+                dropElement={(...args) => dispatch(dropElement(...args))} />
+            )
           }
           {
             showElements && section.elements.map((page, index) => {

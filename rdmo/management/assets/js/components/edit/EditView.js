@@ -48,9 +48,11 @@ const EditView = ({ view }) => {
       </div>
 
       {
-        view.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        view.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

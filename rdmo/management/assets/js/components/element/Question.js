@@ -53,18 +53,22 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
           <Html html={question.text} />
         </div>
         {
-          question.is_optional && <div className="me-1">
-            <code className="code-optional" title={gettext('This is an optional question.')}>
-              {gettext('optional')}
-            </code>
-          </div>
+          question.is_optional && (
+            <div className="me-1">
+              <code className="code-optional" title={gettext('This is an optional question.')}>
+                {gettext('optional')}
+              </code>
+            </div>
+          )
         }
         {
-          (question.default_text || question.default_option || question.default_external_id) && <div className="me-1">
-            <code className="code-default" title={gettext('This question has a default answer.')}>
-              {gettext('default')}
-            </code>
-          </div>
+          (question.default_text || question.default_option || question.default_external_id) && (
+            <div className="me-1">
+              <code className="code-default" title={gettext('This question has a default answer.')}>
+                {gettext('default')}
+              </code>
+            </div>
+          )
         }
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
@@ -151,7 +155,7 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -161,7 +165,7 @@ const Question = ({ question, display='list', indent=0, filter=false, filterEdit
             showElement && (
               <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
                 <div className="card-body">
-                  { elementNode }
+                  {elementNode}
                 </div>
               </div>
             )

@@ -53,9 +53,11 @@ const EditTask = ({ task }) => {
       </div>
 
       {
-        task.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        task.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

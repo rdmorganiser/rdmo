@@ -117,7 +117,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -128,7 +128,7 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
               <Drop element={page}>
                 <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
                   <div className="card-body">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
@@ -139,13 +139,17 @@ const Page = ({ page, display='list', indent=0, filter=false, filterEditors=fals
               if (element.model == 'questions.questionset') {
                 const questionSetInfo = page.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
-                return <QuestionSet key={index} config={config} questionset={element}
-                  display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
+                return (
+                  <QuestionSet key={index} config={config} questionset={element}
+                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
+                )
               } else {
                 const questionInfo = page.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
-                return <Question key={index} config={config} question={element}
-                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                return (
+                  <Question key={index} config={config} question={element}
+                    display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                )
               }
             })
           }

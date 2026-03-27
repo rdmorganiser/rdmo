@@ -183,18 +183,20 @@ const Main = () => {
     return (
       <div className="d-flex position-relative">
         {
-          projects.length > 0 && showTopButton &&
-          <button type="button" className="btn btn-light btn-rounded font-small" onClick={scrollToTop}
-            title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
-            <i className="bi bi-arrow-up" aria-hidden="true"></i>
-          </button>
+          projects.length > 0 && showTopButton && (
+            <button type="button" className="btn btn-light btn-rounded font-small" onClick={scrollToTop}
+              title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
+              <i className="bi bi-arrow-up" aria-hidden="true"></i>
+            </button>
+          )
         }
         {
-          hasNext &&
-          <button type="button" onClick={loadMore}
-            className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
-            {gettext('Load more')}
-          </button>
+          hasNext && (
+            <button type="button" onClick={loadMore}
+              className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
+              {gettext('Load more')}
+            </button>
+          )
         }
       </div>
     )
@@ -236,17 +238,19 @@ const Main = () => {
         </>
       ) : null
 
-      return <>
-        {
-          row.current_role && <div>{row.current_role.role_display}</div>
-        }
-        {
-          row.highest_role && <div className="text-secondary">{highestRoleString}</div>
-        }
-        {
-          row.visibility && <div className="text-secondary">{row.visibility}</div>
-        }
-      </>
+      return (
+        <>
+          {
+            row.current_role && <div>{row.current_role.role_display}</div>
+          }
+          {
+            row.highest_role && <div className="text-secondary">{highestRoleString}</div>
+          }
+          {
+            row.visibility && <div className="text-secondary">{row.visibility}</div>
+          }
+        </>
+      )
     },
     owner: (_content, row) => (
       <>
@@ -276,30 +280,32 @@ const Main = () => {
             }
           />
           {
-            perms.can_change_project &&
-            <Link
-              className="bi bi-pencil"
-              title={labels.update}
-              onClick={
-                () => {
-                  setSelectedProject(row)
-                  openEdit()
+            perms.can_change_project && (
+              <Link
+                className="bi bi-pencil"
+                title={labels.update}
+                onClick={
+                  () => {
+                    setSelectedProject(row)
+                    openEdit()
+                  }
                 }
-              }
-            />
+              />
+            )
           }
           {
-            perms.can_delete_project &&
-            <Link
-              className="bi bi-trash"
-              title={labels.delete}
-              onClick={
-                () => {
-                  setSelectedProject(row)
-                  openDelete()
+            perms.can_delete_project && (
+              <Link
+                className="bi bi-trash"
+                title={labels.delete}
+                onClick={
+                  () => {
+                    setSelectedProject(row)
+                    openDelete()
+                  }
                 }
-              }
-            />
+              />
+            )
           }
         </div>
       )

@@ -76,8 +76,10 @@ const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
     'bi-toggle-off': !available
   })
 
-  return <LinkButton className={className} title={locked ? gettext('Locked') : title}
-    disabled={locked || disabled} onClick={onClick} />
+  return (
+    <LinkButton className={className} title={locked ? gettext('Locked') : title}
+      disabled={locked || disabled} onClick={onClick} />
+  )
 }
 
 AvailableLink.propTypes = {
@@ -159,19 +161,21 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) 
         }
         <li><hr className="dropdown-divider" /></li>
         {
-          csv && <>
-            <li className="dropdown-item">
-              <a href={`${exportUrl}csvcomma/`}>
-                {gettext('CSV comma separated')}
-              </a>
-            </li>
-            <li className="dropdown-item">
-              <a href={`${exportUrl}csvsemicolon/`}>
-                {gettext('CSV semicolon separated')}
-              </a>
-            </li>
-            <li><hr className="dropdown-divider" /></li>
-          </>
+          csv && (
+            <>
+              <li className="dropdown-item">
+                <a href={`${exportUrl}csvcomma/`}>
+                  {gettext('CSV comma separated')}
+                </a>
+              </li>
+              <li className="dropdown-item">
+                <a href={`${exportUrl}csvsemicolon/`}>
+                  {gettext('CSV semicolon separated')}
+                </a>
+              </li>
+              <li><hr className="dropdown-divider" /></li>
+            </>
+          )
         }
         {
           exportFormats.map(([key, label], index) => (
@@ -218,9 +222,11 @@ const CodeLink = ({ className, type, uri, href, onClick, order }) => {
         <code className={`code-${type}`}>{uri}</code>
       </Link>
       {
-        !isNil(order) && <span>
-          <code className="code-order">{order}</code>
-        </span>
+        !isNil(order) && (
+          <span>
+            <code className="code-order">{order}</code>
+          </span>
+        )
       }
     </span>
   )

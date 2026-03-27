@@ -19,7 +19,7 @@ const DeleteViewModal = ({ view, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-views">{view.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('The view will be removed from these projects.')} {gettext('This action cannot be undone!')}
     </p>
