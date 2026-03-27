@@ -43,7 +43,9 @@ export function fetchProjects(pageReset = true) {
     dispatch(addToPending(pendingId))
     dispatch(fetchProjectsInit())
 
-    const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {}): ProjectsApi.fetchProjects(params || {})
+    const action = () => myProjects ? (
+      ProjectsApi.fetchUserProjects(params || {})
+    ) : ProjectsApi.fetchProjects(params || {})
 
     return dispatch(action)
       .then(projects => dispatch(fetchProjectsSuccess(projects, !pageReset)))
@@ -120,7 +122,7 @@ export function refetchLoadedPages() {
     const baseParams = { ...(params || {}) }
 
     const fetchPage = (nextParams) => (
-      myProjects? ProjectsApi.fetchUserProjects(nextParams): ProjectsApi.fetchProjects(nextParams)
+      myProjects ? ProjectsApi.fetchUserProjects(nextParams) : ProjectsApi.fetchProjects(nextParams)
     )
 
     dispatch(addToPending(pendingId))

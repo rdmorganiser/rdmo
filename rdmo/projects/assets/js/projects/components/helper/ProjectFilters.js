@@ -54,13 +54,15 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
     }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const handleCatalogFilterChange = (value) => {
-    value ? dispatch(configActions.updateConfig('params.catalog', value)) : dispatch(configActions.deleteConfig('params.catalog'))
+    value ? (dispatch(configActions.updateConfig('params.catalog', value))
+    ) : dispatch(configActions.deleteConfig('params.catalog'))
     dispatch(projectsActions.fetchProjects())
   }
 
   const selectedRole = get(config, 'params.role', '')
   const handleRoleFilterChange = (value) => {
-    value ? dispatch(configActions.updateConfig('params.role', value)) : dispatch(configActions.deleteConfig('params.role'))
+    value ? (dispatch(configActions.updateConfig('params.role', value))
+    ) : dispatch(configActions.deleteConfig('params.role'))
     dispatch(projectsActions.fetchProjects())
   }
 
@@ -70,7 +72,9 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
       setStartDate(type, date)
       if (date) {
         const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-        dispatch(configActions.updateConfig(`params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' })))
+        dispatch(configActions.updateConfig(
+          `params.${type}_after`, formatISO(startOfDayDate, { representation: 'complete' })
+        ))
       } else {
         dispatch(configActions.deleteConfig(`params.${type}_after`))
       }
@@ -78,7 +82,9 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
       setEndDate(type, date)
       if (date) {
         const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
-        dispatch(configActions.updateConfig(`params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' })))
+        dispatch(configActions.updateConfig(
+          `params.${type}_before`, formatISO(endOfDayDate, { representation: 'complete' })
+        ))
       } else {
         dispatch(configActions.deleteConfig(`params.${type}_before`))
       }
@@ -187,7 +193,9 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
           }
         </button>
         {
-          showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
+          showFilters &&
+          !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) &&
+          (
             <button type="button" className="link font-small" onClick={resetAllFilters}>
               <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
             </button>
