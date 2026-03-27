@@ -1,19 +1,17 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
-
+import { createElement, fetchElement, storeElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink,
-         ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { AddLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink, NestedLink } from '../common/Links'
 
 const OptionSet = ({ optionset, display='list', filter=false, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -44,7 +42,7 @@ const OptionSet = ({ optionset, display='list', filter=false, filterEditors=fals
       <div className="d-flex align-items-center gap-2">
         <strong>{gettext('Option set')}{':'}</strong>
         <CodeLink className="flex-grow-1" type="options" uri={optionset.uri} href={editUrl}
-                  onClick={() => fetchEdit()} />
+          onClick={() => fetchEdit()} />
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
@@ -53,9 +51,9 @@ const OptionSet = ({ optionset, display='list', filter=false, filterEditors=fals
           <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add option')} onClick={createOption} disabled={optionset.read_only} />
           <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
-                      locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
+            locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
           <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={config.settings.export_formats} full={true} />
         </div>
       </div>
       {

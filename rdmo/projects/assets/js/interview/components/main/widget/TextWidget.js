@@ -6,14 +6,14 @@ import QuestionCopyValue from '../question/QuestionCopyValue'
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionDefault from '../question/QuestionDefault'
 import QuestionError from '../question/QuestionError'
-import QuestionReuseValue from '../question/QuestionReuseValue'
 import QuestionRemoveValue from '../question/QuestionRemoveValue'
+import QuestionReuseValue from '../question/QuestionReuseValue'
 import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
 const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-                      createValue, updateValue, deleteValue, copyValue }) => {
+  createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {

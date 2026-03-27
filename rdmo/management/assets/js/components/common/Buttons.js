@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 const BackButton = ({ className }) => (
   <button className={classNames('element-button btn btn-sm btn-light border', className)}
-          onClick={() => history.back()}>
+    onClick={() => history.back()}>
     {gettext('Back')}
   </button>
 )
@@ -71,4 +71,4 @@ DeleteButton.propTypes = {
   disabled: PropTypes.bool
 }
 
-export { BackButton, SaveButton, NewButton, DeleteButton }
+export { BackButton, DeleteButton, NewButton, SaveButton }

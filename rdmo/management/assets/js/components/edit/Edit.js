@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 import EditAttribute from './EditAttribute'
 import EditCatalog from './EditCatalog'
 import EditCondition from './EditCondition'
@@ -12,8 +14,6 @@ import EditQuestionSet from './EditQuestionSet'
 import EditSection from './EditSection'
 import EditTask from './EditTask'
 import EditView from './EditView'
-
-import useScrollEffect from '../../hooks/useScrollEffect'
 
 const Edit = () => {
   const { element, elementType } = useSelector((state) => state.elements)

@@ -1,15 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchElement, storeElement } from '../../actions/elementActions'
-
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/Links'
 
 const Condition = ({ condition, filter=false, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -32,16 +31,16 @@ const Condition = ({ condition, filter=false, filterEditors=false }) => {
         <div className="d-flex align-items-center gap-2">
           <strong>{gettext('Condition')}{':'}</strong>
           <CodeLink className="flex-grow-1" type="conditions" uri={condition.uri} href={editUrl}
-                    onClick={() => fetchEdit()} />
+            onClick={() => fetchEdit()} />
 
           <div className="d-flex align-items-center gap-1">
             <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
             <EditLink title={gettext('Edit condition')} href={editUrl} onClick={fetchEdit} />
             <CopyLink title={gettext('Copy condition')} href={copyUrl} onClick={fetchCopy} />
             <LockedLink title={condition.locked ? gettext('Unlock condition') : gettext('Lock condition')}
-                        locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
+              locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
             <ExportLink title={gettext('Export condition')} exportUrl={exportUrl}
-                        exportFormats={config.settings.export_formats} full={true} />
+              exportFormats={config.settings.export_formats} full={true} />
           </div>
         </div>
         <ElementErrors element={condition} />

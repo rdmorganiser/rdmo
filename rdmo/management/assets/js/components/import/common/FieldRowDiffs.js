@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isEmpty from 'lodash/isEmpty'
 import ReactDiffViewer from 'react-diff-viewer-continued'
+import isEmpty from 'lodash/isEmpty'
 
-import Warnings from './Warnings'
 import Errors from './Errors'
+import Warnings from './Warnings'
 
 const FieldRowDiffs = ({ element, field }) => {
   if (isEmpty(element.updated_and_changed[field])) {
-      return null
+    return null
   }
   const fieldDiffData = element.updated_and_changed[field]
   const newVal = fieldDiffData.newValue.toString() ?? ''
@@ -44,8 +44,8 @@ const FieldRowDiffs = ({ element, field }) => {
       {
         !isEmpty(warnings) && <>
           <Warnings elementWarnings={fieldDiffData.warnings}
-                    elementModel={element.model} elementURI={element.uri}
-                    showTitle={true} shouldShowURI={false}/>
+            elementModel={element.model} elementURI={element.uri}
+            showTitle={true} shouldShowURI={false}/>
         </>
       }
       {

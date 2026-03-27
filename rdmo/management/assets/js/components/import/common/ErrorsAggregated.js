@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { get } from 'lodash'
 
@@ -48,11 +48,13 @@ const ErrorsAggregated = ({ elements }) => {
           <span className={classNames('bi', {'bi-chevron-down': !showErrors, 'bi-chevron-up': showErrors})}></span>
         </div>
       </div>
-      {showErrors && (
-        <ul className="list-group list-group-flush">
-          {generateErrorMessageListItems(uniqueErrors)}
-        </ul>
-      )}
+      {
+        showErrors && (
+          <ul className="list-group list-group-flush">
+            {generateErrorMessageListItems(uniqueErrors)}
+          </ul>
+        )
+      }
     </div>
   )
 }

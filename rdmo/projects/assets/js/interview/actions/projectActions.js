@@ -1,20 +1,20 @@
-import ProjectApi from '../api/ProjectApi'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 import { projectId } from '../utils/meta'
 
+import ProjectApi from '../api/ProjectApi'
+
 import {
+  FETCH_OVERVIEW_ERROR,
   FETCH_OVERVIEW_INIT,
   FETCH_OVERVIEW_SUCCESS,
-  FETCH_OVERVIEW_ERROR,
+  FETCH_PROGRESS_ERROR,
   FETCH_PROGRESS_INIT,
   FETCH_PROGRESS_SUCCESS,
-  FETCH_PROGRESS_ERROR,
+  UPDATE_PROGRESS_ERROR,
   UPDATE_PROGRESS_INIT,
   UPDATE_PROGRESS_SUCCESS,
-  UPDATE_PROGRESS_ERROR,
 } from './actionTypes'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 export function fetchOverview() {
   return (dispatch) => {
@@ -51,14 +51,14 @@ export function fetchProgress() {
     dispatch(fetchProgressInit())
 
     return ProjectApi.fetchProgress(projectId)
-    .then((progress) => {
-      dispatch(removeFromPending('fetchProgress'))
-      dispatch(fetchProgressSuccess(progress))
-    })
-    .catch((error) => {
-      dispatch(removeFromPending('fetchProgress'))
-      dispatch(fetchProgressError(error))
-    })
+      .then((progress) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch(fetchProgressSuccess(progress))
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch(fetchProgressError(error))
+      })
   }
 }
 

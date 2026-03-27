@@ -1,14 +1,13 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
-
-import { ExtendLink, CodeLink } from '../common/Links'
-
 import useBool from '../../hooks/useBool'
+
+import { CodeLink, ExtendLink } from '../common/Links'
 
 const SectionInfo = ({ section }) => {
   const dispatch = useDispatch()
@@ -24,10 +23,12 @@ const SectionInfo = ({ section }) => {
   return (
     <div className="mb-2">
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This section is used in <b>one catalog</b>.',
-          'This section is used in <b>%s catalogs</b>.',
-          catalogs.length), [catalogs.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This section is used in <b>one catalog</b>.',
+            'This section is used in <b>%s catalogs</b>.',
+            catalogs.length), [catalogs.length])
+        } />
         {catalogs.length > 0 && <ExtendLink extend={showCatalogs} onClick={toggleCatalogs} />}
       </p>
       {

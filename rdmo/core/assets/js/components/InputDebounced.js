@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-
 import { useDebouncedCallback } from 'use-debounce'
 
 import Input from './Input'
@@ -16,10 +15,12 @@ const InputDebounced = ({ value, onChange, ...props }) => {
   return (
     <Input {...props}
       value={inputValue}
-      onChange={(value) => {
-        setInputValue(value)
-        debouncedOnChange(value)
-      }}
+      onChange={
+        (value) => {
+          setInputValue(value)
+          debouncedOnChange(value)
+        }
+      }
     />
   )
 }

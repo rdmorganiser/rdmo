@@ -6,13 +6,15 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 const PageHeadDeleteModal = ({ name, show, onClose, onSubmit }) => {
   return (
     <Modal title={gettext('Delete tab')} show={show} submitLabel={gettext('Delete')}
-           submitProps={{className: 'btn btn-danger'}}
-           onClose={onClose} onSubmit={onSubmit}>
+      submitProps={{className: 'btn btn-danger'}}
+      onClose={onClose} onSubmit={onSubmit}>
       {
         name ? (
-          <p dangerouslySetInnerHTML={{
-          __html: interpolate(gettext('You are about to permanently delete the tab named: <strong>%s</strong>'), [name])
-          }}></p>
+          <p dangerouslySetInnerHTML={
+            {
+              __html: interpolate(gettext('You are about to permanently delete the tab named: <strong>%s</strong>'), [name])
+            }
+          }></p>
         ) : (
           <p>{gettext('You are about to permanently delete this tab.')}</p>
         )

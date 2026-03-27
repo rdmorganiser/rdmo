@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { get, isEmpty } from 'lodash'
 
@@ -8,15 +8,13 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { toggleDescendants } from '../../actions/elementActions'
-
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
 import { Drop } from '../common/DragAndDrop'
-
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import Page from '../element/Page'
-import QuestionSet from '../element/QuestionSet'
 import Question from '../element/Question'
+import QuestionSet from '../element/QuestionSet'
 
 const NestedPage = ({ page }) => {
   const dispatch = useDispatch()
@@ -53,11 +51,11 @@ const NestedPage = ({ page }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
-                            label={gettext('Filter pages')} />
+                label={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(page.elements)} />
+                options={getUriPrefixes(page.elements)} />
             </div>
           </div>
           <div className="input-group input-group-sm mb-2">

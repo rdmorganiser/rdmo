@@ -39,17 +39,19 @@ const Fields = ({ element }) => {
 
   return (
     <div>
-      {Object.entries(element)
-        .sort()
-        .map(([key, value]) => {
-          if (!excludeKeys.includes(key)) {
-            const serializedValue = serializeValue(value)
-            if (serializedValue !== '' || (element.changedFields?.includes(key))) {
-              return <Field key={key} element={element} keyName={key} value={serializedValue} />
+      {
+        Object.entries(element)
+          .sort()
+          .map(([key, value]) => {
+            if (!excludeKeys.includes(key)) {
+              const serializedValue = serializeValue(value)
+              if (serializedValue !== '' || (element.changedFields?.includes(key))) {
+                return <Field key={key} element={element} keyName={key} value={serializedValue} />
+              }
             }
-          }
-          return null
-        })}
+            return null
+          })
+      }
     </div>
   )
 }

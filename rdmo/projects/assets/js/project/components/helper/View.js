@@ -6,8 +6,8 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
 
-import SnapshotsDropdown from './SnapshotsDropdown'
 import ExportsDropdown from './ExportsDropdown'
+import SnapshotsDropdown from './SnapshotsDropdown'
 
 const View = () => {
   const dispatch = useDispatch()

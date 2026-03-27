@@ -1,8 +1,7 @@
 import isNil from 'lodash/isNil'
 
 import * as actionTypes from '../actions/actionTypes'
-
-import { updateElement, resetElement } from '../utils/elements'
+import { resetElement, updateElement } from '../utils/elements'
 
 const initialState = {
   elementType: null,
@@ -35,8 +34,7 @@ export default function elementsReducer(state = initialState, action) {
         elementAction: null,
         element: null,
         parent: null,
-        errors: {}
-      }
+        errors: {}}
     case actionTypes.FETCH_ELEMENTS_SUCCESS:
       return {...state, ...action.elements}
     case actionTypes.FETCH_ELEMENTS_ERROR:
@@ -50,8 +48,7 @@ export default function elementsReducer(state = initialState, action) {
         elementAction: action.elementAction,
         element: null,
         parent: null,
-        errors: {}
-      }
+        errors: {}}
     case actionTypes.FETCH_ELEMENT_SUCCESS:
       return {...state, ...action.elements}
     case actionTypes.FETCH_ELEMENT_ERROR:
@@ -77,8 +74,7 @@ export default function elementsReducer(state = initialState, action) {
     case actionTypes.STORE_ELEMENT_SUCCESS:  // eslint-disable-line no-fallthrough
       if (isNil(state.element)) {
         return {...state,
-          [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))
-        }
+          [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))}
       } else if (state.elementAction == 'nested') {
         return {...state, element: updateElement(state.element, action.element)}
       } else {

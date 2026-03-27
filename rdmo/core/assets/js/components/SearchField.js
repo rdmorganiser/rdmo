@@ -34,7 +34,7 @@ const SearchField = ({ value, onChange, onSearch, placeholder }) => {
         aria-label={gettext('Search')}
       />
       <button type="button" className="btn btn-light btn-reset border" onClick={handleButtonClick}
-              title={gettext('Reset')} aria-label={gettext('Reset')}>
+        title={gettext('Reset')} aria-label={gettext('Reset')}>
         <span className="bi bi-x"></span>
       </button>
       <button type="button" className="btn btn-primary" onClick={handleSearch}>

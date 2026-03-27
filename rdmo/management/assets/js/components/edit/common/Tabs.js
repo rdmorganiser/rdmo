@@ -12,7 +12,7 @@ const Tabs = ({ labels, tabs }) => {
           labels.map((label, index) => (
             <li key={index} className="nav-item">
               <button className={classNames('nav-link', {'active': index === activeTab})}
-                      onClick={() => setActiveTab(index)}>{label}</button>
+                onClick={() => setActiveTab(index)}>{label}</button>
             </li>
           ))
         }

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
-import { downloadView, downloadAnswers, navigateDashboard } from '../../actions/projectActions'
+import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
 
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
@@ -35,10 +35,10 @@ const Documents = () => {
           views.map((view) => (
             <div key={view.id} className="col-lg-6">
               <ViewTile
-                  title={view.title}
-                  help={view.help}
-                  onClick={() => dispatch(navigateDashboard({ area, snapshotId, viewId: view.id }))}
-                  onExport={(format) => dispatch(downloadView(null, view.id, format))}
+                title={view.title}
+                help={view.help}
+                onClick={() => dispatch(navigateDashboard({ area, snapshotId, viewId: view.id }))}
+                onExport={(format) => dispatch(downloadView(null, view.id, format))}
               />
             </div>
           ))

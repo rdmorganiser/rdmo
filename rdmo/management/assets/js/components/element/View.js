@@ -1,21 +1,20 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
-
-import Html from 'rdmo/core/assets/js/components/Html'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
-import { fetchElement, storeElement } from '../../actions/elementActions'
+import Html from 'rdmo/core/assets/js/components/Html'
 
+import { fetchElement, storeElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { AvailableLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, ToggleCurrentSiteLink } from '../common/Links'
 
 const View = ({ view, filter=false, filterSites=false, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -49,17 +48,18 @@ const View = ({ view, filter=false, filterSites=false, filterEditors=false }) =>
             <ReadOnlyIcon title={gettext('This view is read only')} show={view.read_only} />
             <EditLink title={gettext('Edit view')} href={editUrl} onClick={fetchEdit} />
             <CopyLink title={gettext('Copy view')} href={copyUrl} onClick={fetchCopy} />
-            <AvailableLink title={view.available ? gettext('Make view unavailable')
-                                                 : gettext('Make view available')}
-                           available={view.available} locked={view.locked} onClick={toggleAvailable}
-                           disabled={view.read_only} />
+            <AvailableLink title={
+              view.available ? gettext('Make view unavailable'): gettext('Make view available')
+            }
+            available={view.available} locked={view.locked} onClick={toggleAvailable}
+            disabled={view.read_only} />
             <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(siteId) : true}
-                           onClick={toggleCurrentSite}
-                           show={config.settings.multisite}/>
+              onClick={toggleCurrentSite}
+              show={config.settings.multisite}/>
             <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
-                        locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
+              locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
             <ExportLink title={gettext('Export view')} exportUrl={exportUrl}
-                        exportFormats={config.settings.export_formats} />
+              exportFormats={config.settings.export_formats} />
           </div>
         </div>
         {

@@ -1,60 +1,56 @@
 import { first, isEmpty, isNil } from 'lodash'
 
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
+
+import { updateLocation } from '../utils/location'
+import { projectId } from '../utils/meta'
+import { updateOptions } from '../utils/options'
+import { initPage } from '../utils/page'
+import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
+import { compareValues, gatherDefaultValues, initValues, isEmptyValue } from '../utils/value'
+
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
 import ValueApi from '../api/ValueApi'
-
-import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
-
-import { updateProgress } from './projectActions'
-
-import { updateLocation } from '../utils/location'
-
-import { updateOptions } from '../utils/options'
-import { initPage } from '../utils/page'
-import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
-import { projectId } from '../utils/meta'
-
-import ValueFactory from '../factories/ValueFactory'
 import SetFactory from '../factories/SetFactory'
+import ValueFactory from '../factories/ValueFactory'
 
 import {
-  NOOP,
-  FETCH_PAGE_INIT,
-  FETCH_PAGE_SUCCESS,
-  FETCH_PAGE_ERROR,
-  FETCH_NAVIGATION_INIT,
-  FETCH_NAVIGATION_SUCCESS,
-  FETCH_NAVIGATION_ERROR,
-  FETCH_OPTIONS_INIT,
-  FETCH_OPTIONS_SUCCESS,
-  FETCH_OPTIONS_ERROR,
-  FETCH_VALUES_INIT,
-  FETCH_VALUES_SUCCESS,
-  FETCH_VALUES_ERROR,
-  RESOLVE_CONDITION_INIT,
-  RESOLVE_CONDITION_SUCCESS,
-  RESOLVE_CONDITION_ERROR,
-  CREATE_VALUE,
-  UPDATE_VALUE,
-  STORE_VALUE_INIT,
-  STORE_VALUE_SUCCESS,
-  STORE_VALUE_ERROR,
-  DELETE_VALUE_INIT,
-  DELETE_VALUE_SUCCESS,
-  DELETE_VALUE_ERROR,
-  CREATE_SET,
-  DELETE_SET_INIT,
-  DELETE_SET_SUCCESS,
-  DELETE_SET_ERROR,
+  COPY_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  CREATE_SET,
+  CREATE_VALUE,
+  DELETE_SET_ERROR,
+  DELETE_SET_INIT,
+  DELETE_SET_SUCCESS,
+  DELETE_VALUE_ERROR,
+  DELETE_VALUE_INIT,
+  DELETE_VALUE_SUCCESS,
+  FETCH_NAVIGATION_ERROR,
+  FETCH_NAVIGATION_INIT,
+  FETCH_NAVIGATION_SUCCESS,
+  FETCH_OPTIONS_ERROR,
+  FETCH_OPTIONS_INIT,
+  FETCH_OPTIONS_SUCCESS,
+  FETCH_PAGE_ERROR,
+  FETCH_PAGE_INIT,
+  FETCH_PAGE_SUCCESS,
+  FETCH_VALUES_ERROR,
+  FETCH_VALUES_INIT,
+  FETCH_VALUES_SUCCESS,
+  NOOP,
+  RESOLVE_CONDITION_ERROR,
+  RESOLVE_CONDITION_INIT,
+  RESOLVE_CONDITION_SUCCESS,
+  STORE_VALUE_ERROR,
+  STORE_VALUE_INIT,
+  STORE_VALUE_SUCCESS,
+  UPDATE_VALUE
 } from './actionTypes'
-
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { updateProgress } from './projectActions'
 
 export function fetchPage(pageId, back) {
   const pendingId = 'fetchPage'
@@ -74,8 +70,7 @@ export function fetchPage(pageId, back) {
       dispatch(fetchPageSuccess(null, true))
       dispatch(removeFromPending(pendingId))
     } else {
-      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId)
-                                    : PageApi.fetchPage(projectId, pageId, back)
+      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId): PageApi.fetchPage(projectId, pageId, back)
       return promise
         .then((page) => {
           updateLocation(page.id)
@@ -147,7 +142,7 @@ export function fetchNavigationError(error) {
 export function fetchOptionsets(page) {
   return (dispatch) => {
     page.optionsets.filter((optionset) => (optionset.has_provider && !optionset.has_search))
-                   .forEach((optionset) => dispatch(fetchOptions(page, optionset)))
+      .forEach((optionset) => dispatch(fetchOptions(page, optionset)))
   }
 }
 
@@ -225,13 +220,13 @@ export function resolveConditions(page, sets) {
     // loop over set to evaluate conditions
     sets.forEach((set) => {
       page.questionsets.filter((questionset) => questionset.has_conditions)
-                       .forEach((questionset) => dispatch(resolveCondition(questionset, set)))
+        .forEach((questionset) => dispatch(resolveCondition(questionset, set)))
 
       page.questions.filter((question) => question.has_conditions)
-                    .forEach((question) => dispatch(resolveCondition(question, set)))
+        .forEach((question) => dispatch(resolveCondition(question, set)))
 
       page.optionsets.filter((optionset) => optionset.has_conditions)
-                     .forEach((optionset) => dispatch(resolveCondition(optionset, set)))
+        .forEach((optionset) => dispatch(resolveCondition(optionset, set)))
     })
   }
 }
@@ -375,7 +370,7 @@ export function updateValue(value, attrs, store = true) {
   if (store) {
     return storeValue(ValueFactory.update(value, attrs))
   } else {
-     return {type: UPDATE_VALUE, value, attrs}
+    return {type: UPDATE_VALUE, value, attrs}
   }
 }
 
@@ -684,7 +679,7 @@ export function copySet(currentSet, copySetValue, attrs) {
     if (isNil(value)) {
       // gather all values for the currentSet and it's descendants
       const { values: currentValues } = getDescendants(getState().interview.values,
-                                                       getState().interview.sets, currentSet)
+        getState().interview.sets, currentSet)
 
       // store each value in currentSet with the new set_index
       promise = Promise.all(

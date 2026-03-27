@@ -14,7 +14,7 @@ import QuestionSuccess from '../question/QuestionSuccess'
 import YesNoInput from './YesNoInput'
 
 const YesNoWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-                       createValue, updateValue, deleteValue, copyValue }) => {
+  createValue, updateValue, deleteValue, copyValue }) => {
   return (
     <div className="interview-widgets">
       {

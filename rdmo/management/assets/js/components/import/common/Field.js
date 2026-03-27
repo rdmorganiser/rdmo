@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FieldRowValue from './FieldRowValue'
 import FieldRowDiffs from './FieldRowDiffs'
+import FieldRowValue from './FieldRowValue'
 
 const FieldRow = ({ element, keyName, value }) => {
 

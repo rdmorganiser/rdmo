@@ -1,24 +1,22 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-
-import { fetchElement, storeElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
+
+import { deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import AttributeInfo from '../info/AttributeInfo'
+import DeleteAttributeModal from '../modals/DeleteAttributeModal'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import AttributeInfo from '../info/AttributeInfo'
-import DeleteAttributeModal from '../modals/DeleteAttributeModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditAttribute = ({ attribute }) => {
   const dispatch = useDispatch()
@@ -51,38 +49,48 @@ const EditAttribute = ({ attribute }) => {
 
       {
         parent && parent.attribute && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This attribute will be added to the attribute <code class="code-domain">%s</code>.'),
-          [parent.attribute.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This attribute will be added to the attribute <code class="code-domain">%s</code>.'),
+            [parent.attribute.uri])
+          } />
         </div>
       }
 
       {
         parent && parent.page && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This attribute will be added to the page <code class="code-questions">%s</code>.'),
-          [parent.page.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This attribute will be added to the page <code class="code-questions">%s</code>.'),
+            [parent.page.uri])
+          } />
         </div>
       }
       {
         parent && parent.questionset && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This attribute will be added to the question set <code class="code-questions">%s</code>.'),
-          [parent.questionset.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This attribute will be added to the question set <code class="code-questions">%s</code>.'),
+            [parent.questionset.uri])
+          } />
         </div>
       }
       {
         parent && parent.question && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This attribute will be added to the question <code class="code-questions">%s</code>.'),
-          [parent.question.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This attribute will be added to the question <code class="code-questions">%s</code>.'),
+            [parent.question.uri])
+          } />
         </div>
       }
       {
         parent && parent.condition && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This attribute will be added to the condition <code class="code-conditions">%s</code>.'),
-          [parent.condition.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This attribute will be added to the condition <code class="code-conditions">%s</code>.'),
+            [parent.condition.uri])
+          } />
         </div>
       }
 
@@ -107,7 +115,7 @@ const EditAttribute = ({ attribute }) => {
         <Checkbox element={attribute} field="locked" onChange={updateAttribute} />
 
         <Select element={attribute} field="parent" options={attributes}
-                onChange={updateAttribute} onEdit={editAttribute} />
+          onChange={updateAttribute} onEdit={editAttribute} />
 
         {
           settings.multisite && (
@@ -126,7 +134,7 @@ const EditAttribute = ({ attribute }) => {
       </div>
 
       <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}
-                            onClose={closeDeleteModal} onDelete={deleteAttribute} />
+        onClose={closeDeleteModal} onDelete={deleteAttribute} />
     </div>
   )
 }

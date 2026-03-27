@@ -1,10 +1,16 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { storeElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { deleteElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import OptionInfo from '../info/OptionInfo'
+import DeleteOptionModal from '../modals/DeleteOptionModal'
 
 import Checkbox from './common/Checkbox'
 import LanguageTabs from './common/LanguageTabs'
@@ -13,14 +19,6 @@ import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import OptionInfo from '../info/OptionInfo'
-import DeleteOptionModal from '../modals/DeleteOptionModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOption = ({ option }) => {
   const dispatch = useDispatch()
@@ -52,9 +50,11 @@ const EditOption = ({ option }) => {
 
       {
         parent && parent.optionset && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This option will be added to the option set <code class="code-options">%s</code>.'),
-            [parent.optionset.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This option will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])
+          } />
         </div>
       }
 
@@ -82,21 +82,25 @@ const EditOption = ({ option }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <>
-            <Text element={option} field={`text_${langCode}`} onChange={updateOption} />
-            <Textarea element={option} field={`help_${langCode }`} onChange={updateOption} />
-            <Textarea element={option} field={`view_text_${langCode}`} onChange={updateOption} />
-          </>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <>
+              <Text element={option} field={`text_${langCode}`} onChange={updateOption} />
+              <Textarea element={option} field={`help_${langCode }`} onChange={updateOption} />
+              <Textarea element={option} field={`view_text_${langCode}`} onChange={updateOption} />
+            </>
+          )
+        } />
 
         <Radio element={option} field="additional_input" options={additionalInputs} onChange={updateOption} />
         {
           (option.additional_input === 'text' || option.additional_input === 'textarea') &&
           settings && (
-            <LanguageTabs render={(langCode) => (
-              <Textarea element={option} field={`default_text_${langCode}`} rows={1} onChange={updateOption} />
-            )} />
+            <LanguageTabs render={
+              (langCode) => (
+                <Textarea element={option} field={`default_text_${langCode}`} rows={1} onChange={updateOption} />
+              )
+            } />
           )
         }
 
@@ -118,7 +122,7 @@ const EditOption = ({ option }) => {
       </div>
 
       <DeleteOptionModal option={option} info={info} show={showDeleteModal}
-                         onClose={closeDeleteModal} onDelete={deleteOption} />
+        onClose={closeDeleteModal} onDelete={deleteOption} />
     </div>
   )
 }

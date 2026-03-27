@@ -1,6 +1,5 @@
-import { updateConfig, deleteConfig, setConfigInLocalStorage, deleteConfigInLocalStorage } from '../utils/config'
-
 import { DELETE_CONFIG, UPDATE_CONFIG } from '../actions/actionTypes'
+import { deleteConfig, deleteConfigInLocalStorage, setConfigInLocalStorage, updateConfig } from '../utils/config'
 
 const initialState = {}
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import { useSelector } from 'react-redux'
+
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 const PendingInvitations = ({ invitations }) => {
@@ -26,9 +26,11 @@ const PendingInvitations = ({ invitations }) => {
           <button
             type="button"
             className="btn btn-sm btn-success"
-            onClick={() => {
-              window.location.href = `${baseUrl}/projects/join/${item.token}/`
-            }}
+            onClick={
+              () => {
+                window.location.href = `${baseUrl}/projects/join/${item.token}/`
+              }
+            }
           >
             {gettext('Accept')}
           </button>
@@ -36,9 +38,11 @@ const PendingInvitations = ({ invitations }) => {
           <button
             type="button"
             className="btn btn-sm btn-danger"
-            onClick={() => {
-              window.location.href = `${baseUrl}/projects/cancel/${item.token}/`
-            }}
+            onClick={
+              () => {
+                window.location.href = `${baseUrl}/projects/cancel/${item.token}/`
+              }
+            }
           >
             {gettext('Decline')}
           </button>

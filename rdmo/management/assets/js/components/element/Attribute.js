@@ -1,15 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchElement, storeElement, createElement } from '../../actions/elementActions'
-
+import { createElement, fetchElement, storeElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink, NestedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { AddLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, NestedLink } from '../common/Links'
 
 const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -35,19 +34,19 @@ const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEdi
       <div className="d-flex align-items-center gap-2">
         <strong>{gettext('Attribute')}{':'}</strong>
         <CodeLink className="flex-grow-1" type="domain" uri={attribute.uri} href={editUrl}
-                  onClick={() => fetchEdit()} />
+          onClick={() => fetchEdit()} />
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
           <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
-                      show={!attribute.is_leaf_node} />
+            show={!attribute.is_leaf_node} />
           <EditLink title={gettext('Edit attribute')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy attribute')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add attribute')} onClick={createAttribute} disabled={attribute.read_only} />
           <LockedLink title={attribute.locked ? gettext('Unlock attribute') : gettext('Lock attribute')}
-                      locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
+            locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
           <ExportLink title={gettext('Export attribute')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} csv={true} />
+            exportFormats={config.settings.export_formats} csv={true} />
         </div>
       </div>
       <ElementErrors element={attribute} />

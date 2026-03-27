@@ -1,13 +1,16 @@
-import ProjectsApi from '../api/ProjectsApi'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import ProjectsApi from '../api/ProjectsApi'
+
 import {
-  FETCH_PROJECTS_ERROR,
-  FETCH_PROJECTS_INIT,
-  FETCH_PROJECTS_SUCCESS,
-  FETCH_INVITATIONS_ERROR,
-  FETCH_INVITATIONS_INIT,
-  FETCH_INVITATIONS_SUCCESS,
+  COPY_PROJECT_ERROR,
+  COPY_PROJECT_INIT,
+  COPY_PROJECT_SUCCESS,
+  CREATE_PROJECT_ERROR,
+  CREATE_PROJECT_INIT,
+  CREATE_PROJECT_SUCCESS,
   FETCH_CATALOGS_ERROR,
   FETCH_CATALOGS_INIT,
   FETCH_CATALOGS_SUCCESS,
@@ -17,20 +20,16 @@ import {
   FETCH_IMPORT_URLS_ERROR,
   FETCH_IMPORT_URLS_INIT,
   FETCH_IMPORT_URLS_SUCCESS,
+  FETCH_INVITATIONS_ERROR,
+  FETCH_INVITATIONS_INIT,
+  FETCH_INVITATIONS_SUCCESS,
+  FETCH_PROJECTS_ERROR,
+  FETCH_PROJECTS_INIT,
+  FETCH_PROJECTS_SUCCESS,
   UPLOAD_PROJECT_ERROR,
   UPLOAD_PROJECT_INIT,
   UPLOAD_PROJECT_SUCCESS,
-  CREATE_PROJECT_ERROR,
-  CREATE_PROJECT_INIT,
-  CREATE_PROJECT_SUCCESS,
-  COPY_PROJECT_ERROR,
-  COPY_PROJECT_INIT,
-  COPY_PROJECT_SUCCESS,
 } from './actionTypes'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 export function fetchProjects(pageReset = true) {
   const pendingId = 'fetchProjects'
@@ -44,8 +43,7 @@ export function fetchProjects(pageReset = true) {
     dispatch(addToPending(pendingId))
     dispatch(fetchProjectsInit())
 
-    const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {})
-      : ProjectsApi.fetchProjects(params || {})
+    const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {}): ProjectsApi.fetchProjects(params || {})
 
     return dispatch(action)
       .then(projects => dispatch(fetchProjectsSuccess(projects, !pageReset)))
@@ -122,9 +120,7 @@ export function refetchLoadedPages() {
     const baseParams = { ...(params || {}) }
 
     const fetchPage = (nextParams) => (
-      myProjects
-        ? ProjectsApi.fetchUserProjects(nextParams)
-        : ProjectsApi.fetchProjects(nextParams)
+      myProjects? ProjectsApi.fetchUserProjects(nextParams): ProjectsApi.fetchProjects(nextParams)
     )
 
     dispatch(addToPending(pendingId))

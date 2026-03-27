@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
@@ -25,31 +25,35 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
       <div className="buttons-wrapper">
         {buttons}
         <fieldset className={classnames}
-                  aria-labelledby={getQuestionTextId(question)}
-                  aria-describedby={getQuestionHelpId(question)}>
+          aria-labelledby={getQuestionTextId(question)}
+          aria-describedby={getQuestionHelpId(question)}>
           <label>
-              <input
-                type="radio"
-                value="1"
-                disabled={disabled}
-                checked={inputValue == '1'}
-                onChange={(event) => {
+            <input
+              type="radio"
+              value="1"
+              disabled={disabled}
+              checked={inputValue == '1'}
+              onChange={
+                (event) => {
                   setInputValue(event.target.value)
                   handleChange(value, event.target.value)
-                }} />
-              <span>{gettext('Yes')}</span>
+                }
+              } />
+            <span>{gettext('Yes')}</span>
           </label>
           <label>
-              <input
-                type="radio"
-                value="0"
-                checked={inputValue == '0'}
-                disabled={disabled}
-                onChange={(event) => {
+            <input
+              type="radio"
+              value="0"
+              checked={inputValue == '0'}
+              disabled={disabled}
+              onChange={
+                (event) => {
                   setInputValue(event.target.value)
                   handleChange(value, event.target.value)
-                }} />
-              <span>{gettext('No')}</span>
+                }
+              } />
+            <span>{gettext('No')}</span>
           </label>
         </fieldset>
       </div>

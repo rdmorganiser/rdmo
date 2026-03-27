@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { get } from 'lodash'
 
@@ -46,13 +46,17 @@ const WarningsAggregated = ({ elements }) => {
           <span className={classNames('bi', {'bi-chevron-down': !showWarnings, 'bi-chevron-up': showWarnings})}></span>
         </div>
       </div>
-      {showWarnings && (
-        <ul className="list-group list-group-flush">
-          {aggregatedWarnings.map(({ elementWarnings, elementModel, elementURI }) =>
-            generateWarningListItems(elementWarnings, elementModel, elementURI)
-          )}
-        </ul>
-      )}
+      {
+        showWarnings && (
+          <ul className="list-group list-group-flush">
+            {
+              aggregatedWarnings.map(({ elementWarnings, elementModel, elementURI }) =>
+                generateWarningListItems(elementWarnings, elementModel, elementURI)
+              )
+            }
+          </ul>
+        )
+      }
     </div>
   )
 }

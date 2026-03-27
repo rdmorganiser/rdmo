@@ -9,9 +9,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix } from '../common/Filter'
 import Option from '../element/Option'
 
 const Options = () => {
@@ -46,16 +45,16 @@ const Options = () => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.options.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter options')} />
+              label={gettext('Filter options')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.options.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(options)} />
+              options={getUriPrefixes(options)} />
           </div>
           {
             config.settings.multisite && <div className="col-sm-2">
               <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                          options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
             </div>
           }
         </div>
@@ -70,12 +69,12 @@ const Options = () => {
       {
         !isEmpty(options) && (
           <ul className="list-group list-group-flush">
-          {
-            options.map((option, index) => (
-              <Option key={index} config={config} option={option}
-                      filter="options" filterEditors={true} />
-            ))
-          }
+            {
+              options.map((option, index) => (
+                <Option key={index} config={config} option={option}
+                  filter="options" filterEditors={true} />
+              ))
+            }
           </ul>
         )
       }
