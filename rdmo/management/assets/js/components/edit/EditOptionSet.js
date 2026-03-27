@@ -51,7 +51,12 @@ const EditOptionSet = ({ optionset }) => {
           <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeOptionSet}
+            disabled={optionset.read_only}
+            back={true}
+          />
         </div>
       </div>
 
@@ -119,7 +124,12 @@ const EditOptionSet = ({ optionset }) => {
           {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
           <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeOptionSet}
+            disabled={optionset.read_only}
+            back={true}
+          />
         </div>
       </div>
 

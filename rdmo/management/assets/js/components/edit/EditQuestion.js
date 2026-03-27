@@ -27,7 +27,7 @@ const EditQuestion = ({ question }) => {
   const { sites, widgetTypes, valueTypes, settings } = useSelector((state) => state.config)
   const { elementAction, parent, attributes, optionsets, options, conditions } = useSelector((state) => state.elements)
 
-  const updateQuestion = (key, value) => dispatch(updateElement(question, {[key]: value}))
+  const updateQuestion = (key, value) => dispatch(updateElement(question, { [key]: value }))
   const storeQuestion = (back) => dispatch(storeElement('questions', question, elementAction, back))
   const deleteQuestion = () => dispatch(deleteElement('questions', question))
 
@@ -58,7 +58,7 @@ const EditQuestion = ({ question }) => {
           <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true} />
         </div>
       </div>
 
@@ -199,7 +199,13 @@ const EditQuestion = ({ question }) => {
                 </div>
               ),
               (
-                <Select key="editors" element={question} field="editors" options={sites} onChange={updateQuestion} isMulti />
+                <Select
+                  key="editors"
+                  element={question}
+                  field="editors"
+                  options={sites}
+                  onChange={updateQuestion} isMulti
+                />
               )
             ]
           }
@@ -211,7 +217,7 @@ const EditQuestion = ({ question }) => {
           {question.id && <DeleteButton onClick={openDeleteModal} disabled={question.read_only} />}
           <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true}/>
+          <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true} />
         </div>
       </div>
 

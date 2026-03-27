@@ -19,7 +19,11 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
         <label className="form-check-label" htmlFor={id}>{verboseNames[element.model]}</label>
       </div>
 
-      <CodeLink className="flex-grow-1" type={elementModules[element.model]} uri={element.uri} onClick={updateShowField} />
+      <CodeLink
+        className="flex-grow-1"
+        type={elementModules[element.model]}
+        uri={element.uri} onClick={updateShowField}
+      />
 
       {
         (element.changed && element.updated) && (
