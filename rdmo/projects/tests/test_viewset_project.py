@@ -446,7 +446,9 @@ def test_copy(db, files, client, username, password, project_id):
     data = {
         'title': 'New title',
         'description': project.description,
-        'catalog': project.catalog.id
+        'catalog': project.catalog.id,
+        'tasks': list(project.tasks.values_list('id', flat=True)),  # will be ignored but should not crash
+        'views': list(project.views.values_list('id', flat=True)),  # will be ignored but should not crash
     }
     response = client.post(url, data, content_type='application/json')
 
