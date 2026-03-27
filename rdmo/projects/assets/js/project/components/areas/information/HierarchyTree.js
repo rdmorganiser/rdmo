@@ -8,7 +8,9 @@ const HierarchyTree = ({ hierarchy }) => {
 
   const linkOrText = (node) => {
     const isCurrent = isCurrentNode(node)
-    const content = (node?.permissions?.can_view_project && !isCurrent)? <a href={`${baseUrl}/projects/${node.id}`}>{node.title}</a>: <>{node.title}</>
+    const content = (node?.permissions?.can_view_project && !isCurrent) ? (
+      <a href={`${baseUrl}/projects/${node.id}`}>{node.title}</a>
+    ) : <>{node.title}</>
 
     return isCurrent ? <span>{content}</span> : content
   }
@@ -62,7 +64,7 @@ const HierarchyTree = ({ hierarchy }) => {
         <>
           {linkOrText(node)}
           {
-            isAtCurrentInPath? renderFullSubtree(node): <ul>{renderPath(idx + 1)}</ul>
+            isAtCurrentInPath ? renderFullSubtree(node) : <ul>{renderPath(idx + 1)}</ul>
           }
         </>
       )
@@ -72,7 +74,7 @@ const HierarchyTree = ({ hierarchy }) => {
       <li key={node.id}>
         {linkOrText(node)}
         {
-          isAtCurrentInPath? renderFullSubtree(node): <ul>{renderPath(idx + 1)}</ul>
+          isAtCurrentInPath ? renderFullSubtree(node) : <ul>{renderPath(idx + 1)}</ul>
         }
       </li>
     )

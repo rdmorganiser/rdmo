@@ -81,14 +81,16 @@ const MembershipTable = ({ persons, type }) => {
                   </td>
                   <td>
                     {
-                      hierarchyRole ?<div className="mb-1">{hierarchyRole}</div>:(
+                      hierarchyRole ? <div className="mb-1">{hierarchyRole}</div> : (
                         <Select
                           options={roleOptions}
                           value={person.role}
                           onChange={
                             (newRole) => {
                               if (!newRole) return
-                              (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole })): dispatch(updateProjectInvite(person.id, { role: newRole }))
+                              (type === 'memberships') ? (
+                                dispatch(updateProjectMember(person.id, { role: newRole }))
+                              ) : dispatch(updateProjectInvite(person.id, { role: newRole }))
                             }
                           }
                           isClearable={false}

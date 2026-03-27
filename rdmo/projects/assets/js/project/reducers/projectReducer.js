@@ -65,13 +65,18 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_PROJECT_INVITES_SUCCESS:
       return { ...state, invites: action.invites }
     case actionTypes.CREATE_PROJECT_MEMBER_SUCCESS:
-      return { ...state, project: { ...state.project, memberships: [...(state.project?.memberships || []), action.member] } }
+      return {
+        ...state,
+        project: { ...state.project, memberships: [...(state.project?.memberships || []), action.member] }
+      }
     case actionTypes.UPDATE_PROJECT_MEMBER_SUCCESS:
       return {
         ...state,
         project: {
           ...state.project,
-          memberships: state.project?.memberships.map(m => (m.id == action.member.id ? { ...m, role: action.member.role } : m))
+          memberships: state.project?.memberships.map(m => (m.id == action.member.id ? (
+            { ...m, role: action.member.role }
+          ) : m))
         }
       }
     case actionTypes.DELETE_PROJECT_MEMBER_SUCCESS: {
@@ -126,7 +131,7 @@ export default function projectReducer(state = initialState, action) {
         project: {
           ...state.project,
           snapshots: state.project?.snapshots.map(s =>
-            s.id === action.snapshot.id? { ...s, ...action.snapshot }: s
+            s.id === action.snapshot.id ? { ...s, ...action.snapshot } : s
           )
         }
       }

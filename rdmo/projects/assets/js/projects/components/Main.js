@@ -106,7 +106,10 @@ const Main = () => {
     closeDelete()
   }
 
-  const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
+  const displayMessage = interpolate(gettext('%s of %s projects are displayed'),
+    [projects.length > projectsCount ? (
+      projectsCount
+    ) : projects.length, projectsCount])
 
   const getProgressString = (row) => {
     return (row.progress_total ? interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
@@ -116,7 +119,8 @@ const Main = () => {
 
   const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
-    value ? dispatch(configActions.updateConfig('params.search', value)) : dispatch(configActions.deleteConfig('params.search'))
+    value ? (dispatch(configActions.updateConfig('params.search', value))
+    ) : dispatch(configActions.deleteConfig('params.search'))
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -145,7 +149,9 @@ const Main = () => {
     const href = `${baseUrl}/projects/${current.id}`
 
     const parts = ancestors.map((ancestor, ancestorIndex) => {
-      const content = ancestorIndex === ancestors.length - 1? <span className="fw-bold">{ancestor.title}</span>: ancestor.title
+      const content = ancestorIndex === ancestors.length - 1 ? (
+        <span className="fw-bold">{ancestor.title}</span>
+      ) : ancestor.title
 
       return (
         <React.Fragment key={ancestorIndex}>
@@ -222,9 +228,11 @@ const Main = () => {
   }
 
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
-  const visibleColumns = myProjects? ['title', 'progress', 'role', 'last_changed', 'actions']: ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
+  const visibleColumns = myProjects ? (
+    ['title', 'progress', 'role', 'last_changed', 'actions']
+  ) : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
 
-  const columnWidths = myProjects? ['40%', '16%', '20%', '18%', '6%']: ['30%', '16%', '16%', '16%', '16%', '6%']
+  const columnWidths = myProjects ? ['40%', '16%', '20%', '18%', '6%'] : ['30%', '16%', '16%', '16%', '16%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),

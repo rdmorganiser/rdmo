@@ -122,7 +122,9 @@ export default class ProjectApi extends BaseApi {
     if (isNil(snapshotId)) {
       return this.download(`/api/v1/projects/projects/${projectId}/views/${viewId}/export/${format}/`)
     } else {
-      return this.download(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/export/${format}/`)
+      return this.download(
+        `/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/views/${viewId}/export/${format}/`
+      )
     }
   }
 }

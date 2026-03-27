@@ -29,13 +29,15 @@ const MembershipDeleteModal = ({ type, show, person, onClose, isAdminOrSiteManag
         async () => {
           try {
             if (type == 'memberships') {
-              isCurrentUser ? await dispatch(leaveProject(person.id, { redirect: !isAdminOrSiteManager })): await dispatch(deleteProjectMember(person.id))
+              isCurrentUser ? (
+                await dispatch(leaveProject(person.id, { redirect: !isAdminOrSiteManager }))
+              ) : await dispatch(deleteProjectMember(person.id))
             } else {
               await dispatch(deleteProjectInvite(person.id))
             }
             onClose()
           } catch {
-          // keep modal open on error
+            // keep modal open on error
           }
         }
       }
@@ -45,15 +47,15 @@ const MembershipDeleteModal = ({ type, show, person, onClose, isAdminOrSiteManag
     >
       <Html
         html={
-          isCurrentUser? interpolate(
+          isCurrentUser ? interpolate(
             gettext('You are about to leave the project <b>%s</b>. If you want to access this project again, ' +
-                      'somebody will need to invite you!'),
+              'somebody will need to invite you!'),
             [project?.title ?? '']
           ) : (
-            (type == 'memberships')? interpolate(
+            (type == 'memberships') ? interpolate(
               gettext('You are about to remove the user <b>%s</b> from the project <b>%s</b>.'),
               [name, project?.title ?? '']
-            ): interpolate(
+            ) : interpolate(
               gettext('You are about to remove the invite of <b>%s</b> from the project <b>%s</b>.'),
               [name, project?.title ?? '']
             )

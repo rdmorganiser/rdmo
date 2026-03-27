@@ -35,11 +35,16 @@ const Table = ({
           {
             visibleColumns.map((column, index) => {
               const headerFormatter = headerFormatters[column]
-              const columnHeaderContent = headerFormatter && headerFormatter.render ? headerFormatter.render(column) : column
-              const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
+              const columnHeaderContent = headerFormatter && headerFormatter.render ? (
+                headerFormatter.render(column)
+              ) : column
+              const columnHeaderLabel = headerFormatter && headerFormatter.label ? (
+                headerFormatter.label(column)
+              ) : columnHeaderContent
 
               return (
-                <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined} key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
+                <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined}
+                  key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
                   aria-label={columnHeaderLabel}>
                   {columnHeaderContent}
                   {sortableColumns.includes(column) && renderSortIcon(column)}
