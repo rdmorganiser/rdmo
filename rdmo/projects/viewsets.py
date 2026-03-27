@@ -228,7 +228,8 @@ class ProjectViewSet(ModelViewSet):
 
         # update instance
         for key, value in serializer.validated_data.items():
-            setattr(instance, key, value)
+            if key in ['title', 'description', 'catalog', 'parent']:
+                setattr(instance, key, value)
 
         site = get_current_site(self.request)
         owners = [self.request.user]
