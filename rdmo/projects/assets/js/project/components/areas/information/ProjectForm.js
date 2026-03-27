@@ -21,9 +21,9 @@ const ProjectForm = ({
   catalogs: catalogsProp = null,
   disabled,
   formId = 'project-form',
-  initialProject = null,
+  currentProject = null,
   mode = 'edit',
-  onSaved,
+  onSave,
   submitMode = 'auto'
 }) => {
   const dispatch = useDispatch()
@@ -32,7 +32,7 @@ const ProjectForm = ({
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
-  const project = initialProject ?? storeData?.project
+  const project = currentProject ?? storeData?.project
   const catalogs = catalogsProp ?? storeData?.catalogs
 
   const [formData, setFormData] = useState(project || {})
@@ -48,9 +48,9 @@ const ProjectForm = ({
 
   useEffect(() => {
     if (mode !== 'copy') return
-    if (!initialProject?.parent) return
+    if (!currentProject?.parent) return
 
-    ProjectApi.fetchProject(initialProject.parent)
+    ProjectApi.fetchProject(currentProject.parent)
       .then(parent => {
         setParentOptions([{
           value: parent.id,
@@ -58,21 +58,21 @@ const ProjectForm = ({
         }])
       })
       .catch(() => {
-        setParentFetchError(interpolate(gettext('You do not have permission to use the original parent project "%s".'), [initialProject?.parent_title])
+        setParentFetchError(interpolate(gettext('You do not have permission to use the original parent project "%s".'), [currentProject?.parent_title])
         )
       })
   }, [])
 
   const catalogOptions = useMemo(
     () => (catalogs || [])
-      .filter(c => c.available)
-      .map(c => ({
-        value: c.id,
+      .filter(catalog => catalog.available)
+      .map(catalog => ({
+        value: catalog.id,
         label: (
           <>
-            {c.title}{' '}
+            {catalog.title}{' '}
             <Tooltip
-              title={c.help || gettext('No help available for this catalog.')}
+              title={catalog.help || gettext('No help available for this catalog.')}
               placement="right"
             >
               <i
@@ -89,21 +89,21 @@ const ProjectForm = ({
     [catalogs]
   )
 
-  const saveProject = (newFormData) => {
+  const saveProject = (currentFormData) => {
     if (mode === 'create') {
-      return dispatch(createProject(newFormData))
+      return dispatch(createProject(currentFormData))
     }
 
     if (mode === 'copy') {
-      return dispatch(copyProject(initialProject.id, newFormData))
+      return dispatch(copyProject(currentProject.id, currentFormData))
     }
 
-    const originalParent = project?.parent ?? null
-    const currentParent = newFormData.parent ?? null
+    const currentProjectParent = project?.parent ?? null
+    const currentFormDataParent = currentFormData.parent ?? null
 
-    const payload = { ...newFormData }
+    const payload = { ...currentFormData }
 
-    if (originalParent === currentParent) {
+    if (currentProjectParent === currentFormDataParent) {
       delete payload.parent
     }
 
@@ -128,7 +128,7 @@ const ProjectForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    saveProject({ ...formData })?.then(() => onSaved?.())
+    saveProject({ ...formData })?.then(() => onSave?.())
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
@@ -323,9 +323,9 @@ ProjectForm.propTypes = {
   catalogs: PropTypes.array,
   disabled: PropTypes.bool,
   formId: PropTypes.string,
-  initialProject: PropTypes.object,
+  currentProject: PropTypes.object,
   mode: PropTypes.oneOf(['edit', 'copy', 'create']),
-  onSaved: PropTypes.func,
+  onSave: PropTypes.func,
   submitMode: PropTypes.oneOf(['auto', 'submit']),
 }
 
