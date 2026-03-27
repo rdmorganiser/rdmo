@@ -12,7 +12,11 @@ const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copy
       <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i>
     </button>
   ) : (
-    <button type="button" className="btn btn-primary btn-xs copy-value-button ml-10" onClick={() => copyValue(question, ...values)}>
+    <button
+      type="button"
+      className="btn btn-primary btn-xs copy-value-button ml-10"
+      onClick={() => copyValue(question, ...values)}
+    >
       <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i> {gettext('Apply to all')}
     </button>
   )
@@ -21,13 +25,13 @@ const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copy
 
   const hasEmptySiblings = sets.filter((set) => (
     (set.set_prefix == currentSet.set_prefix) &&
-      (set.set_index != currentSet.set_index) &&
-      (set.element == question.parent)
+    (set.set_index != currentSet.set_index) &&
+    (set.element == question.parent)
   )).some((set) => {
     // loop over all other sets and filter siblings accordingly
     const setSiblings = siblings.filter((value) => (
       (value.set_prefix == set.set_prefix) &&
-        (value.set_index == set.set_index)
+      (value.set_index == set.set_index)
     ))
 
     // check if this set has no sibling at all (for checkboxes) or if they are empty

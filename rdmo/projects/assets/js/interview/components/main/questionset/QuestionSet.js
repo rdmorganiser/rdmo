@@ -42,8 +42,19 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
               currentSets.map((set, setIndex) => (
                 <div key={setIndex} className="interview-block">
                   <div className="interview-block-options">
-                    <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} disabled={disabled} copySet={copySet} />
-                    <QuestionSetRemoveSet questionset={questionset} currentSet={set} disabled={disabled} deleteSet={deleteSet} />
+                    <QuestionSetCopySet
+                      questionset={questionset}
+                      sets={sets}
+                      currentSet={set}
+                      disabled={disabled}
+                      copySet={copySet}
+                    />
+                    <QuestionSetRemoveSet
+                      questionset={questionset}
+                      currentSet={set}
+                      disabled={disabled}
+                      deleteSet={deleteSet}
+                    />
                   </div>
                   <div className="row">
                     {
@@ -91,15 +102,15 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
                                 values={
                                   values.filter((value) => (
                                     value.attribute == element.attribute &&
-                                  value.set_prefix == set.set_prefix &&
-                                  value.set_index == set.set_index
+                                    value.set_prefix == set.set_prefix &&
+                                    value.set_index == set.set_index
                                   ))
                                 }
                                 siblings={
                                   values.filter((value) => (
                                     value.attribute == element.attribute &&
-                                  value.set_prefix == set.set_prefix &&
-                                  value.set_index != set.set_index
+                                    value.set_prefix == set.set_prefix &&
+                                    value.set_index != set.set_index
                                   ))
                                 }
                                 disabled={disabled}
