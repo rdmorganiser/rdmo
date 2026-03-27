@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { get, isEmpty } from 'lodash'
@@ -11,9 +11,10 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectsActions from '../actions/projectsActions'
 
+import ProjectForm from '../../project/components/areas/information/ProjectForm'
+import ProjectDeleteModal from '../../project/components/areas/information/ProjectDeleteModal'
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
-import { roleOptions } from '../../common/constants/roles'
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -22,10 +23,16 @@ const Main = () => {
   const projectsObject = useSelector(state => state.projects)
   const currentUserObject = useSelector(state => state.currentUser)
 
+  const [selectedProject, setSelectedProject] = useState(null)
+
   const { showTopButton, scrollToTop } = useScrollToTop()
 
   const { show: showInvitations, open: openInvitations, close: closeInvitations } = useModal()
   const { show: showImport, open: openImport, close: closeImport } = useModal()
+  const { show: showEdit, open: openEdit, close: closeEdit } = useModal()
+  const { show: showCreate, open: openCreate, close: closeCreate } = useModal()
+  const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
+  const { show: showCopy, open: openCopy, close: closeCopy } = useModal()
 
   if (!projectsObject.ready) return null
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
@@ -42,6 +49,60 @@ const Main = () => {
     title: gettext('Import project'),
     show: showImport,
     onClose: closeImport
+  }
+
+  const createModalProps = {
+    title: gettext('Create new project'),
+    size: 'modal-lg',
+    show: showCreate,
+    onClose: closeCreate,
+    onSubmit: () => { },
+    submitLabel: gettext('Create project'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-create-form'
+    }
+  }
+
+  const handleCloseCopy = () => {
+    setSelectedProject(null)
+    closeCopy()
+  }
+
+  const copyModalProps = {
+    title: gettext('Copy project'),
+    size: 'modal-lg',
+    show: showCopy,
+    onClose: handleCloseCopy,
+    onSubmit: () => { },
+    submitLabel: gettext('Copy project'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-copy-form'
+    }
+  }
+
+  const handleCloseEdit = () => {
+    setSelectedProject(null)
+    closeEdit()
+  }
+
+  const editModalProps = {
+    title: gettext('Update project'),
+    size: 'modal-lg',
+    show: showEdit,
+    onClose: handleCloseEdit,
+    onSubmit: () => { },
+    submitLabel: gettext('Update project'),
+    submitProps: {
+      type: 'submit',
+      form: 'project-edit-form'
+    }
+  }
+
+  const handleCloseDelete = () => {
+    setSelectedProject(null)
+    closeDelete()
   }
 
   const displayMessage = interpolate(gettext('%s of %s projects are displayed'), [projects.length > projectsCount ? projectsCount : projects.length, projectsCount])
@@ -70,10 +131,6 @@ const Main = () => {
   const handleView = () => {
     dispatch(configActions.updateConfig('myProjects', !myProjects))
     dispatch(projectsActions.fetchProjects())
-  }
-
-  const handleNew = () => {
-    window.location.href = `${baseUrl}/projects/create/`
   }
 
   const handleImport = (file) => {
@@ -134,7 +191,7 @@ const Main = () => {
         }
         {hasNext &&
           <button type="button" onClick={loadMore}
-                  className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
+            className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
             {gettext('Load more')}
           </button>
         }
@@ -167,17 +224,27 @@ const Main = () => {
     : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
 
   const columnWidths = myProjects
-    ? ['40%', '18%', '18%', '18%', '6%']
+    ? ['40%', '16%', '20%', '18%', '6%']
     : ['30%', '16%', '16%', '16%', '16%', '6%']
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),
     role: (_content, row) => {
-      const rolesString = roleOptions.find(option => option.value == row.current_role)?.label || ''
+      const highestRoleString = (row.highest_role && row.highest_role.project_id != row.id) ? (
+        <>
+          {interpolate(gettext('%s of '), [row.highest_role.role_display])}
+          <a href={`${baseUrl}/projects/${row.highest_role.project_id}`}>
+            {row.highest_role.project_title}
+          </a>
+        </>
+      ) : null
 
       return <>
         {
-          rolesString && <div>{rolesString}</div>
+          row.current_role && <div>{row.current_role.role_display}</div>
+        }
+        {
+          row.highest_role && <div className="text-secondary">{highestRoleString}</div>
         }
         {
           row.visibility && <div className="text-secondary">{row.visibility}</div>
@@ -198,31 +265,35 @@ const Main = () => {
     created: content => useFormattedDateTime(content, language),
     last_changed: content => useFormattedDateTime(content, language),
     actions: (_content, row) => {
-      const rowUrl = `${baseUrl}/projects/${row.id}`
-      const params = `?next=${window.location.pathname}`
       const perms = row.permissions || {}
       return (
         <div className="d-flex align-items-center gap-1">
           <Link
-            href={`${rowUrl}/copy/`}
             className="bi bi-copy"
             title={labels.copy}
-            onClick={() => window.location.href = `${rowUrl}/copy/${params}`}
+            onClick={() => {
+              setSelectedProject(row)
+              openCopy()
+            }}
           />
           {perms.can_change_project &&
             <Link
-              href={`${rowUrl}/update/`}
               className="bi bi-pencil"
               title={labels.update}
-              onClick={() => window.location.href = `${rowUrl}/update/${params}`}
+              onClick={() => {
+                setSelectedProject(row)
+                openEdit()
+              }}
             />
           }
           {perms.can_delete_project &&
             <Link
-              href={`${rowUrl}/delete/`}
               className="bi bi-trash"
               title={labels.delete}
-              onClick={() => window.location.href = `${rowUrl}/delete/${params}`}
+              onClick={() => {
+                setSelectedProject(row)
+                openDelete()
+              }}
             />
           }
         </div>
@@ -258,7 +329,7 @@ const Main = () => {
             <button type="button" className="link font-small" onClick={openImport}>
               <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
             </button>
-            <button type="button" className="link font-small" onClick={handleNew}>
+            <button type="button" className="link font-small" onClick={openCreate}>
               <i className="bi bi-plus" aria-hidden="true"></i> {gettext('New project')}
             </button>
           </div>
@@ -306,6 +377,55 @@ const Main = () => {
               handleImport={handleImport}
               importUrls={importUrls ?? []} />
           </Modal>
+          <Modal {...editModalProps}>
+            {selectedProject && (
+              <ProjectForm
+                key={`edit-${selectedProject.id}`}
+                disabled={false}
+                formId='project-edit-form'
+                submitMode="submit"
+                mode="edit"
+                currentProject={selectedProject}
+                catalogs={catalogs ?? []}
+                onSave={() => {
+                  handleCloseEdit()
+                  dispatch(projectsActions.refetchLoadedPages())
+                }}
+              />
+            )}
+          </Modal>
+          <Modal {...copyModalProps}>
+            {selectedProject && (
+              <ProjectForm
+                key={`copy-${selectedProject.id}`}
+                disabled={false}
+                formId='project-copy-form'
+                submitMode="submit"
+                mode="copy"
+                currentProject={selectedProject}
+                catalogs={catalogs ?? []}
+                onSave={handleCloseCopy}
+              />
+            )}
+          </Modal>
+          <Modal {...createModalProps}>
+            <ProjectForm
+              key={`create-${showCreate}`}
+              disabled={false}
+              formId='project-create-form'
+              submitMode="submit"
+              mode="create"
+              catalogs={catalogs ?? []}
+              onSave={closeCreate}
+            />
+          </Modal>
+          <ProjectDeleteModal
+            project={selectedProject}
+            id={selectedProject?.id}
+            show={showDelete}
+            onClose={handleCloseDelete}
+            onDeleted={() => dispatch(projectsActions.refetchLoadedPages())}
+          />
         </div>
       </div>
     </div>

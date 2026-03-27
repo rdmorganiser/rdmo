@@ -1,6 +1,6 @@
 import { isNil } from 'lodash'
 
-import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
+import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -50,7 +50,7 @@ export function fetchProject() {
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
-      CatalogsApi.fetchCatalogs()
+      CatalogApi.fetchCatalogs()
     ])
       .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
         const projectData = {
@@ -78,8 +78,8 @@ export function fetchProject() {
 export function updateProject(data) {
   return function (dispatch, getState) {
     const state = getState()
-    const currentBundle = state.project.project
-    const id = currentBundle?.project?.id
+    const currentBundle = state.project?.project
+    const id = data?.id ?? currentBundle?.project?.id
 
     if (!id) {
       console.warn('No project ID available for update.')
@@ -122,17 +122,21 @@ export function updateProject(data) {
   }
 }
 
-export function deleteProject() {
+export function deleteProject(id) {
   return function (dispatch) {
+    const idToDelete = id ?? projectId
+
     dispatch(addToPending('deleteProject'))
     dispatch({ type: actionTypes.DELETE_PROJECT_INIT })
 
-    return ProjectApi.deleteProject(projectId)
+    return ProjectApi.deleteProject(idToDelete)
       .then(() => {
         dispatch(removeFromPending('deleteProject'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_SUCCESS, projectId })
+        dispatch({ type: actionTypes.DELETE_PROJECT_SUCCESS, projectId: idToDelete })
 
-        window.location.href = `${baseUrl}/projects/`
+        if (!id) {
+          window.location.href = `${baseUrl}/projects/`
+        }
       })
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))

@@ -1,4 +1,5 @@
 import ProjectsApi from '../api/ProjectsApi'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import {
   FETCH_PROJECTS_ERROR,
@@ -18,7 +19,13 @@ import {
   FETCH_IMPORT_URLS_SUCCESS,
   UPLOAD_PROJECT_ERROR,
   UPLOAD_PROJECT_INIT,
-  UPLOAD_PROJECT_SUCCESS
+  UPLOAD_PROJECT_SUCCESS,
+  CREATE_PROJECT_ERROR,
+  CREATE_PROJECT_INIT,
+  CREATE_PROJECT_SUCCESS,
+  COPY_PROJECT_ERROR,
+  COPY_PROJECT_INIT,
+  COPY_PROJECT_SUCCESS,
 } from './actionTypes'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -28,7 +35,7 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 export function fetchProjects(pageReset = true) {
   const pendingId = 'fetchProjects'
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (pageReset === true) {
       dispatch(configActions.updateConfig('params.page', '1'))
     }
@@ -38,7 +45,7 @@ export function fetchProjects(pageReset = true) {
     dispatch(fetchProjectsInit())
 
     const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {})
-                                    : ProjectsApi.fetchProjects(params || {})
+      : ProjectsApi.fetchProjects(params || {})
 
     return dispatch(action)
       .then(projects => dispatch(fetchProjectsSuccess(projects, !pageReset)))
@@ -48,28 +55,105 @@ export function fetchProjects(pageReset = true) {
 }
 
 export function fetchProjectsInit() {
-  return {type: FETCH_PROJECTS_INIT}
+  return { type: FETCH_PROJECTS_INIT }
 }
 
 export function fetchProjectsSuccess(projects, shouldConcatenate) {
-  return {type: FETCH_PROJECTS_SUCCESS, projects, shouldConcatenate}
+  return { type: FETCH_PROJECTS_SUCCESS, projects, shouldConcatenate }
 }
 
 export function fetchProjectsError(error) {
-  return function(dispatch) {
+  return function (dispatch) {
     if (error.constructor.name === 'BadRequestError' && error.errors.catalog) {
       dispatch(configActions.deleteConfig('params.catalog'))
       dispatch(fetchProjects())
     } else {
-      dispatch({type: FETCH_PROJECTS_ERROR, error})
+      dispatch({ type: FETCH_PROJECTS_ERROR, error })
     }
+  }
+}
+
+export function createProject(data) {
+  return function (dispatch) {
+    dispatch(addToPending('createProject'))
+    dispatch({ type: CREATE_PROJECT_INIT })
+
+    return ProjectsApi.createProject(data)
+      .then(project => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: CREATE_PROJECT_SUCCESS, project })
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
+      })
+      .catch(error => {
+        dispatch(removeFromPending('createProject'))
+        dispatch({ type: CREATE_PROJECT_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function copyProject(id, data) {
+  return function (dispatch) {
+    dispatch(addToPending('copyProject'))
+    dispatch({ type: COPY_PROJECT_INIT })
+
+    return ProjectsApi.copyProject(id, data)
+      .then(project => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch({ type: COPY_PROJECT_SUCCESS, project })
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
+      })
+      .catch(error => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch({ type: COPY_PROJECT_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function refetchLoadedPages() {
+  const pendingId = 'fetchProjects'
+
+  return function (dispatch, getState) {
+    const { params, myProjects } = getState().config
+    const currentPage = parseInt(params?.page ?? '1', 10)
+    const baseParams = { ...(params || {}) }
+
+    const fetchPage = (nextParams) => (
+      myProjects
+        ? ProjectsApi.fetchUserProjects(nextParams)
+        : ProjectsApi.fetchProjects(nextParams)
+    )
+
+    dispatch(addToPending(pendingId))
+
+    return Promise.all(
+      Array.from({ length: currentPage }, (_, index) => {
+        const page = (index + 1).toString()
+        return fetchPage({ ...baseParams, page })
+      })
+    )
+      .then(responses => {
+        const lastResponse = responses[responses.length - 1]
+
+        const mergedProjects = {
+          ...lastResponse,
+          results: responses.flatMap(response => response.results)
+        }
+
+        return dispatch(fetchProjectsSuccess(mergedProjects, false))
+      })
+      .catch(error => dispatch(fetchProjectsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function fetchCatalogs() {
   const pendingId = 'fetchCatalogs'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
@@ -80,21 +164,21 @@ export function fetchCatalogs() {
 }
 
 export function fetchCatalogsInit() {
-  return {type: FETCH_CATALOGS_INIT}
+  return { type: FETCH_CATALOGS_INIT }
 }
 
 export function fetchCatalogsSuccess(catalogs) {
-  return {type: FETCH_CATALOGS_SUCCESS, catalogs}
+  return { type: FETCH_CATALOGS_SUCCESS, catalogs }
 }
 
 export function fetchCatalogsError(error) {
-  return {type: FETCH_CATALOGS_ERROR, error}
+  return { type: FETCH_CATALOGS_ERROR, error }
 }
 
 export function fetchAllowedFileTypes() {
   const pendingId = 'fetchAllowedFileTypes'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchAllowedFileTypesInit())
 
@@ -109,21 +193,21 @@ export function fetchAllowedFileTypes() {
 }
 
 export function fetchAllowedFileTypesInit() {
-  return {type: FETCH_FILETYPES_INIT}
+  return { type: FETCH_FILETYPES_INIT }
 }
 
 export function fetchAllowedFileTypesSuccess(allowedTypes) {
-  return {type: FETCH_FILETYPES_SUCCESS, allowedTypes}
+  return { type: FETCH_FILETYPES_SUCCESS, allowedTypes }
 }
 
 export function fetchAllowedFileTypesError(error) {
-  return {type: FETCH_FILETYPES_ERROR, error}
+  return { type: FETCH_FILETYPES_ERROR, error }
 }
 
 export function fetchImportUrls() {
   const pendingId = 'fetchImportUrls'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchImportUrlsInit())
 
@@ -138,21 +222,21 @@ export function fetchImportUrls() {
 }
 
 export function fetchImportUrlsInit() {
-  return {type: FETCH_IMPORT_URLS_INIT}
+  return { type: FETCH_IMPORT_URLS_INIT }
 }
 
 export function fetchImportUrlsSuccess(importUrls) {
-  return {type: FETCH_IMPORT_URLS_SUCCESS, importUrls}
+  return { type: FETCH_IMPORT_URLS_SUCCESS, importUrls }
 }
 
 export function fetchImportUrlsError(error) {
-  return {type: FETCH_IMPORT_URLS_ERROR, error}
+  return { type: FETCH_IMPORT_URLS_ERROR, error }
 }
 
 export function fetchInvitations() {
-  const pendingId = 'fetchImportUrls'
+  const pendingId = 'fetchInvitations'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchInvitationsInit())
 
@@ -167,21 +251,21 @@ export function fetchInvitations() {
 }
 
 export function fetchInvitationsInit() {
-  return {type: FETCH_INVITATIONS_INIT}
+  return { type: FETCH_INVITATIONS_INIT }
 }
 
 export function fetchInvitationsSuccess(invites) {
-  return {type: FETCH_INVITATIONS_SUCCESS, invites}
+  return { type: FETCH_INVITATIONS_SUCCESS, invites }
 }
 
 export function fetchInvitationsError(error) {
-  return {type: FETCH_INVITATIONS_ERROR, error}
+  return { type: FETCH_INVITATIONS_ERROR, error }
 }
 
 export function uploadProject(url, file) {
   const pendingId = 'uploadProject'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(uploadProjectInit())
 
@@ -193,13 +277,13 @@ export function uploadProject(url, file) {
 }
 
 export function uploadProjectInit() {
-  return {type: UPLOAD_PROJECT_INIT}
+  return { type: UPLOAD_PROJECT_INIT }
 }
 
 export function uploadProjectSuccess(project) {
-  return {type: UPLOAD_PROJECT_SUCCESS, project}
+  return { type: UPLOAD_PROJECT_SUCCESS, project }
 }
 
 export function uploadProjectError(error) {
-  return {type: UPLOAD_PROJECT_ERROR, error}
+  return { type: UPLOAD_PROJECT_ERROR, error }
 }
