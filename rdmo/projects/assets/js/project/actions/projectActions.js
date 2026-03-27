@@ -1,6 +1,6 @@
 import { isNil } from 'lodash'
 
-import CatalogsApi from 'rdmo/projects/assets/js/common/api/CatalogsApi'
+import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -50,7 +50,7 @@ export function fetchProject() {
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
-      CatalogsApi.fetchCatalogs()
+      CatalogApi.fetchCatalogs()
     ])
       .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
         const projectData = {
