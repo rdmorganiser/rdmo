@@ -91,19 +91,23 @@ const EditPage = ({ page }) => {
       </div>
 
       {
-        parent && parent.section && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This page will be added to the section <code class="code-questions">%s</code>.'),
-            [parent.section.uri])
-          } />
-        </div>
+        parent && parent.section && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This page will be added to the section <code class="code-questions">%s</code>.'),
+              [parent.section.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        page.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        page.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

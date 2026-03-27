@@ -77,25 +77,29 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
         </div>
       </div>
       {
-        displayUriQuestionSets && <span>
-          <CodeLink
-            type="questions"
-            uri={questionset.uri}
-            href={editUrl}
-            onClick={() => fetchEdit()}
-            order={order}
-          />
-        </span>
+        displayUriQuestionSets && (
+          <span>
+            <CodeLink
+              type="questions"
+              uri={questionset.uri}
+              href={editUrl}
+              onClick={() => fetchEdit()}
+              order={order}
+            />
+          </span>
+        )
       }
       {
-        displayUriAttributes && questionset.attribute_uri && <span>
-          <CodeLink
-            type="domain"
-            uri={questionset.attribute_uri}
-            href={attributeUrl}
-            onClick={() => fetchAttribute()}
-          />
-        </span>
+        displayUriAttributes && questionset.attribute_uri && (
+          <span>
+            <CodeLink
+              type="domain"
+              uri={questionset.attribute_uri}
+              href={attributeUrl}
+              onClick={() => fetchAttribute()}
+            />
+          </span>
+        )
       }
       {
         displayUriConditions && questionset.condition_uris.map((uri, index) => (
@@ -116,7 +120,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'nested':
@@ -127,7 +131,7 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
               <Drop element={questionset}>
                 <div className="card mt-2" style={{ marginLeft: `calc(${indent} * var(--rdmo-management-indent))` }}>
                   <div className="card-body">
-                    { elementNode }
+                    {elementNode}
                   </div>
                 </div>
               </Drop>
@@ -138,13 +142,17 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
               if (element.model == 'questions.questionset') {
                 const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
-                return <QuestionSet key={index} config={config} questionset={element}
-                  display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
+                return (
+                  <QuestionSet key={index} config={config} questionset={element}
+                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
+                )
               } else {
                 const questionInfo = questionset.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
-                return <Question key={index} config={config} question={element}
-                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                return (
+                  <Question key={index} config={config} question={element}
+                    display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                )
               }
             })
           }

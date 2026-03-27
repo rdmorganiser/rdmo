@@ -63,28 +63,34 @@ const EditQuestion = ({ question }) => {
       </div>
 
       {
-        parent && parent.page && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This question will be added to the page <code class="code-questions">%s</code>.'),
-            [parent.page.uri])
-          } />
-        </div>
+        parent && parent.page && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This question will be added to the page <code class="code-questions">%s</code>.'),
+              [parent.page.uri])
+            } />
+          </div>
+        )
       }
       {
-        parent && parent.questionset && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This question will be added to the question set <code class="code-questions">%s</code>.'),
-            [parent.questionset.uri])
-          } />
-        </div>
+        parent && parent.questionset && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This question will be added to the question set <code class="code-questions">%s</code>.'),
+              [parent.questionset.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        question.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        question.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

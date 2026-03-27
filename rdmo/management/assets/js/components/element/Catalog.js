@@ -74,7 +74,7 @@ const Catalog = ({ catalog, display='list', filter=false, filterSites=false, fil
             exportFormats={config.settings.export_formats} full={true} />
         </div>
 
-        { backButton && <BackButton /> }
+        {backButton && <BackButton />}
       </div>
       {
         displayUriCatalogs &&
@@ -88,7 +88,7 @@ const Catalog = ({ catalog, display='list', filter=false, filterSites=false, fil
     case 'list':
       return showElement && (
         <li className="list-group-item">
-          { elementNode }
+          {elementNode}
         </li>
       )
     case 'plain':

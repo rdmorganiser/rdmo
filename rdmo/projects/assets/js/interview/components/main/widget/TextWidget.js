@@ -26,25 +26,27 @@ const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabl
                 disabled={disabled}
                 updateValue={updateValue}
                 buttons={
-                  <div className="buttons">
-                    <QuestionSuccess value={value}/>
-                    <QuestionReuseValue
-                      page={page}
-                      question={question}
-                      value={value}
-                      disabled={disabled}
-                      updateValue={updateValue}
-                    />
-                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
-                    <QuestionRemoveValue
-                      question={question}
-                      values={values}
-                      value={value}
-                      disabled={disabled}
-                      deleteValue={deleteValue}
-                    />
-                    <QuestionDefault question={question} value={value} />
-                  </div>
+                  (
+                    <div className="buttons">
+                      <QuestionSuccess value={value}/>
+                      <QuestionReuseValue
+                        page={page}
+                        question={question}
+                        value={value}
+                        disabled={disabled}
+                        updateValue={updateValue}
+                      />
+                      <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
+                      <QuestionRemoveValue
+                        question={question}
+                        values={values}
+                        value={value}
+                        disabled={disabled}
+                        deleteValue={deleteValue}
+                      />
+                      <QuestionDefault question={question} value={value} />
+                    </div>
+                  )
                 }
               />
               <QuestionError value={value} />

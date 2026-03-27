@@ -11,7 +11,7 @@ const Modal = ({ title, show, modalProps, submitLabel, submitProps, onClose, onS
       {
         children && (
           <BootstrapModal.Body>
-            { children }
+            {children}
           </BootstrapModal.Body>
         )
       }

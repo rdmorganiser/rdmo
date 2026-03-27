@@ -33,10 +33,11 @@ const ImportElement = ({ element }) => {
         <ImportSelectCheckbox element={element} toggleImport={toggleImport} updateShowField={updateShowField} />
 
         {
-          (isEmpty(element.errors) && ('available' in element)) &&
-           <AvailableLink available={element.available}
-             locked={element.locked} onClick={toggleAvailable}
-             title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
+          (isEmpty(element.errors) && ('available' in element)) && (
+            <AvailableLink available={element.available}
+              locked={element.locked} onClick={toggleAvailable}
+              title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
+          )
         }
         {
           !isEmpty(element.warnings) &&
@@ -47,23 +48,25 @@ const ImportElement = ({ element }) => {
           <ErrorLink onClick={updateShowField} />
         }
         {
-          (element.updated && element.locked) &&
-          <LockedLink title={gettext('Locked')}
-            locked={element.locked} onClick={updateShowField} disabled={true} />
-
+          (element.updated && element.locked) && (
+            <LockedLink title={gettext('Locked')}
+              locked={element.locked} onClick={updateShowField} disabled={true} />
+          )
         }
         <ShowLink show={element.show} onClick={updateShowField} />
       </div>
 
       {
-        element.show && <div className="mt-2">
-          <Errors elementErrors={element.errors} />
-          <Warnings elementWarnings={element.warnings}
-            elementModel={element.model} elementURI={element.uri}
-            showTitle={true} shouldShowURI={false} />
-          <Form element={element} />
-          <Fields element={element} />
-        </div>
+        element.show && (
+          <div className="mt-2">
+            <Errors elementErrors={element.errors} />
+            <Warnings elementWarnings={element.warnings}
+              elementModel={element.model} elementURI={element.uri}
+              showTitle={true} shouldShowURI={false} />
+            <Form element={element} />
+            <Fields element={element} />
+          </div>
+        )
       }
     </li>
   )

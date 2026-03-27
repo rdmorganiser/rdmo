@@ -20,9 +20,11 @@ const Drag = ({ element, show=true }) => {
     'disabled': element.read_only
   })
 
-  return show && <span className="drag">
-    <i className={className} ref={dragRef} aria-hidden="true"></i>
-  </span>
+  return show && (
+    <span className="drag">
+      <i className={className} ref={dragRef} aria-hidden="true"></i>
+    </span>
+  )
 }
 
 Drag.propTypes = {

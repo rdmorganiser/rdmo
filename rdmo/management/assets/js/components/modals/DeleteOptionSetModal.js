@@ -19,7 +19,7 @@ const DeleteOptionSetModal = ({ optionset, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-options">{optionset.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

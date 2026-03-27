@@ -56,19 +56,23 @@ const EditSection = ({ section }) => {
       </div>
 
       {
-        parent && parent.catalog && <div className="card-body border-bottom">
-          <Html html={
-            interpolate(gettext(
-              'This section will be added to the catalog <code class="code-questions">%s</code>.'),
-            [parent.catalog.uri])
-          } />
-        </div>
+        parent && parent.catalog && (
+          <div className="card-body border-bottom">
+            <Html html={
+              interpolate(gettext(
+                'This section will be added to the catalog <code class="code-questions">%s</code>.'),
+              [parent.catalog.uri])
+            } />
+          </div>
+        )
       }
 
       {
-        section.id && <div className="card-body border-bottom">
-          { info }
-        </div>
+        section.id && (
+          <div className="card-body border-bottom">
+            {info}
+          </div>
+        )
       }
 
       <div className="card-body pb-0">

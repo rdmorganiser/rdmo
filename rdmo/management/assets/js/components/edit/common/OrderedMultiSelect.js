@@ -222,20 +222,22 @@ const OrderedMultiSelect = ({ element, field, options, values,
           {addText}
         </button>
         {
-          onCreate &&
-          <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
-            disabled={element.read_only || isNil(element.id)}
-            title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {createText}
-          </button>
+          onCreate && (
+            <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
+              disabled={element.read_only || isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {createText}
+            </button>
+          )
         }
         {
-          onAltCreate &&
-          <button type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
-            disabled={element.read_only || isNil(element.id)}
-            title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {altCreateText}
-          </button>
+          onAltCreate && (
+            <button type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
+              disabled={element.read_only || isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {altCreateText}
+            </button>
+          )
         }
       </div>
 

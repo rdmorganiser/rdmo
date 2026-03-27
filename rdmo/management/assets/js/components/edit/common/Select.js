@@ -63,21 +63,24 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
             onChange={handleChange} isDisabled={element.read_only} aria-labelledby={id} />
         </div>
         {
-          onEdit && selectValue && <div>
-            <Link className="bi bi-pencil" title={gettext('Edit')}
-              onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
-          </div>
+          onEdit && selectValue && (
+            <div>
+              <Link className="bi bi-pencil" title={gettext('Edit')}
+                onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
+            </div>
+          )
         }
       </div>
 
       {
-        onCreate &&
-        <div className="mt-2">
-          <button type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
-            title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {createText}
-          </button>
-        </div>
+        onCreate && (
+          <div className="mt-2">
+            <button type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {createText}
+            </button>
+          </div>
+        )
       }
 
       <ErrorList errors={errors} />

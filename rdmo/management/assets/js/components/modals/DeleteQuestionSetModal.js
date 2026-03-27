@@ -19,7 +19,7 @@ const DeleteQuestionSetModal = ({ questionset, info, show, onClose, onDelete }) 
     <p>
       <code className="code-questions">{questionset.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>

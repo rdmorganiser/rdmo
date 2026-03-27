@@ -19,7 +19,7 @@ const DeleteTaskModal = ({ task, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-tasks">{task.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('The task will be removed from these projects.')} {gettext('This action cannot be undone!')}
     </p>

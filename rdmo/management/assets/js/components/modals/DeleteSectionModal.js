@@ -19,7 +19,7 @@ const DeleteSectionModal = ({ section, info, show, onClose, onDelete }) => (
     <p>
       <code className="code-questions">{section.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>
