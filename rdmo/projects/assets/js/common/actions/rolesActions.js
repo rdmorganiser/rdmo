@@ -1,4 +1,4 @@
-import RolesApi from '../api/RolesApi'
+import RoleApi from '../api/RoleApi'
 
 import { FETCH_ROLES_INIT, FETCH_ROLES_ERROR, FETCH_ROLES_SUCCESS } from './actionTypes'
 
@@ -6,7 +6,7 @@ export function fetchRoles() {
   return function (dispatch) {
     dispatch(fetchRolesInit())
 
-    return RolesApi.fetchRoles()
+    return RoleApi.fetchRoles()
       .then((roles) => {
         const mappedRoles = roles.map(role => ({
           value: role.id,
