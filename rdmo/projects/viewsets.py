@@ -204,7 +204,7 @@ class ProjectViewSet(ModelViewSet):
         )
 
         # order queryset by last_changed by default
-        queryset = queryset.order_by('last_changed')
+        queryset = queryset.order_by('-last_changed')
 
         # cache queryset and return
         self._cached_queryset = queryset
