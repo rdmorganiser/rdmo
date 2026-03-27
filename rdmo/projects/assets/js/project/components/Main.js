@@ -2,13 +2,12 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import Dashboard from './areas/Dashboard'
-import Interview from './areas/Interview'
 import Documents from './areas/Documents'
 import Information from './areas/Information'
+import Interview from './areas/Interview'
 import Memberships from './areas/Memberships'
-import Snapshots from './areas/Snapshots'
 import Plugins from './areas/Plugins'
-
+import Snapshots from './areas/Snapshots'
 import View from './helper/View'
 
 const Main = () => {

@@ -4,7 +4,7 @@ import uniqueId from 'lodash/uniqueId'
 
 const Key = ({ element, onChange }) => {
   const id = uniqueId('key-'),
-        value = element.key ?? ''
+    value = element.key ?? ''
 
   return (
     <div className="mb-2">
@@ -13,7 +13,7 @@ const Key = ({ element, onChange }) => {
       </label>
 
       <input className="form-control input-sm" id={id} type="text"
-             value={value} onChange={event => onChange('key', event.target.value)} />
+        value={value} onChange={event => onChange('key', event.target.value)} />
     </div>
   )
 }

@@ -9,14 +9,16 @@ const ProjectImport = ({ allowedTypes, handleImport, importUrls }) => {
     return (
       <div className="mt-3">
         <label className="form-label">{gettext('Import directly')}</label>
-        <ul className='list-unstyled mb-0'>
-          {importUrls.map((url) => (
-            <li key={url.key}>
-              <a href={url.href} target='_blank' rel='noopener noreferrer'>
-                {url.label}
-              </a>
-            </li>
-          ))}
+        <ul className="list-unstyled mb-0">
+          {
+            importUrls.map((url) => (
+              <li key={url.key}>
+                <a href={url.href} target="_blank" rel="noopener noreferrer">
+                  {url.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
     )

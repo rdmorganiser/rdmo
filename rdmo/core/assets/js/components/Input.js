@@ -13,9 +13,11 @@ const Input = ({ type = 'text', className, label, placeholder, help, disabled, e
       <input
         id={id}
         type={type}
-        className={classNames('form-control', {
-          'is-invalid': !isEmpty(errors)
-        })}
+        className={
+          classNames('form-control', {
+            'is-invalid': !isEmpty(errors)
+          })
+        }
         placeholder={placeholder}
         disabled={disabled}
         value={value}

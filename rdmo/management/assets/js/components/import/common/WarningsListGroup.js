@@ -2,6 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
+
 import { elementModules, verboseNames } from '../../../constants/elements'
 
 // Helper function to generate warning messages
@@ -9,12 +10,14 @@ export const generateWarningListItems = (elementWarnings, elementModel, elementU
   Object.values(elementWarnings).flatMap((messages) =>
     messages.map(message => (
       <li className="list-group-item" key={uniqueId('warning-uri-message')}>
-        {shouldShowURI && elementModel && elementURI && (
-          <div className="mb-1">
-            <strong>{verboseNames[elementModel]}{' '}</strong>
-            <code className={elementModules[elementModel]}>{elementURI}</code>
-          </div>
-        )}
+        {
+          shouldShowURI && elementModel && elementURI && (
+            <div className="mb-1">
+              <strong>{verboseNames[elementModel]}{' '}</strong>
+              <code className={elementModules[elementModel]}>{elementURI}</code>
+            </div>
+          )
+        }
         <div>
           {message}
         </div>

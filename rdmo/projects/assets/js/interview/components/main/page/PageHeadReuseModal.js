@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
@@ -41,8 +41,8 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
 
   return (
     <Modal title={gettext('Reuse tab')} show={show} submitLabel={gettext('Reuse')}
-           submitProps={{className: 'btn btn-primary'}}
-           onClose={onClose} onSubmit={handleSubmit}>
+      submitProps={{className: 'btn btn-primary'}}
+      onClose={onClose} onSubmit={handleSubmit}>
       <div className={classNames({'form-group': true, 'has-error': errors.value })}>
         <label className="control-label">
           {gettext('Answers')}
@@ -51,9 +51,11 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
         <Search attribute={attribute} values={values} setValues={setValues} />
 
         <p className="help-block mb-0">
-          {gettext('You can populate this tab with answers from a similar tab in any ' +
+          {
+            gettext('You can populate this tab with answers from a similar tab in any ' +
                    'project you have access to. This only affects questions that ' +
-                   'don\'t already have an answer.')}
+                   'don\'t already have an answer.')
+          }
         </p>
       </div>
     </Modal>

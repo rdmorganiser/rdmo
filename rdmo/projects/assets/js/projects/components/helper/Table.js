@@ -1,6 +1,6 @@
 import React from 'react'
-import classNames from 'classnames'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 const Table = ({
   cellFormatters,
@@ -32,19 +32,21 @@ const Table = ({
     return (
       <thead>
         <tr>
-          {visibleColumns.map((column, index) => {
-            const headerFormatter = headerFormatters[column]
-            const columnHeaderContent = headerFormatter && headerFormatter.render ? headerFormatter.render(column) : column
-            const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
+          {
+            visibleColumns.map((column, index) => {
+              const headerFormatter = headerFormatters[column]
+              const columnHeaderContent = headerFormatter && headerFormatter.render ? headerFormatter.render(column) : column
+              const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
 
-            return (
-              <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined} key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
-                aria-label={columnHeaderLabel}>
-                {columnHeaderContent}
-                {sortableColumns.includes(column) && renderSortIcon(column)}
-              </th>
-            )
-          })}
+              return (
+                <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined} key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
+                  aria-label={columnHeaderLabel}>
+                  {columnHeaderContent}
+                  {sortableColumns.includes(column) && renderSortIcon(column)}
+                </th>
+              )
+            })
+          }
         </tr>
       </thead>
     )
@@ -60,15 +62,19 @@ const Table = ({
   const renderRows = () => {
     return (
       <tbody>
-        {data.map((row) => (
-          <tr key={row.id}>
-            {visibleColumns.map((column, index) => (
-              <td key={column} style={{ width: columnWidths[index] }}>
-                {formatCellContent(row, column, row[column])}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {
+          data.map((row) => (
+            <tr key={row.id}>
+              {
+                visibleColumns.map((column, index) => (
+                  <td key={column} style={{ width: columnWidths[index] }}>
+                    {formatCellContent(row, column, row[column])}
+                  </td>
+                ))
+              }
+            </tr>
+          ))
+        }
       </tbody>
     )
   }

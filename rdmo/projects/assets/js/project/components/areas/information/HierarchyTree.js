@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 const HierarchyTree = ({ hierarchy }) => {
@@ -7,9 +8,7 @@ const HierarchyTree = ({ hierarchy }) => {
 
   const linkOrText = (node) => {
     const isCurrent = isCurrentNode(node)
-    const content = (node?.permissions?.can_view_project && !isCurrent)
-      ? <a href={`${baseUrl}/projects/${node.id}`}>{node.title}</a>
-      : <>{node.title}</>
+    const content = (node?.permissions?.can_view_project && !isCurrent)? <a href={`${baseUrl}/projects/${node.id}`}>{node.title}</a>: <>{node.title}</>
 
     return isCurrent ? <span>{content}</span> : content
   }
@@ -18,12 +17,14 @@ const HierarchyTree = ({ hierarchy }) => {
     if (!node?.children?.length) return null
     return (
       <ul>
-        {node.children.map(child => (
-          <li key={child.id}>
-            {linkOrText(child)}
-            {renderFullSubtree(child)}
-          </li>
-        ))}
+        {
+          node.children.map(child => (
+            <li key={child.id}>
+              {linkOrText(child)}
+              {renderFullSubtree(child)}
+            </li>
+          ))
+        }
       </ul>
     )
   }
@@ -60,9 +61,9 @@ const HierarchyTree = ({ hierarchy }) => {
       return (
         <>
           {linkOrText(node)}
-          {isAtCurrentInPath
-            ? renderFullSubtree(node)
-            : <ul>{renderPath(idx + 1)}</ul>}
+          {
+            isAtCurrentInPath? renderFullSubtree(node): <ul>{renderPath(idx + 1)}</ul>
+          }
         </>
       )
     }
@@ -70,9 +71,9 @@ const HierarchyTree = ({ hierarchy }) => {
     return (
       <li key={node.id}>
         {linkOrText(node)}
-        {isAtCurrentInPath
-          ? renderFullSubtree(node)
-          : <ul>{renderPath(idx + 1)}</ul>}
+        {
+          isAtCurrentInPath? renderFullSubtree(node): <ul>{renderPath(idx + 1)}</ul>
+        }
       </li>
     )
   }
@@ -95,7 +96,7 @@ const nodeShape = PropTypes.shape({
   }),
   children: PropTypes.array
 })
-  PropTypes.arrayOf(() => nodeShape)
+PropTypes.arrayOf(() => nodeShape)
 HierarchyTree.propTypes = {
   hierarchy: PropTypes.oneOfType([
     nodeShape,

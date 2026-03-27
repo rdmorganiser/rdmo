@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
-import useFocusEffect from '../../../hooks/useFocusEffect'
 
 import Modal from 'rdmo/core/assets/js/components/Modal'
+
+import useFocusEffect from '../../../hooks/useFocusEffect'
+
 import Search from '../Search'
 
 const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, reuse, initial, onClose, onSubmit }) => {
@@ -52,7 +54,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
 
   return (
     <Modal title={title} show={show} submitLabel={submitLabel} submitProps={{className: `btn btn-${submitColor}`}}
-           onClose={onClose} onSubmit={handleSubmit} disableSubmit={errors}>
+      onClose={onClose} onSubmit={handleSubmit} disableSubmit={errors}>
       {
         isNil(attribute) ? (
           <div>
@@ -71,11 +73,13 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
                 type="text"
                 value={values.text}
                 onChange={(event) => setValues({ ...values, text: event.target.value })}
-                onKeyPress={(event) => {
-                  if (event.code === 'Enter') {
-                    handleSubmit()
+                onKeyPress={
+                  (event) => {
+                    if (event.code === 'Enter') {
+                      handleSubmit()
+                    }
                   }
-                }}
+                }
               />
 
               <p className="help-block mb-0">{gettext('Please give the tab a meaningful name.')}</p>
@@ -90,8 +94,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
                   <Search attribute={attribute} values={values} setValues={setValues} />
 
                   <p className="help-block mb-0">
-                    {gettext('You can populate this tab with answers from a similar tab in any ' +
-                             'project you are allowed to access.')}
+                    {
+                      gettext('You can populate this tab with answers from a similar tab in any ' +
+                             'project you are allowed to access.')
+                    }
                   </p>
                 </div>
               )

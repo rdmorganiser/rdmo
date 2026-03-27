@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ErrorsListGroup from './ErrorsListGroup'
 import isUndefined from 'lodash/isUndefined'
+
+import ErrorsListGroup from './ErrorsListGroup'
 
 const Errors = ({ elementErrors }) => {
   const show = !isUndefined(elementErrors) &&  elementErrors.length > 0

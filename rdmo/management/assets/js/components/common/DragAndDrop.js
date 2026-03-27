@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { useDrag, useDrop } from 'react-dnd'
 import PropTypes from 'prop-types'
+import { useDrag, useDrop } from 'react-dnd'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
 
 import { dropElement } from '../../actions/elementActions'

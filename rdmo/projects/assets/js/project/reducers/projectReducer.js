@@ -126,9 +126,7 @@ export default function projectReducer(state = initialState, action) {
         project: {
           ...state.project,
           snapshots: state.project?.snapshots.map(s =>
-            s.id === action.snapshot.id
-              ? { ...s, ...action.snapshot }
-              : s
+            s.id === action.snapshot.id? { ...s, ...action.snapshot }: s
           )
         }
       }

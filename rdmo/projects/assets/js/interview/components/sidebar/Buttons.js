@@ -11,14 +11,14 @@ const Buttons = ({ next, prev, help, fetchPage }) => {
       <div className="interview-buttons">
         <div className="pull-right">
           <button type="button" onClick={() => fetchPage(next)} disabled={!next}
-                  className="btn btn-default btn-xs">
+            className="btn btn-default btn-xs">
             {gettext('Proceed')}
           </button>
         </div>
 
         <div>
           <button type="button" onClick={() => fetchPage(prev, true)} disabled={!prev}
-                  className="btn btn-default btn-xs">
+            className="btn btn-default btn-xs">
             {gettext('Back')}
           </button>
         </div>

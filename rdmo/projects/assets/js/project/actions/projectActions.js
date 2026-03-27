@@ -1,13 +1,13 @@
 import { isNil } from 'lodash'
 
-import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { projectId } from '../utils/meta'
+import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
+
 import { locationKeys, updateLocation } from '../utils/location'
+import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
 

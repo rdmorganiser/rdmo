@@ -1,4 +1,4 @@
-import { filterUriPrefix, filterSearch} from './filter'
+import { filterSearch, filterUriPrefix} from './filter'
 
 function filterElementsByChanged(elements, selectFilterChanged) {
   if (!selectFilterChanged) return elements

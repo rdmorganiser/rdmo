@@ -1,13 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { FilterString, FilterUriPrefix } from '../../common/Filter'
 import { getUriPrefixes } from '../../../utils/filter'
+
+import { FilterString, FilterUriPrefix } from '../../common/Filter'
 
 const ImportFilters = ({ elements, changedElements, filteredElements, success = false}) => {
   const dispatch = useDispatch()
@@ -23,8 +24,7 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
   const updateFilterChanged = () => dispatch(updateConfig('filter.import.elements.changed', !filterChanged))
 
   const filterCheckBoxText = interpolate(
-    success ? gettext('Show only created and changed elements (%s)')
-            : gettext('Show only new and changed elements (%s)'),
+    success ? gettext('Show only created and changed elements (%s)'): gettext('Show only new and changed elements (%s)'),
     [changedElements.length]
   )
 
@@ -33,12 +33,12 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
       <div className="row">
         <div className={'col-sm-8'}>
           <FilterString value={filterString} onChange={updateFilterString}
-                        label={gettext('Filter URI')}/>
+            label={gettext('Filter URI')}/>
         </div>
         <div className="col-sm-4">
           <FilterUriPrefix value={filterUriPrefix}
-                           onChange={updateFilterUriPrefix}
-                           options={getUriPrefixes(elements)}/>
+            onChange={updateFilterUriPrefix}
+            options={getUriPrefixes(elements)}/>
         </div>
       </div>
       {
@@ -46,7 +46,7 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
           <>
             <div className="form-check mb-2">
               <input className="form-check-input" type="checkbox" id="import-filter-changed"
-                     checked={filterChanged} onChange={updateFilterChanged}/>
+                checked={filterChanged} onChange={updateFilterChanged}/>
               <label className="form-check-label" htmlFor="import-filter-changed">
                 { filterCheckBoxText }
               </label>

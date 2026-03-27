@@ -11,4 +11,4 @@ const hasErrors = (project, interview) => {
   return !(isEmpty(project.errors) && isEmpty(interview.errors))
 }
 
-export { isReady, hasErrors }
+export { hasErrors, isReady }

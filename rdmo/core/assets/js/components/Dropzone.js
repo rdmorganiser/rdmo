@@ -1,7 +1,7 @@
 import React,  { useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { useDropzone } from 'react-dropzone'
+import classNames from 'classnames'
 
 const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
   const [errorMessage, setErrorMessage] = useState('')

@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WarningsListGroup from './WarningsListGroup'
 import isUndefined from 'lodash/isUndefined'
+
+import WarningsListGroup from './WarningsListGroup'
 
 const Warnings = ({ elementWarnings, elementModel, elementURI, shouldShowURI = true }) => {
   const show = !isUndefined(elementWarnings) && Object.keys(elementWarnings).length > 0

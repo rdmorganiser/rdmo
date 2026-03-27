@@ -4,7 +4,7 @@ import uniqueId from 'lodash/uniqueId'
 
 const UriPath = ({ element, onChange }) => {
   const id = uniqueId('uriPath-'),
-        value = element.uri_path ?? ''
+    value = element.uri_path ?? ''
 
   return (
     <div className="mb-2">
@@ -13,7 +13,7 @@ const UriPath = ({ element, onChange }) => {
       </label>
 
       <input className="form-control input-sm" id={id} type="text"
-             value={value} onChange={event => onChange('uri_path', event.target.value)} />
+        value={value} onChange={event => onChange('uri_path', event.target.value)} />
     </div>
   )
 }

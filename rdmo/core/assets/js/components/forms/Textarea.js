@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty, isNil, uniqueId } from 'lodash'
-
 import { useDebouncedCallback } from 'use-debounce'
+import { isEmpty, isNil, uniqueId } from 'lodash'
 
 const Textarea = ({ rows, className, debounce, label, placeholder, help, isDisabled, errors, value, onChange }) => {
   const id = uniqueId('textarea-')
@@ -12,8 +11,7 @@ const Textarea = ({ rows, className, debounce, label, placeholder, help, isDisab
   const [textareaValue, setTextareaValue] = isNil(debounce) ? [value, () => {}] : useState(value)
 
   // use the debounce hook on the onChange callback (only when debouncing)
-  const callOnChange = isNil(debounce) ? (value) => onChange(value)
-                                       : useDebouncedCallback((value) => onChange(value), debounce)
+  const callOnChange = isNil(debounce) ? (value) => onChange(value): useDebouncedCallback((value) => onChange(value), debounce)
 
   // update the local state if the value prop changes (only when debouncing)
   useEffect(() => setTextareaValue(value), [value])
@@ -32,9 +30,11 @@ const Textarea = ({ rows, className, debounce, label, placeholder, help, isDisab
       <textarea
         rows={rows}
         id={id}
-        className={classNames('form-control', {
-          'is-invalid': !isEmpty(errors)
-        })}
+        className={
+          classNames('form-control', {
+            'is-invalid': !isEmpty(errors)
+          })
+        }
         placeholder={placeholder}
         disabled={isDisabled}
         value={textareaValue}

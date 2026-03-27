@@ -1,12 +1,11 @@
 import isNil from 'lodash/isNil'
 
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+
 import ManagementApi from '../api/ManagementApi'
 
 import * as actionTypes from './actionTypes'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-
-import { fetchElements, fetchElement } from './elementActions'
+import { fetchElement, fetchElements } from './elementActions'
 
 
 // upload file

@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
@@ -8,13 +8,12 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement } from '../../actions/elementActions'
-
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, LockedLink, ExportLink, CodeLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/Links'
 
 const Option = ({ option, display='list', indent=0, filter=false, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -46,9 +45,9 @@ const Option = ({ option, display='list', indent=0, filter=false, filterEditors=
           <EditLink title={gettext('Edit option')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy option')} href={copyUrl} onClick={fetchCopy} />
           <LockedLink title={option.locked ? gettext('Unlock option') : gettext('Lock option')}
-                      locked={option.locked} onClick={toggleLocked} disabled={option.read_only} />
+            locked={option.locked} onClick={toggleLocked} disabled={option.read_only} />
           <ExportLink title={gettext('Export option')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} />
+            exportFormats={config.settings.export_formats} />
         </div>
       </div>
       {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
@@ -65,12 +65,12 @@ const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) =>
 
   return !disabled && <>
     <button type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}
-            title={gettext('Reuse answer')} aria-label={gettext('Reuse answer')}>
+      title={gettext('Reuse answer')} aria-label={gettext('Reuse answer')}>
       <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
     </button>
 
     <Modal title={gettext('Reuse answer')} show={show} buttons={modalButtons}
-           onClose={() => setShow(false)} >
+      onClose={() => setShow(false)} >
       <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
         <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
           {gettext('Answer')}
@@ -85,8 +85,10 @@ const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) =>
         />
 
         <p className="help-block mb-0">
-          {gettext('You can reuse an answer from a similar question in any ' +
-                   'project you have access to.')}
+          {
+            gettext('You can reuse an answer from a similar question in any ' +
+                   'project you have access to.')
+          }
         </p>
       </div>
     </Modal>

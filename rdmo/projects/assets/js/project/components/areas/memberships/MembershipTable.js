@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
-import { updateProjectMember, updateProjectInvite } from '../../../actions/projectActions'
+import { updateProjectInvite, updateProjectMember } from '../../../actions/projectActions'
 
 import MembershipDeleteModal from './MembershipDeleteModal'
 
@@ -48,74 +48,79 @@ const MembershipTable = ({ persons, type }) => {
           </tr>
         </thead>
         <tbody>
-          {uniquePersons?.map((person, index) => {
-            const isCurrentUser = person.user?.id === currentUser?.id
-            const isOwner = isCurrentUser && person.role == 'owner'
+          {
+            uniquePersons?.map((person, index) => {
+              const isCurrentUser = person.user?.id === currentUser?.id
+              const isOwner = isCurrentUser && person.role == 'owner'
 
-            const showMemberAction = (type === 'memberships') && (
-              isCurrentUser ? perms.can_leave_project : perms.can_delete_membership
-            )
-            const showInviteAction = (type === 'invites') && perms.can_delete_invite
-            const showActions = (
-              showMemberAction || showInviteAction || isAdminOrSiteManager
-            ) && !person.project // do not show action buttons for hierarchy roles
+              const showMemberAction = (type === 'memberships') && (
+                isCurrentUser ? perms.can_leave_project : perms.can_delete_membership
+              )
+              const showInviteAction = (type === 'invites') && perms.can_delete_invite
+              const showActions = (
+                showMemberAction || showInviteAction || isAdminOrSiteManager
+              ) && !person.project // do not show action buttons for hierarchy roles
 
-            const emailAddress = person.user?.email || person?.email
-            const hierarchyRole = person?.project ? interpolate(gettext('%s of %s'), [
-              roleOptions.find(opt => opt.value === person.role)?.label || '',
-              person.project.title
-            ]) : null
+              const emailAddress = person.user?.email || person?.email
+              const hierarchyRole = person?.project ? interpolate(gettext('%s of %s'), [
+                roleOptions.find(opt => opt.value === person.role)?.label || '',
+                person.project.title
+              ]) : null
 
-            return (
-              <tr key={index}>
-                <td><strong>{person?.user?.first_name} {person?.user?.last_name}</strong></td>
-                <td>
-                  {
-                    emailAddress && (
-                      <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">
-                        {emailAddress}
-                      </a>
-                    )
-                  }
-                </td>
-                <td>
-                  {hierarchyRole ?
-                    <div className="mb-1">{hierarchyRole}</div>
-                    :
-                    <Select
-                      options={roleOptions}
-                      value={person.role}
-                      onChange={(newRole) => {
-                        if (!newRole) return
-                        (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole }))
-                          : dispatch(updateProjectInvite(person.id, { role: newRole }))
-                      }}
-                      isClearable={false}
-                      isDisabled={(
-                        (type === 'memberships') ? (
-                          !perms.can_change_membership || (isOwner && !isAdminOrSiteManager)
-                        ) : !perms.can_change_invite
-                      )}
-                    />
-                  }
-                </td>
-                <td className="text-end">
-                  {showActions && (
-                    <button type="button" className="btn link"
-                      aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                      title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
-                      onClick={() => openDeleteModal(person, isCurrentUser)}
-                    >
-                      <i
-                        className={classNames('bi', isCurrentUser ? 'bi-box-arrow-right' : 'bi-person-x')}
-                        aria-hidden="true"
+              return (
+                <tr key={index}>
+                  <td><strong>{person?.user?.first_name} {person?.user?.last_name}</strong></td>
+                  <td>
+                    {
+                      emailAddress && (
+                        <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">
+                          {emailAddress}
+                        </a>
+                      )
+                    }
+                  </td>
+                  <td>
+                    {
+                      hierarchyRole ?<div className="mb-1">{hierarchyRole}</div>:<Select
+                        options={roleOptions}
+                        value={person.role}
+                        onChange={
+                          (newRole) => {
+                            if (!newRole) return
+                            (type === 'memberships') ? dispatch(updateProjectMember(person.id, { role: newRole })): dispatch(updateProjectInvite(person.id, { role: newRole }))
+                          }
+                        }
+                        isClearable={false}
+                        isDisabled={
+                          (
+                            (type === 'memberships') ? (
+                              !perms.can_change_membership || (isOwner && !isAdminOrSiteManager)
+                            ) : !perms.can_change_invite
+                          )
+                        }
                       />
-                    </button>
-                  )}
-                </td>
-              </tr>
-            )
-          })}
+                    }
+                  </td>
+                  <td className="text-end">
+                    {
+                      showActions && (
+                        <button type="button" className="btn link"
+                          aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
+                          title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
+                          onClick={() => openDeleteModal(person, isCurrentUser)}
+                        >
+                          <i
+                            className={classNames('bi', isCurrentUser ? 'bi-box-arrow-right' : 'bi-person-x')}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      )
+                    }
+                  </td>
+                </tr>
+              )
+            })
+          }
         </tbody>
       </table>
       {

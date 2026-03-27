@@ -9,9 +9,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite} from '../common/Filter'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix} from '../common/Filter'
 import Catalog from '../element/Catalog'
 
 const Catalogs = () => {
@@ -47,21 +46,21 @@ const Catalogs = () => {
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
             <FilterString value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter catalogs')} />
+              label={gettext('Filter catalogs')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix value={get(config, 'filter.catalogs.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(catalogs)} />
+              options={getUriPrefixes(catalogs)} />
           </div>
           {
             config.settings.multisite && <>
               <div className="col-sm-2">
                 <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
-                            options={config.sites} />
+                  options={config.sites} />
               </div>
               <div className="col-sm-2">
                 <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                            options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                  options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             </>
           }
@@ -77,12 +76,12 @@ const Catalogs = () => {
       {
         !isEmpty(catalogs) && (
           <ul className="list-group list-group-flush">
-          {
-            catalogs.map((catalog, index) => (
-              <Catalog key={index} config={config} catalog={catalog}
-                       filter="catalogs" filterSites={true} filterEditors={true} />
-            ))
-          }
+            {
+              catalogs.map((catalog, index) => (
+                <Catalog key={index} config={config} catalog={catalog}
+                  filter="catalogs" filterSites={true} filterEditors={true} />
+              ))
+            }
           </ul>
         )
       }

@@ -18,7 +18,7 @@ const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
 
   return !disabled && question.is_collection && (
     <button type="button" className="btn btn-success btn-xs add-value-button" onClick={handleClick}
-            title={gettext('Add answer')} aria-label={gettext('Add answer')}>
+      title={gettext('Add answer')} aria-label={gettext('Add answer')}>
       <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {upperFirst(question.verbose_name)}
     </button>
   )

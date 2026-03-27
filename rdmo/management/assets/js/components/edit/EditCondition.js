@@ -1,24 +1,22 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import ConditionInfo from '../info/ConditionInfo'
+import DeleteConditionModal from '../modals/DeleteConditionModal'
 
 import Checkbox from './common/Checkbox'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import ConditionInfo from '../info/ConditionInfo'
-import DeleteConditionModal from '../modals/DeleteConditionModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCondition = ({ condition }) => {
   const dispatch = useDispatch()
@@ -55,37 +53,47 @@ const EditCondition = ({ condition }) => {
 
       {
         parent && parent.optionset && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This condition will be added to the option set <code class="code-options">%s</code>.'),
-            [parent.optionset.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This condition will be added to the option set <code class="code-options">%s</code>.'),
+            [parent.optionset.uri])
+          } />
         </div>
       }
       {
         parent && parent.page && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This condition will be added to the page <code class="code-questions">%s</code>.'),
-            [parent.page.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This condition will be added to the page <code class="code-questions">%s</code>.'),
+            [parent.page.uri])
+          } />
         </div>
       }
       {
         parent && parent.questionset && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This condition will be added to the question set <code class="code-questions">%s</code>.'),
-            [parent.questionset.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This condition will be added to the question set <code class="code-questions">%s</code>.'),
+            [parent.questionset.uri])
+          } />
         </div>
       }
       {
         parent && parent.question && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This condition will be added to the question <code class="code-questions">%s</code>.'),
-            [parent.question.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This condition will be added to the question <code class="code-questions">%s</code>.'),
+            [parent.question.uri])
+          } />
         </div>
       }
       {
         parent && parent.task && <div className="card-body border-bottom">
-          <Html html={interpolate(gettext(
-            'This condition will be added to the task <code class="code-tasks">%s</code>.'),
-          [parent.task.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This condition will be added to the task <code class="code-tasks">%s</code>.'),
+            [parent.task.uri])
+          } />
         </div>
       }
 
@@ -110,7 +118,7 @@ const EditCondition = ({ condition }) => {
         <Checkbox element={condition} field="locked" onChange={updateCondition} />
 
         <Select element={condition} field="source" createText={gettext('Create new attribute')}
-                options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
+          options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
         <Select element={condition} field="relation" options={relations} onChange={updateCondition} />
 
@@ -135,7 +143,7 @@ const EditCondition = ({ condition }) => {
       </div>
 
       <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}
-                            onClose={closeDeleteModal} onDelete={deleteCondition} />
+        onClose={closeDeleteModal} onDelete={deleteCondition} />
     </div>
   )
 }

@@ -1,8 +1,14 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import CatalogInfo from '../info/CatalogInfo'
+import DeleteCatalogModal from '../modals/DeleteCatalogModal'
 
 import Checkbox from './common/Checkbox'
 import LanguageTabs from './common/LanguageTabs'
@@ -12,14 +18,6 @@ import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import CatalogInfo from '../info/CatalogInfo'
-import DeleteCatalogModal from '../modals/DeleteCatalogModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditCatalog = ({ catalog }) => {
   const dispatch = useDispatch()
@@ -86,17 +84,19 @@ const EditCatalog = ({ catalog }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <div>
-            <Text element={catalog} field={`title_${langCode }`} onChange={updateCatalog} />
-            <Textarea element={catalog} field={`help_${langCode }`}
-                      rows={4} onChange={updateCatalog} />
-          </div>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <div>
+              <Text element={catalog} field={`title_${langCode }`} onChange={updateCatalog} />
+              <Textarea element={catalog} field={`help_${langCode }`}
+                rows={4} onChange={updateCatalog} />
+            </div>
+          )
+        } />
 
         <OrderedMultiSelect element={catalog} field="sections" options={sections}
-                            addText={addSectionText} createText={createSectionText}
-                            onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
+          addText={addSectionText} createText={createSectionText}
+          onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
         {
           settings.groups && (
@@ -123,7 +123,7 @@ const EditCatalog = ({ catalog }) => {
       </div>
 
       <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}
-                          onClose={closeDeleteModal} onDelete={deleteCatalog} />
+        onClose={closeDeleteModal} onDelete={deleteCatalog} />
     </div>
   )
 }

@@ -2,8 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import HierarchyTree from './information/HierarchyTree'
-import ProjectForm from './information/ProjectForm'
 import ProjectDelete from './information/ProjectDelete'
+import ProjectForm from './information/ProjectForm'
 
 const Information = () => {
   const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}

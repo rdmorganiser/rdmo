@@ -3,9 +3,8 @@ import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
 import * as actionTypes from '../actions/actionTypes'
-
-import { buildUri, buildPathForAttribute } from '../utils/elements'
 import { processElementDiffs } from '../utils/diff'
+import { buildPathForAttribute, buildUri } from '../utils/elements'
 
 
 const initialState = {
@@ -64,7 +63,7 @@ export default function importsReducer(state = initialState, action) {
       }
     case actionTypes.SELECT_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
-          return {...element, import: action.value}
+        return {...element, import: action.value}
       })}
     case actionTypes.SELECT_CHANGED_IMPORT_ELEMENTS:
       return {...state, elements: state.elements.map(element => {
@@ -72,7 +71,7 @@ export default function importsReducer(state = initialState, action) {
           return {...element, import: action.value}
         }
         else if (action.value) {return {...element, import: !action.value}}
-          else { return element }
+        else { return element }
       }
       )}
     case actionTypes.SHOW_IMPORT_ELEMENTS:

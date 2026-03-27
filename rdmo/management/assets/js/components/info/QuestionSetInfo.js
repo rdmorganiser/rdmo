@@ -1,14 +1,13 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
-
-import { ExtendLink, CodeLink } from '../common/Links'
-
 import useBool from '../../hooks/useBool'
+
+import { CodeLink, ExtendLink } from '../common/Links'
 
 const QuestionSetInfo = ({ questionset }) => {
   const dispatch = useDispatch()
@@ -27,10 +26,12 @@ const QuestionSetInfo = ({ questionset }) => {
   return (
     <div className="mb-2">
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This question set is used in <b>one page</b>.',
-          'This question set is used in <b>%s pages</b>.',
-          pages.length), [pages.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This question set is used in <b>one page</b>.',
+            'This question set is used in <b>%s pages</b>.',
+            pages.length), [pages.length])
+        } />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
@@ -41,10 +42,12 @@ const QuestionSetInfo = ({ questionset }) => {
         ))
       }
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This question set is used in <b>one question set</b>.',
-          'This question set is used in <b>%s question sets</b>.',
-          questionsets.length), [questionsets.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This question set is used in <b>one question set</b>.',
+            'This question set is used in <b>%s question sets</b>.',
+            questionsets.length), [questionsets.length])
+        } />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSet} onClick={toggleQuestionSets} />}
       </p>
       {

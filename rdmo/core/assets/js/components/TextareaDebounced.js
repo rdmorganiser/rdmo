@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-
 import { useDebouncedCallback } from 'use-debounce'
 
 import Textarea from './Textarea'
@@ -16,10 +15,12 @@ const TextareaDebounced = ({ value, onChange, ...props }) => {
   return (
     <Textarea {...props}
       value={inputValue}
-      onChange={(value) => {
-        setInputValue(value)
-        debouncedOnChange(value)
-      }}
+      onChange={
+        (value) => {
+          setInputValue(value)
+          debouncedOnChange(value)
+        }
+      }
     />
   )
 }

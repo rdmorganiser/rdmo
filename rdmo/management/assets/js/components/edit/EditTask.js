@@ -1,25 +1,23 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import TaskInfo from '../info/TaskInfo'
+import DeleteTaskModal from '../modals/DeleteTaskModal'
 
 import Checkbox from './common/Checkbox'
-import MultiSelect from './common/MultiSelect'
 import LanguageTabs from './common/LanguageTabs'
+import MultiSelect from './common/MultiSelect'
 import Number from './common/Number'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import TaskInfo from '../info/TaskInfo'
-import DeleteTaskModal from '../modals/DeleteTaskModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditTask = ({ task }) => {
   const dispatch = useDispatch()
@@ -84,22 +82,24 @@ const EditTask = ({ task }) => {
           </div>
         </div>
 
-        <LanguageTabs render={(langCode) => (
-          <>
-            <Text element={task} field={`title_${langCode}`} onChange={updateTask} />
-            <Textarea element={task} field={`text_${langCode}`} rows={8} onChange={updateTask} />
-          </>
-        )} />
+        <LanguageTabs render={
+          (langCode) => (
+            <>
+              <Text element={task} field={`title_${langCode}`} onChange={updateTask} />
+              <Textarea element={task} field={`text_${langCode}`} rows={8} onChange={updateTask} />
+            </>
+          )
+        } />
 
         <MultiSelect element={task} field="conditions" options={conditions}
-                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
-                     onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
+          addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
+          onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
 
         <Select element={task} field="start_attribute" options={attributes}
-                onChange={updateTask} onEdit={editAttribute} />
+          onChange={updateTask} onEdit={editAttribute} />
 
         <Select element={task} field="end_attribute" options={attributes}
-                onChange={updateTask} onEdit={editAttribute} />
+          onChange={updateTask} onEdit={editAttribute} />
 
         <div className="row">
           <div className="col-sm-6">
@@ -137,7 +137,7 @@ const EditTask = ({ task }) => {
       </div>
 
       <DeleteTaskModal task={task} info={info} show={showDeleteModal}
-                       onClose={closeDeleteModal} onDelete={deleteTask} />
+        onClose={closeDeleteModal} onDelete={deleteTask} />
     </div>
   )
 }

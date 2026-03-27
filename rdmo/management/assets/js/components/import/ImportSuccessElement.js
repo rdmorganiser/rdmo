@@ -1,14 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { updateElement } from '../../actions/importActions'
-
 import { codeClass, verboseNames } from '../../constants/elements'
 
-import Warnings from './common/Warnings'
 import Errors from './common/Errors'
+import Warnings from './common/Warnings'
 
 const ImportSuccessElement = ({ element }) => {
   const dispatch = useDispatch()
@@ -53,8 +52,8 @@ const ImportSuccessElement = ({ element }) => {
 
       <Errors elementErrors={element.errors} />
       <Warnings elementWarnings={element.warnings}
-                elementModel={element.model} elementURI={element.uri}
-                showTitle={true} shouldShowURI={false} />
+        elementModel={element.model} elementURI={element.uri}
+        showTitle={true} shouldShowURI={false} />
     </li>
   )
 }

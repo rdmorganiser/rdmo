@@ -5,7 +5,7 @@ const initialState = {}
 export default function settingsReducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_CATALOGS_INIT:
-        return {...state, ...action.catalogs}
+      return {...state, ...action.catalogs}
     case FETCH_CATALOGS_SUCCESS:
       return {...state, ...action.catalogs}
     case FETCH_CATALOGS_ERROR:

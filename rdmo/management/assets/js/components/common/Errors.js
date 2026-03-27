@@ -51,4 +51,4 @@ ElementErrors.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-export { MainErrors, ElementErrors }
+export { ElementErrors, MainErrors }

@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import useScrollEffect from '../../hooks/useScrollEffect'
+
 import Attributes from './Attributes'
 import Catalogs from './Catalogs'
 import Conditions from './Conditions'
@@ -12,8 +14,6 @@ import QuestionSets from './QuestionSets'
 import Sections from './Sections'
 import Tasks from './Tasks'
 import Views from './Views'
-
-import useScrollEffect from '../../hooks/useScrollEffect'
 
 const Elements = () => {
   const { elementType } = useSelector((state) => state.elements)

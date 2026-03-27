@@ -46,7 +46,7 @@ const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
     return (
       <span className="dropdown">
         <button type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
-                title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
+          title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
         </button>
         <ul className="dropdown-menu">
           <li onClick={onClick}>
@@ -77,7 +77,7 @@ const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   })
 
   return <LinkButton className={className} title={locked ? gettext('Locked') : title}
-                     disabled={locked || disabled} onClick={onClick} />
+    disabled={locked || disabled} onClick={onClick} />
 }
 
 AvailableLink.propTypes = {
@@ -145,7 +145,7 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) 
   return (
     <span className="dropdown">
       <button type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
-              title={title} aria-label={title}></button>
+        title={title} aria-label={title}></button>
       <ul className="dropdown-menu dropdown-menu-end">
         <li className="dropdown-item">
           <a href={exportUrl}>{gettext('XML')}</a>
@@ -177,8 +177,8 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) 
           exportFormats.map(([key, label], index) => (
             <li className="dropdown-item" key={index}>
               <a href={`${exportUrl}${key}/`}
-                 target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-                 rel="noreferrer">{label}</a>
+                target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+                rel="noreferrer">{label}</a>
             </li>
           ))
         }
@@ -201,8 +201,7 @@ const ExtendLink = ({ extend, onClick }) => {
     'bi-chevron-down': !extend
   })
 
-  const title = extend ? gettext('Show less')
-                       : gettext('Show more')
+  const title = extend ? gettext('Show less'): gettext('Show more')
 
   return <Link className={className} title={title} onClick={onClick} />
 }
@@ -268,5 +267,5 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, ShowElementsLink,
-         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }
+export { AddLink, AvailableLink, CodeLink, CopyLink, EditLink, ErrorLink, ExportLink, ExtendLink, LockedLink,          NestedLink, ShowElementsLink,
+  ShowLink, ToggleCurrentSiteLink, WarningLink }

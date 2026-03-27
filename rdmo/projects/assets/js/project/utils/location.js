@@ -1,6 +1,8 @@
-import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
-import { projectId } from '../utils/meta'
 import { isNil } from 'lodash'
+
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
+import { projectId } from '../utils/meta'
 
 export const locationKeys = ['area', 'snapshotId', 'viewId', 'detail']
 

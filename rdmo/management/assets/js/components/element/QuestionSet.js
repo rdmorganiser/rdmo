@@ -1,23 +1,25 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, toggleElements } from '../../actions/elementActions'
-
+import { createElement, fetchElement, storeElement, toggleElements } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
-import Question from './Question'
-import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AddLink, LockedLink,
-         NestedLink, ExportLink, CodeLink, ShowElementsLink } from '../common/Links'
-import { ReadOnlyIcon } from '../common/Icons'
 import { Drag, Drop } from '../common/DragAndDrop'
+import { ElementErrors } from '../common/Errors'
+import { ReadOnlyIcon } from '../common/Icons'
+import {
+  AddLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink,
+  NestedLink, ShowElementsLink 
+} from '../common/Links'
+
+import Question from './Question'
 
 const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filterEditors=false, order }) => {
   const dispatch = useDispatch()
@@ -66,11 +68,11 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
           <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
-                   onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
+            onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
           <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
-                      locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
+            locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
           <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
-                      exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={config.settings.export_formats} full={true} />
           <Drag element={questionset} show={display == 'nested'} />
         </div>
       </div>
@@ -137,12 +139,12 @@ const QuestionSet = ({ questionset, display='list', indent=0, filter=false, filt
                 const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return <QuestionSet key={index} config={config} questionset={element}
-                                    display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
+                  display="nested" filter={filter} indent={indent + 1} order={questionSetOrder}  />
               } else {
                 const questionInfo = questionset.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return <Question key={index} config={config} question={element}
-                                 display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
+                  display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
               }
             })
           }

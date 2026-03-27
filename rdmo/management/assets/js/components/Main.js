@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { get, isEmpty, isNil } from 'lodash'
 
 import { MainErrors } from '../components/common/Errors'
-
 import Edit from '../components/edit/Edit'
 import Elements from '../components/elements/Elements'
 import Import from '../components/import/Import'

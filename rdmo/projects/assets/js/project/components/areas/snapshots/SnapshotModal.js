@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Html from 'rdmo/core/assets/js/components/Html'
-import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
+import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
-import { createSnapshot, updateSnapshot, clearProjectErrors } from '../../../actions/projectActions'
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { clearProjectErrors, createSnapshot, updateSnapshot } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 const initialForm = { title: '', description: '' }
@@ -85,9 +86,11 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
           rows={4}
         />
 
-        {errors.non_field_errors?.map((err, i) => (
-          <div key={i} className="text-danger mt-1">{err}</div>
-        ))}
+        {
+          errors.non_field_errors?.map((err, i) => (
+            <div key={i} className="text-danger mt-1">{err}</div>
+          ))
+        }
       </form>
     </Modal>
   )

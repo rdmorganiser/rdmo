@@ -1,24 +1,23 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
-
+import { useDispatch } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { updateElement } from '../../actions/importActions'
 
 import {
-  WarningLink,
-  ErrorLink,
-  ShowLink,
   AvailableLink,
+  ErrorLink,
   LockedLink,
+  ShowLink,
+  WarningLink,
 } from '../common/Links'
-import ImportSelectCheckbox from './common/ImportSelectCheckbox'
-import Errors from './common/Errors'
 
-import Warnings from './common/Warnings'
+import Errors from './common/Errors'
 import Fields from './common/Fields'
 import Form from './common/Form'
+import ImportSelectCheckbox from './common/ImportSelectCheckbox'
+import Warnings from './common/Warnings'
 
 
 const ImportElement = ({ element }) => {
@@ -36,8 +35,8 @@ const ImportElement = ({ element }) => {
         {
           (isEmpty(element.errors) && ('available' in element)) &&
            <AvailableLink available={element.available}
-                          locked={element.locked} onClick={toggleAvailable}
-                          title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
+             locked={element.locked} onClick={toggleAvailable}
+             title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
         }
         {
           !isEmpty(element.warnings) &&
@@ -50,7 +49,7 @@ const ImportElement = ({ element }) => {
         {
           (element.updated && element.locked) &&
           <LockedLink title={gettext('Locked')}
-                      locked={element.locked} onClick={updateShowField} disabled={true} />
+            locked={element.locked} onClick={updateShowField} disabled={true} />
 
         }
         <ShowLink show={element.show} onClick={updateShowField} />
@@ -60,8 +59,8 @@ const ImportElement = ({ element }) => {
         element.show && <div className="mt-2">
           <Errors elementErrors={element.errors} />
           <Warnings elementWarnings={element.warnings}
-                    elementModel={element.model} elementURI={element.uri}
-                    showTitle={true} shouldShowURI={false} />
+            elementModel={element.model} elementURI={element.uri}
+            showTitle={true} shouldShowURI={false} />
           <Form element={element} />
           <Fields element={element} />
         </div>

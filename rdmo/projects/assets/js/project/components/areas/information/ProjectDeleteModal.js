@@ -17,9 +17,7 @@ const ProjectDeleteModal = ({
   const dispatch = useDispatch()
 
   const handleDelete = () => {
-    const action = id
-      ? deleteProject(id)
-      : deleteProject()
+    const action = id? deleteProject(id): deleteProject()
 
     return dispatch(action).then(() => {
       onClose()
@@ -37,10 +35,12 @@ const ProjectDeleteModal = ({
       submitProps={{ className: 'btn btn-danger' }}
     >
       <Html
-        html={interpolate(
-          gettext('Are you sure you want to delete the project <b>%s</b>?'),
-          [project?.title ?? '']
-        )}
+        html={
+          interpolate(
+            gettext('Are you sure you want to delete the project <b>%s</b>?'),
+            [project?.title ?? '']
+          )
+        }
       />
       <p>{gettext('This action cannot be undone.')}</p>
     </Modal>

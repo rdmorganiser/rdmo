@@ -1,27 +1,25 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement, createElement, deleteElement, updateElement } from '../../actions/elementActions'
+import { createElement, deleteElement, fetchElement, storeElement, updateElement } from '../../actions/elementActions'
+import useDeleteModal from '../../hooks/useDeleteModal'
+
+import { BackButton, DeleteButton, SaveButton } from '../common/Buttons'
+import { ReadOnlyIcon } from '../common/Icons'
+import OptionSetInfo from '../info/OptionSetInfo'
+import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
 
 import Checkbox from './common/Checkbox'
+import MultiSelect from './common/MultiSelect'
 import Number from './common/Number'
 import OrderedMultiSelect from './common/OrderedMultiSelect'
-import MultiSelect from './common/MultiSelect'
 import Select from './common/Select'
 import Text from './common/Text'
 import Textarea from './common/Textarea'
 import UriPrefix from './common/UriPrefix'
-
-import { BackButton, SaveButton, DeleteButton } from '../common/Buttons'
-import { ReadOnlyIcon } from '../common/Icons'
-
-import OptionSetInfo from '../info/OptionSetInfo'
-import DeleteOptionSetModal from '../modals/DeleteOptionSetModal'
-
-import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ optionset }) => {
   const dispatch = useDispatch()
@@ -59,9 +57,11 @@ const EditOptionSet = ({ optionset }) => {
 
       {
         parent && parent.question && <div className="card-body border-bottom">
-        <Html html={interpolate(gettext(
-          'This option set will be added to the question <code class="code-questions">%s</code>.'),
-          [parent.question.uri])} />
+          <Html html={
+            interpolate(gettext(
+              'This option set will be added to the question <code class="code-questions">%s</code>.'),
+            [parent.question.uri])
+          } />
         </div>
       }
 
@@ -93,19 +93,19 @@ const EditOptionSet = ({ optionset }) => {
         </div>
 
         <OrderedMultiSelect element={optionset} field="options" options={options}
-                            addText={gettext('Add existing option')} createText={gettext('Create new option')}
-                            onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
+          addText={gettext('Add existing option')} createText={gettext('Create new option')}
+          onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
 
         <MultiSelect element={optionset} field="conditions" options={conditions}
-                     addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
-                     onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
+          addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
+          onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
         <Select element={optionset} field="provider_key" options={providers} onChange={updateOptionSet} />
 
         {
           settings.multisite && (
             <Select element={optionset} field="editors"
-                    options={sites} onChange={updateOptionSet} isMulti />
+              options={sites} onChange={updateOptionSet} isMulti />
           )
         }
       </div>
@@ -120,7 +120,7 @@ const EditOptionSet = ({ optionset }) => {
       </div>
 
       <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}
-                            onClose={closeDeleteModal} onDelete={deleteOptionSet} />
+        onClose={closeDeleteModal} onDelete={deleteOptionSet} />
     </div>
   )
 }

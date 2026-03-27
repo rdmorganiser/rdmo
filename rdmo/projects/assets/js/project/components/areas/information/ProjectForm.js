@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
-import Html from 'rdmo/core/assets/js/components/Html'
-import Input from 'rdmo/core/assets/js/components/forms/Input'
-import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
-import Select from 'rdmo/core/assets/js/components/forms/Select'
-
 import { Tooltip } from 'rdmo/core/assets/js/_bs53/components'
+
+import Input from 'rdmo/core/assets/js/components/forms/Input'
+import Select from 'rdmo/core/assets/js/components/forms/Select'
+import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'
@@ -209,43 +209,48 @@ const ProjectForm = ({
         <label className="form-label mb-0">{gettext('Catalog')}</label>
         <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
 
-        {selectCatalog == 'select' ? (
-          <Select
-            className="mt-2"
-            placeholder={gettext('Select catalog')}
-            isClearable={false}
-            isDisabled={disabled}
-            options={catalogOptions}
-            value={formData.catalog}
-            onChange={(value) => handleChange('catalog', value)}
-          />
-        ) : (
-          catalogOptions.map((opt) => (
-            <div key={opt.value} className="form-check">
-              <input
-                type="radio"
-                className="form-check-input"
-                id={`catalog-${opt.value}`}
-                name="catalog"
-                value={opt.value}
-                checked={formData.catalog === opt.value}
-                onChange={(e) => handleChange('catalog', Number(e.target.value))}
-                disabled={disabled}
-              />
-              <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
-                {opt.label}
-              </label>
-            </div>
-          ))
-        )}
+        {
+          selectCatalog == 'select' ? (
+            <Select
+              className="mt-2"
+              placeholder={gettext('Select catalog')}
+              isClearable={false}
+              isDisabled={disabled}
+              options={catalogOptions}
+              value={formData.catalog}
+              onChange={(value) => handleChange('catalog', value)}
+            />
+          ) : (
+            catalogOptions.map((opt) => (
+              <div key={opt.value} className="form-check">
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  id={`catalog-${opt.value}`}
+                  name="catalog"
+                  value={opt.value}
+                  checked={formData.catalog === opt.value}
+                  onChange={(e) => handleChange('catalog', Number(e.target.value))}
+                  disabled={disabled}
+                />
+                <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
+                  {opt.label}
+                </label>
+              </div>
+            ))
+          )
+        }
 
-        {errors.catalog?.map((err, i) => (
-          <div key={i} className="text-danger mt-1">{err}</div>
-        ))}
+        {
+          errors.catalog?.map((err, i) => (
+            <div key={i} className="text-danger mt-1">{err}</div>
+          ))
+        }
       </div>
 
       <div className="mb-3">
-        {submitMode === 'auto' &&
+        {
+          submitMode === 'auto' &&
           < div className="form-check form-switch">
             <input
               type="checkbox"
@@ -260,7 +265,8 @@ const ProjectForm = ({
             </label>
           </div>
         }
-        {submitMode == 'submit' &&
+        {
+          submitMode == 'submit' &&
           <label className="form-label fw-bold m-0" htmlFor="parentToggle">
             {gettext('Select parent project')}
           </label>
@@ -270,8 +276,8 @@ const ProjectForm = ({
         </div>
 
         <AsyncSelect
-          classNamePrefix='react-select'
-          className='react-select mt-10'
+          classNamePrefix="react-select"
+          className="react-select mt-10"
           placeholder={gettext('Search projects ...')}
           noOptionsMessage={() => gettext('No projects matching your search.')}
           loadingMessage={() => gettext('Loading ...')}
@@ -287,15 +293,19 @@ const ProjectForm = ({
           backspaceRemovesValue={true}
         />
 
-        {errors.parent?.map((err, i) => (
-          <div key={i} className="text-danger mt-1">{err}</div>
-        ))}
+        {
+          errors.parent?.map((err, i) => (
+            <div key={i} className="text-danger mt-1">{err}</div>
+          ))
+        }
 
-        {parentFetchError && (
-          <div className="text-danger mt-1">
-            {parentFetchError}
-          </div>
-        )}
+        {
+          parentFetchError && (
+            <div className="text-danger mt-1">
+              {parentFetchError}
+            </div>
+          )
+        }
         {/* TODO feature inherit parent defaults / mode create */}
         {/* <div className="form-check mt-2">
           <input

@@ -1,15 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import ReactSelect from 'react-select'
 import classNames from 'classnames'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
-import get from 'lodash/get'
+
+import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
-import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
@@ -18,9 +18,9 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
   const { meta } = useSelector((state) => state.config)
 
   const id = getId(element, field),
-        label = getLabel(element, field, meta),
-        help = getHelp(element, field, meta),
-        errors = get(element, ['errors', field])
+    label = getLabel(element, field, meta),
+    help = getHelp(element, field, meta),
+    errors = get(element, ['errors', field])
 
   const className = classNames({
     'is-invalid': !isEmpty(errors)
@@ -65,41 +65,41 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
       </div>
 
       <div className={className}>
-      {
-        values.map((value, index) => {
-          const selectValue = selectOptions.find(option => (option.value == value))
+        {
+          values.map((value, index) => {
+            const selectValue = selectOptions.find(option => (option.value == value))
 
-          return (
-            <div key={index} className="d-flex align-items-center gap-2 mb-2">
-              <div className="flex-grow-1">
-                <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
-                             options={selectOptions} value={selectValue} isDisabled={element.read_only}
-                             aria-labelledby={id} onChange={option => handleChange(option, index)} />
-              </div>
-              {
-                onEdit && <div className="d-flex align-items-center gap-1">
-                  <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
-                  <Link className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
-                        disabled={element.read_only} />
+            return (
+              <div key={index} className="d-flex align-items-center gap-2 mb-2">
+                <div className="flex-grow-1">
+                  <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+                    options={selectOptions} value={selectValue} isDisabled={element.read_only}
+                    aria-labelledby={id} onChange={option => handleChange(option, index)} />
                 </div>
-              }
-            </div>
-          )
-        })
-      }
+                {
+                  onEdit && <div className="d-flex align-items-center gap-1">
+                    <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
+                    <Link className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
+                      disabled={element.read_only} />
+                  </div>
+                }
+              </div>
+            )
+          })
+        }
       </div>
 
       <div className="d-flex align-items-center gap-2">
         <button type="button" className="btn btn-primary btn-sm" onClick={() => handleAdd()}
-                disabled={element.read_only}>
+          disabled={element.read_only}>
           {addText}
         </button>
 
         {
           onCreate &&
           <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
-                  disabled={element.read_only || isNil(element.id)}
-                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+            disabled={element.read_only || isNil(element.id)}
+            title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
             {createText}
           </button>
         }

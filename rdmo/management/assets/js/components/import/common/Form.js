@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import isUndefined from 'lodash/isUndefined'
 
 import { updateElement } from '../../../actions/importActions'
@@ -21,8 +21,7 @@ const Form = ({ element }) => {
       </div>
       <div className="col-sm-6">
         {
-          isUndefined(element.uri_path) ? <Key element={element} onChange={handleChange} />
-                                        : <UriPath element={element} onChange={handleChange} />
+          isUndefined(element.uri_path) ? <Key element={element} onChange={handleChange} />: <UriPath element={element} onChange={handleChange} />
         }
       </div>
     </div>

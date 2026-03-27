@@ -1,14 +1,13 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
-
-import { ExtendLink, CodeLink } from '../common/Links'
-
 import useBool from '../../hooks/useBool'
+
+import { CodeLink, ExtendLink } from '../common/Links'
 
 const ConditionInfo = ({ condition }) => {
   const dispatch = useDispatch()
@@ -36,10 +35,12 @@ const ConditionInfo = ({ condition }) => {
   return (
     <div className="mb-2">
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This condition is used for <b>one optionset</b>.',
-          'This condition is used for <b>%s optionsets</b>.',
-          optionsets.length), [optionsets.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This condition is used for <b>one optionset</b>.',
+            'This condition is used for <b>%s optionsets</b>.',
+            optionsets.length), [optionsets.length])
+        } />
         {optionsets.length > 0 && <ExtendLink extend={extendOptionSets} onClick={toggleOptionSets} />}
       </p>
       {
@@ -50,10 +51,12 @@ const ConditionInfo = ({ condition }) => {
         ))
       }
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This condition is used for <b>one page</b>.',
-          'This condition is used for <b>%s pages</b>.',
-          pages.length), [pages.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This condition is used for <b>one page</b>.',
+            'This condition is used for <b>%s pages</b>.',
+            pages.length), [pages.length])
+        } />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
@@ -64,10 +67,12 @@ const ConditionInfo = ({ condition }) => {
         ))
       }
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This condition is used for <b>one questionset</b>.',
-          'This condition is used for <b>%s questionsets</b>.',
-          questionsets.length), [questionsets.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This condition is used for <b>one questionset</b>.',
+            'This condition is used for <b>%s questionsets</b>.',
+            questionsets.length), [questionsets.length])
+        } />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />}
       </p>
       {
@@ -78,10 +83,12 @@ const ConditionInfo = ({ condition }) => {
         ))
       }
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This condition is used for <b>one question</b>.',
-          'This condition is used for <b>%s questions</b>.',
-          questions.length), [questions.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This condition is used for <b>one question</b>.',
+            'This condition is used for <b>%s questions</b>.',
+            questions.length), [questions.length])
+        } />
         {questions.length > 0 && <ExtendLink extend={extendQuestions} onClick={toggleQuestion} />}
       </p>
       {
@@ -92,10 +99,12 @@ const ConditionInfo = ({ condition }) => {
         ))
       }
       <p className="mb-1">
-        <Html html={interpolate(ngettext(
-          'This condition is used for <b>one task</b>.',
-          'This condition is used for <b>%s tasks</b>.',
-          tasks.length), [tasks.length])} />
+        <Html html={
+          interpolate(ngettext(
+            'This condition is used for <b>one task</b>.',
+            'This condition is used for <b>%s tasks</b>.',
+            tasks.length), [tasks.length])
+        } />
         {tasks.length > 0 && <ExtendLink extend={extendTasks} onClick={toggleTasks} />}
       </p>
       {

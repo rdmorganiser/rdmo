@@ -6,11 +6,13 @@ import Html from 'rdmo/core/assets/js/components/Html'
 const ViewInfo = ({ view }) => {
   return (
     <div className="mb-2">
-      <Html html={interpolate(ngettext(
-        'This view is used in <b>one project</b>.',
-        'This view is used in <b>%s projects</b>.',
-        view.projects_count
-      ), [view.projects_count])} />
+      <Html html={
+        interpolate(ngettext(
+          'This view is used in <b>one project</b>.',
+          'This view is used in <b>%s projects</b>.',
+          view.projects_count
+        ), [view.projects_count])
+      } />
     </div>
   )
 }

@@ -1,10 +1,12 @@
 import { get, isNil } from 'lodash'
 
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
-import * as actionTypes from './actionTypes'
+import { elementTypes } from '../constants/elements'
+import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
+import { updateLocation } from '../utils/location'
 
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
@@ -12,7 +14,6 @@ import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
-
 import ConditionsFactory from '../factories/ConditionsFactory'
 import DomainFactory from '../factories/DomainFactory'
 import OptionsFactory from '../factories/OptionsFactory'
@@ -20,9 +21,7 @@ import QuestionsFactory from '../factories/QuestionsFactory'
 import TasksFactory from '../factories/TasksFactory'
 import ViewsFactory from '../factories/ViewsFactory'
 
-import { elementTypes } from '../constants/elements'
-import { updateLocation } from '../utils/location'
-import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
+import * as actionTypes from './actionTypes'
 
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
@@ -169,7 +168,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, sections,
-                    questionsets, questions]) => {
+            questionsets, questions]) => {
             if (elementAction == 'copy') {
               delete element.sections
             }
@@ -194,14 +193,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, pages,
-                    questionsets, questions]) => {
+            questionsets, questions]) => {
             if (elementAction == 'copy') {
               delete element.pages
               delete element.parents
             }
 
             return {
-             element, attributes, conditions, pages, questionsets, questions
+              element, attributes, conditions, pages, questionsets, questions
             }
           })
         }
@@ -221,7 +220,7 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchPages('index'),
             QuestionsApi.fetchQuestionSets('index')
           ]).then(([element, attributes, optionsets, options, conditions,
-                    pages, questionsets]) => {
+            pages, questionsets]) => {
             if (elementAction == 'copy') {
               delete element.pages
               delete element.questionsets
@@ -248,17 +247,17 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             QuestionsApi.fetchQuestions('index'),
             TasksApi.fetchTasks('index'),
           ]).then(([element, attributes, conditions, pages, questionsets,
-                    questions, tasks]) => {
-              if (elementAction == 'copy') {
-                delete element.conditions
-                delete element.pages
-                delete element.questionsets
-                delete element.questions
-                delete element.tasks
-              }
+            questions, tasks]) => {
+            if (elementAction == 'copy') {
+              delete element.conditions
+              delete element.pages
+              delete element.questionsets
+              delete element.questions
+              delete element.tasks
+            }
 
             return {
-            element, attributes, conditions, pages, questionsets, questions, tasks
+              element, attributes, conditions, pages, questionsets, questions, tasks
             }
           })
         }
@@ -312,17 +311,17 @@ export function fetchElement(elementType, elementId, elementAction=null) {
           QuestionsApi.fetchQuestions('index'),
           TasksApi.fetchTasks('index'),
         ]).then(([element, attributes, optionsets, options,
-                  pages, questionsets, questions, tasks]) => {
-           if (elementAction == 'copy') {
+          pages, questionsets, questions, tasks]) => {
+          if (elementAction == 'copy') {
             delete element.optionsets
             delete element.pages
             delete element.questionsets
             delete element.questions
             delete element.tasks
           }
-           return {
-             element, attributes, optionsets, options, pages, questionsets, questions, tasks
-           }
+          return {
+            element, attributes, optionsets, options, pages, questionsets, questions, tasks
+          }
         })
         break
 
@@ -502,7 +501,7 @@ export function createElement(elementType, parent={}) {
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
-                  questionsets, questions]) => ({
+          questionsets, questions]) => ({
           element, parent, attributes, conditions, questionsets, questions
         }))
         break
@@ -515,7 +514,7 @@ export function createElement(elementType, parent={}) {
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
-                  questionsets, questions]) => ({
+          questionsets, questions]) => ({
           element, parent, attributes, conditions, questionsets, questions
         }))
         break
@@ -530,9 +529,9 @@ export function createElement(elementType, parent={}) {
           QuestionsApi.fetchWidgetTypes(),
           QuestionsApi.fetchValueTypes()
         ]).then(([element, attributes, optionsets,
-                  options, conditions]) => ({
-            element, parent, attributes, optionsets, options, conditions
-          }))
+          options, conditions]) => ({
+          element, parent, attributes, optionsets, options, conditions
+        }))
         break
 
       case 'attributes':
@@ -540,8 +539,8 @@ export function createElement(elementType, parent={}) {
           DomainFactory.createAttribute(getState().config, parent),
           DomainApi.fetchAttributes('index'),
         ]).then(([element, attributes]) => ({
-            element, parent, attributes
-          }))
+          element, parent, attributes
+        }))
         break
 
       case 'optionsets':
@@ -549,8 +548,8 @@ export function createElement(elementType, parent={}) {
           OptionsFactory.createOptionSet(getState().config, parent),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, options]) => ({
-            element, parent, options
-          }))
+          element, parent, options
+        }))
         break
 
       case 'options':
@@ -558,8 +557,8 @@ export function createElement(elementType, parent={}) {
           OptionsFactory.createOption(getState().config, parent),
           OptionsApi.fetchOptionSets('index'),
         ]).then(([element, optionsets]) => ({
-            element, parent, optionsets
-          }))
+          element, parent, optionsets
+        }))
         break
 
       case 'conditions':
@@ -568,8 +567,8 @@ export function createElement(elementType, parent={}) {
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, attributes, options]) => ({
-            element, parent, attributes, options
-          }))
+          element, parent, attributes, options
+        }))
         break
 
       case 'tasks':
@@ -579,8 +578,8 @@ export function createElement(elementType, parent={}) {
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchCatalogs('index')
         ]).then(([element, attributes, conditions, catalogs]) => ({
-            element, attributes, conditions, catalogs
-          }))
+          element, attributes, conditions, catalogs
+        }))
         break
 
       case 'views':
@@ -705,9 +704,9 @@ export function dropElement(dragElement, dropElement, mode) {
       const element = {...getState().elements.element}
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
-    dispatch(storeElement(elementTypes[dragParent.model], dragParent))
-    if (!isNil(dropParent)) {
-      dispatch(storeElement(elementTypes[dropParent.model], dropParent))
+      dispatch(storeElement(elementTypes[dragParent.model], dragParent))
+      if (!isNil(dropParent)) {
+        dispatch(storeElement(elementTypes[dropParent.model], dropParent))
       }
     }
   }

@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
-import { resetElements, importElements, selectElements, selectChangedElements,
-         showElements, showChangedElements, updateUriPrefix } from '../../actions/importActions'
-
+import {
+  importElements, resetElements, selectChangedElements,
+  selectElements, showChangedElements,          showElements, updateUriPrefix 
+} from '../../actions/importActions'
 import { useImportElements } from '../../hooks/useImportElements'
 
 
@@ -15,7 +16,7 @@ const ImportSidebar = () => {
   const { settings } = useSelector((state) => state.config)
   const { elements, success } = useSelector((state) => state.imports)
 
-   const {
+  const {
     changedElements,
   } = useImportElements(elements)
 
@@ -64,25 +65,25 @@ const ImportSidebar = () => {
 
         <div className="d-flex flex-column gap-2 px-3 my-3">
           <button type="button" className="btn btn-light border text-start"
-                  onClick={() => dispatch(selectElements(true))}>
+            onClick={() => dispatch(selectElements(true))}>
             {gettext('Select all')}
           </button>
           {
             changedElements.length > 0 && (
               <button type="button" className="btn btn-light border text-start"
-                      onClick={() => dispatch(selectChangedElements(true))}>
+                onClick={() => dispatch(selectChangedElements(true))}>
                 {gettext('Select changed')}
               </button>
             )
           }
           <button type="button" className="btn btn-light border text-start"
-                  onClick={() => dispatch(selectElements(false))}>
+            onClick={() => dispatch(selectElements(false))}>
             {gettext('Deselect all')}
           </button>
           {
             changedElements.length > 0 && (
               <button type="button" className="btn btn-light border text-start"
-                      onClick={() => dispatch(selectChangedElements(false))}>
+                onClick={() => dispatch(selectChangedElements(false))}>
                 {gettext('Deselect changed')}
               </button>
             )
@@ -95,25 +96,25 @@ const ImportSidebar = () => {
 
         <div className="d-flex flex-column gap-2 px-3 my-4">
           <button type="button" className="btn btn-light border text-start"
-                  onClick={() => dispatch(showElements(true))}>
+            onClick={() => dispatch(showElements(true))}>
             {gettext('Show all')}
           </button>
           {
             changedElements.length > 0 && (
               <button type="button" className="btn btn-light border text-start"
-                      onClick={() => dispatch(showChangedElements(true))}>
+                onClick={() => dispatch(showChangedElements(true))}>
                 {gettext('Show changes')}
               </button>
             )
           }
           <button type="button" className="btn btn-light border text-start"
-                  onClick={() => dispatch(showElements(false))}>
+            onClick={() => dispatch(showElements(false))}>
             {gettext('Hide all')}
           </button>
           {
             changedElements.length > 0 && (
               <button type="button" className="btn btn-light border text-start"
-                      onClick={() => dispatch(showChangedElements(false))}>
+                onClick={() => dispatch(showChangedElements(false))}>
                 {gettext('Hide changes')}
               </button>
             )
@@ -125,20 +126,20 @@ const ImportSidebar = () => {
 
           <div className="input-group">
             <input type="text" className="form-control"
-                   placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
-                   value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
+              placeholder={gettext('URI prefix')} aria-label={gettext('URI prefix')}
+              value={uriPrefix} onChange={event => setUriPrefix(event.target.value)} />
 
             <button type="button" className="btn btn-light border"
-                    title={gettext('Insert default URI Prefix')}
-                    aria-label={gettext('Insert default URI Prefix')}
-                    onClick={() => setUriPrefix(settings.default_uri_prefix)}>
+              title={gettext('Insert default URI Prefix')}
+              aria-label={gettext('Insert default URI Prefix')}
+              onClick={() => setUriPrefix(settings.default_uri_prefix)}>
               <span className="bi bi-magic"></span>
             </button>
 
             <button type="button" className="btn btn-primary" disabled={disabled}
-                    title={gettext('Set URI prefix for all elements')}
-                    aria-label={gettext('Set URI prefix for all elements')}
-                    onClick={handleUpdateUriPrefix}>
+              title={gettext('Set URI prefix for all elements')}
+              aria-label={gettext('Set URI prefix for all elements')}
+              onClick={handleUpdateUriPrefix}>
               <span className="bi bi-arrow-right"></span>
             </button>
           </div>

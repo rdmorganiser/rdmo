@@ -16,8 +16,8 @@ import QuestionSetManagement from './QuestionSetManagement'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
 const QuestionSet = ({ config, settings, templates, page, questionset, sets, values, disabled, isManager,
-                       parentSet, createSet, updateSet, deleteSet, copySet,
-                       createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
+  parentSet, createSet, updateSet, deleteSet, copySet,
+  createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
 
   const setPrefix = getChildPrefix(parentSet)
 
@@ -83,19 +83,25 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
                                 templates={templates}
                                 page={page}
                                 question={element}
-                                sets={sets.filter((set) => (
-                                  set.set_prefix == setPrefix
-                                ))}
-                                values={values.filter((value) => (
-                                  value.attribute == element.attribute &&
+                                sets={
+                                  sets.filter((set) => (
+                                    set.set_prefix == setPrefix
+                                  ))
+                                }
+                                values={
+                                  values.filter((value) => (
+                                    value.attribute == element.attribute &&
                                   value.set_prefix == set.set_prefix &&
                                   value.set_index == set.set_index
-                                ))}
-                                siblings={values.filter((value) => (
-                                  value.attribute == element.attribute &&
+                                  ))
+                                }
+                                siblings={
+                                  values.filter((value) => (
+                                    value.attribute == element.attribute &&
                                   value.set_prefix == set.set_prefix &&
                                   value.set_index != set.set_index
-                                ))}
+                                  ))
+                                }
                                 disabled={disabled}
                                 isManager={isManager}
                                 currentSet={set}

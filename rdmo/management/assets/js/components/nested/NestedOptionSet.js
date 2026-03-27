@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { get } from 'lodash'
 
@@ -10,7 +10,6 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
-
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
 
@@ -39,11 +38,11 @@ const NestedOptionSet = ({ optionset }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
-                            label={gettext('Filter option sets')} />
+                label={gettext('Filter option sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(optionset.elements)} />
+                options={getUriPrefixes(optionset.elements)} />
             </div>
           </div>
           <div className="input-group input-group-sm">

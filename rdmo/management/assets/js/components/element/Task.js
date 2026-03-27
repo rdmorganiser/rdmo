@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
@@ -9,13 +9,12 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, storeElement } from '../../actions/elementActions'
-
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { EditLink, CopyLink, AvailableLink, LockedLink, ExportLink, CodeLink, ToggleCurrentSiteLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
+import { AvailableLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, ToggleCurrentSiteLink } from '../common/Links'
 
 const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) => {
   const dispatch = useDispatch()
@@ -54,17 +53,18 @@ const Task = ({ task, filter=false, filterSites=false, filterEditors=false }) =>
             <ReadOnlyIcon title={gettext('This task is read only')} show={task.read_only} />
             <EditLink title={gettext('Edit task')} href={editUrl} onClick={fetchEdit} />
             <CopyLink title={gettext('Copy task')} href={copyUrl} onClick={fetchCopy} />
-            <AvailableLink title={task.available ? gettext('Make task unavailable')
-                                                 : gettext('Make task available')}
-                           available={task.available} locked={task.locked} onClick={toggleAvailable}
-                           disabled={task.read_only} />
+            <AvailableLink title={
+              task.available ? gettext('Make task unavailable'): gettext('Make task available')
+            }
+            available={task.available} locked={task.locked} onClick={toggleAvailable}
+            disabled={task.read_only} />
             <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
-                           onClick={toggleCurrentSite}
-                           show={config.settings.multisite}/>
+              onClick={toggleCurrentSite}
+              show={config.settings.multisite}/>
             <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
-                        locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
+              locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
             <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
-                        exportFormats={config.settings.export_formats} full={true} />
+              exportFormats={config.settings.export_formats} full={true} />
           </div>
         </div>
         {

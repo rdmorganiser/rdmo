@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { get, isEmpty } from 'lodash'
 
@@ -8,11 +8,10 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { toggleDescendants } from '../../actions/elementActions'
-
 import { getUriPrefixes } from '../../utils/filter'
-import { FilterString, FilterUriPrefix } from '../common/Filter'
-import { Drop } from '../common/DragAndDrop'
 
+import { Drop } from '../common/DragAndDrop'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import Catalog from '../element/Catalog'
 import Section from '../element/Section'
 
@@ -59,11 +58,11 @@ const NestedCatalog = ({ catalog }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
-                            label={gettext('Filter catalogs')} />
+                label={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(catalog.elements)} />
+                options={getUriPrefixes(catalog.elements)} />
             </div>
           </div>
           <div className="input-group input-group-sm mb-2">
