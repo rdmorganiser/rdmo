@@ -59,8 +59,6 @@ const ProjectForm = ({
       })
       .catch(() => {
         setParentFetchError(interpolate(gettext('You do not have permission to use the original parent project "%s".'), [currentProject?.parent_title]))
-        // Remove parent from formData when parent cannot be accessed
-        setFormData(prev => ({ ...prev, parent: null }))
       })
   }, [])
 
