@@ -12,7 +12,7 @@ export default function rolesReducer(state = initialState, action) {
     case FETCH_ROLES_SUCCESS:
       return { ...state, roles: action.roles }
     case FETCH_ROLES_ERROR:
-      return { ...state, errors: action.error.errors }
+      return { ...state, errors: action.errors.errors }
     default:
       return state
   }
