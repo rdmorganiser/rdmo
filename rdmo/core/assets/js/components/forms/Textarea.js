@@ -11,7 +11,9 @@ const Textarea = ({ rows, className, debounce, label, placeholder, help, isDisab
   const [textareaValue, setTextareaValue] = isNil(debounce) ? [value, () => {}] : useState(value)
 
   // use the debounce hook on the onChange callback (only when debouncing)
-  const callOnChange = isNil(debounce) ? (value) => onChange(value): useDebouncedCallback((value) => onChange(value), debounce)
+  const callOnChange = isNil(debounce) ? (
+    (value) => onChange(value)
+  ): useDebouncedCallback((value) => onChange(value), debounce)
 
   // update the local state if the value prop changes (only when debouncing)
   useEffect(() => setTextareaValue(value), [value])
