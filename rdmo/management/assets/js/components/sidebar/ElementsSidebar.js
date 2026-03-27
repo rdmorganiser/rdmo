@@ -47,7 +47,9 @@ const ElementsSidebar = () => {
   const { elementType, elementId } = useSelector((state) => state.elements)
 
   const model = invert(elementTypes)[elementType]
-  const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export'): buildApiPath(elementModules[model], elementType, elementId, 'export')
+  const exportUrl = isNil(elementId) ? (
+    buildApiPath(elementModules[model], elementType, 'export')
+  ) : buildApiPath(elementModules[model], elementType, elementId, 'export')
   const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
 
   const handleExport = (key) => {
@@ -136,7 +138,7 @@ const ElementsSidebar = () => {
       </p>
 
       <div className="text-muted px-3 mb-4">
-        <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')}/>
+        <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')} />
       </div>
 
       <h3 className="px-3 mb-2">

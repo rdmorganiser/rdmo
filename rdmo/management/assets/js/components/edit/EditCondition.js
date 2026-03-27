@@ -47,7 +47,12 @@ const EditCondition = ({ condition }) => {
           <ReadOnlyIcon title={gettext('This condition is read only')} show={condition.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeCondition}
+            disabled={condition.read_only}
+            back={true}
+          />
         </div>
       </div>
 
@@ -136,7 +141,13 @@ const EditCondition = ({ condition }) => {
 
         <Text element={condition} field="target_text" onChange={updateCondition} />
 
-        <Select element={condition} field="target_option" options={options} onChange={updateCondition} onEdit={editOption} />
+        <Select
+          element={condition}
+          field="target_option"
+          options={options}
+          onChange={updateCondition}
+          onEdit={editOption}
+        />
 
         {
           settings.multisite && (
@@ -150,7 +161,12 @@ const EditCondition = ({ condition }) => {
           {condition.id && <DeleteButton onClick={openDeleteModal} disabled={condition.read_only} />}
           <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeCondition} disabled={condition.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeCondition}
+            disabled={condition.read_only}
+            back={true}
+          />
         </div>
       </div>
 

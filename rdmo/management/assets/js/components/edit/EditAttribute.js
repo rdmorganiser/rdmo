@@ -43,7 +43,12 @@ const EditAttribute = ({ attribute }) => {
           <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
           <BackButton />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeAttribute}
+            disabled={attribute.read_only}
+            back={true}
+          />
         </div>
       </div>
 
@@ -141,7 +146,12 @@ const EditAttribute = ({ attribute }) => {
           {attribute.id && <DeleteButton onClick={openDeleteModal} disabled={attribute.read_only} />}
           <BackButton className="ms-auto" />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
-          <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} back={true}/>
+          <SaveButton
+            elementAction={elementAction}
+            onClick={storeAttribute}
+            disabled={attribute.read_only}
+            back={true}
+          />
         </div>
       </div>
 
