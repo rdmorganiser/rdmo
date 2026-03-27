@@ -29,11 +29,11 @@ const ProjectDeleteModal = ({
 
   return (
     <Modal
-      title={gettext('Delete project?')}
+      title={gettext('Delete project')}
       show={show}
       onClose={onClose}
       onSubmit={handleDelete}
-      submitLabel={gettext('Delete')}
+      submitLabel={gettext('Delete project')}
       submitProps={{ className: 'btn btn-danger' }}
     >
       <Html
