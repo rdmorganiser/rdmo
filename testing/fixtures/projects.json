@@ -471,8 +471,8 @@
     "model": "projects.project",
     "pk": 7,
     "fields": {
-      "created": "2021-10-12T07:55:13.007Z",
-      "updated": "2021-10-12T13:57:34.993Z",
+      "created": "2021-10-12T07:55:14.007Z",
+      "updated": "2021-10-12T13:57:35.993Z",
       "parent": null,
       "site": 1,
       "title": "Prune Test",
@@ -493,8 +493,8 @@
     "model": "projects.project",
     "pk": 8,
     "fields": {
-      "created": "2021-10-12T07:55:13.007Z",
-      "updated": "2021-10-12T13:57:34.993Z",
+      "created": "2021-10-12T07:55:15.007Z",
+      "updated": "2021-10-12T13:57:36.993Z",
       "parent": null,
       "site": 1,
       "title": "Prune Test",
