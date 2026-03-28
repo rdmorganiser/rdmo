@@ -15,8 +15,10 @@ import Done from '../components/main/Done'
 import Errors from '../components/main/Errors'
 import Page from '../components/main/page/Page'
 
-const Main = ({ config, settings, templates, project, interview, contact,
-  interviewActions, contactActions }) => {
+const Main = ({
+  config, settings, templates, project, interview, contact,
+  interviewActions, contactActions
+}) => {
 
   if (hasErrors(project, interview)) {
     return (
