@@ -42,11 +42,15 @@ def get_inactive_providers(context=None):
 
 
 @register.simple_tag(takes_context=True)
-def get_current_provider_ids(context={}):
-    try:
-        return [account.provider for account in context['form'].accounts]
-    except (KeyError, AttributeError):
-        return []
+def get_current_provider_ids(context=None):
+
+    context = context or {}
+
+    if 'form' in context:
+        try:
+            return [account.provider for account in context['form'].accounts]
+        except (KeyError, AttributeError):
+            return []
 
 
 @register.simple_tag()
