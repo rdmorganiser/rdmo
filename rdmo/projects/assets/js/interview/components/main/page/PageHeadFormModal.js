@@ -95,8 +95,10 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
 
                   <p className="help-block mb-0">
                     {
-                      gettext('You can populate this tab with answers from a similar tab in any ' +
-                             'project you are allowed to access.')
+                      gettext(
+                        'You can populate this tab with answers from a similar tab in any ' +
+                        'project you are allowed to access.'
+                      )
                     }
                   </p>
                 </div>

@@ -43,15 +43,21 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
     }))
   const selectedCatalog = get(config, 'params.catalog', '')
   const handleCatalogFilterChange = (value) => {
-    value ? (dispatch(configActions.updateConfig('params.catalog', value))
-    ) : dispatch(configActions.deleteConfig('params.catalog'))
+    value ? (
+      dispatch(configActions.updateConfig('params.catalog', value))
+    ) : (
+      dispatch(configActions.deleteConfig('params.catalog'))
+    )
     dispatch(projectsActions.fetchProjects())
   }
 
   const selectedRole = get(config, 'params.role', '')
   const handleRoleFilterChange = (value) => {
-    value ? (dispatch(configActions.updateConfig('params.role', value))
-    ) : dispatch(configActions.deleteConfig('params.role'))
+    value ? (
+      dispatch(configActions.updateConfig('params.role', value))
+    ) : (
+      dispatch(configActions.deleteConfig('params.role'))
+    )
     dispatch(projectsActions.fetchProjects())
   }
 
