@@ -15,8 +15,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import SelectInput from './SelectInput'
 
-const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disabled, creatable,
-  createValue, updateValue, deleteValue, copyValue }) => {
+const SelectWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled, creatable,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
   return (
     <div className="interview-widgets">
       {

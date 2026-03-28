@@ -13,8 +13,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import DateInput from './DateInput'
 
-const DateWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-  createValue, updateValue, deleteValue, copyValue }) => {
+const DateWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
   return (
     <div className="interview-widgets">
       {

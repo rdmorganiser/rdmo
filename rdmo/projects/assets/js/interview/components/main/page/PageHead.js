@@ -12,8 +12,10 @@ import PageHeadFormModal from './PageHeadFormModal'
 import PageHeadReuseModal from './PageHeadReuseModal'
 import PageTabsHelp from './PageTabsHelp'
 
-const PageHead = ({ templates, page, sets, values, disabled, currentSet,
-  activateSet, createSet, updateSet, deleteSet, copySet }) => {
+const PageHead = ({
+  templates, page, sets, values, disabled, currentSet,
+  activateSet, createSet, updateSet, deleteSet, copySet
+}) => {
 
   const currentSetValue = isNil(currentSet) ? null : (
     values.find((value) => (

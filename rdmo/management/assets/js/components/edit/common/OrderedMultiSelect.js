@@ -19,8 +19,10 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
-const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
-  handleChange, handleEdit, handleRemove, handleDrag }) => {
+const OrderedMultiSelectItem = ({
+  index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
+  handleChange, handleEdit, handleRemove, handleDrag
+}) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
 
@@ -96,8 +98,10 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
 }
 
 
-const OrderedMultiSelect = ({ element, field, options, values,
-  addText, createText, altCreateText, onChange, onCreate, onAltCreate, onEdit }) => {
+const OrderedMultiSelect = ({
+  element, field, options, values,
+  addText, createText, altCreateText, onChange, onCreate, onAltCreate, onEdit
+}) => {
 
   const { meta } = useSelector((state) => state.config)
 

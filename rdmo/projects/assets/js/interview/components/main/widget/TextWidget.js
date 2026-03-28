@@ -12,8 +12,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextInput from './TextInput'
 
-const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-  createValue, updateValue, deleteValue, copyValue }) => {
+const TextWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
   return (
     <div className="interview-widgets">
       {

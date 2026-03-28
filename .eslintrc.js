@@ -92,10 +92,8 @@ module.exports = {
 
     // Ensure correct multiline imports
     'object-curly-newline': ['error', {
-      ImportDeclaration: {
-        multiline: true,
-        consistent: true
-      }
+      multiline: true,
+      consistent: true
     }],
 
     // JSX: require a newline before the first prop when the JSX spans multiple lines and there is more than one prop

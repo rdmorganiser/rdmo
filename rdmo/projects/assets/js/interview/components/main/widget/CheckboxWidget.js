@@ -12,8 +12,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-  createValue, updateValue, deleteValue, copyValue }) => {
+const CheckboxWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
 
   const handleCreateValue = (attrsList) => {
     attrsList.forEach(attrs => {

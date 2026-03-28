@@ -13,8 +13,10 @@ import QuestionText from './QuestionText'
 import QuestionWarning from './QuestionWarning'
 import QuestionWidget from './QuestionWidget'
 
-const Question = ({ config, settings, templates, page, question, sets, values, siblings, disabled, isManager,
-  currentSet, createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
+const Question = ({
+  config, settings, templates, page, question, sets, values, siblings, disabled, isManager,
+  currentSet, createValue, updateValue, deleteValue, copyValue, fetchContact
+}) => {
   return checkQuestion(question, currentSet) && (
     <div className={`interview-question col-md-${question.width || '12'}`}>
       <QuestionOptional question={question} />

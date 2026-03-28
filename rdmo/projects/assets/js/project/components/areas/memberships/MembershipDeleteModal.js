@@ -8,8 +8,10 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { deleteProjectInvite, deleteProjectMember, leaveProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
-const MembershipDeleteModal = ({ type, show, person, onClose, isAdminOrSiteManager = false,
-  isCurrentUser = false }) => {
+const MembershipDeleteModal = ({
+  type, show, person, onClose, isAdminOrSiteManager = false,
+  isCurrentUser = false
+}) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) ?? {}
   const errors = useFieldErrors()

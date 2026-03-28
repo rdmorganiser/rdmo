@@ -19,8 +19,10 @@ import {
   AddLink, AvailableLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, NestedLink, ToggleCurrentSiteLink
 } from '../common/Links'
 
-const Catalog = ({ catalog, display = 'list', filter = false, filterSites = false, filterEditors = false,
-  backButton = false }) => {
+const Catalog = ({
+  catalog, display = 'list', filter = false, filterSites = false, filterEditors = false,
+  backButton = false
+}) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
