@@ -98,7 +98,8 @@ const EditSection = ({ section }) => {
           )
         } />
 
-        <OrderedMultiSelect element={section} field="pages" options={pages}
+        <OrderedMultiSelect
+          element={section} field="pages" options={pages}
           addText={addPageText} createText={createPageText}
           onChange={updateSection} onCreate={createPage} onEdit={editPage} />
 
@@ -118,7 +119,8 @@ const EditSection = ({ section }) => {
         </div>
       </div>
 
-      <DeleteSectionModal section={section} info={info} show={showDeleteModal}
+      <DeleteSectionModal
+        section={section} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteSection} />
     </div>
   )

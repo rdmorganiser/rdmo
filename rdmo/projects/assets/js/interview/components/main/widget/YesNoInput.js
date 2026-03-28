@@ -24,7 +24,8 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
     <div className="interview-input yesno-input">
       <div className="buttons-wrapper">
         {buttons}
-        <fieldset className={classnames}
+        <fieldset
+          className={classnames}
           aria-labelledby={getQuestionTextId(question)}
           aria-describedby={getQuestionHelpId(question)}>
           <label>

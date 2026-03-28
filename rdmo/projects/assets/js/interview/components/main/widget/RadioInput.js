@@ -59,7 +59,8 @@ const RadioInput = ({ question, value, options, disabled, updateValue, buttons }
     <div ref={ref} className="interview-input radio-input">
       <div className="buttons-wrapper">
         {buttons}
-        <fieldset className={classnames}
+        <fieldset
+          className={classnames}
           aria-labelledby={getQuestionTextId(question)}
           aria-describedby={getQuestionHelpId(question)}>
           {

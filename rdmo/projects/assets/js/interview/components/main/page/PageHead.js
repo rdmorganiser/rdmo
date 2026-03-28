@@ -132,17 +132,21 @@ const PageHead = ({ templates, page, sets, values, disabled, currentSet,
                 <div className="interview-page-tabs-buttons">
                   {
                     page.attribute && (
-                      <button role="button" className="btn-link fa fa-pencil"
+                      <button
+                        role="button" className="btn-link fa fa-pencil"
                         title={labels.edit} onClick={updateModal.open} />
                     )
                   }
-                  <button role="button" className="btn-link fa fa-copy"
+                  <button
+                    role="button" className="btn-link fa fa-copy"
                     title={labels.copy} aria-label={labels.copy}
                     onClick={copyModal.open} />
-                  <button role="button" className="btn-link fa fa-arrow-circle-down"
+                  <button
+                    role="button" className="btn-link fa fa-arrow-circle-down"
                     title={labels.reuse} aria-label={labels.reuse}
                     onClick={importModal.open} />
-                  <button role="button" className="btn-link fa fa-trash"
+                  <button
+                    role="button" className="btn-link fa fa-trash"
                     title={labels.remove} aria-label={labels.remove}
                     onClick={deleteModal.open} />
                 </div>

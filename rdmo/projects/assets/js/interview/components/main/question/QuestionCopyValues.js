@@ -6,7 +6,8 @@ import { isEmptyValue } from '../../../utils/value'
 
 const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copyValue }) => {
   const button = question.widget_type == 'checkbox' ? (
-    <button className="btn btn-link btn-apply-to-all" onClick={() => copyValue(question, ...values)}
+    <button
+      className="btn btn-link btn-apply-to-all" onClick={() => copyValue(question, ...values)}
       title={gettext('Apply this answer to all tabs where this question is empty')}
       aria-label={gettext('Apply this answer to all tabs where this question is empty')}>
       <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i>

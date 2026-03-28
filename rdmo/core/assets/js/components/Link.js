@@ -14,7 +14,8 @@ const Link = ({ href = '', title, className, disabled = false, onClick, children
   })
 
   return (
-    <a href={href} title={title} className={classnames}
+    <a
+      href={href} title={title} className={classnames}
       onClick={event => handleClick(event)}>
       {children}
     </a>

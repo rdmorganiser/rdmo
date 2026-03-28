@@ -36,7 +36,8 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
       <div className="interview-widget">
         <div className="interview-input checkbox-input">
           <div className="buttons-wrapper">
-            <fieldset className="checkbox-control"
+            <fieldset
+              className="checkbox-control"
               aria-labelledby={getQuestionTextId(question)}
               aria-describedby={getQuestionHelpId(question)}>
               {

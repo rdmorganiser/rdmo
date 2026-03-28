@@ -98,6 +98,9 @@ module.exports = {
       }
     }],
 
+    // JSX: require a newline before the first prop when the JSX spans multiple lines and there is more than one prop
+    'react/jsx-first-prop-new-line': ['error', 'multiline-multiprop'],
+
     // JSX: wrap multiline expressions in parens, opening paren on a new line
     'react/jsx-wrap-multilines': [
       'error',

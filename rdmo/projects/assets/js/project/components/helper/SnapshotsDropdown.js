@@ -39,14 +39,16 @@ const SnapshotsDropdown = ({ onChange }) => {
       </button>
 
       <ul className="dropdown-menu">
-        <button className={classNames('dropdown-item', { active: isNil(snapshotId) })}
+        <button
+          className={classNames('dropdown-item', { active: isNil(snapshotId) })}
           onClick={(event) => handleClick(event, null)}>
           {currentLabel}
         </button>
         {
           snapshots.map((snapshot) => (
             <li key={snapshot.id}>
-              <button className={classNames('dropdown-item', {active: snapshot.id == snapshotId})}
+              <button
+                className={classNames('dropdown-item', {active: snapshot.id == snapshotId})}
                 onClick={(event) => handleClick(event, snapshot)}>
                 {snapshot.title}
               </button>

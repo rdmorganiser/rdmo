@@ -35,17 +35,20 @@ const Attributes = () => {
       <div className="card-body pb-0">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
-            <FilterString value={get(config, 'filter.attributes.search', '')} onChange={updateFilterString}
+            <FilterString
+              value={get(config, 'filter.attributes.search', '')} onChange={updateFilterString}
               label={gettext('Filter attributes')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.attributes.uri_prefix', '')} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix
+              value={get(config, 'filter.attributes.uri_prefix', '')} onChange={updateFilterUriPrefix}
               options={getUriPrefixes(attributes)} />
           </div>
           {
             config.settings.multisite && (
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                <FilterSite
+                  value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                   options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             )
@@ -58,7 +61,8 @@ const Attributes = () => {
           <ul className="list-group list-group-flush">
             {
               attributes.map((attribute, index) => (
-                <Attribute key={index} config={config} attribute={attribute}
+                <Attribute
+                  key={index} config={config} attribute={attribute}
                   filter="attributes" filterEditors={true} />
               ))
             }

@@ -8,7 +8,8 @@ const LinkButton = ({ title, className, disabled = false, onClick, children }) =
   }
 
   return (
-    <button type="button" title={title} aria-label={title}
+    <button
+      type="button" title={title} aria-label={title}
       className={'btn-link ' + className} disabled={disabled}
       onClick={event => handleClick(event)}>
       {children}

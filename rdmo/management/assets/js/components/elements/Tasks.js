@@ -47,22 +47,26 @@ const Tasks = () => {
       <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={get(config, 'filter.tasks.search', '')} onChange={updateFilterString}
+            <FilterString
+              value={get(config, 'filter.tasks.search', '')} onChange={updateFilterString}
               label={gettext('Filter tasks')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.tasks.uri_prefix', '')} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix
+              value={get(config, 'filter.tasks.uri_prefix', '')} onChange={updateFilterUriPrefix}
               options={getUriPrefixes(tasks)} />
           </div>
           {
             config.settings.multisite && (
               <>
                 <div className="col-sm-2">
-                  <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                  <FilterSite
+                    value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
                     options={config.sites} />
                 </div>
                 <div className="col-sm-2">
-                  <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                  <FilterSite
+                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                     options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               </>
@@ -85,7 +89,8 @@ const Tasks = () => {
           <ul className="list-group list-group-flush">
             {
               tasks.map((task, index) => (
-                <Task key={index} config={config} task={task}
+                <Task
+                  key={index} config={config} task={task}
                   filter="tasks" filterSites={true} filterEditors={true} />
               ))
             }

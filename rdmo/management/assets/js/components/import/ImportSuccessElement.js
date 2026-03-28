@@ -51,7 +51,8 @@ const ImportSuccessElement = ({ element }) => {
       </div>
 
       <Errors elementErrors={element.errors} />
-      <Warnings elementWarnings={element.warnings}
+      <Warnings
+        elementWarnings={element.warnings}
         elementModel={element.model} elementURI={element.uri}
         showTitle={true} shouldShowURI={false} />
     </li>

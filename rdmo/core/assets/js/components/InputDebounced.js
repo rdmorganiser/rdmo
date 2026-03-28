@@ -13,7 +13,8 @@ const InputDebounced = ({ value, onChange, ...props }) => {
   const debouncedOnChange = useDebouncedCallback((value) => onChange(value), 500)
 
   return (
-    <Input {...props}
+    <Input
+      {...props}
       value={inputValue}
       onChange={
         (value) => {

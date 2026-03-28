@@ -62,12 +62,15 @@ const View = ({ view, filter = false, filterSites = false, filterEditors = false
               }
               available={view.available} locked={view.locked} onClick={toggleAvailable}
               disabled={view.read_only} />
-            <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? view.sites.includes(siteId) : true}
+            <ToggleCurrentSiteLink
+              hasCurrentSite={config.settings.multisite ? view.sites.includes(siteId) : true}
               onClick={toggleCurrentSite}
               show={config.settings.multisite} />
-            <LockedLink title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
+            <LockedLink
+              title={view.locked ? gettext('Unlock view') : gettext('Lock view')}
               locked={view.locked} onClick={toggleLocked} disabled={view.read_only} />
-            <ExportLink title={gettext('Export view')} exportUrl={exportUrl}
+            <ExportLink
+              title={gettext('Export view')} exportUrl={exportUrl}
               exportFormats={config.settings.export_formats} />
           </div>
         </div>

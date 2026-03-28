@@ -50,11 +50,13 @@ const NestedPage = ({ page }) => {
         <div className="card-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
+              <FilterString
+                value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
                 label={gettext('Filter pages')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix
+                value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
                 options={getUriPrefixes(page.elements)} />
             </div>
           </div>

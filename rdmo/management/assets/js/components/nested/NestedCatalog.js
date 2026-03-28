@@ -57,11 +57,13 @@ const NestedCatalog = ({ catalog }) => {
         <div className="card-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
+              <FilterString
+                value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
                 label={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix
+                value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
                 options={getUriPrefixes(catalog.elements)} />
             </div>
           </div>
