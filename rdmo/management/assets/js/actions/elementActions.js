@@ -110,7 +110,7 @@ export function fetchElementsError(error) {
 
 // fetch element
 
-export function fetchElement(elementType, elementId, elementAction=null) {
+export function fetchElement(elementType, elementId, elementAction = null) {
   const pendingId = `fetchElement/${elementType}/${elementId}` + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch, getState) {
@@ -464,7 +464,7 @@ export function storeElementError(element, error) {
 
 // createElement
 
-export function createElement(elementType, parent={}) {
+export function createElement(elementType, parent = {}) {
   const pendingId = `createElement/${elementType}`
 
   return function(dispatch, getState) {

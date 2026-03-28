@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const Link = ({ href='', title, className, disabled=false, onClick, children }) => {
+const Link = ({ href = '', title, className, disabled = false, onClick, children }) => {
   const handleClick = (event) => {
     event.preventDefault()
     if (!disabled) onClick()

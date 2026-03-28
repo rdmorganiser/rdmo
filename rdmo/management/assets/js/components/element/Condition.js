@@ -10,7 +10,7 @@ import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/Links'
 
-const Condition = ({ condition, filter=false, filterEditors=false }) => {
+const Condition = ({ condition, filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)

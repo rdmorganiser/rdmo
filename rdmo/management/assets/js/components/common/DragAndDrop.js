@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import { dropElement } from '../../actions/elementActions'
 
-const Drag = ({ element, show=true }) => {
+const Drag = ({ element, show = true }) => {
   const dragRef = useRef(null)
 
   const [{}, drag] = useDrag(() => ({
@@ -32,7 +32,7 @@ Drag.propTypes = {
   show: PropTypes.bool
 }
 
-const Drop = ({ element, indent=0, mode='in', children=null }) => {
+const Drop = ({ element, indent = 0, mode = 'in', children = null }) => {
   const dispatch = useDispatch()
 
   const dropRef = useRef(null)
