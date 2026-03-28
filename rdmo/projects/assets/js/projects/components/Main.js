@@ -415,7 +415,7 @@ const Main = () => {
                   mode="edit"
                   currentProject={selectedProject}
                   catalogs={catalogs ?? []}
-                  onSaved={
+                  onSave={
                     () => {
                       handleCloseEdit()
                       dispatch(projectsActions.refetchLoadedPages())
@@ -436,7 +436,7 @@ const Main = () => {
                   mode="copy"
                   currentProject={selectedProject}
                   catalogs={catalogs ?? []}
-                  onSaved={handleCloseCopy}
+                  onSave={handleCloseCopy}
                 />
               )
             }
