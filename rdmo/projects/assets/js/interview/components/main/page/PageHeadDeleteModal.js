@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 const PageHeadDeleteModal = ({ name, show, onClose, onSubmit }) => {
@@ -11,12 +12,9 @@ const PageHeadDeleteModal = ({ name, show, onClose, onSubmit }) => {
       onClose={onClose} onSubmit={onSubmit}>
       {
         name ? (
-          <p dangerouslySetInnerHTML={
-            {
-              __html: interpolate(gettext('You are about to permanently delete the tab named: <strong>%s</strong>'),
-                [name])
-            }
-          }></p>
+          <Html html={
+            interpolate(gettext('You are about to permanently delete the tab named: <strong>%s</strong>'), [name])
+          } />
         ) : (
           <p>{gettext('You are about to permanently delete this tab.')}</p>
         )
