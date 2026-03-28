@@ -23,7 +23,7 @@ const Select = ({
   const getValue = () => (
     isArray(value) ? (
       options.filter(option => (value.includes(option.value)))
-    ): options.find(option => (option.value == value))
+    ) : options.find(option => (option.value == value))
   )
 
   const handleChange = (option) => {

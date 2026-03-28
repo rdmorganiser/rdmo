@@ -17,7 +17,7 @@ const ProjectDeleteModal = ({
   const dispatch = useDispatch()
 
   const handleDelete = () => {
-    const action = id? deleteProject(id): deleteProject()
+    const action = id ? deleteProject(id) : deleteProject()
 
     return dispatch(action).then(() => {
       onClose()

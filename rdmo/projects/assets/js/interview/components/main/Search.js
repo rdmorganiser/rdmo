@@ -12,7 +12,7 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
   // compile a list of possible options to restrict the search, only include optionsets without provider
-  const options = isNil(question) ? []: question.optionsets.filter(optionset => !optionset.has_provider)
+  const options = isNil(question) ? [] : question.optionsets.filter(optionset => !optionset.has_provider)
     .flatMap(optionset => optionset.options.map(option => option.id))
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {

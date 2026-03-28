@@ -16,12 +16,11 @@ import { BackButton } from '../common/Buttons'
 import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import {
-  AddLink, AvailableLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink, NestedLink,
-  ToggleCurrentSiteLink 
+  AddLink, AvailableLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, NestedLink, ToggleCurrentSiteLink
 } from '../common/Links'
 
-const Catalog = ({ catalog, display='list', filter=false, filterSites=false, filterEditors=false,
-  backButton=false }) => {
+const Catalog = ({ catalog, display = 'list', filter = false, filterSites = false, filterEditors = false,
+  backButton = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
@@ -61,7 +60,7 @@ const Catalog = ({ catalog, display='list', filter=false, filterSites=false, fil
           <CopyLink title={gettext('Copy catalog')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add section')} onClick={createSection} disabled={catalog.read_only} />
           <AvailableLink title={
-            catalog.available ? gettext('Make catalog unavailable'): gettext('Make catalog available')
+            catalog.available ? gettext('Make catalog unavailable') : gettext('Make catalog available')
           }
           available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
           disabled={catalog.read_only} />

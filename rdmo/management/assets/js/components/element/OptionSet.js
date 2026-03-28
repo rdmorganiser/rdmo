@@ -13,7 +13,7 @@ import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import { AddLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink, NestedLink } from '../common/Links'
 
-const OptionSet = ({ optionset, display='list', filter=false, filterEditors=false }) => {
+const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
