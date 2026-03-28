@@ -9,4 +9,4 @@ def get_projects_ordered_by_last_changed():
         last_changed=Coalesce(Greatest(Subquery(
             Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
         ), 'updated'), 'updated')
-    ).order_by('last_changed')
+    ).order_by('-last_changed')

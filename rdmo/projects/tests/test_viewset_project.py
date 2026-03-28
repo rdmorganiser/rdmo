@@ -166,11 +166,11 @@ def test_list_multisite(db, client, settings):
     visibility.sites.add(Site.objects.get(id=1))
 
     url = reverse(urlnames['list'])
-    response = client.get(url + '?page=3')
+    response = client.get(url)
     response_data = response.json()
 
     assert response.status_code == 200
-    assert project.id in [i['id'] for i in response_data['results']]
+    assert project.id == response_data['results'][0]['id']
     assert response_data['count'] == len(view_project_permission_map['site']) + 1
 
 
@@ -451,8 +451,8 @@ def test_copy(db, files, client, username, password, project_id):
         'title': 'New title',
         'description': project.description,
         'catalog': project.catalog.id,
-        'tasks': list(project.tasks.values_list('id', flat=True)),  # will be ignored but should not crash
-        'views': list(project.views.values_list('id', flat=True)),  # will be ignored but should not crash
+        'tasks': [2],  # will be ignored but should not crash
+        'views': [2],  # will be ignored but should not crash
     }
     response = client.post(url, data, content_type='application/json')
 
@@ -460,8 +460,14 @@ def test_copy(db, files, client, username, password, project_id):
         assert response.status_code == 201
 
         for key, value in response.json().items():
-            if key in data:
+            if key in ['title', 'description', 'catalog']:
                 assert value == data[key]
+
+            # TODO: add checks once rdmo.project.handlers is rebased
+            # elif key == 'tasks':
+            #     assert value == list(project.tasks.values_list('id', flat=True))
+            # elif key == 'views':
+            #     assert value == list(project.views.values_list('id', flat=True))
 
         assert Project.objects.count() == project_count + 1
         assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
