@@ -12,9 +12,9 @@ import HelpText from './HelpText'
 const Radio = ({ element, field, options, onChange }) => {
   const { meta } = useSelector((state) => state.config)
 
-  const label = getLabel(element, field, meta),
-    help = getHelp(element, field, meta),
-    errors = get(element, ['errors', field])
+  const label = getLabel(element, field, meta)
+  const help = getHelp(element, field, meta)
+  const errors = get(element, ['errors', field])
 
   const value = isNil(element[field]) ? '' : element[field]
 

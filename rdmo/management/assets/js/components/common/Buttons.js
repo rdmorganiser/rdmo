@@ -14,7 +14,8 @@ BackButton.propTypes = {
 }
 
 const SaveButton = ({ elementAction, onClick, disabled = false, back = false }) => {
-  let text, className
+  let text
+  let className
 
   if (elementAction == 'create') {
     text = back ? gettext('Create') : gettext('Create and continue editing')

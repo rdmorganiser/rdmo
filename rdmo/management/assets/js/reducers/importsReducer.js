@@ -15,7 +15,9 @@ const initialState = {
 }
 
 export default function importsReducer(state = initialState, action) {
-  let index, elements, elementsMap = {}
+  let index
+  let elements
+  let elementsMap = {}
 
   switch (action.type) {
     case actionTypes.FETCH_ELEMENTS_INIT:
