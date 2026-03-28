@@ -106,10 +106,10 @@ const Main = () => {
     closeDelete()
   }
 
-  const displayMessage = interpolate(gettext('%s of %s projects are displayed'),
-    [projects.length > projectsCount ? (
-      projectsCount
-    ) : projects.length, projectsCount])
+  const displayMessage = interpolate(
+    gettext('%s of %s projects are displayed'),
+    [projects.length > projectsCount ? projectsCount : projects.length, projectsCount]
+  )
 
   const getProgressString = (row) => {
     return (row.progress_total ? interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
@@ -230,9 +230,15 @@ const Main = () => {
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   const visibleColumns = myProjects ? (
     ['title', 'progress', 'role', 'last_changed', 'actions']
-  ) : ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
+  ) : (
+    ['title', 'progress', 'owner', 'created', 'last_changed', 'actions']
+  )
 
-  const columnWidths = myProjects ? ['40%', '16%', '20%', '18%', '6%'] : ['30%', '16%', '16%', '16%', '16%', '6%']
+  const columnWidths = myProjects ? (
+    ['40%', '16%', '20%', '18%', '6%']
+  ) : (
+    ['30%', '16%', '16%', '16%', '16%', '6%']
+  )
 
   const cellFormatters = {
     title: (_content, row) => renderTitle(row),

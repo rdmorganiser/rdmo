@@ -52,9 +52,11 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
 
         <p className="help-block mb-0">
           {
-            gettext('You can populate this tab with answers from a similar tab in any ' +
-                   'project you have access to. This only affects questions that ' +
-                   'don\'t already have an answer.')
+            gettext(
+              'You can populate this tab with answers from a similar tab in any ' +
+              'project you have access to. This only affects questions that ' +
+              'don\'t already have an answer.'
+            )
           }
         </p>
       </div>

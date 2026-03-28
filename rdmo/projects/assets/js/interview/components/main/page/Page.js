@@ -117,15 +117,15 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     values={
                       values.filter((value) => (
                         value.attribute == element.attribute &&
-                      value.set_prefix == currentSetPrefix &&
-                      value.set_index == currentSetIndex
+                        value.set_prefix == currentSetPrefix &&
+                        value.set_index == currentSetIndex
                       ))
                     }
                     siblings={
                       values.filter((value) => (
                         value.attribute == element.attribute &&
-                      value.set_prefix == currentSetPrefix &&
-                      value.set_index != currentSetIndex
+                        value.set_prefix == currentSetPrefix &&
+                        value.set_index != currentSetIndex
                       ))
                     }
                     disabled={disabled}
