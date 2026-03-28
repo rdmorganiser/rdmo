@@ -60,6 +60,10 @@ module.exports = {
 
     // Enforce spaces around =, +, ==, ?, :, etc.
     'space-infix-ops': 'error',
+
+    // Enforce separate const declarations
+    'one-var': ['error', 'never'],
+
     // Import order
     'simple-import-sort/imports': ['error', {
       groups: [

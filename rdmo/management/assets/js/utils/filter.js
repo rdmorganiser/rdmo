@@ -4,10 +4,11 @@ import isUndefined from 'lodash/isUndefined'
 import toNumber from 'lodash/toNumber'
 
 const filterElement = (config, filter, filterSites, filterEditors, element) => {
-  const strings = get(config, `filter.${filter}.search`, '').trim().split(' '),
-    uriPrefix = get(config, `filter.${filter}.uri_prefix`, ''),
-    site = get(config, 'filter.sites', ''),
-    editor = get(config, 'filter.editors', '')
+  const strings = get(config, `filter.${filter}.search`, '').trim().split(' ')
+  const uriPrefix = get(config, `filter.${filter}.uri_prefix`, '')
+  const site = get(config, 'filter.sites', '')
+  const editor = get(config, 'filter.editors', '')
+
   return (
     strings.some(search => filterSearch(search, element)) &&
     filterUriPrefix(uriPrefix, element) &&

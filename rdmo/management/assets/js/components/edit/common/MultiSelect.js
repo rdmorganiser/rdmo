@@ -17,10 +17,10 @@ import HelpText from './HelpText'
 const MultiSelect = ({ element, field, options, addText, createText, onChange, onCreate, onEdit }) => {
   const { meta } = useSelector((state) => state.config)
 
-  const id = getId(element, field),
-    label = getLabel(element, field, meta),
-    help = getHelp(element, field, meta),
-    errors = get(element, ['errors', field])
+  const id = getId(element, field)
+  const label = getLabel(element, field, meta)
+  const help = getHelp(element, field, meta)
+  const errors = get(element, ['errors', field])
 
   const className = classNames({
     'is-invalid': !isEmpty(errors)
