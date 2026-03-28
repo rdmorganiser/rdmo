@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import { useDispatch, useSelector } from 'react-redux'
-import { formatISO, set, isValid, parseISO } from 'date-fns'
+import { formatISO, isValid, parseISO, set } from 'date-fns'
 import { get } from 'lodash'
 
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { Select } from 'rdmo/core/assets/js/components'
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
-import { Select } from 'rdmo/core/assets/js/components'
-
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as projectsActions from '../../actions/projectsActions'
 
 const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
@@ -65,14 +64,18 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
     if (type.endsWith('_after')) {
       if (date) {
         const startOfDayDate = set(date, { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-        dispatch(configActions.updateConfig(`params.${type}`, formatISO(startOfDayDate, { representation: 'complete' })))
+        dispatch(
+          configActions.updateConfig(`params.${type}`, formatISO(startOfDayDate, { representation: 'complete' }))
+        )
       } else {
         dispatch(configActions.deleteConfig(`params.${type}`))
       }
     } else if (type.endsWith('_before')) {
       if (date) {
         const endOfDayDate = set(date, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 })
-        dispatch(configActions.updateConfig(`params.${type}`, formatISO(endOfDayDate, { representation: 'complete' })))
+        dispatch(
+          configActions.updateConfig(`params.${type}`, formatISO(endOfDayDate, { representation: 'complete' }))
+        )
       } else {
         dispatch(configActions.deleteConfig(`params.${type}`))
       }
@@ -94,30 +97,71 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
 
   return (
     <>
-      {showFilters && (
-        <div className="mt-2">
-          <div className="row">
-            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
-              <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
-              <Select
-                onChange={handleCatalogFilterChange}
-                options={catalogOptions ?? []}
-                placeholder={gettext('Select catalog')}
-                value={selectedCatalog}
-              />
-            </div>
-            <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
-              <label className="form-label text-secondary">{gettext('Filter by role')}</label>
-              <Select
-                onChange={handleRoleFilterChange}
-                options={roleOptions}
-                placeholder={gettext('Select role')}
-                value={selectedRole}
-              />
-            </div>
-            {isAdminOrSiteManager && (
+      {
+        showFilters && (
+          <div className="mt-2">
+            <div className="row">
+              <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
+                <label className="form-label text-secondary">{gettext('Filter by catalog')}</label>
+                <Select
+                  onChange={handleCatalogFilterChange}
+                  options={catalogOptions ?? []}
+                  placeholder={gettext('Select catalog')}
+                  value={selectedCatalog}
+                />
+              </div>
+              <div className={`col-md-${isAdminOrSiteManager ? 2 : 4}`}>
+                <label className="form-label text-secondary">{gettext('Filter by role')}</label>
+                <Select
+                  onChange={handleRoleFilterChange}
+                  options={roleOptions}
+                  placeholder={gettext('Select role')}
+                  value={selectedRole}
+                />
+              </div>
+              {
+                isAdminOrSiteManager && (
+                  <div className="col-md-4">
+                    <label className="form-label text-muted">{gettext('Filter by created date')}</label>
+                    <div className="projects-datepicker">
+                      <div className="row">
+                        <div className="col-md-6">
+                          <DatePicker
+                            autoComplete="off"
+                            className="form-control"
+                            dateFormat={getDateFormat()}
+                            id="created-after-date-picker"
+                            isClearable
+                            locale={getLocale()}
+                            onChange={date => handleDateChange('created_after', date)}
+                            onChangeRaw={event => handleDateChangeRaw('created_after', event)}
+                            placeholderText={gettext('Select start date')}
+                            selected={getSelected('created_after')}
+                            openToDate={getSelected('created_after')}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <DatePicker
+                            autoComplete="off"
+                            className="form-control"
+                            dateFormat={getDateFormat()}
+                            id="created-before-date-picker"
+                            isClearable
+                            locale={getLocale()}
+                            onChange={date => handleDateChange('created_before', date)}
+                            onChangeRaw={event => handleDateChangeRaw('created_before', event)}
+                            placeholderText={gettext('Select end date')}
+                            selected={getSelected('created_before')}
+                            openToDate={getSelected('created_before')}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
               <div className="col-md-4">
-                <label className="form-label text-muted">{gettext('Filter by created date')}</label>
+                <label className="form-label text-muted">{gettext('Filter by last changed date')}</label>
                 <div className="projects-datepicker">
                   <div className="row">
                     <div className="col-md-6">
@@ -125,14 +169,14 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                         autoComplete="off"
                         className="form-control"
                         dateFormat={getDateFormat()}
-                        id="created-after-date-picker"
+                        id="last-changed-after-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('created_after', date)}
-                        onChangeRaw={event => handleDateChangeRaw('created_after', event)}
+                        onChange={date => handleDateChange('last_changed_after', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed_after', event)}
                         placeholderText={gettext('Select start date')}
-                        selected={getSelected('created_after')}
-                        openToDate={getSelected('created_after')}
+                        selected={getSelected('last_changed_after')}
+                        openToDate={getSelected('last_changed_after')}
                       />
                     </div>
                     <div className="col-md-6">
@@ -140,60 +184,23 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
                         autoComplete="off"
                         className="form-control"
                         dateFormat={getDateFormat()}
-                        id="created-before-date-picker"
+                        id="last-changed-before-date-picker"
                         isClearable
                         locale={getLocale()}
-                        onChange={date => handleDateChange('created_before', date)}
-                        onChangeRaw={event => handleDateChangeRaw('created_before', event)}
+                        onChange={date => handleDateChange('last_changed_before', date)}
+                        onChangeRaw={event => handleDateChangeRaw('last_changed_before', event)}
                         placeholderText={gettext('Select end date')}
-                        selected={getSelected('created_before')}
-                        openToDate={getSelected('created_before')}
+                        selected={getSelected('last_changed_before')}
+                        openToDate={getSelected('last_changed_before')}
                       />
                     </div>
                   </div>
                 </div>
               </div>
-            )}
-            <div className="col-md-4">
-              <label className="form-label text-muted">{gettext('Filter by last changed date')}</label>
-              <div className="projects-datepicker">
-                <div className="row">
-                  <div className="col-md-6">
-                    <DatePicker
-                      autoComplete="off"
-                      className="form-control"
-                      dateFormat={getDateFormat()}
-                      id="last-changed-after-date-picker"
-                      isClearable
-                      locale={getLocale()}
-                      onChange={date => handleDateChange('last_changed_after', date)}
-                      onChangeRaw={event => handleDateChangeRaw('last_changed_after', event)}
-                      placeholderText={gettext('Select start date')}
-                      selected={getSelected('last_changed_after')}
-                      openToDate={getSelected('last_changed_after')}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <DatePicker
-                      autoComplete="off"
-                      className="form-control"
-                      dateFormat={getDateFormat()}
-                      id="last-changed-before-date-picker"
-                      isClearable
-                      locale={getLocale()}
-                      onChange={date => handleDateChange('last_changed_before', date)}
-                      onChangeRaw={event => handleDateChangeRaw('last_changed_before', event)}
-                      placeholderText={gettext('Select end date')}
-                      selected={getSelected('last_changed_before')}
-                      openToDate={getSelected('last_changed_before')}
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <div className="d-flex justify-content-between mt-2">
         <button type="button" className="link font-small" onClick={toggleFilters}>
           <i className="bi bi-filter"></i> {
@@ -201,10 +208,12 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
           }
         </button>
         {
-          showFilters && !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
-            <button type="button" className="link font-small" onClick={resetAllFilters}>
-              <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
-            </button>
+          showFilters && (
+            !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
+              <button type="button" className="link font-small" onClick={resetAllFilters}>
+                <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
+              </button>
+            )
           )
         }
       </div>
