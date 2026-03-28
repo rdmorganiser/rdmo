@@ -12,8 +12,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import TextareaInput from './TextareaInput'
 
-const TextareaWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-  createValue, updateValue, deleteValue, copyValue }) => {
+const TextareaWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
   return (
     <div className="interview-widgets">
       {

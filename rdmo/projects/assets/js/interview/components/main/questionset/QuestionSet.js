@@ -15,9 +15,11 @@ import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetManagement from './QuestionSetManagement'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ config, settings, templates, page, questionset, sets, values, disabled, isManager,
+const QuestionSet = ({
+  config, settings, templates, page, questionset, sets, values, disabled, isManager,
   parentSet, createSet, updateSet, deleteSet, copySet,
-  createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
+  createValue, updateValue, deleteValue, copyValue, fetchContact
+}) => {
 
   const setPrefix = getChildPrefix(parentSet)
 

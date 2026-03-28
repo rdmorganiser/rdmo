@@ -11,9 +11,11 @@ import PageHead from './PageHead'
 import PageHelp from './PageHelp'
 import PageManagement from './PageManagement'
 
-const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
+const Page = ({
+  config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
   createValue, updateValue, deleteValue, copyValue,
-  activateSet, createSet, updateSet, deleteSet, copySet }) => {
+  activateSet, createSet, updateSet, deleteSet, copySet
+}) => {
 
   const currentSetPrefix = ''
 

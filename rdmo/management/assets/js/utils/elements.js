@@ -206,7 +206,14 @@ const buildPathForAttribute = (key, parentUri) => {
   return path
 }
 
-
-
-export { buildPathForAttribute, buildUri, canMoveElement, compareElements, findDescendants,
-  moveElement, resetElement, updateElement,          updateWarning }
+export {
+  buildPathForAttribute,
+  buildUri,
+  canMoveElement,
+  compareElements,
+  findDescendants,
+  moveElement,
+  resetElement,
+  updateElement,
+  updateWarning
+}

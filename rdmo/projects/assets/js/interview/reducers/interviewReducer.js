@@ -52,20 +52,26 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
     case RESOLVE_CONDITION_SUCCESS:
-      return { ...state, sets: state.sets.map(
-        (set) => (
-          (set.set_prefix == action.set.set_prefix) &&
+      return {
+        ...state,
+        sets: state.sets.map(
+          (set) => (
+            (set.set_prefix == action.set.set_prefix) &&
           (set.set_index == action.set.set_index)
-        ) ? {
-            ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
-          } : set
-      )}
+          ) ? {
+              ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
+            } : set
+        )
+      }
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case UPDATE_VALUE:
-      return { ...state, values: state.values.map(
-        (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
-      )}
+      return {
+        ...state,
+        values: state.values.map(
+          (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
+        )
+      }
     case STORE_VALUE_SUCCESS:
       if (state.values.some((value) => (value.id || value.tmp_id) == action.valueId)) {
         return {
@@ -126,7 +132,8 @@ export default function interviewReducer(state = initialState, action) {
     case STORE_VALUE_ERROR:
       if (action.valueIndex > -1) {
         return {
-          ...state, values: state.values.map((value, valueIndex) => (
+          ...state,
+          values: state.values.map((value, valueIndex) => (
             valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
           ))
         }

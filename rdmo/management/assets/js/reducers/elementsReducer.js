@@ -27,14 +27,16 @@ export default function elementsReducer(state = initialState, action) {
   switch(action.type) {
     // fetch elements
     case actionTypes.FETCH_ELEMENTS_INIT:
-      return {...state,
+      return {
+        ...state,
         [action.elementType]: [],
         elementType: action.elementType,
         elementId: null,
         elementAction: null,
         element: null,
         parent: null,
-        errors: {}}
+        errors: {}
+      }
     case actionTypes.FETCH_ELEMENTS_SUCCESS:
       return {...state, ...action.elements}
     case actionTypes.FETCH_ELEMENTS_ERROR:
@@ -42,13 +44,15 @@ export default function elementsReducer(state = initialState, action) {
 
     // fetch element
     case actionTypes.FETCH_ELEMENT_INIT:
-      return {...state,
+      return {
+        ...state,
         elementType: action.elementType,
         elementId: action.elementId,
         elementAction: action.elementAction,
         element: null,
         parent: null,
-        errors: {}}
+        errors: {}
+      }
     case actionTypes.FETCH_ELEMENT_SUCCESS:
       return {...state, ...action.elements}
     case actionTypes.FETCH_ELEMENT_ERROR:
@@ -73,8 +77,10 @@ export default function elementsReducer(state = initialState, action) {
       // there is not break here on purpose
     case actionTypes.STORE_ELEMENT_SUCCESS:  // eslint-disable-line no-fallthrough
       if (isNil(state.element)) {
-        return {...state,
-          [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))}
+        return {
+          ...state,
+          [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))
+        }
       } else if (state.elementAction == 'nested') {
         return {...state, element: updateElement(state.element, action.element)}
       } else {

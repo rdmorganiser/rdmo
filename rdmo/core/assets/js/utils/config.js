@@ -32,9 +32,11 @@ const deleteConfigInLocalStorage = (prefix, path) => {
 
 const isTruthy = (value) => [true, 'true'].includes(value)
 
-export {deleteConfig,
+export {
+  deleteConfig,
   deleteConfigInLocalStorage,
   getConfigFromLocalStorage,
   isTruthy,
   setConfigInLocalStorage,
-  updateConfig}
+  updateConfig
+}

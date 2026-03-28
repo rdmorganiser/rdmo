@@ -26,8 +26,9 @@ const EditQuestionSet = ({ questionset }) => {
   const dispatch = useDispatch()
 
   const { sites, settings } = useSelector((state) => state.config)
-  const { elementAction, parent, attributes,
-    conditions, questions, questionsets } = useSelector((state) => state.elements)
+  const {
+    elementAction, parent, attributes, conditions, questions, questionsets
+  } = useSelector((state) => state.elements)
 
   const elementValues = orderBy(questionset.questions.concat(questionset.questionsets), ['order', 'uri'])
   const elementOptions = questions.map(question => ({

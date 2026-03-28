@@ -146,9 +146,11 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
             type="checkbox"
             checked={values.snapshot}
             onChange={
-              () => setValues({...values,
+              () => setValues({
+                ...values,
                 value: values.snapshot ? '' : values.value,  // reset value
-                snapshot: !values.snapshot })
+                snapshot: !values.snapshot
+              })
             }
           />
           <span>{gettext('Include snapshots in the search')}</span>

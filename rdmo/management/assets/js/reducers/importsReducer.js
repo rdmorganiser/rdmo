@@ -29,7 +29,8 @@ export default function importsReducer(state = initialState, action) {
       return { ...state, ...initialState, file: action.file }
     case actionTypes.UPLOAD_IMPORT_FILE_SUCCESS:
       return {
-        ...state, elements: action.elements.map(element => {
+        ...state,
+        elements: action.elements.map(element => {
           element = processElementDiffs(element)
           if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
             element.available = true
@@ -68,13 +69,15 @@ export default function importsReducer(state = initialState, action) {
       }
     case actionTypes.SELECT_IMPORT_ELEMENTS:
       return {
-        ...state, elements: state.elements.map(element => {
+        ...state,
+        elements: state.elements.map(element => {
           return { ...element, import: action.value }
         })
       }
     case actionTypes.SELECT_CHANGED_IMPORT_ELEMENTS:
       return {
-        ...state, elements: state.elements.map(element => {
+        ...state,
+        elements: state.elements.map(element => {
           if (element.changed || element.created) {
             return { ...element, import: action.value }
           }
@@ -85,13 +88,15 @@ export default function importsReducer(state = initialState, action) {
       }
     case actionTypes.SHOW_IMPORT_ELEMENTS:
       return {
-        ...state, elements: state.elements.map(element => {
+        ...state,
+        elements: state.elements.map(element => {
           return { ...element, show: action.value }
         })
       }
     case actionTypes.SHOW_CHANGED_IMPORT_ELEMENTS:
       return {
-        ...state, elements: state.elements.map(element => {
+        ...state,
+        elements: state.elements.map(element => {
           if (element.changed || element.created) {
             return { ...element, show: action.value }
           }
