@@ -14,7 +14,8 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
   return (
     <>
       <div className="form-check">
-        <input type="checkbox" htmlFor={id} className="form-check-input" checked={element.import}
+        <input
+          type="checkbox" htmlFor={id} className="form-check-input" checked={element.import}
           onChange={toggleImport} />
         <label className="form-check-label" htmlFor={id}>{verboseNames[element.model]}</label>
       </div>

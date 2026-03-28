@@ -59,17 +59,21 @@ const Catalog = ({ catalog, display = 'list', filter = false, filterSites = fals
           <EditLink title={gettext('Edit catalog')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy catalog')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add section')} onClick={createSection} disabled={catalog.read_only} />
-          <AvailableLink title={
-            catalog.available ? gettext('Make catalog unavailable') : gettext('Make catalog available')
-          }
-          available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
-          disabled={catalog.read_only} />
-          <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? catalog.sites.includes(siteId) : true}
+          <AvailableLink
+            title={
+              catalog.available ? gettext('Make catalog unavailable') : gettext('Make catalog available')
+            }
+            available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
+            disabled={catalog.read_only} />
+          <ToggleCurrentSiteLink
+            hasCurrentSite={config.settings.multisite ? catalog.sites.includes(siteId) : true}
             onClick={toggleCurrentSite}
             show={config.settings.multisite}/>
-          <LockedLink title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
+          <LockedLink
+            title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
             locked={catalog.locked} onClick={toggleLocked} disabled={catalog.read_only} />
-          <ExportLink title={gettext('Export catalog')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export catalog')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
         </div>
 

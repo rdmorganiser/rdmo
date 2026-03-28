@@ -41,7 +41,8 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
         <strong>{gettext('Option set')}{':'}</strong>
-        <CodeLink className="flex-grow-1" type="options" uri={optionset.uri} href={editUrl}
+        <CodeLink
+          className="flex-grow-1" type="options" uri={optionset.uri} href={editUrl}
           onClick={() => fetchEdit()} />
 
         <div className="d-flex align-items-center gap-1">
@@ -50,9 +51,11 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
           <EditLink title={gettext('Edit option set')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy option set')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add option')} onClick={createOption} disabled={optionset.read_only} />
-          <LockedLink title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
+          <LockedLink
+            title={optionset.locked ? gettext('Unlock option set') : gettext('Lock option set')}
             locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
-          <ExportLink title={gettext('Export option set')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export option set')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
         </div>
       </div>

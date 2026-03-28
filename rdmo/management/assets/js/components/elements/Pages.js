@@ -48,17 +48,20 @@ const Pages = () => {
       <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
-            <FilterString value={get(config, 'filter.pages.search', '')} onChange={updateFilterString}
+            <FilterString
+              value={get(config, 'filter.pages.search', '')} onChange={updateFilterString}
               label={gettext('Filter pages')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.pages.uri_prefix', '')} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix
+              value={get(config, 'filter.pages.uri_prefix', '')} onChange={updateFilterUriPrefix}
               options={getUriPrefixes(pages)} />
           </div>
           {
             config.settings.multisite && (
               <div className="col-sm-2">
-                <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                <FilterSite
+                  value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                   options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             )
@@ -83,7 +86,8 @@ const Pages = () => {
           <ul className="list-group list-group-flush">
             {
               pages.map((page, index) => (
-                <Page key={index} config={config} page={page}
+                <Page
+                  key={index} config={config} page={page}
                   filter="pages" filterEditors={true} />
               ))
             }

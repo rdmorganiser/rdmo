@@ -53,7 +53,8 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
   useFocusEffect(ref, show)
 
   return (
-    <Modal title={title} show={show} submitLabel={submitLabel} submitProps={{className: `btn btn-${submitColor}`}}
+    <Modal
+      title={title} show={show} submitLabel={submitLabel} submitProps={{className: `btn btn-${submitColor}`}}
       onClose={onClose} onSubmit={handleSubmit} disableSubmit={errors}>
       {
         isNil(attribute) ? (

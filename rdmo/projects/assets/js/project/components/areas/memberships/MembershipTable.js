@@ -108,7 +108,8 @@ const MembershipTable = ({ persons, type }) => {
                   <td className="text-end">
                     {
                       showActions && (
-                        <button type="button" className="btn link"
+                        <button
+                          type="button" className="btn link"
                           aria-label={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                           title={isCurrentUser ? gettext('Leave') : gettext('Remove')}
                           onClick={() => openDeleteModal(person, isCurrentUser)}

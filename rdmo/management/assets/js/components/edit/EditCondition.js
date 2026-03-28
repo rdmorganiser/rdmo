@@ -134,7 +134,8 @@ const EditCondition = ({ condition }) => {
 
         <Checkbox element={condition} field="locked" onChange={updateCondition} />
 
-        <Select element={condition} field="source" createText={gettext('Create new attribute')}
+        <Select
+          element={condition} field="source" createText={gettext('Create new attribute')}
           options={attributes} onChange={updateCondition} onCreate={createAttribute} onEdit={editAttribute} />
 
         <Select element={condition} field="relation" options={relations} onChange={updateCondition} />
@@ -170,7 +171,8 @@ const EditCondition = ({ condition }) => {
         </div>
       </div>
 
-      <DeleteConditionModal condition={condition} info={info} show={showDeleteModal}
+      <DeleteConditionModal
+        condition={condition} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteCondition} />
     </div>
   )

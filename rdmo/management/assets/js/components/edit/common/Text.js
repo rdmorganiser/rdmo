@@ -28,7 +28,8 @@ const Text = ({ element, field, onChange }) => {
   return (
     <div className="mb-3">
       <label className="form-label" htmlFor={id}>{label}</label>
-      <input type="text" id={id} className={className} disabled={element.read_only}
+      <input
+        type="text" id={id} className={className} disabled={element.read_only}
         value={value} onChange={event => onChange(field, event.target.value)} />
       <ErrorList errors={errors} />
       <HelpText help={help} />

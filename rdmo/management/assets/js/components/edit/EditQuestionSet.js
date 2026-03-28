@@ -157,17 +157,20 @@ const EditQuestionSet = ({ questionset }) => {
           )
         } />
 
-        <Select element={questionset} field="attribute" createText={gettext('Create new attribute')}
+        <Select
+          element={questionset} field="attribute" createText={gettext('Create new attribute')}
           options={attributes} onChange={updateQuestionSet} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <OrderedMultiSelect element={questionset} field="elements"
+        <OrderedMultiSelect
+          element={questionset} field="elements"
           values={elementValues} options={elementOptions}
           addText={addElementText} createText={createQuestionText}
           altCreateText={createQuestionSetText}
           onChange={updateQuestionSet} onCreate={createQuestion} onAltCreate={createQuestionSet}
           onEdit={editElement} />
 
-        <MultiSelect element={questionset} field="conditions" options={conditions}
+        <MultiSelect
+          element={questionset} field="conditions" options={conditions}
           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
           onChange={updateQuestionSet} onCreate={createCondition} onEdit={editCondition} />
 
@@ -192,7 +195,8 @@ const EditQuestionSet = ({ questionset }) => {
         </div>
       </div>
 
-      <DeleteQuestionSetModal questionset={questionset} info={info} show={showDeleteModal}
+      <DeleteQuestionSetModal
+        questionset={questionset} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteQuestionSet} />
     </div>
   )

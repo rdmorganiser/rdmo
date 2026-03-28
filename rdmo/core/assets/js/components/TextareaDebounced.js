@@ -13,7 +13,8 @@ const TextareaDebounced = ({ value, onChange, ...props }) => {
   const debouncedOnChange = useDebouncedCallback((value) => onChange(value), 500)
 
   return (
-    <Textarea {...props}
+    <Textarea
+      {...props}
       value={inputValue}
       onChange={
         (value) => {

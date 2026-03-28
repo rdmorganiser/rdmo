@@ -72,7 +72,8 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
             return (
               <div key={index} className="d-flex align-items-center gap-2 mb-2">
                 <div className="flex-grow-1">
-                  <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+                  <ReactSelect
+                    classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
                     options={selectOptions} value={selectValue} isDisabled={element.read_only}
                     aria-labelledby={id} onChange={option => handleChange(option, index)} />
                 </div>
@@ -80,7 +81,8 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
                   onEdit && (
                     <div className="d-flex align-items-center gap-1">
                       <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
-                      <Link className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
+                      <Link
+                        className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
                         disabled={element.read_only} />
                     </div>
                   )
@@ -92,14 +94,16 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
       </div>
 
       <div className="d-flex align-items-center gap-2">
-        <button type="button" className="btn btn-primary btn-sm" onClick={() => handleAdd()}
+        <button
+          type="button" className="btn btn-primary btn-sm" onClick={() => handleAdd()}
           disabled={element.read_only}>
           {addText}
         </button>
 
         {
           onCreate && (
-            <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onCreate}
               disabled={element.read_only || isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
               {createText}

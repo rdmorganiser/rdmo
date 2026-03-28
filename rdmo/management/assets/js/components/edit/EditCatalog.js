@@ -90,13 +90,15 @@ const EditCatalog = ({ catalog }) => {
           (langCode) => (
             <div>
               <Text element={catalog} field={`title_${langCode }`} onChange={updateCatalog} />
-              <Textarea element={catalog} field={`help_${langCode }`}
+              <Textarea
+                element={catalog} field={`help_${langCode }`}
                 rows={4} onChange={updateCatalog} />
             </div>
           )
         } />
 
-        <OrderedMultiSelect element={catalog} field="sections" options={sections}
+        <OrderedMultiSelect
+          element={catalog} field="sections" options={sections}
           addText={addSectionText} createText={createSectionText}
           onChange={updateCatalog} onCreate={createSection} onEdit={editSection} />
 
@@ -124,7 +126,8 @@ const EditCatalog = ({ catalog }) => {
         </div>
       </div>
 
-      <DeleteCatalogModal catalog={catalog} info={info} show={showDeleteModal}
+      <DeleteCatalogModal
+        catalog={catalog} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteCatalog} />
     </div>
   )

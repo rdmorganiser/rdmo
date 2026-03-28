@@ -26,9 +26,10 @@ const Navigation = ({ overview, currentPage, navigation, help, fetchPage }) => {
                   <ul className="list-unstyled">
                     {
                       section.pages.map((page, pageIndex) => (
-                        <li key={pageIndex} className={
-                          classNames({'active': currentPage ? page.id == currentPage.id : false})
-                        }>
+                        <li
+                          key={pageIndex} className={
+                            classNames({'active': currentPage ? page.id == currentPage.id : false})
+                          }>
                           {
                             page.show ? (
                               <NavigationLink

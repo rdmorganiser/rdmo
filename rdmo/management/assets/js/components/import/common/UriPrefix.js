@@ -16,10 +16,12 @@ const UriPrefix = ({ element, onChange }) => {
       </label>
 
       <div className="input-group">
-        <input className="form-control input-sm" id={id} type="text"
+        <input
+          className="form-control input-sm" id={id} type="text"
           value={value} onChange={event => onChange('uri_prefix', event.target.value)} />
 
-        <button type="button" className="btn btn-sm btn-light border"
+        <button
+          type="button" className="btn btn-sm btn-light border"
           title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
           onClick={() => onChange('uri_prefix', config.settings.default_uri_prefix)}>
           <span className="bi bi-magic"></span>

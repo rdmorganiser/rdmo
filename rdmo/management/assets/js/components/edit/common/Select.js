@@ -60,14 +60,16 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
 
       <div className={className}>
         <div className="flex-grow-1">
-          <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+          <ReactSelect
+            classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
             options={selectOptions} value={selectValue} isMulti={isMulti} isClearable={true}
             onChange={handleChange} isDisabled={element.read_only} aria-labelledby={id} />
         </div>
         {
           onEdit && selectValue && (
             <div>
-              <Link className="bi bi-pencil" title={gettext('Edit')}
+              <Link
+                className="bi bi-pencil" title={gettext('Edit')}
                 onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
             </div>
           )
@@ -77,7 +79,8 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
       {
         onCreate && (
           <div className="mt-2">
-            <button type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
               {createText}
             </button>

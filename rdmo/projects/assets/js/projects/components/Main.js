@@ -190,7 +190,8 @@ const Main = () => {
       <div className="d-flex position-relative">
         {
           projects.length > 0 && showTopButton && (
-            <button type="button" className="btn btn-light btn-rounded font-small" onClick={scrollToTop}
+            <button
+              type="button" className="btn btn-light btn-rounded font-small" onClick={scrollToTop}
               title={gettext('Scroll to top')} aria-label={gettext('Scroll to top')}>
               <i className="bi bi-arrow-up" aria-hidden="true"></i>
             </button>
@@ -198,7 +199,8 @@ const Main = () => {
         }
         {
           hasNext && (
-            <button type="button" onClick={loadMore}
+            <button
+              type="button" onClick={loadMore}
               className="btn btn-light btn-rounded font-small position-absolute start-50 translate-middle-x">
               {gettext('Load more')}
             </button>

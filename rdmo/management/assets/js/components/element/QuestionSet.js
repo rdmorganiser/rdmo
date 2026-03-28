@@ -72,11 +72,14 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
           <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit question set')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy question set')} href={copyUrl} onClick={fetchCopy} />
-          <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
+          <AddLink
+            title={gettext('Add question')} altTitle={gettext('Add question set')}
             onClick={createQuestion} onAltClick={createQuestionSet} disabled={questionset.read_only} />
-          <LockedLink title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
+          <LockedLink
+            title={questionset.locked ? gettext('Unlock question set') : gettext('Lock question set')}
             locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
-          <ExportLink title={gettext('Export question set')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export question set')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
           <Drag element={questionset} show={display == 'nested'} />
         </div>
@@ -148,14 +151,16 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
                 const questionSetInfo = questionset.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return (
-                  <QuestionSet key={index} config={config} questionset={element}
+                  <QuestionSet
+                    key={index} config={config} questionset={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
                 )
               } else {
                 const questionInfo = questionset.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return (
-                  <Question key={index} config={config} question={element}
+                  <Question
+                    key={index} config={config} question={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
                 )
               }

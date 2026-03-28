@@ -33,19 +33,23 @@ const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, fil
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
         <strong>{gettext('Attribute')}{':'}</strong>
-        <CodeLink className="flex-grow-1" type="domain" uri={attribute.uri} href={editUrl}
+        <CodeLink
+          className="flex-grow-1" type="domain" uri={attribute.uri} href={editUrl}
           onClick={() => fetchEdit()} />
 
         <div className="d-flex align-items-center gap-1">
           <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
-          <NestedLink title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
+          <NestedLink
+            title={gettext('View attribute nested')} href={nestedUrl} onClick={fetchNested}
             show={!attribute.is_leaf_node} />
           <EditLink title={gettext('Edit attribute')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy attribute')} href={copyUrl} onClick={fetchCopy} />
           <AddLink title={gettext('Add attribute')} onClick={createAttribute} disabled={attribute.read_only} />
-          <LockedLink title={attribute.locked ? gettext('Unlock attribute') : gettext('Lock attribute')}
+          <LockedLink
+            title={attribute.locked ? gettext('Unlock attribute') : gettext('Lock attribute')}
             locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
-          <ExportLink title={gettext('Export attribute')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export attribute')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} csv={true} />
         </div>
       </div>

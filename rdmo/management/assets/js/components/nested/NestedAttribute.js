@@ -28,11 +28,13 @@ const NestedAttribute = ({ attribute }) => {
         <div className="card-body pb-0">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
+              <FilterString
+                value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
                 label={gettext('Filter attributes')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix
+                value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
                 options={getUriPrefixes(attribute.elements)} />
             </div>
           </div>

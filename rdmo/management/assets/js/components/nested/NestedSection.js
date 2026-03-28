@@ -54,11 +54,13 @@ const NestedSection = ({ section }) => {
         <div className="card-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
+              <FilterString
+                value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
                 label={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
+              <FilterUriPrefix
+                value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
                 options={getUriPrefixes(section.elements)} />
             </div>
           </div>
@@ -103,7 +105,8 @@ const NestedSection = ({ section }) => {
       }
       {
         section.elements.map((page, index) => (
-          <Page key={index} config={config} page={page}
+          <Page
+            key={index} config={config} page={page}
             display="nested" filter="section" indent={1} />
         ))
       }

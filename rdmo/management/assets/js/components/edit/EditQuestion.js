@@ -127,7 +127,8 @@ const EditQuestion = ({ question }) => {
           )
         } />
 
-        <Select element={question} field="attribute" createText={gettext('Create new attribute')}
+        <Select
+          element={question} field="attribute" createText={gettext('Create new attribute')}
           options={attributes} onChange={updateQuestion} onCreate={createAttribute} onEdit={editAttribute} />
 
         <div className="row">
@@ -158,12 +159,14 @@ const EditQuestion = ({ question }) => {
           tabs={
             [
               (
-                <MultiSelect key="conditions" element={question} field="conditions" options={conditions}
+                <MultiSelect
+                  key="conditions" element={question} field="conditions" options={conditions}
                   addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                   onChange={updateQuestion} onCreate={createCondition} onEdit={editCondition} />
               ),
               (
-                <MultiSelect key="optionsets" element={question} field="optionsets" options={optionsets}
+                <MultiSelect
+                  key="optionsets" element={question} field="optionsets" options={optionsets}
                   addText={addOptionText} createText={createOptionText}
                   onChange={updateQuestion} onCreate={createOptionSet} onEdit={editOptionSet} />
               ),
@@ -184,7 +187,8 @@ const EditQuestion = ({ question }) => {
                 <div key="default">
                   {
                     settings.languages.map((language, index) => (
-                      <Textarea key={index} element={question} field={`default_text_${language[0]}`}
+                      <Textarea
+                        key={index} element={question} field={`default_text_${language[0]}`}
                         rows={1} onChange={updateQuestion} />
                     ))
                   }
@@ -221,7 +225,8 @@ const EditQuestion = ({ question }) => {
         </div>
       </div>
 
-      <DeleteQuestionModal question={question} info={info} show={showDeleteModal}
+      <DeleteQuestionModal
+        question={question} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteQuestion} />
     </div>
   )

@@ -142,17 +142,20 @@ const EditPage = ({ page }) => {
           )
         } />
 
-        <Select element={page} field="attribute" createText={gettext('Create new attribute')}
+        <Select
+          element={page} field="attribute" createText={gettext('Create new attribute')}
           options={attributes} onChange={updatePage} onCreate={createAttribute} onEdit={editAttribute} />
 
-        <OrderedMultiSelect element={page} field="elements"
+        <OrderedMultiSelect
+          element={page} field="elements"
           values={elementValues} options={elementOptions}
           addText={addElementText} createText={createQuestionText}
           altCreateText={createQuestionSetText}
           onChange={updatePage} onCreate={createQuestion} onAltCreate={createQuestionSet}
           onEdit={editElement} />
 
-        <MultiSelect element={page} field="conditions" options={conditions}
+        <MultiSelect
+          element={page} field="conditions" options={conditions}
           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
           onChange={updatePage} onCreate={createCondition} onEdit={editCondition} />
 
@@ -172,7 +175,8 @@ const EditPage = ({ page }) => {
         </div>
       </div>
 
-      <DeletePageModal page={page} info={info} show={showDeleteModal}
+      <DeletePageModal
+        page={page} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deletePage} />
     </div>
   )

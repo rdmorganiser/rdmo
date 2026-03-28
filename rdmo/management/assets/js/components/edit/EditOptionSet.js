@@ -101,11 +101,13 @@ const EditOptionSet = ({ optionset }) => {
           </div>
         </div>
 
-        <OrderedMultiSelect element={optionset} field="options" options={options}
+        <OrderedMultiSelect
+          element={optionset} field="options" options={options}
           addText={gettext('Add existing option')} createText={gettext('Create new option')}
           onChange={updateOptionSet} onCreate={createOption} onEdit={editOption} />
 
-        <MultiSelect element={optionset} field="conditions" options={conditions}
+        <MultiSelect
+          element={optionset} field="conditions" options={conditions}
           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
           onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
@@ -113,7 +115,8 @@ const EditOptionSet = ({ optionset }) => {
 
         {
           settings.multisite && (
-            <Select element={optionset} field="editors"
+            <Select
+              element={optionset} field="editors"
               options={sites} onChange={updateOptionSet} isMulti />
           )
         }
@@ -133,7 +136,8 @@ const EditOptionSet = ({ optionset }) => {
         </div>
       </div>
 
-      <DeleteOptionSetModal optionset={optionset} info={info} show={showDeleteModal}
+      <DeleteOptionSetModal
+        optionset={optionset} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteOptionSet} />
     </div>
   )

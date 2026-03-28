@@ -24,7 +24,8 @@ const Checkbox = ({ element, field, onChange }) => {
   return (
     <div className="mb-3">
       <div className="form-check">
-        <input type="checkbox"  id={id} disabled={element.read_only}
+        <input
+          type="checkbox"  id={id} disabled={element.read_only}
           className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}
           checked={checked} onChange={() => onChange(field, !checked)} />
         <label className="form-check-label" htmlFor={id}>{label}</label>

@@ -67,12 +67,15 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
               }
               available={task.available} locked={task.locked} onClick={toggleAvailable}
               disabled={task.read_only} />
-            <ToggleCurrentSiteLink hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
+            <ToggleCurrentSiteLink
+              hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
               onClick={toggleCurrentSite}
               show={config.settings.multisite} />
-            <LockedLink title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
+            <LockedLink
+              title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
               locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
-            <ExportLink title={gettext('Export task')} exportUrl={exportUrl}
+            <ExportLink
+              title={gettext('Export task')} exportUrl={exportUrl}
               exportFormats={config.settings.export_formats} full={true} />
           </div>
         </div>

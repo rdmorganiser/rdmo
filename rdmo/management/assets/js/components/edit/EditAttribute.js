@@ -131,7 +131,8 @@ const EditAttribute = ({ attribute }) => {
 
         <Checkbox element={attribute} field="locked" onChange={updateAttribute} />
 
-        <Select element={attribute} field="parent" options={attributes}
+        <Select
+          element={attribute} field="parent" options={attributes}
           onChange={updateAttribute} onEdit={editAttribute} />
 
         {
@@ -155,7 +156,8 @@ const EditAttribute = ({ attribute }) => {
         </div>
       </div>
 
-      <DeleteAttributeModal attribute={attribute} info={info} show={showDeleteModal}
+      <DeleteAttributeModal
+        attribute={attribute} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteAttribute} />
     </div>
   )

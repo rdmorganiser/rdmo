@@ -73,11 +73,14 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
           <ShowElementsLink showElements={showElements} show={display == 'nested'} onClick={toggleShowElements} />
           <EditLink title={gettext('Edit page')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy page')} href={copyUrl} onClick={fetchCopy} />
-          <AddLink title={gettext('Add question')} altTitle={gettext('Add question set')}
+          <AddLink
+            title={gettext('Add question')} altTitle={gettext('Add question set')}
             onClick={createQuestion} onAltClick={createQuestionSet} disabled={page.read_only} />
-          <LockedLink title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
+          <LockedLink
+            title={page.locked ? gettext('Unlock page') : gettext('Lock page')}
             locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
-          <ExportLink title={gettext('Export page')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export page')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
           <Drag element={page} show={display == 'nested'} />
         </div>
@@ -145,14 +148,16 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 const questionSetInfo = page.questionsets.find(info => info.questionset === element.id)
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return (
-                  <QuestionSet key={index} config={config} questionset={element}
+                  <QuestionSet
+                    key={index} config={config} questionset={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
                 )
               } else {
                 const questionInfo = page.questions.find(info => info.question === element.id)
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return (
-                  <Question key={index} config={config} question={element}
+                  <Question
+                    key={index} config={config} question={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
                 )
               }

@@ -74,9 +74,11 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
           <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
           <EditLink title={gettext('Edit question')} href={editUrl} onClick={fetchEdit} />
           <CopyLink title={gettext('Copy question')} href={copyUrl} onClick={fetchCopy} />
-          <LockedLink title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
+          <LockedLink
+            title={question.locked ? gettext('Unlock question') : gettext('Lock question')}
             locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
-          <ExportLink title={gettext('Export question')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export question')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
           <Drag element={question} show={display == 'nested'} />
         </div>
