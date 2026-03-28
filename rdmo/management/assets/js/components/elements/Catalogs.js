@@ -45,22 +45,26 @@ const Catalogs = () => {
       <div className="card-body">
         <div className="row">
           <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
-            <FilterString value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
+            <FilterString
+              value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
               label={gettext('Filter catalogs')} />
           </div>
           <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.catalogs.uri_prefix', '')} onChange={updateFilterUriPrefix}
+            <FilterUriPrefix
+              value={get(config, 'filter.catalogs.uri_prefix', '')} onChange={updateFilterUriPrefix}
               options={getUriPrefixes(catalogs)} />
           </div>
           {
             config.settings.multisite && (
               <>
                 <div className="col-sm-2">
-                  <FilterSite value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                  <FilterSite
+                    value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
                     options={config.sites} />
                 </div>
                 <div className="col-sm-2">
-                  <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                  <FilterSite
+                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
                     options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               </>
@@ -80,7 +84,8 @@ const Catalogs = () => {
           <ul className="list-group list-group-flush">
             {
               catalogs.map((catalog, index) => (
-                <Catalog key={index} config={config} catalog={catalog}
+                <Catalog
+                  key={index} config={config} catalog={catalog}
                   filter="catalogs" filterSites={true} filterEditors={true} />
               ))
             }

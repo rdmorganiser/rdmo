@@ -71,7 +71,8 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
             }
             locked={section.locked} onClick={toggleLocked} disabled={section.read_only}
           />
-          <ExportLink title={gettext('Export section')} exportUrl={exportUrl}
+          <ExportLink
+            title={gettext('Export section')} exportUrl={exportUrl}
             exportFormats={config.settings.export_formats} full={true} />
           <Drag element={section} show={display == 'nested'} />
         </div>
@@ -107,7 +108,8 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
           }
           {
             !isEmpty(section.elements) && (
-              <Drop element={section.elements[0]} indent={indent + 1} mode="before"
+              <Drop
+                element={section.elements[0]} indent={indent + 1} mode="before"
                 dropElement={(...args) => dispatch(dropElement(...args))} />
             )
           }

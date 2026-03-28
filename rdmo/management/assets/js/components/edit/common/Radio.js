@@ -29,7 +29,8 @@ const Radio = ({ element, field, options, onChange }) => {
 
             return (
               <div key={index} className="form-check">
-                <input type="radio" id={radioId} disabled={element.read_only}
+                <input
+                  type="radio" id={radioId} disabled={element.read_only}
                   className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}
                   checked={value === option.id} value={option.id}
                   onChange={event => onChange(field, event.target.value)} />

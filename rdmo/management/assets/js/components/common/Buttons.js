@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 const BackButton = ({ className }) => (
-  <button className={classNames('element-button btn btn-sm btn-light border', className)}
+  <button
+    className={classNames('element-button btn btn-sm btn-light border', className)}
     onClick={() => history.back()}>
     {gettext('Back')}
   </button>

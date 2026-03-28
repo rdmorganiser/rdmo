@@ -34,7 +34,8 @@ const ImportElement = ({ element }) => {
 
         {
           (isEmpty(element.errors) && ('available' in element)) && (
-            <AvailableLink available={element.available}
+            <AvailableLink
+              available={element.available}
               locked={element.locked} onClick={toggleAvailable}
               title={element.available ? gettext('Make unavailable') : gettext('Make available')} />
           )
@@ -49,7 +50,8 @@ const ImportElement = ({ element }) => {
         }
         {
           (element.updated && element.locked) && (
-            <LockedLink title={gettext('Locked')}
+            <LockedLink
+              title={gettext('Locked')}
               locked={element.locked} onClick={updateShowField} disabled={true} />
           )
         }
@@ -60,7 +62,8 @@ const ImportElement = ({ element }) => {
         element.show && (
           <div className="mt-2">
             <Errors elementErrors={element.errors} />
-            <Warnings elementWarnings={element.warnings}
+            <Warnings
+              elementWarnings={element.warnings}
               elementModel={element.model} elementURI={element.uri}
               showTitle={true} shouldShowURI={false} />
             <Form element={element} />

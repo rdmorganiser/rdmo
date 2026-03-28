@@ -45,7 +45,8 @@ const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
   } else {
     return (
       <span className="dropdown">
-        <button type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
+        <button
+          type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
           title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
         </button>
         <ul className="dropdown-menu">
@@ -77,7 +78,8 @@ const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   })
 
   return (
-    <LinkButton className={className} title={locked ? gettext('Locked') : title}
+    <LinkButton
+      className={className} title={locked ? gettext('Locked') : title}
       disabled={locked || disabled} onClick={onClick} />
   )
 }
@@ -146,7 +148,8 @@ ShowElementsLink.propTypes = {
 const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false }) => {
   return (
     <span className="dropdown">
-      <button type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
+      <button
+        type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
         title={title} aria-label={title}></button>
       <ul className="dropdown-menu dropdown-menu-end">
         <li className="dropdown-item">
@@ -180,7 +183,8 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false
         {
           exportFormats.map(([key, label], index) => (
             <li className="dropdown-item" key={index}>
-              <a href={`${exportUrl}${key}/`}
+              <a
+                href={`${exportUrl}${key}/`}
                 target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
                 rel="noreferrer">{label}</a>
             </li>

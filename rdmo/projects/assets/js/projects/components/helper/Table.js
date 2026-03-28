@@ -43,7 +43,8 @@ const Table = ({
               ) : columnHeaderContent
 
               return (
-                <th className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined}
+                <th
+                  className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined}
                   key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
                   aria-label={columnHeaderLabel}>
                   {columnHeaderContent}

@@ -12,7 +12,8 @@ const Key = ({ element, onChange }) => {
         <small>{gettext('Key')}</small>
       </label>
 
-      <input className="form-control input-sm" id={id} type="text"
+      <input
+        className="form-control input-sm" id={id} type="text"
         value={value} onChange={event => onChange('key', event.target.value)} />
     </div>
   )

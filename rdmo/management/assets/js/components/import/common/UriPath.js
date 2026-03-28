@@ -12,7 +12,8 @@ const UriPath = ({ element, onChange }) => {
         <small>{gettext('URI path')}</small>
       </label>
 
-      <input className="form-control input-sm" id={id} type="text"
+      <input
+        className="form-control input-sm" id={id} type="text"
         value={value} onChange={event => onChange('uri_path', event.target.value)} />
     </div>
   )

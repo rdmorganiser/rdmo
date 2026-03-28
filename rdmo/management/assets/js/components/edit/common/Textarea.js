@@ -28,7 +28,8 @@ const Textarea = ({ element, field, rows, onChange }) => {
   return (
     <div className="mb-3">
       <label className="form-label" htmlFor={id}>{label}</label>
-      <textarea id={id} className={className} rows={rows} disabled={element.read_only}
+      <textarea
+        id={id} className={className} rows={rows} disabled={element.read_only}
         value={value} onChange={event => onChange(field, event.target.value)}  />
       <ErrorList errors={errors} />
       <HelpText help={help} />

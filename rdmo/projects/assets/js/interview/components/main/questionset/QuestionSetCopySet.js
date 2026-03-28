@@ -22,13 +22,15 @@ const QuestionCopySet = ({ questionset, sets, currentSet, disabled, copySet }) =
 
   return !disabled && questionset.is_collection && (
     <>
-      <button type="button" className="btn btn-link btn-copy-set"
+      <button
+        type="button" className="btn btn-link btn-copy-set"
         title={'Copy block'} aria-label={'Copy block'}
         onClick={modal.open}>
         <i className="fa fa-copy fa-btn" aria-hidden="true"></i>
       </button>
 
-      <Modal title={gettext('Copy block')} show={modal.show} submitLabel={gettext('Copy')}
+      <Modal
+        title={gettext('Copy block')} show={modal.show} submitLabel={gettext('Copy')}
         submitProps={{className: 'btn btn-info'}}
         onClose={modal.close} onSubmit={handleCopySet}>
       </Modal>

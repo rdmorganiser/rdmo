@@ -72,15 +72,18 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     <div className="position-relative mb-2">
       <div className={className}>
         <div className="flex-grow-1">
-          <ReactSelect classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+          <ReactSelect
+            classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
             options={selectOptions} value={selectValue}
             onChange={option => handleChange(option, index)}
             menuPortalTarget={document.body} isDisabled={disabled}
             aria-labelledby={ariaLabelledBy} />
         </div>
-        <Link className="bi bi-pencil" title={gettext('Edit')}
+        <Link
+          className="bi bi-pencil" title={gettext('Edit')}
           onClick={() => handleEdit(index)} />
-        <Link className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
+        <Link
+          className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
           onClick={() => !disabled && handleRemove(index)} />
         <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
       </div>
@@ -206,7 +209,8 @@ const OrderedMultiSelect = ({ element, field, options, values,
             const selectOptions = getSelectOptions()
             const selectValue = selectOptions.find(option => compareValue(option, value))
             return (
-              <OrderedMultiSelectItem key={index} index={index} field={field}
+              <OrderedMultiSelectItem
+                key={index} index={index} field={field}
                 selectValue={selectValue} selectOptions={selectOptions}
                 errors={errors} handleChange={handleChange}
                 handleEdit={handleEdit} handleRemove={handleRemove}
@@ -217,13 +221,15 @@ const OrderedMultiSelect = ({ element, field, options, values,
       </div>
 
       <div className="d-flex align-items-center gap-2">
-        <button type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
+        <button
+          type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
           disabled={element.read_only}>
           {addText}
         </button>
         {
           onCreate && (
-            <button type="button" className="btn btn-success btn-sm" onClick={onCreate}
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onCreate}
               disabled={element.read_only || isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
               {createText}
@@ -232,7 +238,8 @@ const OrderedMultiSelect = ({ element, field, options, values,
         }
         {
           onAltCreate && (
-            <button type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
               disabled={element.read_only || isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
               {altCreateText}

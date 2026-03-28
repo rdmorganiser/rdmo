@@ -116,7 +116,8 @@ const ElementsSidebar = () => {
       <nav className="nav nav-pills nav-fill flex-column mb-4">
         {
           Object.entries(navigation).map(([et, label]) => (
-            <Link key={et}
+            <Link
+              key={et}
               href={buildPath(et)}
               className={classNames('nav-link text-start', { active: elementType === et })}
               onClick={() => dispatch(fetchElements(et))}>
@@ -150,7 +151,8 @@ const ElementsSidebar = () => {
       </p>
 
       <div className="text-muted px-3">
-        <input className="form-control" type="file" id="fileUpload" name="uploaded_file"
+        <input
+          className="form-control" type="file" id="fileUpload" name="uploaded_file"
           onChange={handleFileUpload} />
       </div>
     </div>

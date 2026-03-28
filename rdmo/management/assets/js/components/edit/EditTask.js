@@ -93,14 +93,17 @@ const EditTask = ({ task }) => {
           )
         } />
 
-        <MultiSelect element={task} field="conditions" options={conditions}
+        <MultiSelect
+          element={task} field="conditions" options={conditions}
           addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
           onChange={updateTask} onCreate={createCondition} onEdit={editCondition} />
 
-        <Select element={task} field="start_attribute" options={attributes}
+        <Select
+          element={task} field="start_attribute" options={attributes}
           onChange={updateTask} onEdit={editAttribute} />
 
-        <Select element={task} field="end_attribute" options={attributes}
+        <Select
+          element={task} field="end_attribute" options={attributes}
           onChange={updateTask} onEdit={editAttribute} />
 
         <div className="row">
@@ -138,7 +141,8 @@ const EditTask = ({ task }) => {
         </div>
       </div>
 
-      <DeleteTaskModal task={task} info={info} show={showDeleteModal}
+      <DeleteTaskModal
+        task={task} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteTask} />
     </div>
   )

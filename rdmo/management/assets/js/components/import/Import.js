@@ -44,13 +44,15 @@ const Import = () => {
             <code className="code-import">{file.name}</code>
           </div>
 
-          <ImportInfo elementsLength={elements.length} createdLength={createdElements.length}
+          <ImportInfo
+            elementsLength={elements.length} createdLength={createdElements.length}
             updatedLength={updatedElements.length} changedLength={changedElements.length}
             warningsLength={importWarnings.length} errorsLength={importErrors.length}/>
         </div>
       </div>
       <div className="card-body">
-        <ImportFilters elements={elements} changedElements={changedElements}
+        <ImportFilters
+          elements={elements} changedElements={changedElements}
           filteredElements={filteredElements} success={success} />
         <WarningsAggregated elements={importWarnings} />
         <ErrorsAggregated elements={importErrors} />

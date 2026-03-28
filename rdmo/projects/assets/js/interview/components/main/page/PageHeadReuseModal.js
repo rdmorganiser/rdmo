@@ -40,7 +40,8 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
   }, [values, values.value])
 
   return (
-    <Modal title={gettext('Reuse tab')} show={show} submitLabel={gettext('Reuse')}
+    <Modal
+      title={gettext('Reuse tab')} show={show} submitLabel={gettext('Reuse')}
       submitProps={{className: 'btn btn-primary'}}
       onClose={onClose} onSubmit={handleSubmit}>
       <div className={classNames({'form-group': true, 'has-error': errors.value })}>

@@ -34,11 +34,13 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
     <>
       <div className="row">
         <div className={'col-sm-8'}>
-          <FilterString value={filterString} onChange={updateFilterString}
+          <FilterString
+            value={filterString} onChange={updateFilterString}
             label={gettext('Filter URI')} />
         </div>
         <div className="col-sm-4">
-          <FilterUriPrefix value={filterUriPrefix}
+          <FilterUriPrefix
+            value={filterUriPrefix}
             onChange={updateFilterUriPrefix}
             options={getUriPrefixes(elements)} />
         </div>
@@ -47,7 +49,8 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
         elements.length > 0 && (
           <>
             <div className="form-check mb-2">
-              <input className="form-check-input" type="checkbox" id="import-filter-changed"
+              <input
+                className="form-check-input" type="checkbox" id="import-filter-changed"
                 checked={filterChanged} onChange={updateFilterChanged} />
               <label className="form-check-label" htmlFor="import-filter-changed">
                 {filterCheckBoxText}

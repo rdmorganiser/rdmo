@@ -116,7 +116,8 @@ const EditView = ({ view }) => {
         </div>
       </div>
 
-      <DeleteViewModal view={view} info={info} show={showDeleteModal}
+      <DeleteViewModal
+        view={view} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteView} />
     </div>
   )

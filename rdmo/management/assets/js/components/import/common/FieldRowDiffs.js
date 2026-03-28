@@ -44,7 +44,8 @@ const FieldRowDiffs = ({ element, field }) => {
       {
         !isEmpty(warnings) && (
           <>
-            <Warnings elementWarnings={fieldDiffData.warnings}
+            <Warnings
+              elementWarnings={fieldDiffData.warnings}
               elementModel={element.model} elementURI={element.uri}
               showTitle={true} shouldShowURI={false}/>
           </>

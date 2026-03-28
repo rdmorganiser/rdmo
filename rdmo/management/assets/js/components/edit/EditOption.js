@@ -125,7 +125,8 @@ const EditOption = ({ option }) => {
         </div>
       </div>
 
-      <DeleteOptionModal option={option} info={info} show={showDeleteModal}
+      <DeleteOptionModal
+        option={option} info={info} show={showDeleteModal}
         onClose={closeDeleteModal} onDelete={deleteOption} />
     </div>
   )
