@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
 const Key = ({ element, onChange }) => {
-  const id = uniqueId('key-'),
-    value = element.key ?? ''
+  const id = uniqueId('key-')
+  const value = element.key ?? ''
 
   return (
     <div className="mb-2">

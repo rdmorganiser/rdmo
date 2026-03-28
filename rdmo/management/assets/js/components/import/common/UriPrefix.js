@@ -6,8 +6,8 @@ import uniqueId from 'lodash/uniqueId'
 const UriPrefix = ({ element, onChange }) => {
   const config = useSelector((state) => state.config)
 
-  const id = uniqueId('uriPrefix-'),
-    value = element.uri_prefix
+  const id = uniqueId('uriPrefix-')
+  const value = element.uri_prefix
 
   return (
     <div className="mb-2">

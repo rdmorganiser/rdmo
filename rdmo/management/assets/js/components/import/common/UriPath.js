@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
 const UriPath = ({ element, onChange }) => {
-  const id = uniqueId('uriPath-'),
-    value = element.uri_path ?? ''
+  const id = uniqueId('uriPath-')
+  const value = element.uri_path ?? ''
 
   return (
     <div className="mb-2">
