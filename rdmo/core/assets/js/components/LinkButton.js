@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const LinkButton = ({ title, className, disabled=false, onClick, children }) => {
+const LinkButton = ({ title, className, disabled = false, onClick, children }) => {
   const handleClick = (event) => {
     event.preventDefault()
     onClick()

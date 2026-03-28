@@ -7,7 +7,7 @@ import isUndefined from 'lodash/isUndefined'
 import Link from 'rdmo/core/assets/js/components/Link'
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-const NestedLink = ({ href, title, onClick, show=true }) => {
+const NestedLink = ({ href, title, onClick, show = true }) => {
   return show && <Link href={href} className="element-link bi bi-list-nested" title={title} onClick={onClick} />
 }
 
@@ -18,7 +18,7 @@ NestedLink.propTypes = {
   show: PropTypes.bool
 }
 
-const EditLink = ({ href, title, onClick, disabled= false }) => {
+const EditLink = ({ href, title, onClick, disabled = false }) => {
   return <Link href={href} className="element-link bi bi-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
@@ -113,7 +113,7 @@ const ToggleCurrentSiteLink = ({ hasCurrentSite, onClick, show }) => {
     'bi-plus-square': !hasCurrentSite,
     'bi-dash-square': hasCurrentSite,
   })
-  const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
+  const title = hasCurrentSite ? gettext('Remove your site') : gettext('Add your site')
 
   return  show && <LinkButton className={className} title={title} onClick={onClick} />
 }
@@ -143,7 +143,7 @@ ShowElementsLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
+const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false }) => {
   return (
     <span className="dropdown">
       <button type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
@@ -205,7 +205,7 @@ const ExtendLink = ({ extend, onClick }) => {
     'bi-chevron-down': !extend
   })
 
-  const title = extend ? gettext('Show less'): gettext('Show more')
+  const title = extend ? gettext('Show less') : gettext('Show more')
 
   return <Link className={className} title={title} onClick={onClick} />
 }

@@ -58,6 +58,8 @@ module.exports = {
       'SwitchCase': 1,
     }],
 
+    // Enforce spaces around =, +, ==, ?, :, etc.
+    'space-infix-ops': 'error',
     // Import order
     'simple-import-sort/imports': ['error', {
       groups: [

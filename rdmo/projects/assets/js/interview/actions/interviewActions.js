@@ -70,7 +70,7 @@ export function fetchPage(pageId, back) {
       dispatch(fetchPageSuccess(null, true))
       dispatch(removeFromPending(pendingId))
     } else {
-      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId): PageApi.fetchPage(projectId, pageId, back)
+      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId) : PageApi.fetchPage(projectId, pageId, back)
       return promise
         .then((page) => {
           updateLocation(page.id)

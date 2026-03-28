@@ -16,7 +16,7 @@ import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/Links'
 
-const Question = ({ question, display='list', indent=0, filter=false, filterEditors=false, order }) => {
+const Question = ({ question, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)

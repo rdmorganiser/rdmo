@@ -10,7 +10,7 @@ import { ElementErrors } from '../common/Errors'
 import { ReadOnlyIcon } from '../common/Icons'
 import { AddLink, CodeLink, CopyLink, EditLink, ExportLink, LockedLink, NestedLink } from '../common/Links'
 
-const Attribute = ({ attribute, display='list', indent=0, filter=null, filterEditors=false }) => {
+const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, filterEditors = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)

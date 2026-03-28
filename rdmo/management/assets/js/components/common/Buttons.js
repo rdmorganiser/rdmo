@@ -13,7 +13,7 @@ BackButton.propTypes = {
   className: PropTypes.string
 }
 
-const SaveButton = ({ elementAction, onClick, disabled=false, back=false }) => {
+const SaveButton = ({ elementAction, onClick, disabled = false, back = false }) => {
   let text, className
 
   if (elementAction == 'create') {
@@ -60,7 +60,7 @@ NewButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const DeleteButton = ({ onClick, disabled=false }) => (
+const DeleteButton = ({ onClick, disabled = false }) => (
   <button className="element-button btn btn-sm btn-danger" onClick={() => onClick()} disabled={disabled}>
     {gettext('Delete')}
   </button>
