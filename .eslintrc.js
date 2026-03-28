@@ -64,11 +64,23 @@ module.exports = {
     // Enforce separate const declarations
     'one-var': ['error', 'never'],
 
+    // Ensure spaces after commas
+    'comma-spacing': ['error', { before: false, after: true }],
+
+    // Disallow newlines between the operands of a ternary expression
+    'multiline-ternary': ['error', 'never'],
+
+    // Ensure correct multiline imports
+    'object-curly-newline': ['error', {
+      multiline: true,
+      consistent: true
+    }],
+
     // Import order
     'simple-import-sort/imports': ['error', {
       groups: [
         // external imports in the given order
-        ['^react$', '^prop-types$', '^react', '^[a-z]', '^lodash'],
+        ['^react$', '^prop-types$', '^react', '^redux', '^[a-z]', '^lodash'],
         // rdmo imports: lowercase first, then capitalized components
         ['^rdmo/.*\\/[a-z]'],
         ['^rdmo/.*\\/[A-Z]'],
@@ -83,18 +95,6 @@ module.exports = {
 
     // Export order
     'simple-import-sort/exports': 'error',
-
-    // Disallow newlines between the operands of a ternary expression
-    'multiline-ternary': ['error', 'never'],
-
-    // Ensure spaces after commas
-    'comma-spacing': ['error', { before: false, after: true }],
-
-    // Ensure correct multiline imports
-    'object-curly-newline': ['error', {
-      multiline: true,
-      consistent: true
-    }],
 
     // JSX: require a newline before the first prop when the JSX spans multiple lines and there is more than one prop
     'react/jsx-first-prop-new-line': ['error', 'multiline-multiprop'],
