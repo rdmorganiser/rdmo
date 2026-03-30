@@ -53,7 +53,7 @@ urlpatterns = [
             ProjectCancelView.as_view(), name='project_cancel'),
     re_path(r'^import/$',
             ProjectCreateImportView.as_view(), name='project_create_import'),
-    re_path(r'^import/(?P<format>[a-z-]+)/$',
+    re_path(r'^import/(?P<url_name>[a-z-]+)/$',
             ProjectCreateImportView.as_view(), name='project_create_import'),
 
     re_path(r'^(?P<pk>[0-9]+)/$',
@@ -78,11 +78,11 @@ urlpatterns = [
             ProjectDeleteView.as_view(), name='project_delete'),
     re_path(r'^(?P<pk>[0-9]+)/leave/$',
             ProjectLeaveView.as_view(), name='project_leave'),
-    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z-]+)/$',
+    re_path(r'^(?P<pk>[0-9]+)/export/(?P<url_name>[a-z-]+)/$',
             ProjectExportView.as_view(), name='project_export'),
     re_path(r'^(?P<pk>[0-9]+)/import/$',
             ProjectUpdateImportView.as_view(), name='project_update_import'),
-    re_path(r'^(?P<pk>[0-9]+)/import/(?P<format>[a-z-]+)/$',
+    re_path(r'^(?P<pk>[0-9]+)/import/(?P<url_name>[a-z-]+)/$',
             ProjectUpdateImportView.as_view(), name='project_update_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create/$',
@@ -116,7 +116,7 @@ urlpatterns = [
             SnapshotUpdateView.as_view(), name='snapshot_update'),
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/rollback/$',
             SnapshotRollbackView.as_view(), name='snapshot_rollback'),
-    re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/export/(?P<format>[a-z-]+)/$',
+    re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/export/(?P<url_name>[a-z-]+)/$',
             SnapshotExportView.as_view(), name='snapshot_export'),
 
     re_path(r'^(?P<pk>[0-9]+)/answers/$',

@@ -123,14 +123,14 @@
 </ul>
 
 {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-{% if settings.PROJECT_EXPORTS and can_export_project %}
+{% if exports and can_export_project %}
 <h2 id="export-project">{% trans 'Export' %}</h2>
 
 <ul class="list-unstyled">
-    {% for key, label, class in settings.PROJECT_EXPORTS %}
+    {% for url_name, title in exports %}
     <li>
-        <a href="{% url 'project_export' project.pk key %}" target="_blank">
-            {{ label }}
+        <a href="{% url 'project_export' project.pk url_name %}" target="_blank">
+            {{ title }}
         </a>
     </li>
     {% endfor %}
@@ -138,10 +138,12 @@
 {% endif %}
 
 {% has_perm 'projects.import_project_object' request.user project as can_import_project %}
-{% if settings.PROJECT_IMPORTS and can_import_project %}
+{% if can_import_project %}
+{% if upload_import or ancestors_import or imports %}
 <h2 id="import-project">{% trans 'Import values' %}</h2>
 
 <ul class="list-unstyled">
+    {% if upload_import %}
     <li>
         <p>
             <strong>{% trans 'Import from file' %}</strong>
@@ -149,7 +151,9 @@
         {% url 'project_update_import' project.id as upload_url %}
         {% include 'core/upload_form.html' with upload_url=upload_url label=True %}
     </li>
-    {% if settings.NESTED_PROJECTS and ancestors_import %}
+    {% endif %}
+
+    {% if ancestors_import %}
     <li>
         <p>
             <strong>{% trans 'Import from parent project' %}</strong>
@@ -157,21 +161,21 @@
         {% include 'projects/project_detail_sidebar_parent_import.html' %}
     </li>
     {% endif %}
-    {% if settings.PROJECT_IMPORTS_LIST %}
+
+    {% if url_import %}
     <li>
         <p>
             <strong>{% trans 'Import directly' %}</strong>
         </p>
     </li>
-    {% for key, label, class in settings.PROJECT_IMPORTS %}
-    {% if key in settings.PROJECT_IMPORTS_LIST %}
+    {% for url_name, title in url_import %}
     <li>
-        <a href="{% url 'project_update_import' project.id key %}" target="_blank">
-            {{ label }}
+        <a href="{% url 'project_update_import' project.id url_name %}" target="_blank">
+            {{ title }}
         </a>
     </li>
-    {% endif %}
     {% endfor %}
     {% endif %}
 </ul>
+{% endif %}
 {% endif %}
