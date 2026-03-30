@@ -20,7 +20,7 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
         return (
             self
                 .filter_for_site(project.site)
-                .filter(catalogs=project.catalog)
+                .filter(models.Q(catalogs=None) | models.Q(catalogs=project.catalog))
                 .filter(models.Q(groups=None) | models.Q(groups__in=project.groups))
                 .filter(available=True)
         )
