@@ -181,10 +181,10 @@ class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, Redirec
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        if kwargs.get('format') is None:
+        if kwargs.get('url_name') is None:
             return self.import_form()
         else:
-            return self.get_import_plugin(self.kwargs.get('format'), self.object).render()
+            return self.get_import_plugin().render()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -193,4 +193,4 @@ class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, Redirec
         if method in ['upload_file', 'import_file', 'import_project']:
             return getattr(self, method)()
         else:
-            return self.get_import_plugin(self.kwargs.get('format'), self.object).submit()
+            return self.get_import_plugin().submit()
