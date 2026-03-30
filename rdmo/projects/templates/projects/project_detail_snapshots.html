@@ -56,17 +56,17 @@
                         {% endif %}
 
                         {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-                        {% if settings.PROJECT_SNAPSHOT_EXPORTS and can_export_project %}
+                        {% if snapshot_exports and can_export_project %}
                         <span class="dropdown">
-                            <button type="submit" class="btn-link fa fa-download"
+                            <button type="submit" class="btn-link fa fa-download snapshot-export-button"
                                     title="{% trans 'Export snapshot' %}" aria-label="{% trans 'Export snapshot' %}"
                                     data-toggle="dropdown"></button>
 
                             <ul class="dropdown-menu">
-                                {% for key, label, class in settings.PROJECT_SNAPSHOT_EXPORTS %}
+                                {% for url_name, title in snapshot_exports %}
                                 <li>
-                                    <a href="{% url 'snapshot_export' project.id snapshot.id key %}" target="_blank">
-                                        {{ label }}
+                                    <a href="{% url 'snapshot_export' project.id snapshot.id url_name %}" target="_blank">
+                                        {{ title }}
                                     </a>
                                 </li>
                                 {% endfor %}

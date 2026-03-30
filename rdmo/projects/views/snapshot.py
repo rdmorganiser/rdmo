@@ -78,21 +78,26 @@ class SnapshotExportView(ObjectPermissionMixin, DetailView):
     def get_permission_object(self):
         return self.get_object().project
 
+    def get_plugin_by_url_name(self, url_name, project=None):
+        for plugin in Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
+            project=project,
+            user=self.request.user,
+        ):
+            if plugin.url_name == url_name:
+                return plugin
+
     def get_export_plugin(self):
-        export_plugins = Plugin.objects.for_context(
-            project=self.get_object().project,
-            plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
-            user=self.request.user, format=self.kwargs.get('format')
-        )
-        if not export_plugins.exists():
-            raise Http404
-        export_plugin_instance = export_plugins.first()
+        plugin = self.get_plugin_by_url_name(self.kwargs.get('url_name'), self.object.project)
+        if plugin:
+            import_plugin = plugin.initialize_class()
+            import_plugin.request = self.request
+            import_plugin.snapshot = self.object
 
-        export_plugin = export_plugin_instance.initialize_class()
-        export_plugin.request = self.request
-        export_plugin.snapshot = self.object
+            return import_plugin
 
-        return export_plugin
+        # no plugin for this url_name found
+        raise Http404
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
