@@ -1,10 +1,8 @@
-{% extends 'core/base.html' %}
+{% extends 'core/bs53/main.html' %}
 {% load i18n %}
 {% load core_tags %}
 
-{% block content %}
-
-<div class="container page">
+{% block main %}
 
     <h1>API</h1>
 
@@ -52,6 +50,5 @@
         <li><a href="{{ module_url }}">{{ module_url }}</a></li>
         {% endfor %}
     </ul>
-</div>
 
 {% endblock %}
