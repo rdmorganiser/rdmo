@@ -397,12 +397,20 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
-        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=self.request.user)
+        plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
+            user=self.request.user,
+        )
         return Response(get_upload_accept(plugins))
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
-        plugins = Plugin.objects.for_context(plugin_type=PLUGIN_TYPES.PROJECT_IMPORT, user=request.user)
+        plugins = (
+            Plugin.objects.for_context(
+                plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
+                user=request.user,
+            ).exclude(url_name='')
+        )
         serializer = ProjectImportPluginSerializer(plugins, many=True)
         return Response(serializer.data)
 
