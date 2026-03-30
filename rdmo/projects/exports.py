@@ -156,13 +156,25 @@ class JSONExport(AnswersExportMixin, Export):
 class RDMOXMLExport(Export):
 
     def render(self):
-        if self.project:
-            content_disposition = f'attachment; filename="{self.project.title}.xml"'
-            serializer = ProjectExportSerializer(self.project)
+        content_disposition = f'attachment; filename="{self.project.title}.xml"'
+        serializer = ProjectExportSerializer(self.project)
 
-        else:
-            content_disposition = f'attachment; filename="{self.snapshot.title}.xml"'
-            serializer = SnapshotExportSerializer(self.snapshot)
+        xmldata = XMLRenderer().render(serializer.data)
+        response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
+
+        if settings.EXPORT_CONTENT_DISPOSITION == 'attachment':
+            response['Content-Disposition'] = content_disposition
+
+        return response
+
+
+class RDMOSnapshotXMLExport(Export):
+
+    plugin_type = 'project_snapshot_export'
+
+    def render(self):
+        content_disposition = f'attachment; filename="{self.snapshot.title}.xml"'
+        serializer = SnapshotExportSerializer(self.snapshot)
 
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")

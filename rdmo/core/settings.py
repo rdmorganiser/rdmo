@@ -330,6 +330,7 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
 
 PLUGINS = [  # introduced in 2.5
     'rdmo.projects.exports.RDMOXMLExport',
+    'rdmo.projects.exports.RDMOSnapshotXMLExport',
     'rdmo.projects.imports.RDMOXMLImport',
 ]
 
