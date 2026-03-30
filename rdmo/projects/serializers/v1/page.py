@@ -41,6 +41,7 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
 
     model = serializers.SerializerMethodField()
     options = OptionSerializer(source='elements', many=True)
+    has_provider = serializers.BooleanField(source='has_plugins')
 
     class Meta:
         model = OptionSet
@@ -49,7 +50,7 @@ class OptionSetSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             'uri',
             'model',
             'options',
-            'has_plugins',
+            'has_provider',
             'has_search',
             'has_refresh',
             'has_conditions'
