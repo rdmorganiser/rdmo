@@ -151,17 +151,13 @@ class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
 
 class ProjectImportPluginSerializer(serializers.ModelSerializer):
 
-    key = serializers.CharField(source='url_name')
-    label = serializers.CharField(source='title')
-    class_name = serializers.CharField(source='python_path')
     href = serializers.SerializerMethodField()
 
     class Meta:
         model = Plugin
         fields = (
-            'key',
-            'label',
-            'class_name',
+            'title',
+            'url_name',
             'href',
         )
 
