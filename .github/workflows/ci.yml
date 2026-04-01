@@ -66,7 +66,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         name: Packages
         path: dist
@@ -126,7 +126,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         name: Packages
         path: dist
@@ -154,7 +154,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v7
       with:
         name: screenshots
         path: screenshots/**/*.png
@@ -202,7 +202,7 @@ jobs:
           python-version: "3.14"
           cache: pip
       - name: Download wheel
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: Packages
           path: dist
