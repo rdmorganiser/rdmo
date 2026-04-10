@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import { Modal, Tooltip } from 'rdmo/core/assets/js/_bs53/components'
-
 import Html from 'rdmo/core/assets/js/components/Html'
+import Modal from 'rdmo/core/assets/js/components/Modal'
+import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
 
 import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'

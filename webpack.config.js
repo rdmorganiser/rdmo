@@ -18,17 +18,21 @@ const configList = [
   {
     name: 'core',
     entry: {
-      'bootstrap-bs53': [
-        './rdmo/core/assets/js/_bs53/bootstrap.js',
-        './rdmo/core/assets/scss/_bs53/bootstrap.scss'
+      'bootstrap': [
+        './rdmo/core/assets/js/bootstrap.js',
+        './rdmo/core/assets/scss/bootstrap.scss'
       ],
-      'base-bs53': [
-        './rdmo/core/assets/js/_bs53/base.js',
-        './rdmo/core/assets/scss/_bs53/base.scss'
+      'base': [
+        './rdmo/core/assets/js/base.js',
+        './rdmo/core/assets/scss/base.scss'
       ],
-      'app-bs53': [
-        './rdmo/core/assets/js/_bs53/app.js',
-        './rdmo/core/assets/scss/_bs53/app.scss'
+      'home': [
+        './rdmo/core/assets/js/home.js',
+        './rdmo/core/assets/scss/home.scss'
+      ],
+      'app': [
+        './rdmo/core/assets/js/app.js',
+        './rdmo/core/assets/scss/app.scss'
       ]
     },
     output: {

@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'core/js/bootstrap.js' %}"></script>
+    <script src="{% static 'core/js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+{% get_current_language as lang %}
+{% if lang == 'en' %}
+    {% include 'core/home_en.html' %}
+{% elif lang == 'de' %}
+    {% include 'core/home_de.html' %}
+{% endif %}
+
+{% endblock %}

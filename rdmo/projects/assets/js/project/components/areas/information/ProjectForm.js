@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { Tooltip } from 'rdmo/core/assets/js/_bs53/components'
-
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
 import Html from 'rdmo/core/assets/js/components/Html'
+import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'

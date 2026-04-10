@@ -1,1 +1,22 @@
-{% extends 'core/bs53/page.html' %}
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'core/js/bootstrap.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <section class="page col-md-9 py-5">
+            {% block page %}{% endblock %}
+        </section>
+        <aside class="sidebar col-md-3 py-5">
+            {% block sidebar %}{% endblock %}
+        </aside>
+    </div>
+</main>
+
+{% endblock %}

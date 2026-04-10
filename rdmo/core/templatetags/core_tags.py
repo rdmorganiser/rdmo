@@ -57,9 +57,9 @@ def bootstrap_form_field(field, **kwargs):
     }
 
     if field.widget_type in ['text', 'email', 'password']:
-        return render_to_string('core/bs53/forms/bootstrap_input.html', context)
+        return render_to_string('core/forms/bootstrap_input.html', context)
     else:
-        return render_to_string(f'core/bs53/forms/bootstrap_{field.widget_type}.html', context)
+        return render_to_string(f'core/forms/bootstrap_{field.widget_type}.html', context)
 
 
 @register.simple_tag(takes_context=True)
