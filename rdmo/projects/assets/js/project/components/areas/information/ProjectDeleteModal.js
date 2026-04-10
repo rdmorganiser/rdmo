@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 import Html from 'rdmo/core/assets/js/components/Html'
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import { deleteProject } from '../../../actions/projectActions'
 

@@ -11,14 +11,4 @@
         {% trans "The project does appear not to have a question catalog. Please update your project." %}
     </p>
 
-    <p>
-        {% trans "You will be redirected shortly." %}
-    </p>
-
-    <script type="text/javascript">
-        window.setTimeout(function(){
-            window.location.replace('{% url 'project_update' project.id %}');
-        }, 5000);
-    </script>
-
 {% endblock%}

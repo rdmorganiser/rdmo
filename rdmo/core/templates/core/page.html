@@ -1,16 +1,22 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'core/js/bootstrap.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 
-<div class="container">
+<main class="container">
     <div class="row">
-        <div class="page col-md-9">
+        <section class="page col-md-9 py-5">
             {% block page %}{% endblock %}
-        </div>
-        <div class="sidebar col-md-3">
+        </section>
+        <aside class="sidebar col-md-3 py-5">
             {% block sidebar %}{% endblock %}
-        </div>
+        </aside>
     </div>
-</div>
+</main>
 
 {% endblock %}

@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     # rdmo modules
     'rdmo',
     'rdmo.core',
-    'rdmo.overlays',
     'rdmo.accounts',
     'rdmo.services',
     'rdmo.domain',
@@ -34,7 +33,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'widget_tweaks',
     'markdown',
-    'compressor',
     'django_cleanup',
     'django_extensions',
     'django_filters',
@@ -76,10 +74,6 @@ TEMPLATES = [
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -162,7 +156,6 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 DATABASES = {
@@ -292,31 +285,6 @@ EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 
 USER_API = True
-
-OVERLAYS = {
-    'projects': [
-        'projects-table',
-        'create-project',
-        'import-project',
-        'support-info'
-    ],
-    'project': [
-        'project-questions',
-        'project-catalog',
-        'project-issues',
-        'project-views',
-        'project-memberships',
-        'project-snapshots',
-        'export-project',
-        'import-project',
-        'support-info'
-    ],
-    'issue_send': [
-        'issue-message',
-        'issue-attachments',
-        'support-info'
-    ]
-}
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
