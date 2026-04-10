@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'widget_tweaks',
     'markdown',
-    'compressor',
     'django_cleanup',
     'django_extensions',
     'django_filters',
@@ -75,10 +74,6 @@ TEMPLATES = [
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -161,7 +156,6 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 DATABASES = {
