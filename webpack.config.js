@@ -18,10 +18,6 @@ const configList = [
   {
     name: 'core',
     entry: {
-      base: [
-        './rdmo/core/assets/js/base.js',
-        './rdmo/core/assets/scss/base.scss'
-      ],
       'bootstrap-bs53': [
         './rdmo/core/assets/js/_bs53/bootstrap.js',
         './rdmo/core/assets/scss/_bs53/bootstrap.scss'
