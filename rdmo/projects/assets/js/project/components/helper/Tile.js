@@ -1,26 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Tile = ({ title, children, className = '', size = 'normal', style = 'normal', onClick }) => {
+const Tile = ({ title, label, buttonLabel, children, className = '', size = 'normal', onClick }) => {
   const sizeClasses = {
     compact: 'col-12 col-md-4',  // 3 tiles per row
     normal: 'col-12 col-md-6',   // 2 tiles per row
     fullWidth: 'col-12',         // 1 tile per row
   }
 
-  const tileStyleClass = style === 'warning' ? 'tile-warning' : ''
-
   return (
-    <div className={`mb-4 ${sizeClasses[size]} ${className}`}>
-      {title && <h2 className="fw-bold mb-2">{title}</h2>}
-      <div
-        className={`card border-0 bg-white rounded-3 shadow-sm p-0 ${tileStyleClass}`}
-        style={onClick ? { cursor: 'pointer' } : undefined}
-        onClick={onClick}
-      >
-        <div className="card-body">
-          {children}
-        </div>
+    <div
+      className={`card card-tile mb-4 rounded-3 ${sizeClasses[size]} ${className}`}>
+      <div className="card-body d-flex flex-column">
+        {label && <div className="text-success fw-semibold small mb-1">{label}</div>}
+        {title && <h3 className="card-title mb-2">{title}</h3>}
+        <div className="card-text mb-2">{children}</div>
+
+        {
+          onClick && buttonLabel && (
+            <div className="mt-auto">
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={onClick}
+              >
+                {buttonLabel} <span className="ms-1">→</span>
+              </button>
+            </div>
+          )
+        }
       </div>
     </div>
   )
@@ -28,10 +36,11 @@ const Tile = ({ title, children, className = '', size = 'normal', style = 'norma
 
 Tile.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  buttonLabel: PropTypes.node,
+  children: PropTypes.node,
   className: PropTypes.string,
+  label: PropTypes.node,
   size: PropTypes.oneOf(['compact', 'normal', 'fullWidth']),
-  style: PropTypes.oneOf(['normal', 'warning']),
   onClick: PropTypes.func,
 }
 
