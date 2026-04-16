@@ -44,12 +44,12 @@ class AnswerTree:
 
             if element_type in ['catalog', 'page', 'questionset']:
                 element_node.update({
-                    'title': markdown2html(element.title),
+                    'title': markdown2html(element.short_title) or markdown2html(element.title),
                     'help': markdown2html(element.help)
                 })
             elif element_type == 'section':
                 element_node.update({
-                    'title': markdown2html(element.title)
+                    'title': markdown2html(element.short_title) or markdown2html(element.title)
                 })
             elif element_type == 'question':
                 element_node.update({
