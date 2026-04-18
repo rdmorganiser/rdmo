@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -64,6 +66,7 @@ from .serializers.v1 import (
     ProjectIssueSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
+    ProjectResolveSerializer,
     ProjectSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
@@ -252,74 +255,71 @@ class ProjectViewSet(ModelViewSet):
 
     @resolve.mapping.post
     def resolve_post(self, request, pk=None):
-        snapshot_id = request.GET.get('snapshot')
+        project = self.get_object()
 
-        if not isinstance(request.data, list) or not all(isinstance(x, dict) for x in request.data):
-            raise ValidationError('Expected a list of objects.')
+        serializer = ProjectResolveSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
 
-        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+        # gather element_ids
+        element_ids = defaultdict(set)
+        for params in validated_data:
+            element_ids[params['element_type']].add(params['element_id'])
 
-        response_data = []
-        for request_params in request.data:
-            # set the result to false by default
-            params = {
-                **request_params,
-                'result': False
-            }
+        elements = defaultdict(lambda: defaultdict(set))
 
-            set_prefix = params.get('set_prefix')
-            set_index = params.get('set_index')
+        # gather conditions for pages
+        if 'pages' in element_ids:
+            queryset = Page.conditions.through.objects.filter(page_id__in=element_ids['pages'])
+            for page_id, condition_id in queryset.values_list('page_id', 'condition_id'):
+                elements['pages'][page_id].add(condition_id)
 
-            element_type = params.get('element_type')
-            element_id = params.get('element_id')
+        # gather conditions for questionsets
+        if 'questionsets' in element_ids:
+            queryset = QuestionSet.conditions.through.objects.filter(questionset_id__in=element_ids['questionsets'])
+            for questionset_id, condition_id in queryset.values_list('questionset_id', 'condition_id'):
+                elements['questionsets'][questionset_id].add(condition_id)
 
-            if element_type == 'pages':
-                try:
-                    page = Page.objects.get(id=element_id)
-                    conditions = page.conditions.select_related('source', 'target_option')
-                    if check_conditions(conditions, values, set_prefix, set_index):
-                        params.update({'result': True})
-                except Page.DoesNotExist:
-                    pass
+        # gather conditions for questions
+        if 'questions' in element_ids:
+            queryset = Question.conditions.through.objects.filter(question_id__in=element_ids['questions'])
+            for question_id, condition_id in queryset.values_list('question_id', 'condition_id'):
+                elements['questions'][question_id].add(condition_id)
 
-            elif element_type == 'questionsets':
-                try:
-                    questionset = QuestionSet.objects.get(id=element_id)
-                    conditions = questionset.conditions.select_related('source', 'target_option')
-                    if check_conditions(conditions, values, set_prefix, set_index):
-                        params.update({'result': True})
-                except QuestionSet.DoesNotExist:
-                    pass
+        # gather conditions for optionsets
+        if 'optionsets' in element_ids:
+            queryset = OptionSet.conditions.through.objects.filter(optionset_id__in=element_ids['optionsets'])
+            for optionset_id, condition_id in queryset.values_list('optionset_id', 'condition_id'):
+                elements['optionsets'][optionset_id].add(condition_id)
 
-            elif element_type == 'questions':
-                try:
-                    question = Question.objects.get(id=element_id)
-                    conditions = question.conditions.select_related('source', 'target_option')
-                    if check_conditions(conditions, values, set_prefix, set_index):
-                        params.update({'result': True})
-                except Question.DoesNotExist:
-                    pass
+        # gather conditions
+        if 'conditions' in element_ids:
+            # construct a similar structure for conditions
+            for condition_id in element_ids['conditions']:
+                elements['conditions'][condition_id] = {condition_id}
 
-            elif element_type == 'optionsets':
-                try:
-                    optionset = OptionSet.objects.get(id=element_id)
-                    conditions = optionset.conditions.select_related('source', 'target_option')
-                    if check_conditions(conditions, values, set_prefix, set_index):
-                        params.update({'result': True})
-                except OptionSet.DoesNotExist:
-                    pass
+        # query conditions
+        condition_ids = set().union(*(
+            conditions_set
+            for element_dict in elements.values()
+            for conditions_set in element_dict.values()
+        ))
+        conditions = Condition.objects.select_related('source', 'target_option').in_bulk(condition_ids)
 
-            elif element_type == 'conditions':
-                try:
-                    condition = Condition.objects.select_related('source', 'target_option').get(id=element_id)
-                    if check_conditions([condition], values, set_prefix, set_index):
-                        params.update({'result': True})
-                except Condition.DoesNotExist:
-                    pass
+        # get all values of the project
+        values = project.values.filter(snapshot=None).select_related('attribute', 'option')
 
-            response_data.append(params)
+        # second pass: resolve conditions
+        for params in validated_data:
+            set_prefix = params['set_prefix']
+            set_index = params['set_index']
+            element_type = params['element_type']
+            element_id = params['element_id']
 
-        return Response(response_data)
+            element_conditions = [conditions[condition_id] for condition_id in elements[element_type][element_id]]
+            params['result'] = check_conditions(element_conditions, values, set_prefix, set_index)
+
+        return Response(validated_data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):

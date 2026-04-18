@@ -686,6 +686,8 @@ def test_resolve_post(db, client, username, password, project_id, condition_id):
 
     url = reverse(urlnames['resolve'], args=[project_id])
     data = [{
+        'set_prefix': '',
+        'set_index': 0,
         'element_type': 'conditions',
         'element_id': condition_id
     }]
