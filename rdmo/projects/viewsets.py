@@ -250,6 +250,77 @@ class ProjectViewSet(ModelViewSet):
 
         return Response({'result': False})
 
+    @resolve.mapping.post
+    def resolve_post(self, request, pk=None):
+        snapshot_id = request.GET.get('snapshot')
+
+        if not isinstance(request.data, list) or not all(isinstance(x, dict) for x in request.data):
+            raise ValidationError('Expected a list of objects.')
+
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+
+        response_data = []
+        for request_params in request.data:
+            # set the result to false by default
+            params = {
+                **request_params,
+                'result': False
+            }
+
+            set_prefix = params.get('set_prefix')
+            set_index = params.get('set_index')
+
+            element_type = params.get('element_type')
+            element_id = params.get('element_id')
+
+            if element_type == 'pages':
+                try:
+                    page = Page.objects.get(id=element_id)
+                    conditions = page.conditions.select_related('source', 'target_option')
+                    if check_conditions(conditions, values, set_prefix, set_index):
+                        params.update({'result': True})
+                except Page.DoesNotExist:
+                    pass
+
+            elif element_type == 'questionsets':
+                try:
+                    questionset = QuestionSet.objects.get(id=element_id)
+                    conditions = questionset.conditions.select_related('source', 'target_option')
+                    if check_conditions(conditions, values, set_prefix, set_index):
+                        params.update({'result': True})
+                except QuestionSet.DoesNotExist:
+                    pass
+
+            elif element_type == 'questions':
+                try:
+                    question = Question.objects.get(id=element_id)
+                    conditions = question.conditions.select_related('source', 'target_option')
+                    if check_conditions(conditions, values, set_prefix, set_index):
+                        params.update({'result': True})
+                except Question.DoesNotExist:
+                    pass
+
+            elif element_type == 'optionsets':
+                try:
+                    optionset = OptionSet.objects.get(id=element_id)
+                    conditions = optionset.conditions.select_related('source', 'target_option')
+                    if check_conditions(conditions, values, set_prefix, set_index):
+                        params.update({'result': True})
+                except OptionSet.DoesNotExist:
+                    pass
+
+            elif element_type == 'conditions':
+                try:
+                    condition = Condition.objects.select_related('source', 'target_option').get(id=element_id)
+                    if check_conditions([condition], values, set_prefix, set_index):
+                        params.update({'result': True})
+                except Condition.DoesNotExist:
+                    pass
+
+            response_data.append(params)
+
+        return Response(response_data)
+
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):
         project = self.get_object()
