@@ -11,9 +11,9 @@ import {
   FETCH_VALUES_INIT,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
-  RESOLVE_CONDITION_INIT,
-  RESOLVE_CONDITION_SUCCESS,
-  RESOLVE_CONDITION_ERROR,
+  RESOLVE_CONDITIONS_INIT,
+  RESOLVE_CONDITIONS_SUCCESS,
+  RESOLVE_CONDITIONS_ERROR,
   CREATE_VALUE,
   UPDATE_VALUE,
   STORE_VALUE_INIT,
@@ -51,14 +51,24 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, values: action.values, sets: action.sets }
     case FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
-    case RESOLVE_CONDITION_SUCCESS:
+    case RESOLVE_CONDITIONS_SUCCESS:
       return { ...state, sets: state.sets.map(
-        (set) => (
-          (set.set_prefix == action.set.set_prefix) &&
-          (set.set_index == action.set.set_index)
-        ) ? {
-          ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
-        } : set
+        (set) => {
+          // filter all results for the current set
+          const results = action.results.filter((result) => (
+            result.set_prefix === set.set_prefix &&
+            result.set_index === set.set_index
+          ))
+
+          // apply the results
+          return results.reduce((acc, result) => ({
+            ...acc,
+            [result.element_type]: {
+              ...acc[result.element_type],
+              [result.element_id]: result.result
+            },
+          }), set)
+        }
       )}
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
@@ -98,7 +108,7 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_NAVIGATION_INIT:
     case FETCH_OPTIONS_INIT:
     case FETCH_VALUES_INIT:
-    case RESOLVE_CONDITION_INIT:
+    case RESOLVE_CONDITIONS_INIT:
       return { ...state, errors: [] }
     case STORE_VALUE_INIT:
        return {
@@ -121,7 +131,7 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_NAVIGATION_ERROR:
     case FETCH_OPTIONS_ERROR:
     case FETCH_VALUES_ERROR:
-    case RESOLVE_CONDITION_ERROR:
+    case RESOLVE_CONDITIONS_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_ERROR:
       if (action.valueIndex > -1) {

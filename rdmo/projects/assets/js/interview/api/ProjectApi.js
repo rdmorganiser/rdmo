@@ -1,4 +1,4 @@
-import { isNil, last } from 'lodash'
+import { isNil } from 'lodash'
 
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 
@@ -35,15 +35,8 @@ class ProjectsApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/options/?${encodeParams(params)}`)
   }
 
-  static resolveCondition(projectId, set, element) {
-    const model = last(element.model.split('.'))
-    const params = {
-      set_prefix: set.set_prefix,
-      set_index: set.set_index,
-      [model]: element.id
-    }
-
-    return this.get(`/api/v1/projects/projects/${projectId}/resolve/?${encodeParams(params)}`)
+  static resolveConditions(projectId, payload) {
+    return this.post(`/api/v1/projects/projects/${projectId}/resolve/`, payload)
   }
 
 }
