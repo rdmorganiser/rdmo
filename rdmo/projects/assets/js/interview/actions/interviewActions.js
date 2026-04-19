@@ -4,8 +4,6 @@ import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
 import ValueApi from '../api/ValueApi'
 
-import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
-
 import { updateProgress } from './projectActions'
 
 import { updateLocation } from '../utils/location'
@@ -33,9 +31,9 @@ import {
   FETCH_VALUES_INIT,
   FETCH_VALUES_SUCCESS,
   FETCH_VALUES_ERROR,
-  RESOLVE_CONDITION_INIT,
-  RESOLVE_CONDITION_SUCCESS,
-  RESOLVE_CONDITION_ERROR,
+  RESOLVE_CONDITIONS_INIT,
+  RESOLVE_CONDITIONS_SUCCESS,
+  RESOLVE_CONDITIONS_ERROR,
   CREATE_VALUE,
   UPDATE_VALUE,
   STORE_VALUE_INIT,
@@ -221,51 +219,66 @@ export function fetchValuesError(error) {
 }
 
 export function resolveConditions(page, sets) {
-  return (dispatch) => {
-    // loop over set to evaluate conditions
-    sets.forEach((set) => {
-      page.questionsets.filter((questionset) => questionset.has_conditions)
-                       .forEach((questionset) => dispatch(resolveCondition(questionset, set)))
-
-      page.questions.filter((question) => question.has_conditions)
-                    .forEach((question) => dispatch(resolveCondition(question, set)))
-
-      page.optionsets.filter((optionset) => optionset.has_conditions)
-                     .forEach((optionset) => dispatch(resolveCondition(optionset, set)))
-    })
-  }
-}
-
-export function resolveCondition(element, set) {
-  const pendingId = `resolveCondition/${element.model}/${element.id}/${set.set_prefix}/${set.set_index}`
+  const pendingId = 'resolveConditions'
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch(resolveConditionInit())
+    dispatch(resolveConditionsInit())
 
-    return ProjectApi.resolveCondition(projectId, set, element)
+    // loop over sets to gather payload
+    const payload = []
+
+    sets.forEach((set) => {
+      page.questionsets
+        .filter((questionset) => questionset.has_conditions)
+        .forEach((questionset) => payload.push({
+          element_type: 'questionsets',
+          element_id: questionset.id,
+          set_prefix: set.set_prefix,
+          set_index: set.set_index,
+        }))
+
+      page.questions
+        .filter((question) => question.has_conditions)
+        .forEach((question) => payload.push({
+          element_type: 'questions',
+          element_id: question.id,
+          set_prefix: set.set_prefix,
+          set_index: set.set_index,
+        }))
+
+      page.optionsets
+        .filter((optionset) => optionset.has_conditions)
+        .forEach((optionset) => payload.push({
+          element_type: 'optionsets',
+          element_id: optionset.id,
+          set_prefix: set.set_prefix,
+          set_index: set.set_index,
+        }))
+    })
+
+    return ProjectApi.resolveConditions(projectId, payload)
       .then((response) => {
-        const elementType = elementTypes[element.model]
         dispatch(removeFromPending(pendingId))
-        dispatch(resolveConditionSuccess(set, elementType, element.id, response.result))
+        dispatch(resolveConditionsSuccess(response))
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
-        dispatch(resolveConditionError(error))
+        dispatch(resolveConditionsError(error))
       })
   }
 }
 
-export function resolveConditionInit() {
-  return {type: RESOLVE_CONDITION_INIT}
+export function resolveConditionsInit() {
+  return {type: RESOLVE_CONDITIONS_INIT}
 }
 
-export function resolveConditionSuccess(set, elementType, elementId, result) {
-  return {type: RESOLVE_CONDITION_SUCCESS, set, elementType, elementId, result}
+export function resolveConditionsSuccess(results) {
+  return {type: RESOLVE_CONDITIONS_SUCCESS, results}
 }
 
-export function resolveConditionError(error) {
-  return {type: RESOLVE_CONDITION_ERROR, error}
+export function resolveConditionsError(error) {
+  return {type: RESOLVE_CONDITIONS_ERROR, error}
 }
 
 export function storeValue(value) {

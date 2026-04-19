@@ -117,6 +117,13 @@ class ProjectCopySerializer(ProjectSerializer):
         read_only_fields = ProjectSerializer.Meta.read_only_fields
 
 
+class ProjectResolveSerializer(serializers.Serializer):
+    set_prefix = serializers.CharField(allow_blank=True)
+    set_index = serializers.IntegerField()
+    element_type = serializers.ChoiceField(choices=['pages', 'questionsets', 'questions', 'optionsets', 'conditions'])
+    element_id = serializers.IntegerField()
+
+
 class ProjectVisibilitySerializer(serializers.ModelSerializer):
 
     class Meta:
