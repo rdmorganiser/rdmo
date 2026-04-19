@@ -75,6 +75,9 @@ def get_pandoc_args(export_format, context):
     pandoc_version = get_pandoc_version()
     pandoc_args = list(settings.EXPORT_PANDOC_ARGS.get(export_format, []))  # without list(), settings would be changed
 
+    if pandoc_version < Version('2'):
+        raise RuntimeError(f'pandoc >= 2.0 is required, but found {pandoc_version}.')
+
     if export_format == 'pdf':
         # we used xelatex before pandoc 3
         if pandoc_version < Version('3'):
@@ -87,17 +90,13 @@ def get_pandoc_args(export_format, context):
         # find and add a possible reference document
         reference_document = get_pandoc_reference_document(export_format, context)
         if reference_document:
-            if pandoc_version >= Version('2'):
-                pandoc_args.append(f'--reference-doc={reference_document}')
-            else:
-                pandoc_args.append(f'--reference-{export_format}={reference_document}')
+            pandoc_args.append(f'--reference-doc={reference_document}')
 
     # add STATIC_ROOT and possible additional resource paths
-    if pandoc_version >= Version('2'):
-        pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
-        if 'resource_path' in context:
-            resource_path = Path(settings.MEDIA_ROOT) / context['resource_path']
-            pandoc_args.append(f'--resource-path={resource_path}')
+    pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
+    if 'resource_path' in context:
+        resource_path = Path(settings.MEDIA_ROOT) / context['resource_path']
+        pandoc_args.append(f'--resource-path={resource_path}')
 
     return pandoc_args
 
