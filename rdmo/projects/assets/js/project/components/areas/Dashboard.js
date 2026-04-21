@@ -6,26 +6,9 @@ import { Tile } from '../helper'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  // const tasks = [
-  //   {
-  //     title: 'Recommendation: Consider reuse scenarios',
-  //     progress: '0 / 2',
-  //     date: '14 August 2024',
-  //     isDone: false,
-  //   },
-  //   {
-  //     title: 'Consider Open Access Policy',
-  //     progress: '1 / 3',
-  //     date: '15 May 2024',
-  //     isDone: false,
-  //   },
-  //   {
-  //     title: 'Consider Open Access Policy',
-  //     progress: '3 / 3',
-  //     date: '15 May 2024',
-  //     isDone: true,
-  //   },
-  // ]
+
+  const [selectedTask, setSelectedTask] = useState(null)
+  const [showClosedTasks, setShowClosedTasks] = useState(false)
 
   const [tasks, setTasks] = useState([
     {
@@ -50,6 +33,10 @@ const Dashboard = () => {
       isDone: true,
     },
   ])
+
+  const visibleTasks = tasks
+    .filter((task) => showClosedTasks || !task.isDone)
+    .sort((a, b) => Number(a.isDone) - Number(b.isDone))
 
   const toggleTaskDone = (taskId) => {
     setTasks((prevTasks) =>
@@ -83,20 +70,21 @@ const Dashboard = () => {
         </Tile>
       </div>
 
-      {/* <h2>{gettext('Tasks')}</h2>
+      {/*       <h2>{gettext('Tasks')}</h2>
       <div className="row">
         {
-          tasks.map((task, index) => (
-            <Tile key={index} size="normal">
+          tasks.map((task) => (
+            <Tile key={task.id} size="normal">
               <div className="d-flex align-items-start">
                 <div className="me-3 mt-1">
-                  {
-                    task.isDone ? (
-                      <i className="bi bi-check-circle-fill" />
-                    ) : (
-                      <i className="bi bi-circle" />
-                    )
-                  }
+                  <button
+                    type="button"
+                    className="btn p-0 border-0 bg-transparent"
+                    onClick={() => toggleTaskDone(task.id)}
+                    aria-label={task.isDone ? 'Mark task as not done' : 'Mark task as done'}
+                  >
+                    <i className={`bi ${task.isDone ? 'bi-check-circle-fill' : 'bi-circle'}`} />
+                  </button>
                 </div>
 
                 <div className="flex-grow-1">
@@ -121,18 +109,40 @@ const Dashboard = () => {
           ))
         }
       </div> */}
-
       <h2>{gettext('Tasks')}</h2>
+
+      <div className="form-check form-switch mb-3">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="showClosedTasks"
+          checked={showClosedTasks}
+          onChange={() => setShowClosedTasks((prev) => !prev)}
+        />
+        <label className="form-check-label" htmlFor="showClosedTasks">
+          {gettext('Show closed tasks')}
+        </label>
+      </div>
+
       <div className="row">
         {
-          tasks.map((task) => (
-            <Tile key={task.id} size="normal">
+          visibleTasks.map((task) => (
+            <Tile
+              key={task.id}
+              size="normal"
+              onCardClick={() => setSelectedTask(task)}
+            >
               <div className="d-flex align-items-start">
                 <div className="me-3 mt-1">
                   <button
                     type="button"
                     className="btn p-0 border-0 bg-transparent"
-                    onClick={() => toggleTaskDone(task.id)}
+                    onClick={
+                      (e) => {
+                        e.stopPropagation()
+                        toggleTaskDone(task.id)
+                      }
+                    }
                     aria-label={task.isDone ? 'Mark task as not done' : 'Mark task as done'}
                   >
                     <i className={`bi ${task.isDone ? 'bi-check-circle-fill' : 'bi-circle'}`} />
@@ -181,6 +191,28 @@ const Dashboard = () => {
           <p>{gettext('Save a snapshot to view or restore later.')}</p>
         </Tile>
       </div>
+      {
+        selectedTask && (
+          <div className="modal d-block" tabIndex="-1">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">{selectedTask.title}</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setSelectedTask(null)}
+                  />
+                </div>
+                <div className="modal-body">
+                  <p>{gettext('Task popup placeholder')}</p>
+                  <p>{selectedTask.date}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
     </div>
   )
 }
