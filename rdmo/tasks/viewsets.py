@@ -1,6 +1,7 @@
 from django.db import models
 
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -11,8 +12,10 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.domain.models import Attribute
+from rdmo.core.views import ChoicesViewSet
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
+from .constants import TaskAreas, TaskTypes
 from .models import Task
 from .renderers import TaskRenderer
 from .serializers.export import TaskExportSerializer
@@ -31,7 +34,8 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         'uri_path',
         'comment',
         'sites',
-        'editors'
+        'editors',
+        'task_type'
     )
 
     def get_queryset(self):
@@ -120,3 +124,13 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 include_self=True
             ).in_bulk()
         }
+
+
+class TaskTypeViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = TaskTypes.choices
+
+
+class TaskAreaViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = TaskAreas.choices

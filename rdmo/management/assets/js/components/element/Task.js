@@ -52,7 +52,7 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
     <li className="list-group-item">
       <div className="d-flex flex-column gap-2">
         <div className="d-flex align-items-center gap-2">
-          <strong>{gettext('Task')}{':'}</strong>
+          <strong>{task.task_type_display}{':'}</strong>
           <div className="flex-grow-1">
             <Html html={task.title} />
           </div>

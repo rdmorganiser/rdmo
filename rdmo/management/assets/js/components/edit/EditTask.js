@@ -22,7 +22,7 @@ import UriPrefix from './common/UriPrefix'
 const EditTask = ({ task }) => {
   const dispatch = useDispatch()
 
-  const { sites, groups, settings } = useSelector((state) => state.config)
+  const { sites, groups, settings, taskTypes, taskAreas } = useSelector((state) => state.config)
   const { elementAction, attributes, catalogs, conditions } = useSelector((state) => state.elements)
 
   const updateTask = (key, value) => dispatch(updateElement(task, {[key]: value}))
@@ -81,6 +81,15 @@ const EditTask = ({ task }) => {
           </div>
           <div className="col-sm-4">
             <Number element={task} field="order" onChange={updateTask} />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-6">
+            <Select element={task} field="task_type" options={taskTypes} onChange={updateTask} />
+          </div>
+          <div className="col-sm-6">
+            <Select element={task} field="task_area" options={taskAreas} onChange={updateTask} />
           </div>
         </div>
 
