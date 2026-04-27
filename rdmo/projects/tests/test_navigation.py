@@ -86,3 +86,32 @@ def test_compute_navigation(db, section_uri):
                 assert page['total'] == total, page['uri']
                 assert page['show'] == show, page['uri']
                 assert 'title' in  page  # test for verbose, help is filtered out
+
+def test_compute_navigation_uses_short_title_as_title(db):
+    project = Project.objects.get(id=1)
+    project.catalog.prefetch_elements()
+
+    # ARRANGE: pick a section and its first page
+    section = project.catalog.elements[0]
+    page = section.elements[0]
+
+    # ARRANGE: clear the normal titles and set short titles
+    section.title_lang1 = ""
+    section.short_title_lang1 = 'SectionShorty'
+    section.save()
+    page.title_lang1 = ""
+    page.short_title_lang1 = 'PageShorty'
+    page.save()
+
+    # ACT: compute navigation for this section
+    section = project.catalog.sections.get(id=section.id)
+    navigation = compute_navigation(project, section)
+
+    # ASSERT: find the section title and compare to its short_title
+    section_nav = next((s for s in navigation if s['id'] == section.id), None)
+    assert section_nav.get('title') == 'SectionShorty'
+
+    # ASSERT: find the page title and compare to its short_title
+    pages = section_nav.get('pages', [])
+    page_nav = next((p for p in pages if p['id'] == page.id), None)
+    assert page_nav.get('title') == 'PageShorty'
