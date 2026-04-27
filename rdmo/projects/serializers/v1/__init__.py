@@ -510,11 +510,18 @@ class ProjectInviteUpdateSerializer(serializers.ModelSerializer):
 
 class ProjectIssueTaskSerializer(serializers.ModelSerializer):
 
+    task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
+    task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+
     class Meta:
         model = Task
         fields = (
             'id',
             'order',
+            'task_type',
+            'task_type_display',
+            'task_area',
+            'task_area_display',
             'title',
             'text',
         )
@@ -702,11 +709,18 @@ class UserInviteSerializer(InviteSerializer):
 
 class IssueTaskSerializer(serializers.ModelSerializer):
 
+    task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
+    task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+
     class Meta:
         model = Task
         fields = (
             'id',
             'order',
+            'task_type',
+            'task_type_display',
+            'task_area',
+            'task_area_display',
             'title',
             'text',
         )
