@@ -89,6 +89,30 @@ def test_translationmixin_trans_exact_locale_match(settings):
         assert instance.trans('text') == instance.text_lang2
 
 
+@pytest.mark.parametrize('replace_missing_translation', [True, False])
+def test_translationmixin_trans_exact_locale_empty_field(settings, replace_missing_translation):
+    settings.REPLACE_MISSING_TRANSLATION = replace_missing_translation
+    settings.LANGUAGES = (
+        ('en', 'English'),
+        ('en-GB', 'English (GB)'),
+        ('de', 'German')
+    )
+
+    instance = DummyTranslationModel()
+    instance.title_lang2 = ''
+    instance.text_lang2 = ''
+
+    # An explicitly configured locale with an empty value should not fall back
+    # to the base-language field unless replacement is enabled.
+    with translation.override('en-gb'):
+        if settings.REPLACE_MISSING_TRANSLATION:
+            assert instance.trans('title') == instance.title_lang1
+            assert instance.trans('text') == instance.text_lang1
+        else:
+            assert instance.trans('title') == ''
+            assert instance.trans('text') == ''
+
+
 def test_translationmixin_trans_uses_resolved_base_language(settings):
     settings.REPLACE_MISSING_TRANSLATION = False
     settings.LANGUAGES = (
