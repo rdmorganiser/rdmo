@@ -31,17 +31,28 @@ class Model(models.Model):
 class TranslationMixin:
 
     def trans(self, field):
-        current_language = get_language()
+        current_language = (get_language() or '').lower()
+        languages = {
+            lang_code.lower(): lang_field
+            for lang_code, _lang_string, lang_field in get_languages()
+        }
 
-        languages = get_languages()
-        for lang_code, _lang_string, lang_field in languages:
-            if lang_code == current_language:
-                r = getattr(self, f'{field}_{lang_field}') or None
+        exact_lang_field = languages.get(current_language)
+        if exact_lang_field:
+            r = getattr(self, f'{field}_{exact_lang_field}') or None
+            if r is not None:
+                return r
+        else:
+            base_language = current_language.split('-')[0]
+            base_lang_field = languages.get(base_language)
+            if base_lang_field:
+                r = getattr(self, f'{field}_{base_lang_field}') or None
                 if r is not None:
                     return r
-                elif settings.REPLACE_MISSING_TRANSLATION:
-                    for i in range(1, 6):
-                        r = getattr(self, '{}_{}'.format(field, 'lang' + str(i))) or None
-                        if r is not None:
-                            return r
+
+        if settings.REPLACE_MISSING_TRANSLATION:
+            for i in range(1, 6):
+                r = getattr(self, '{}_{}'.format(field, 'lang' + str(i))) or None
+                if r is not None:
+                    return r
         return ''
