@@ -1,9 +1,8 @@
 from django.db.models import Q
-from django.utils.translation import get_language
 
 from rest_framework.filters import BaseFilterBackend
 
-from rdmo.core.utils import get_languages
+from rdmo.core.utils import get_current_language_field
 
 
 class SearchFilter(BaseFilterBackend):
@@ -19,11 +18,11 @@ class SearchFilter(BaseFilterBackend):
             if 'uri' in view.search_fields:
                 q |= Q(uri__contains=search)
 
-            for lang_code, _, lang_field in get_languages():
-                if lang_code == get_language():
-                    for search_field in ['title', 'text']:
-                        if search_field in view.search_fields:
-                            q |= Q(**{f'{search_field}_{lang_field}__contains': search})
+            lang_field = get_current_language_field()
+            if lang_field:
+                for search_field in ['title', 'text']:
+                    if search_field in view.search_fields:
+                        q |= Q(**{f'{search_field}_{lang_field}__contains': search})
 
             queryset = queryset.filter(q)
 

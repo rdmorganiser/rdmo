@@ -3,10 +3,9 @@ import logging
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
-from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.utils import get_languages
+from rdmo.core.utils import get_current_language_field
 
 logger = logging.getLogger(__name__)
 
@@ -31,17 +30,15 @@ class Model(models.Model):
 class TranslationMixin:
 
     def trans(self, field):
-        current_language = get_language()
+        lang_field = get_current_language_field()
+        if lang_field:
+            r = getattr(self, f'{field}_{lang_field}') or None
+            if r is not None:
+                return r
 
-        languages = get_languages()
-        for lang_code, _lang_string, lang_field in languages:
-            if lang_code == current_language:
-                r = getattr(self, f'{field}_{lang_field}') or None
+        if settings.REPLACE_MISSING_TRANSLATION:
+            for i in range(1, 6):
+                r = getattr(self, '{}_{}'.format(field, 'lang' + str(i))) or None
                 if r is not None:
                     return r
-                elif settings.REPLACE_MISSING_TRANSLATION:
-                    for i in range(1, 6):
-                        r = getattr(self, '{}_{}'.format(field, 'lang' + str(i))) or None
-                        if r is not None:
-                            return r
         return ''
