@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from django.utils.translation import activate
+from django.utils import translation
 
 from rdmo.core.utils import (
     human2bytes,
@@ -85,8 +85,8 @@ def test_human2bytes(human: str | None, bytes: float):
 
 @pytest.mark.parametrize("locale, date_string, expected_date", valid_date_strings)
 def test_parse_date_from_string_valid_formats(settings, locale, date_string, expected_date):
-    activate(locale)
-    assert parse_date_from_string(date_string) == expected_date
+    with translation.override(locale):
+        assert parse_date_from_string(date_string) == expected_date
 
 
 @pytest.mark.parametrize("invalid_date, error_msg", invalid_date_strings)
