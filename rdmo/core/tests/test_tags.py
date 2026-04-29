@@ -10,7 +10,9 @@ def test_i18n_switcher(rf):
     # create a fake template with a name
     template = "{% load core_tags %}{% i18n_switcher %}"
 
+    # set a language
     with translation.override(settings.LANGUAGES[0][0]):
+
         # render the link
         request = rf.get(reverse('home'))
         context = RequestContext(request, {})
