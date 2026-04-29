@@ -22,7 +22,6 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
                 .filter_for_site(project.site)
                 .filter(models.Q(catalogs=None) | models.Q(catalogs=project.catalog))
                 .filter(models.Q(groups=None) | models.Q(groups__in=project.groups))
-                .filter(available=True)
         )
 
     def filter_for_settings(self):
