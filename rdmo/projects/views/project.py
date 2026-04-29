@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, OuterRef, Subquery
 from django.forms import Form
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -21,7 +20,7 @@ from rdmo.questions.models import Catalog
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
-from ..utils import filter_tasks_or_views_for_project, get_upload_accept
+from ..utils import filter_tasks_or_views_for_project, get_project_export_plugin, get_upload_accept
 
 logger = logging.getLogger(__name__)
 
@@ -219,26 +218,13 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
-    def get_plugin_by_url_name(self, url_name, project=None):
-        for plugin in Plugin.objects.for_context(
-            plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
-            project=project,
-            user=self.request.user,
-        ):
-            if plugin.url_name == url_name:
-                return plugin
-
     def get_export_plugin(self):
-        plugin = self.get_plugin_by_url_name(self.kwargs.get('url_name'), self.object)
-        if plugin:
-            import_plugin = plugin.initialize_class()
-            import_plugin.request = self.request
-            import_plugin.project = self.object
-
-            return import_plugin
-
-        # no plugin for this url_name found
-        raise Http404
+        return get_project_export_plugin(
+            self.object,
+            self.request.user,
+            self.kwargs.get('url_name'),
+            request=self.request,
+        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

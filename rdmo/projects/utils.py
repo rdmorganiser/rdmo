@@ -6,16 +6,36 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.http import Http404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import remove_double_newlines
 from rdmo.tasks.managers import TaskQuerySet
 from rdmo.views.managers import ViewQuerySet
 
 logger = logging.getLogger(__name__)
+
+
+def get_project_export_plugin(project, user, url_name, request=None):
+    export_plugin_instance = Plugin.objects.for_context(
+        project=project,
+        plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+        user=user,
+    ).filter(url_name=url_name).first()
+
+    if export_plugin_instance is None:
+        raise Http404
+
+    export_plugin = export_plugin_instance.initialize_class()
+    export_plugin.project = project
+    if request is not None:
+        export_plugin.request = request
+    return export_plugin
 
 
 def get_value_path(project, snapshot=None):

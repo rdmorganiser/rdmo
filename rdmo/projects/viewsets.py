@@ -85,6 +85,7 @@ from .utils import (
     copy_project,
     filter_tasks_or_views_for_project,
     get_contact_message,
+    get_project_export_plugin,
     get_upload_accept,
     send_contact_message,
     send_invite_email,
@@ -172,6 +173,15 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=True, methods=['get', 'post'], url_path=r'export/(?P<export_format>[a-z-]+)',
+            permission_classes = (HasModelPermission | HasProjectPermission,))
+    def export(self, request, pk=None, export_format=None):
+        project = self.get_object()
+        plugin = get_project_export_plugin(project, request.user, export_format, request=request)
+        if request.method == 'POST':
+            return plugin.submit()
+        return plugin.render()
 
     @action(detail=True, url_path=r'navigation(?:/(?P<section_id>\d+))?',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
