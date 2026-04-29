@@ -13,6 +13,7 @@ from django.template.loader import get_template, render_to_string
 from django.utils.dateparse import parse_date
 from django.utils.encoding import force_str
 from django.utils.formats import get_format
+from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from defusedcsv import csv
@@ -118,6 +119,21 @@ def get_languages() -> list[tuple]:
         except IndexError:
             pass
     return languages
+
+
+def get_current_language_field():
+    current_language = (get_language() or '').lower()
+    languages = {
+        lang_code.lower(): lang_field
+        for lang_code, _lang_string, lang_field in get_languages()
+    }
+
+    lang_field = languages.get(current_language)
+    if lang_field:
+        return lang_field
+
+    base_language = current_language.split('-')[0]
+    return languages.get(base_language)
 
 
 def get_language_fields(field_name):
