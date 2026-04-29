@@ -50,6 +50,7 @@ urlnames = {
     'detail': 'v1-projects:project-detail',
     'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
+    'export': 'v1-projects:project-export',
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
@@ -185,6 +186,18 @@ def test_detail(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_export_unavailable_plugin_requires_admin(db, client):
+    url = reverse(urlnames['export'], args=[1, 'simple'])
+
+    client.login(username='owner', password='owner')
+    response = client.get(url)
+    assert response.status_code == 404
+
+    client.force_login(User.objects.get(username='admin'))
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize('username,password', users)
