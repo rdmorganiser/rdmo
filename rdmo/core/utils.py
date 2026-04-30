@@ -110,7 +110,7 @@ def get_model_field_meta(model):
     elif model._meta.model_name == 'plugin':
         meta['python_path'] = {
             **meta.get('python_path', {}),
-            'choices': settings.PLUGINS
+            'choices': [(python_path, python_path) for python_path in settings.PLUGINS]
         }
 
     return meta
