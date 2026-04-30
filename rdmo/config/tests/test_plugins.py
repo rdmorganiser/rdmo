@@ -2,9 +2,12 @@ from importlib import metadata
 
 import pytest
 
+from django.core.exceptions import ValidationError
+
 from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.config.utils import get_plugins_from_settings
+from rdmo.config.validators import PluginURLNameValidator
 from rdmo.core.utils import get_model_field_meta
 from rdmo.options.providers import Provider
 from rdmo.projects.exports import Export
@@ -96,3 +99,44 @@ def test_build_plugin_meta_includes_distribution_version(settings, monkeypatch):
 
     plugin = Plugin()
     assert plugin.build_plugin_meta(MockPlugin) == {'distribution_name': 'mocked-dist', 'distribution_version': '0.0.1'}
+
+
+def test_plugin_url_name_validator_allows_upload_import_without_url_name(monkeypatch):
+    class MockUploadImport:
+        plugin_type = PLUGIN_TYPES.PROJECT_IMPORT
+        upload = True
+
+    monkeypatch.setattr('rdmo.config.validators.import_string', lambda _: MockUploadImport)
+
+    PluginURLNameValidator()({
+        'plugin_type': PLUGIN_TYPES.PROJECT_IMPORT,
+        'python_path': 'mocked.upload.import',
+    })
+
+
+def test_plugin_url_name_validator_allows_import_class_url_name(monkeypatch):
+    class MockImport:
+        plugin_type = PLUGIN_TYPES.PROJECT_IMPORT
+        upload = False
+        url_name = 'mocked-import'
+
+    monkeypatch.setattr('rdmo.config.validators.import_string', lambda _: MockImport)
+
+    PluginURLNameValidator()({
+        'plugin_type': PLUGIN_TYPES.PROJECT_IMPORT,
+        'python_path': 'mocked.import',
+    })
+
+
+def test_plugin_url_name_validator_requires_url_name_for_export(monkeypatch):
+    class MockExport:
+        plugin_type = PLUGIN_TYPES.PROJECT_EXPORT
+        url_name = ''
+
+    monkeypatch.setattr('rdmo.config.validators.import_string', lambda _: MockExport)
+
+    with pytest.raises(ValidationError):
+        PluginURLNameValidator()({
+            'plugin_type': PLUGIN_TYPES.PROJECT_EXPORT,
+            'python_path': 'mocked.export',
+        })
