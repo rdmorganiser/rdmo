@@ -85,7 +85,7 @@ def test_get_model_field_meta_serializes_plugin_python_path_choices(settings):
     ]
 
 def test_build_plugin_meta_includes_distribution_version(settings, monkeypatch):
-    settings.PLUGIN_META_ATTRIBUTES = ('distribution_name', 'distribution_version')
+    monkeypatch.setattr('rdmo.config.models.PLUGIN_META_ATTRIBUTES', ('distribution_name', 'distribution_version'))
 
     class MockPlugin:
         __module__ = 'mocked_package.plugin'

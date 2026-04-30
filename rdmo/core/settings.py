@@ -334,34 +334,16 @@ PLUGINS = [  # introduced in 2.5
     'rdmo.projects.imports.RDMOXMLImport',
 ]
 
-PLUGIN_META_ATTRIBUTES = (
-    'accept',
-    'upload',
-    'search',
-    'refresh',
-    'delimiter',
-    'distribution_name',
-    'distribution_version',
-)
-
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
 
 PROJECT_ISSUES = True
 
-# PROJECT_ISSUE_PROVIDERS  # deprecated in 2.5
-
 PROJECT_VIEWS = True
 
 PROJECT_CONTACT = False
 PROJECT_CONTACT_RECIPIENTS = []
-
-# PROJECT_EXPORTS  # deprecated in 2.5
-# PROJECT_SNAPSHOT_EXPORTS  # deprecated in 2.5
-# PROJECT_IMPORTS  # deprecated in 2.5
-
-# PROJECT_IMPORTS_LIST  # deprecated in 2.5
 
 PROJECT_FILE_QUOTA = '10Mb'
 
@@ -380,8 +362,6 @@ PROJECT_CREATE_GROUPS = []
 PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
 
 NESTED_PROJECTS = True
-
-# OPTIONSET_PROVIDERS  # deprecated in 2.5
 
 PROJECT_VALUES_SEARCH_LIMIT = 10
 

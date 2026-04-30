@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.constants import PLUGIN_META_ATTRIBUTES, PLUGIN_TYPES
 from rdmo.config.managers import PluginManager
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import get_distribution_name_from_class, get_distribution_version, join_url
@@ -249,7 +249,7 @@ class Plugin(Model, TranslationMixin):
         # are explicitly defined on the plugin class or its BasePlugin ancestors.
         meta = {}
         mro = plugin_class.mro()
-        attrs = settings.PLUGIN_META_ATTRIBUTES
+        attrs = PLUGIN_META_ATTRIBUTES
 
         for attr in attrs:
             if attr.startswith('distribution_'):

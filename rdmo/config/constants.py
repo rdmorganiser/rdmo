@@ -7,3 +7,14 @@ class PLUGIN_TYPES(TextChoices):
     PROJECT_IMPORT = "project_import", "Project import"
     PROJECT_ISSUE_PROVIDER = "project_issue_provider", "Project issue provider"
     OPTIONSET_PROVIDER = "optionset_provider", "Optionset provider"
+
+
+PLUGIN_META_ATTRIBUTES = (
+    'accept',
+    'upload',
+    'search',
+    'refresh',
+    'delimiter',
+    'distribution_name',
+    'distribution_version',
+)
