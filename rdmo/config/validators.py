@@ -24,23 +24,10 @@ class PluginPythonPathValidator(InstanceValidator):
         super().__call__(data, serializer)
 
         available_plugin_paths = get_plugin_python_paths()
-        if not available_plugin_paths:
-            self.raise_validation_error({
-                'python_path': _("There are no python paths for plugins available.")
-            })
-
         if data.get('python_path') not in available_plugin_paths:
             self.raise_validation_error({
                 'python_path': _("This path is not in the configured paths.")
             })
-
-        if self.instance and self.instance.available:
-            try:  # a double-check, maybe not needed
-                import_string(data.get('python_path'))
-            except (ModuleNotFoundError, ImportError):
-                self.raise_validation_error({
-                    'python_path': _("This path could not be not imported.")
-                })
 
 
 class PluginURLNameValidator(InstanceValidator):
@@ -50,11 +37,13 @@ class PluginURLNameValidator(InstanceValidator):
     def __call__(self, data, serializer=None):
         super().__call__(data, serializer)
 
+        plugin_class = None
         if self.instance:
             if self.instance.plugin_type:
                 plugin_type = self.instance.plugin_type
             else:
-                plugin_type = self.instance.get_plugin_class().plugin_type
+                plugin_class = self.instance.get_plugin_class()
+                plugin_type = plugin_class.plugin_type
         else:
             plugin_type = data.get('plugin_type')
 
@@ -63,28 +52,34 @@ class PluginURLNameValidator(InstanceValidator):
         except ValueError:
             return
 
-        if plugin_type == PLUGIN_TYPES.PROJECT_IMPORT:
-            python_path = data.get('python_path')
-            if not python_path and self.instance:
-                python_path = self.instance.python_path
+        if plugin_type not in (PLUGIN_TYPES.PROJECT_IMPORT, PLUGIN_TYPES.PROJECT_EXPORT):
+            return
 
-            is_upload_plugin = False
-            if self.instance and python_path == self.instance.python_path:
-                is_upload_plugin = self.instance.plugin_meta.get('upload') is True
-            elif python_path:
-                try:
-                    plugin_class = import_string(python_path)
-                    is_upload_plugin = getattr(plugin_class, 'upload', False) is True
-                except (ModuleNotFoundError, ImportError):
-                    is_upload_plugin = False
+        python_path = data.get('python_path')
+        if not python_path and self.instance:
+            python_path = self.instance.python_path
 
-            if is_upload_plugin:
-                return
+        is_upload_plugin = False
+        if self.instance and python_path == self.instance.python_path:
+            is_upload_plugin = self.instance.plugin_meta.get('upload') is True
+            if plugin_class is None:
+                plugin_class = self.instance.get_plugin_class()
+        elif python_path:
+            try:
+                plugin_class = import_string(python_path)
+                is_upload_plugin = getattr(plugin_class, 'upload', False) is True
+            except (ModuleNotFoundError, ImportError):
+                is_upload_plugin = False
 
-            url_name = data.get('url_name')
-            if url_name is None and self.instance:
-                url_name = self.instance.url_name
-            if not url_name:
-                self.raise_validation_error({
-                    'url_name': _("This field is required for project import plugins.")
-                })
+        if plugin_type == PLUGIN_TYPES.PROJECT_IMPORT and is_upload_plugin:
+            return
+
+        url_name = data.get('url_name')
+        if url_name is None and self.instance:
+            url_name = self.instance.url_name
+        if url_name is None and plugin_class is not None:
+            url_name = getattr(plugin_class, 'url_name', None)
+        if not url_name:
+            self.raise_validation_error({
+                'url_name': _("This field is required for this plugin.")
+            })
