@@ -56,11 +56,13 @@ class PluginViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        plugin = self.get_object()
+
         if export_format == 'xml':
-            serializer = PluginExportSerializer(self.get_object())
+            serializer = PluginExportSerializer(plugin)
             xml = PluginRenderer().render([serializer.data])
-            return XMLResponse(xml, name=self.get_object().uri_path)
-        return render_to_format(self.request, export_format, self.get_object().uri_path,
+            return XMLResponse(xml, name=plugin.uri_path)
+        return render_to_format(self.request, export_format, plugin.uri_path,
                                 'config/export/plugins.html', {
-                                    'plugins': [self.get_object()]
+                                    'plugins': [plugin]
                                 })
