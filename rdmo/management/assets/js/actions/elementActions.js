@@ -5,6 +5,7 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import ConditionsApi from '../api/ConditionsApi'
+import ConfigApi from '../api/ConfigApi'
 import DomainApi from '../api/DomainApi'
 import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
@@ -12,6 +13,7 @@ import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
 
 import ConditionsFactory from '../factories/ConditionsFactory'
+import ConfigFactory from '../factories/ConfigFactory'
 import DomainFactory from '../factories/DomainFactory'
 import OptionsFactory from '../factories/OptionsFactory'
 import QuestionsFactory from '../factories/QuestionsFactory'
@@ -86,6 +88,11 @@ export function fetchElements(elementType) {
       case 'views':
         action = (dispatch) => ViewsApi.fetchViews(true)
           .then(views => dispatch(fetchElementsSuccess({ views })))
+        break
+
+      case 'plugins':
+        action = (dispatch) => ConfigApi.fetchPlugins(true)
+          .then(plugins => dispatch(fetchElementsSuccess({ plugins })))
         break
     }
 
@@ -271,13 +278,14 @@ export function fetchElement(elementType, elementId, elementAction=null) {
             OptionsApi.fetchOptionSet(elementId),
             ConditionsApi.fetchConditions('index'),
             OptionsApi.fetchOptions('index'),
-            QuestionsApi.fetchQuestions('index')
-          ]).then(([element, conditions, options, questions]) => {
+            QuestionsApi.fetchQuestions('index'),
+            ConfigApi.fetchPlugins('index', { plugin_type: 'optionset_provider' })
+          ]).then(([element, conditions, options, questions, plugins]) => {
             if (elementAction == 'copy') {
               delete element.questions
             }
             return {
-              element, conditions, options, questions
+              element, conditions, options, questions, plugins
             }
           })
         }
@@ -342,6 +350,18 @@ export function fetchElement(elementType, elementId, elementAction=null) {
         ]).then(([element, catalogs]) => ({
           element, catalogs
         }))
+        break
+
+      case 'plugins':
+        action = () => Promise.all([
+          ConfigApi.fetchPlugin(elementId),
+          QuestionsApi.fetchCatalogs('index'),
+        ]).then(([element, catalogs]) => {
+          if (elementAction == 'copy') {
+            delete element.catalogs
+          }
+          return { element, catalogs }
+        })
         break
     }
 
@@ -432,6 +452,10 @@ export function storeElement(elementType, element, elementAction = null, back = 
 
       case 'views':
         action = () => ViewsApi.storeView(element, elementAction)
+        break
+
+      case 'plugins':
+        action = () => ConfigApi.storePlugin(element, elementAction)
         break
     }
 
@@ -546,8 +570,9 @@ export function createElement(elementType, parent={}) {
         action = () => Promise.all([
           OptionsFactory.createOptionSet(getState().config, parent),
           OptionsApi.fetchOptions('index'),
-        ]).then(([element, options]) => ({
-            element, parent, options
+          ConfigApi.fetchPlugins('index', { plugin_type: 'optionset_provider' })
+          ]).then(([element, options, plugins]) => ({
+            element, parent, options, plugins
           }))
         break
 
@@ -584,6 +609,15 @@ export function createElement(elementType, parent={}) {
       case 'views':
         action = () => Promise.all([
           ViewsFactory.createView(getState().config),
+          QuestionsApi.fetchCatalogs('index')
+        ]).then(([element, catalogs]) => ({
+          element, catalogs
+        }))
+        break
+
+      case 'plugins':
+        action = () => Promise.all([
+          ConfigFactory.createPlugin(getState().config),
           QuestionsApi.fetchCatalogs('index')
         ]).then(([element, catalogs]) => ({
           element, catalogs
@@ -663,6 +697,10 @@ export function deleteElement(elementType, element) {
 
       case 'views':
         action = () => ViewsApi.deleteView(element)
+        break
+
+      case 'plugins':
+        action = () => ConfigApi.deletePlugin(element)
         break
     }
 

@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, OuterRef, Subquery
 from django.forms import Form
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -13,14 +12,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 
-from rdmo.core.plugins import get_plugin, get_plugins
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
 from rdmo.questions.models import Catalog
 
 from ...tasks.models import Task
 from ...views.models import View
 from ..models import Integration, Invite, Membership, Project
-from ..utils import filter_tasks_or_views_for_project, get_upload_accept
+from ..utils import filter_tasks_or_views_for_project, get_project_export_plugin, get_upload_accept
 
 logger = logging.getLogger(__name__)
 
@@ -78,14 +78,23 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 filter_tasks_or_views_for_project(View, project).filter_availability(self.request.user).exists()
             )
 
-        ancestors_import = []
-        for instance in ancestors.exclude(id=project.id):
-            if self.request.user.has_perm('projects.view_project_object', instance):
-                ancestors_import.append(instance)
-        context['ancestors_import'] = ancestors_import
+        if settings.NESTED_PROJECTS:
+            ancestors_import = []
+            for instance in ancestors.exclude(id=project.id):
+                if self.request.user.has_perm('projects.view_project_object', instance):
+                    ancestors_import.append(instance)
+            context['ancestors_import'] = ancestors_import
+
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
-        context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
+        context['providers'] = {}
+        for plugin in Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+            project=project,
+            user=self.request.user
+        ).exclude(url_name=""):
+            context['providers'][plugin.url_name] = plugin.initialize_class()
+
         context['issues'] = [
             issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)
         ]
@@ -93,9 +102,44 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
+        upload_plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
+            project=project,
+            user=self.request.user,
+        )
         context['upload_accept'] = ','.join([
-            suffix for suffixes in get_upload_accept().values() for suffix in suffixes
+            suffix for suffixes in get_upload_accept(upload_plugins).values() for suffix in suffixes
         ])
+
+        context['exports'] = [
+            (plugin.url_name, plugin.title)
+            for plugin in Plugin.objects.for_context(
+                plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+                project=project,
+                user=self.request.user,
+            ).exclude(url_name="")
+        ]
+
+        context['snapshot_exports'] = [
+            (plugin.url_name, plugin.title)
+            for plugin in Plugin.objects.for_context(
+                plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
+                project=project,
+                user=self.request.user,
+            ).exclude(url_name="")
+        ]
+
+        import_plugins = Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
+            project=project,
+            user=self.request.user,
+        )
+        context['upload_import'] = import_plugins.filter(plugin_meta__upload=True).exists()
+        context['url_import'] = [
+            (plugin.url_name, plugin.title)
+            for plugin in import_plugins.exclude(plugin_meta__upload=True)
+        ]
+
         return context
 
 
@@ -175,14 +219,12 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.export_project_object'
 
     def get_export_plugin(self):
-        export_plugin = get_plugin('PROJECT_EXPORTS', self.kwargs.get('format'))
-        if export_plugin is None:
-            raise Http404
-
-        export_plugin.request = self.request
-        export_plugin.project = self.object
-
-        return export_plugin
+        return get_project_export_plugin(
+            self.object,
+            self.request.user,
+            self.kwargs.get('url_name'),
+            request=self.request,
+        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rdmo.views',
     'rdmo.projects',
     'rdmo.management',
+    'rdmo.config',
     # 3rd party modules
     'rest_framework',
     'rest_framework.authtoken',
@@ -232,10 +233,6 @@ SETTINGS_EXPORT = [
     'PROJECT_VISIBILITY',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
-    'PROJECT_EXPORTS',
-    'PROJECT_SNAPSHOT_EXPORTS',
-    'PROJECT_IMPORTS',
-    'PROJECT_IMPORTS_LIST',
     'PROJECT_SEND_ISSUE',
     'NESTED_PROJECTS',
     'PROJECT_VIEWS_SYNC',
@@ -335,33 +332,40 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
     # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
 }
 
+PLUGINS = [  # introduced in 2.5
+    'rdmo.projects.exports.RDMOXMLExport',
+    'rdmo.projects.exports.RDMOSnapshotXMLExport',
+    'rdmo.projects.imports.RDMOXMLImport',
+]
+
+PLUGIN_META_ATTRIBUTES = (
+    'accept',
+    'upload',
+    'search',
+    'refresh',
+    'delimiter',
+    'distribution_name',
+    'distribution_version',
+)
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
 
 PROJECT_ISSUES = True
 
-PROJECT_ISSUE_PROVIDERS = []
+# PROJECT_ISSUE_PROVIDERS  # deprecated in 2.5
 
 PROJECT_VIEWS = True
 
 PROJECT_CONTACT = False
 PROJECT_CONTACT_RECIPIENTS = []
 
-PROJECT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
-    ('csvcomma', _('CSV (comma separated)'), 'rdmo.projects.exports.CSVCommaExport'),
-    ('csvsemicolon', _('CSV (semicolon separated)'), 'rdmo.projects.exports.CSVSemicolonExport'),
-    ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
-]
+# PROJECT_EXPORTS  # deprecated in 2.5
+# PROJECT_SNAPSHOT_EXPORTS  # deprecated in 2.5
+# PROJECT_IMPORTS  # deprecated in 2.5
 
-PROJECT_SNAPSHOT_EXPORTS = []
-
-PROJECT_IMPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
-]
-
-PROJECT_IMPORTS_LIST = []
+# PROJECT_IMPORTS_LIST  # deprecated in 2.5
 
 PROJECT_FILE_QUOTA = '10Mb'
 
@@ -381,7 +385,7 @@ PROJECT_VALUES_CONFLICT_THRESHOLD = 0.01
 
 NESTED_PROJECTS = True
 
-OPTIONSET_PROVIDERS = []
+# OPTIONSET_PROVIDERS  # deprecated in 2.5
 
 PROJECT_VALUES_SEARCH_LIMIT = 10
 

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -7,8 +5,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
+from rdmo.config.models import Plugin
 from rdmo.core.models import TranslationMixin
-from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import join_url
 
 
@@ -49,11 +47,6 @@ class OptionSet(models.Model):
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this option set (in a multi site setup).')
     )
-    provider_key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Provider'),
-        help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
-    )
     options = models.ManyToManyField(
         'Option', through='OptionSetOption', blank=True, related_name='optionsets',
         verbose_name=_('Options'),
@@ -63,6 +56,11 @@ class OptionSet(models.Model):
         Condition, blank=True, related_name='optionsets',
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
+    )
+    plugins = models.ManyToManyField(
+        Plugin, blank=True, related_name='optionsets',
+        verbose_name=_('Plugins'),
+        help_text=_('The list of plugins evaluated for this option set.')
     )
 
     class Meta:
@@ -82,20 +80,16 @@ class OptionSet(models.Model):
         return self.uri
 
     @property
-    def provider(self) -> list:
-        return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
-
-    @property
-    def has_provider(self) -> bool:
-        return self.provider is not None
+    def has_plugins(self) -> bool:
+        return self.plugins.exists()
 
     @property
     def has_search(self) -> bool:
-        return self.has_provider and self.provider.search
+        return self.has_plugins and any(i.has_search for i in self.plugins.all())
 
     @property
     def has_refresh(self) -> bool:
-        return self.has_provider and self.provider.refresh
+        return self.has_plugins and any(i.has_refresh for i in self.plugins.all())
 
     @property
     def has_conditions(self) -> bool:
@@ -106,7 +100,7 @@ class OptionSet(models.Model):
         return self.locked
 
     @cached_property
-    def elements(self) -> list[Option]:
+    def elements(self) -> list:
         return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
     @classmethod
