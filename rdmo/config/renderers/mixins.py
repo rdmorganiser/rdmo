@@ -25,7 +25,6 @@ class PluginRendererMixin:
                 plugin_settings = json.dumps(plugin_settings)
             self.render_text_element(xml, 'plugin_settings', {}, plugin_settings)
 
-            self.render_text_element(xml, 'available', {}, plugin['available'])
             self.render_text_element(xml, 'locked', {}, plugin['locked'])
             self.render_text_element(xml, 'order', {}, plugin['order'])
             self.render_text_element(xml, 'url_name', {}, plugin['url_name'])
