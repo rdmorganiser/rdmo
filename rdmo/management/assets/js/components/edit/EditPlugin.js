@@ -95,6 +95,9 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
         <Select config={config} element={plugin} field="python_path"
                 options={pythonPathOptions} onChange={updatePlugin} />
 
+        <JsonField config={config} element={plugin} field="plugin_settings"
+                   onChange={updatePlugin} />
+
         <Tabs id="#plugin-tabs" defaultActiveKey={0} animation={false}>
           {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
@@ -119,9 +122,6 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={plugin} field="editors"
                                                       options={sites} onChange={updatePlugin} isMulti />}
-
-        <JsonField config={config} element={plugin} field="plugin_settings"
-                   onChange={updatePlugin} />
 
         <JsonField config={config} element={plugin} field="plugin_meta"
                    disabled />
