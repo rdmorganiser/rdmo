@@ -14,7 +14,6 @@ class PluginExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
             'uri_prefix',
             'uri_path',
             'comment',
-            'available',
             'locked',
             'order',
             'python_path',
