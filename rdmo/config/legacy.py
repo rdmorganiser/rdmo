@@ -2,35 +2,23 @@ from django.conf import settings
 
 from rdmo.config.constants import PLUGIN_TYPES
 
-PLUGIN_TYPE_TO_SETTING_KEY = {
-    PLUGIN_TYPES.PROJECT_IMPORT: "PROJECT_IMPORTS",
-    PLUGIN_TYPES.PROJECT_EXPORT: "PROJECT_EXPORTS",
-    PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT: "PROJECT_SNAPSHOT_EXPORTS",
-    PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER: "PROJECT_ISSUE_PROVIDERS",
-    PLUGIN_TYPES.OPTIONSET_PROVIDER: "OPTIONSET_PROVIDERS",
-}
 
-def get_plugins_from_legacy_settings(select_plugin_type=None) -> list[dict]:
+def get_plugins_from_legacy_settings() -> list[dict]:
     """Read 3-tuples (key, label, python-path) from legacy settings."""
     plugin_definitions: list[dict] = []
-    for plugin_type, legacy_setting in PLUGIN_TYPE_TO_SETTING_KEY.items():
-        if not hasattr(settings, legacy_setting):
-            continue
-        if select_plugin_type is not None and select_plugin_type != plugin_type:
-            continue
+    for legacy_setting, plugin_type in (
+        ("PROJECT_IMPORTS", PLUGIN_TYPES.PROJECT_IMPORT),
+        ("PROJECT_EXPORTS", PLUGIN_TYPES.PROJECT_EXPORT),
+        ("PROJECT_SNAPSHOT_EXPORTS", PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT),
+        ("PROJECT_ISSUE_PROVIDERS", PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER),
+        ("OPTIONSET_PROVIDERS", PLUGIN_TYPES.OPTIONSET_PROVIDER),
+    ):
 
-        legacy_plugins = getattr(settings, legacy_setting, None)
+        legacy_plugins = getattr(settings, legacy_setting, [])
         if not legacy_plugins:
             continue
 
-        for entry in legacy_plugins:
-            try:
-                key, label, dotted = entry
-            except ValueError as exc:
-                raise ValueError(
-                    f"{legacy_setting} must be a sequence of 3-tuples "
-                    f"(key, label, python-path); got {entry!r}"
-                ) from exc
+        for (key, label, dotted) in legacy_plugins:
 
             plugin_definitions.append({
                 "uri_prefix": settings.DEFAULT_URI_PREFIX,
