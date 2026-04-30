@@ -2,9 +2,10 @@ from django import forms
 from django.contrib import admin
 
 from rdmo.core.admin import ElementAdminForm
-from rdmo.core.utils import get_language_fields, get_plugin_python_paths
+from rdmo.core.utils import get_language_fields
 
 from .models import Plugin
+from .utils import get_plugin_python_paths
 from .validators import (
     PluginLockedValidator,
     PluginPythonPathValidator,

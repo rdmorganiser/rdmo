@@ -4,7 +4,7 @@ import types
 
 import pytest
 
-from django.core.management import CommandError, call_command
+from django.core.management import call_command
 
 from rdmo.config.models import Plugin
 
@@ -138,10 +138,10 @@ def test_setup_plugins_clear_with_dry_run_keeps_rows(db, settings, monkeypatch):
 
 
 def test_setup_plugins_validate_failure(db, settings):
-    # non-importable path will fail validation
+    # non-importable path should now fail fast with the import error
     settings.PLUGINS = ["nope.this.module.DoesNotExist"]
 
-    with pytest.raises(CommandError):
+    with pytest.raises(ModuleNotFoundError):
         call_command("setup_plugins", stdout=io.StringIO(), stderr=io.StringIO())
 
     assert not Plugin.objects.filter(python_path="nope.this.module.DoesNotExist").exists()

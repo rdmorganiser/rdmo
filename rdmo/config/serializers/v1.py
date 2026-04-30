@@ -7,9 +7,9 @@ from rdmo.core.serializers import (
     ReadOnlyObjectPermissionSerializerMixin,
     TranslationSerializerMixin,
 )
-from rdmo.core.utils import get_plugin_python_paths
 
 from ..models import Plugin
+from ..utils import get_plugin_python_paths
 from ..validators import (
     PluginLockedValidator,
     PluginPythonPathValidator,
