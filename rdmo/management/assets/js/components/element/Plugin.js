@@ -54,6 +54,10 @@ const Plugin = ({ config, plugin, elementActions, filter=false, filterSites=fals
             <strong>{gettext('Type')}{': '}</strong>
             <code className="code-config">{plugin.plugin_type || gettext('Unknown')}</code>
           </p>
+          <p>
+            <strong>{gettext('Python path')}{': '}</strong>
+            <code className="code-config">{plugin.python_path}</code>
+          </p>
           <ElementErrors element={plugin} />
         </div>
       </div>
