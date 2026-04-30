@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
@@ -9,7 +9,7 @@ import { json } from '@codemirror/lang-json'
 
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const JsonField = ({ config, element, field, onChange, disabled = false }) => {
+const JsonField = forwardRef(({ config, element, field, disabled = false }, ref) => {
   const id = getId(element, field),
         label = getLabel(config, element, field),
         help = getHelp(config, element, field),
@@ -17,14 +17,28 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
         errors = get(element, ['errors', field])
 
   const [value, setValue] = useState(formatValue(element[field]))
-  const [parseError, setParseError] = useState(false)
+  const [parseError, setParseError] = useState(null)
 
   useEffect(() => {
     setValue(formatValue(element[field]))
   }, [element.id, field])
 
+  useImperativeHandle(ref, () => ({
+    commit: () => {
+      try {
+        const parsed = value.trim() ? JSON.parse(value) : {}
+        setParseError(null)
+        return parsed
+      } catch (e) {
+        setParseError(getParseErrorMessageFromError(e))
+        return undefined
+      }
+    }
+  }), [value])
+
   const className = classNames({
     'form-group': true,
+    'is-disabled': disabled || element.read_only,
     'has-warning': !isEmpty(warnings) || parseError,
     'has-error': !isEmpty(errors)
   })
@@ -34,22 +48,7 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
       return
     }
     setValue(newValue)
-    if (parseError) {
-      setParseError(false)
-    }
-  }
-
-  const handleBlur = () => {
-    if (disabled || element.read_only) {
-      return
-    }
-    try {
-      const parsed = value.trim() ? JSON.parse(value) : {}
-      setParseError(false)
-      onChange(field, parsed)
-    } catch (e) {
-      setParseError(true)
-    }
+    setParseError(validateJson(newValue))
   }
 
   return (
@@ -57,20 +56,24 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <ReactCodeMirror
-        className="codemirror form-control"
+        className={classNames('codemirror form-control', { 'is-disabled': disabled })}
         id={id}
         value={value}
         extensions={[json()]}
         onChange={handleChange}
-        onBlur={handleBlur}
         editable={!(element.read_only || disabled)}
       />
 
       {help && <p className="help-block">{help}</p>}
       {parseError && (
-        <p className="help-block text-warning">
-          {gettext('Please provide valid JSON.')}
-        </p>
+        <>
+          <p className="help-block text-warning">
+            {parseError}
+          </p>
+          <p className="help-block">
+            {gettext('Example:')} <code>{'{ "key1": "value", "key2": "value" }'}</code>
+          </p>
+        </>
       )}
 
       {errors && (
@@ -82,7 +85,9 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
       )}
     </div>
   )
-}
+})
+
+JsonField.displayName = 'JsonField'
 
 const formatValue = (value) => {
   if (isNil(value)) return ''
@@ -94,11 +99,26 @@ const formatValue = (value) => {
   }
 }
 
+const validateJson = (value) => {
+  try {
+    JSON.parse(value.trim() ? value : '{}')
+    return null
+  } catch (e) {
+    return getParseErrorMessageFromError(e)
+  }
+}
+
+const getParseErrorMessageFromError = (error) => {
+  if (error instanceof SyntaxError && error.message) {
+    return error.message
+  }
+  return gettext('Please provide valid JSON.')
+}
+
 JsonField.propTypes = {
   config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
-  onChange: PropTypes.func,
   disabled: PropTypes.bool
 }
 
