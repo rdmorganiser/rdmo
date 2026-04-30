@@ -10,7 +10,6 @@ from rdmo.core.managers import (
     GroupsManagerMixin,
     GroupsQuerySetMixin,
 )
-from rdmo.core.utils import jsonfield_contains
 
 
 class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuerySetMixin,
@@ -30,22 +29,21 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
 
         return self.filter(python_path__in=settings.PLUGINS)
 
-    def filter_for_format(self, file_format: str):
-        queryset = (
-            models.Q(url_name=file_format)
-            | models.Q(uri_path=file_format)
-            | models.Q(uri_path__endswith=f'/{file_format}')
-        )
+    def filter_for_plugin_type(self, plugin_type=None, plugin_types=None):
+        if plugin_type is not None and plugin_types is not None:
+            raise ValueError('Pass either plugin_type or plugin_types, not both.')
 
-        queryset_contains = jsonfield_contains(self.db, 'plugin_settings', 'format', file_format)
-        if queryset_contains is not None:
-            queryset |= queryset_contains
+        if plugin_type is not None:
+            return self.filter(plugin_type=plugin_type)
 
-        return self.filter(queryset)
+        if plugin_types is not None:
+            return self.filter(plugin_type__in=plugin_types)
+
+        return self
 
 
     def for_context(self, project=None, plugin_type=None, plugin_types=None,
-                    user=None, format=None):
+                    user=None, url_name=None):
         queryset = self
 
         # filter by settings.PLUGINS
@@ -65,17 +63,11 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
         queryset = queryset.filter_current_site()
 
         # filter by optional plugin type(s)
-        if plugin_type is not None and plugin_types is not None:
-            raise ValueError('Pass either plugin_type or plugin_types, not both.')
+        queryset = queryset.filter_for_plugin_type(plugin_type=plugin_type, plugin_types=plugin_types)
 
-        if plugin_type is not None:
-            queryset = queryset.filter(plugin_type=plugin_type)
-        elif plugin_types is not None:
-            queryset = queryset.filter(plugin_type__in=plugin_types)
-
-        # filter by optional format
-        if format is not None:
-            queryset = queryset.filter_for_format(format)
+        # filter by optional url_name
+        if url_name is not None:
+            queryset = queryset.filter(url_name=url_name)
 
         return queryset
 
@@ -94,15 +86,12 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
     def filter_for_settings(self):
         return self.get_queryset().filter_for_settings()
 
-    def filter_for_format(self, file_format):
-        return self.get_queryset().filter_for_format(file_format)
-
     def for_context(self, project=None, plugin_type=None, plugin_types=None,
-                    user=None, format=None):
+                    user=None, url_name=None):
         return self.get_queryset().for_context(
             project=project,
             plugin_type=plugin_type,
             plugin_types=plugin_types,
             user=user,
-            format=format
+            url_name=url_name
         )
