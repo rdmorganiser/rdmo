@@ -8,8 +8,8 @@ from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.managers import PluginManager
-from rdmo.config.utils import get_plugin_type_from_class
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import get_distribution_name_from_class, get_distribution_version, join_url
 
@@ -141,7 +141,7 @@ class Plugin(Model, TranslationMixin):
         help_text=_('Contains the settings for this plugin in JSON format.'),
     )
     plugin_type = models.SlugField(
-        max_length=128, blank=True, default="", editable=False,
+        max_length=128, blank=True, default="", editable=False, choices=PLUGIN_TYPES.choices,
         verbose_name=_('Plugin type'),
         help_text=_('The type of plugin this is, e.g. "project_export".')
     )
@@ -162,21 +162,9 @@ class Plugin(Model, TranslationMixin):
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
-        try:
-            plugin_class = self.get_class()
-        except ImportError as e:
-            raise RuntimeError(f"Could not import plugin from {self.python_path}: {e}") from e
-
-        try:
-            self.plugin_type = get_plugin_type_from_class(plugin_class)
-        except ValueError as e:
-            raise RuntimeError(f"Could not get plugin type from class {plugin_class}: {e}") from e
-
-        try:
-            self.initialize_class(plugin_class=plugin_class)
-        except ValueError as e:
-            raise RuntimeError(f"Could initialize the plugin from class {plugin_class}: {e}") from e
-
+        plugin_class = self.get_plugin_class()
+        self.initialize_class(plugin_class=plugin_class)
+        self.plugin_type = plugin_class.plugin_type
         self.plugin_meta = self.build_plugin_meta(plugin_class)
 
         super().save(*args, **kwargs)
@@ -204,24 +192,35 @@ class Plugin(Model, TranslationMixin):
         plugin_search = self.plugin_meta.get('search')
         if plugin_search is not None:
             return plugin_search
-        return getattr(self.get_class(), 'search', False)
+        return getattr(self.get_plugin_class(), 'search', False)
 
     @property
     def has_refresh(self):
         plugin_refresh = self.plugin_meta.get('refresh')
         if plugin_refresh is not None:
             return plugin_refresh
-        return getattr(self.get_class(), 'refresh', False)
+        return getattr(self.get_plugin_class(), 'refresh', False)
 
     @property
     def upload_accept(self):
         plugin_accept = self.plugin_meta.get('accept')
 
         if isinstance(plugin_accept, dict):
-            return {
-                mime_type: set(suffixes)
-                for mime_type, suffixes in plugin_accept.items()
-            }
+            normalized_accept = {}
+            for mime_type, suffixes in plugin_accept.items():
+                if not isinstance(mime_type, str):
+                    continue
+                if not isinstance(suffixes, (list, tuple, set)):
+                    continue
+
+                normalized_suffixes = {
+                    suffix for suffix in suffixes
+                    if isinstance(suffix, str) and suffix.startswith('.')
+                }
+                if normalized_suffixes:
+                    normalized_accept[mime_type] = normalized_suffixes
+
+            return normalized_accept
 
         if isinstance(plugin_accept, str):
             # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
@@ -238,7 +237,7 @@ class Plugin(Model, TranslationMixin):
 
         return {}
 
-    def get_class(self):
+    def get_plugin_class(self):
         return import_string(self.python_path)
 
     def build_plugin_meta(self, plugin_class):
@@ -270,7 +269,7 @@ class Plugin(Model, TranslationMixin):
         return meta
 
     def initialize_class(self, plugin_class=None):
-        cls = plugin_class or self.get_class()
+        cls = plugin_class or self.get_plugin_class()
         sig = signature(cls)
         if len(sig.parameters) == 0:
             return cls()
