@@ -163,6 +163,8 @@ class Plugin(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
         plugin_class = self.get_plugin_class()
+        if not self.url_name:
+            self.url_name = getattr(plugin_class, "url_name", "")
         self.initialize_class(plugin_class=plugin_class)
         self.plugin_type = plugin_class.plugin_type
         self.plugin_meta = self.build_plugin_meta(plugin_class)
