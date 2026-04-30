@@ -8,7 +8,7 @@ import { filterElement } from '../../utils/filter'
 import { buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
-import { AvailableLink, CodeLink, CopyLink, EditLink, LockedLink, ToggleCurrentSiteLink } from '../common/Links'
+import { AvailableLink, CodeLink, CopyLink, EditLink, LockedLink, ToggleCurrentSiteLink, WarningLink } from '../common/Links'
 import { ReadOnlyIcon } from '../common/Icons'
 
 const Plugin = ({ config, plugin, elementActions, filter=false, filterSites=false, filterEditors=false }) => {
@@ -16,6 +16,8 @@ const Plugin = ({ config, plugin, elementActions, filter=false, filterSites=fals
 
   const editUrl = buildPath('plugins', plugin.id)
   const copyUrl = buildPath('plugins', plugin.id, 'copy')
+  const availablePythonPaths = get(config, ['meta', 'config.plugin', 'python_path', 'choices'], [])
+  const hasConfiguredPythonPath = availablePythonPaths.some(([pythonPath]) => pythonPath === plugin.python_path)
 
   const fetchEdit = () => elementActions.fetchElement('plugins', plugin.id)
   const fetchCopy = () => elementActions.fetchElement('plugins', plugin.id, 'copy')
@@ -57,6 +59,12 @@ const Plugin = ({ config, plugin, elementActions, filter=false, filterSites=fals
           <p>
             <strong>{gettext('Python path')}{': '}</strong>
             <code className="code-config">{plugin.python_path}</code>
+            {!hasConfiguredPythonPath && (
+              <>
+                {' '}
+                <WarningLink title={gettext('This python path is not configured and may no longer be available.')} onClick={() => {}} />
+              </>
+            )}
           </p>
           <ElementErrors element={plugin} />
         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap'
 import get from 'lodash/get'
@@ -25,16 +25,31 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
   const { elementAction, catalogs } = elements
 
   const updatePlugin = (key, value) => elementActions.updateElement(plugin, {[key]: value})
-  const storePlugin = (back) => elementActions.storeElement('plugins', plugin, elementAction, back)
   const deletePlugin = () => elementActions.deleteElement('plugins', plugin)
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
+  const pluginSettingsRef = useRef(null)
 
   const info = <PluginInfo plugin={plugin} elements={elements} />
 
   const pluginModel = plugin.model || 'config.plugin'
   const pythonPathOptions = get(config, ['meta', pluginModel, 'python_path', 'choices'], [])
     .map(([value, label]) => ({id: value, name: label}))
+  const showUrlName = plugin.plugin_type !== 'project_import' || !get(plugin, ['plugin_meta', 'upload'], false)
+
+  const storePlugin = (back) => {
+    const pluginSettings = pluginSettingsRef.current?.commit()
+    if (pluginSettings === undefined) {
+      return
+    }
+
+    const updatedPlugin = {
+      ...plugin,
+      plugin_settings: pluginSettings
+    }
+
+    elementActions.storeElement('plugins', updatedPlugin, elementAction, back)
+  }
 
   return (
     <div className="panel panel-default panel-edit">
@@ -71,9 +86,6 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
           </div>
         </div>
 
-        <Text config={config} element={plugin} field="url_name"
-              onChange={updatePlugin} />
-
         <Textarea config={config} element={plugin} field="comment"
                   rows={4} onChange={updatePlugin} />
 
@@ -95,9 +107,6 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
         <Select config={config} element={plugin} field="python_path"
                 options={pythonPathOptions} onChange={updatePlugin} />
 
-        <JsonField config={config} element={plugin} field="plugin_settings"
-                   onChange={updatePlugin} />
-
         <Tabs id="#plugin-tabs" defaultActiveKey={0} animation={false}>
           {
             config.settings && config.settings.languages.map(([lang_code, lang], index) => (
@@ -111,6 +120,16 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
           }
         </Tabs>
 
+        {showUrlName ? (
+          <Text config={config} element={plugin} field="url_name"
+                onChange={updatePlugin} />
+        ) : null}
+
+        <JsonField ref={pluginSettingsRef} config={config} element={plugin} field="plugin_settings" />
+
+        <JsonField config={config} element={plugin} field="plugin_meta"
+                   disabled />
+
         <Select config={config} element={plugin} field="catalogs"
                 options={catalogs} onChange={updatePlugin} isMulti />
 
@@ -122,9 +141,6 @@ const EditPlugin = ({ config, plugin, elements, elementActions}) => {
 
         {get(config, 'settings.multisite') && <Select config={config} element={plugin} field="editors"
                                                       options={sites} onChange={updatePlugin} isMulti />}
-
-        <JsonField config={config} element={plugin} field="plugin_meta"
-                   disabled />
       </div>
 
       <div className="panel-footer">
