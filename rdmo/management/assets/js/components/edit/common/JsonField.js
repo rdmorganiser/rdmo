@@ -30,6 +30,9 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
   })
 
   const handleChange = (newValue) => {
+    if (disabled || element.read_only) {
+      return
+    }
     setValue(newValue)
     if (parseError) {
       setParseError(false)
@@ -60,7 +63,7 @@ const JsonField = ({ config, element, field, onChange, disabled = false }) => {
         extensions={[json()]}
         onChange={handleChange}
         onBlur={handleBlur}
-        disabled={element.read_only || disabled}
+        editable={!(element.read_only || disabled)}
       />
 
       {help && <p className="help-block">{help}</p>}
