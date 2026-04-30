@@ -22,6 +22,8 @@ class TaskAdminForm(forms.ModelForm):
             "sites",
             "editors",
             "groups",
+            "task_type",
+            "task_area",
             "title_lang1",
             "title_lang2",
             "title_lang3",

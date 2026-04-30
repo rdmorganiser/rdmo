@@ -20,6 +20,7 @@ import ConditionsApi from '../api/ConditionsApi'
 import ManagementApi from '../api/ManagementApi'
 import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
+import TasksApi from '../api/TasksApi'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -55,10 +56,12 @@ export default function configureStore() {
       OptionsApi.fetchAdditionalInputs(),
       OptionsApi.fetchProviders(),
       QuestionsApi.fetchValueTypes(),
-      QuestionsApi.fetchWidgetTypes()
+      QuestionsApi.fetchWidgetTypes(),
+      TasksApi.fetchTaskTypes(),
+      TasksApi.fetchTaskAreas(),
     ]).then(([
       relations, groups, settings, sites, meta,
-      additionalInputs, providers, valueTypes, widgetTypes]) => {
+      additionalInputs, providers, valueTypes, widgetTypes, taskTypes, taskAreas]) => {
       store.dispatch(configActions.updateConfig('relations', relations, false))
       store.dispatch(configActions.updateConfig('groups', groups, false))
       store.dispatch(configActions.updateConfig('settings', settings, false))
@@ -68,6 +71,8 @@ export default function configureStore() {
       store.dispatch(configActions.updateConfig('providers', providers, false))
       store.dispatch(configActions.updateConfig('valueTypes', valueTypes, false))
       store.dispatch(configActions.updateConfig('widgetTypes', widgetTypes, false))
+      store.dispatch(configActions.updateConfig('taskTypes', taskTypes, false))
+      store.dispatch(configActions.updateConfig('taskAreas', taskAreas, false))
     }
     )
   }

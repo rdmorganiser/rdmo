@@ -829,6 +829,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
     filterset_fields = (
         'task',
         'task__uri',
+        'task__task_type',
         'status'
     )
 
@@ -1156,6 +1157,7 @@ class IssueViewSet(ReadOnlyModelViewSet):
     filterset_fields = (
         'task',
         'task__uri',
+        'task__task_type',
         'status'
     )
 

@@ -13,6 +13,7 @@ from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
+from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ...constants import ROLE_CHOICES
@@ -507,6 +508,25 @@ class ProjectInviteUpdateSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectIssueTaskSerializer(serializers.ModelSerializer):
+
+    task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
+    task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'order',
+            'task_type',
+            'task_type_display',
+            'task_area',
+            'task_area_display',
+            'title',
+            'text',
+        )
+
+
 class ProjectIssueResourceSerializer(serializers.ModelSerializer):
 
     integration = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -522,7 +542,7 @@ class ProjectIssueResourceSerializer(serializers.ModelSerializer):
 
 class ProjectIssueSerializer(serializers.ModelSerializer):
 
-    task = serializers.PrimaryKeyRelatedField(read_only=True)
+    task = ProjectIssueTaskSerializer(read_only=True)
     resources = ProjectIssueResourceSerializer(read_only=True, many=True)
 
     class Meta:
@@ -686,6 +706,26 @@ class UserInviteSerializer(InviteSerializer):
             'token',
         )
 
+
+class IssueTaskSerializer(serializers.ModelSerializer):
+
+    task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
+    task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'order',
+            'task_type',
+            'task_type_display',
+            'task_area',
+            'task_area_display',
+            'title',
+            'text',
+        )
+
+
 class IssueResourceSerializer(serializers.ModelSerializer):
 
     integration = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -702,7 +742,7 @@ class IssueResourceSerializer(serializers.ModelSerializer):
 class IssueSerializer(serializers.ModelSerializer):
 
     project = serializers.PrimaryKeyRelatedField(read_only=True)
-    task = serializers.PrimaryKeyRelatedField(read_only=True)
+    task = IssueTaskSerializer(read_only=True)
     resources = IssueResourceSerializer(read_only=True, many=True)
 
     class Meta:

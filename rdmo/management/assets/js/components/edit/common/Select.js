@@ -44,7 +44,7 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
 
   const handleChange = (option) => {
     if (isNil(option)) {
-      onChange(field, null)
+      onChange(field, '')
     } else if (isArray(option)) {
       onChange(field, option.map(o => o.value))
     } else {
