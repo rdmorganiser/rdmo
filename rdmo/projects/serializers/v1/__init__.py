@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
+from rdmo.config.models import Plugin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -146,6 +147,22 @@ class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
         fields = (
             'role',
         )
+
+
+class ProjectImportPluginSerializer(serializers.ModelSerializer):
+
+    href = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Plugin
+        fields = (
+            'title',
+            'url_name',
+            'href',
+        )
+
+    def get_href(self, obj) -> str:
+        return reverse('project_create_import', args=[obj.url_name])
 
 
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):

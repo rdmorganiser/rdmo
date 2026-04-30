@@ -1,4 +1,5 @@
 from rdmo.conditions.renderers.mixins import ConditionRendererMixin
+from rdmo.config.renderers import PluginRendererMixin
 from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.domain.renderers.mixins import AttributeRendererMixin
 
@@ -6,7 +7,7 @@ from .mixins import OptionRendererMixin, OptionSetRendererMixin
 
 
 class OptionSetRenderer(OptionSetRendererMixin, OptionRendererMixin, ConditionRendererMixin,
-                        AttributeRendererMixin, BaseXMLRenderer):
+                        PluginRendererMixin, AttributeRendererMixin, BaseXMLRenderer):
 
     def render_document(self, xml, optionsets):
         xml.startElement('rdmo', {

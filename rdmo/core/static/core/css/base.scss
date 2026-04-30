@@ -138,6 +138,10 @@ code {
         color: rgb(0, 128, 0);
         background-color: rgba(0, 128, 0, 0.1);
     }
+    &.code-config {
+        color: rgb(0, 102, 102);
+        background-color: rgba(0, 102, 102, 0.1);
+    }
     &.code-order {
         color: rgb(96, 96, 96);
         background-color: rgba(96, 96, 96, 0.1);

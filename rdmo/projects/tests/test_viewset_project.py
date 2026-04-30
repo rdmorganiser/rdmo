@@ -50,6 +50,7 @@ urlnames = {
     'detail': 'v1-projects:project-detail',
     'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
+    'export': 'v1-projects:project-export',
     'navigation': 'v1-projects:project-navigation',
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
@@ -185,6 +186,18 @@ def test_detail(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_export_unavailable_plugin_requires_admin(db, client):
+    url = reverse(urlnames['export'], args=[1, 'simple'])
+
+    client.login(username='owner', password='owner')
+    response = client.get(url)
+    assert response.status_code == 404
+
+    client.force_login(User.objects.get(username='admin'))
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -622,7 +635,7 @@ def test_options(db, client, username, password):
 
 
 def test_options_text_and_help(db, client, mocker):
-    mocker.patch('rdmo.options.providers.SimpleProvider.get_options', return_value=[
+    mocker.patch('plugins.optionset_providers.providers.SimpleProvider.get_options', return_value=[
         {
             'id': 'simple_1',
             'text': 'Simple answer 1'
@@ -653,9 +666,14 @@ def test_upload_accept(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert response.json() == {
-            'application/xml': ['.xml']
-        }
+        if username == "admin":
+            assert response.json() == {
+            'application/xml': ['.xml'], 'text/plain': ['.txt']
+            }
+        else:
+            assert response.json() == {
+                'application/xml': ['.xml']
+            }
     else:
         assert response.status_code == 401
 
@@ -669,7 +687,11 @@ def test_imports(db, client, username, password):
 
     if password:
         assert response.status_code == 200
-        assert len(response.json()) == 1
-        assert response.json()[0]['key'] == 'url'
+        if username == 'admin':
+            assert len(response.json()) == 3
+            assert {i['key'] for i in response.json()} == {'url', 'xml', 'simple'}
+        else:
+            assert len(response.json()) == 2
+            assert {i['key'] for i in response.json()} == {'url', 'xml'}
     else:
         assert response.status_code == 401

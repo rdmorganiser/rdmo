@@ -69,6 +69,10 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
           <Link href={buildPath('views')}
                 onClick={() => elementActions.fetchElements('views')}>{gettext('Views')}</Link>
         </li>
+        <li>
+          <Link href={buildPath('plugins')}
+                onClick={() => elementActions.fetchElements('plugins')}>{gettext('Plugins')}</Link>
+        </li>
       </ul>
 
       <h2>Export</h2>

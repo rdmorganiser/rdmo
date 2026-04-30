@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import SnapshotCreateForm
@@ -77,15 +78,26 @@ class SnapshotExportView(ObjectPermissionMixin, DetailView):
     def get_permission_object(self):
         return self.get_object().project
 
+    def get_plugin_by_url_name(self, url_name, project=None):
+        for plugin in Plugin.objects.for_context(
+            plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
+            project=project,
+            user=self.request.user,
+        ):
+            if plugin.url_name == url_name:
+                return plugin
+
     def get_export_plugin(self):
-        export_plugin = get_plugin('PROJECT_SNAPSHOT_EXPORTS', self.kwargs.get('format'))
-        if export_plugin is None:
-            raise Http404
+        plugin = self.get_plugin_by_url_name(self.kwargs.get('url_name'), self.object.project)
+        if plugin:
+            import_plugin = plugin.initialize_class()
+            import_plugin.request = self.request
+            import_plugin.snapshot = self.object
 
-        export_plugin.request = self.request
-        export_plugin.snapshot = self.object
+            return import_plugin
 
-        return export_plugin
+        # no plugin for this url_name found
+        raise Http404
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

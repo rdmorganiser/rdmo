@@ -84,28 +84,30 @@ PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
-PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
-]
-
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
 ]
 EMAIL_RECIPIENTS_INPUT = True
 
-OPTIONSET_PROVIDERS = [
-    ('simple', _('Simple provider'), 'rdmo.options.providers.SimpleProvider')
+INSTALLED_APPS += [
+    'plugins',  # introduced in 2.5, rdmo/testing/plugins
 ]
 
-PROJECT_ISSUE_PROVIDERS = [
-    ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
+PLUGINS = [  # introduced in 2.5
+    # internal rdmo plugins
+    'rdmo.projects.exports.RDMOXMLExport',
+    'rdmo.projects.exports.CSVCommaExport',
+    'rdmo.projects.exports.CSVSemicolonExport',
+    'rdmo.projects.exports.JSONExport',
+    'rdmo.projects.imports.RDMOXMLImport',
+    'rdmo.projects.imports.URLImport',
+    # rdmo/testing/plugins
+    'plugins.optionset_providers.providers.SimpleProvider',  # here or in app/test
+    'plugins.project_issue_providers.providers.SimpleIssueProvider',
+    'plugins.project_export.exports.SimpleExportPlugin',
+    'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin',
+    'plugins.project_import.imports.SimpleImportPlugin',
 ]
-
-PROJECT_IMPORTS += [
-    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
-]
-
-PROJECT_IMPORTS_LIST = ['url']
 
 PROJECT_VALUES_VALIDATION = True
 

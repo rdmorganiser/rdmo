@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from rdmo.accounts.checks import W_FIX_DISABLED, W_MISSING_FIX, check_shibboleth_remoteuser
 
 from .helpers import enable_shibboleth, fake_shibboleth  # noqa: F401

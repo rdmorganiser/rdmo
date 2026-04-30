@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 
 from ..managers import IntegrationManager
 
@@ -34,7 +35,16 @@ class Integration(models.Model):
 
     @property
     def provider(self):
-        return get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        plugins = (
+            Plugin.objects.for_context(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+                project=self.project,
+                format=self.provider_key)
+        )
+        if plugins.exists():
+            return plugins.first().initialize_class()
+        else:
+            return None
 
     def get_option_value(self, key):
         try:
@@ -43,6 +53,8 @@ class Integration(models.Model):
             return None
 
     def save_options(self, options):
+        if self.provider is None:
+            raise ValueError(_('The provider key is required.'))
         for field in self.provider.fields:
             try:
                 integration_option = IntegrationOption.objects.get(integration=self, key=field.get('key'))
