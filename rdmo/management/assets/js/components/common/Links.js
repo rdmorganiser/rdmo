@@ -7,8 +7,8 @@ import isUndefined from 'lodash/isUndefined'
 import Link from 'rdmo/core/assets/js/components/Link'
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-const NestedLink = ({ href, title, onClick, show=true }) => {
-  return show && <Link href={href} className="element-link fa fa-align-right flip" title={title} onClick={onClick} />
+const NestedLink = ({ href, title, onClick, show = true }) => {
+  return show && <Link href={href} className="element-link bi bi-list-nested" title={title} onClick={onClick} />
 }
 
 NestedLink.propTypes = {
@@ -18,8 +18,8 @@ NestedLink.propTypes = {
   show: PropTypes.bool
 }
 
-const EditLink = ({ href, title, onClick, disabled= false }) => {
-  return <Link href={href} className="element-link fa fa-pencil" title={title} onClick={onClick} disabled={disabled} />
+const EditLink = ({ href, title, onClick, disabled = false }) => {
+  return <Link href={href} className="element-link bi bi-pencil" title={title} onClick={onClick} disabled={disabled} />
 }
 
 EditLink.propTypes = {
@@ -30,7 +30,7 @@ EditLink.propTypes = {
 }
 
 const CopyLink = ({ href, title, onClick }) => {
-  return <Link href={href} className="element-link fa fa-copy" title={title} onClick={onClick} />
+  return <Link href={href} className="element-link bi bi-copy" title={title} onClick={onClick} />
 }
 
 CopyLink.propTypes = {
@@ -41,12 +41,13 @@ CopyLink.propTypes = {
 
 const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
   if (isUndefined(onAltClick)) {
-    return <LinkButton className="element-btn-link fa fa-plus" title={title} onClick={onClick} disabled={disabled} />
+    return <LinkButton className="link bi bi-plus-lg" title={title} onClick={onClick} disabled={disabled} />
   } else {
     return (
       <span className="dropdown">
-        <button type="button" className="element-btn-link btn-link fa fa-plus" data-toggle="dropdown"
-                title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
+        <button
+          type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
+          title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
         </button>
         <ul className="dropdown-menu">
           <li onClick={onClick}>
@@ -71,13 +72,16 @@ AddLink.propTypes = {
 
 const AvailableLink = ({ available, locked, title, onClick, disabled }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-toggle-on': available,
-    'fa-toggle-off': !available
+    'link bi': true,
+    'bi-toggle-on': available,
+    'bi-toggle-off': !available
   })
 
-  return <LinkButton className={className} title={locked ? gettext('Locked') : title}
-                     disabled={locked || disabled} onClick={onClick} />
+  return (
+    <LinkButton
+      className={className} title={locked ? gettext('Locked') : title}
+      disabled={locked || disabled} onClick={onClick} />
+  )
 }
 
 AvailableLink.propTypes = {
@@ -90,9 +94,9 @@ AvailableLink.propTypes = {
 
 const LockedLink = ({ locked, title, onClick, disabled }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-lock text-danger': locked,
-    'fa-unlock-alt': !locked
+    'link bi': true,
+    'bi-lock text-danger': locked,
+    'bi-unlock': !locked
   })
 
   return <LinkButton className={className} title={title} onClick={onClick} disabled={disabled} />
@@ -107,11 +111,11 @@ LockedLink.propTypes = {
 
 const ToggleCurrentSiteLink = ({ hasCurrentSite, onClick, show }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-plus-square': !hasCurrentSite,
-    'fa-minus-square': hasCurrentSite,
+    'link bi': true,
+    'bi-plus-square': !hasCurrentSite,
+    'bi-dash-square': hasCurrentSite,
   })
-  const title = hasCurrentSite ? gettext('Remove your site'): gettext('Add your site')
+  const title = hasCurrentSite ? gettext('Remove your site') : gettext('Add your site')
 
   return  show && <LinkButton className={className} title={title} onClick={onClick} />
 }
@@ -125,9 +129,9 @@ ToggleCurrentSiteLink.propTypes = {
 
 const ShowElementsLink = ({ showElements, show, onClick }) => {
   const className = classNames({
-    'element-btn-link fa': true,
-    'fa-chevron-down': showElements,
-    'fa-chevron-up': !showElements
+    'link bi': true,
+    'bi-chevron-down': showElements,
+    'bi-chevron-up': !showElements
   })
 
   const title = showElements ? gettext('Hide elements') : gettext('Show elements')
@@ -141,34 +145,50 @@ ShowElementsLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const ExportLink = ({ exportUrl, title, exportFormats, csv=false, full=false }) => {
+const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false }) => {
   return (
     <span className="dropdown">
-      <button type="button" className="element-btn-link btn-link fa fa-download" data-toggle="dropdown"
-              title={title} aria-label={title}></button>
-      <ul className="dropdown-menu">
-        <li><a href={exportUrl}>{gettext('XML')}</a></li>
+      <button
+        type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
+        title={title} aria-label={title}></button>
+      <ul className="dropdown-menu dropdown-menu-end">
+        <li className="dropdown-item">
+          <a href={exportUrl}>{gettext('XML')}</a>
+        </li>
         {
-          full && <li><a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a></li>
+          full && (
+            <li className="dropdown-item">
+              <a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a>
+            </li>
+          )
         }
-        <li role="separator" className="divider"></li>
+        <li><hr className="dropdown-divider" /></li>
         {
-          csv && <>
-            <li><a href={`${exportUrl}csvcomma/`}>
-              {gettext('CSV comma separated')}
-            </a></li>
-            <li><a href={`${exportUrl}csvsemicolon/`}>
-              {gettext('CSV semicolon separated')}
-            </a></li>
-            <li role="separator" className="divider"></li>
-          </>
+          csv && (
+            <>
+              <li className="dropdown-item">
+                <a href={`${exportUrl}csvcomma/`}>
+                  {gettext('CSV comma separated')}
+                </a>
+              </li>
+              <li className="dropdown-item">
+                <a href={`${exportUrl}csvsemicolon/`}>
+                  {gettext('CSV semicolon separated')}
+                </a>
+              </li>
+              <li><hr className="dropdown-divider" /></li>
+            </>
+          )
         }
         {
-          exportFormats.map(([key, label], index) => <li key={index}>
-            <a href={`${exportUrl}${key}/`}
-               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-               rel="noreferrer">{label}</a>
-          </li>)
+          exportFormats.map(([key, label], index) => (
+            <li className="dropdown-item" key={index}>
+              <a
+                href={`${exportUrl}${key}/`}
+                target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+                rel="noreferrer">{label}</a>
+            </li>
+          ))
         }
       </ul>
     </span>
@@ -184,14 +204,12 @@ ExportLink.propTypes = {
 }
 
 const ExtendLink = ({ extend, onClick }) => {
-  const className = classNames({
-    'element-link fa': true,
-    'fa-chevron-up': extend,
-    'fa-chevron-down': !extend
+  const className = classNames('element-link bi ms-1', {
+    'bi-chevron-up': extend,
+    'bi-chevron-down': !extend
   })
 
-  const title = extend ? gettext('Show less')
-                       : gettext('Show more')
+  const title = extend ? gettext('Show less') : gettext('Show more')
 
   return <Link className={className} title={title} onClick={onClick} />
 }
@@ -201,21 +219,26 @@ ExtendLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const CodeLink = ({ className, uri, href, onClick, order }) => {
+const CodeLink = ({ className, type, uri, href, onClick, order }) => {
   return (
-    <>
+    <span className={classNames('d-flex gap-2', className)}>
       <Link href={href} onClick={onClick}>
-        <code className={className}>{uri}</code>
+        <code className={`code-${type}`}>{uri}</code>
       </Link>
-      {!isNil(order) ? (
-        <>{' '}<code className="code-order">{order}</code></>
-      ) : null}
-    </>
+      {
+        !isNil(order) && (
+          <span>
+            <code className="code-order">{order}</code>
+          </span>
+        )
+      }
+    </span>
   )
 }
 
 CodeLink.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  type: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
   href: PropTypes.string,
   onClick: PropTypes.func.isRequired,
@@ -223,7 +246,7 @@ CodeLink.propTypes = {
 }
 
 const ErrorLink = ({ onClick }) => {
-  return <Link className="element-link fa fa-warning text-danger" onClick={onClick} />
+  return <Link className="element-link bi bi-exclamation-triangle text-danger" onClick={onClick} />
 }
 
 ErrorLink.propTypes = {
@@ -231,7 +254,7 @@ ErrorLink.propTypes = {
 }
 
 const WarningLink = ({ onClick }) => {
-  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
+  return <Link className="element-link bi bi-exclamation-triangle text-warning" onClick={onClick} />
 }
 
 WarningLink.propTypes = {
@@ -241,9 +264,9 @@ WarningLink.propTypes = {
 const ShowLink = ({ show = false, onClick }) => {
   const title = show ? gettext('Hide') : gettext('Show')
   const className = classNames({
-    'element-link fa': true,
-    'fa-chevron-down': !show,
-    'fa-chevron-up': show
+    'element-link bi': true,
+    'bi-chevron-down': !show,
+    'bi-chevron-up': show
   })
 
   return <Link className={className} title={title} onClick={onClick} />
@@ -254,5 +277,19 @@ ShowLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export { EditLink, CopyLink, AddLink, AvailableLink, ToggleCurrentSiteLink, LockedLink, ShowElementsLink,
-         NestedLink, ExportLink, ExtendLink, CodeLink, ErrorLink, WarningLink, ShowLink }
+export {
+  AddLink,
+  AvailableLink,
+  CodeLink,
+  CopyLink,
+  EditLink,
+  ErrorLink,
+  ExportLink,
+  ExtendLink,
+  LockedLink,
+  NestedLink,
+  ShowElementsLink,
+  ShowLink,
+  ToggleCurrentSiteLink,
+  WarningLink
+}

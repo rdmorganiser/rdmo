@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isEmpty from 'lodash/isEmpty'
 import ReactDiffViewer from 'react-diff-viewer-continued'
+import isEmpty from 'lodash/isEmpty'
 
-import Warnings from './Warnings'
 import Errors from './Errors'
+import Warnings from './Warnings'
 
 const FieldRowDiffs = ({ element, field }) => {
   if (isEmpty(element.updated_and_changed[field])) {
-      return null
+    return null
   }
   const fieldDiffData = element.updated_and_changed[field]
   const newVal = fieldDiffData.newValue.toString() ?? ''
@@ -32,31 +32,34 @@ const FieldRowDiffs = ({ element, field }) => {
     },
   }
 
-  return (changed &&
-     <div className="field-diff col-sm-12 mt-10 mb-10">
+  return (changed && (
+    <div className="field-diff mt-1">
       <ReactDiffViewer
-          styles={newStyles}
-          oldValue={oldVal}
-          newValue={newVal}
-          splitView={splitView}
-          hideLineNumbers={hideLineNumbers}
-          // leftTitle={leftTitle}
-          // rightTitle={rightTitle}
-          >
-          </ReactDiffViewer>
+        styles={newStyles}
+        oldValue={oldVal}
+        newValue={newVal}
+        splitView={splitView}
+        hideLineNumbers={hideLineNumbers}
+      />
       {
-        !isEmpty(warnings) && <>
-          <Warnings elementWarnings={fieldDiffData.warnings}
-                    elementModel={element.model} elementURI={element.uri}
-                    showTitle={true} shouldShowURI={false}/>
-        </>
+        !isEmpty(warnings) && (
+          <>
+            <Warnings
+              elementWarnings={fieldDiffData.warnings}
+              elementModel={element.model} elementURI={element.uri}
+              showTitle={true} shouldShowURI={false}/>
+          </>
+        )
       }
       {
-        !isEmpty(errors) && <>
-          <Errors element={fieldDiffData} />
-        </>
+        !isEmpty(errors) && (
+          <>
+            <Errors element={fieldDiffData} />
+          </>
+        )
       }
-      </div>
+    </div>
+  )
   )
 }
 

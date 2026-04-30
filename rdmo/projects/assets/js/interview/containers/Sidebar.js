@@ -1,20 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-import { isReady } from '../utils/interview'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import Html from 'rdmo/core/assets/js/components/Html'
+
+import * as interviewActions from '../actions/interviewActions'
+import { isReady } from '../utils/interview'
 
 import Buttons from '../components/sidebar/Buttons'
 import Navigation from '../components/sidebar/Navigation'
 import Overview from '../components/sidebar/Overview'
 import Progress from '../components/sidebar/Progress'
-
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-
-import * as interviewActions from '../actions/interviewActions'
 
 // eslint-disable-next-line no-unused-vars
 const Sidebar = ({ config, settings, templates, user, project, interview, configActions, interviewActions }) => {

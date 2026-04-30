@@ -1,0 +1,18 @@
+.dropdown-menu {
+    --bs-dropdown-font-size: 0.9rem;
+    --bs-dropdown-link-active-color: white;
+    --bs-dropdown-link-active-bg: var(--rdmo-link-color);
+
+    .dropdown-header {
+        font-size: var(--bs-dropdown-font-size);
+    }
+
+    .dropdown-item {
+        &button {
+            cursor: pointer;
+        }
+        p {
+            margin: 0;
+        }
+    }
+}

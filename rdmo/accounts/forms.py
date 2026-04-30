@@ -71,19 +71,17 @@ class ProfileForm(forms.ModelForm):
 class RemoveForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
-        kwargs.setdefault('label_suffix', '')
+        self.user = kwargs.pop('user')
+
         super().__init__(*args, **kwargs)
-        if not self.request.user.has_usable_password():
+        if not self.user.has_usable_password():
             self.fields.pop('password')
 
     email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
     email.label = _('E-mail')
-    email.widget.attrs = {'class': 'form-control', 'placeholder': email.label}
 
     password = forms.CharField(widget=forms.PasswordInput)
     password.label = _('Password')
-    password.widget.attrs = {'class': 'form-control', 'placeholder': password.label}
 
     consent = forms.BooleanField(required=True)
     consent.label = _("I confirm that I want my profile to be completely removed. This can not be undone!")

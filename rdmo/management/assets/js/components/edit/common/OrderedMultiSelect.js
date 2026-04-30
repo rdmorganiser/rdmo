@@ -1,22 +1,28 @@
-import React, { Component, useRef } from 'react'
-import ReactSelect from 'react-select'
-import { useDrag, useDrop } from 'react-dnd'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
+import { useDrag, useDrop } from 'react-dnd'
+import { useSelector } from 'react-redux'
+import ReactSelect from 'react-select'
 import classNames from 'classnames'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-import isUndefined from 'lodash/isUndefined'
 import isNil from 'lodash/isNil'
 import isNumber from 'lodash/isNumber'
-import toNumber from 'lodash/toNumber'
-import get from 'lodash/get'
+import isUndefined from 'lodash/isUndefined'
 import maxBy from 'lodash/maxBy'
+import toNumber from 'lodash/toNumber'
+
+import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
-import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
 
-const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
-                                  handleChange, handleEdit, handleRemove, handleDrag }) => {
+const OrderedMultiSelectItem = ({
+  index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
+  handleChange, handleEdit, handleRemove, handleDrag
+}) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
 
@@ -36,14 +42,12 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     },
   }))
 
-  const dropClassName = classNames({
-    'drop': true,
+  const dropClassName = classNames('drop', {
     'show': isDragging,
     'over': isOver
   })
 
-  const dragClassName = classNames({
-    'fa fa-arrows drag': true,
+  const dragClassName = classNames('bi bi-arrows-move drag', {
     disabled: disabled
   })
 
@@ -52,57 +56,61 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     drop(dropRef)
   }
 
-  const styles = {
-    container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
+  const itemErrors = isEmpty(errors) || isEmpty(errors[index]) ? [] : (
+    Object.values(errors[index]).reduce((itemErrors, values) => [...itemErrors, ...values]
+    ))
+
+  const className = classNames('d-flex align-items-center gap-2', {
+    'is-invalid': !isEmpty(itemErrors)
+  })
+
+  const selectClassNames = {
+    control: () => classNames('form-control', {
+      'is-invalid': !isEmpty(itemErrors)
+    })
   }
 
   return (
-    <>
-      <div className="ordered-multi-select-item">
-        <div className="ordered-multi-select-item-options">
-          <Link className="fa fa-pencil" title={gettext('Edit')}
-                onClick={() => handleEdit(index)} />
-          <Link className="fa fa-times" title={gettext('Remove')} disabled={disabled}
-                onClick={() => !disabled && handleRemove(index)} />
-          <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
+    <div className="position-relative mb-2">
+      <div className={className}>
+        <div className="flex-grow-1">
+          <ReactSelect
+            classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+            options={selectOptions} value={selectValue}
+            onChange={option => handleChange(option, index)}
+            menuPortalTarget={document.body} isDisabled={disabled}
+            aria-labelledby={ariaLabelledBy} />
         </div>
-        <div className="ordered-multi-select-item-select">
-          <ReactSelect classNamePrefix="react-select" className="react-select"
-                       options={selectOptions} value={selectValue}
-                       onChange={option => handleChange(option, index)}
-                       menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
-                       aria-labelledby={ariaLabelledBy} />
-        </div>
-        {
-          errors && errors[index] &&
-          <ul className="help-block list-unstyled">
-            {
-              Object.keys(errors[index]).map((key, i1) => {
-                return errors[index][key].map((error, i2) => <li key={`${i1}-${i2}`}>{error}</li>)
-              })
-            }
-          </ul>
-        }
+        <Link
+          className="bi bi-pencil" title={gettext('Edit')}
+          onClick={() => handleEdit(index)} />
+        <Link
+          className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
+          onClick={() => !disabled && handleRemove(index)} />
+        <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
       </div>
+
+      <ErrorList errors={itemErrors} />
+
       <div ref={dropRef} className={dropClassName}></div>
-    </>
+    </div>
   )
 }
 
-class OrderedMultiSelect extends Component {
 
-  constructor(props) {
-    super(props)
+const OrderedMultiSelect = ({
+  element, field, options, values,
+  addText, createText, altCreateText, onChange, onCreate, onAltCreate, onEdit
+}) => {
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleRemove = this.handleRemove.bind(this)
-    this.handleDrag = this.handleDrag.bind(this)
-  }
+  const { meta } = useSelector((state) => state.config)
 
-  getValues() {
-    const { field, values, element } = this.props
+  const id = getId(element, field)
+  const label = getLabel(element, field, meta)
+  const help = getHelp(element, field, meta)
+  const errors = get(element, ['errors', field])
 
+  const getValues = () => {
     if (isUndefined(values)) {
       return isUndefined(element[field]) ? [] : [...element[field]]
     } else {
@@ -110,18 +118,14 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  getSelectOptions() {
-    const { options } = this.props
-
+  const getSelectOptions = () => {
     return options.map(option => ({
       value: option.value || option.id,
       label: option.label || option.uri || option.text || option.name
     }))
   }
 
-  parseValue(option) {
-    const { field } = this.props
-
+  const parseValue = (option) => {
     if (isNumber(option.value)) {
       return [field.slice(0, -1), option.value]
     } else {
@@ -130,7 +134,7 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  compareValue(option, value) {
+  const compareValue = (option, value) => {
     const valueField = Object.keys(value).filter(k => k != 'order')[0]
     if (isNumber(option.value)) {
       return option.value == value[valueField]
@@ -139,12 +143,11 @@ class OrderedMultiSelect extends Component {
     }
   }
 
-  handleAdd() {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleAdd = () => {
+    const values = getValues()
 
     const maxValue = maxBy(values, 'order')
-    const [valueField, value] = this.parseValue(this.getSelectOptions()[0])
+    const [valueField, value] = parseValue(getSelectOptions()[0])
     values.push({
       [valueField]: value,
       order: maxValue ? maxValue.order + 1 : 0
@@ -153,14 +156,13 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  handleChange(option, index) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleChange = (option, index) => {
+    const values = getValues()
 
     if (isNil(option)) {
       values[index] = null
     } else {
-      const [valueField, value] = this.parseValue(option)
+      const [valueField, value] = parseValue(option)
       values[index] = {
         [valueField]: value,
         order: values[index].order
@@ -170,25 +172,22 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  handleEdit(index) {
-    const { onEdit } = this.props
-    const values = this.getValues()
+  const handleEdit = (index) => {
+    const values = getValues()
 
     onEdit(values[index])
   }
 
-  handleRemove(index) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleRemove = (index) => {
+    const values = getValues()
 
     values.splice(index, 1)
 
     onChange(field, values)
   }
 
-  handleDrag(dragIndex, dropIndex) {
-    const { field, onChange } = this.props
-    const values = this.getValues()
+  const handleDrag = (dragIndex, dropIndex) => {
+    const values = getValues()
 
     const dragValue = values[dragIndex]
     values.splice(dragIndex, 1)
@@ -202,69 +201,60 @@ class OrderedMultiSelect extends Component {
     onChange(field, values)
   }
 
-  render() {
-    const { config, element, field, addText, createText, altCreateText,
-            onCreate, onAltCreate } = this.props
+  return (
+    <div className="mb-3">
+      <div className="mb-2">
+        <strong id={id}>{label}</strong>
+      </div>
 
-    const id = getId(element, field),
-          label = getLabel(config, element, field),
-          help = getHelp(config, element, field),
-          warnings = get(element, ['warnings', field]),
-          errors = get(element, ['errors', field])
-
-    const className = classNames({
-      'form-group': true,
-      'has-warning': !isEmpty(warnings),
-      'has-error': !isEmpty(errors)
-    })
-
-    return (
-      <div className={className}>
-        <div className="mb-5">
-          <strong id={id}>{label}</strong>
-        </div>
-
-        <div>
+      <div>
         {
-          this.getValues().map((value, index) => {
-            const selectOptions = this.getSelectOptions()
-            const selectValue = selectOptions.find(option => this.compareValue(option, value))
+          getValues().map((value, index) => {
+            const selectOptions = getSelectOptions()
+            const selectValue = selectOptions.find(option => compareValue(option, value))
             return (
-              <OrderedMultiSelectItem key={index} index={index} field={field}
-                                      selectValue={selectValue} selectOptions={selectOptions}
-                                      errors={errors} handleChange={this.handleChange}
-                                      handleEdit={this.handleEdit} handleRemove={this.handleRemove}
-                                      handleDrag={this.handleDrag} ariaLabelledBy={id} disabled={element.read_only} />
+              <OrderedMultiSelectItem
+                key={index} index={index} field={field}
+                selectValue={selectValue} selectOptions={selectOptions}
+                errors={errors} handleChange={handleChange}
+                handleEdit={handleEdit} handleRemove={handleRemove}
+                handleDrag={handleDrag} ariaLabelledBy={id} disabled={element.read_only} />
             )
           })
         }
-        </div>
+      </div>
 
-        <button type="button" className="btn btn-primary btn-xs" onClick={() => this.handleAdd()}
-                disabled={element.read_only}>
+      <div className="d-flex align-items-center gap-2">
+        <button
+          type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
+          disabled={element.read_only}>
           {addText}
         </button>
         {
-          onCreate &&
-          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onCreate}
-                  disabled={element.read_only || isNil(element.id)}
-                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {createText}
-          </button>
+          onCreate && (
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onCreate}
+              disabled={element.read_only || isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {createText}
+            </button>
+          )
         }
         {
-          onAltCreate &&
-          <button type="button" className="btn btn-success btn-xs ml-10" onClick={onAltCreate}
-                  disabled={element.read_only || isNil(element.id)}
-                  title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
-            {altCreateText}
-          </button>
+          onAltCreate && (
+            <button
+              type="button" className="btn btn-success btn-sm" onClick={onAltCreate}
+              disabled={element.read_only || isNil(element.id)}
+              title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>
+              {altCreateText}
+            </button>
+          )
         }
-
-        {help && <p className="help-block">{help}</p>}
       </div>
-    )
-  }
+
+      <HelpText help={help} />
+    </div>
+  )
 }
 
 OrderedMultiSelectItem.propTypes = {
@@ -282,10 +272,8 @@ OrderedMultiSelectItem.propTypes = {
 }
 
 OrderedMultiSelect.propTypes = {
-  config: PropTypes.object.isRequired,
   element: PropTypes.object.isRequired,
   field: PropTypes.string.isRequired,
-  fields: PropTypes.array,
   options: PropTypes.array.isRequired,
   values: PropTypes.array,
   addText: PropTypes.string.isRequired,

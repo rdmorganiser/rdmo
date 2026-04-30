@@ -1,7 +1,7 @@
-{% extends 'core/page.html' %}
+{% extends 'core/bs53/main.html' %}
 {% load i18n %}
 
-{% block page %}
+{% block main %}
 
     <h1>{% trans "API token" %}</h1>
 
@@ -9,7 +9,10 @@
 
     <form method="post" action="{% url 'account_token' %}" novalidate>
         {% csrf_token %}
-        <input type="submit" name="regenerate" value="{% trans 'Regenerate token' %}" class="btn btn-default" />
+
+        <button type="submit" name="regenerate" class="btn btn-default">
+            {% trans 'Regenerate token' %}
+        </button>
     </form>
 
     <p>

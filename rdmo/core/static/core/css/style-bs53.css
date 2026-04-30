@@ -1,0 +1,14 @@
+:root,
+[data-bs-theme=light] {
+  --rdmo-blue: #101F70;
+  --rdmo-blue-dark: #0d195a;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--rdmo-blue);
+    --bs-btn-border-color: var(--rdmo-blue);
+    --bs-btn-hover-bg: var(--rdmo-blue-dark);
+    --bs-btn-hover-border-color: var(--rdmo-blue-dark);
+    --bs-btn-active-bg: var(--rdmo-blue);
+    --bs-btn-active-border-color: var(--rdmo-blue);
+}

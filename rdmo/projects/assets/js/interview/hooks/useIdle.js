@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const useIdle = (dependencies) => {
   const [idle, setIdle] = useState(true)

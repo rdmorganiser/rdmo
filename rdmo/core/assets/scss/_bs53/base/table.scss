@@ -1,0 +1,24 @@
+table.table {
+    --bs-table-border-color: #efefef;
+
+    --rdmo-table-font-size: var(--rdmo-font-size-smaller);
+    --rdmo-table-th-padding: 1rem 1.5rem;
+    --rdmo-table-th-bg: var(--rdmo-sidebar-bg);
+    --rdmo-table-td-padding: 0.75rem 1.5rem;
+
+    font-size: var(--rdmo-table-font-size);
+    box-shadow: var(--rdmo-box-shadow);
+
+    th {
+        text-transform: uppercase;
+        background-color: var(--rdmo-table-th-bg);
+        border-bottom: none;
+    }
+    th {
+        padding: var(--rdmo-table-th-padding);
+    }
+
+    td {
+        padding: var(--rdmo-table-td-padding);
+    }
+}

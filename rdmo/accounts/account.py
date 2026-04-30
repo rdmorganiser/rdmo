@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.forms import BooleanField
+from django.urls import reverse
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.forms import LoginForm as AllauthLoginForm
@@ -23,6 +24,9 @@ class AccountAdapter(DefaultAccountAdapter):
             user.groups.set(groups)
 
         return user
+
+    def get_password_change_redirect_url(self, request):
+        return reverse('projects')
 
 
 class LoginForm(AllauthLoginForm):

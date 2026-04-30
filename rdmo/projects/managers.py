@@ -7,7 +7,6 @@ from django.db.models import Q
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
-from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
@@ -29,7 +28,7 @@ class ProjectQuerySet(TreeQuerySet):
                 visibility_filter = Q(visibility__isnull=False) & sites_filter & groups_filter
 
                 # create a filter for all projects of this site (unless filter_for_user is set)
-                if (user.has_perm('projects.view_project') or is_site_manager(user)) and not filter_for_user:
+                if (user.has_perm('projects.view_project') or user.role.is_site_manager) and not filter_for_user:
                     current_site_filter = Q(site=settings.SITE_ID)
                 else:
                     current_site_filter = Q()
@@ -71,7 +70,7 @@ class MembershipQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_membership'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -90,7 +89,7 @@ class IssueQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_integration'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -109,7 +108,7 @@ class IntegrationQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_issue'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -128,7 +127,7 @@ class InviteQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_invite'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -147,7 +146,7 @@ class SnapshotQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_snapshot'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -166,7 +165,7 @@ class ValueQuerySet(models.QuerySet):
         if user.is_authenticated:
             if user.has_perm('projects.view_value'):
                 return self.all()
-            elif is_site_manager(user):
+            elif user.role.is_site_manager:
                 return self.filter_current_site()
             else:
                 from .models import Project
@@ -228,6 +227,33 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
     def filter_groups(self, groups):
         return self.get_queryset().filter_groups(groups)
+
+    def filter_projects_for_task_or_view(self, instance):
+        return self.get_queryset().filter_projects_for_task_or_view(instance)
+
+    def prefetch_ancestors(self, projects):
+        # collect the constraints for all projects
+        filters = Q()
+        for project in projects:
+            filters |= (Q(tree_id=project.tree_id) & Q(lft__lt=project.lft) & Q(rght__gt=project.rght))
+
+        # Fetch all ancestors in one query
+        ancestors = self.filter(filters).order_by('tree_id', 'lft')
+
+        # Index by descendant id
+        prefetched_ancestors = {
+            project.id: [] for project in projects
+        }
+        for ancestor in ancestors:
+            for project in projects:
+                if ancestor.tree_id == project.tree_id and ancestor.lft < project.lft and ancestor.rght > project.rght:
+                    prefetched_ancestors[project.id].append(ancestor)
+
+        # add the project as last ancestor
+        for project in projects:
+            prefetched_ancestors[project.id].append(project)
+
+        return prefetched_ancestors
 
 
 class MembershipManager(CurrentSiteManagerMixin, models.Manager):

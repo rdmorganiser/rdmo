@@ -9,7 +9,7 @@ const DeleteModal = ({ title, show, onClose, onDelete, children }) => {
         <h2 className="modal-title">{title}</h2>
       </Modal.Header>
       <Modal.Body>
-        { children }
+        {children}
       </Modal.Body>
       <Modal.Footer>
         <button type="button" className="btn btn-default" onClick={onClose}>

@@ -22,9 +22,9 @@ def i18n_switcher():
     for language, language_string in settings.LANGUAGES:
         url = reverse('i18n_switcher', args=[language])
         if language == translation.get_language():
-            string += f"<li><a href=\"{url}\"><u>{language_string}</u></a></li>"
+            string += f"<li><a class=\"dropdown-item\" href=\"{url}\"><u>{language_string}</u></a></li>"
         else:
-            string += f"<li><a href=\"{url}\">{language_string}</a></li>"
+            string += f"<li><a class=\"dropdown-item\" href=\"{url}\">{language_string}</a></li>"
     return mark_safe(string)
 
 
@@ -48,6 +48,18 @@ def render_lang_template(template_name, escape_html=False):
         except TemplateDoesNotExist:
             pass
     return ''
+
+
+@register.simple_tag()
+def bootstrap_form_field(field, **kwargs):
+    context = {
+        'field': field
+    }
+
+    if field.widget_type in ['text', 'email', 'password']:
+        return render_to_string('core/bs53/forms/bootstrap_input.html', context)
+    else:
+        return render_to_string(f'core/bs53/forms/bootstrap_{field.widget_type}.html', context)
 
 
 @register.simple_tag(takes_context=True)

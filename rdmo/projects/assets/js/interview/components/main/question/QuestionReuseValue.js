@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
@@ -50,47 +50,55 @@ const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) =>
     }
   }, [formValues, formValues.value])
 
-  const modalButtons = <>
-    {
-      ['text', 'textarea'].includes(question.widget_type) && (
-        <button type="button" className="btn btn-primary" onClick={() => handleSubmit('append')}>
-          {gettext('Append')}
-        </button>
-      )
-    }
-    <button type="button" className="btn btn-primary" onClick={() => handleSubmit('replace')}>
-      {gettext('Replace')}
-    </button>
-  </>
+  const modalButtons = (
+    <>
+      {
+        ['text', 'textarea'].includes(question.widget_type) && (
+          <button type="button" className="btn btn-primary" onClick={() => handleSubmit('append')}>
+            {gettext('Append')}
+          </button>
+        )
+      }
+      <button type="button" className="btn btn-primary" onClick={() => handleSubmit('replace')}>
+        {gettext('Replace')}
+      </button>
+    </>
+  )
 
-  return !disabled && <>
-    <button type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}
-            title={gettext('Reuse answer')} aria-label={gettext('Reuse answer')}>
-      <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
-    </button>
+  return !disabled && (
+    <>
+      <button
+        type="button" className="btn btn-link btn-reuse-value" onClick={() => setShow(true)}
+        title={gettext('Reuse answer')} aria-label={gettext('Reuse answer')}>
+        <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
+      </button>
 
-    <Modal title={gettext('Reuse answer')} show={show} buttons={modalButtons}
-           onClose={() => setShow(false)} >
-      <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
-        <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
-          {gettext('Answer')}
-        </label>
+      <Modal
+        title={gettext('Reuse answer')} show={show} buttons={modalButtons}
+        onClose={() => setShow(false)} >
+        <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
+          <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
+            {gettext('Answer')}
+          </label>
 
-        <Search
-          page={page}
-          question={question}
-          attribute={value.attribute}
-          values={formValues}
-          setValues={setFormValues}
-        />
+          <Search
+            page={page}
+            question={question}
+            attribute={value.attribute}
+            values={formValues}
+            setValues={setFormValues}
+          />
 
-        <p className="help-block mb-0">
-          {gettext('You can reuse an answer from a similar question in any ' +
-                   'project you have access to.')}
-        </p>
-      </div>
-    </Modal>
-  </>
+          <p className="help-block mb-0">
+            {
+              gettext('You can reuse an answer from a similar question in any ' +
+                   'project you have access to.')
+            }
+          </p>
+        </div>
+      </Modal>
+    </>
+  )
 }
 
 QuestionReuseValue.propTypes = {

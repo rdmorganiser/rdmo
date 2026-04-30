@@ -1,16 +1,17 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,24 +22,30 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.utils import human2bytes, is_truthy, return_file_response
+from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
+from rdmo.core.views import ChoicesViewSet
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
+from rdmo.views.utils import ProjectWrapper
 
+from .constants import ROLE_CHOICES, ROLE_RANKS
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
     ProjectDateFilterBackend,
     ProjectOrderingFilter,
+    ProjectRoleFilterBackend,
     ProjectSearchFilterBackend,
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
     HasProjectProgressModelPermission,
@@ -57,16 +64,24 @@ from .serializers.v1 import (
     InviteSerializer,
     IssueSerializer,
     MembershipSerializer,
+    ProjectAnswersSerializer,
     ProjectCopySerializer,
+    ProjectHierarchySerializer,
     ProjectIntegrationSerializer,
+    ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
     ProjectIssueSerializer,
+    ProjectListSerializer,
+    ProjectMembershipCreateSerializer,
+    ProjectMembershipHierarchySerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
     ProjectSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    ProjectViewSerializer,
+    ProjectViewsSerializer,
     ProjectVisibilitySerializer,
     SnapshotSerializer,
     UserInviteSerializer,
@@ -84,6 +99,7 @@ from .utils import (
     copy_project,
     get_contact_message,
     get_upload_accept,
+    get_value_path,
     send_contact_message,
     send_invite_email,
 )
@@ -95,12 +111,12 @@ class ProjectPagination(PageNumberPagination):
 
 class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
-    serializer_class = ProjectSerializer
     pagination_class = ProjectPagination
 
     filter_backends = (
         DjangoFilterBackend,
         ProjectUserFilterBackend,
+        ProjectRoleFilterBackend,
         ProjectDateFilterBackend,
         ProjectOrderingFilter,
         ProjectSearchFilterBackend,
@@ -115,35 +131,93 @@ class ProjectViewSet(ModelViewSet):
         'title',
         'progress',
         'role',
+        'current_role',
+        'highest_role',
         'owner',
         'updated',
         'created',
         'last_changed'
     )
 
-    filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
-
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
-            'snapshots',
-            'views',
-            Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
-        ).select_related('catalog', 'visibility')
+        if hasattr(self, '_cached_queryset'):
+            return self._cached_queryset
+
+        # for the user action (below), we need to set filter_for_user to s to filter the
+        # projects for the current user regardless of their permissions, e.g. for admins
+        filter_for_user = (self.action == 'user')
+
+        # create a query to prefetch the memberships incl. the socialaccounts
+        membership_queryset = Membership.objects.select_related('user')
+        if settings.SOCIALACCOUNT:
+            membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
+
+        queryset = (
+            Project.objects.filter_user(self.request.user, filter_for_user).distinct()
+                           .prefetch_related(
+                                'views',
+                                Prefetch('memberships', queryset=membership_queryset, to_attr='prefetched_memberships')
+                            )
+                           .select_related('catalog', 'visibility')
+        )
+
+        # prepare subquery for the role of the current user
+        current_role_subquery = Subquery(
+            Membership.objects.filter(project=OuterRef('pk'), user=self.request.user).values('role')
+        )
+
+        # create a case for the highest role in the hierarchy, and the other way around
+        role_rank_case = Case(
+            *[When(role=role, then=rank) for role, rank in ROLE_RANKS.items()], output_field=IntegerField()
+        )
+
+        # prepare subquery for the highest role in the hierarchy for the current user
+        highest_role_membership_subquery = (
+            Membership.objects.filter(
+                user=self.request.user,
+                project__tree_id=OuterRef('tree_id'),
+                project__lft__lte=OuterRef('lft'),
+                project__rght__gte=OuterRef('rght'),
+            )
+            .annotate(role_rank=role_rank_case)
+            .order_by('-role_rank')
+        )
 
         # prepare subquery for last_changed
         last_changed_subquery = Subquery(
             Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
         )
-        # the 'updated' field from a Project always returns a valid DateTime value
-        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-        # when Greatest returns a value, then Coalesce will return this value
-        queryset = queryset.annotate(last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated'))
 
-        return queryset
+        # annotate the queryset with the subqueries
+        queryset = queryset.annotate(
+            current_role=current_role_subquery,
+            # it is important that each highest_role field has its own subquery since you cannot use
+            # something like OuterRef('highest_role_membership_id') in a different subquery
+            highest_role=Subquery(highest_role_membership_subquery.values('role')[:1]),
+            highest_role_project_id=Subquery(highest_role_membership_subquery.values('project_id')[:1]),
+            highest_role_project_title=Subquery(highest_role_membership_subquery.values('project__title')[:1]),
+            highest_role_membership_id=Subquery(highest_role_membership_subquery.values('id')[:1]),
+            # the 'updated' field from a Project always returns a valid DateTime value
+            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+            # when Greatest returns a value, then Coalesce will return this value
+            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+        )
+
+        # order queryset by last_changed by default
+        queryset = queryset.order_by('-last_changed')
+
+        # cache queryset and return
+        self._cached_queryset = queryset
+        return self._cached_queryset
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'user']:
+            return ProjectListSerializer
+        else:
+            return ProjectSerializer
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
-        self.filter_for_user = True
         return self.list(request, *args, **kwargs)
 
     @action(detail=True, methods=['POST'],
@@ -155,7 +229,8 @@ class ProjectViewSet(ModelViewSet):
 
         # update instance
         for key, value in serializer.validated_data.items():
-            setattr(instance, key, value)
+            if key in ['title', 'description', 'catalog', 'parent']:
+                setattr(instance, key, value)
 
         site = get_current_site(self.request)
         owners = [self.request.user]
@@ -286,12 +361,6 @@ class ProjectViewSet(ModelViewSet):
         # if it didn't work return 404
         raise NotFound()
 
-    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
-    def answers(self, request, pk=None):
-        project = self.get_object()
-        project.catalog.prefetch_elements()
-        return Response(project.get_answer_tree(verbose=request.GET.getlist('verbose')))
-
     @action(detail=True, methods=['get', 'post'],
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
@@ -386,6 +455,172 @@ class ProjectViewSet(ModelViewSet):
         else:
             raise Http404
 
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def hierarchy(self, request, pk):
+        # get the cached family of this project
+        project = self.get_object()
+        cached_trees = project.get_family().get_cached_trees()
+        serializer_context = self.get_serializer_context()
+        serializer_context['project'] = self.get_object()
+        serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        url_path=r'answers-tree',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_tree(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        return Response(project.get_answer_tree(snapshot=snapshot, verbose=request.GET.getlist('verbose')))
+
+    @action(
+        detail=True,
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers-tree',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_tree_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers_tree(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        serializer = ProjectAnswersSerializer({
+            'html': render_to_string('projects/project_answers.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'project_wrapper': ProjectWrapper(project, snapshot),
+                'export_formats': settings.EXPORT_FORMATS
+            }),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        })
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_export(self, request, pk, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
+            'project': project,
+            'snapshot': snapshot,
+            'project_wrapper': ProjectWrapper(project, snapshot)
+        })
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_export_snapshot(self, request, pk, export_format, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers_export(request, pk, export_format, snapshot_id)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views')
+    def views(self, request, pk):
+        project = self.get_object()
+        serializer = ProjectViewsSerializer(project.views, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views/(?P<view_id>\d+)')
+    def view(self, request, pk, view_id, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            view = project.views.get(pk=view_id)
+        except View.DoesNotExist as e:
+            raise Http404 from e
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        serializer = ProjectViewSerializer(view, context={
+            'html': view.render(project, snapshot),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        })
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)')
+    def view_snapshot(self, request, pk, view_id, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.view(request, pk, view_id, snapshot_id)
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
+    def view_export(self, request, pk, view_id, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            view = project.views.get(pk=view_id)
+        except View.DoesNotExist as e:
+            raise Http404 from e
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_view_export.html', {
+            'project': project,
+            'snapshot': snapshot,
+            'html': view.render(project, snapshot),
+            'resource_path': get_value_path(project, snapshot)
+        })
+
+    @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
+            url_path=r'snapshots/(?P<snapshot_id>\d+)/views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
+    def view_export_snapshot(self, request, pk, view_id, export_format, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.view_export(request, pk, view_id, export_format, snapshot_id)
+
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
         return Response(get_upload_accept())
@@ -398,6 +633,27 @@ class ProjectViewSet(ModelViewSet):
             'class_name': class_name,
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
+
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+
+        # in order to return all the fields from the subqueries, we need to re-fetch the project
+        # from the database again, and inject it into the the response
+        project = self.get_queryset().get(pk=response.data['id'])
+        response.data = self.get_serializer(project).data
+        return response
+
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        # in order to return all the fields from the subqueries, we need to re-fetch the project
+        # from the database again, and inject it into the the response
+        project = self.get_queryset().get(pk=response.data['id'])
+        response.data = self.get_serializer(project).data
+        return response
+
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
@@ -436,8 +692,46 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
         serializer.save(project=self.project)
 
 
-class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+class ProjectUserViewSetMixin:
+
+    def create(self, request, *args, **kwargs):
+        # use serializer_class_create to create the user
+        serializer_create = self.serializer_class_create(
+            data=request.data,
+            context=self.get_serializer_context()
+        )
+        serializer_create.is_valid(raise_exception=True)
+        self.perform_create(serializer_create)
+
+        # but serializer_class to return it
+        serializer = self.serializer_class(serializer_create.instance, context=self.get_serializer_context())
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        # use serializer_class_update to create the user
+        serializer_update = self.serializer_class_update(
+            instance,
+            data=request.data,
+            partial=partial,
+            context=self.get_serializer_context()
+        )
+        serializer_update.is_valid(raise_exception=True)
+        self.perform_update(serializer_update)
+
+        # but serializer_class to return it
+        serializer = self.serializer_class(serializer_update.instance, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+
+class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
+
+    serializer_class = ProjectMembershipSerializer
+    serializer_class_create = ProjectMembershipCreateSerializer
+    serializer_class_update = ProjectMembershipUpdateSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -447,13 +741,41 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        return Membership.objects.filter(project=self.project)
+        queryset = Membership.objects.filter(project=self.project).select_related('user')
+        if settings.SOCIALACCOUNT:
+            queryset = queryset.prefetch_related('user__socialaccount_set')
+        return queryset
 
-    def get_serializer_class(self):
-        if self.action == 'update':
-            return ProjectMembershipUpdateSerializer
-        else:
-            return ProjectMembershipSerializer
+    @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def hierarchy(self, request, parent_lookup_project=None):
+        # get the ancestors of this project
+        ancestors = self.project.get_ancestors()
+
+        # add a subquery to find the highest occurrence of a user in the project hierarchy
+        highest_project = Membership.objects.filter(
+            project__in=ancestors, user_id=OuterRef('user_id')
+        ).order_by('-project__level')
+
+        # query memberships for all ancestors, but only the highest level
+        memberships = Membership.objects.filter(project__in=ancestors) \
+                                        .annotate(highest=Subquery(highest_project.values('project__level')[:1])) \
+                                        .filter(highest=F('project__level')) \
+                                        .select_related('project', 'user')
+
+        if settings.SOCIALACCOUNT:
+            # prefetch the users social account, if that relation exists
+            memberships = memberships.prefetch_related('user__socialaccount_set')
+
+        serializer = ProjectMembershipHierarchySerializer(memberships, many=True, context={
+            'request': request, 'view': self
+        })
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['delete'], permission_classes=(HasProjectLeavePermission, ))
+    def leave(self, request, parent_lookup_project=None):
+        membership = Membership.objects.filter(project=self.project).get(user=request.user)
+        membership.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -469,8 +791,12 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         return Integration.objects.filter(project=self.project)
 
 
-class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+class ProjectInviteViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
+
+    serializer_class = ProjectInviteSerializer
+    serializer_class_create = ProjectInviteCreateSerializer
+    serializer_class_update = ProjectInviteUpdateSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -483,11 +809,10 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     def get_queryset(self):
         return Invite.objects.filter(project=self.project)
 
-    def get_serializer_class(self):
-        if self.action == 'update':
-            return ProjectInviteUpdateSerializer
-        else:
-            return ProjectInviteSerializer
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['project'] = self.project
+        return context
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
@@ -504,6 +829,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
     filterset_fields = (
         'task',
         'task__uri',
+        'task__task_type',
         'status'
     )
 
@@ -511,13 +837,19 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         return Issue.objects.filter(project=self.project).prefetch_related('resources')
 
 
-class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
-                             UpdateModelMixin, ListModelMixin, GenericViewSet):
+class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
     serializer_class = ProjectSnapshotSerializer
 
     def get_queryset(self):
         return self.project.snapshots.all()
+
+    @action(detail=True, methods=['POST'],
+            permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def rollback(self, request, parent_lookup_project, pk=None):
+        snapshot = self.get_object()
+        snapshot.rollback()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -816,6 +1148,7 @@ class InviteViewSet(ReadOnlyModelViewSet):
         serializer = UserInviteSerializer(invites, many=True)
         return Response(serializer.data)
 
+
 class IssueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasProjectsPermission, )
     serializer_class = IssueSerializer
@@ -824,6 +1157,7 @@ class IssueViewSet(ReadOnlyModelViewSet):
     filterset_fields = (
         'task',
         'task__uri',
+        'task__task_type',
         'status'
     )
 
@@ -941,3 +1275,8 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
             queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
             .order_by('-available', 'order', 'id').distinct()
         )
+
+
+class RoleViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = ROLE_CHOICES

@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const LinkButton = ({ title, className, disabled=false, onClick, children }) => {
-    const handleClick = (event) => {
-        event.preventDefault()
-        onClick()
-    }
+const LinkButton = ({ title, className, disabled = false, onClick, children }) => {
+  const handleClick = (event) => {
+    event.preventDefault()
+    onClick()
+  }
 
-    return (
-        <button type="button" title={title} aria-label={title}
-                className={'btn-link ' + className} disabled={disabled}
-                onClick={event => handleClick(event)}>
-            {children}
-        </button>
-    )
+  return (
+    <button
+      type="button" title={title} aria-label={title}
+      className={'btn-link ' + className} disabled={disabled}
+      onClick={event => handleClick(event)}>
+      {children}
+    </button>
+  )
 }
 
 LinkButton.propTypes = {

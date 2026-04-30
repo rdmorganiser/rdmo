@@ -214,6 +214,10 @@ class Role(models.Model):
     def is_reviewer(self):
         return self.reviewer.filter(id=settings.SITE_ID).exists()
 
+    @cached_property
+    def is_site_manager(self):
+        return self.manager.filter(id=settings.SITE_ID).exists()
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_save_user(sender, **kwargs):

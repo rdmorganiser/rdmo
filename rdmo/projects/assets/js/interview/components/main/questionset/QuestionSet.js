@@ -15,9 +15,11 @@ import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetManagement from './QuestionSetManagement'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({ config, settings, templates, page, questionset, sets, values, disabled, isManager,
-                       parentSet, createSet, updateSet, deleteSet, copySet,
-                       createValue, updateValue, deleteValue, copyValue, fetchContact }) => {
+const QuestionSet = ({
+  config, settings, templates, page, questionset, sets, values, disabled, isManager,
+  parentSet, createSet, updateSet, deleteSet, copySet,
+  createValue, updateValue, deleteValue, copyValue, fetchContact
+}) => {
 
   const setPrefix = getChildPrefix(parentSet)
 
@@ -42,8 +44,19 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
               currentSets.map((set, setIndex) => (
                 <div key={setIndex} className="interview-block">
                   <div className="interview-block-options">
-                    <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} disabled={disabled} copySet={copySet} />
-                    <QuestionSetRemoveSet questionset={questionset} currentSet={set} disabled={disabled} deleteSet={deleteSet} />
+                    <QuestionSetCopySet
+                      questionset={questionset}
+                      sets={sets}
+                      currentSet={set}
+                      disabled={disabled}
+                      copySet={copySet}
+                    />
+                    <QuestionSetRemoveSet
+                      questionset={questionset}
+                      currentSet={set}
+                      disabled={disabled}
+                      deleteSet={deleteSet}
+                    />
                   </div>
                   <div className="row">
                     {
@@ -83,19 +96,25 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
                                 templates={templates}
                                 page={page}
                                 question={element}
-                                sets={sets.filter((set) => (
-                                  set.set_prefix == setPrefix
-                                ))}
-                                values={values.filter((value) => (
-                                  value.attribute == element.attribute &&
-                                  value.set_prefix == set.set_prefix &&
-                                  value.set_index == set.set_index
-                                ))}
-                                siblings={values.filter((value) => (
-                                  value.attribute == element.attribute &&
-                                  value.set_prefix == set.set_prefix &&
-                                  value.set_index != set.set_index
-                                ))}
+                                sets={
+                                  sets.filter((set) => (
+                                    set.set_prefix == setPrefix
+                                  ))
+                                }
+                                values={
+                                  values.filter((value) => (
+                                    value.attribute == element.attribute &&
+                                    value.set_prefix == set.set_prefix &&
+                                    value.set_index == set.set_index
+                                  ))
+                                }
+                                siblings={
+                                  values.filter((value) => (
+                                    value.attribute == element.attribute &&
+                                    value.set_prefix == set.set_prefix &&
+                                    value.set_index != set.set_index
+                                  ))
+                                }
                                 disabled={disabled}
                                 isManager={isManager}
                                 currentSet={set}

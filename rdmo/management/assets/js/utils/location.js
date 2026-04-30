@@ -45,4 +45,4 @@ const generatePath = (basePath, ...args) => {
   return path
 }
 
-export { parseLocation, updateLocation, buildPath, buildApiPath }
+export { buildApiPath, buildPath, parseLocation, updateLocation }

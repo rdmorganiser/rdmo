@@ -1,11 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { ExtendLink, CodeLink } from '../common/Links'
+import Html from 'rdmo/core/assets/js/components/Html'
 
+import { fetchElement } from '../../actions/elementActions'
 import useBool from '../../hooks/useBool'
 
-const ConditionInfo = ({ condition, elements, elementActions }) => {
+import { CodeLink, ExtendLink } from '../common/Links'
+
+const ConditionInfo = ({ condition }) => {
+  const dispatch = useDispatch()
+
+  const elements = useSelector((state) => state.elements)
 
   const [extendOptionSets, toggleOptionSets] = useBool(false)
   const [extendPages, togglePages] = useBool(false)
@@ -19,86 +26,91 @@ const ConditionInfo = ({ condition, elements, elementActions }) => {
   const questions = elements.questions.filter(e => condition.questions.includes(e.id))
   const tasks = elements.tasks.filter(e => condition.tasks.includes(e.id))
 
-  const fetchOptionSet = (optionset) => elementActions.fetchElement('optionsets', optionset.id)
-  const fetchPage = (page) => elementActions.fetchElement('pages', page.id)
-  const fetchQuestionSet = (questionset) => elementActions.fetchElement('questionsets', questionset.id)
-  const fetchQuestion = (question) => elementActions.fetchElement('questions', question.id)
-  const fetchTask = (task) => elementActions.fetchElement('tasks', task.id)
+  const fetchOptionSet = (optionset) => dispatch(fetchElement('optionsets', optionset.id))
+  const fetchPage = (page) => dispatch(fetchElement('pages', page.id))
+  const fetchQuestionSet = (questionset) => dispatch(fetchElement('questionsets', questionset.id))
+  const fetchQuestion = (question) => dispatch(fetchElement('questions', question.id))
+  const fetchTask = (task) => dispatch(fetchElement('tasks', task.id))
 
   return (
-    <div className="element-info">
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
+    <div className="mb-2">
+      <p className="mb-1">
+        <Html html={
+          interpolate(ngettext(
             'This condition is used for <b>one optionset</b>.',
             'This condition is used for <b>%s optionsets</b>.',
-            optionsets.length), [optionsets.length])}} />
+            optionsets.length), [optionsets.length])
+        } />
         {optionsets.length > 0 && <ExtendLink extend={extendOptionSets} onClick={toggleOptionSets} />}
       </p>
       {
         extendOptionSets && optionsets.map((optionset, index) => (
-          <p key={index}>
-            <CodeLink className="code-options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="options" uri={optionset.uri} onClick={() => fetchOptionSet(optionset)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
+      <p className="mb-1">
+        <Html html={
+          interpolate(ngettext(
             'This condition is used for <b>one page</b>.',
             'This condition is used for <b>%s pages</b>.',
-            pages.length), [pages.length])}} />
+            pages.length), [pages.length])
+        } />
         {pages.length > 0 && <ExtendLink extend={extendPages} onClick={togglePages} />}
       </p>
       {
         extendPages && pages.map((page, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={page.uri} onClick={() => fetchPage(page)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
+      <p className="mb-1">
+        <Html html={
+          interpolate(ngettext(
             'This condition is used for <b>one questionset</b>.',
             'This condition is used for <b>%s questionsets</b>.',
-            questionsets.length), [questionsets.length])}} />
+            questionsets.length), [questionsets.length])
+        } />
         {questionsets.length > 0 && <ExtendLink extend={extendQuestionSets} onClick={toggleQuestionSets} />}
       </p>
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
+      <p className="mb-1">
+        <Html html={
+          interpolate(ngettext(
             'This condition is used for <b>one question</b>.',
             'This condition is used for <b>%s questions</b>.',
-            questions.length), [questions.length])}} />
+            questions.length), [questions.length])
+        } />
         {questions.length > 0 && <ExtendLink extend={extendQuestions} onClick={toggleQuestion} />}
       </p>
       {
         extendQuestions && questions.map((question, index) => (
-          <p key={index}>
-            <CodeLink className="code-questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
-      <p>
-        <span dangerouslySetInnerHTML={{
-          __html: interpolate(ngettext(
+      <p className="mb-1">
+        <Html html={
+          interpolate(ngettext(
             'This condition is used for <b>one task</b>.',
             'This condition is used for <b>%s tasks</b>.',
-            tasks.length), [tasks.length])}} />
+            tasks.length), [tasks.length])
+        } />
         {tasks.length > 0 && <ExtendLink extend={extendTasks} onClick={toggleTasks} />}
       </p>
       {
         extendTasks && tasks.map((task, index) => (
-          <p key={index}>
-            <CodeLink className="code-tasks" uri={task.uri} onClick={() => fetchTask(task)} />
+          <p className="mb-1" key={index}>
+            <CodeLink type="tasks" uri={task.uri} onClick={() => fetchTask(task)} />
           </p>
         ))
       }
@@ -107,9 +119,7 @@ const ConditionInfo = ({ condition, elements, elementActions }) => {
 }
 
 ConditionInfo.propTypes = {
-  condition: PropTypes.object.isRequired,
-  elements: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  condition: PropTypes.object.isRequired
 }
 
 export default ConditionInfo
