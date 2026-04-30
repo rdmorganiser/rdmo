@@ -1,12 +1,11 @@
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.utils import get_plugin_python_paths
 from rdmo.core.validators import InstanceValidator, LockedValidator, UniqueURIValidator
 
 from .constants import PLUGIN_TYPES
 from .models import Plugin
-from .utils import get_plugin_type_from_class
+from .utils import get_plugin_python_paths
 
 
 class PluginUniqueURIValidator(UniqueURIValidator):
@@ -55,7 +54,7 @@ class PluginURLNameValidator(InstanceValidator):
             if self.instance.plugin_type:
                 plugin_type = self.instance.plugin_type
             else:
-                plugin_type = get_plugin_type_from_class(self.instance.get_class())
+                plugin_type = self.instance.get_plugin_class().plugin_type
         else:
             plugin_type = data.get('plugin_type')
 
@@ -65,6 +64,23 @@ class PluginURLNameValidator(InstanceValidator):
             return
 
         if plugin_type == PLUGIN_TYPES.PROJECT_IMPORT:
+            python_path = data.get('python_path')
+            if not python_path and self.instance:
+                python_path = self.instance.python_path
+
+            is_upload_plugin = False
+            if self.instance and python_path == self.instance.python_path:
+                is_upload_plugin = self.instance.plugin_meta.get('upload') is True
+            elif python_path:
+                try:
+                    plugin_class = import_string(python_path)
+                    is_upload_plugin = getattr(plugin_class, 'upload', False) is True
+                except (ModuleNotFoundError, ImportError):
+                    is_upload_plugin = False
+
+            if is_upload_plugin:
+                return
+
             url_name = data.get('url_name')
             if url_name is None and self.instance:
                 url_name = self.instance.url_name

@@ -4,7 +4,7 @@ import pytest
 
 from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
-from rdmo.config.utils import get_plugin_type_from_class, get_plugins_from_settings
+from rdmo.config.utils import get_plugins_from_settings
 from rdmo.options.providers import Provider
 from rdmo.projects.exports import Export
 from rdmo.projects.imports import Import
@@ -13,10 +13,10 @@ from rdmo.projects.providers import IssueProvider
 
 
 def test_get_plugin_types_from_internal_plugins():
-    assert get_plugin_type_from_class(Export) == PLUGIN_TYPES.PROJECT_EXPORT
-    assert get_plugin_type_from_class(Import) == PLUGIN_TYPES.PROJECT_IMPORT
-    assert get_plugin_type_from_class(IssueProvider) == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
-    assert get_plugin_type_from_class(Provider) == PLUGIN_TYPES.OPTIONSET_PROVIDER
+    assert Export.plugin_type == PLUGIN_TYPES.PROJECT_EXPORT
+    assert Import.plugin_type == PLUGIN_TYPES.PROJECT_IMPORT
+    assert IssueProvider.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
+    assert Provider.plugin_type == PLUGIN_TYPES.OPTIONSET_PROVIDER
 
 @pytest.mark.django_db
 def test_plugin_create_and_render():
