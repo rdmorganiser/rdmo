@@ -14,7 +14,6 @@ from django.template.loader import get_template, render_to_string
 from django.utils.dateparse import parse_date
 from django.utils.encoding import force_str
 from django.utils.formats import get_format
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from defusedcsv import csv
@@ -111,7 +110,7 @@ def get_model_field_meta(model):
     elif model._meta.model_name == 'plugin':
         meta['python_path'] = {
             **meta.get('python_path', {}),
-            'choices': [(python_path, python_path) for python_path in get_plugin_python_paths()]
+            'choices': settings.PLUGINS
         }
 
     return meta
@@ -210,19 +209,6 @@ def sanitize_url(s):
         else:
             s = re.sub(r'/+', '/', s)
     return s
-
-
-def get_plugin_python_paths(raise_exception=False):
-    plugin_paths = []
-    for python_path in settings.PLUGINS:
-        try:
-            import_string(python_path)
-        except (ImportError, ValueError) as e:
-            if raise_exception:
-                raise e from e
-        else:
-            plugin_paths.append(python_path)
-    return plugin_paths
 
 
 def human2bytes(string):
