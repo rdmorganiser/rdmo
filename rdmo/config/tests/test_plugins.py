@@ -5,6 +5,7 @@ import pytest
 from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.config.utils import get_plugins_from_settings
+from rdmo.core.utils import get_model_field_meta
 from rdmo.options.providers import Provider
 from rdmo.projects.exports import Export
 from rdmo.projects.imports import Import
@@ -65,6 +66,20 @@ def test_get_plugins_from_settings_uses_default_uri_prefix(settings):
     for plugin in plugins:
         if plugin['python_path'].startswith('plugins.'):
             assert plugin["uri_prefix"] == "https://rdmorganiser.github.io/terms"
+
+
+def test_get_model_field_meta_serializes_plugin_python_path_choices(settings):
+    settings.PLUGINS = [
+        'rdmo.projects.exports.RDMOXMLExport',
+        'plugins.project_export.exports.SimpleExportPlugin',
+    ]
+
+    meta = get_model_field_meta(Plugin)
+
+    assert meta['python_path']['choices'] == [
+        ('rdmo.projects.exports.RDMOXMLExport', 'rdmo.projects.exports.RDMOXMLExport'),
+        ('plugins.project_export.exports.SimpleExportPlugin', 'plugins.project_export.exports.SimpleExportPlugin'),
+    ]
 
 def test_build_plugin_meta_includes_distribution_version(settings, monkeypatch):
     settings.PLUGIN_META_ATTRIBUTES = ('distribution_name', 'distribution_version')
