@@ -75,60 +75,58 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
         </li>
       </ul>
 
-      { elementType != 'plugins' && <>
-        <h2>Export</h2>
+      <h2>Export</h2>
 
-        <p className="text-muted">
-          {gettext('Export all visible elements.')}
-        </p>
+      <p className="text-muted">
+        {gettext('Export all visible elements.')}
+      </p>
 
-        <ul className="list-unstyled">
-          <li>
-            <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
-          </li>
-          {
-            [
-              'catalogs',
-              'sections',
-              'pages',
-              'questionsets',
-              'questions',
-              'optionsets',
-              'conditions',
-              'tasks'
-            ].includes(elementType) && (
-              <li>
-                <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
-              </li>
-            )
-          }
-        </ul>
+      <ul className="list-unstyled">
+        <li>
+          <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
+        </li>
+        {
+          [
+            'catalogs',
+            'sections',
+            'pages',
+            'questionsets',
+            'questions',
+            'optionsets',
+            'conditions',
+            'tasks'
+          ].includes(elementType) && (
+            <li>
+              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
+            </li>
+          )
+        }
+      </ul>
 
-        <ul className="list-unstyled">
-          {
-            elementType == 'attributes' && <>
-              <li>
-                <a href={`${exportUrl}csvcomma/?${exportParams}`}>
-                  {gettext('CSV comma separated')}
-                </a>
-              </li>
-              <li>
-                <a href={`${exportUrl}csvsemicolon/?${exportParams}`}>
-                  {gettext('CSV semicolon separated')}
-                </a>
-              </li>
-            </>
-          }
-          {
-            config.settings.export_formats &&
-            config.settings.export_formats.map(([key, label], index) => <li key={index}>
-              <a href={`${exportUrl}${key}/?${exportParams}`}
-                 target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
-                 rel="noreferrer">{label}</a>
-            </li>)
-          }
-        </ul>
-      </> }
+      <ul className="list-unstyled">
+        {
+          elementType == 'attributes' && <>
+            <li>
+              <a href={`${exportUrl}csvcomma/?${exportParams}`}>
+                {gettext('CSV comma separated')}
+              </a>
+            </li>
+            <li>
+              <a href={`${exportUrl}csvsemicolon/?${exportParams}`}>
+                {gettext('CSV semicolon separated')}
+              </a>
+            </li>
+          </>
+        }
+        {
+          config.settings.export_formats &&
+          config.settings.export_formats.map(([key, label], index) => <li key={index}>
+            <a href={`${exportUrl}${key}/?${exportParams}`}
+               target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
+               rel="noreferrer">{label}</a>
+          </li>)
+        }
+      </ul>
 
       <h2>Import</h2>
 

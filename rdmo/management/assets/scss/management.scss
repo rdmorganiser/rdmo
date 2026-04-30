@@ -186,6 +186,12 @@
     height: auto;
     padding: 0;
 
+    &.is-disabled,
+    &.is-disabled .cm-editor,
+    &.is-disabled .cm-content {
+        cursor: not-allowed !important;
+    }
+
     .cm-editor {
         border-radius: 4px;
     }
