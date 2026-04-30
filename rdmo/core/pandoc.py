@@ -93,10 +93,10 @@ def get_pandoc_args(export_format, context):
             pandoc_args.append(f'--reference-doc={reference_document}')
 
     # add STATIC_ROOT and possible additional resource paths
-    pandoc_args.append(f'--resource-path={settings.STATIC_ROOT}')
+    resource_paths = [settings.STATIC_ROOT]
     if 'resource_path' in context:
-        resource_path = Path(settings.MEDIA_ROOT) / context['resource_path']
-        pandoc_args.append(f'--resource-path={resource_path}')
+        resource_paths.append(Path(settings.MEDIA_ROOT) / context['resource_path'])
+    pandoc_args.append(f'--resource-path={os.pathsep.join(map(str, resource_paths))}')
 
     return pandoc_args
 
