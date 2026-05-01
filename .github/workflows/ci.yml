@@ -46,7 +46,7 @@ jobs:
         cache: npm
     - run: npm ci && npm run build:dist
     - name: Build and inspect package
-      uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
+      uses: hynek/build-and-inspect-python-package@fe0a0fb1925ca263d076ca4f2c13e93a6e92a33e # v2.17.0
 
   test:
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
@@ -66,7 +66,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         name: Packages
         path: dist
@@ -126,7 +126,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v8
       with:
         name: Packages
         path: dist
@@ -154,7 +154,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v7
       with:
         name: screenshots
         path: screenshots/**/*.png
@@ -202,7 +202,7 @@ jobs:
           python-version: "3.14"
           cache: pip
       - name: Download wheel
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: Packages
           path: dist
