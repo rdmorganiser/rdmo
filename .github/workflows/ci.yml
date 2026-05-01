@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:
@@ -31,26 +33,26 @@ permissions: {}
 
 jobs:
 
-  build-wheel:
-    name: Build python wheel
+  build:
+    name: Build python package
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
         fetch-depth: 0  # important for setuptools_scm
-    # build the webpack bundle
     - uses: actions/setup-node@v6
       with:
         node-version: 22.22
         cache: npm
-    - run: npm ci && npm run build:dist
+    - name: build front end
+      run: npm ci && npm run build:dist
     - name: Build and inspect package
       uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
 
   test:
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -110,7 +112,7 @@ jobs:
 
   test-e2e:
     name: "End-to-end Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -125,7 +127,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
-    - name: Download wheel
+    - name: Download package
       uses: actions/download-artifact@v6
       with:
         name: Packages
@@ -191,7 +193,7 @@ jobs:
 
   dependencies:
     name: Test installation of all dependencies
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
@@ -201,7 +203,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-      - name: Download wheel
+      - name: Download package
         uses: actions/download-artifact@v6
         with:
           name: Packages
@@ -244,10 +246,32 @@ jobs:
             echo -e "\`\`\`\n</details>"
           } >> $GITHUB_STEP_SUMMARY
 
+  pypi-release:
+    name: Publish distribution to PyPI
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+    - build
+    - test
+    - test-e2e
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/p/rdmo
+    permissions:
+      id-token: write
+    steps:
+    - name: Download package
+      uses: actions/download-artifact@v6
+      with:
+        name: Packages
+        path: dist
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@6733eb7d741f0b11ec6a39b58540dab7590f9b7d  # v1.14.0
+
   required-checks-pass:
     if: always()
     needs:
-      - build-wheel
+      - build
       - test
       - coveralls
       - test-e2e
