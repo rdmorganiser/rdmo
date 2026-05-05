@@ -67,7 +67,7 @@ For major and minor releases we prepare a release candidate to be tested by the 
 
 ### Commits and Branches
 
-Ideally, commits should made often, ideally after every small, logical unit of work. Keep the later use in e.g. `git blame` in mind. Commit messages should be clear and concise and should use the imperative mood, be capitalized, not end in a period, and not exceed 72 characters. If a longer messages is needed, separate subject and body by an empty line (see also [How to Write a Git Commit Message](https://cbea.ms/git-commit/)).
+Ideally, commits should be made often, ideally after every small, logical unit of work. Keep the later use in e.g. `git blame` in mind. Commit messages should be clear and concise and should use the imperative mood (e.g. `Add ...` instead of `Adding ...` or `Adds ...`), be capitalized, not end in a period, and not exceed 72 characters. If the commit relates to a specific issue, please include it in the message (e.g. `Fix ... (#123)`).
 
 The `main` branch of RDMO should always be in sync with the latest release. It is protected on GitHub and must not be updated without consulting the release manager. Usually it is only updated immediately before the release. Release branches are named `<version>/release` and collect all contributions leading to the release. When working on the code, please name your branches according to the following pattern: `<version>/<type>/<description>`, e.g. `2.4.1/fix/date-picker` or `2.5.0/feature/nh3`. Please use hyphens (`-`) instead of underscores (`_`).
 
@@ -77,7 +77,7 @@ In general, we prioritize readable, maintainable code over clever or overly conc
 
 When submitting pull requests, please keep it small and focused. A good PR addresses a single feature, bug fix, or concern. Avoid bundling unrelated changes, such as refactors, formatting cleanups, or dependency updates, alongside functional changes, as this makes review slower and harder to reason about. If you notice something that needs fixing while working on a PR, open a separate issue or PR for it rather than folding it in. Smaller, well-scoped PRs are easier to review and faster to merge.
 
-In RDMO, we try to follow common conventions from the Python, Django and React communities. By now, RDMO has developed its own coding style, which we ask you to respect. For Python code, we use [ruff](https://github.com/astral-sh/ruff) for automatic linting and follow its suggestions. Unlike many Python projects, we do not enforce [black](https://github.com/psf/black) or [ruff format](https://github.com/astral-sh/ruff). Contributors are trusted to follow the style guidelines without automated formatting.
+In RDMO, we try to follow common conventions from the Python, Django and React communities. By now, RDMO has developed its own coding style, which we ask you to respect. For Python code, we use [ruff](https://github.com/astral-sh/ruff) for automatic linting and formatting. For JavaScript we use [ESLint](https://eslint.org/).
 
 For a full breakdown of naming conventions, style, patterns, API and UX considerations see the separate [Code Style Reference](https://github.com/rdmorganiser/rdmo/blob/main/STYLE.md).
 
@@ -93,7 +93,7 @@ While not mandatory, we suggest to use the development setup as described in the
 
 Automatic tests are very important to us and we require tests for each new feature implemented. Usually we implement and run integration tests, which perform single requests against a URL or endpoint. Most crucial are tests, which perform requests as different users with different permissions. If you intend to add tests for your contributed code, we recommend looking at the existing tests to get a better understanding of our testing approach.
 
-How to run the tests is described in the [Testing docs of the RDMO documentation](https://rdmo.readthedocs.io/en/latest/development/index.html)
+How to run the tests is described in the [Testing docs of the RDMO documentation](https://rdmo.readthedocs.io/en/latest/development/testing.html)
 
 ## Continuous integration
 

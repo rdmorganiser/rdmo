@@ -4,7 +4,7 @@ This document provides an overview over the architecture of RDMO and provides in
 
 ## Core dependencies
 
-RDMO is a [Django](https://www.djangoproject.com/) application with an integrated [React](https://react.dev/) backend.
+RDMO is a [Django](https://www.djangoproject.com/) application with an integrated [React](https://react.dev/) frontend.
 
 On the backend, it makes heavy use of:
 

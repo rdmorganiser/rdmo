@@ -6,10 +6,11 @@ This document outlines the naming conventions and code patterns used in RDMO, as
 
 Consistent and descriptive naming is one of the key factors for readable and maintainable code. Giving good names to variables, functions, and classes not only makes the code easier to understand and debug, it also helps when reviewing code and onboarding new team members.
 
-In general, we want to follow established naming conventions used in [Django](https://www.djangoproject.com), [Django Rest Framework](https://www.django-rest-framework.org) (DRF), [React](https://react.dev) and [Bootstrap](https://getbootstrap.com). In addition, please follow the guidelines below when naming new variables, functions or methods:
+In general, we want to follow established naming conventions used in Django, Django Rest Framework (DRF), React, Redux and Bootstrap. In addition, please follow the guidelines below when naming new variables, functions or methods:
 
-* The prefixes `set` and `get` should be used for functions which perform little to none operations. In Python classes, we prefer `@property` instead of `get_egg(self)`. For more complex functions we use `compute` as prefix. An exception are well established Django/DRF patterns like `get_queryset`.
+* The prefixes `set` and `get` should be used for functions which perform little to none operations.
 * If functions access the network (e.g. in the front end) or the database, `fetch` and `store` are good prefixes.
+* For more complex functions we use `compute` as prefix. An exception are well established Django/DRF patterns like `get_queryset`.
 * The words `list`, `retrieve`, `create`, `update`, `delete` correspond to *actions* in DRF. The boolean `detail` describes whether the API works with one object or a list.
 * The Django permission system uses `view`, `add`, `change`, `delete` to describe the operations it checks. The same words are used in the admin interface.
 * The data model of RDMO introduces its own vocabulary, which can lead to confusion. Terms like `catalog`, `section`, `page`, `view`, `attribute`, or `value` should only be used when the context is clear.
@@ -23,9 +24,7 @@ Please note [ARCHITECTURE.md](https://github.com/rdmorganiser/rdmo/blob/main/ARC
 
 ### Python and Django
 
-For Python code, we use [ruff](https://github.com/astral-sh/ruff) as linter (as configured in `pyproject.toml`) and follow its suggestions. Unlike many Python projects, we do not enforce [black](https://github.com/psf/black) or [ruff format](https://github.com/astral-sh/ruff). Contributors are trusted to follow the style guidelines without automated formatting.
-
-The maximum line length is 120 characters. When breaking longer statements, we avoid `\`. We use **single quotes for strings**. Double-quotes are used in favor of escaping quotes in strings or when using dicts in f-strings. For constant iterables we use tuples `()` instead of lists `[]`.
+For Python code, we use [ruff](https://github.com/astral-sh/ruff) as linter and formatter (as configured in `pyproject.toml`). Instead of the [black](https://github.com/psf/black)/[ruff format](https://docs.astral.sh/ruff/formatter/) defaults, we use a maximum line length of 120 characters and single quotes for strings. [Magic trailing commas](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#the-magic-trailing-comma) can be used to enforce line breaks and to format lists and dicts in a consistent way.
 
 Examples:
 
@@ -33,24 +32,28 @@ Examples:
 # use parenthesis and indent nicely
 last_changed_subquery = Subquery(
     Value.objects.filter(project=OuterRef('pk'))
-                 .order_by('-updated')
-                 .values('updated')[:1]
+    .order_by('-updated')
+    .values('updated')[:1]
 )
 
 # multi line strings have the space at the end
 Error(
     "When ACCOUNT_TERMS_OF_USE is enabled, "
     "The TermsAndConditionsRedirectMiddleware is missing from the middlewares.",
-    ...
+    ...,
 )
 
-# we prefer line breaks after { or [
+# magic trailing commas prevent inlining of short dicts or lists
 get_kwargs = {
     'attribute': data.get('attribute'),
     'set_prefix': data.get('set_prefix'),
-    'set_index': data.get('set_index')
+    'set_index': data.get('set_index'),  # <- magic trailing comma
 }
 ```
+
+For constant iterables we use tuples `()` instead of lists `[]`.
+
+In Python classes, we prefer `@property` instead of getter method (e.g. like `get_var(self)`).
 
 RDMO uses [Django settings](https://docs.djangoproject.com/en/6.0/ref/settings/) extensively. All settings have a default value set in `rdmo/core/settings.py`. For readability, settings must not check if they exists (e.g. using `try/except` or `hasattr`).
 
@@ -74,7 +77,7 @@ Examples:
   )
 }
 
-// multiline tertiary operators
+// multiline ternary operators
 {
   page.id ? (
     <>
@@ -89,7 +92,7 @@ Examples:
 
 We only use functional components and only one component should be in a single file.
 
-## UI/UI considerations
+## User interface considerations
 
 All front end logic needs to be implemented with a consistent user experience in mind. Generic components reside in `rdmo/core/assets/js/components` and should be used where ever possible.
 
@@ -97,6 +100,6 @@ The styling should align with Bootstrap and it should be possible to adjust the 
 
 Custom CSS code should be kept to a minimum. For CSS classes hyphens `-` should be used instead of underscores (`_`).
 
-In the interactive front end, `a` should be used when there is a front end route or a backend URL which users might want to copy or bookmark. In all other cases, a `button` is preferred. The CSS class `link` can be used to make it look like a link. Usually `button` has `type="button"`, unless used as submit button in a form.
+In the interactive front end, regular links (using the `a` tag) should only be used to navigate to a frontend location or a backend URL, which actually exists and which users might want to copy or bookmark. In all other cases, a `button` is preferred. The CSS class `link` can be used to make it look like a link. Usually `button` has `type="button"`, unless used as submit button in a form.
 
-Form input fields should should apply or save automatically. This save operation needs a visual indicator to communicate success to the user. An exception are fields in models modals are only saved on the submit button of the modal.
+Form input fields should apply or save automatically. This save operation needs a visual indicator to communicate success to the user. An exception are fields in models, which are saved when the submit button of the modal is clicked.
