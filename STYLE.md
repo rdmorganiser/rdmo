@@ -102,4 +102,4 @@ Custom CSS code should be kept to a minimum. For CSS classes hyphens `-` should 
 
 In the interactive front end, regular links (using the `a` tag) should only be used to navigate to a frontend location or a backend URL, which actually exists and which users might want to copy or bookmark. In all other cases, a `button` is preferred. The CSS class `link` can be used to make it look like a link. Usually `button` has `type="button"`, unless used as submit button in a form.
 
-Form input fields should apply or save automatically. This save operation needs a visual indicator to communicate success to the user. An exception are fields in models, which are saved when the submit button of the modal is clicked.
+Form input fields should apply or save automatically. This save operation needs a visual indicator to communicate success to the user. An exception are fields in modals, which are saved when the submit button of the modal is clicked.
