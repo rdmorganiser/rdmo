@@ -51,9 +51,7 @@ class Issue(models.Model):
 
     @property
     def resolve(self):
-        values = getattr(self.project, '_prefetched_current_values', None)
-        if values is None:
-            values = self.project.values.filter(snapshot=None)
+        values = self.project.values.filter(snapshot=None)
 
         return any(condition.resolve(values) for condition in self.task.conditions.all())
 
