@@ -551,6 +551,8 @@ class ProjectIssueSerializer(serializers.ModelSerializer):
 
     task = ProjectIssueTaskSerializer(read_only=True)
     resources = ProjectIssueResourceSerializer(read_only=True, many=True)
+    resolve = serializers.BooleanField(read_only=True)
+    dates = serializers.ReadOnlyField()
 
     class Meta:
         model = Issue
@@ -558,7 +560,9 @@ class ProjectIssueSerializer(serializers.ModelSerializer):
             'id',
             'task',
             'status',
-            'resources'
+            'resolve',
+            'resources',
+            'dates'
         )
 
 
@@ -751,6 +755,8 @@ class IssueSerializer(serializers.ModelSerializer):
     project = serializers.PrimaryKeyRelatedField(read_only=True)
     task = IssueTaskSerializer(read_only=True)
     resources = IssueResourceSerializer(read_only=True, many=True)
+    resolve = serializers.BooleanField(read_only=True)
+    dates = serializers.ReadOnlyField()
 
     class Meta:
         model = Issue
@@ -759,7 +765,9 @@ class IssueSerializer(serializers.ModelSerializer):
             'project',
             'task',
             'status',
-            'resources'
+            'resolve',
+            'resources',
+            'dates'
         )
 
 

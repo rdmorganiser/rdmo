@@ -906,7 +906,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
     )
 
     def get_queryset(self):
-        return Issue.objects.filter(project=self.project).prefetch_related('resources')
+        return Issue.objects.filter(project=self.project).prefetch_related('resources').select_related('task')
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -1233,7 +1233,7 @@ class IssueViewSet(ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return Issue.objects.filter_user(self.request.user).prefetch_related('resources')
+        return Issue.objects.filter_user(self.request.user).prefetch_related('resources').select_related('task')
 
 
 class SnapshotViewSet(ReadOnlyModelViewSet):
