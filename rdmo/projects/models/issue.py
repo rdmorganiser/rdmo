@@ -49,10 +49,13 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
-    def resolve(self, values):
-        for condition in self.task.conditions.all():
-            if condition.resolve(values):
-                return True
+    @property
+    def resolve(self):
+        values = getattr(self.project, '_prefetched_current_values', None)
+        if values is None:
+            values = self.project.values.filter(snapshot=None)
+
+        return any(condition.resolve(values) for condition in self.task.conditions.all())
 
     @property
     def dates(self):
