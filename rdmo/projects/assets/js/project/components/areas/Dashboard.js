@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+
 import { navigateDashboard } from '../../actions/projectActions'
 import { Tile } from '../helper'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const issues = useSelector((state) => state.project.project.tasks) ?? []
+  // const issues = useSelector((state) => state.project.project.tasks) ?? []
+  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  // const resolvedIssues = issues.filter((issue) => issue.resolve === true)
+  // console.log('resolved issues', resolvedIssues)
+  const issues = allIssues.filter((issue) => issue.resolve === true)
+  console.log('resolved issues', issues)
 
   const [selectedTaskIssue, setSelectedTaskIssue] = useState(null)
   const [showClosedTasks, setShowClosedTasks] = useState(false)
@@ -166,27 +173,16 @@ const Dashboard = () => {
           </>
         )
       }
-
       {
         selectedTaskIssue && (
-          <div className="modal d-block" tabIndex="-1">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">{selectedTaskIssue.task.title}</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setSelectedTaskIssue(null)}
-                  />
-                </div>
-                <div className="modal-body">
-                  <p>{selectedTaskIssue.task.text}</p>
-                  <p>{selectedTaskIssue.dates?.[0]}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Modal
+            show
+            title={selectedTaskIssue.task.title}
+            onClose={() => setSelectedTaskIssue(null)}
+          >
+            <p>{selectedTaskIssue.task.text}</p>
+            <p>{selectedTaskIssue.dates?.[0]}</p>
+          </Modal>
         )
       }
     </div>
