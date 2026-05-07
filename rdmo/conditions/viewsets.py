@@ -20,9 +20,6 @@ from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ConditionSerializer
-    queryset = Condition.objects.select_related('source', 'target_option') \
-                                .prefetch_related('optionsets', 'pages', 'questionsets',
-                                                  'questions', 'tasks', 'editors')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -35,6 +32,23 @@ class ConditionViewSet(ModelViewSet):
         'target_text',
         'target_option'
     )
+
+    def get_queryset(self):
+        queryset = Condition.objects.all()
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.select_related(
+                'source',
+                'target_option'
+            ).prefetch_related(
+                'optionsets',
+                'pages',
+                'questionsets',
+                'questions',
+                'tasks',
+                'editors'
+            )
 
     @action(detail=False)
     def index(self, request):

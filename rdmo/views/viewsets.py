@@ -21,9 +21,6 @@ from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ViewSerializer
-    queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
-                           .annotate(projects_count=models.Count('projects')) \
-                           .order_by('uri')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -35,6 +32,20 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         'sites',
         'editors'
     )
+
+    def get_queryset(self):
+        queryset = View.objects.all().order_by('uri')
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.prefetch_related(
+                'catalogs',
+                'sites',
+                'editors',
+                'groups'
+            ).annotate(
+                projects_count=models.Count('projects')
+            )
 
     @action(detail=False)
     def index(self, request):

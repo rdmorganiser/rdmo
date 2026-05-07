@@ -21,10 +21,6 @@ from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = TaskSerializer
-    queryset = Task.objects.select_related('start_attribute', 'end_attribute') \
-                           .prefetch_related('catalogs', 'sites', 'editors', 'groups', 'conditions') \
-                           .annotate(projects_count=models.Count('projects')) \
-                           .order_by('uri')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -36,6 +32,24 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         'sites',
         'editors'
     )
+
+    def get_queryset(self):
+        queryset = Task.objects.all().order_by('uri')
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.select_related(
+                'start_attribute',
+                'end_attribute'
+            ).prefetch_related(
+                'catalogs',
+                'sites',
+                'editors',
+                'groups',
+                'conditions'
+            ).annotate(
+                projects_count=models.Count('projects')
+            )
 
     @action(detail=False)
     def index(self, request):

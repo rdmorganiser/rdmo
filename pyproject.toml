@@ -201,6 +201,7 @@ pythonpath = [".", "testing"]
 addopts = ["-ra", "-p no:randomly", "-m", "not e2e"]
 markers = [
   "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
+  "performance: marks query-count regression tests",
 ]
 filterwarnings = [
   # fail on RemovedInDjango50Warning exception

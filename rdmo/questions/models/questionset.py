@@ -21,6 +21,7 @@ class QuestionSet(Model, TranslationMixin):
         'questionset_questions__question__attribute',
         'questionset_questions__question__conditions',
         'questionset_questions__question__optionsets',
+        'questionset_questions__question__default_option',
         'questionset_questionsets__questionset__attribute',
         'questionset_questionsets__questionset__conditions'
     )
