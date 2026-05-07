@@ -24,11 +24,6 @@ from .serializers.v1 import (
 
 class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = Attribute.objects.annotate(values_count=models.Count('values')) \
-                                .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                                .prefetch_related('conditions', 'pages', 'questionsets', 'questions',
-                                                  'tasks_as_start', 'tasks_as_end', 'editors') \
-                                .order_by('path')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -39,6 +34,27 @@ class AttributeViewSet(ModelViewSet):
         'key',
         'parent'
     )
+
+    def get_queryset(self):
+        queryset = Attribute.objects.all().order_by('path')
+        if self.action in ['index']:
+            return queryset
+        elif self.action in ('nested', 'export', 'detail_export'):
+            return queryset.select_related('parent')
+        else:
+            return queryset.annotate(
+                values_count=models.Count('values')
+            ).annotate(
+                projects_count=models.Count('values__project', distinct=True)
+            ).prefetch_related(
+                'conditions',
+                'pages',
+                'questionsets',
+                'questions',
+                'tasks_as_start',
+                'tasks_as_end',
+                'editors'
+            ).select_related('parent')
 
     def get_serializer_class(self):
         return AttributeListSerializer if self.action == 'list' else AttributeSerializer
