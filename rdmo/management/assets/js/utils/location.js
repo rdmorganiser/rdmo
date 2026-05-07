@@ -33,6 +33,17 @@ const buildApiPath = (...args) => {
   return generatePath(`${baseUrl}/api/v1/`, ...args)
 }
 
+const buildUrlWithParams = (url, params, extraParams = {}) => {
+  const searchParams = new URLSearchParams(params)
+
+  Object.entries(extraParams).forEach(([key, value]) => {
+    searchParams.set(key, value)
+  })
+
+  const queryString = searchParams.toString()
+  return queryString ? `${url}?${queryString}` : url
+}
+
 const generatePath = (basePath, ...args) => {
   let path = basePath
 
@@ -45,4 +56,4 @@ const generatePath = (basePath, ...args) => {
   return path
 }
 
-export { parseLocation, updateLocation, buildPath, buildApiPath }
+export { parseLocation, updateLocation, buildPath, buildApiPath, buildUrlWithParams }
