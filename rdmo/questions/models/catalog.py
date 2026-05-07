@@ -23,11 +23,13 @@ class Catalog(Model, TranslationMixin):
         'catalog_sections__section__section_pages__page__page_questions__question__attribute',
         'catalog_sections__section__section_pages__page__page_questions__question__conditions',
         'catalog_sections__section__section_pages__page__page_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questions__question__default_option',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__attribute',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__conditions',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__default_option',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
         'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )

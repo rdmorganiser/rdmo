@@ -58,10 +58,12 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
+        queryset = Catalog.objects.all()
         if self.action in ['index']:
             return queryset
-        elif self.action in ('nested', 'export', 'detail_export'):
+
+        queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
+        if self.action in ('nested', 'export', 'detail_export'):
             return queryset.prefetch_elements()
         else:
             return queryset.prefetch_related('sites', 'editors', 'groups', 'catalog_sections__section')
@@ -375,7 +377,7 @@ class QuestionViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         elif self.action in ('nested', 'export', 'detail_export'):
-            return queryset.prefetch_elements().select_related('attribute')
+            return queryset.prefetch_elements().select_related('attribute', 'default_option')
         else:
             return queryset.prefetch_related(
                 'conditions',
@@ -383,7 +385,7 @@ class QuestionViewSet(ModelViewSet):
                 'pages',
                 'questionsets',
                 'editors'
-            ).select_related('attribute')
+            ).select_related('attribute', 'default_option')
 
     @action(detail=False)
     def index(self, request):

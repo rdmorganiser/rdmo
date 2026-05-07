@@ -19,7 +19,8 @@ class Question(Model, TranslationMixin):
 
     prefetch_lookups = (
         'conditions',
-        'optionsets'
+        'optionsets',
+        'default_option'
     )
 
     uri = models.URLField(

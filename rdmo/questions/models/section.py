@@ -20,11 +20,13 @@ class Section(Model, TranslationMixin):
         'section_pages__page__page_questions__question__attribute',
         'section_pages__page__page_questions__question__conditions',
         'section_pages__page__page_questions__question__optionsets',
+        'section_pages__page__page_questions__question__default_option',
         'section_pages__page__page_questionsets__questionset__attribute',
         'section_pages__page__page_questionsets__questionset__conditions',
         'section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
         'section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
         'section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__default_option',
         'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
         'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )

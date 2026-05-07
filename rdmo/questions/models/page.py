@@ -21,11 +21,13 @@ class Page(Model, TranslationMixin):
         'page_questions__question__attribute',
         'page_questions__question__conditions',
         'page_questions__question__optionsets',
+        'page_questions__question__default_option',
         'page_questionsets__questionset__attribute',
         'page_questionsets__questionset__conditions',
         'page_questionsets__questionset__questionset_questions__question__attribute',
         'page_questionsets__questionset__questionset_questions__question__conditions',
         'page_questionsets__questionset__questionset_questions__question__optionsets',
+        'page_questionsets__questionset__questionset_questions__question__default_option',
         'page_questionsets__questionset__questionset_questionsets__questionset__attribute',
         'page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )
