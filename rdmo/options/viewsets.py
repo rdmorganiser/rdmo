@@ -29,12 +29,6 @@ from .serializers.v1 import (
 class OptionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = OptionSetSerializer
-    queryset = OptionSet.objects.prefetch_related(
-        'optionset_options__option',
-        'conditions',
-        'questions',
-        'editors'
-    )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -44,6 +38,18 @@ class OptionSetViewSet(ModelViewSet):
         'uri_path',
         'comment'
     )
+
+    def get_queryset(self):
+        queryset = OptionSet.objects.all()
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.prefetch_related(
+                'optionset_options__option',
+                'conditions',
+                'questions',
+                'editors'
+            )
 
     @action(detail=False)
     def index(self, request):
@@ -93,9 +99,6 @@ class OptionSetViewSet(ModelViewSet):
 class OptionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = OptionSerializer
-    queryset = Option.objects.annotate(values_count=models.Count('values')) \
-                             .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .prefetch_related('optionsets', 'conditions', 'editors')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'text')
@@ -108,6 +111,21 @@ class OptionViewSet(ModelViewSet):
         'optionsets__uri_path',
         'comment'
     )
+
+    def get_queryset(self):
+        queryset = Option.objects.all()
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.annotate(
+                values_count=models.Count('values')
+            ).annotate(
+                projects_count=models.Count('values__project', distinct=True)
+            ).prefetch_related(
+                'optionsets',
+                'conditions',
+                'editors'
+            )
 
     @action(detail=False)
     def index(self, request):
