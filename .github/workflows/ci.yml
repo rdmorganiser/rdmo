@@ -163,7 +163,7 @@ jobs:
     name: Indicate completion to coveralls
     needs: test
     if: ${{ always() }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
     - name: Run Coveralls finish
       uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
@@ -253,7 +253,7 @@ jobs:
       - test-e2e
       - dev-setup
       - dependencies
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
       - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:
