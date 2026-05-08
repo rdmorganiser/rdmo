@@ -17,6 +17,7 @@ const Dashboard = () => {
 
   const [selectedTaskIssue, setSelectedTaskIssue] = useState(null)
   const [showClosedTasks, setShowClosedTasks] = useState(false)
+  const [showClosedRecommendations, setShowClosedRecommendations] = useState(false)
 
   const isClosed = (issue) => issue.status === 'closed'
   const isActive = (issue) => ['open', 'in_progress'].includes(issue.status)
@@ -32,7 +33,13 @@ const Dashboard = () => {
 
   const visibleTaskIssues = taskIssues
     .filter((issue) => showClosedTasks || !isClosed(issue))
-    .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
+
+  const recommendationIssues = issues.filter((issue) =>
+    getTaskType(issue) === 'recommendation'
+  )
+
+  const visibleRecommendationIssues = recommendationIssues
+    .filter((issue) => showClosedRecommendations || !isClosed(issue))
 
   const guidanceIssues = issues.filter((issue) =>
     getTaskType(issue) === 'guidance' && isActive(issue)
@@ -42,6 +49,53 @@ const Dashboard = () => {
     // local placeholder until backend POST/PATCH exists
     console.log('toggle issue', issueId)
   }
+
+  const renderIssueTiles = (visibleIssues) => (
+    <div className="row">
+      {
+        visibleIssues.map((issue) => {
+          const closed = isClosed(issue)
+
+          return (
+            <Tile
+              key={issue.id}
+              size="normal"
+              onCardClick={() => setSelectedTaskIssue(issue)}
+            >
+              <div className="d-flex align-items-start">
+                <div className="me-3 mt-1">
+                  <button
+                    type="button"
+                    className="btn p-0 border-0 bg-transparent"
+                    onClick={
+                      (e) => {
+                        e.stopPropagation()
+                        toggleTaskDone(issue.id)
+                      }
+                    }
+                    aria-label={closed ? 'Mark task as not done' : 'Mark task as done'}
+                  >
+                    <i className={`bi ${closed ? 'bi-check-circle-fill' : 'bi-circle'}`} />
+                  </button>
+                </div>
+
+                <div className="flex-grow-1">
+                  <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
+                    {issue.task.title}
+                  </div>
+
+                  <div className="text-muted small mt-2 text-end">
+                    <i className="bi bi-clock me-1" />
+                    {issue.dates?.[0] ?? ''}
+                  </div>
+                </div>
+              </div>
+            </Tile>
+          )
+        })
+      }
+    </div>
+  )
 
   return (
     <div>
@@ -53,11 +107,11 @@ const Dashboard = () => {
             <h2>{gettext('Create your data management plan')}</h2>
             <div className="row mb-4">
               {
-                stepIssues.map((issue, index) => (
+                stepIssues.sort((a, b) => a.task.order - b.task.order).map((issue, index) => (
                   <Tile
                     key={issue.id}
                     title={issue.task.title}
-                    label={gettext('Step %(number)s').replace('%(number)s', index + 1)}
+                    label={`${gettext('Step')} ${index + 1}`}
                     buttonLabel={issue.task.task_area_display}
                     onClick={
                       issue.task.task_area ? (
@@ -73,7 +127,6 @@ const Dashboard = () => {
           </>
         )
       }
-
       {
         taskIssues.length > 0 && (
           <>
@@ -91,62 +144,31 @@ const Dashboard = () => {
                 {gettext('Show closed tasks')}
               </label>
             </div>
-
-            <div className="row">
-              {
-                visibleTaskIssues.map((issue) => {
-                  const closed = isClosed(issue)
-
-                  return (
-                    <Tile
-                      key={issue.id}
-                      size="normal"
-                      onCardClick={() => setSelectedTaskIssue(issue)}
-                    >
-                      <div className="d-flex align-items-start">
-                        <div className="me-3 mt-1">
-                          <button
-                            type="button"
-                            className="btn p-0 border-0 bg-transparent"
-                            onClick={
-                              (e) => {
-                                e.stopPropagation()
-                                toggleTaskDone(issue.id)
-                              }
-                            }
-                            aria-label={closed ? 'Mark task as not done' : 'Mark task as done'}
-                          >
-                            <i className={`bi ${closed ? 'bi-check-circle-fill' : 'bi-circle'}`} />
-                          </button>
-                        </div>
-
-                        <div className="flex-grow-1">
-                          <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
-                            {issue.task.title}
-                          </div>
-
-                          <div className="d-flex justify-content-between text-muted small mt-2">
-                            <div>
-                              <i className="bi bi-check2-square me-1" />
-                              {issue.resolve ? '1 / 1' : '0 / 1'}
-                            </div>
-
-                            <div>
-                              <i className="bi bi-clock me-1" />
-                              {issue.dates?.[0] ?? ''}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Tile>
-                  )
-                })
-              }
-            </div>
+            {renderIssueTiles(visibleTaskIssues)}
           </>
         )
       }
+      {
+        recommendationIssues.length > 0 && (
+          <>
+            <h2>{gettext('Recommendations')}</h2>
 
+            <div className="form-check form-switch mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="showClosedTasks"
+                checked={showClosedRecommendations}
+                onChange={() => setShowClosedRecommendations((prev) => !prev)}
+              />
+              <label className="form-check-label" htmlFor="showClosedTasks">
+                {gettext('Show closed tasks')}
+              </label>
+            </div>
+            {renderIssueTiles(visibleRecommendationIssues)}
+          </>
+        )
+      }
       {
         guidanceIssues.length > 0 && (
           <>
