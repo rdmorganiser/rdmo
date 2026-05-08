@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.tasks.constants import TaskTypes
 from rdmo.tasks.models import Task
 
 from ..managers import IssueManager
@@ -53,7 +54,9 @@ class Issue(models.Model):
     def resolve(self):
         values = self.project.values.filter(snapshot=None)
 
-        return any(condition.resolve(values) for condition in self.task.conditions.all())
+        if self.task.task_type == TaskTypes.TASK:
+            return any(condition.resolve(values) for condition in self.task.conditions.all())
+        return True
 
     @property
     def dates(self):
