@@ -22,8 +22,8 @@ RDMO is a tool to support the systematic planning, organisation and implementati
   <dd>https://rdmo.readthedocs.io</dd>
   <dt>Mailing list</dt>
   <dd>https://www.listserv.dfn.de/sympa/subscribe/rdmo</dd>
-  <dt>Slack</dt>
-  <dd>https://rdmo.slack.com</dd>
+  <dt>Matrix</dt>
+  <dd>https://matrix.to/#/#rdmo:matrix.org</dd>
   <dt>Demo</dt>
   <dd>https://rdmo.aip.de</dd>
 </dl>

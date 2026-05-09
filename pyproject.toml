@@ -107,12 +107,13 @@ pytest = [
 ]
 
 [project.urls]
-changelog = "https://github.com/rdmorganiser/rdmo/blob/main/CHANGELOG.md"
-documentation = "https://rdmo.readthedocs.io"
-homepage = "https://rdmorganiser.github.io"
-issues = "https://github.com/rdmorganiser/rdmo/issues"
-repository = "https://github.com/rdmorganiser/rdmo.git"
-slack = "https://rdmo.slack.com"
+Homepage = "https://rdmorganiser.github.io"
+Repository = "https://github.com/rdmorganiser/rdmo"
+Issues = "https://github.com/rdmorganiser/rdmo/issues"
+Changelog = "https://github.com/rdmorganiser/rdmo/blob/main/CHANGELOG.md"
+Documentation = "https://rdmo.readthedocs.io"
+Mastodon = "https://openbiblio.social/@rdmo"
+Matrix = "https://matrix.to/#/#rdmo:matrix.org"
 
 [project.scripts]
 rdmo-admin = "rdmo.__main__:main"
