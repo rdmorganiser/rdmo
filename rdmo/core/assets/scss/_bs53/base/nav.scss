@@ -12,6 +12,10 @@ nav.navbar {
     --bs-navbar-active-color: var(--bs-navbar-hover-color);
     --bs-navbar-active-hover-color: var(--bs-navbar-hover-color);
 
+    --bs-navbar-brand-font-size: 1rem;
+    --bs-navbar-brand-padding-y: 0.5rem;
+    --bs-navbar-brand-margin-end: 0.5rem;
+
     background-color: var(--rdmo-navbar-bg);
 
     .container-fluid {
