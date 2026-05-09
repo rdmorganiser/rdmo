@@ -100,43 +100,25 @@ The `assets` directories in the modules use the following structure:
 
 ## Internal dependencies
 
-```plain
-┌────────────┐         ┌────────────┐
-│ core       │◀───┬────┤ accounts   │
-└────────────┘    │    └────────────┘
-                  │    ┌────────────┐         ┌────────────┐
-                  ├────┤ domain     │◀───┬────┤ projects   │
-                  │    └────────────┘    │    └────────────┘
-                  │    ┌────────────┐    │    ┌────────────┐
-                  ├────┤ conditions │◀───┼────┤ management │
-                  │    └────────────┘    │    └────────────┘
-                  │    ┌────────────┐    │
-                  ├────┤ options    │◀───┤
-                  │    └────────────┘    │
-                  │    ┌────────────┐    │
-                  ├────┤ questions  │◀───┤
-                  │    └────────────┘    │
-                  │    ┌────────────┐    │
-                  ├────┤ tasks      │◀───┤
-                  │    └────────────┘    │
-                  │    ┌────────────┐    │
-                  └────┤ views      │◀───┘
-                       └────────────┘
-```
-
-The modules depend on each other in the following way:
+The modules directly depend on each other (e.g. by importing classes or functions) in the following way:
 
 * `core` does not depend on the other modules.
-* `accounts` does only depend on `core`.
-* `conditions`, `domain`, `options`, `questions`, `tasks`, `views` depend only on `core` (with the exception that the `options.Optionset` model and the `conditions.Condition` depend on each other).
-* `project` and `management` depend on `conditions`, `domain`, `options`, `questions`, `tasks`, `views` and `core`.
+* `accounts` and `domain` depend only on `core`.
+* `conditions` depends on `core`, `domain`, and `options`.
+* `options` depends on `core` and `conditions`.
+* `questions` depends on `core`, `conditions`, `domain`, and `options`.
+* `tasks` depends on `core`, `conditions`, `domain`, and `questions`.
+* `views` depends on `core` and `questions`.
+* `project` and `management` depend on `core`, `conditions`, `domain`, `options`, `questions`, `tasks`, and `views`.
 
 Besides those dependencies:
 
 * `utils.py` and `managers.py` must not depend on anything inside the module.
 * `models.py` must only depend on `utils.py` and `managers.py`.
 
-If utility functions, which depend on the models are needed, they are put in special files, e.g. `process.py`. Utility functions for tests are placed in `tests/helpers.py`.
+If utility functions are needed, which depend on the models they are put in special files, e.g. `process.py`. Utility functions for tests are placed in `tests/helpers.py`.
+
+Besides those relationships, which should not be extended, implicit dependencies exists, e.g. when functions take objects from other modules as arguments.
 
 Only after careful consideration, functions can use local imports (in the function body) to circumvent the described dependency rules.
 
