@@ -152,13 +152,13 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false
         type="button" className="link link bi bi-download" data-bs-toggle="dropdown"
         title={title} aria-label={title}></button>
       <ul className="dropdown-menu dropdown-menu-end">
-        <li className="dropdown-item">
-          <a href={exportUrl}>{gettext('XML')}</a>
+        <li>
+          <a className="dropdown-item" href={exportUrl}>{gettext('XML')}</a>
         </li>
         {
           full && (
-            <li className="dropdown-item">
-              <a href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a>
+            <li>
+              <a className="dropdown-item" href={exportUrl + '?full=true'}>{gettext('XML (full)')}</a>
             </li>
           )
         }
@@ -166,13 +166,13 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false
         {
           csv && (
             <>
-              <li className="dropdown-item">
-                <a href={`${exportUrl}csvcomma/`}>
+              <li>
+                <a className="dropdown-item" href={`${exportUrl}csvcomma/`}>
                   {gettext('CSV comma separated')}
                 </a>
               </li>
-              <li className="dropdown-item">
-                <a href={`${exportUrl}csvsemicolon/`}>
+              <li>
+                <a className="dropdown-item" href={`${exportUrl}csvsemicolon/`}>
                   {gettext('CSV semicolon separated')}
                 </a>
               </li>
@@ -182,8 +182,9 @@ const ExportLink = ({ exportUrl, title, exportFormats, csv = false, full = false
         }
         {
           exportFormats.map(([key, label], index) => (
-            <li className="dropdown-item" key={index}>
+            <li key={index}>
               <a
+                className="dropdown-item"
                 href={`${exportUrl}${key}/`}
                 target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
                 rel="noreferrer">{label}</a>
