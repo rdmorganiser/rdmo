@@ -3,7 +3,7 @@
 {% load rules %}
 
 <nav class="navbar navbar-dark fixed-top navbar-expand-lg">
-    <div class="container-fluid align-items-baseline">
+    <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">{{ request.site.name }}</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse"
@@ -12,7 +12,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav w-100 align-items-lg-center">
                 {% back_to_project_link %}
 
                 {% test_rule 'management.can_view_management' request.user request.site as can_view_management %}
@@ -27,10 +27,10 @@
                     <a class="nav-link" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
-            </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <span id="pending" class="navbar-text"></span>
+                <li class="nav-item ms-lg-auto">
+                    <span id="pending" class="navbar-text"></span>
+                </li>
 
                 {% include 'core/bs53/base_navigation_i18n.html' %}
                 {% include 'core/bs53/base_navigation_user.html' %}
