@@ -1,0 +1,85 @@
+{% load i18n %}
+{% load accounts_tags %}
+
+{% if user.is_authenticated %}
+
+<li class="nav-item dropdown">
+    <a
+        class="nav-link dropdown-toggle" href="#" role="button"
+        data-bs-toggle="dropdown" aria-expanded="false"
+    >
+        {% full_name user %}
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+        {% url 'about' as about_url %}
+        {% if about_url %}
+        <li>
+            <a class="dropdown-item" href="{{ about_url }}">
+                {% trans 'About RDMO' %}
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        {% endif %}
+
+        {% if settings.PROFILE_UPDATE %}
+        <li>
+            <a class="dropdown-item" href="{% url 'profile_update' %}">
+                {% trans 'Update profile' %}
+            </a>
+        </li>
+        {% endif %}
+
+        {% if settings.ACCOUNT %}
+            {% include 'core/bs53/base_navigation_user_account.html' %}
+        {% endif %}
+
+        {% if settings.SOCIALACCOUNT %}
+            {% include 'core/bs53/base_navigation_user_socialaccount.html' %}
+        {% endif %}
+
+        {% if settings.ACCOUNT_ALLOW_USER_TOKEN %}
+        <li>
+            <a class="dropdown-item" href="{% url 'account_token' %}">
+                {% trans 'API token' %}
+            </a>
+        </li>
+        {% endif %}
+
+        {% if settings.PROFILE_DELETE %}
+        <li>
+            <a class="dropdown-item" href="{% url 'profile_remove' %}">
+                {% trans 'Delete profile' %}
+            </a>
+        </li>
+        {% endif %}
+
+        <li>
+            <a class="dropdown-item" href="{% url 'reset_overlays' %}">
+                {% trans 'Reset tutorial overlays' %}
+            </a>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
+        <li>
+            <form class="d-inline" action="{{ settings.LOGOUT_URL }}" method="POST">
+                {% csrf_token %}
+                <button class="dropdown-item" type="submit">
+                    {% trans 'Logout' %}
+                </button>
+            </form>
+        </li>
+        {% else %}
+        <li>
+            <a class="dropdown-item" href="{{ settings.LOGOUT_URL }}">
+                {% trans 'Logout' %}
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</li>
+
+{% endif %}

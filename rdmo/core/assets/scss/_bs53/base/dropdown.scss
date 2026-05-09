@@ -1,7 +1,9 @@
 .dropdown-menu {
-    --bs-dropdown-font-size: 0.9rem;
-    --bs-dropdown-link-active-color: white;
-    --bs-dropdown-link-active-bg: var(--rdmo-link-color);
+    --bs-dropdown-font-size: 0.85rem;
+
+    // disable the colorful active state when clicking
+    --bs-dropdown-link-active-color: var(--bs-dropdown-link-hover-color);
+    --bs-dropdown-link-active-bg: var(--bs-dropdown-link-hover-bg);
 
     .dropdown-header {
         font-size: var(--bs-dropdown-font-size);
