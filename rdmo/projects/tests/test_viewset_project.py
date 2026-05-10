@@ -679,6 +679,31 @@ def test_resolve(db, client, username, password, project_id, condition_id):
 
 
 @pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('condition_id', conditions)
+def test_resolve_post(db, client, username, password, project_id, condition_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['resolve'], args=[project_id])
+    data = [{
+        'set_prefix': '',
+        'set_index': 0,
+        'element_type': 'conditions',
+        'element_id': condition_id
+    }]
+    response = client.post(url, data, content_type='application/json')
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_options(db, client, username, password):
     client.login(username=username, password=password)
 
