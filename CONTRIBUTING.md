@@ -6,7 +6,7 @@ We are always happy to welcome new contributors! Whether you are reporting a bug
 
 To make sure contributions can be reviewed and integrated smoothly, we ask that you take a few minutes to read through this guide. It covers how the RDMO community is organized, how we work as a distributed open source project, our development process, and the coding styles and tools we use.
 
-While this document describes the work on the main [RDMO repository](https://github.com/rdmorganiser/rdmo), these principles also apply to the other tools and plugins maintained by the RDMO community. Please note the separate documents regarding the [architecture](https://github.com/rdmorganiser/rdmo/blob/main/ARCHITECTURE.md) and [coding style](https://github.com/rdmorganiser/rdmo/blob/main/STYLE.md) of RDMO.
+While this document describes the work on the main [RDMO repository](https://github.com/rdmorganiser/rdmo), these principles also apply to the other tools and plugins maintained by the RDMO community. Please note the separate documents regarding the [architecture](https://github.com/rdmorganiser/rdmo/blob/main/ARCHITECTURE.md), the [security policy](https://github.com/rdmorganiser/rdmo/blob/main/SECURITY.md) and [coding style](https://github.com/rdmorganiser/rdmo/blob/main/STYLE.md) of RDMO.
 
 ## Code of conduct
 
@@ -41,7 +41,7 @@ The best way to get your bug fixed is to provide precise steps to reproduce the 
 
 If you decide to work on the issue yourself, please wait until you received some feedback from us. Maybe we are already working on it (and forgot to comment on the issue), or we have other plans for the affected code.
 
-As a general rule, **all software bugs should be reported as GitHub issues**. An exception are security-critical bugs, which may also be reported confidentially to the release management, to be made public only once they have been fixed.
+As a general rule, **all software bugs should be reported as GitHub issues**. Exceptions are security-critical bugs, which may also be reported confidentially to the release management, to be made public only once they have been fixed (see the [security policy](https://github.com/rdmorganiser/rdmo/blob/main/SECURITY.md) for details)).
 
 In any case, to avoid unintentional duplication of effort, **always create an issue before you start working on the code**.
 
