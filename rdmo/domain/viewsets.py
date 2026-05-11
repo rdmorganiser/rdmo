@@ -37,10 +37,8 @@ class AttributeViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Attribute.objects.all().order_by('path')
-        if self.action in ['index']:
+        if self.action in ('index','nested', 'export', 'detail_export'):
             return queryset
-        elif self.action in ('nested', 'export', 'detail_export'):
-            return queryset.select_related('parent')
         else:
             return queryset.annotate(
                 values_count=models.Count('values')
@@ -53,8 +51,7 @@ class AttributeViewSet(ModelViewSet):
                 'questions',
                 'tasks_as_start',
                 'tasks_as_end',
-                'editors'
-            ).select_related('parent')
+            )
 
     def get_serializer_class(self):
         return AttributeListSerializer if self.action == 'list' else AttributeSerializer
