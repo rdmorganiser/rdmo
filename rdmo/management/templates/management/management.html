@@ -1,16 +1,17 @@
-{% extends 'core/bs53/base.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
+{% block head %}
+    <meta name="management" />
+{% endblock %}
+
 {% block css %}
-    <link rel="stylesheet" href="{% static 'core/css/base-bs53.css' %}" />
-    <link rel="stylesheet" href="{% static 'core/css/style-bs53.css' %}" />
     <link rel="stylesheet" href="{% static 'management/css/management.css' %}" />
     {{ block.super }}
 {% endblock %}
 
 {% block js %}
-    <script src="{% url 'javascript-catalog' %}"></script>
-    <script src="{% static 'core/js/base-bs53.js' %}" defer></script>
+    {{ block.super }}
     <script src="{% static 'management/js/management.js' %}" defer></script>
 {% endblock %}
 

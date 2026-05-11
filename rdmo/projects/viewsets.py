@@ -631,9 +631,8 @@ class ProjectViewSet(ModelViewSet):
             'key': key,
             'label': label,
             'class_name': class_name,
-            'href': reverse('project_create_import', args=[key])
+            # 'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
-
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)

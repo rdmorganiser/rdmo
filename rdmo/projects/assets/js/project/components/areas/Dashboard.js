@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import Tooltip from 'rdmo/core/assets/js/_bs53/components/Tooltip'
+import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
 
 import { TileGrid } from '../helper'
 

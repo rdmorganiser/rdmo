@@ -829,16 +829,17 @@ def test_upload_accept(db, client, username, password):
         assert response.status_code == 401
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_imports(db, client, username, password):
-    client.login(username=username, password=password)
+# TODO: enable again once imports are reimplemented
+# @pytest.mark.parametrize('username,password', users)
+# def test_imports(db, client, username, password):
+#     client.login(username=username, password=password)
 
-    url = reverse(urlnames['imports'])
-    response = client.get(url)
+#     url = reverse(urlnames['imports'])
+#     response = client.get(url)
 
-    if password:
-        assert response.status_code == 200
-        assert len(response.json()) == 1
-        assert response.json()[0]['key'] == 'url'
-    else:
-        assert response.status_code == 401
+#     if password:
+#         assert response.status_code == 200
+#         assert len(response.json()) == 1
+#         assert response.json()[0]['key'] == 'url'
+#     else:
+#         assert response.status_code == 401

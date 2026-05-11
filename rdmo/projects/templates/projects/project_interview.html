@@ -1,7 +1,5 @@
-{% extends 'core/page.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
-{% load i18n %}
-{% load core_tags %}
 
 {% block head %}
     <meta name='project' content="{{ project.id }}" />
@@ -18,13 +16,7 @@
     <script src="{% static 'projects/js/interview.js' %}" defer></script>
 {% endblock %}
 
-{% block sidebar %}
-
-    <div id="sidebar"></div>
-
-{% endblock %}
-
-{% block page %}
+{% block content %}
 
     <div id="main" class="interview"></div>
 

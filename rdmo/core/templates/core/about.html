@@ -1,18 +1,16 @@
-{% extends 'core/base.html' %}
+{% extends 'core/main.html' %}
 {% load static core_tags %}
 {% load i18n %}
 
 {% block content %}
 
-<div class="container page">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-8">
-            {% render_lang_template "core/about_text" %}
-        </div>
-        <div class="col-md-2">
-        </div>
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        {% render_lang_template "core/about_text" %}
+    </div>
+    <div class="col-md-2">
     </div>
 </div>
 

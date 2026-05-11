@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Link, SearchField } from 'rdmo/core/assets/js/components'
 import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'

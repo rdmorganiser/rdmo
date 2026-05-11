@@ -44,10 +44,8 @@ dependencies = [
   "defusedxml>=0.7.1,<1.0",
   "django>=5.2.8,<6.0",
   "django-cleanup>=8.0,<10.0",
-  "django-compressor>=4.4,<5.0",
   "django-extensions>=3.2,<5.0",
   "django-filter>=23.2,<26.0",
-  "django-libsass>=0.9,<1.0",
   "django-mathfilters>=1.0,<2.0",
   "django-mptt>=0.16.0,<1.0.0",
   "django-settings-export>=1.2,<2.0",
@@ -231,7 +229,7 @@ default.extend-ignore-re = [
   "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$", # for .py files
   "(?Rm)^.*<!-- spellchecker:disable-line -->$", # for .html files
 ]
-files.extend-exclude = ["rdmo/core/templates/core/bs53/home.html"]
+files.extend-exclude = ["rdmo/core/templates/core/home.html"]
 
 [tool.check-wheel-contents] # Ref: https://github.com/jwodder/check-wheel-contents
 ignore = [

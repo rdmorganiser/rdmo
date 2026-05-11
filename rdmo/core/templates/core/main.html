@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'core/js/bootstrap.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <main class="py-5">
+    {% block main %}{% endblock %}
+    </main>
+</div>
+
+{% endblock %}

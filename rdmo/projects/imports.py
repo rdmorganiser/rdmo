@@ -265,10 +265,10 @@ class URLImport(RDMOXMLImport):
             response = requests.get(form.cleaned_data['url'])
             self.request.session['import_file_name'] = handle_fetched_file(response.content)
 
-            if self.current_project:
-                return redirect('project_update_import', self.current_project.id)
-            else:
-                return redirect('project_create_import')
+            # if self.current_project:
+            #     return redirect('project_update_import', self.current_project.id)
+            # else:
+            #     return redirect('project_create_import')
 
         return render(self.request, 'projects/project_import_form.html', {
             'source_title': 'URL',
