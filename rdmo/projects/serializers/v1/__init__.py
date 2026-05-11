@@ -9,6 +9,7 @@ from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
+from rdmo.conditions.serializers.v1 import ConditionSerializer
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
@@ -512,11 +513,14 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
 
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
+    conditions = ConditionSerializer(read_only=True, many=True)
 
     class Meta:
         model = Task
         fields = (
             'id',
+            'uri',
             'order',
             'task_type',
             'task_type_display',
@@ -524,7 +528,12 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
             'task_area_display',
             'title',
             'text',
+            'condition_uris',
+            'conditions',
         )
+
+    def get_condition_uris(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class ProjectIssueResourceSerializer(serializers.ModelSerializer):
@@ -715,11 +724,14 @@ class IssueTaskSerializer(serializers.ModelSerializer):
 
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
+    conditions = ConditionSerializer(read_only=True, many=True)
 
     class Meta:
         model = Task
         fields = (
             'id',
+            'uri',
             'order',
             'task_type',
             'task_type_display',
@@ -727,7 +739,12 @@ class IssueTaskSerializer(serializers.ModelSerializer):
             'task_area_display',
             'title',
             'text',
+            'condition_uris',
+            'conditions',
         )
+
+    def get_condition_uris(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class IssueResourceSerializer(serializers.ModelSerializer):
