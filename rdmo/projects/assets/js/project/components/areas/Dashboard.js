@@ -1,26 +1,38 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import { Modal } from 'rdmo/core/assets/js/_bs53/components'
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
-import { navigateDashboard } from '../../actions/projectActions'
+import Select from 'rdmo/core/assets/js/components/forms/Select'
+
+import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
 import { Tile } from '../helper'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  // const issues = useSelector((state) => state.project.project.tasks) ?? []
-  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
-  // const resolvedIssues = issues.filter((issue) => issue.resolve === true)
-  // console.log('resolved issues', resolvedIssues)
-  const issues = allIssues.filter((issue) => issue.resolve === true)
-  console.log('resolved issues', issues)
+  const config = useSelector(state => state.config)
+  const issues = useSelector((state) => state.project.project.tasks) ?? []
+  // const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  const resolvedIssues = issues.filter((issue) => issue.resolve === true)
+  console.log('resolved issues', resolvedIssues)
+  // const issues = allIssues.filter((issue) => issue.resolve === true)
+  // console.log('resolved issues', issues)
 
+  console.log('all issues', issues)
+  const statusOptions = [
+    { value: 'open', label: gettext('Open') },
+    { value: 'closed', label: gettext('Closed') },
+    { value: 'in_progress', label: gettext('In progress') },
+  ]
+
+  const { showClosedTasks, showClosedRecommendations } = config
+
+  console.log('showClosedTasks', showClosedTasks)
+  console.log('showClosedRecommendations', showClosedRecommendations)
   const [selectedTaskIssue, setSelectedTaskIssue] = useState(null)
-  const [showClosedTasks, setShowClosedTasks] = useState(false)
-  const [showClosedRecommendations, setShowClosedRecommendations] = useState(false)
 
   const isClosed = (issue) => issue.status === 'closed'
-  // const isActive = (issue) => ['open', 'in_progress'].includes(issue.status)
   const getTaskType = (issue) => issue.task?.task_type
 
   const stepIssues = issues.filter((issue) =>
@@ -33,6 +45,7 @@ const Dashboard = () => {
 
   const visibleTaskIssues = taskIssues
     .filter((issue) => showClosedTasks || !isClosed(issue))
+    .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
   const recommendationIssues = issues.filter((issue) =>
     getTaskType(issue) === 'recommendation'
@@ -40,14 +53,17 @@ const Dashboard = () => {
 
   const visibleRecommendationIssues = recommendationIssues
     .filter((issue) => showClosedRecommendations || !isClosed(issue))
+    .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
   const guidanceIssues = issues.filter((issue) =>
     getTaskType(issue) === 'guidance'
   ).sort((a, b) => a.task.order - b.task.order)
 
-  const toggleTaskDone = (issueId) => {
-    // local placeholder until backend POST/PATCH exists
+  const toggleTaskDone = (issueId, currentStatus) => {
     console.log('toggle issue', issueId)
+    dispatch(updateProjectTask(issueId, {
+      status: currentStatus === 'closed' ? 'open' : 'closed'
+    }))
   }
 
   const renderIssueTiles = (visibleIssues) => (
@@ -55,7 +71,6 @@ const Dashboard = () => {
       {
         visibleIssues.map((issue) => {
           const closed = isClosed(issue)
-
           return (
             <Tile
               key={issue.id}
@@ -70,7 +85,7 @@ const Dashboard = () => {
                     onClick={
                       (e) => {
                         e.stopPropagation()
-                        toggleTaskDone(issue.id)
+                        toggleTaskDone(issue.id, issue.status)
                       }
                     }
                     aria-label={closed ? 'Mark task as not done' : 'Mark task as done'}
@@ -78,12 +93,10 @@ const Dashboard = () => {
                     <i className={`bi ${closed ? 'bi-check-circle-fill' : 'bi-circle'}`} />
                   </button>
                 </div>
-
                 <div className="flex-grow-1">
                   <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
                     {issue.task.title}
                   </div>
-
                   <div className="text-muted small mt-2 text-end">
                     <i className="bi bi-clock me-1" />
                     {issue.dates?.[0] ?? ''}
@@ -138,7 +151,7 @@ const Dashboard = () => {
                 type="checkbox"
                 id="showClosedTasks"
                 checked={showClosedTasks}
-                onChange={() => setShowClosedTasks((prev) => !prev)}
+                onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
               />
               <label className="form-check-label" htmlFor="showClosedTasks">
                 {gettext('Show closed tasks')}
@@ -157,11 +170,16 @@ const Dashboard = () => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                id="showClosedTasks"
+                id="showClosedRecommendations"
                 checked={showClosedRecommendations}
-                onChange={() => setShowClosedRecommendations((prev) => !prev)}
+                onChange={
+                  () => dispatch(configActions.updateConfig(
+                    'showClosedRecommendations',
+                    !showClosedRecommendations
+                  ))
+                }
               />
-              <label className="form-check-label" htmlFor="showClosedTasks">
+              <label className="form-check-label" htmlFor="showClosedRecommendations">
                 {gettext('Show closed tasks')}
               </label>
             </div>
@@ -201,9 +219,28 @@ const Dashboard = () => {
             show
             title={selectedTaskIssue.task.title}
             onClose={() => setSelectedTaskIssue(null)}
+            size="modal-lg"
           >
+            <p>{selectedTaskIssue.id}</p>
             <p>{selectedTaskIssue.task.text}</p>
+            {/* <p>{selectedTaskIssue.status}</p> */}
+            <Select
+              label={gettext('Status')}
+              options={statusOptions}
+              value={selectedTaskIssue.status}
+              onChange={
+                (status) => {
+                  dispatch(updateProjectTask(selectedTaskIssue.id, { status }))
+                  setSelectedTaskIssue({
+                    ...selectedTaskIssue,
+                    status,
+                  })
+                }
+              }
+            />
+            <p>{`URI: ${selectedTaskIssue.task.uri}`}</p>
             <p>{selectedTaskIssue.dates?.[0]}</p>
+            <p>{`Condition Uris: ${(selectedTaskIssue.task.condition_uris ?? []).join(', ')}`}</p>
           </Modal>
         )
       }

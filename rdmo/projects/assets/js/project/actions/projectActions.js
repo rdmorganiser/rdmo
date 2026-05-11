@@ -222,6 +222,41 @@ export function deleteProjectVisibility() {
   }
 }
 
+// project task
+
+export function updateProjectTask(issueId, data) {
+  return function (dispatch, getState) {
+    dispatch(addToPending('updateProjectTask'))
+    dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_INIT })
+
+    return ProjectApi.updateProjectTask(projectId, issueId, data)
+      .then(() => {
+        const state = getState()
+        const currentBundle = state.project.project
+
+        return ProjectApi.fetchProjectTasks(projectId)
+          .then((tasks) => ({ currentBundle, tasks }))
+      })
+      .then(({ currentBundle, tasks }) => {
+        const updatedBundle = {
+          ...currentBundle,
+          tasks,
+        }
+
+        dispatch(removeFromPending('updateProjectTask'))
+        dispatch({
+          type: actionTypes.UPDATE_PROJECT_SUCCESS,
+          project: updatedBundle,
+        })
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('updateProjectTask'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_ERROR, error })
+        throw error
+      })
+  }
+}
+
 // memberships / invites / leave
 
 export function fetchProjectInvites() {
