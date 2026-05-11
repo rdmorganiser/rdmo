@@ -20,12 +20,12 @@ const Dashboard = () => {
   const [showClosedRecommendations, setShowClosedRecommendations] = useState(false)
 
   const isClosed = (issue) => issue.status === 'closed'
-  const isActive = (issue) => ['open', 'in_progress'].includes(issue.status)
+  // const isActive = (issue) => ['open', 'in_progress'].includes(issue.status)
   const getTaskType = (issue) => issue.task?.task_type
 
   const stepIssues = issues.filter((issue) =>
-    getTaskType(issue) === 'step' && isActive(issue)
-  )
+    getTaskType(issue) === 'step'
+  ).sort((a, b) => a.task.order - b.task.order)
 
   const taskIssues = issues.filter((issue) =>
     getTaskType(issue) === 'task'
@@ -42,8 +42,8 @@ const Dashboard = () => {
     .filter((issue) => showClosedRecommendations || !isClosed(issue))
 
   const guidanceIssues = issues.filter((issue) =>
-    getTaskType(issue) === 'guidance' && isActive(issue)
-  )
+    getTaskType(issue) === 'guidance'
+  ).sort((a, b) => a.task.order - b.task.order)
 
   const toggleTaskDone = (issueId) => {
     // local placeholder until backend POST/PATCH exists
@@ -107,7 +107,7 @@ const Dashboard = () => {
             <h2>{gettext('Create your data management plan')}</h2>
             <div className="row mb-4">
               {
-                stepIssues.sort((a, b) => a.task.order - b.task.order).map((issue, index) => (
+                stepIssues.map((issue, index) => (
                   <Tile
                     key={issue.id}
                     title={issue.task.title}
