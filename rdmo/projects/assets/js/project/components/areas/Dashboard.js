@@ -12,6 +12,7 @@ import { Tile } from '../helper'
 const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
+  const perms = useSelector(state => state.project.project.project.permissions) ?? {}
   const issues = useSelector((state) => state.project.project.tasks) ?? []
   // const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   const resolvedIssues = issues.filter((issue) => issue.resolve === true)
@@ -82,6 +83,7 @@ const Dashboard = () => {
                   <button
                     type="button"
                     className="btn p-0 border-0 bg-transparent"
+                    disabled={!perms.can_change_issue}
                     onClick={
                       (e) => {
                         e.stopPropagation()
@@ -113,135 +115,141 @@ const Dashboard = () => {
   return (
     <div>
       <h1>{gettext('Dashboard')}</h1>
-
       {
-        stepIssues.length > 0 && (
+        perms.can_view_issue && (
           <>
-            <h2>{gettext('Create your data management plan')}</h2>
-            <div className="row mb-4">
-              {
-                stepIssues.map((issue, index) => (
-                  <Tile
-                    key={issue.id}
-                    title={issue.task.title}
-                    label={`${gettext('Step')} ${index + 1}`}
-                    buttonLabel={issue.task.task_area_display}
-                    onClick={
-                      issue.task.task_area ? (
-                        () => dispatch(navigateDashboard({ area: issue.task.task_area }))
-                      ) : undefined
+            {
+              stepIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Create your data management plan')}</h2>
+                  <div className="row mb-4">
+                    {
+                      stepIssues.map((issue, index) => (
+                        <Tile
+                          key={issue.id}
+                          title={issue.task.title}
+                          label={`${gettext('Step')} ${index + 1}`}
+                          buttonLabel={issue.task.task_area_display}
+                          onClick={
+                            issue.task.task_area ? (
+                              () => dispatch(navigateDashboard({ area: issue.task.task_area }))
+                            ) : undefined
+                          }
+                        >
+                          <p>{issue.task.text}</p>
+                        </Tile>
+                      ))
                     }
-                  >
-                    <p>{issue.task.text}</p>
-                  </Tile>
-                ))
-              }
-            </div>
-          </>
-        )
-      }
-      {
-        taskIssues.length > 0 && (
-          <>
-            <h2>{gettext('Tasks')}</h2>
+                  </div>
+                </>
+              )
+            }
+            {
+              taskIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Tasks')}</h2>
 
-            <div className="form-check form-switch mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="showClosedTasks"
-                checked={showClosedTasks}
-                onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
-              />
-              <label className="form-check-label" htmlFor="showClosedTasks">
-                {gettext('Show closed tasks')}
-              </label>
-            </div>
-            {renderIssueTiles(visibleTaskIssues)}
-          </>
-        )
-      }
-      {
-        recommendationIssues.length > 0 && (
-          <>
-            <h2>{gettext('Recommendations')}</h2>
+                  <div className="form-check form-switch mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="showClosedTasks"
+                      checked={showClosedTasks}
+                      onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
+                    />
+                    <label className="form-check-label" htmlFor="showClosedTasks">
+                      {gettext('Show closed tasks')}
+                    </label>
+                  </div>
+                  {renderIssueTiles(visibleTaskIssues)}
+                </>
+              )
+            }
+            {
+              recommendationIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Recommendations')}</h2>
 
-            <div className="form-check form-switch mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="showClosedRecommendations"
-                checked={showClosedRecommendations}
-                onChange={
-                  () => dispatch(configActions.updateConfig(
-                    'showClosedRecommendations',
-                    !showClosedRecommendations
-                  ))
-                }
-              />
-              <label className="form-check-label" htmlFor="showClosedRecommendations">
-                {gettext('Show closed tasks')}
-              </label>
-            </div>
-            {renderIssueTiles(visibleRecommendationIssues)}
-          </>
-        )
-      }
-      {
-        guidanceIssues.length > 0 && (
-          <>
-            <h2>{gettext('More actions')}</h2>
-            <div className="row mb-4">
-              {
-                guidanceIssues.map((issue) => (
-                  <Tile
-                    key={issue.id}
-                    title={issue.task.title}
-                    buttonLabel={issue.task.task_area_display}
-                    onClick={
-                      issue.task.task_area ? (
-                        () => dispatch(navigateDashboard({ area: issue.task.task_area }))
-                      ) : undefined
+                  <div className="form-check form-switch mb-3">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="showClosedRecommendations"
+                      checked={showClosedRecommendations}
+                      onChange={
+                        () => dispatch(configActions.updateConfig(
+                          'showClosedRecommendations',
+                          !showClosedRecommendations
+                        ))
+                      }
+                    />
+                    <label className="form-check-label" htmlFor="showClosedRecommendations">
+                      {gettext('Show closed tasks')}
+                    </label>
+                  </div>
+                  {renderIssueTiles(visibleRecommendationIssues)}
+                </>
+              )
+            }
+            {
+              guidanceIssues.length > 0 && (
+                <>
+                  <h2>{gettext('More actions')}</h2>
+                  <div className="row mb-4">
+                    {
+                      guidanceIssues.map((issue) => (
+                        <Tile
+                          key={issue.id}
+                          title={issue.task.title}
+                          buttonLabel={issue.task.task_area_display}
+                          onClick={
+                            issue.task.task_area ? (
+                              () => dispatch(navigateDashboard({ area: issue.task.task_area }))
+                            ) : undefined
+                          }
+                          size="compact"
+                        >
+                          <p>{issue.task.text}</p>
+                        </Tile>
+                      ))
                     }
-                    size="compact"
-                  >
-                    <p>{issue.task.text}</p>
-                  </Tile>
-                ))
-              }
-            </div>
+                  </div>
+                </>
+              )
+            }
+            {
+              selectedTaskIssue && (
+                <Modal
+                  show
+                  title={selectedTaskIssue.task.title}
+                  onClose={() => setSelectedTaskIssue(null)}
+                  size="modal-lg"
+                >
+                  <p>{selectedTaskIssue.id}</p>
+                  <p>{selectedTaskIssue.task.text}</p>
+                  {/* <p>{selectedTaskIssue.status}</p> */}
+                  <Select
+                    isDisabled={!perms.can_change_issue}
+                    label={gettext('Status')}
+                    options={statusOptions}
+                    value={selectedTaskIssue.status}
+                    onChange={
+                      (status) => {
+                        dispatch(updateProjectTask(selectedTaskIssue.id, { status }))
+                        setSelectedTaskIssue({
+                          ...selectedTaskIssue,
+                          status,
+                        })
+                      }
+                    }
+                  />
+                  <p>{`URI: ${selectedTaskIssue.task.uri}`}</p>
+                  <p>{selectedTaskIssue.dates?.[0]}</p>
+                  <p>{`Condition Uris: ${(selectedTaskIssue.task.condition_uris ?? []).join(', ')}`}</p>
+                </Modal>
+              )
+            }
           </>
-        )
-      }
-      {
-        selectedTaskIssue && (
-          <Modal
-            show
-            title={selectedTaskIssue.task.title}
-            onClose={() => setSelectedTaskIssue(null)}
-            size="modal-lg"
-          >
-            <p>{selectedTaskIssue.id}</p>
-            <p>{selectedTaskIssue.task.text}</p>
-            {/* <p>{selectedTaskIssue.status}</p> */}
-            <Select
-              label={gettext('Status')}
-              options={statusOptions}
-              value={selectedTaskIssue.status}
-              onChange={
-                (status) => {
-                  dispatch(updateProjectTask(selectedTaskIssue.id, { status }))
-                  setSelectedTaskIssue({
-                    ...selectedTaskIssue,
-                    status,
-                  })
-                }
-              }
-            />
-            <p>{`URI: ${selectedTaskIssue.task.uri}`}</p>
-            <p>{selectedTaskIssue.dates?.[0]}</p>
-            <p>{`Condition Uris: ${(selectedTaskIssue.task.condition_uris ?? []).join(', ')}`}</p>
-          </Modal>
         )
       }
     </div>
