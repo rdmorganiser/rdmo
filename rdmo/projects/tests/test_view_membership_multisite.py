@@ -65,7 +65,12 @@ def test_get_invite_email_project_path_project_site(db, settings):
     settings.MULTISITE = True
     settings.PROJECT_INVITE_USE_PROJECT_SITE = True
 
-    invite = Invite.objects.get(pk=1)
+    foo_user = get_user_model().objects.get(username='foo-user')
+
+    project = Project.objects.get(pk=1)  # example.com
+    invite = Invite(project=project, user=foo_user, role='owner')
+    invite.make_token()
+    invite.save()
 
     assert get_invite_email_project_path(invite) == reverse('project_join', args=[invite.token])
 
