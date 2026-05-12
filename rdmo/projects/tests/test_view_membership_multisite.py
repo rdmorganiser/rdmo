@@ -65,22 +65,9 @@ def test_get_invite_email_project_path_project_site(db, settings):
     settings.MULTISITE = True
     settings.PROJECT_INVITE_USE_PROJECT_SITE = True
 
-    foo_site, _ = Site.objects.get_or_create(domain='foo.com', name='foo.com')
-    foo_user, _ = get_user_model().objects.get_or_create(
-        username='foo-user',
-        email='foo-user@foo.com',
-        password='foo-user',
-    )
-    foo_user.role.member.set([foo_site])
+    invite = Invite.objects.get(pk=1)
 
-    project = Project.objects.get(pk=1)
-    invite = Invite(project=project, user=foo_user, role='owner')
-    invite.make_token()
-    invite.save()
-
-    invite_email_project_path = get_invite_email_project_path(invite)
-
-    assert invite_email_project_path == reverse('project_join', args=[invite.token])
+    assert get_invite_email_project_path(invite) == reverse('project_join', args=[invite.token])
 
 
 @pytest.mark.parametrize('username,password', users)
