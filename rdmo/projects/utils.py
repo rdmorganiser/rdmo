@@ -237,21 +237,21 @@ def save_import_views(project, views):
         project.views.add(view)
 
 
-def get_invite_email_project_path(invite) -> str:
+def get_invite_email_project_path(invite, scheme='http') -> str:
     project_invite_path = reverse('project_join', args=[invite.token])
     # check if the invited user exists and the multisite environment is enabled
-    if invite.user is not None and settings.MULTISITE:
+    if invite.user is not None and settings.MULTISITE and not settings.PROJECT_INVITE_USE_PROJECT_SITE:
         # do nothing if user is a member of the current site
         current_site = Site.objects.get_current()
         if not invite.user.role.member.filter(id=current_site.id).exists():
             # else take first site
             invited_user_member_domain = invite.user.role.member.first().domain
-            project_invite_path = 'http://' + invited_user_member_domain + project_invite_path
+            project_invite_path = f'{scheme}://' + invited_user_member_domain + project_invite_path
     return project_invite_path
 
 
 def send_invite_email(request, invite):
-    project_invite_path = get_invite_email_project_path(invite)
+    project_invite_path = get_invite_email_project_path(invite, request.scheme)
     context = {
         'invite_url': request.build_absolute_uri(project_invite_path),
         'invite_user': invite.user,
