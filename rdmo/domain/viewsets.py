@@ -71,7 +71,12 @@ class AttributeViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = AttributeExportSerializer(queryset, many=True)
+            attributes = list(queryset)
+            serializer = AttributeExportSerializer(
+                attributes, many=True, context={
+                    'attributes_by_id': { attribute.pk: attribute for attribute in attributes}
+                },
+            )
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name='attributes')
         elif export_format[:3] == 'csv':
@@ -85,18 +90,23 @@ class AttributeViewSet(ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
-        attributes = self.get_object().get_descendants(include_self=True)
+        instance = self.get_object()
+        attributes = instance.get_descendants(include_self=True)
         if export_format == 'xml':
-            serializer = AttributeExportSerializer(attributes, many=True)
+            serializer = AttributeExportSerializer(
+                attributes, many=True, context={
+                    'attributes_by_id': {attribute.pk: attribute for attribute in attributes}
+                },
+            )
             xml = AttributeRenderer().render(serializer.data)
-            return XMLResponse(xml, name=self.get_object().key)
+            return XMLResponse(xml, name=instance.key)
         elif export_format[:3] == 'csv':
             rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in attributes]
             delimiter = ',' if export_format == 'csvcomma' else ';'
             return render_to_csv('domain', rows, delimiter)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().key, 'domain/export/attributes.html', {
+                self.request, export_format, instance.key, 'domain/export/attributes.html', {
                     'attributes': attributes
                 }
             )

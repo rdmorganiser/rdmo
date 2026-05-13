@@ -71,14 +71,15 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        instance = self.get_object()
         if export_format == 'xml':
-            serializer = TaskExportSerializer(self.get_object())
+            serializer = TaskExportSerializer(instance)
             xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
-            return XMLResponse(xml, name=self.get_object().uri_path)
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().uri_path, 'tasks/export/tasks.html', {
-                    'tasks': [self.get_object()]
+                self.request, export_format, instance.uri_path, 'tasks/export/tasks.html', {
+                    'tasks': [instance]
                 }
             )
 

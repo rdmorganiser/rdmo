@@ -67,13 +67,14 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
 
     @action(detail=True, url_path=r'export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        instance = self.get_object()
         if export_format == 'xml':
-            serializer = ViewExportSerializer(self.get_object())
+            serializer = ViewExportSerializer(instance)
             xml = ViewRenderer().render([serializer.data])
-            return XMLResponse(xml, name=self.get_object().uri_path)
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().uri_path, 'views/export/views.html', {
-                    'views': [self.get_object()]
+                self.request, export_format, instance.uri_path, 'views/export/views.html', {
+                    'views': [instance]
                 }
             )

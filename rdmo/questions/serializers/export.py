@@ -24,8 +24,8 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
 
     attribute = AttributeExportSerializer()
     default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
-    optionsets = OptionSetExportSerializer(many=True)
-    conditions = ConditionExportSerializer(many=True)
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -56,6 +56,22 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'verbose_name'
         )
 
+    def get_optionsets(self, obj):
+        optionsets = obj.optionsets.all()
+
+        if self.context.get('optionsets'):
+            return OptionSetExportSerializer(optionsets, many=True, context=self.context).data
+
+        return [{'uri': optionset.uri} for optionset in optionsets]
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
+
 
 class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
 
@@ -69,7 +85,7 @@ class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
         )
 
     def get_questionset(self, obj):
-        return QuestionSetExportSerializer(obj.questionset).data
+        return QuestionSetExportSerializer(obj.questionset, context=self.context).data
 
 
 class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
@@ -87,7 +103,7 @@ class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = AttributeExportSerializer()
-    conditions = ConditionExportSerializer(many=True)
+    conditions = serializers.SerializerMethodField()
 
     questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True)
     questionset_questions = QuestionSetQuestionExportSerializer(many=True)
@@ -110,6 +126,14 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'help',
             'verbose_name'
         )
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
 
 
 class PageQuestionSetExportSerializer(serializers.ModelSerializer):
@@ -139,7 +163,7 @@ class PageQuestionExportSerializer(serializers.ModelSerializer):
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = AttributeExportSerializer()
-    conditions = ConditionExportSerializer(many=True)
+    conditions = serializers.SerializerMethodField()
 
     page_questionsets = PageQuestionSetExportSerializer(many=True)
     page_questions = PageQuestionExportSerializer(many=True)
@@ -163,6 +187,14 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'help',
             'verbose_name'
         )
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
 
 
 class SectionPageExportSerializer(serializers.ModelSerializer):

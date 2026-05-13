@@ -76,14 +76,15 @@ class OptionSetViewSet(ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        instance = self.get_object()
         if export_format == 'xml':
-            serializer = OptionSetExportSerializer(self.get_object())
+            serializer = OptionSetExportSerializer(instance)
             xml = OptionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
-            return XMLResponse(xml, name=self.get_object().uri_path)
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().uri_path, 'options/export/optionsets.html', {
-                    'optionsets': [self.get_object()]
+                self.request, export_format, instance.uri_path, 'options/export/optionsets.html', {
+                    'optionsets': [instance]
                 }
             )
 
@@ -147,14 +148,15 @@ class OptionViewSet(ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        instance = self.get_object()
         if export_format == 'xml':
-            serializer = OptionExportSerializer(self.get_object())
+            serializer = OptionExportSerializer(instance)
             xml = OptionRenderer().render([serializer.data])
-            return XMLResponse(xml, name=self.get_object().uri_path)
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().uri_path, 'options/export/options.html', {
-                    'options': [self.get_object()]
+                self.request, export_format, instance.uri_path, 'options/export/options.html', {
+                    'options': [instance]
                 }
             )
 
