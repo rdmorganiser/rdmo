@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import HierarchyTree from './information/HierarchyTree'
 import ProjectDelete from './information/ProjectDelete'
 import ProjectForm from './information/ProjectForm'
+import ProjectVisibilityForm from './information/ProjectVisibilityForm'
 
 const Information = () => {
   const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}
@@ -18,6 +19,16 @@ const Information = () => {
           <ProjectForm disabled={!perms.can_change_project} />
         </div>
       </div>
+
+      {
+        perms.can_change_visibility && (
+          <div className="card card-tile mb-4">
+            <div className="card-body">
+              <ProjectVisibilityForm projectId={project.id} disabled={!perms.can_change_visibility} />
+            </div>
+          </div>
+        )
+      }
 
       <div className="card card-tile mb-4">
         <div className="card-body">
