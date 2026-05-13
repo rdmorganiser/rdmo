@@ -9,18 +9,25 @@ import {
   updateProjectVisibility
 } from '../../../actions/projectActions'
 
-const ProjectVisibilityForm = ({ projectId, disabled = false}) => {
+const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
   const dispatch = useDispatch()
   const visibility = useSelector((state) => state.project.visibility)
+  const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
+  const groups = useSelector((state) => state.groups)
+
+  console.log('groups', groups)
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
+  const [groupIds, setGroupIds] = useState(visibility?.groups || [])
 
   console.log('sites', sites)
+  console.log('groups', groups)
   console.log('visibility', visibility)
 
   useEffect(() => {
     setSiteIds(visibility?.sites || [])
+    setGroupIds(visibility?.groups || [])
   }, [visibility])
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({
@@ -28,14 +35,23 @@ const ProjectVisibilityForm = ({ projectId, disabled = false}) => {
     label: site.current ? `${site.domain} (${gettext('current')})` : site.domain
   })) : []
 
+  const groupOptions = groups ? Object.values(groups).map((group) => ({
+    value: group.id,
+    label: group.name
+  })) : []
+
   const handleSave = () => {
     const data = new FormData()
-    siteIds.forEach((siteId) => data.append('sites', siteId))
+    if (settings.multisite) {
+      siteIds.forEach((siteId) => data.append('sites', siteId))
+    }
+    if (settings.groups) {
+      groupIds.forEach((groupId) => data.append('groups', groupId))
+    }
     dispatch(updateProjectVisibility(data))
   }
 
   const handleDelete = () => {
-    setSiteIds([])
     dispatch(deleteProjectVisibility())
   }
 
@@ -48,25 +64,47 @@ const ProjectVisibilityForm = ({ projectId, disabled = false}) => {
       <div className="d-flex align-items-center justify-content-between mb-2">
         <h3 className="mb-0">{gettext('Project visibility')}</h3>
         <span className="text-muted small">
-          {visibility ? gettext('Configured') : gettext('Not set')}
+          {
+            visibility ? (
+              siteIds.length === 0 && groupIds.length === 0 ? (
+                gettext('Visible to all users on all sites')
+              ) : gettext('Restricted')
+            ) : gettext('Not set')
+          }
         </span>
       </div>
 
-      {/* <p className="text-muted mb-3">
-        {gettext('Select the sites that may access this project.')}
-      </p> */}
+      {
+        settings.multisite && (
+          <Select
+            className="mb-3"
+            label={gettext('Sites')}
+            placeholder={gettext('Select sites')}
+            isClearable={true}
+            isDisabled={disabled}
+            isMulti={true}
+            options={siteOptions}
+            value={siteIds}
+            onChange={(value) => setSiteIds(value || [])}
+          />
+        )
+      }
 
-      <Select
-        className="mb-3"
-        label={gettext('Sites')}
-        placeholder={gettext('Select sites')}
-        isClearable={true}
-        isDisabled={disabled}
-        isMulti={true}
-        options={siteOptions}
-        value={siteIds}
-        onChange={(value) => setSiteIds(value || [])}
-      />
+      {
+        settings.groups && (
+          <Select
+            className="mb-3"
+            label={gettext('Groups')}
+            placeholder={gettext('Select groups')}
+            isClearable={true}
+            isDisabled={disabled}
+            isMulti={true}
+            options={groupOptions}
+            value={groupIds}
+            onChange={(value) => setGroupIds(value || [])}
+          />
+        )
+      }
 
       <div className="d-flex gap-2">
         <button
@@ -76,7 +114,7 @@ const ProjectVisibilityForm = ({ projectId, disabled = false}) => {
           onClick={handleSave}
         >
           <i className="bi bi-save me-1" aria-hidden="true" />
-          {visibility ? gettext('Update visibility') : gettext('Make visible')}
+          {visibility ? gettext('Update visibility') : gettext('Set visibility')}
         </button>
 
         {
