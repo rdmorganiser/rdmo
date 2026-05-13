@@ -10,6 +10,10 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/`)
   }
 
+  static fetchProjectVisibility(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/visibility/`)
+  }
+
   static fetchProjectHierarchy(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/hierarchy/`)
   }
@@ -42,8 +46,16 @@ export default class ProjectApi extends BaseApi {
     return this.put(`/api/v1/projects/projects/${projectId}/`, data)
   }
 
+  static updateProjectVisibility(projectId, data) {
+    return this.postFormData(`/api/v1/projects/projects/${projectId}/visibility/`, data)
+  }
+
   static deleteProject(projectId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/`)
+  }
+
+  static deleteProjectVisibility(projectId) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/visibility/`)
   }
 
   static createMember(projectId, data) {

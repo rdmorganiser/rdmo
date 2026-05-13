@@ -4,6 +4,7 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
 import { locationKeys, updateLocation } from '../utils/location'
@@ -141,6 +142,87 @@ export function deleteProject(id) {
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))
         dispatch({ type: actionTypes.DELETE_PROJECT_ERROR, error })
+        throw error
+      })
+  }
+}
+
+// visibility
+export function fetchSites() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchSites'))
+    dispatch({ type: actionTypes.FETCH_SITES_INIT })
+
+    return CoreApi.fetchSites()
+      .then(sites => {
+        dispatch(removeFromPending('fetchSites'))
+        dispatch({ type: actionTypes.FETCH_SITES_SUCCESS, sites })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchSites'))
+        dispatch({ type: actionTypes.FETCH_SITES_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function fetchProjectVisibility() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectVisibility'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.fetchProjectVisibility(projectId)
+      .then(visibility => {
+        dispatch(removeFromPending('fetchProjectVisibility'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchProjectVisibility'))
+
+        if (error?.status === 404) {
+          dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility: null })
+          return null
+        }
+
+        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function updateProjectVisibility(data) {
+  return function (dispatch) {
+    dispatch(addToPending('updateProjectVisibility'))
+    dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.updateProjectVisibility(projectId, data)
+      .then(visibility => {
+        dispatch(removeFromPending('updateProjectVisibility'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
+        return dispatch(fetchProjectVisibility())
+      })
+      .catch(error => {
+        dispatch(removeFromPending('updateProjectVisibility'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function deleteProjectVisibility() {
+  return function (dispatch) {
+    dispatch(addToPending('deleteProjectVisibility'))
+    dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.deleteProjectVisibility(projectId)
+      .then(() => {
+        dispatch(removeFromPending('deleteProjectVisibility'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
+        return dispatch(fetchProjectVisibility())
+      })
+      .catch(error => {
+        dispatch(removeFromPending('deleteProjectVisibility'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_ERROR, error })
         throw error
       })
   }
