@@ -13,12 +13,14 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import { UploadForm } from '../common/Forms'
 
 const ElementsSidebar = ({ config, elements, elementActions, importActions }) => {
-  const { elementType, elementId } = elements
+  const { elementType, elementId, elementAction } = elements
 
   const model = invert(elementTypes)[elementType]
   const exportUrl = isNil(elementId) ? buildApiPath(elementModules[model], elementType, 'export')
                                      : buildApiPath(elementModules[model], elementType, elementId, 'export')
-  const exportParams = isNil(config.filter) ? '' : getExportParams(config.filter[elementType])
+  const exportParams = (isNil(elementId) && elementAction != 'nested' && !isNil(config.filter))
+    ? getExportParams(config.filter[elementType])
+    : ''
 
   return (
     <div className="elements-sidebar">
@@ -79,7 +81,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
 
       <ul className="list-unstyled">
         <li>
-          <a href={`${exportUrl}?${exportParams}`}>{gettext('XML')}</a>
+          <a href={`${exportUrl}${exportParams ? `?${exportParams}` : ''}`}>{gettext('XML')}</a>
         </li>
         {
           [
@@ -93,7 +95,9 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
             'tasks'
           ].includes(elementType) && (
             <li>
-              <a href={`${exportUrl}?full=true&${exportParams}`}>{gettext('XML (full)')}</a>
+              <a href={`${exportUrl}?full=true${exportParams ? `&${exportParams}` : ''}`}>
+                {gettext('XML (full)')}
+              </a>
             </li>
           )
         }
@@ -103,12 +107,12 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
         {
           elementType == 'attributes' && <>
             <li>
-              <a href={`${exportUrl}csvcomma/?${exportParams}`}>
+              <a href={`${exportUrl}csvcomma/${exportParams ? `?${exportParams}` : ''}`}>
                 {gettext('CSV comma separated')}
               </a>
             </li>
             <li>
-              <a href={`${exportUrl}csvsemicolon/?${exportParams}`}>
+              <a href={`${exportUrl}csvsemicolon/${exportParams ? `?${exportParams}` : ''}`}>
                 {gettext('CSV semicolon separated')}
               </a>
             </li>
@@ -117,7 +121,7 @@ const ElementsSidebar = ({ config, elements, elementActions, importActions }) =>
         {
           config.settings.export_formats &&
           config.settings.export_formats.map(([key, label], index) => <li key={index}>
-            <a href={`${exportUrl}${key}/?${exportParams}`}
+            <a href={`${exportUrl}${key}/${exportParams ? `?${exportParams}` : ''}`}
                target={['pdf', 'html'].includes(key) ? '_blank' : '_self'}
                rel="noreferrer">{label}</a>
           </li>)
