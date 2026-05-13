@@ -239,7 +239,8 @@ def test_password_change_get(db, client, settings, account):
         response = client.get(url)
         assert response.status_code == 200
     else:
-        pytest.raises(NoReverseMatch, reverse, 'account_change_password')
+        with pytest.raises(NoReverseMatch):
+            reverse('account_change_password')
 
 
 @pytest.mark.parametrize('account', boolean_toggle)
@@ -262,7 +263,8 @@ def test_password_change_post(db, client, settings, account):
         response = client.post(url, data)
         assert response.status_code == 200
     else:
-        pytest.raises(NoReverseMatch, reverse, 'account_change_password')
+        with pytest.raises(NoReverseMatch):
+            reverse('account_change_password')
 
 
 @pytest.mark.parametrize('account', boolean_toggle)
@@ -278,7 +280,8 @@ def test_password_reset_get(db, client, settings, account):
         response = client.get(url)
         assert response.status_code == 200
     else:
-        pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
+        with pytest.raises(NoReverseMatch):
+            reverse('account_reset_password')
 
 
 @pytest.mark.parametrize('account', boolean_toggle)
@@ -297,7 +300,8 @@ def test_password_reset_post_invalid(db, client, settings, account):
         assert response.status_code == 200
         assert len(mail.outbox) == 0
     else:
-        pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
+        with pytest.raises(NoReverseMatch):
+            reverse('account_reset_password')
 
 
 @pytest.mark.urls('rdmo.accounts.urls')
@@ -328,7 +332,8 @@ def test_password_reset_post_valid(db, client, settings, account):
         assert response.status_code == 302
         assert response.url == reverse('account_reset_password_from_key', args=['4', 'set-password'])
     else:
-        pytest.raises(NoReverseMatch, reverse, 'account_reset_password')
+        with pytest.raises(NoReverseMatch):
+            reverse('account_reset_password')
 
 
 @pytest.mark.parametrize('profile_delete', boolean_toggle)
@@ -364,7 +369,8 @@ def test_remove_user_post(db, client, settings, django_user_model, profile_delet
     assert response.status_code == 200
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        pytest.raises(ObjectDoesNotExist, django_user_model.objects.get, username='user')
+        with pytest.raises(ObjectDoesNotExist):
+            django_user_model.objects.get(username='user')
     else:
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
         assert django_user_model.objects.get(username='user')
@@ -473,7 +479,8 @@ def test_remove_a_user_without_usable_password_post(db, client, settings, django
     assert response.status_code == 200
     if settings.PROFILE_DELETE:
         assertTemplateUsed(response, 'profile/profile_remove_success.html')
-        pytest.raises(ObjectDoesNotExist, django_user_model.objects.get, pk=user.pk)
+        with pytest.raises(ObjectDoesNotExist):
+            django_user_model.objects.get(pk=user.pk)
     else:
         assertTemplateUsed(response, 'profile/profile_remove_closed.html')
     client.logout()
