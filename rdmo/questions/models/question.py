@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models import Prefetch
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -16,12 +17,6 @@ from ..managers import QuestionManager
 
 
 class Question(Model, TranslationMixin):
-
-    prefetch_lookups = (
-        'conditions',
-        'optionsets',
-        'default_option'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True, default="",
@@ -293,3 +288,17 @@ class Question(Model, TranslationMixin):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
+
+
+def condition_prefetch(path):
+    return Prefetch(
+        path,
+        queryset=Condition.objects.select_related('source', 'source__parent', 'target_option')
+    )
+
+
+Question.prefetch_lookups = (
+    condition_prefetch('conditions'),
+    'optionsets',
+    'default_option',
+)

@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models import Prefetch
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.conditions.models import Condition
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
@@ -13,23 +15,6 @@ from ..managers import SectionManager
 class Section(Model, TranslationMixin):
 
     objects = SectionManager()
-
-    prefetch_lookups = (
-        'section_pages__page__attribute',
-        'section_pages__page__conditions',
-        'section_pages__page__page_questions__question__attribute',
-        'section_pages__page__page_questions__question__conditions',
-        'section_pages__page__page_questions__question__optionsets',
-        'section_pages__page__page_questions__question__default_option',
-        'section_pages__page__page_questionsets__questionset__attribute',
-        'section_pages__page__page_questionsets__questionset__conditions',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__default_option',
-        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
-        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -172,3 +157,74 @@ class Section(Model, TranslationMixin):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
+
+
+def condition_prefetch(path):
+    return Prefetch(
+        path,
+        queryset=Condition.objects.select_related('source', 'source__parent', 'target_option')
+    )
+
+
+def question_prefetch(path):
+    from .question import Question
+
+    return Prefetch(
+        path,
+        queryset=Question.objects.select_related(
+            'attribute',
+            'default_option',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            'optionsets',
+        )
+    )
+
+
+def child_questionset_prefetch(path):
+    from .questionset import QuestionSet
+
+    return Prefetch(
+        path,
+        queryset=QuestionSet.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('questionset_questions__question'),
+        )
+    )
+
+
+def questionset_prefetch(path):
+    from .questionset import QuestionSet
+
+    return Prefetch(
+        path,
+        queryset=QuestionSet.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('questionset_questions__question'),
+            child_questionset_prefetch('questionset_questionsets__questionset'),
+        )
+    )
+
+
+def page_prefetch(path):
+    from .page import Page
+
+    return Prefetch(
+        path,
+        queryset=Page.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('page_questions__question'),
+            questionset_prefetch('page_questionsets__questionset'),
+        )
+    )
+
+
+Section.prefetch_lookups = (
+    page_prefetch('section_pages__page'),
+)

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
+from django.db.models import Prefetch
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -15,16 +16,6 @@ from ..managers import QuestionSetManager
 class QuestionSet(Model, TranslationMixin):
 
     objects = QuestionSetManager()
-
-    prefetch_lookups = (
-        'conditions',
-        'questionset_questions__question__attribute',
-        'questionset_questions__question__conditions',
-        'questionset_questions__question__optionsets',
-        'questionset_questions__question__default_option',
-        'questionset_questionsets__questionset__attribute',
-        'questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -226,3 +217,45 @@ class QuestionSet(Model, TranslationMixin):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
+
+
+def condition_prefetch(path):
+    return Prefetch(
+        path,
+        queryset=Condition.objects.select_related('source', 'source__parent', 'target_option')
+    )
+
+
+def question_prefetch(path):
+    from .question import Question
+
+    return Prefetch(
+        path,
+        queryset=Question.objects.select_related(
+            'attribute',
+            'default_option',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            'optionsets',
+        )
+    )
+
+
+def child_questionset_prefetch(path):
+    return Prefetch(
+        path,
+        queryset=QuestionSet.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('questionset_questions__question'),
+            'questionset_questionsets',
+        )
+    )
+
+
+QuestionSet.prefetch_lookups = (
+    condition_prefetch('conditions'),
+    question_prefetch('questionset_questions__question'),
+    child_questionset_prefetch('questionset_questionsets__questionset'),
+)
