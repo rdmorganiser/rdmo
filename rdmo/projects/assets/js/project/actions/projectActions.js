@@ -166,6 +166,24 @@ export function fetchSites() {
   }
 }
 
+export function fetchGroups() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchGroups'))
+    dispatch({ type: actionTypes.FETCH_GROUPS_INIT })
+
+    return CoreApi.fetchGroups()
+      .then(groups => {
+        dispatch(removeFromPending('fetchGroups'))
+        dispatch({ type: actionTypes.FETCH_GROUPS_SUCCESS, groups })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchGroups'))
+        dispatch({ type: actionTypes.FETCH_GROUPS_ERROR, error })
+        throw error
+      })
+  }
+}
+
 export function fetchProjectVisibility() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectVisibility'))
