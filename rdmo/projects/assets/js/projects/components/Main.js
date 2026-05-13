@@ -12,6 +12,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 
+import CopyProjectModal from '../../common/components/CopyProjectModal'
 import ProjectDeleteModal from '../../project/components/areas/information/ProjectDeleteModal'
 import ProjectForm from '../../project/components/areas/information/ProjectForm'
 
@@ -68,19 +69,6 @@ const Main = () => {
   const handleCloseCopy = () => {
     setSelectedProject(null)
     closeCopy()
-  }
-
-  const copyModalProps = {
-    title: gettext('Copy project'),
-    size: 'modal-lg',
-    show: showCopy,
-    onClose: handleCloseCopy,
-    onSubmit: () => { },
-    submitLabel: gettext('Copy project'),
-    submitProps: {
-      type: 'submit',
-      form: 'project-copy-form'
-    }
   }
 
   const handleCloseEdit = () => {
@@ -425,22 +413,12 @@ const Main = () => {
               )
             }
           </Modal>
-          <Modal {...copyModalProps}>
-            {
-              selectedProject && (
-                <ProjectForm
-                  key={`copy-${selectedProject.id}`}
-                  disabled={false}
-                  formId="project-copy-form"
-                  submitMode="submit"
-                  mode="copy"
-                  currentProject={selectedProject}
-                  catalogs={catalogs ?? []}
-                  onSave={handleCloseCopy}
-                />
-              )
-            }
-          </Modal>
+          <CopyProjectModal
+            catalogs={catalogs ?? []}
+            onClose={handleCloseCopy}
+            project={selectedProject}
+            show={showCopy}
+          />
           <Modal {...createModalProps}>
             <ProjectForm
               key={`create-${showCreate}`}
