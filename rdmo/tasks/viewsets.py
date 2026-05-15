@@ -10,6 +10,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
+from rdmo.domain.models import Attribute
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Task
@@ -37,6 +38,11 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         queryset = Task.objects.all().order_by('uri')
         if self.action in ['index']:
             return queryset
+        elif self.action in ['export', 'detail_export']:
+            return queryset.prefetch_related(
+                'catalogs',
+                'conditions',
+            )
         else:
             return queryset.select_related(
                 'start_attribute',
@@ -61,7 +67,11 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = TaskExportSerializer(queryset, many=True)
+            serializer = TaskExportSerializer(
+                queryset,
+                many=True,
+                context=self.get_export_serializer_context(queryset),
+            )
             xml = TaskRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='tasks')
         else:
@@ -73,7 +83,10 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            serializer = TaskExportSerializer(instance)
+            serializer = TaskExportSerializer(
+                instance,
+                context=self.get_export_serializer_context([instance]),
+            )
             xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=instance.uri_path)
         else:
@@ -82,6 +95,23 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                     'tasks': [instance]
                 }
             )
+
+    def get_export_serializer_context(self, tasks):
+        attribute_ids = set()
+        for task in tasks:
+            if task.start_attribute:
+                attribute_ids.add(task.start_attribute_id)
+            if task.end_attribute:
+                attribute_ids.add(task.end_attribute_id)
+            for condition in task.conditions.all():
+                attribute_ids.add(condition.source_id)
+
+        return {
+            'attribute_map': Attribute.objects.get_queryset_ancestors(
+                Attribute.objects.filter(id__in=attribute_ids),
+                include_self=True
+            ).in_bulk()
+        }
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))

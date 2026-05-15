@@ -37,7 +37,7 @@ class AttributeViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Attribute.objects.all().order_by('path')
-        if self.action in ('index','nested', 'export', 'detail_export'):
+        if self.action in ('index', 'nested', 'export', 'detail_export'):
             return queryset
         else:
             return queryset.annotate(
@@ -51,6 +51,7 @@ class AttributeViewSet(ModelViewSet):
                 'questions',
                 'tasks_as_start',
                 'tasks_as_end',
+                'editors',
             )
 
     def get_serializer_class(self):
@@ -73,9 +74,9 @@ class AttributeViewSet(ModelViewSet):
         if export_format == 'xml':
             attributes = list(queryset)
             serializer = AttributeExportSerializer(
-                attributes, many=True, context={
-                    'attributes_by_id': { attribute.pk: attribute for attribute in attributes}
-                },
+                queryset,
+                many=True,
+                context=self.get_export_serializer_context(attributes),
             )
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name='attributes')
@@ -94,9 +95,9 @@ class AttributeViewSet(ModelViewSet):
         attributes = instance.get_descendants(include_self=True)
         if export_format == 'xml':
             serializer = AttributeExportSerializer(
-                attributes, many=True, context={
-                    'attributes_by_id': {attribute.pk: attribute for attribute in attributes}
-                },
+                attributes,
+                many=True,
+                context=self.get_export_serializer_context(attributes),
             )
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name=instance.key)
@@ -110,3 +111,10 @@ class AttributeViewSet(ModelViewSet):
                     'attributes': attributes
                 }
             )
+
+    def get_export_serializer_context(self, attributes):
+        return {
+            'attribute_map': {
+                attribute.pk: attribute for attribute in attributes
+            }
+        }

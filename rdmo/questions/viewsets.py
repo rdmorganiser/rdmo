@@ -13,7 +13,6 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.domain.models import Attribute
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .constants import WIDGET_TYPE_CHOICES
@@ -42,11 +41,6 @@ from .serializers.v1 import (
     SectionNestedSerializer,
     SectionSerializer,
 )
-
-
-def get_attributes_by_id():
-    attributes = list(Attribute.objects.all())
-    return {attribute.pk: attribute for attribute in attributes}
 
 
 class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
@@ -126,7 +120,6 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -203,7 +196,6 @@ class SectionViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -287,7 +279,6 @@ class PageViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -372,7 +363,6 @@ class QuestionSetViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -452,7 +442,6 @@ class QuestionViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 

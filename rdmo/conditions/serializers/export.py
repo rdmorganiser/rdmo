@@ -7,7 +7,7 @@ from ..models import Condition
 
 class ConditionExportSerializer(serializers.ModelSerializer):
 
-    source = AttributeExportSerializer()
+    source = serializers.SerializerMethodField()
     target_option = serializers.SerializerMethodField()
 
     class Meta:
@@ -22,6 +22,11 @@ class ConditionExportSerializer(serializers.ModelSerializer):
             'target_text',
             'target_option'
         )
+
+    def get_source(self, obj):
+        source = self.context.get('attribute_map', {}).get(obj.source_id)
+        if source:
+            return AttributeExportSerializer(source).data
 
     def get_target_option(self, obj):
         if obj.target_option is not None:

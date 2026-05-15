@@ -13,6 +13,7 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
+from rdmo.domain.models import Attribute
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
@@ -43,12 +44,17 @@ class OptionSetViewSet(ModelViewSet):
         queryset = OptionSet.objects.all()
         if self.action in ['index']:
             return queryset
+        elif self.action in ['export', 'detail_export']:
+            return queryset.prefetch_related(
+                'optionset_options__option',
+                'conditions',
+            )
         else:
             return queryset.prefetch_related(
                 'optionset_options__option',
                 'conditions',
                 'questions',
-                'editors'
+                'editors',
             )
 
     @action(detail=False)
@@ -66,7 +72,11 @@ class OptionSetViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = OptionSetExportSerializer(queryset, many=True)
+            serializer = OptionSetExportSerializer(
+                queryset,
+                many=True,
+                context=self.get_export_serializer_context(queryset),
+            )
             xml = OptionSetRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='optionsets')
         else:
@@ -78,7 +88,10 @@ class OptionSetViewSet(ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            serializer = OptionSetExportSerializer(instance)
+            serializer = OptionSetExportSerializer(
+                instance,
+                context=self.get_export_serializer_context([instance]),
+            )
             xml = OptionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name=instance.uri_path)
         else:
@@ -87,6 +100,18 @@ class OptionSetViewSet(ModelViewSet):
                     'optionsets': [instance]
                 }
             )
+
+    def get_export_serializer_context(self, optionsets):
+        return {
+            'attribute_map': Attribute.objects.get_queryset_ancestors(
+                Attribute.objects.filter(id__in={
+                    condition.source_id
+                    for optionset in optionsets
+                    for condition in optionset.conditions.all()
+                }),
+                include_self=True
+            ).in_bulk()
+        }
 
     def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
