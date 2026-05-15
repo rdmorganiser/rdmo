@@ -10,13 +10,21 @@ from ..models import QuestionSet
 from ..serializers.v1 import QuestionSetSerializer
 from ..validators import QuestionSetQuestionSetValidator
 
+fields = [
+    'questionsets',
+    'questionsets_questionsets',
+]
 
-@pytest.mark.parametrize('questionset_uri,success', [
+questionsets = [
     ('http://example.com/terms/questions/catalog/blocks/single/block', True),
     ('http://example.com/terms/questions/catalog/blocks/set/block/block', False),
     ('http://example.com/terms/questions/catalog/blocks/set/block', False),
-])
-def test_update(db, questionset_uri, success):
+]
+
+
+@pytest.mark.parametrize('field', fields)
+@pytest.mark.parametrize('questionset_uri,success', questionsets)
+def test_update(db, field, questionset_uri, success):
     instance = QuestionSet.objects.get(uri='http://example.com/terms/questions/catalog/blocks/set/block/block')
 
     with nullcontext() if success else pytest.raises(ValidationError):
@@ -27,12 +35,9 @@ def test_update(db, questionset_uri, success):
         })
 
 
-@pytest.mark.parametrize('questionset_uri,success', [
-    ('http://example.com/terms/questions/catalog/blocks/single/block', True),
-    ('http://example.com/terms/questions/catalog/blocks/set/block/block', False),
-    ('http://example.com/terms/questions/catalog/blocks/set/block', False),
-])
-def test_serializer_update(db, questionset_uri, success):
+@pytest.mark.parametrize('field', fields)
+@pytest.mark.parametrize('questionset_uri,success', questionsets)
+def test_serializer_update(db, field, questionset_uri, success):
     instance = QuestionSet.objects.get(uri='http://example.com/terms/questions/catalog/blocks/set/block/block')
 
     validator = QuestionSetQuestionSetValidator()
