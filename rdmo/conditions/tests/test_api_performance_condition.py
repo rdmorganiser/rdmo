@@ -4,30 +4,19 @@ from django.urls import reverse
 
 from .test_viewset_condition import urlnames
 
-max_query_map = {
-    # action: max_queries url_kwargs
-    'list': {'max_queries': 9},
-    'index': {'max_queries': 3},
-    'export': {'max_queries': 11, 'url_kwargs': {'export_format': 'xml'}},
-    'detail': {'max_queries': 9, 'url_kwargs': {'pk': 1}},
-    'detail_export': {
-        'max_queries': 9, 'url_kwargs': {'pk': 1, 'export_format': 'xml'},
-    },
-}
+max_queries = [
+    # action, max_queries, url_kwargs
+    ('list', 9, {}),
+    ('index', 3, {}),
+    ('export', 11, {'export_format': 'xml'}),
+    ('detail', 9, {'pk': 1}),
+    ('detail_export', 9, {'pk': 1, 'export_format': 'xml'}),
+]
 
 
 @pytest.mark.performance
-@pytest.mark.parametrize(
-    'action,max_queries,url_kwargs',
-    [
-        (action, case['max_queries'], case.get('url_kwargs'))
-        for action, case in max_query_map.items()
-    ],
-)
-def test_actions_max_query_counts(
-    db, admin_client, django_assert_max_num_queries,
-    action, max_queries, url_kwargs,
-):
+@pytest.mark.parametrize('action,max_queries,url_kwargs', max_queries)
+def test_actions_max_query_counts(db, admin_client, django_assert_max_num_queries, action, max_queries, url_kwargs):
     url = reverse(urlnames[action], kwargs=url_kwargs)
 
     with django_assert_max_num_queries(max_queries):
