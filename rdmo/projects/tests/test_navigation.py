@@ -87,6 +87,7 @@ def test_compute_navigation(db, section_uri):
                 assert page['show'] == show, page['uri']
                 assert 'title' in  page  # test for verbose, help is filtered out
 
+
 def test_compute_navigation_uses_short_title_as_title(db):
     project = Project.objects.get(id=1)
     project.catalog.prefetch_elements()
