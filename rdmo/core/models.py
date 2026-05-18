@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
-from django.utils.translation import get_language
+from django.utils.translation import get_language, get_supported_language_variant
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.utils import get_languages
@@ -31,7 +31,7 @@ class Model(models.Model):
 class TranslationMixin:
 
     def trans(self, field):
-        current_language = get_language()
+        current_language = get_supported_language_variant(get_language())
 
         languages = get_languages()
         for lang_code, _lang_string, lang_field in languages:
