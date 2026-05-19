@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
+import Html from 'rdmo/core/assets/js/components/Html'
 
 import {
   deleteProjectVisibility,
@@ -14,21 +15,20 @@ const ProjectVisibilityForm = ({ projectId }) => {
   const visibility = useSelector((state) => state.project.visibility)
   const perms = useSelector((state) => state.project.project.project?.permissions) ?? {}
   const settings = useSelector((state) => state.settings)
+  const templates = useSelector((state) => state.templates)
   const sites = useSelector((state) => state.sites)
   const groups = useSelector((state) => state.groups)
 
-  console.log('groups', groups)
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
-
-  console.log('sites', sites)
-  console.log('groups', groups)
-  console.log('visibility', visibility)
 
   useEffect(() => {
     setSiteIds(visibility?.sites || [])
     setGroupIds(visibility?.groups || [])
   }, [visibility])
+
+  const canUpdateVisibility =  visibility &&  perms.can_change_visibility &&  (settings.multisite || settings.groups)
+  const canSetVisibility = !visibility && perms.can_add_visibility
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({
     value: site.id,
@@ -73,6 +73,7 @@ const ProjectVisibilityForm = ({ projectId }) => {
           }
         </span>
       </div>
+      <Html html={templates?.project_view_visibility_help} />
 
       {
         settings.multisite && (
@@ -108,16 +109,14 @@ const ProjectVisibilityForm = ({ projectId }) => {
 
       <div className="d-flex gap-2">
         {
-          (visibility && perms.can_change_visibility) || perms.can_add_visibility && (
+          (canUpdateVisibility || canSetVisibility) && (
             <button
               type="button"
               className="btn btn-primary"
               onClick={handleSave}
             >
-              <i className="bi bi-save me-1" aria-hidden="true" />
               {
-                visibility && perms.can_change_visibility ? gettext('Update visibility') : (
-                  perms.can_add_visibility ? gettext('Set visibility') : null)
+                canUpdateVisibility ? gettext('Update visibility') : gettext('Set visibility')
               }
             </button>
           )
@@ -127,10 +126,9 @@ const ProjectVisibilityForm = ({ projectId }) => {
           visibility && perms.can_delete_visibility && (
             <button
               type="button"
-              className="btn btn-outline-danger"
+              className="btn btn-danger"
               onClick={handleDelete}
             >
-              <i className="bi bi-trash me-1" aria-hidden="true" />
               {gettext('Remove visibility')}
             </button>
           )
