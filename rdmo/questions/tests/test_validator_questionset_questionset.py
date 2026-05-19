@@ -1,4 +1,3 @@
-from contextlib import nullcontext
 
 import pytest
 
@@ -27,12 +26,17 @@ questionsets = [
 def test_update(db, field, questionset_uri, success):
     instance = QuestionSet.objects.get(uri='http://example.com/terms/questions/catalog/blocks/set/block/block')
 
-    with nullcontext() if success else pytest.raises(ValidationError):
-        QuestionSetQuestionSetValidator(instance)({
-            'questionsets': [
-                QuestionSet.objects.get(uri=questionset_uri)
-            ]
-        })
+    data = {
+        'questionsets': [
+            QuestionSet.objects.get(uri=questionset_uri)
+        ]
+    }
+
+    if success:
+        QuestionSetQuestionSetValidator(instance)(data)
+    else:
+        with pytest.raises(ValidationError):
+            QuestionSetQuestionSetValidator(instance)(data)
 
 
 @pytest.mark.parametrize('field', fields)
@@ -43,9 +47,14 @@ def test_serializer_update(db, field, questionset_uri, success):
     validator = QuestionSetQuestionSetValidator()
     serializer = QuestionSetSerializer(instance=instance)
 
-    with nullcontext() if success else pytest.raises(RestFrameworkValidationError):
-        validator({
-            'questionsets': [
-                QuestionSet.objects.get(uri=questionset_uri)
-            ]
-        }, serializer)
+    data = {
+        'questionsets': [
+            QuestionSet.objects.get(uri=questionset_uri)
+        ]
+    }
+
+    if success:
+        validator(data, serializer)
+    else:
+        with pytest.raises(RestFrameworkValidationError):
+            validator(data, serializer)
