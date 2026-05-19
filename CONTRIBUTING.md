@@ -1,5 +1,7 @@
 # Contributing to RDMO
 
+> This document took effect in accordance with § 11 of the Articles of Association (Vereinssatzung) by resolution of the General Meeting of the association **RDMO. Research Data Management Organiser e. V.** on May 18, 2026. Changes to this document require the approval of the General Meeting.
+
 RDMO is the work of a community of people committed to improving research data management and the tools that support it. Over the last decade, contributors from different fields and institutions have come together to build something that genuinely serves researchers.
 
 We are always happy to welcome new contributors! Whether you are reporting a bug, improving the documentation, or working on a new feature, every contribution, no matter how small, is a meaningful part of that effort. We are glad you are here.
