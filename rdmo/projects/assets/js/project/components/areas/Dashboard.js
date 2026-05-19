@@ -40,6 +40,8 @@ const Dashboard = () => {
     getTaskType(issue) === 'step'
   ).sort((a, b) => a.task.order - b.task.order)
 
+  const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
+
   const taskIssues = issues.filter((issue) =>
     getTaskType(issue) === 'task'
   )
@@ -124,21 +126,31 @@ const Dashboard = () => {
                   <h2>{gettext('Create your data management plan')}</h2>
                   <div className="row mb-4">
                     {
-                      stepIssues.map((issue, index) => (
-                        <Tile
-                          key={issue.id}
-                          title={issue.task.title}
-                          label={`${gettext('Step')} ${index + 1}`}
-                          buttonLabel={issue.task.task_area_display}
-                          onClick={
-                            issue.task.task_area ? (
-                              () => dispatch(navigateDashboard({ area: issue.task.task_area }))
-                            ) : undefined
-                          }
-                        >
-                          <p>{issue.task.text}</p>
-                        </Tile>
-                      ))
+                      stepIssues.map((issue, index) => {
+                        const isActiveStep = activeStepIssue?.id === issue.id
+                        return (
+                          <Tile
+                            key={issue.id}
+                            title={issue.task.title}
+                            label={`${gettext('Step')} ${index + 1}`}
+                            buttonLabel={issue.task?.task_area_display}
+                            buttonClassName={isActiveStep ? 'btn-primary' : 'btn-outline-primary'}
+                            buttonIconClassName="bi bi-arrow-right"
+                            onClick={
+                              issue.task.task_area ? (
+                                () => {
+                                  dispatch(navigateDashboard({ area: issue.task.task_area }))
+                                  if (isActiveStep) {
+                                    dispatch(updateProjectTask(issue.id, { status: 'closed'}))
+                                  }
+                                }
+                              ) : undefined
+                            }
+                          >
+                            <p>{issue.task.text}</p>
+                          </Tile>
+                        )
+                      })
                     }
                   </div>
                 </>
@@ -202,6 +214,7 @@ const Dashboard = () => {
                           key={issue.id}
                           title={issue.task.title}
                           buttonLabel={issue.task.task_area_display}
+                          buttonIconClassName="bi bi-arrow-right"
                           onClick={
                             issue.task.task_area ? (
                               () => dispatch(navigateDashboard({ area: issue.task.task_area }))
