@@ -172,11 +172,7 @@
         1,
         2
       ],
-      "editors": [
-        3,
-        1,
-        2
-      ],
+      "editors": [],
       "groups": [],
       "task_type": "step",
       "task_area": "interview",
@@ -214,11 +210,7 @@
         1,
         2
       ],
-      "editors": [
-        3,
-        1,
-        2
-      ],
+      "editors": [],
       "groups": [],
       "task_type": "step",
       "task_area": "documents",
@@ -256,11 +248,7 @@
         1,
         2
       ],
-      "editors": [
-        3,
-        1,
-        2
-      ],
+      "editors": [],
       "groups": [],
       "task_type": "guidance",
       "task_area": "memberships",
@@ -298,11 +286,7 @@
         1,
         2
       ],
-      "editors": [
-        3,
-        1,
-        2
-      ],
+      "editors": [],
       "groups": [],
       "task_type": "guidance",
       "task_area": "snapshots",
@@ -340,11 +324,7 @@
         1,
         2
       ],
-      "editors": [
-        3,
-        1,
-        2
-      ],
+      "editors": [],
       "groups": [],
       "task_type": "recommendation",
       "task_area": "",
