@@ -80,7 +80,7 @@ export default function configureStore() {
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
-      if (permissions.can_change_visibility) {
+      if (permissions.can_view_visibility) {
         store.dispatch(projectActions.fetchProjectVisibility(projectId))
       }
       initDashboardFromLocation()
