@@ -72,15 +72,15 @@ export default function configureStore() {
       store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
       store.dispatch(projectActions.fetchProject()),
-      store.dispatch(rolesActions.fetchRoles()),
-      store.dispatch(projectActions.fetchSites()),
-      store.dispatch(projectActions.fetchGroups()),
+      store.dispatch(rolesActions.fetchRoles())
     ]).then(() => {
       const permissions = store.getState().project.project.project.permissions
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
       if (permissions.can_view_visibility) {
+        store.dispatch(projectActions.fetchSites()),
+        store.dispatch(projectActions.fetchGroups()),
         store.dispatch(projectActions.fetchProjectVisibility(projectId))
       }
       initDashboardFromLocation()
