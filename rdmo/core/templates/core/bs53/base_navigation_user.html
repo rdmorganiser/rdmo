@@ -63,7 +63,13 @@
 
         <li><hr class="dropdown-divider"></li>
 
-        {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
+        {% if settings.ACCOUNT_LOGOUT_ON_GET %}
+        <li>
+            <a class="dropdown-item" href="{{ settings.LOGOUT_URL }}">
+                {% trans 'Logout' %}
+            </a>
+        </li>
+        {% else %}
         <li>
             <form class="d-inline" action="{{ settings.LOGOUT_URL }}" method="POST">
                 {% csrf_token %}
@@ -71,12 +77,6 @@
                     {% trans 'Logout' %}
                 </button>
             </form>
-        </li>
-        {% else %}
-        <li>
-            <a class="dropdown-item" href="{{ settings.LOGOUT_URL }}">
-                {% trans 'Logout' %}
-            </a>
         </li>
         {% endif %}
     </ul>
