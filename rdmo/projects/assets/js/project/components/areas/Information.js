@@ -21,10 +21,10 @@ const Information = () => {
       </div>
 
       {
-        perms.can_change_visibility && (
+        perms.can_view_visibility && (
           <div className="card card-tile mb-4">
             <div className="card-body">
-              <ProjectVisibilityForm projectId={project.id} disabled={!perms.can_change_visibility} />
+              <ProjectVisibilityForm projectId={project.id} />
             </div>
           </div>
         )
