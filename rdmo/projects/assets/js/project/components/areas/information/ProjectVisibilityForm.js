@@ -9,15 +9,15 @@ import {
   updateProjectVisibility
 } from '../../../actions/projectActions'
 
-const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
+const ProjectVisibilityForm = ({ projectId }) => {
   const dispatch = useDispatch()
   const visibility = useSelector((state) => state.project.visibility)
+  const perms = useSelector((state) => state.project.project.project?.permissions) ?? {}
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const groups = useSelector((state) => state.groups)
 
   console.log('groups', groups)
-
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
 
@@ -81,7 +81,7 @@ const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
             label={gettext('Sites')}
             placeholder={gettext('Select sites')}
             isClearable={true}
-            isDisabled={disabled}
+            isDisabled={!perms.can_change_visibility}
             isMulti={true}
             options={siteOptions}
             value={siteIds}
@@ -97,7 +97,7 @@ const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
             label={gettext('Groups')}
             placeholder={gettext('Select groups')}
             isClearable={true}
-            isDisabled={disabled}
+            isDisabled={!perms.can_change_visibility}
             isMulti={true}
             options={groupOptions}
             value={groupIds}
@@ -107,22 +107,27 @@ const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
       }
 
       <div className="d-flex gap-2">
-        <button
-          type="button"
-          className="btn btn-primary"
-          disabled={disabled}
-          onClick={handleSave}
-        >
-          <i className="bi bi-save me-1" aria-hidden="true" />
-          {visibility ? gettext('Update visibility') : gettext('Set visibility')}
-        </button>
+        {
+          (visibility && perms.can_change_visibility) || perms.can_add_visibility && (
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSave}
+            >
+              <i className="bi bi-save me-1" aria-hidden="true" />
+              {
+                visibility && perms.can_change_visibility ? gettext('Update visibility') : (
+                  perms.can_add_visibility ? gettext('Set visibility') : null)
+              }
+            </button>
+          )
+        }
 
         {
-          visibility && (
+          visibility && perms.can_delete_visibility && (
             <button
               type="button"
               className="btn btn-outline-danger"
-              disabled={disabled}
               onClick={handleDelete}
             >
               <i className="bi bi-trash me-1" aria-hidden="true" />
@@ -136,8 +141,7 @@ const ProjectVisibilityForm = ({ projectId, disabled = false }) => {
 }
 
 ProjectVisibilityForm.propTypes = {
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  disabled: PropTypes.bool
+  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default ProjectVisibilityForm
