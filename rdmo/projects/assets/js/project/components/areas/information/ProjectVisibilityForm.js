@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
@@ -10,14 +9,12 @@ import {
   updateProjectVisibility
 } from '../../../actions/projectActions'
 
-const ProjectVisibilityForm = ({ projectId }) => {
+const ProjectVisibilityForm = () => {
   const dispatch = useDispatch()
   const visibility = useSelector((state) => state.project.visibility)
-  const perms = useSelector((state) => state.project.project.project?.permissions) ?? {}
-  const settings = useSelector((state) => state.settings)
-  const templates = useSelector((state) => state.templates)
-  const sites = useSelector((state) => state.sites)
-  const groups = useSelector((state) => state.groups)
+  const project = useSelector((state) => state.project.project.project) || {}
+  const perms = project.permissions || {}
+  const { groups, settings, sites, templates } = useSelector((state) => state)
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
@@ -27,7 +24,7 @@ const ProjectVisibilityForm = ({ projectId }) => {
     setGroupIds(visibility?.groups || [])
   }, [visibility])
 
-  const canUpdateVisibility =  visibility &&  perms.can_change_visibility &&  (settings.multisite || settings.groups)
+  const canUpdateVisibility =  visibility && perms.can_change_visibility && (settings.multisite || settings.groups)
   const canSetVisibility = !visibility && perms.can_add_visibility
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({
@@ -55,7 +52,7 @@ const ProjectVisibilityForm = ({ projectId }) => {
     dispatch(deleteProjectVisibility())
   }
 
-  if (!projectId) {
+  if (!project.id) {
     return null
   }
 
@@ -65,11 +62,7 @@ const ProjectVisibilityForm = ({ projectId }) => {
         <h3 className="mb-0">{gettext('Project visibility')}</h3>
         <span className="text-muted small">
           {
-            visibility ? (
-              siteIds.length === 0 && groupIds.length === 0 ? (
-                gettext('Visible to all users on all sites')
-              ) : gettext('Restricted')
-            ) : gettext('Not set')
+            visibility ? project?.visibility : gettext('Not set')
           }
         </span>
       </div>
@@ -116,7 +109,7 @@ const ProjectVisibilityForm = ({ projectId }) => {
               onClick={handleSave}
             >
               {
-                canUpdateVisibility ? gettext('Update visibility') : gettext('Set visibility')
+                canUpdateVisibility ? gettext('Update visibility') : gettext('Make visible')
               }
             </button>
           )
@@ -136,10 +129,6 @@ const ProjectVisibilityForm = ({ projectId }) => {
       </div>
     </div>
   )
-}
-
-ProjectVisibilityForm.propTypes = {
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default ProjectVisibilityForm
