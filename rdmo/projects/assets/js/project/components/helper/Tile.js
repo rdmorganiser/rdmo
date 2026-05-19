@@ -1,7 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Tile = ({ title, label, buttonLabel, children, className = '', size = 'normal', onClick, onCardClick }) => {
+const Tile = ({
+  title,
+  label,
+  buttonLabel,
+  buttonClassName = 'btn-outline-primary',
+  buttonIconClassName,
+  children,
+  className = '',
+  size = 'normal',
+  onClick,
+  onCardClick
+}) => {
   const sizeClasses = {
     compact: 'col-12 col-md-4',  // 3 tiles per row
     normal: 'col-12 col-md-6',   // 2 tiles per row
@@ -23,8 +34,7 @@ const Tile = ({ title, label, buttonLabel, children, className = '', size = 'nor
             <div className="mt-auto">
               <button
                 type="button"
-                className="btn btn-outline-secondary"
-                // onClick={onClick}
+                className={`btn ${buttonClassName}`}
                 onClick={
                   (e) => {
                     e.stopPropagation()
@@ -32,7 +42,14 @@ const Tile = ({ title, label, buttonLabel, children, className = '', size = 'nor
                   }
                 }
               >
-                {buttonLabel} <span className="ms-1">→</span>
+                <>
+                  {buttonLabel}
+                  {
+                    buttonIconClassName && (
+                      <i className={`${buttonIconClassName} ms-1`} />
+                    )
+                  }
+                </>
               </button>
             </div>
           )
@@ -45,6 +62,8 @@ const Tile = ({ title, label, buttonLabel, children, className = '', size = 'nor
 Tile.propTypes = {
   title: PropTypes.string,
   buttonLabel: PropTypes.node,
+  buttonClassName: PropTypes.string,
+  buttonIconClassName: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
   label: PropTypes.node,
