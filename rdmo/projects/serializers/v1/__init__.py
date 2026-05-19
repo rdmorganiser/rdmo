@@ -12,7 +12,7 @@ from rdmo.accounts.utils import get_full_name
 from rdmo.conditions.serializers.v1 import ConditionSerializer
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
-from rdmo.questions.models import Catalog
+from rdmo.questions.models import Catalog, Page, Question
 from rdmo.services.validators import ProviderValidator
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -549,10 +549,35 @@ class ProjectIssueResourceSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectIssuePageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'title',
+            'help'
+        )
+
+class ProjectIssueQuestionSerializer(serializers.ModelSerializer):
+
+    pages = ProjectIssuePageSerializer(source='page_list', read_only=True, many=True)
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'text',
+            'help',
+            'pages'
+        )
+
+
 class ProjectIssueSerializer(serializers.ModelSerializer):
 
     task = ProjectIssueTaskSerializer(read_only=True)
     resources = ProjectIssueResourceSerializer(read_only=True, many=True)
+    questions = ProjectIssueQuestionSerializer(read_only=True, many=True)
     resolve = serializers.BooleanField(read_only=True)
     dates = serializers.ReadOnlyField()
 
@@ -564,7 +589,8 @@ class ProjectIssueSerializer(serializers.ModelSerializer):
             'status',
             'resolve',
             'resources',
-            'dates'
+            'dates',
+            'questions',
         )
 
 
@@ -760,11 +786,37 @@ class IssueResourceSerializer(serializers.ModelSerializer):
         )
 
 
+class IssuePageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'title',
+            'help'
+        )
+
+
+class IssueQuestionSerializer(serializers.ModelSerializer):
+
+    pages = ProjectIssuePageSerializer(source='page_list', read_only=True, many=True)
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'text',
+            'help',
+            'pages'
+        )
+
+
 class IssueSerializer(serializers.ModelSerializer):
 
     project = serializers.PrimaryKeyRelatedField(read_only=True)
     task = IssueTaskSerializer(read_only=True)
     resources = IssueResourceSerializer(read_only=True, many=True)
+    questions = IssueQuestionSerializer(read_only=True, many=True)
     resolve = serializers.BooleanField(read_only=True)
     dates = serializers.ReadOnlyField()
 
@@ -777,7 +829,8 @@ class IssueSerializer(serializers.ModelSerializer):
             'status',
             'resolve',
             'resources',
-            'dates'
+            'dates',
+            'questions'
         )
 
 
