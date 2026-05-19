@@ -25,6 +25,13 @@ const Information = () => {
         </div>
       </div>
 
+      <div className="card card-tile mb-4">
+        <div className="card-body">
+          <h3>{gettext('Project hierarchy')}</h3>
+          <HierarchyTree hierarchy={hierarchy} />
+        </div>
+      </div>
+
       {
         perms.can_view_visibility && (
           <div className="card card-tile mb-4">
@@ -34,13 +41,6 @@ const Information = () => {
           </div>
         )
       }
-
-      <div className="card card-tile mb-4">
-        <div className="card-body">
-          <h3>{gettext('Project hierarchy')}</h3>
-          <HierarchyTree hierarchy={hierarchy} />
-        </div>
-      </div>
 
       {
         perms.can_delete_project && (
