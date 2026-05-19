@@ -45,7 +45,6 @@ else:
                 auth_views.LogoutView.as_view(next_page=settings.LOGIN_REDIRECT_URL), name='account_logout'),
     ]
 
-
 if settings.ACCOUNT_ALLOW_USER_TOKEN:
     urlpatterns += [
         re_path(r'^token/$', token, name='account_token')
