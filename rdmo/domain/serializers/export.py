@@ -21,4 +21,4 @@ class AttributeExportSerializer(serializers.ModelSerializer):
     def get_parent(self, obj):
         parent = self.context.get('attribute_map', {}).get(obj.parent_id)
         if parent:
-            return AttributeExportSerializer(parent).data
+            return AttributeExportSerializer(parent, context=self.context).data

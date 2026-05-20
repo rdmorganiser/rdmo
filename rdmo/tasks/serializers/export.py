@@ -37,12 +37,12 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
     def get_start_attribute(self, obj):
         start_attribute = self.context.get('attribute_map', {}).get(obj.start_attribute_id)
         if start_attribute:
-            return AttributeExportSerializer(start_attribute).data
+            return AttributeExportSerializer(start_attribute, context=self.context).data
 
     def get_end_attribute(self, obj):
         end_attribute = self.context.get('attribute_map', {}).get(obj.end_attribute_id)
         if end_attribute:
-            return AttributeExportSerializer(end_attribute).data
+            return AttributeExportSerializer(end_attribute, context=self.context).data
 
     def get_catalogs(self, obj):
         return [catalog.uri for catalog in obj.catalogs.all()]

@@ -26,7 +26,7 @@ class ConditionExportSerializer(serializers.ModelSerializer):
     def get_source(self, obj):
         source = self.context.get('attribute_map', {}).get(obj.source_id)
         if source:
-            return AttributeExportSerializer(source).data
+            return AttributeExportSerializer(source, context=self.context).data
 
     def get_target_option(self, obj):
         if obj.target_option is not None:
