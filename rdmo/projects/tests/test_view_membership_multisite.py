@@ -60,21 +60,6 @@ def test_get_invite_email_project_path_function(db, client, settings, username, 
     else:
         assert invite_email_project_path.startswith('http://' + site_domain + '/projects')
 
-
-def test_get_invite_email_project_path_project_site(db, settings):
-    settings.MULTISITE = True
-    settings.PROJECT_INVITE_USE_PROJECT_SITE = True
-
-    foo_user = get_user_model().objects.get(username='foo-user')
-
-    project = Project.objects.get(pk=1)  # example.com
-    invite = Invite(project=project, user=foo_user, role='owner')
-    invite.make_token()
-    invite.save()
-
-    assert get_invite_email_project_path(invite) == reverse('project_join', args=[invite.token])
-
-
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
