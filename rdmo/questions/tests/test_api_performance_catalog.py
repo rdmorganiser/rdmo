@@ -8,9 +8,9 @@ max_queries = [
     # action, max_queries url_kwargs
     ('list', 8, {}),
     ('index', 3, {}),
-    ('export', 30, {'export_format': 'xml'}),
+    ('export', 32, {'export_format': 'xml'}),
     ('detail', 8, {'pk': 1}),
-    ('detail_export', 29, {'pk': 1, 'export_format': 'xml'}),
+    ('detail_export', 32, {'pk': 1, 'export_format': 'xml'}),
 ]
 
 

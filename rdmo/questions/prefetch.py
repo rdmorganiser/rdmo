@@ -26,7 +26,6 @@ def question_prefetch(path, include_options=False):
         path,
         queryset=Question.objects.select_related(
             'attribute',
-            'default_option',
         ).prefetch_related(
             condition_prefetch('conditions'),
             *optionset_lookups,
