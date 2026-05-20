@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.http import QueryDict
 
-#from django.test.client import RequestFactory
 from rdmo.core.tests.utils import compute_checksum
 
 from ..filters import ProjectFilter
