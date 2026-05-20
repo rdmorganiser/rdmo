@@ -3,7 +3,6 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core import mail
-from django.test.client import RequestFactory
 from django.urls import reverse
 
 from ..models import Invite, Project
@@ -36,7 +35,7 @@ sites_domains = ('example.com', 'foo.com', 'bar.com')
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('membership_role', membership_roles)
 @pytest.mark.parametrize('site_domain', sites_domains)
-def test_get_invite_email_project_path_function(db, client, settings, username, password, project_id,
+def test_get_invite_email_project_path_function(rf, db, client, settings, username, password, project_id,
                                                 membership_role, site_domain):
     settings.MULTISITE = True
 
@@ -55,7 +54,7 @@ def test_get_invite_email_project_path_function(db, client, settings, username, 
     invite.make_token()
     invite.save()
 
-    request = RequestFactory().get('/')
+    request = rf.get('/')
     invite_email_project_path = get_invite_email_project_path(request, invite)
     if current_site.domain == site_domain:
         assert invite_email_project_path.startswith('http://testserver/projects')

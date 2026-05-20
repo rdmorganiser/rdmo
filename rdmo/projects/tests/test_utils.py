@@ -3,8 +3,8 @@ import pytest
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.http import QueryDict
-from django.test.client import RequestFactory
 
+#from django.test.client import RequestFactory
 from rdmo.core.tests.utils import compute_checksum
 
 from ..filters import ProjectFilter
@@ -236,12 +236,12 @@ INVITE_EMAIL_PROJECT_PATHS = [
 ]
 
 @pytest.mark.parametrize('config, expected', INVITE_EMAIL_PROJECT_PATHS)
-def test_get_invite_email_project_path(db, settings, config, expected):
+def test_get_invite_email_project_path(rf, db, settings, config, expected):
     settings.MULTISITE = config['MULTISITE']
     settings.PROJECT_INVITE_USE_PROJECT_SITE = config['PROJECT_INVITE_USE_PROJECT_SITE']
 
     # this is where testserver comes from:
-    request = RequestFactory().get('/')
+    request = rf.get('/')
 
     project = Project.objects.get(pk=1)
     project.site.domain = 'example.com'
