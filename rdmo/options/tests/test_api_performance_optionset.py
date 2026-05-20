@@ -4,22 +4,18 @@ from django.urls import reverse
 
 from .test_viewset_optionsets import urlnames
 
-max_query_map_optionset = {
-    'list': {'max_queries': 8},
-    'index': {'max_queries': 3},
-    'export': {'max_queries': 11, 'url_kwargs': {'export_format': 'xml'}},
-    'detail': {'max_queries': 8, 'url_kwargs': {'pk': 1}},
-    'detail_export': {'max_queries': 10, 'url_kwargs': {'pk': 1, 'export_format': 'xml'}},
-}
+max_queries = [
+    # action, max_queries, url_kwargs
+    ('list', 8, {}),
+    ('index', 3, {}),
+    ('export', 11, {'export_format': 'xml'}),
+    ('detail', 8, {'pk': 1}),
+    ('detail_export', 10, {'pk': 1, 'export_format': 'xml'}),
+]
+
 
 @pytest.mark.performance
-@pytest.mark.parametrize(
-    'action,max_queries,url_kwargs',
-    [
-        (action, case['max_queries'], case.get('url_kwargs'))
-        for action, case in max_query_map_optionset.items()
-    ],
-)
+@pytest.mark.parametrize('action,max_queries,url_kwargs', max_queries)
 def test_optionset_endpoints_query_counts(
     admin_client,
     django_assert_max_num_queries,

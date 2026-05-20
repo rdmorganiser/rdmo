@@ -18,11 +18,6 @@ from .serializers.export import ConditionExportSerializer
 from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 
-def get_attributes_by_id():
-    attributes = list(Attribute.objects.all())
-    return {attribute.pk: attribute for attribute in attributes}
-
-
 class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ConditionSerializer
@@ -46,15 +41,7 @@ class ConditionViewSet(ModelViewSet):
         elif self.action in ['export', 'detail_export']:
             return queryset.select_related(
                 'source',
-                'source__parent',
                 'target_option'
-            ).prefetch_related(
-                'optionsets',
-                'pages',
-                'questionsets',
-                'questions',
-                'tasks',
-                'editors'
             )
         else:
             return queryset.select_related(
@@ -79,10 +66,12 @@ class ConditionViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            conditions = list(queryset)
-            context = self.get_export_renderer_context(request, attributes_by_id=True)
-            serializer = ConditionExportSerializer(conditions, many=True, context=context)
-            xml = ConditionRenderer().render(serializer.data, context=context)
+            serializer = ConditionExportSerializer(
+                queryset,
+                many=True,
+                context=self.get_export_serializer_context(queryset),
+            )
+            xml = ConditionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
             return XMLResponse(xml, name='conditions')
         else:
             return render_to_format(self.request, export_format, 'conditions', 'conditions/export/conditions.html', {
@@ -91,28 +80,35 @@ class ConditionViewSet(ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
-        condition = self.get_object()
+        instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = ConditionExportSerializer(condition, context=context)
-            xml = ConditionRenderer().render([serializer.data], context=context)
-            return XMLResponse(xml, name=condition.uri_path)
+            serializer = ConditionExportSerializer(
+                instance,
+                context=self.get_export_serializer_context([instance]),
+            )
+            xml = ConditionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, condition.uri_path, 'conditions/export/conditions.html', {
-                    'conditions': [condition]
+                self.request, export_format, instance.uri_path, 'conditions/export/conditions.html', {
+                    'conditions': [instance]
                 }
             )
 
-    def get_export_renderer_context(self, request, attributes_by_id=False):
+    def get_export_serializer_context(self, conditions):
+        return {
+            'attribute_map': Attribute.objects.get_queryset_ancestors(
+                Attribute.objects.filter(id__in=[condition.source_id for condition in conditions]),
+                include_self=True
+            ).in_bulk()
+        }
+
+    def get_export_renderer_context(self, request):
         full = is_truthy(request.GET.get('full'))
-        context = {
+        return {
             'attributes': full or is_truthy(request.GET.get('attributes')),
             'options': full or is_truthy(request.GET.get('options')),
         }
-        if attributes_by_id:
-            context['attributes_by_id'] = get_attributes_by_id()
-        return context
 
 
 class RelationViewSet(ChoicesViewSet):

@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
-from django.db.models import Prefetch
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -14,6 +13,7 @@ from rdmo.options.models import Option
 
 from ..constants import WIDGET_TYPE_CHOICES
 from ..managers import QuestionManager
+from ..prefetch import question_prefetch_lookups
 
 
 class Question(Model, TranslationMixin):
@@ -264,7 +264,7 @@ class Question(Model, TranslationMixin):
         return []
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *self.prefetch_lookups)
+        models.prefetch_related_objects([self], *question_prefetch_lookups())
 
     def to_dict(self, *ancestors):
         return {
@@ -288,17 +288,3 @@ class Question(Model, TranslationMixin):
         if not uri_path:
             raise RuntimeError('uri_path is missing')
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
-
-
-def condition_prefetch(path):
-    return Prefetch(
-        path,
-        queryset=Condition.objects.select_related('source', 'source__parent', 'target_option')
-    )
-
-
-Question.prefetch_lookups = (
-    condition_prefetch('conditions'),
-    'optionsets',
-    'default_option',
-)

@@ -9,6 +9,14 @@ from rdmo.core.managers import (
     GroupsQuerySetMixin,
 )
 
+from .prefetch import (
+    catalog_prefetch_lookups,
+    page_prefetch_lookups,
+    question_prefetch_lookups,
+    questionset_prefetch_lookups,
+    section_prefetch_lookups,
+)
+
 
 class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, AvailabilityQuerySetMixin, models.QuerySet):
 
@@ -16,7 +24,7 @@ class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
         return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
 
     def prefetch_elements(self):
-        return self.prefetch_related(*self.model.prefetch_lookups)
+        return self.prefetch_related(*catalog_prefetch_lookups())
 
     def filter_for_user(self, user):
         return (
@@ -45,7 +53,7 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 class SectionQuerySet(models.QuerySet):
 
     def prefetch_elements(self):
-        return self.prefetch_related(*self.model.prefetch_lookups)
+        return self.prefetch_related(*section_prefetch_lookups())
 
 
 class SectionManager(models.Manager):
@@ -60,7 +68,7 @@ class SectionManager(models.Manager):
 class PageQuerySet(models.QuerySet):
 
     def prefetch_elements(self):
-        return self.prefetch_related(*self.model.prefetch_lookups)
+        return self.prefetch_related(*page_prefetch_lookups())
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
@@ -82,7 +90,7 @@ class PageManager(models.Manager):
 class QuestionSetQuerySet(models.QuerySet):
 
     def prefetch_elements(self):
-        return self.prefetch_related(*self.model.prefetch_lookups)
+        return self.prefetch_related(*questionset_prefetch_lookups())
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
@@ -101,7 +109,7 @@ class QuestionSetManager(models.Manager):
 class QuestionQuerySet(models.QuerySet):
 
     def prefetch_elements(self):
-        return self.prefetch_related(*self.model.prefetch_lookups)
+        return self.prefetch_related(*question_prefetch_lookups())
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]

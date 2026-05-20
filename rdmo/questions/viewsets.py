@@ -13,7 +13,6 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.domain.models import Attribute
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .constants import WIDGET_TYPE_CHOICES
@@ -42,11 +41,7 @@ from .serializers.v1 import (
     SectionNestedSerializer,
     SectionSerializer,
 )
-
-
-def get_attributes_by_id():
-    attributes = list(Attribute.objects.all())
-    return {attribute.pk: attribute for attribute in attributes}
+from .utils import get_export_serializer_context
 
 
 class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
@@ -89,9 +84,13 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = CatalogExportSerializer(queryset, many=True, context=context)
-            xml = CatalogRenderer().render(serializer.data, context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context(queryset, renderer_context),
+            }
+            serializer = CatalogExportSerializer(queryset, many=True, context=serializer_context)
+            xml = CatalogRenderer().render(serializer.data, context=renderer_context)
             return XMLResponse(xml, name='catalogs')
         else:
             return render_to_format(
@@ -104,9 +103,13 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = CatalogExportSerializer(instance, context=context)
-            xml = CatalogRenderer().render([serializer.data], context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context([instance], renderer_context),
+            }
+            serializer = CatalogExportSerializer(instance, context=serializer_context)
+            xml = CatalogRenderer().render([serializer.data], context=renderer_context)
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -126,7 +129,6 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -167,9 +169,13 @@ class SectionViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = SectionExportSerializer(queryset, many=True, context=context)
-            xml = SectionRenderer().render(serializer.data, context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context(queryset, renderer_context),
+            }
+            serializer = SectionExportSerializer(queryset, many=True, context=serializer_context)
+            xml = SectionRenderer().render(serializer.data, context=renderer_context)
             return XMLResponse(xml, name='sections')
         else:
             return render_to_format(
@@ -182,9 +188,13 @@ class SectionViewSet(ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = SectionExportSerializer(instance, context=context)
-            xml = SectionRenderer().render([serializer.data], context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context([instance], renderer_context),
+            }
+            serializer = SectionExportSerializer(instance, context=serializer_context)
+            xml = SectionRenderer().render([serializer.data], context=renderer_context)
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -203,7 +213,6 @@ class SectionViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -252,9 +261,13 @@ class PageViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = PageExportSerializer(queryset, many=True, context=context)
-            xml = PageRenderer().render(serializer.data, context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context(queryset, renderer_context),
+            }
+            serializer = PageExportSerializer(queryset, many=True, context=serializer_context)
+            xml = PageRenderer().render(serializer.data, context=renderer_context)
             return XMLResponse(xml, name='pages')
         else:
             return render_to_format(
@@ -267,9 +280,13 @@ class PageViewSet(ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = PageExportSerializer(instance, context=context)
-            xml = PageRenderer().render([serializer.data], context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context([instance], renderer_context),
+            }
+            serializer = PageExportSerializer(instance, context=serializer_context)
+            xml = PageRenderer().render([serializer.data], context=renderer_context)
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -287,7 +304,6 @@ class PageViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -337,9 +353,13 @@ class QuestionSetViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = QuestionSetExportSerializer(queryset, many=True, context=context)
-            xml = QuestionSetRenderer().render(serializer.data, context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context(queryset, renderer_context),
+            }
+            serializer = QuestionSetExportSerializer(queryset, many=True, context=serializer_context)
+            xml = QuestionSetRenderer().render(serializer.data, context=renderer_context)
             return XMLResponse(xml, name='questionsets')
         else:
             return render_to_format(
@@ -352,9 +372,13 @@ class QuestionSetViewSet(ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = QuestionSetExportSerializer(instance, context=context)
-            xml = QuestionSetRenderer().render([serializer.data], context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context([instance], renderer_context),
+            }
+            serializer = QuestionSetExportSerializer(instance, context=serializer_context)
+            xml = QuestionSetRenderer().render([serializer.data], context=renderer_context)
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -372,7 +396,6 @@ class QuestionSetViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
@@ -419,9 +442,13 @@ class QuestionViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = QuestionExportSerializer(queryset, many=True, context=context)
-            xml = QuestionRenderer().render(serializer.data, context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context(queryset, renderer_context),
+            }
+            serializer = QuestionExportSerializer(queryset, many=True, context=serializer_context)
+            xml = QuestionRenderer().render(serializer.data, context=renderer_context)
             return XMLResponse(xml, name='questions')
         else:
             return render_to_format(
@@ -434,9 +461,13 @@ class QuestionViewSet(ModelViewSet):
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
         if export_format == 'xml':
-            context = self.get_export_renderer_context(request)
-            serializer = QuestionExportSerializer(instance, context=context)
-            xml = QuestionRenderer().render([serializer.data], context=context)
+            renderer_context = self.get_export_renderer_context(request)
+            serializer_context = {
+                **renderer_context,
+                **get_export_serializer_context([instance], renderer_context),
+            }
+            serializer = QuestionExportSerializer(instance, context=serializer_context)
+            xml = QuestionRenderer().render([serializer.data], context=renderer_context)
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -452,7 +483,6 @@ class QuestionViewSet(ModelViewSet):
             'optionsets': full or is_truthy(request.GET.get('optionsets')),
             'options': full or is_truthy(request.GET.get('options')),
             'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes_by_id': get_attributes_by_id(),
         }
 
 
