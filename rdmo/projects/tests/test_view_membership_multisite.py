@@ -3,6 +3,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core import mail
+from django.test.client import RequestFactory
 from django.urls import reverse
 
 from ..models import Invite, Project
@@ -54,9 +55,10 @@ def test_get_invite_email_project_path_function(db, client, settings, username, 
     invite.make_token()
     invite.save()
 
-    invite_email_project_path = get_invite_email_project_path(invite)
+    request = RequestFactory().get('/')
+    invite_email_project_path = get_invite_email_project_path(request, invite)
     if current_site.domain == site_domain:
-        assert invite_email_project_path.startswith('/projects')
+        assert invite_email_project_path.startswith('http://testserver/projects')
     else:
         assert invite_email_project_path.startswith('http://' + site_domain + '/projects')
 
