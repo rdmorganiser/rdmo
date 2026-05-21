@@ -4,7 +4,7 @@ from playwright.sync_api import Page, expect
 
 from rdmo.questions.models import Catalog
 
-pytestmark = pytest.mark.e2e
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db(transaction=True)]
 
 
 @pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
