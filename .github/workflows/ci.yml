@@ -152,7 +152,7 @@ jobs:
     - name: Collect static files into static root (only required if rdmo is installed from wheel)
       run: python testing/manage.py collectstatic --noinput
     - name: Run end-to-end tests
-      run: pytest -p randomly -p no:cacheprovider -m e2e --nomigrations
+      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
