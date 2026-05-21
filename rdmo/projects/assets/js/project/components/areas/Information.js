@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import CopyProject from './information/CopyProject'
 import HierarchyTree from './information/HierarchyTree'
 import ProjectDelete from './information/ProjectDelete'
 import ProjectForm from './information/ProjectForm'
@@ -11,7 +12,11 @@ const Information = () => {
 
   return (
     <div className="project-information">
-      <h1 className="mb-5">{gettext('Project information')}</h1>
+      <div className="d-lg-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-lg-0">{gettext('Project information')}</h1>
+        <CopyProject project={project} />
+      </div>
+
 
       <div className="card card-tile mb-4">
         <div className="card-body">
