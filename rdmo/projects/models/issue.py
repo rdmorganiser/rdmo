@@ -107,7 +107,7 @@ class Issue(models.Model):
 
         # prefetch the catalog and filter all questions for the source_ids and all pages for those questions
         self.project.catalog.prefetch_elements()
-        questions = list(filter(lambda q: q.source_id in source_ids, self.project.catalog.questions))
+        questions = list(filter(lambda q: q.attribute_id in source_ids, self.project.catalog.questions))
         for question in questions:
             question.page_list = list(filter(lambda p: question in p.elements, self.project.catalog.pages))
 
