@@ -41,6 +41,8 @@ const FieldRowDiffs = ({ element, field }) => {
       overflow: 'visible',
       pre: {
         display: 'inline',
+        border: 'none',
+        boxShadow: 'none',
         lineHeight: '1.6em',
         overflow: 'visible',
       },
@@ -61,6 +63,7 @@ const FieldRowDiffs = ({ element, field }) => {
           oldValue={oldVal}
           newValue={newVal}
           splitView={splitView}
+          hideSummary={true}
           hideLineNumbers={hideLineNumbers}
           // leftTitle={leftTitle}
           // rightTitle={rightTitle}
