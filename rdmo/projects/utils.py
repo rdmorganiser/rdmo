@@ -248,7 +248,9 @@ def get_invite_email_project_path(request, invite):
 
         if not invite.user.role.member.filter(id=current_site.id).exists():
             # take users first site
-            return f'{request.scheme}://{invite.user.role.member.first().domain}{project_invite_path}'
+            user_first_site = invite.user.role.member.first()
+            if user_first_site:
+                return f'{request.scheme}://{user_first_site.domain}{project_invite_path}'
 
     return request.build_absolute_uri(project_invite_path)
 
