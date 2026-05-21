@@ -4,7 +4,6 @@ import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
 import { locationKeys, updateLocation } from '../utils/location'
@@ -148,41 +147,6 @@ export function deleteProject(id) {
 }
 
 // visibility
-export function fetchSites() {
-  return function (dispatch) {
-    dispatch(addToPending('fetchSites'))
-    dispatch({ type: actionTypes.FETCH_SITES_INIT })
-
-    return CoreApi.fetchSites()
-      .then(sites => {
-        dispatch(removeFromPending('fetchSites'))
-        dispatch({ type: actionTypes.FETCH_SITES_SUCCESS, sites })
-      })
-      .catch(error => {
-        dispatch(removeFromPending('fetchSites'))
-        dispatch({ type: actionTypes.FETCH_SITES_ERROR, error })
-        throw error
-      })
-  }
-}
-
-export function fetchGroups() {
-  return function (dispatch) {
-    dispatch(addToPending('fetchGroups'))
-    dispatch({ type: actionTypes.FETCH_GROUPS_INIT })
-
-    return CoreApi.fetchGroups()
-      .then(groups => {
-        dispatch(removeFromPending('fetchGroups'))
-        dispatch({ type: actionTypes.FETCH_GROUPS_SUCCESS, groups })
-      })
-      .catch(error => {
-        dispatch(removeFromPending('fetchGroups'))
-        dispatch({ type: actionTypes.FETCH_GROUPS_ERROR, error })
-        throw error
-      })
-  }
-}
 
 export function fetchProjectVisibility() {
   return function (dispatch) {
