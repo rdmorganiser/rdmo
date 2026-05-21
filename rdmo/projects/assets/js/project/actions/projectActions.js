@@ -146,6 +146,82 @@ export function deleteProject(id) {
   }
 }
 
+// visibility
+
+export function fetchProjectVisibility() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectVisibility'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.fetchProjectVisibility(projectId)
+      .then(visibility => {
+        dispatch(removeFromPending('fetchProjectVisibility'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchProjectVisibility'))
+
+        if (error?.status === 404) {
+          dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility: null })
+          return null
+        }
+
+        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function updateProjectVisibility(data) {
+  return function (dispatch, getState) {
+    dispatch(addToPending('updateProjectVisibility'))
+    dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.updateProjectVisibility(projectId, data)
+      .then(visibility => {
+        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
+
+        // visibility updates lead to change of project objects visibility property
+        const state = getState()
+        const currentBundle = state.project.project
+        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
+      })
+      .then(({ project, currentBundle }) => {
+        const updatedBundle = {
+          ...currentBundle,
+          project
+        }
+        dispatch(removeFromPending('updateProjectVisibility'))
+        dispatch(fetchProjectVisibility())
+        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('updateProjectVisibility'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function deleteProjectVisibility() {
+  return function (dispatch) {
+    dispatch(addToPending('deleteProjectVisibility'))
+    dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_INIT })
+
+    return ProjectApi.deleteProjectVisibility(projectId)
+      .then(() => {
+        dispatch(removeFromPending('deleteProjectVisibility'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
+        return dispatch(fetchProjectVisibility())
+      })
+      .catch(error => {
+        dispatch(removeFromPending('deleteProjectVisibility'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_ERROR, error })
+        throw error
+      })
+  }
+}
+
 // memberships / invites / leave
 
 export function fetchProjectInvites() {

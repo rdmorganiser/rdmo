@@ -2,12 +2,16 @@ import { applyMiddleware, combineReducers, createStore } from 'redux'
 import thunk from 'redux-thunk'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
+import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import groupsReducer from 'rdmo/core/assets/js/reducers/groupsReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
+import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
@@ -38,7 +42,9 @@ export default function configureStore() {
     settings: settingsReducer,
     templates: templateReducer,
     user: userReducer,
-    roles: rolesReducer
+    roles: rolesReducer,
+    sites: sitesReducer,
+    groups: groupsReducer
   })
 
   const initialState = {
@@ -74,6 +80,11 @@ export default function configureStore() {
       const permissions = store.getState().project.project.project.permissions
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
+      }
+      if (permissions.can_view_visibility) {
+        store.dispatch(sitesActions.fetchSites())
+        store.dispatch(groupsActions.fetchGroups())
+        store.dispatch(projectActions.fetchProjectVisibility(projectId))
       }
       initDashboardFromLocation()
     })
