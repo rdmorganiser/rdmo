@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
@@ -256,9 +257,36 @@ const Dashboard = () => {
                       }
                     }
                   />
-                  <p>{`URI: ${selectedTaskIssue.task.uri}`}</p>
+                  {
+                    selectedTaskIssue.questions?.length > 0 && (
+                      <div className="mt-3">
+                        <h5>{gettext('Origin')}</h5>
+
+                        <ul className="list-unstyled mb-0">
+                          {
+                            selectedTaskIssue.questions.map((question) => (
+                              <li key={question.id} className="mb-2">
+                                <div>{question.text}</div>
+
+                                {
+                                  question.pages?.map((page) => (
+                                    <a
+                                      key={page.id}
+                                      href={`${baseUrl}/interview/${page.id}/`}
+                                      className="d-block"
+                                    >
+                                      {page.title}
+                                    </a>
+                                  ))
+                                }
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </div>
+                    )
+                  }
                   <p>{selectedTaskIssue.dates?.[0]}</p>
-                  <p>{`Condition Uris: ${(selectedTaskIssue.task.condition_uris ?? []).join(', ')}`}</p>
                 </Modal>
               )
             }
