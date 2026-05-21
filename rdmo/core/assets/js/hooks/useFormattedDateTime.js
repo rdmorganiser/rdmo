@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { de, enUS } from 'date-fns/locale'
 
 const getLocaleObject = (language) => {
@@ -6,15 +6,21 @@ const getLocaleObject = (language) => {
 }
 
 const FORMAT_STRINGS = {
-  en: 'MMM d, yyyy, h:mm a',
-  de: 'd. MMM yyyy, H:mm',
+  dateTime: {
+    en: 'MMM d, yyyy, h:mm a',
+    de: 'd. MMM yyyy, H:mm',
+  },
+  dateOnly: {
+    en: 'MMM d, yyyy',
+    de: 'd. MMM yyyy',
+  },
 }
 
-export const useFormattedDateTime  = (date, language) => {
+export const useFormattedDateTime = (date, language, formatType = 'dateTime') => {
   const locale = getLocaleObject(language)
-  const formatString = language === 'de' ? FORMAT_STRINGS.de : FORMAT_STRINGS.en
+  const formatString = FORMAT_STRINGS[formatType][language] ?? FORMAT_STRINGS[formatType].en
 
-  return format(new Date(date), formatString, { locale })
+  return format(parseISO(date), formatString, { locale })
 }
 
 export default useFormattedDateTime

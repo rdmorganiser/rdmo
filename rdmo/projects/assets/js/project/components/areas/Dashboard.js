@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
+import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
 import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
+import { projectId } from '../../utils/meta'
 import { Tile } from '../helper'
 
 const Dashboard = () => {
@@ -15,13 +18,21 @@ const Dashboard = () => {
   const config = useSelector(state => state.config)
   const perms = useSelector(state => state.project.project.project.permissions) ?? {}
   const issues = useSelector((state) => state.project.project.tasks) ?? []
+  // Mock dates for testing
+  // issues.forEach((issue) => {
+  //   issue.dates = [
+  //     ['2017-12-31', '2017-04-03'],
+  //     ['2017-04-03'],
+  //     ['2017-04-04'],
+  //   ]
+  // })
   // const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   const resolvedIssues = issues.filter((issue) => issue.resolve === true)
   console.log('resolved issues', resolvedIssues)
   // const issues = allIssues.filter((issue) => issue.resolve === true)
   // console.log('resolved issues', issues)
-
   console.log('all issues', issues)
+
   const statusOptions = [
     { value: 'open', label: gettext('Open') },
     { value: 'closed', label: gettext('Closed') },
@@ -30,8 +41,6 @@ const Dashboard = () => {
 
   const { showClosedTasks, showClosedRecommendations } = config
 
-  console.log('showClosedTasks', showClosedTasks)
-  console.log('showClosedRecommendations', showClosedRecommendations)
   const [selectedTaskIssue, setSelectedTaskIssue] = useState(null)
 
   const isClosed = (issue) => issue.status === 'closed'
@@ -64,11 +73,14 @@ const Dashboard = () => {
   ).sort((a, b) => a.task.order - b.task.order)
 
   const toggleTaskDone = (issueId, currentStatus) => {
-    console.log('toggle issue', issueId)
     dispatch(updateProjectTask(issueId, {
       status: currentStatus === 'closed' ? 'open' : 'closed'
     }))
   }
+
+  const renderDate = (date) => (
+    date.map((dateValue) => useFormattedDateTime(dateValue, language, 'dateOnly')).join(' - ')
+  )
 
   const renderIssueTiles = (visibleIssues) => (
     <div className="row">
@@ -102,10 +114,14 @@ const Dashboard = () => {
                   <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
                     {issue.task.title}
                   </div>
-                  <div className="text-muted small mt-2 text-end">
-                    <i className="bi bi-clock me-1" />
-                    {issue.dates?.[0] ?? ''}
-                  </div>
+                  {
+                    issue.dates?.length > 0 && (
+                      <div className="text-muted small mt-2 text-end">
+                        <i className="bi bi-clock me-1" />
+                        {renderDate(issue.dates[0])}
+                      </div>
+                    )
+                  }
                 </div>
               </div>
             </Tile>
@@ -257,36 +273,55 @@ const Dashboard = () => {
                       }
                     }
                   />
-                  {
-                    selectedTaskIssue.questions?.length > 0 && (
-                      <div className="mt-3">
-                        <h5>{gettext('Origin')}</h5>
+                  <div className="row mt-3">
+                    <div className="col-md-8">
+                      {
+                        selectedTaskIssue.questions?.length > 0 && (
+                          <>
+                            <div className="fw-bold mb-2">{gettext('Questions')}</div>
 
-                        <ul className="list-unstyled mb-0">
-                          {
-                            selectedTaskIssue.questions.map((question) => (
-                              <li key={question.id} className="mb-2">
-                                <div>{question.text}</div>
+                            {
+                              selectedTaskIssue.questions.map((question) => (
+                                <div key={question.id} className="mb-3">
+                                  <div>{question.text}</div>
 
-                                {
-                                  question.pages?.map((page) => (
-                                    <a
-                                      key={page.id}
-                                      href={`${baseUrl}/interview/${page.id}/`}
-                                      className="d-block"
-                                    >
-                                      {page.title}
-                                    </a>
-                                  ))
-                                }
-                              </li>
-                            ))
-                          }
-                        </ul>
-                      </div>
-                    )
-                  }
-                  <p>{selectedTaskIssue.dates?.[0]}</p>
+                                  {
+                                    question.pages?.map((page) => {
+                                      const url = `${baseUrl}/projects/${projectId}/interview/${page.id}/`
+
+                                      return (
+                                        <div key={page.id}>
+                                          <a href={url}>{url}</a>
+                                        </div>
+                                      )
+                                    })
+                                  }
+                                </div>
+                              ))
+                            }
+                          </>
+                        )
+                      }
+                    </div>
+
+                    <div className="col-md-4">
+                      {
+                        selectedTaskIssue.dates?.length > 0 && (
+                          <>
+                            <div className="fw-bold mb-2">{gettext('Dates')}</div>
+
+                            {
+                              selectedTaskIssue.dates.map((date, index) => (
+                                <div key={index} className="mb-2">
+                                  {renderDate(date)}
+                                </div>
+                              ))
+                            }
+                          </>
+                        )
+                      }
+                    </div>
+                  </div>
                 </Modal>
               )
             }
