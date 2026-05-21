@@ -14,7 +14,7 @@ import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
-import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
+import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
@@ -49,7 +49,9 @@ export default function configureStore() {
 
   const initialState = {
     config: {
-      prefix: 'rdmo.project'
+      prefix: 'rdmo.project',
+      showClosedTasks: false,
+      showClosedRecommendations: false
     }
   }
 
@@ -66,9 +68,15 @@ export default function configureStore() {
 
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
-    getConfigFromLocalStorage('rdmo.project').forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig(path, value))
-    })
+    getConfigFromLocalStorage('rdmo.project')
+      .map(([path, value]) => (
+        [path, ['showClosedTasks', 'showClosedRecommendations'].includes(path) ? (
+          isTruthy(value)
+        ) : value]  // cast to bool
+      ))
+      .forEach(([path, value]) => {
+        store.dispatch(configActions.updateConfig(path, value))
+      })
 
     Promise.all([
       store.dispatch(settingsActions.fetchSettings()),
