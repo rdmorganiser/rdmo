@@ -27,8 +27,32 @@ const FieldRowDiffs = ({ element, field }) => {
         gutterBackground: '#fff',
       },
     },
+    diffContainer: {
+      minWidth: '100%',
+      maxWidth: '100%',
+      width: '100%',
+    },
+    marker: {
+      width: '28px',
+      minWidth: '28px',
+      paddingLeft: 8,
+      paddingRight: 4,
+      textAlign: 'left',
+      overflow: 'visible',
+      pre: {
+        display: 'inline',
+        border: 'none',
+        boxShadow: 'none',
+        lineHeight: '1.6em',
+        overflow: 'visible',
+      },
+    },
     contentText: {
       backgroundColor: '#fff !important',
+      display: 'block',
+      lineHeight: '1.6em',
+      overflowWrap: 'anywhere',
+      wordBreak: 'break-word',
     },
   }
 
@@ -39,6 +63,7 @@ const FieldRowDiffs = ({ element, field }) => {
           oldValue={oldVal}
           newValue={newVal}
           splitView={splitView}
+          hideSummary={true}
           hideLineNumbers={hideLineNumbers}
           // leftTitle={leftTitle}
           // rightTitle={rightTitle}

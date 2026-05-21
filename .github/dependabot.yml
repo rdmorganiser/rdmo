@@ -66,6 +66,8 @@ updates:
     update-types: ["version-update:semver-major"] # ignore major for react-redux
   - dependency-name: eslint
     update-types: ["version-update:semver-major"] # keep eslint 8.56.0 for now
+  - dependency-name: jquery
+    update-types: [ "version-update:semver-major" ] # keep jQuery 3.x until Bootstrap is upgraded
   groups:
     react:
       patterns:
