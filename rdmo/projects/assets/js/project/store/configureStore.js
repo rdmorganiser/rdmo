@@ -2,12 +2,16 @@ import { applyMiddleware, combineReducers, createStore } from 'redux'
 import thunk from 'redux-thunk'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
+import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import groupsReducer from 'rdmo/core/assets/js/reducers/groupsReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
+import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
@@ -16,7 +20,6 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
 import * as projectActions from '../actions/projectActions'
-import { groupsReducer, sitesReducer } from '../reducers/coreReducer'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
@@ -79,8 +82,8 @@ export default function configureStore() {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
       if (permissions.can_view_visibility) {
-        store.dispatch(projectActions.fetchSites()),
-        store.dispatch(projectActions.fetchGroups()),
+        store.dispatch(sitesActions.fetchSites())
+        store.dispatch(groupsActions.fetchGroups())
         store.dispatch(projectActions.fetchProjectVisibility(projectId))
       }
       initDashboardFromLocation()
