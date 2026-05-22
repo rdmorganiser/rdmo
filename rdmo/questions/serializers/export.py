@@ -22,7 +22,7 @@ from ..models import (
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
+    attribute = serializers.SerializerMethodField()
     default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
     optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
@@ -55,6 +55,11 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'default_text',
             'verbose_name'
         )
+
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
 
     def get_optionsets(self, obj):
         optionsets = obj.optionsets.all()
@@ -90,7 +95,7 @@ class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
 
 class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
 
-    question = QuestionExportSerializer()
+    question = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSetQuestion
@@ -99,10 +104,13 @@ class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_question(self, obj):
+        return QuestionExportSerializer(obj.question, context=self.context).data
+
 
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
+    attribute = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
 
     questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True)
@@ -127,6 +135,11 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'verbose_name'
         )
 
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
+
     def get_conditions(self, obj):
         conditions = obj.conditions.all()
 
@@ -138,7 +151,7 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
 
 class PageQuestionSetExportSerializer(serializers.ModelSerializer):
 
-    questionset = QuestionSetExportSerializer()
+    questionset = serializers.SerializerMethodField()
 
     class Meta:
         model = PageQuestionSet
@@ -147,10 +160,13 @@ class PageQuestionSetExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_questionset(self, obj):
+        return QuestionSetExportSerializer(obj.questionset, context=self.context).data
+
 
 class PageQuestionExportSerializer(serializers.ModelSerializer):
 
-    question = QuestionExportSerializer()
+    question = serializers.SerializerMethodField()
 
     class Meta:
         model = PageQuestion
@@ -159,10 +175,13 @@ class PageQuestionExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_question(self, obj):
+        return QuestionExportSerializer(obj.question, context=self.context).data
+
 
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
+    attribute = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
 
     page_questionsets = PageQuestionSetExportSerializer(many=True)
@@ -188,6 +207,11 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'verbose_name'
         )
 
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
+
     def get_conditions(self, obj):
         conditions = obj.conditions.all()
 
@@ -199,7 +223,7 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
 
 class SectionPageExportSerializer(serializers.ModelSerializer):
 
-    page = PageExportSerializer()
+    page = serializers.SerializerMethodField()
 
     class Meta:
         model = SectionPage
@@ -207,6 +231,9 @@ class SectionPageExportSerializer(serializers.ModelSerializer):
             'page',
             'order'
         )
+
+    def get_page(self, obj):
+        return PageExportSerializer(obj.page, context=self.context).data
 
 
 class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):

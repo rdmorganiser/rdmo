@@ -10,7 +10,7 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
 from ..managers import CatalogManager
-from ..prefetch import catalog_prefetch_lookups
+from ..prefetch import get_catalog_prefetch_lookups
 
 
 class Catalog(Model, TranslationMixin):
@@ -198,7 +198,7 @@ class Catalog(Model, TranslationMixin):
         return list(filter(lambda q: q.is_optional, self.questions))
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *catalog_prefetch_lookups())
+        models.prefetch_related_objects([self], *get_catalog_prefetch_lookups())
 
     def to_dict(self):
         elements = [element.to_dict() for element in self.elements]

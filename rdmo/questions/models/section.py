@@ -8,7 +8,7 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
 from ..managers import SectionManager
-from ..prefetch import section_prefetch_lookups
+from ..prefetch import get_section_prefetch_lookups
 
 
 class Section(Model, TranslationMixin):
@@ -138,7 +138,7 @@ class Section(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *section_prefetch_lookups())
+        models.prefetch_related_objects([self], *get_section_prefetch_lookups())
 
     def to_dict(self):
         elements = [element.to_dict() for element in self.elements]

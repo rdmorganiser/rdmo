@@ -10,7 +10,7 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import PageManager
-from ..prefetch import page_prefetch_lookups
+from ..prefetch import get_page_prefetch_lookups
 
 
 class Page(Model, TranslationMixin):
@@ -223,7 +223,7 @@ class Page(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *page_prefetch_lookups())
+        models.prefetch_related_objects([self], *get_page_prefetch_lookups())
 
     def to_dict(self):
         return {

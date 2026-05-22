@@ -1,20 +1,32 @@
 from rdmo.conditions.models import Condition
+from rdmo.core.utils import is_truthy
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Page, Question, QuestionSet
 
 
-def get_export_serializer_context(elements, renderer_context):
-    if not any(
-        renderer_context.get(key)
-        for key in ('attributes', 'conditions', 'optionsets')
-    ):
-        return {'attribute_map': {}}
+def get_export_flags(request):
+    full = is_truthy(request.GET.get('full'))
+    return {
+        'sections': full or is_truthy(request.GET.get('sections', True)),
+        'pages': full or is_truthy(request.GET.get('pages', True)),
+        'questionsets': full or is_truthy(request.GET.get('questionsets', True)),
+        'questions': full or is_truthy(request.GET.get('questions', True)),
+        'attributes': full or is_truthy(request.GET.get('attributes')),
+        'optionsets': full or is_truthy(request.GET.get('optionsets')),
+        'options': full or is_truthy(request.GET.get('options')),
+        'conditions': full or is_truthy(request.GET.get('conditions')),
+    }
+
+
+def get_serializer_context(elements, export_flags):
+    if not any(export_flags.get(key) for key in ('attributes', 'conditions', 'optionsets')):
+        return export_flags
 
     attribute_ids = set()
     question_ids = set()
 
     for element in elements:
-        for descendant in get_element_descendants(element):
+        for descendant in [element, *element.descendants]:
             if isinstance(descendant, (Page, QuestionSet, Question)) and descendant.attribute_id:
                 attribute_ids.add(descendant.attribute_id)
 
@@ -27,7 +39,7 @@ def get_export_serializer_context(elements, renderer_context):
                     for condition in descendant.conditions.all()
                 )
 
-    if renderer_context.get('optionsets') and question_ids:
+    if export_flags.get('optionsets') and question_ids:
         attribute_ids.update(
             Condition.objects.filter(
                 optionsets__questions__id__in=question_ids
@@ -35,13 +47,11 @@ def get_export_serializer_context(elements, renderer_context):
         )
 
     return {
-        'attribute_map': Attribute.objects.get_queryset_ancestors(
-            Attribute.objects.filter(id__in=attribute_ids),
-            include_self=True
-        ).in_bulk()
+        **export_flags,
+        'attribute_map': (
+            Attribute.objects.get_queryset_ancestors(
+                Attribute.objects.filter(id__in=attribute_ids),
+                include_self=True
+            ).in_bulk()
+        )
     }
-
-
-def get_element_descendants(element):
-    yield element
-    yield from getattr(element, 'descendants', [])

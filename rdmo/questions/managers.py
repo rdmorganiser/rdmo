@@ -10,11 +10,11 @@ from rdmo.core.managers import (
 )
 
 from .prefetch import (
-    catalog_prefetch_lookups,
-    page_prefetch_lookups,
-    question_prefetch_lookups,
-    questionset_prefetch_lookups,
-    section_prefetch_lookups,
+    get_catalog_prefetch_lookups,
+    get_page_prefetch_lookups,
+    get_question_prefetch_lookups,
+    get_questionset_prefetch_lookups,
+    get_section_prefetch_lookups,
 )
 
 
@@ -23,8 +23,8 @@ class CatalogQuerySet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
     def filter_catalog(self, catalog):
         return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
 
-    def prefetch_elements(self):
-        return self.prefetch_related(*catalog_prefetch_lookups())
+    def prefetch_elements(self, **kwargs):
+        return self.prefetch_related(*get_catalog_prefetch_lookups(**kwargs))
 
     def filter_for_user(self, user):
         return (
@@ -43,8 +43,8 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
 
-    def prefetch_elements(self):
-        return self.get_queryset().prefetch_elements()
+    def prefetch_elements(self, **kwargs):
+        return self.get_queryset().prefetch_elements(**kwargs)
 
     def filter_for_user(self, user):
         return self.get_queryset().filter_for_user(user)
@@ -52,8 +52,8 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 
 class SectionQuerySet(models.QuerySet):
 
-    def prefetch_elements(self):
-        return self.prefetch_related(*section_prefetch_lookups())
+    def prefetch_elements(self, **kwargs):
+        return self.prefetch_related(*get_section_prefetch_lookups(**kwargs))
 
 
 class SectionManager(models.Manager):
@@ -61,14 +61,14 @@ class SectionManager(models.Manager):
     def get_queryset(self):
         return SectionQuerySet(self.model, using=self._db)
 
-    def prefetch_elements(self):
-        return self.get_queryset().prefetch_elements()
+    def prefetch_elements(self, **kwargs):
+        return self.get_queryset().prefetch_elements(**kwargs)
 
 
 class PageQuerySet(models.QuerySet):
 
-    def prefetch_elements(self):
-        return self.prefetch_related(*page_prefetch_lookups())
+    def prefetch_elements(self, **kwargs):
+        return self.prefetch_related(*get_page_prefetch_lookups(**kwargs))
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
@@ -83,14 +83,14 @@ class PageManager(models.Manager):
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)
 
-    def prefetch_elements(self):
-        return self.get_queryset().prefetch_elements()
+    def prefetch_elements(self, **kwargs):
+        return self.get_queryset().prefetch_elements(**kwargs)
 
 
 class QuestionSetQuerySet(models.QuerySet):
 
-    def prefetch_elements(self):
-        return self.prefetch_related(*questionset_prefetch_lookups())
+    def prefetch_elements(self, **kwargs):
+        return self.prefetch_related(*get_questionset_prefetch_lookups(**kwargs))
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
@@ -105,11 +105,14 @@ class QuestionSetManager(models.Manager):
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)
 
+    def prefetch_elements(self, **kwargs):
+        return self.get_queryset().prefetch_elements(**kwargs)
+
 
 class QuestionQuerySet(models.QuerySet):
 
-    def prefetch_elements(self):
-        return self.prefetch_related(*question_prefetch_lookups())
+    def prefetch_elements(self, **kwargs):
+        return self.prefetch_related(*get_question_prefetch_lookups(**kwargs))
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
@@ -124,5 +127,5 @@ class QuestionManager(models.Manager):
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)
 
-    def prefetch_elements(self):
-        return self.get_queryset().prefetch_elements()
+    def prefetch_elements(self, **kwargs):
+        return self.get_queryset().prefetch_elements(**kwargs)

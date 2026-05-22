@@ -13,7 +13,7 @@ from rdmo.options.models import Option
 
 from ..constants import WIDGET_TYPE_CHOICES
 from ..managers import QuestionManager
-from ..prefetch import question_prefetch_lookups
+from ..prefetch import get_question_prefetch_lookups
 
 
 class Question(Model, TranslationMixin):
@@ -264,7 +264,7 @@ class Question(Model, TranslationMixin):
         return []
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *question_prefetch_lookups())
+        models.prefetch_related_objects([self], *get_question_prefetch_lookups())
 
     def to_dict(self, *ancestors):
         return {

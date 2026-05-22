@@ -3,133 +3,144 @@ from django.db.models import Prefetch
 from rdmo.conditions.models import Condition
 
 
-def condition_prefetch(path):
-    return Prefetch(
-        path,
-        queryset=Condition.objects.select_related('source', 'source__parent', 'target_option')
-    )
-
-
-def question_options_prefetch_lookups():
+def get_catalog_prefetch_lookups(**kwargs):
     return (
-        'optionsets',
-        'optionsets__optionset_options__option',
+        section_prefetch('catalog_sections__section', **kwargs),
     )
 
 
-def question_prefetch(path, include_options=False):
-    from .models import Question
+def get_section_prefetch_lookups(**kwargs):
+    return (
+        page_prefetch('section_pages__page', **kwargs),
+    )
 
-    optionset_lookups = question_options_prefetch_lookups() if include_options else ('optionsets',)
+
+def get_page_prefetch_lookups(**kwargs):
+    return (
+        condition_prefetch('conditions'),
+        question_prefetch('page_questions__question', **kwargs),
+        questionset_prefetch('page_questionsets__questionset', **kwargs),
+    )
+
+
+def get_questionset_prefetch_lookups(**kwargs):
+    return (
+        condition_prefetch('conditions'),
+        question_prefetch('questionset_questions__question', **kwargs),
+        questionset_questionset_prefetch('questionset_questionsets__questionset', **kwargs),
+    )
+
+
+def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False, options=False):
+    additional_lookups = []
+    if optionsets:
+        additional_lookups += [
+            'optionsets',
+        ]
+    if optionsets_conditions:
+        additional_lookups += [
+            condition_prefetch('optionsets__conditions'),
+        ]
+    if options:
+        additional_lookups += [
+            'default_option',
+            'optionsets__optionset_options__option',
+        ]
+
+    return (
+        'attribute',
+        condition_prefetch('conditions'),
+        *additional_lookups
+    )
+
+
+def section_prefetch(lookup, **kwargs):
+    from .models import Section
 
     return Prefetch(
-        path,
-        queryset=Question.objects.select_related(
-            'attribute',
-        ).prefetch_related(
-            condition_prefetch('conditions'),
-            *optionset_lookups,
+        lookup,
+        queryset=Section.objects.prefetch_related(
+            page_prefetch('section_pages__page', **kwargs),
         )
     )
 
 
-def questionset_questionset_prefetch(path):
-    from .models import QuestionSet
-
-    return Prefetch(
-        path,
-        queryset=QuestionSet.objects.select_related(
-            'attribute',
-        ).prefetch_related(
-            condition_prefetch('conditions'),
-            question_prefetch('questionset_questions__question'),
-        )
-    )
-
-
-def questionset_prefetch(path, include_question_options=False):
-    from .models import QuestionSet
-
-    return Prefetch(
-        path,
-        queryset=QuestionSet.objects.select_related(
-            'attribute',
-        ).prefetch_related(
-            condition_prefetch('conditions'),
-            question_prefetch(
-                'questionset_questions__question',
-                include_options=include_question_options
-            ),
-            questionset_questionset_prefetch('questionset_questionsets__questionset'),
-        )
-    )
-
-
-def page_prefetch(path):
+def page_prefetch(lookup, **kwargs):
     from .models import Page
 
     return Prefetch(
-        path,
+        lookup,
         queryset=Page.objects.select_related(
             'attribute',
         ).prefetch_related(
             condition_prefetch('conditions'),
-            question_prefetch('page_questions__question'),
-            questionset_prefetch('page_questionsets__questionset'),
+            question_prefetch('page_questions__question', **kwargs),
+            questionset_prefetch('page_questionsets__questionset', **kwargs),
         )
     )
 
 
-def section_prefetch(path):
-    from .models import Section
+def questionset_prefetch(lookup, **kwargs):
+    from .models import QuestionSet
 
     return Prefetch(
-        path,
-        queryset=Section.objects.prefetch_related(
-            page_prefetch('section_pages__page'),
+        lookup,
+        queryset=QuestionSet.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('questionset_questions__question', **kwargs),
+            questionset_questionset_prefetch('questionset_questionsets__questionset', **kwargs),
         )
     )
 
 
-def catalog_prefetch_lookups():
-    return (
-        section_prefetch('catalog_sections__section'),
+def questionset_questionset_prefetch(lookup, **kwargs):
+    from .models import QuestionSet
+
+    return Prefetch(
+        lookup,
+        queryset=QuestionSet.objects.select_related(
+            'attribute',
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            question_prefetch('questionset_questions__question', **kwargs),
+        )
     )
 
 
-def section_prefetch_lookups():
-    return (
-        page_prefetch('section_pages__page'),
+def question_prefetch(lookup, optionsets=False, optionsets_conditions=False, options=False):
+    from .models import Question
+
+    additional_fields = ['default_option'] if options else []
+    additional_lookups = []
+    if optionsets:
+        additional_lookups += [
+            'optionsets',
+        ]
+    if optionsets_conditions:
+        additional_lookups += [
+            condition_prefetch('optionsets__conditions'),
+        ]
+    if options:
+        additional_lookups += [
+            'optionsets__optionset_options__option',
+        ]
+
+    return Prefetch(
+        lookup,
+        queryset=Question.objects.select_related(
+            'attribute',
+            *additional_fields,
+        ).prefetch_related(
+            condition_prefetch('conditions'),
+            *additional_lookups,
+        )
     )
 
 
-def page_prefetch_lookups():
-    return (
-        condition_prefetch('conditions'),
-        question_prefetch('page_questions__question'),
-        questionset_prefetch('page_questionsets__questionset'),
-    )
-
-
-def project_page_prefetch_lookups():
-    return (
-        condition_prefetch('conditions'),
-        question_prefetch('page_questions__question', include_options=True),
-        questionset_prefetch('page_questionsets__questionset', include_question_options=True),
-    )
-
-
-def questionset_prefetch_lookups():
-    return (
-        condition_prefetch('conditions'),
-        question_prefetch('questionset_questions__question'),
-        questionset_questionset_prefetch('questionset_questionsets__questionset'),
-    )
-
-
-def question_prefetch_lookups():
-    return (
-        condition_prefetch('conditions'),
-        'optionsets',
-        'default_option',
+def condition_prefetch(lookup):
+    return Prefetch(
+        lookup,
+        queryset=Condition.objects.select_related('source', 'target_option')
     )

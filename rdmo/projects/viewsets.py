@@ -25,7 +25,7 @@ from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
-from rdmo.questions.prefetch import project_page_prefetch_lookups
+from rdmo.questions.prefetch import get_page_prefetch_lookups
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -697,8 +697,10 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def get_queryset(self):
         self.project.catalog.prefetch_elements()
-        return Page.objects.filter_by_catalog(self.project.catalog).prefetch_related(
-            *project_page_prefetch_lookups()
+        return (
+            Page.objects
+            .filter_by_catalog(self.project.catalog)
+            .prefetch_related(*get_page_prefetch_lookups(optionsets=True, optionsets_conditions=True, options=True))
         )
 
     def get_serializer_context(self):

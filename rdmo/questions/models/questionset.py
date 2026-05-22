@@ -10,7 +10,7 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import QuestionSetManager
-from ..prefetch import questionset_prefetch_lookups
+from ..prefetch import get_questionset_prefetch_lookups
 
 
 class QuestionSet(Model, TranslationMixin):
@@ -199,7 +199,7 @@ class QuestionSet(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *questionset_prefetch_lookups())
+        models.prefetch_related_objects([self], *get_questionset_prefetch_lookups())
 
     def to_dict(self, *ancestors):
         return {
