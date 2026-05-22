@@ -212,11 +212,11 @@ class Catalog(Model, TranslationMixin):
         }
 
     def get_section_for_page(self, page):
-        from . import Section
-        try:
-            return Section.objects.get(catalogs=self, pages=page)
-        except (Section.DoesNotExist, Section.MultipleObjectsReturned):
-            return None
+        for catalog_section in self.catalog_sections.all():
+            for section_page in catalog_section.section.section_pages.all():
+                if section_page.page.id == page.id:
+                    return catalog_section.section
+        return None
 
     def get_prev_page(self, page):
         try:
