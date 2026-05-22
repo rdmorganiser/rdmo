@@ -72,7 +72,7 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 many=True,
                 context=self.get_export_serializer_context(queryset),
             )
-            xml = TaskRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
+            xml = TaskRenderer().render(serializer.data, context=self.get_export_flags())
             return XMLResponse(xml, name='tasks')
         else:
             return render_to_format(self.request, export_format, 'tasks', 'tasks/export/tasks.html', {
@@ -87,7 +87,7 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 instance,
                 context=self.get_export_serializer_context([instance]),
             )
-            xml = TaskRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
+            xml = TaskRenderer().render([serializer.data], context=self.get_export_flags())
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -95,6 +95,14 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                     'tasks': [instance]
                 }
             )
+
+    def get_export_flags(self):
+        full = is_truthy(self.request.GET.get('full'))
+        return {
+            'conditions': full or is_truthy(self.request.GET.get('conditions')),
+            'attributes': full or is_truthy(self.request.GET.get('attributes')),
+            'options': full or is_truthy(self.request.GET.get('options'))
+        }
 
     def get_export_serializer_context(self, tasks):
         attribute_ids = set()
@@ -111,12 +119,4 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 Attribute.objects.filter(id__in=attribute_ids),
                 include_self=True
             ).in_bulk()
-        }
-
-    def get_export_renderer_context(self, request):
-        full = is_truthy(request.GET.get('full'))
-        return {
-            'conditions': full or is_truthy(request.GET.get('conditions')),
-            'attributes': full or is_truthy(request.GET.get('attributes')),
-            'options': full or is_truthy(request.GET.get('options'))
         }

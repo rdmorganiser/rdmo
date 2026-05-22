@@ -71,7 +71,7 @@ class ConditionViewSet(ModelViewSet):
                 many=True,
                 context=self.get_export_serializer_context(queryset),
             )
-            xml = ConditionRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
+            xml = ConditionRenderer().render(serializer.data, context=self.get_export_flags())
             return XMLResponse(xml, name='conditions')
         else:
             return render_to_format(self.request, export_format, 'conditions', 'conditions/export/conditions.html', {
@@ -86,7 +86,7 @@ class ConditionViewSet(ModelViewSet):
                 instance,
                 context=self.get_export_serializer_context([instance]),
             )
-            xml = ConditionRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
+            xml = ConditionRenderer().render([serializer.data], context=self.get_export_flags())
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -95,19 +95,19 @@ class ConditionViewSet(ModelViewSet):
                 }
             )
 
+    def get_export_flags(self):
+        full = is_truthy(self.request.GET.get('full'))
+        return {
+            'attributes': full or is_truthy(self.request.GET.get('attributes')),
+            'options': full or is_truthy(self.request.GET.get('options')),
+        }
+
     def get_export_serializer_context(self, conditions):
         return {
             'attribute_map': Attribute.objects.get_queryset_ancestors(
                 Attribute.objects.filter(id__in=[condition.source_id for condition in conditions]),
                 include_self=True
             ).in_bulk()
-        }
-
-    def get_export_renderer_context(self, request):
-        full = is_truthy(request.GET.get('full'))
-        return {
-            'attributes': full or is_truthy(request.GET.get('attributes')),
-            'options': full or is_truthy(request.GET.get('options')),
         }
 
 
