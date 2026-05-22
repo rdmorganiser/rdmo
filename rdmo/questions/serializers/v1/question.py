@@ -31,10 +31,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    optionset_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = Question
         fields = (
@@ -101,12 +97,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
         return super().to_internal_value(data)
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
-
-    def get_optionset_uris(self, obj) -> list:
-        return [optionset.uri for optionset in obj.optionsets.all()]
-
     def validate(self, data):
         is_collection = data.get('is_collection')
         widget_type = data.get('widget_type')
@@ -148,10 +138,6 @@ class QuestionNestedSerializer(
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    optionset_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = Question
         fields = (
@@ -179,12 +165,6 @@ class QuestionNestedSerializer(
         warning_fields = (
             'text',
         )
-
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
-
-    def get_optionset_uris(self, obj) -> list:
-        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):

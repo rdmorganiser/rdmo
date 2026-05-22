@@ -50,9 +50,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = Page
         fields = (
@@ -103,9 +100,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'title',
         )
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class PageNestedSerializer(
     ElementModelSerializerMixin,
@@ -120,9 +114,6 @@ class PageNestedSerializer(
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
@@ -152,9 +143,6 @@ class PageNestedSerializer(
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
                 yield QuestionNestedSerializer(element, context=self.context).data
-
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
 
 
 class PageIndexSerializer(serializers.ModelSerializer):

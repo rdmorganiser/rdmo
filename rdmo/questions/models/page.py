@@ -206,9 +206,17 @@ class Page(Model, TranslationMixin):
     def is_locked(self) -> bool:
         return self.locked or any(section.is_locked for section in self.sections.all())
 
+    @property
+    def attribute_uri(self) -> str:
+        return self.attribute.uri
+
     @cached_property
     def has_conditions(self) -> bool:
         return self.conditions.exists()
+
+    @property
+    def condition_uris(self):
+        return [condition.uri for condition in self.conditions.all()]
 
     @cached_property
     def elements(self) -> list:

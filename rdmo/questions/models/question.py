@@ -255,9 +255,21 @@ class Question(Model, TranslationMixin):
             any(page.is_locked for page in self.pages.all()) or \
             any(questionset.is_locked for questionset in self.questionsets.all())
 
+    @property
+    def attribute_uri(self) -> str:
+        return self.attribute.uri
+
     @cached_property
     def has_conditions(self) -> bool:
         return self.conditions.exists()
+
+    @property
+    def condition_uris(self) -> list:
+        return [condition.uri for condition in self.conditions.all()]
+
+    @property
+    def optionset_uris(self) -> list:
+        return [optionset.uri for optionset in self.optionsets.all()]
 
     @cached_property
     def descendants(self) -> list:

@@ -32,8 +32,6 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
 
     read_only = serializers.SerializerMethodField()
 
-    condition_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = OptionSet
         fields = (
@@ -64,9 +62,6 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             OptionSetLockedValidator()
         )
 
-    def get_condition_uris(self, obj) -> list[str]:
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class OptionSetNestedSerializer(
     ElementModelSerializerMixin,
@@ -76,8 +71,6 @@ class OptionSetNestedSerializer(
     model = serializers.SerializerMethodField()
 
     read_only = serializers.SerializerMethodField()
-
-    condition_uris = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
@@ -99,9 +92,6 @@ class OptionSetNestedSerializer(
     def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
             yield OptionNestedSerializer(element, context=self.context).data
-
-    def get_condition_uris(self, obj) -> list[str]:
-        return [condition.uri for condition in obj.conditions.all()]
 
 
 class OptionSetIndexSerializer(serializers.ModelSerializer):

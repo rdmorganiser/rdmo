@@ -53,9 +53,6 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = QuestionSet
         fields = (
@@ -107,9 +104,6 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'title',
         )
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class QuestionSetNestedSerializer(
     ElementModelSerializerMixin,
@@ -124,9 +118,6 @@ class QuestionSetNestedSerializer(
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
@@ -156,9 +147,6 @@ class QuestionSetNestedSerializer(
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
                 yield QuestionNestedSerializer(element, context=self.context).data
-
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
