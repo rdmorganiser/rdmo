@@ -92,6 +92,8 @@ class CatalogNestedSerializer(
 
     model = serializers.SerializerMethodField()
 
+    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
+
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
@@ -104,7 +106,10 @@ class CatalogNestedSerializer(
             'model',
             'uri',
             'locked',
+            'available',
             'title',
+            'sections',
+            'sites',
             'warning',
             'read_only',
             'elements',

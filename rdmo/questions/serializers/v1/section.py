@@ -90,6 +90,8 @@ class SectionNestedSerializer(
 
     model = serializers.SerializerMethodField()
 
+    pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
+
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
@@ -103,6 +105,7 @@ class SectionNestedSerializer(
             'uri',
             'locked',
             'title',
+            'pages',
             'warning',
             'read_only',
             'elements',

@@ -112,6 +112,9 @@ class PageNestedSerializer(
 
     model = serializers.SerializerMethodField()
 
+    questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
+    questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
+
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
@@ -126,6 +129,8 @@ class PageNestedSerializer(
             'locked',
             'attribute',
             'title',
+            'questionsets',
+            'questions',
             'conditions',
             'warning',
             'read_only',

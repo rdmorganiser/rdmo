@@ -116,6 +116,19 @@ class QuestionSetNestedSerializer(
 
     model = serializers.SerializerMethodField()
 
+    questionsets = QuestionSetQuestionSetSerializer(
+        source="questionset_questionsets",
+        read_only=False,
+        required=False,
+        many=True,
+    )
+    questions = QuestionSetQuestionSerializer(
+        source="questionset_questions",
+        read_only=False,
+        required=False,
+        many=True,
+    )
+
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
@@ -130,6 +143,8 @@ class QuestionSetNestedSerializer(
             'locked',
             'attribute',
             'title',
+            'questionsets',
+            'questions',
             'conditions',
             'warning',
             'read_only',
