@@ -11,7 +11,7 @@ from rdmo.core.serializers import (
 
 from ...models import Page, QuestionSet, QuestionSetQuestion, QuestionSetQuestionSet
 from ...validators import QuestionSetLockedValidator, QuestionSetQuestionSetValidator, QuestionSetUniqueURIValidator
-from .question import QuestionSerializer
+from .question import QuestionNestedSerializer
 
 
 class QuestionSetQuestionSetSerializer(serializers.ModelSerializer):
@@ -111,14 +111,43 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class QuestionSetNestedSerializer(QuestionSetSerializer):
+class QuestionSetNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('title',)
+
+    model = serializers.SerializerMethodField()
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
+
+    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
+    condition_uris = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(QuestionSetSerializer.Meta):
+    class Meta:
+        model = QuestionSet
         fields = (
-            *QuestionSetSerializer.Meta.fields,
-            'elements'
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'attribute',
+            'title',
+            'conditions',
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris',
+            'elements',
+        )
+        warning_fields = (
+            'title',
         )
 
     def get_elements(self, obj):
@@ -126,7 +155,10 @@ class QuestionSetNestedSerializer(QuestionSetSerializer):
             if isinstance(element, QuestionSet):
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
-                yield QuestionSerializer(element, context=self.context).data
+                yield QuestionNestedSerializer(element, context=self.context).data
+
+    def get_condition_uris(self, obj) -> list:
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):

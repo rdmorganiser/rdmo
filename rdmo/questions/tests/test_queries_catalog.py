@@ -10,6 +10,7 @@ max_queries = [
     # action, max_queries, url_kwargs, url_params
     ('list', 8, {}, {}),
     ('index', 3, {}, {}),
+    ('nested', 28, {'pk': 1}, {}),
     ('export', 32, {'export_format': 'xml'}, {}),
     ('export', 42, {'export_format': 'xml'}, {'full': '1'}),
     ('detail', 8, {'pk': 1}, {}),

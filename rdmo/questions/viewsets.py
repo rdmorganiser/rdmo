@@ -65,7 +65,7 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
 
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects'))
         if self.action in ['nested']:
-            return queryset.prefetch_elements()
+            return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_elements(
                 optionsets=True,
@@ -147,7 +147,7 @@ class SectionViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         if self.action in ['nested']:
-            return queryset.prefetch_elements()
+            return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_elements(
                 optionsets=True,
@@ -230,7 +230,7 @@ class PageViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         if self.action in ['nested']:
-            return queryset.prefetch_elements()
+            return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_elements(
                 optionsets=True,
@@ -316,7 +316,7 @@ class QuestionSetViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         elif self.action in ['nested']:
-            return queryset.prefetch_elements()
+            return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_elements(
                 optionsets=True,
@@ -405,8 +405,6 @@ class QuestionViewSet(ModelViewSet):
 
         if self.action in ['index']:
             return queryset
-        elif self.action in ['nested']:
-            return queryset.prefetch_elements()
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_elements(
                 optionsets=True,
