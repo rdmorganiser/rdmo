@@ -40,18 +40,22 @@ const FieldRowDiffs = ({ element, field }) => {
       textAlign: 'left',
       overflow: 'visible',
       pre: {
-        display: 'inline',
+        backgroundColor: 'transparent',
         border: 'none',
         boxShadow: 'none',
         lineHeight: '1.6em',
         overflow: 'visible',
+        padding: 0,
       },
     },
     contentText: {
       backgroundColor: '#fff !important',
+      border: '1px solid #ccc',
+      borderRadius: 4,
       display: 'block',
       lineHeight: '1.6em',
       overflowWrap: 'anywhere',
+      padding: '5px 10px',
       wordBreak: 'break-word',
     },
   }

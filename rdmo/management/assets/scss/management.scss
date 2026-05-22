@@ -242,6 +242,7 @@
         border-collapse: separate;  // needed for border radius since this is a table
         border: 1px solid #ccc;
         border-radius: 4px;
+        border-spacing: 0;
 
         tr {
             &:not(:last-child) {
@@ -262,23 +263,13 @@
             padding: 8px 0 8px 8px;
 
             pre {
-                padding: 0;
+                background-color: transparent;
                 border: none;
                 border-radius: 0;
                 box-shadow: none;
                 font-size: 13px;
                 line-height: 18px;
-                background-color: transparent;
-            }
-        }
-
-        td[class*="content"] {
-            pre {
-                padding: 5px 10px;
-                border-radius: 4px;
-                font-size: 13px;
-                line-height: 18px;
-                background-color: #fff;
+                padding: 0;
             }
         }
     }
