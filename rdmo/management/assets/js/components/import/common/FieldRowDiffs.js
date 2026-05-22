@@ -11,9 +11,10 @@ const FieldRowDiffs = ({ element, field }) => {
       return null
   }
   const fieldDiffData = element.updated_and_changed[field]
-  const newVal = fieldDiffData.newValue.toString() ?? ''
-  const oldVal = fieldDiffData.oldValue.toString() ?? ''
+  const newVal = fieldDiffData.newValue ?? ''
+  const oldVal = fieldDiffData.oldValue ?? ''
   const changed = fieldDiffData.changed ?? false
+  const compareMethod = fieldDiffData.compareMethod
   const splitView = false
   const hideLineNumbers = true
   const warnings = fieldDiffData.warnings ?? {}
@@ -23,8 +24,12 @@ const FieldRowDiffs = ({ element, field }) => {
     variables: {
       light: {
         diffViewerBackground: '#fff',
+        addedBackground: '#eafaf0',
+        removedBackground: '#fff0f2',
         changedBackground: '#fff',
         gutterBackground: '#fff',
+        wordAddedBackground: '#a7e8b8',
+        wordRemovedBackground: '#f5b5bf',
       },
     },
     diffContainer: {
@@ -66,6 +71,7 @@ const FieldRowDiffs = ({ element, field }) => {
           styles={newStyles}
           oldValue={oldVal}
           newValue={newVal}
+          compareMethod={compareMethod}
           splitView={splitView}
           hideSummary={true}
           hideLineNumbers={hideLineNumbers}
