@@ -44,7 +44,7 @@ class OptionSetViewSet(ModelViewSet):
         queryset = OptionSet.objects.all()
         if self.action in ['index']:
             return queryset
-        elif self.action in ['export', 'detail_export']:
+        elif self.action in ['nested', 'export', 'detail_export']:
             return queryset.prefetch_related(
                 'optionset_options__option',
                 'conditions',
@@ -77,7 +77,7 @@ class OptionSetViewSet(ModelViewSet):
                 many=True,
                 context=self.get_export_serializer_context(queryset),
             )
-            xml = OptionSetRenderer().render(serializer.data, context=self.get_export_renderer_context(request))
+            xml = OptionSetRenderer().render(serializer.data, context=self.get_export_flags())
             return XMLResponse(xml, name='optionsets')
         else:
             return render_to_format(self.request, export_format, 'optionsets', 'options/export/optionsets.html', {
@@ -92,7 +92,7 @@ class OptionSetViewSet(ModelViewSet):
                 instance,
                 context=self.get_export_serializer_context([instance]),
             )
-            xml = OptionSetRenderer().render([serializer.data], context=self.get_export_renderer_context(request))
+            xml = OptionSetRenderer().render([serializer.data], context=self.get_export_flags())
             return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
@@ -100,6 +100,14 @@ class OptionSetViewSet(ModelViewSet):
                     'optionsets': [instance]
                 }
             )
+
+    def get_export_flags(self):
+        full = is_truthy(self.request.GET.get('full'))
+        return {
+            'attributes': full or is_truthy(self.request.GET.get('attributes')),
+            'conditions': full or is_truthy(self.request.GET.get('conditions')),
+            'options': full or is_truthy(self.request.GET.get('options'))
+        }
 
     def get_export_serializer_context(self, optionsets):
         return {
@@ -111,14 +119,6 @@ class OptionSetViewSet(ModelViewSet):
                 }),
                 include_self=True
             ).in_bulk()
-        }
-
-    def get_export_renderer_context(self, request):
-        full = is_truthy(request.GET.get('full'))
-        return {
-            'attributes': full or is_truthy(request.GET.get('attributes')),
-            'conditions': full or is_truthy(request.GET.get('conditions')),
-            'options': full or is_truthy(request.GET.get('options'))
         }
 
 
