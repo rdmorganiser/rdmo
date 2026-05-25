@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load core_tags %}
+
+<div class="signup-form">
+    <form method="post">
+        {% csrf_token %}
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        {% for field in form.visible_fields %}
+            {% if field.html_name != 'consent' %}
+            {% bootstrap_form_field field %}
+            {% endif %}
+        {% endfor %}
+
+        {% if settings.ACCOUNT_TERMS_OF_USE %}
+        {% include 'account/terms_of_use_consent.html' %}
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">
+            {% trans 'Create account' %}
+        </button>
+    </form>
+</div>

@@ -21,6 +21,8 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'uri_path',
             'comment',
             'order',
+            'task_type',
+            'task_area',
             'start_attribute',
             'end_attribute',
             'days_before',

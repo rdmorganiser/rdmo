@@ -1,5 +1,5 @@
-import { enGB, de, it, es, fr } from 'date-fns/locale'
 import { parse, set } from 'date-fns'
+import { de, enGB, es, fr, it } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
 

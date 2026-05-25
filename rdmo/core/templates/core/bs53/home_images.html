@@ -1,0 +1,13 @@
+{% load static %}
+{% load core_tags %}
+
+{% for image in settings.HOME_IMAGES %}
+<div class="header-image {% if forloop.first %}header-image-visible{% endif %}">
+    <img src="{% static image.src %}" alt="{{ image.alt }}">
+    <p class="attribution">{{ image.attribution|markdown }}</p>
+</div>
+{% endfor %}
+
+<script>
+    window.loopHeaderBackgroundImage({{ settings.HOME_IMAGES_TIMEOUT }})
+</script>

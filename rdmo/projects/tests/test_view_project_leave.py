@@ -32,7 +32,7 @@ def test_project_leave_get(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in leave_project_permission_map.get(username, []):
-        assert response.status_code == 200
+        assert response.status_code == (403 if username == 'owner' else 200)
     else:
         if password:
             assert response.status_code == 403
@@ -80,12 +80,13 @@ def test_project_leave_post_last_owner(db, client, username, password, project_i
     response = client.post(url)
 
     if project_id in leave_project_permission_map.get(username, []):
-        assert response.status_code == 302
 
         if username == 'owner':
+            assert response.status_code == 403
             if membership_existed:
                 assert Membership.objects.filter(project_id=project_id, user__username=username).exists()
         else:
+            assert response.status_code == 302
             if membership_existed:
                 assert not Membership.objects.filter(project_id=project_id, user__username=username).exists()
     else:

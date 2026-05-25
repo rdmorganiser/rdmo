@@ -1,34 +1,34 @@
 import {
-  FETCH_PAGE_INIT,
-  FETCH_PAGE_SUCCESS,
-  FETCH_PAGE_ERROR,
-  FETCH_NAVIGATION_INIT,
-  FETCH_NAVIGATION_SUCCESS,
-  FETCH_NAVIGATION_ERROR,
-  FETCH_OPTIONS_INIT,
-  FETCH_OPTIONS_SUCCESS,
-  FETCH_OPTIONS_ERROR,
-  FETCH_VALUES_INIT,
-  FETCH_VALUES_SUCCESS,
-  FETCH_VALUES_ERROR,
-  RESOLVE_CONDITION_INIT,
-  RESOLVE_CONDITION_SUCCESS,
-  RESOLVE_CONDITION_ERROR,
-  CREATE_VALUE,
-  UPDATE_VALUE,
-  STORE_VALUE_INIT,
-  STORE_VALUE_SUCCESS,
-  STORE_VALUE_ERROR,
-  DELETE_VALUE_INIT,
-  DELETE_VALUE_SUCCESS,
-  DELETE_VALUE_ERROR,
-  CREATE_SET,
-  DELETE_SET_INIT,
-  DELETE_SET_SUCCESS,
-  DELETE_SET_ERROR,
+  COPY_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  CREATE_SET,
+  CREATE_VALUE,
+  DELETE_SET_ERROR,
+  DELETE_SET_INIT,
+  DELETE_SET_SUCCESS,
+  DELETE_VALUE_ERROR,
+  DELETE_VALUE_INIT,
+  DELETE_VALUE_SUCCESS,
+  FETCH_NAVIGATION_ERROR,
+  FETCH_NAVIGATION_INIT,
+  FETCH_NAVIGATION_SUCCESS,
+  FETCH_OPTIONS_ERROR,
+  FETCH_OPTIONS_INIT,
+  FETCH_OPTIONS_SUCCESS,
+  FETCH_PAGE_ERROR,
+  FETCH_PAGE_INIT,
+  FETCH_PAGE_SUCCESS,
+  FETCH_VALUES_ERROR,
+  FETCH_VALUES_INIT,
+  FETCH_VALUES_SUCCESS,
+  RESOLVE_CONDITION_ERROR,
+  RESOLVE_CONDITION_INIT,
+  RESOLVE_CONDITION_SUCCESS,
+  STORE_VALUE_ERROR,
+  STORE_VALUE_INIT,
+  STORE_VALUE_SUCCESS,
+  UPDATE_VALUE
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -52,20 +52,26 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
     case RESOLVE_CONDITION_SUCCESS:
-      return { ...state, sets: state.sets.map(
-        (set) => (
-          (set.set_prefix == action.set.set_prefix) &&
+      return {
+        ...state,
+        sets: state.sets.map(
+          (set) => (
+            (set.set_prefix == action.set.set_prefix) &&
           (set.set_index == action.set.set_index)
-        ) ? {
-          ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
-        } : set
-      )}
+          ) ? {
+              ...set, [action.elementType]: {...set[action.elementType], [action.elementId]: action.result}
+            } : set
+        )
+      }
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case UPDATE_VALUE:
-      return { ...state, values: state.values.map(
-        (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
-      )}
+      return {
+        ...state,
+        values: state.values.map(
+          (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
+        )
+      }
     case STORE_VALUE_SUCCESS:
       if (state.values.some((value) => (value.id || value.tmp_id) == action.valueId)) {
         return {
@@ -101,14 +107,14 @@ export default function interviewReducer(state = initialState, action) {
     case RESOLVE_CONDITION_INIT:
       return { ...state, errors: [] }
     case STORE_VALUE_INIT:
-       return {
+      return {
         ...state,
         values: state.values.map((value) => (
           (value.id || value.tmp_id) == action.valueId ? {...value, error: null, pending: true} : value
         ))
       }
     case DELETE_VALUE_INIT:
-       return {
+      return {
         ...state,
         values: state.values.map((value) => (
           (value.id || value.tmp_id) == action.valueId ? {...value, pending: true} : value
@@ -125,8 +131,9 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_ERROR:
       if (action.valueIndex > -1) {
-         return {
-          ...state, values: state.values.map((value, valueIndex) => (
+        return {
+          ...state,
+          values: state.values.map((value, valueIndex) => (
             valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
           ))
         }

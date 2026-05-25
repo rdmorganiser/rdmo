@@ -1,58 +1,64 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { getUriPrefixes } from '../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../common/Filter'
-import { Checkbox } from '../common/Checkboxes'
-import { BackButton } from '../common/Buttons'
-
 import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
 
-const NestedOptionSet = ({ config, optionset, configActions, elementActions }) => {
+const NestedOptionSet = ({ optionset }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.optionset.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.optionset.uri_prefix', uriPrefix)
+  const config = useSelector((state) => state.config)
 
-  const updateDisplayURI = (value) => configActions.updateConfig('display.uri.options', value)
+  const updateFilterString = (uri) => dispatch(updateConfig('filter.optionset.search', uri))
+  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.optionset.uri_prefix', uriPrefix))
+
+  const displayUriOptions = isTruthy(get(config, 'display.uri.options', true))
+
+  const toggleDisplayUriOptions = () => dispatch(updateConfig('display.uri.options', !displayUriOptions))
+
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
     <>
-      <div className="panel panel-default panel-nested">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <BackButton />
-          </div>
-          <OptionSet config={config} optionset={optionset}
-                     configActions={configActions} elementActions={elementActions} display="plain" />
+      <div className="card">
+        <div className="card-header">
+          <OptionSet optionset={optionset} display="plain" backButton={true} />
         </div>
 
-        <div className="panel-body">
+        <div className="card-body">
           <div className="row">
             <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
-                            label={gettext('Filter option sets')} />
+              <FilterString
+                value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
+                label={gettext('Filter option sets')} />
             </div>
             <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(optionset.elements)} />
+              <FilterUriPrefix
+                value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                options={getUriPrefixes(optionset.elements)} />
             </div>
           </div>
-          <div className="checkboxes">
-            <span className="mr-10">{gettext('Show URIs:')}</span>
-            <Checkbox label={<code className="code-options">{gettext('Options')}</code>}
-                      value={get(config, 'display.uri.options', true)} onChange={updateDisplayURI} />
+          <div className="input-group input-group-sm">
+            <label className="input-group-text">{gettext('Show URIs')}</label>
+            <button type="button" onClick={toggleDisplayUriOptions} className={btnClass(displayUriOptions)}>
+              {gettext('Options')}
+            </button>
           </div>
         </div>
       </div>
 
       {
         optionset.elements.map((option, index) => (
-          <Option key={index} config={config} option={option}
-                  configActions={configActions} elementActions={elementActions}
-                  display="nested" filter="optionset" indent={1} />
+          <Option key={index} option={option} display="nested" filter="optionset" indent={1} />
         ))
       }
     </>
@@ -60,10 +66,7 @@ const NestedOptionSet = ({ config, optionset, configActions, elementActions }) =
 }
 
 NestedOptionSet.propTypes = {
-  config: PropTypes.object.isRequired,
-  optionset: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  optionset: PropTypes.object.isRequired
 }
 
 export default NestedOptionSet
