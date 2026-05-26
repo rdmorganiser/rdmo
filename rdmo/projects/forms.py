@@ -352,17 +352,19 @@ class IntegrationForm(forms.ModelForm):
         self.project = kwargs.pop('project')
         self.provider_key = kwargs.pop('provider_key', None)
         super().__init__(*args, **kwargs)
+        self.plugin = None
 
         # get the provider
         if self.provider_key:
 
-            plugin = Plugin.objects.filter_plugins_for_project(
+            self.plugin = Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, url_name=self.provider_key
             ).first()
-            if plugin is None:
+            if self.plugin is None:
                 raise Http404
-            self.provider = plugin.initialize_class()
+            self.provider = self.plugin.initialize_class()
         else:
+            self.plugin = self.instance.plugin
             self.provider = self.instance.provider
             if self.provider is None:
                 raise Http404
@@ -387,15 +389,12 @@ class IntegrationForm(forms.ModelForm):
                                                             help_text=field.get('help'))
 
     def save(self):
-        # the the project and the provider_key
         self.instance.project = self.project
-        if self.provider_key:
-            self.instance.provider_key = self.provider_key
+        if self.plugin:
+            self.instance.plugin = self.plugin
 
-        # call the form's save method
         super().save()
 
-        # save the integration options
         self.instance.save_options(self.cleaned_data)
 
 

@@ -488,7 +488,8 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
-        'provider_key',
+        'plugin',
+        'plugin__url_name',
     )
 
     def get_queryset(self):
@@ -799,7 +800,8 @@ class IntegrationViewSet(ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
         'project',
-        'provider_key'
+        'plugin',
+        'plugin__url_name'
     )
 
     def get_queryset(self):

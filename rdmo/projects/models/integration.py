@@ -15,9 +15,10 @@ class Integration(models.Model):
         verbose_name=_('Project'),
         help_text=_('The project for this integration.')
     )
-    provider_key = models.TextField(
-        verbose_name=_('Provider key'),
-        help_text=_('The key of the provider for this integration.')
+    plugin = models.ForeignKey(
+        Plugin, blank=True, null=True, on_delete=models.CASCADE, related_name='integrations',
+        verbose_name=_('Plugin'),
+        help_text=_('The issue provider plugin for this integration.')
     )
 
     objects = IntegrationManager()
@@ -34,15 +35,15 @@ class Integration(models.Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
     @property
+    def provider_key(self):
+        if self.plugin:
+            return self.plugin.url_name
+        return ''
+
+    @property
     def provider(self):
-        plugins = (
-            Plugin.objects.filter_plugins_for_project(
-                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
-                project=self.project,
-                url_name=self.provider_key)
-        )
-        if plugins.exists():
-            return plugins.first().initialize_class()
+        if self.plugin and self.plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER:
+            return self.plugin.initialize_class()
         else:
             return None
 
@@ -54,7 +55,7 @@ class Integration(models.Model):
 
     def save_options(self, options):
         if self.provider is None:
-            raise ValueError(_('The provider key is required.'))
+            raise ValueError(_('The plugin is required.'))
         for field in self.provider.fields:
             try:
                 integration_option = IntegrationOption.objects.get(integration=self, key=field.get('key'))

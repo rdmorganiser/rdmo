@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
@@ -178,24 +179,34 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True)
+    provider_key = serializers.CharField(required=False)
 
     class Meta:
         model = Integration
         fields = (
             'id',
+            'plugin',
             'provider_key',
             'options'
         )
-        validators = [
-            ProviderValidator()
-        ]
+
+    def validate(self, data):
+        provider_key = data.pop('provider_key', None)
+        if provider_key and not data.get('plugin'):
+            data['plugin'] = Plugin.objects.filter_plugins_for_project(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+                url_name=provider_key
+            ).first()
+
+        ProviderValidator()(data)
+        return data
 
     def create(self, validated_data):
-        provider_key = validated_data.get('provider_key')
+        plugin = validated_data.get('plugin')
         project = validated_data.get('project')
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
-        integration = Integration(project=project, provider_key=provider_key)
+        integration = Integration(project=project, plugin=plugin)
         integration.save()
         integration.save_options(options)
 
@@ -352,12 +363,14 @@ class MembershipSerializer(serializers.ModelSerializer):
 class IntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
+    provider_key = serializers.CharField(read_only=True)
 
     class Meta:
         model = Integration
         fields = (
             'id',
             'project',
+            'plugin',
             'provider_key',
             'options'
         )
