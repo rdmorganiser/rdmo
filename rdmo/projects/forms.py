@@ -356,8 +356,8 @@ class IntegrationForm(forms.ModelForm):
         # get the provider
         if self.provider_key:
 
-            plugin = Plugin.objects.for_context(
-                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, format=self.provider_key
+            plugin = Plugin.objects.filter_plugins_for_project(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, url_name=self.provider_key
             ).first()
             if plugin is None:
                 raise Http404

@@ -63,6 +63,42 @@ def test_plugin_save_sets_issue_provider_type():
     plugin = Plugin.objects.get(pk=instance.pk)
     assert plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
 
+
+@pytest.mark.django_db
+def test_filter_plugins_for_project_filters_by_url_name_and_orders(settings):
+    settings.PLUGINS = [
+        'rdmo.projects.exports.RDMOXMLExport',
+        'plugins.project_export.exports.SimpleExportPlugin',
+    ]
+    project = Project.objects.get(id=1)
+    Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-plugins-export-late",
+        python_path="plugins.project_export.exports.SimpleExportPlugin",
+        title_lang1="Test Export Plugin",
+        available=True,
+        url_name="shared",
+        order=2,
+    )
+    Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-plugins-export-early",
+        python_path="rdmo.projects.exports.RDMOXMLExport",
+        title_lang1="RDMO XML",
+        available=True,
+        url_name="shared",
+        order=1,
+    )
+
+    plugins = Plugin.objects.filter_plugins_for_project(
+        project=project,
+        plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+        url_name="shared",
+    )
+
+    assert list(plugins.values_list('order', flat=True)) == [1, 2]
+
+
 def test_get_plugins_from_settings_uses_default_uri_prefix(settings):
 
     plugins = get_plugins_from_settings()

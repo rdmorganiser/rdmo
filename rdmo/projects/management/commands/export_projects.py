@@ -97,10 +97,10 @@ class Command(BaseCommand):
 
     def export_projects(self):
         for project in self.get_queryset():
-            export_plugins = Plugin.objects.for_context(
+            export_plugins = Plugin.objects.filter_plugins_for_project(
                 project=project, plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
-                format=self.format)
-            if export_plugins.exists() is not None:
+                url_name=self.format)
+            if not export_plugins.exists():
                 raise CommandError(f'Format "{self.format}" is not supported.')
             export_plugin = export_plugins.first()
 

@@ -36,10 +36,10 @@ class Integration(models.Model):
     @property
     def provider(self):
         plugins = (
-            Plugin.objects.for_context(
+            Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
                 project=self.project,
-                format=self.provider_key)
+                url_name=self.provider_key)
         )
         if plugins.exists():
             return plugins.first().initialize_class()

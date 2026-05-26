@@ -8,9 +8,9 @@ class ProviderValidator:
 
     def __call__(self, data):
         provider_key = data.get('provider_key')
-        plugin = Plugin.objects.for_context(
+        plugin = Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
-            format=provider_key
+            url_name=provider_key
         ).first()
         provider = plugin.initialize_class() if plugin else None
         if provider is None:

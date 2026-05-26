@@ -38,9 +38,9 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
     def get_context_data(self, **kwargs):
         plugin = (
             Plugin.objects
-                .for_context(
+                .filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project,
-                user=self.request.user,format=self.provider_key
+                user=self.request.user, url_name=self.provider_key
             ).first()
        )
         if plugin is not None:
