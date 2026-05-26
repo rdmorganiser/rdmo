@@ -104,6 +104,26 @@ def test_legacy_setup_plugins_skips_plugins_created_from_regular_settings(db, se
     assert instance.title_lang1 == "Imported Label"
 
 
+def test_legacy_setup_plugins_from_issue_provider(db, settings, monkeypatch):
+    Plugin.objects.all().delete()
+    dotted = _install_dummy_plugin(
+        monkeypatch, "legacy.mod.IssueProvider", plugin_type="project_issue_provider"
+    )
+    settings.PROJECT_EXPORTS = []
+    settings.PROJECT_IMPORTS = []
+    settings.PROJECT_SNAPSHOT_EXPORTS = []
+    settings.PROJECT_ISSUE_PROVIDERS = [('legacy-provider', 'Issue Provider', dotted)]
+    settings.OPTIONSET_PROVIDERS = []
+    settings.PLUGINS = []
+
+    call_command("legacy_setup_plugins", stdout=io.StringIO(), stderr=io.StringIO())
+
+    plugin = Plugin.objects.get()
+    assert plugin.python_path == dotted
+    assert plugin.uri_path == "project_issue_providers/legacy-provider"
+    assert plugin.url_name == "legacy-provider"
+
+
 @pytest.mark.parametrize('dry_run', [True, False])
 def test_legacy_setup_plugins_from_legacy_settings(db, settings, monkeypatch, dry_run):
     Plugin.objects.all().delete()

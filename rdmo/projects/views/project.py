@@ -87,7 +87,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['ancestors_import'] = ancestors_import
 
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
-        context['integrations'] = integrations.order_by('provider_key', '-project__level')
+        context['integrations'] = integrations.exclude(plugin=None).order_by('plugin__url_name', '-project__level')
         context['providers'] = {}
         for plugin in Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,

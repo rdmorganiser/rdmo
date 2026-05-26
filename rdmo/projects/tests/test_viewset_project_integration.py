@@ -107,6 +107,27 @@ def test_create(db, client, username, password, project_id):
         assert response.status_code == 404
 
 
+def test_create_with_plugin(db, client):
+    client.login(username='owner', password='owner')
+
+    url = reverse(urlnames['list'], args=[1])
+    data = {
+        'plugin': 10,
+        'options': [
+            {
+                'key': 'project_url',
+                'value': 'https://example.com/projects/1'
+            }
+        ]
+    }
+    response = client.post(url, data=json.dumps(data), content_type="application/json")
+
+    assert response.status_code == 201, response.content
+    integration = Integration.objects.get(id=response.json()['id'])
+    assert integration.plugin_id == 10
+    assert response.json()['provider_key'] == 'simple'
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_create_error1(db, client, username, password, project_id):
