@@ -1,12 +1,11 @@
 import io
-import sys
-import types
 
 import pytest
 
 from django.core.management import call_command
 
 from rdmo.config.models import Plugin
+from rdmo.config.tests.helpers import _install_dummy_plugin
 
 
 @pytest.mark.parametrize('use_new_setting', [True, False])
@@ -72,24 +71,6 @@ def test_command_setup_plugins_basic_from_settings(db, settings, clear_first, dr
         assert instances.count() >= 1
 
 
-
-def _install_dummy_plugin(monkeypatch, dotted: str = "dummy_mod.DummyPlugin", **attrs) -> str:
-    """
-    Create a dummy importable plugin class at the dotted path.
-    Returns the dotted path string for convenience.
-    """
-    module_name, class_name = dotted.rsplit(".", 1)
-    mod = types.ModuleType(module_name)
-    cls = type(class_name, (), {"__module__": module_name})
-    # sensible defaults that the command can read if it imports the class
-    cls.key = attrs.get("key", "dummy_key")
-    cls.label = attrs.get("label", "Dummy Label")
-    cls.plugin_type = attrs.get("plugin_type", "dummy_type")
-    mod.__dict__[class_name] = cls
-    monkeypatch.setitem(sys.modules, module_name, mod)
-    return dotted
-
-
 def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
     dotted = _install_dummy_plugin(
         monkeypatch, "dummy_mod.ExamplePlugin", key="monkeypatch_plugin", label="MonkeyPatchPlugin"
@@ -108,20 +89,42 @@ def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
     assert Plugin.objects.count() == count_before
 
 
-def test_setup_plugins_merge_legacy_prioritizes_legacy_and_dedupes(db, settings, monkeypatch):
+def test_legacy_setup_plugins_skips_plugins_created_from_regular_settings(db, settings, monkeypatch):
     dotted = _install_dummy_plugin(monkeypatch, "dummy.mod.ExamplePlugin", key="example", label="Imported Label")
-    # legacy tuple wins (compat), PLUGINS contains the same python_path
     settings.PROJECT_EXPORTS = [('example', 'Legacy Label', dotted)]
     settings.PLUGINS = [dotted]
 
     stdout, stderr = io.StringIO(), io.StringIO()
     call_command("setup_plugins", stdout=stdout, stderr=stderr)
+    call_command("legacy_setup_plugins", stdout=stdout, stderr=stderr)
 
-    # exactly one instance, with the legacy title
     queryset = Plugin.objects.filter(python_path=dotted)
     assert queryset.count() == 1
     instance = queryset.get()
-    assert instance.title_lang1 == "Legacy Label"
+    assert instance.title_lang1 == "Imported Label"
+
+
+@pytest.mark.parametrize('dry_run', [True, False])
+def test_legacy_setup_plugins_from_legacy_settings(db, settings, monkeypatch, dry_run):
+    Plugin.objects.all().delete()
+    dotted = _install_dummy_plugin(monkeypatch, "legacy.mod.ExamplePlugin")
+    settings.PROJECT_EXPORTS = [('legacy_export', 'Legacy Export', dotted)]
+    settings.PLUGINS = []
+
+    stdout, stderr = io.StringIO(), io.StringIO()
+    args = ("--dry-run",) if dry_run else []
+    call_command("legacy_setup_plugins", *args, stdout=stdout, stderr=stderr)
+
+    assert settings.PLUGINS == []
+
+    if dry_run:
+        assert Plugin.objects.count() == 0
+        assert "dry-run complete" in stdout.getvalue().lower()
+    else:
+        plugin = Plugin.objects.get()
+        assert plugin.python_path == dotted
+        assert plugin.uri_path == "project_exports/legacy_export"
+        assert plugin.title_lang1 == "Legacy Export"
 
 
 def test_setup_plugins_clear_with_dry_run_keeps_rows(db, settings, monkeypatch):
@@ -148,8 +151,8 @@ def test_setup_plugins_validate_failure(db, settings):
 
 
 def test_setup_plugins_clear_only_dry_run_is_success_no_raise(db):
-    # nothing configured; --clear --dry-run should print success and not raise
     stdout = io.StringIO()
     call_command("setup_plugins", "--clear", "--dry-run", stdout=stdout, stderr=io.StringIO())
     txt = stdout.getvalue().lower()
-    assert "dry-run complete" in txt
+    assert "dry-run" in txt
+    assert "about to clear" in txt
