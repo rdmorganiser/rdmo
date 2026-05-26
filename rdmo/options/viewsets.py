@@ -200,7 +200,7 @@ class ProviderViewSet(ChoicesViewSet):
     def get_queryset(self):
         providers = {}
 
-        plugins = Plugin.objects.for_context(
+        plugins = Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.OPTIONSET_PROVIDER,
             user=self.request.user
         )

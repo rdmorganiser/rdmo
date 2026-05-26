@@ -89,7 +89,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = {}
-        for plugin in Plugin.objects.for_context(
+        for plugin in Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
             project=project,
             user=self.request.user
@@ -103,7 +103,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
-        upload_plugins = Plugin.objects.for_context(
+        upload_plugins = Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
             project=project,
             user=self.request.user,
@@ -114,7 +114,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
 
         context['exports'] = [
             (plugin.url_name, plugin.title)
-            for plugin in Plugin.objects.for_context(
+            for plugin in Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
                 project=project,
                 user=self.request.user,
@@ -123,14 +123,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
 
         context['snapshot_exports'] = [
             (plugin.url_name, plugin.title)
-            for plugin in Plugin.objects.for_context(
+            for plugin in Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
                 project=project,
                 user=self.request.user,
             ).exclude(url_name="")
         ]
 
-        import_plugins = Plugin.objects.for_context(
+        import_plugins = Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
             project=project,
             user=self.request.user,

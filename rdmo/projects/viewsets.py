@@ -480,7 +480,7 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
-        plugins = Plugin.objects.for_context(
+        plugins = Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
             user=self.request.user,
         )
@@ -489,7 +489,7 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
         plugins = (
-            Plugin.objects.for_context(
+            Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
                 user=request.user,
             ).exclude(url_name='')
