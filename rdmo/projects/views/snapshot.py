@@ -79,7 +79,7 @@ class SnapshotExportView(ObjectPermissionMixin, DetailView):
         return self.get_object().project
 
     def get_plugin_by_url_name(self, url_name, project=None):
-        for plugin in Plugin.objects.for_context(
+        for plugin in Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
             project=project,
             user=self.request.user,

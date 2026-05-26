@@ -22,11 +22,12 @@ logger = logging.getLogger(__name__)
 
 
 def get_project_export_plugin(project, user, url_name, request=None):
-    export_plugin_instance = Plugin.objects.for_context(
+    export_plugin_instance = Plugin.objects.filter_plugins_for_project(
         project=project,
         plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
         user=user,
-    ).filter(url_name=url_name).first()
+        url_name=url_name,
+    ).first()
 
     if export_plugin_instance is None:
         raise Http404

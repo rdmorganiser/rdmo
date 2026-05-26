@@ -64,7 +64,7 @@ class ProjectImportMixin:
                                                   .get(value.collection_index)
 
     def get_plugin_by_url_name(self, url_name, project=None):
-        for plugin in Plugin.objects.for_context(
+        for plugin in Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
             project=project,
             user=self.request.user,
@@ -73,7 +73,7 @@ class ProjectImportMixin:
                 return plugin
 
     def get_plugin_by_suffix(self, suffix, project=None):
-        for plugin in Plugin.objects.for_context(
+        for plugin in Plugin.objects.filter_plugins_for_project(
             plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
             project=project,
             user=self.request.user,
@@ -184,7 +184,7 @@ class ProjectImportMixin:
         checked = [key for key, value in self.request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and plugin_id:
-            plugin = Plugin.objects.for_context(
+            plugin = Plugin.objects.filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_IMPORT,
                 project=current_project,
                 user=self.request.user,

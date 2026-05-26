@@ -42,8 +42,8 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
         return self
 
 
-    def for_context(self, project=None, plugin_type=None, plugin_types=None,
-                    user=None, url_name=None):
+    def filter_plugins_for_project(self, project=None, plugin_type=None, plugin_types=None,
+                                   user=None, url_name=None):
         queryset = self
 
         # filter by settings.PLUGINS
@@ -69,7 +69,7 @@ class PluginQuerySet(ForSiteQuerySetMixin, CurrentSiteQuerySetMixin, GroupsQuery
         if url_name is not None:
             queryset = queryset.filter(url_name=url_name)
 
-        return queryset
+        return queryset.order_by('order', 'uri')
 
 
 class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
@@ -86,9 +86,9 @@ class PluginManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMan
     def filter_for_settings(self):
         return self.get_queryset().filter_for_settings()
 
-    def for_context(self, project=None, plugin_type=None, plugin_types=None,
-                    user=None, url_name=None):
-        return self.get_queryset().for_context(
+    def filter_plugins_for_project(self, project=None, plugin_type=None, plugin_types=None,
+                                   user=None, url_name=None):
+        return self.get_queryset().filter_plugins_for_project(
             project=project,
             plugin_type=plugin_type,
             plugin_types=plugin_types,
