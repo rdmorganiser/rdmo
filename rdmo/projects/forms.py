@@ -350,15 +350,15 @@ class IntegrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
-        self.provider_key = kwargs.pop('provider_key', None)
+        self.url_name = kwargs.pop('url_name', None)
         super().__init__(*args, **kwargs)
         self.plugin = None
 
         # get the provider
-        if self.provider_key:
+        if self.url_name:
 
             self.plugin = Plugin.objects.filter_plugins_for_project(
-                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, url_name=self.provider_key
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, url_name=self.url_name
             ).first()
             if self.plugin is None:
                 raise Http404

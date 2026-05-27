@@ -11,10 +11,10 @@ PROVIDER_TYPES = [
 ]
 
 
-def oauth_callback(request, provider_key):
+def oauth_callback(request, url_name):
     for plugin in (Plugin.objects.filter_plugins_for_project(
             user=request.user,
-            url_name=provider_key,
+            url_name=url_name,
             plugin_types=PROVIDER_TYPES
         )
     ):

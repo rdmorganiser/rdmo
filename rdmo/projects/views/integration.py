@@ -23,7 +23,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
-        self.provider_key = self.kwargs['provider_key']
+        self.url_name = self.kwargs['url_name']
         return super().dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -32,7 +32,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['project'] = self.project
-        kwargs['provider_key'] = self.provider_key
+        kwargs['url_name'] = self.url_name
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -40,7 +40,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
             Plugin.objects
                 .filter_plugins_for_project(
                 plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project,
-                user=self.request.user, url_name=self.provider_key
+                user=self.request.user, url_name=self.url_name
             ).first()
        )
         if plugin is not None:

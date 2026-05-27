@@ -94,7 +94,7 @@ urlpatterns = [
     re_path(r'^(?P<project_id>[0-9]+)/invite/(?P<pk>[0-9]+)/delete/$',
             InviteDeleteView.as_view(), name='invite_delete'),
 
-    re_path(r'^(?P<project_id>[0-9]+)/integrations/create/(?P<provider_key>[a-z]+)/$',
+    re_path(r'^(?P<project_id>[0-9]+)/integrations/create/(?P<url_name>[-\w]+)/$',
             IntegrationCreateView.as_view(), name='integration_create'),
     re_path(r'^(?P<project_id>[0-9]+)/integrations/(?P<pk>[0-9]+)/update/$',
             IntegrationUpdateView.as_view(), name='integration_update'),
