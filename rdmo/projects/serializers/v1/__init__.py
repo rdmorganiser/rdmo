@@ -7,7 +7,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
-from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
@@ -179,24 +178,31 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True)
-    provider_key = serializers.CharField(required=False)
+    plugin = serializers.PrimaryKeyRelatedField(read_only=True)
+    url_name = serializers.CharField()
 
     class Meta:
         model = Integration
         fields = (
             'id',
             'plugin',
-            'provider_key',
+            'url_name',
             'options'
         )
 
     def validate(self, data):
-        provider_key = data.pop('provider_key', None)
-        if provider_key and not data.get('plugin'):
-            data['plugin'] = Plugin.objects.filter_plugins_for_project(
-                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
-                url_name=provider_key
-            ).first()
+        plugin = self.context.get('plugin')
+
+        if 'plugin' not in self.context and self.instance:
+            plugin = self.instance.plugin
+
+        if plugin is None:
+            raise ValidationError({
+                'url_name': _('Please provide a valid provider.')
+            })
+
+        data['plugin'] = plugin
+        data.pop('url_name', None)
 
         ProviderValidator()(data)
         return data
@@ -363,7 +369,7 @@ class MembershipSerializer(serializers.ModelSerializer):
 class IntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
-    provider_key = serializers.CharField(read_only=True)
+    url_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Integration
@@ -371,7 +377,7 @@ class IntegrationSerializer(serializers.ModelSerializer):
             'id',
             'project',
             'plugin',
-            'provider_key',
+            'url_name',
             'options'
         )
 

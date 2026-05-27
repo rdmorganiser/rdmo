@@ -495,6 +495,24 @@ class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     def get_queryset(self):
         return Integration.objects.filter(project=self.project)
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        url_name = self.request.data.get('url_name')
+
+        if url_name:
+            context['plugin'] = (
+                Plugin.objects
+                    .filter_plugins_for_project(
+                        plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+                        project=self.project,
+                        user=self.request.user,
+                        url_name=url_name
+                    )
+                    .first()
+            )
+
+        return context
+
 
 class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasProjectPermission, )
