@@ -128,6 +128,7 @@ class PageNestedSerializer(
             'uri',
             'locked',
             'attribute',
+            'is_collection',
             'title',
             'questionsets',
             'questions',
