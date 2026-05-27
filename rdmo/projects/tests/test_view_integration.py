@@ -25,6 +25,13 @@ projects = [1, 2, 3, 4, 5]
 integrations = [1, 2]
 
 
+def test_integration_create_url_allows_slug_url_name():
+    assert (
+        reverse('integration_create', args=[1, 'legacy-provider']) ==
+        '/projects/1/integrations/create/legacy-provider/'
+    )
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_integration_create_get(db, client, username, password, project_id):

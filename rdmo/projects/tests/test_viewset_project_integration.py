@@ -89,7 +89,7 @@ def test_create(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'simple',
+        'url_name': 'simple',
         'options': [
             {
                 'key': 'project_url',
@@ -107,7 +107,7 @@ def test_create(db, client, username, password, project_id):
         assert response.status_code == 404
 
 
-def test_create_with_plugin(db, client):
+def test_create_with_plugin_requires_url_name(db, client):
     client.login(username='owner', password='owner')
 
     url = reverse(urlnames['list'], args=[1])
@@ -122,10 +122,8 @@ def test_create_with_plugin(db, client):
     }
     response = client.post(url, data=json.dumps(data), content_type="application/json")
 
-    assert response.status_code == 201, response.content
-    integration = Integration.objects.get(id=response.json()['id'])
-    assert integration.plugin_id == 10
-    assert response.json()['provider_key'] == 'simple'
+    assert response.status_code == 400, response.content
+    assert response.json()['url_name'], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -135,7 +133,7 @@ def test_create_error1(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'wrong',
+        'url_name': 'wrong',
         'options': [
             {
                 'key': 'project_url',
@@ -147,7 +145,7 @@ def test_create_error1(db, client, username, password, project_id):
 
     if project_id in add_integration_permission_map.get(username, []):
         assert response.status_code == 400, response.json()
-        assert response.json()['provider_key'], response.json()
+        assert response.json()['url_name'], response.json()
     elif project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -161,7 +159,7 @@ def test_create_error2(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'simple',
+        'url_name': 'simple',
         'options': [
             {
                 'key': 'project_url',
@@ -187,7 +185,7 @@ def test_create_error3(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'provider_key': 'simple',
+        'url_name': 'simple',
         'options': [
             {
                 'key': 'project_url',
@@ -219,7 +217,7 @@ def test_update(db, client, username, password, project_id, integration_id):
 
     url = reverse(urlnames['detail'], args=[project_id, integration_id])
     data = {
-        'provider_key': 'simple',
+        'url_name': 'simple',
         'options': [
             {
                 'key': 'project_url',
