@@ -20,6 +20,15 @@ class GroupsQuerySetMixin:
         return self.filter(models.Q(groups=None) | models.Q(groups__in=groups))
 
 
+class ForSiteQuerySetMixin:
+
+    def filter_for_site(self, site):
+        if settings.MULTISITE:
+            return self.filter(sites=site)
+        else:
+            return self.filter(models.Q(sites=None) | models.Q(sites=site))
+
+
 class AvailabilityQuerySetMixin:
 
     def filter_availability(self, user):

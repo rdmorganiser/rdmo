@@ -1,0 +1,52 @@
+{% extends 'core/export.html' %}
+{% load i18n %}
+
+{% block body %}
+
+    <h1>{% trans 'Plugins' %}</h1>
+
+    <ul>
+
+    {% for plugin in plugins %}
+
+    <li>
+
+    <p>
+        <strong>{% trans 'URI' %}:</strong> {{ plugin.uri }}
+    </p>
+
+    {% if plugin.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}:</strong> {{ plugin.comment }}
+    </p>
+
+    {% endif %}
+
+    <p>
+        <strong>{% trans 'Title' %}:</strong> {{ plugin.title }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Help text' %}:</strong> {{ plugin.help }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Python path' %}:</strong> {{ plugin.python_path }}
+    </p>
+
+    {% if plugin.url_name %}
+
+    <p>
+        <strong>{% trans 'URL name' %}:</strong> {{ plugin.url_name }}
+    </p>
+
+    {% endif %}
+
+    </li>
+
+    {% endfor %}
+
+    </ul>
+
+{% endblock %}

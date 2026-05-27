@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from rdmo.accounts.utils import get_full_name
+from rdmo.config.models import Plugin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 from rdmo.services.validators import ProviderValidator
@@ -148,6 +149,22 @@ class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectImportPluginSerializer(serializers.ModelSerializer):
+
+    href = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Plugin
+        fields = (
+            'title',
+            'url_name',
+            'href',
+        )
+
+    def get_href(self, obj) -> str:
+        return reverse('project_create_import', args=[obj.url_name])
+
+
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -161,24 +178,41 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True)
+    plugin = serializers.PrimaryKeyRelatedField(read_only=True)
+    url_name = serializers.CharField()
 
     class Meta:
         model = Integration
         fields = (
             'id',
-            'provider_key',
+            'plugin',
+            'url_name',
             'options'
         )
-        validators = [
-            ProviderValidator()
-        ]
+
+    def validate(self, data):
+        plugin = self.context.get('plugin')
+
+        if 'plugin' not in self.context and self.instance:
+            plugin = self.instance.plugin
+
+        if plugin is None:
+            raise ValidationError({
+                'url_name': _('Please provide a valid provider.')
+            })
+
+        data['plugin'] = plugin
+        data.pop('url_name', None)
+
+        ProviderValidator()(data)
+        return data
 
     def create(self, validated_data):
-        provider_key = validated_data.get('provider_key')
+        plugin = validated_data.get('plugin')
         project = validated_data.get('project')
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
-        integration = Integration(project=project, provider_key=provider_key)
+        integration = Integration(project=project, plugin=plugin)
         integration.save()
         integration.save_options(options)
 
@@ -335,13 +369,15 @@ class MembershipSerializer(serializers.ModelSerializer):
 class IntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
+    url_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Integration
         fields = (
             'id',
             'project',
-            'provider_key',
+            'plugin',
+            'url_name',
             'options'
         )
 

@@ -12,6 +12,7 @@ import QuestionSets from '../elements/QuestionSets'
 import Sections from '../elements/Sections'
 import Tasks from '../elements/Tasks'
 import Views from '../elements/Views'
+import Plugins from '../elements/Plugins'
 
 import useScrollEffect from '../../hooks/useScrollEffect'
 
@@ -54,6 +55,10 @@ const Elements = ({ config, elements, configActions, elementActions }) => {
     case 'views':
       return <Views config={config} views={elements.views}
                     configActions={configActions} elementActions={elementActions} />
+
+    case 'plugins':
+      return <Plugins config={config} plugins={elements.plugins}
+                      configActions={configActions} elementActions={elementActions} />
   }
 }
 

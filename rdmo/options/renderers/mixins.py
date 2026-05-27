@@ -11,7 +11,6 @@ class OptionSetRendererMixin:
             self.render_text_element(xml, 'uri_prefix', {}, optionset['uri_prefix'])
             self.render_text_element(xml, 'uri_path', {}, optionset['uri_path'])
             self.render_text_element(xml, 'dc:comment', {}, optionset['comment'])
-            self.render_text_element(xml, 'provider_key', {}, optionset['provider_key'])
 
             xml.startElement('options', {})
             for optionset_option in optionset['optionset_options']:
@@ -26,6 +25,11 @@ class OptionSetRendererMixin:
                 self.render_text_element(xml, 'condition', {'dc:uri': condition['uri']}, None)
             xml.endElement('conditions')
 
+            xml.startElement('plugins', {})
+            for plugin in optionset.get('plugins', []):
+                self.render_text_element(xml, 'plugin', {'dc:uri': plugin['uri']}, None)
+            xml.endElement('plugins')
+
             xml.endElement('optionset')
 
         for optionset_option in optionset['optionset_options']:
@@ -34,6 +38,10 @@ class OptionSetRendererMixin:
         if self.context.get('conditions'):
             for condition in optionset['conditions']:
                 self.render_condition(xml, condition)
+
+        if self.context.get('plugins'):
+            for plugin in optionset['plugins']:
+                self.render_plugin(xml, plugin)
 
 
 class OptionRendererMixin:

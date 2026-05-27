@@ -5,6 +5,8 @@ import pytest
 from django.contrib.auth.models import Group, User
 from django.urls import reverse
 
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.questions.models import Catalog
 from rdmo.views.models import View
 
@@ -733,6 +735,21 @@ def test_project_export_json(db, client, username, password, project_id):
             assert response.status_code == 403
         else:
             assert response.status_code == 302
+
+
+def test_project_export_unavailable_plugin_requires_admin(db, client):
+    plugin = Plugin.objects.get(plugin_type=PLUGIN_TYPES.PROJECT_EXPORT, url_name='simple')
+    assert plugin.available is False
+
+    url = reverse('project_export', args=[1, 'simple'])
+
+    client.login(username='owner', password='owner')
+    response = client.get(url)
+    assert response.status_code == 404
+
+    client.login(username='admin', password='admin')
+    response = client.get(url)
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize('username,password', users)

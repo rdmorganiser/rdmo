@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 
 from ..managers import IntegrationManager
 
@@ -14,9 +15,10 @@ class Integration(models.Model):
         verbose_name=_('Project'),
         help_text=_('The project for this integration.')
     )
-    provider_key = models.TextField(
-        verbose_name=_('Provider key'),
-        help_text=_('The key of the provider for this integration.')
+    plugin = models.ForeignKey(
+        Plugin, blank=True, null=True, on_delete=models.CASCADE, related_name='integrations',
+        verbose_name=_('Plugin'),
+        help_text=_('The issue provider plugin for this integration.')
     )
 
     objects = IntegrationManager()
@@ -27,14 +29,23 @@ class Integration(models.Model):
         verbose_name_plural = _('Integrations')
 
     def __str__(self):
-        return f'{self.project.title} / {self.provider_key}'
+        return f'{self.project.title} / {self.url_name}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
     @property
+    def url_name(self):
+        if self.plugin:
+            return self.plugin.url_name
+        return ''
+
+    @property
     def provider(self):
-        return get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        if self.plugin and self.plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER:
+            return self.plugin.initialize_class()
+        else:
+            return None
 
     def get_option_value(self, key):
         try:
@@ -43,6 +54,8 @@ class Integration(models.Model):
             return None
 
     def save_options(self, options):
+        if self.provider is None:
+            raise ValueError(_('The plugin is required.'))
         for field in self.provider.fields:
             try:
                 integration_option = IntegrationOption.objects.get(integration=self, key=field.get('key'))
@@ -82,7 +95,7 @@ class IntegrationOption(models.Model):
         verbose_name_plural = _('Integration options')
 
     def __str__(self):
-        return f'{self.integration.project.title} / {self.integration.provider_key} / {self.key} = {self.value}'
+        return f'{self.integration.project.title} / {self.integration.url_name} / {self.key} = {self.value}'
 
     @property
     def title(self):

@@ -7,6 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
 from rdmo.conditions.imports import import_helper_condition
+from rdmo.config.imports import import_helper_plugin
 from rdmo.core.imports import (
     ImportElementFields,
     check_permissions,
@@ -50,7 +51,8 @@ ELEMENT_IMPORT_HELPERS = {
     "questions.page": import_helper_page,
     "questions.catalog": import_helper_catalog,
     "tasks.task": import_helper_task,
-    "views.view": import_helper_view
+    "views.view": import_helper_view,
+    "config.plugin": import_helper_plugin,
 }
 
 

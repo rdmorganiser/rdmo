@@ -4,6 +4,8 @@ import pytest
 
 from django.urls import reverse
 
+from ...config.constants import PLUGIN_TYPES
+from ...config.models import Plugin
 from ..models import OptionSet
 
 users = (
@@ -155,6 +157,9 @@ def test_create_m2m(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
+    plugin = Plugin.objects.filter(plugin_type=PLUGIN_TYPES.OPTIONSET_PROVIDER).first()
+    plugins = [plugin.pk] if plugin else []
+
     for instance in instances:
         optionset_options = [{
             'option': optionset_option.option.id,
@@ -170,6 +175,7 @@ def test_create_m2m(db, client, username, password):
             'order': instance.order,
             'options': optionset_options,
             'conditions': conditions,
+            'plugins': plugins,
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -181,6 +187,7 @@ def test_create_m2m(db, client, username, password):
                 'order': optionset_option.order
             } for optionset_option in new_instance.optionset_options.all()]
             assert conditions == [condition.pk for condition in new_instance.conditions.all()]
+            assert plugins == [plugin.pk for plugin in new_instance.plugins.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -218,6 +225,9 @@ def test_update_m2m(db, client, username, password):
     client.login(username=username, password=password)
     instances = OptionSet.objects.all()
 
+    plugin = Plugin.objects.filter(plugin_type=PLUGIN_TYPES.OPTIONSET_PROVIDER).first()
+    plugins = [plugin.pk] if plugin else []
+
     for instance in instances:
         optionset_options = [{
             'option': optionset_option.option.id,
@@ -233,6 +243,7 @@ def test_update_m2m(db, client, username, password):
             'order': instance.order,
             'options': optionset_options,
             'conditions': conditions,
+            'plugins': plugins,
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
@@ -244,6 +255,7 @@ def test_update_m2m(db, client, username, password):
                 'order': optionset_option.order
             } for optionset_option in instance.optionset_options.all()]
             assert conditions == [condition.pk for condition in instance.conditions.all()]
+            assert plugins == [plugin.pk for plugin in instance.plugins.all()]
 
 
 @pytest.mark.parametrize('username,password', users)

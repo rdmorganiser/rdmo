@@ -1,13 +1,14 @@
-import importlib
 import json
 import logging
 import os
 import re
 from datetime import datetime
+from importlib import metadata
 from pathlib import Path
 from urllib.parse import urlparse
 
 from django.conf import settings
+from django.db import connections, models
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template, render_to_string
 from django.utils.dateparse import parse_date
@@ -17,6 +18,7 @@ from django.utils.translation import gettext_lazy as _
 
 from defusedcsv import csv
 from markdown import markdown
+from packaging.version import Version
 
 from .constants import HUMAN2BYTES_MAPPER
 from .pandoc import get_pandoc_content, get_pandoc_content_disposition
@@ -95,15 +97,20 @@ def get_model_field_meta(model):
             if hasattr(field, 'help_text'):
                 meta[field.name]['help_text'] = field.help_text
 
-    if model.__name__ == 'Page':
+    if model._meta.model_name == 'page':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this page.')
         }
-    elif model.__name__ == 'QuestionSet':
+    elif model._meta.model_name == 'questionset':
         meta['elements'] = {
             'verbose_name': _('Elements'),
             'help_text': _('The questions and question sets for this question set.')
+        }
+    elif model._meta.model_name == 'plugin':
+        meta['python_path'] = {
+            **meta.get('python_path', {}),
+            'choices': [(python_path, python_path) for python_path in settings.PLUGINS]
         }
 
     return meta
@@ -202,11 +209,6 @@ def sanitize_url(s):
         else:
             s = re.sub(r'/+', '/', s)
     return s
-
-
-def import_class(string):
-    module_name, class_name = string.rsplit('.', 1)
-    return getattr(importlib.import_module(module_name), class_name)
 
 
 def human2bytes(string):
@@ -314,3 +316,36 @@ def parse_date_from_string(date: str) -> datetime.date:
             f"Invalid date format for: {date}. Valid formats {get_format('DATE_INPUT_FORMATS')}"
         )
     return parsed_date
+
+
+def jsonfield_contains(using: str, field: str, key: str, value) -> models.Q | None:
+    connection = connections[using]
+
+    if getattr(connection.features, 'supports_json_field_contains', False):
+        return models.Q(**{f'{field}__contains': {key: value}})
+
+    if connection.vendor == 'sqlite':
+        # e.g. '"format": "csv"' with proper JSON escaping for key/value
+        fragment = f'{json.dumps(key)}: {json.dumps(value)}'
+        return models.Q(**{f'{field}__icontains': fragment})
+
+    return None
+
+
+def get_distribution_name_from_class(python_class):
+    module = getattr(python_class, "__module__", "")
+    top = module.split(".", 1)[0]
+    if not top:
+        return None
+
+    dist_names = metadata.packages_distributions().get(top, [])
+    return sorted(dist_names)[0] if dist_names else None
+
+
+def get_distribution_version(distribution_name):
+    if not distribution_name:
+        return None
+    try:
+        return Version(metadata.version(distribution_name))
+    except metadata.PackageNotFoundError:
+        return None

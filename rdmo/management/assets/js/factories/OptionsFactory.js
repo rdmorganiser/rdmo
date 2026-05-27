@@ -8,6 +8,7 @@ class OptionsFactory {
       uri_prefix: config.settings.default_uri_prefix,
       questions: parent.question ? [parent.question.id] : [],
       editors: config.settings.multisite ? [siteId] : [],
+      plugins: []
     }
   }
 

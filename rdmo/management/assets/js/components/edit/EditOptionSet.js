@@ -21,8 +21,8 @@ import useDeleteModal from '../../hooks/useDeleteModal'
 
 const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
-  const { sites, providers } = config
-  const { elementAction, parent, conditions, options } = elements
+  const { sites } = config
+  const { elementAction, parent, conditions, options, plugins } = elements
 
   const updateOptionSet = (key, value) => elementActions.updateElement(optionset, {[key]: value})
   const storeOptionSet = (back) => elementActions.storeElement('optionsets', optionset, elementAction, back)
@@ -33,6 +33,9 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
 
   const editCondition = (condition) => elementActions.fetchElement('conditions', condition)
   const createCondition = () => elementActions.createElement('conditions', { optionset })
+
+  const editPlugin = (plugin) => elementActions.fetchElement('plugins', plugin)
+  const createPlugin = () => elementActions.createElement('plugins', { optionset })
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()
 
@@ -103,8 +106,9 @@ const EditOptionSet = ({ config, optionset, elements, elementActions }) => {
                      addText={gettext('Add existing condition')} createText={gettext('Create new condition')}
                      onChange={updateOptionSet} onCreate={createCondition} onEdit={editCondition} />
 
-        <Select config={config} element={optionset} field="provider_key"
-                options={providers} onChange={updateOptionSet} />
+        <MultiSelect config={config} element={optionset} field="plugins" options={plugins}
+                     addText={gettext('Add existing plugin')} createText={gettext('Create new plugin')}
+                     onChange={updateOptionSet} onCreate={createPlugin} onEdit={editPlugin} />
 
         {get(config, 'settings.multisite') && <Select config={config} element={optionset} field="editors"
                                                       options={sites} onChange={updateOptionSet} isMulti />}

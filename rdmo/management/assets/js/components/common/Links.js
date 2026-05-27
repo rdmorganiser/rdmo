@@ -230,11 +230,12 @@ ErrorLink.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const WarningLink = ({ onClick }) => {
-  return <Link className="element-link fa fa-warning text-warning" onClick={onClick} />
+const WarningLink = ({ title, onClick }) => {
+  return <Link className="element-link fa fa-warning text-warning" title={title} onClick={onClick} />
 }
 
 WarningLink.propTypes = {
+  title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }
 

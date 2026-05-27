@@ -3,6 +3,7 @@ from django.urls import include, path
 urlpatterns = [
     path('accounts/', include('rdmo.accounts.urls.v1')),
     path('conditions/', include('rdmo.conditions.urls.v1')),
+    path('config/', include('rdmo.config.urls.v1')),
     path('domain/', include('rdmo.domain.urls.v1')),
     path('management/', include('rdmo.management.urls.v1')),
     path('options/', include('rdmo.options.urls.v1')),
