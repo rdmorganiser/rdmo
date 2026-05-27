@@ -31,10 +31,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    optionset_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = Question
         fields = (
@@ -51,6 +47,7 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'maximum',
             'minimum',
             'step',
+            'default_text',
             'default_option',
             'default_external_id',
             'widget_type',
@@ -59,7 +56,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             'width',
             'text',
             'help',
-            'default_text',
             'verbose_name',
             'pages',
             'questionsets',
@@ -101,12 +97,6 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
         return super().to_internal_value(data)
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
-
-    def get_optionset_uris(self, obj) -> list:
-        return [optionset.uri for optionset in obj.optionsets.all()]
-
     def validate(self, data):
         is_collection = data.get('is_collection')
         widget_type = data.get('widget_type')
@@ -132,6 +122,49 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
             })
 
         return data
+
+
+class QuestionNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('text',)
+
+    model = serializers.SerializerMethodField()
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'attribute',
+            'is_collection',
+            'is_optional',
+            'default_text',
+            'default_option',
+            'default_external_id',
+            'widget_type',
+            'value_type',
+            'text',
+            'optionsets',
+            'conditions',
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris',
+            'optionset_uris'
+        )
+        warning_fields = (
+            'text',
+        )
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):

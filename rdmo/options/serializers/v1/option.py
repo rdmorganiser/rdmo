@@ -76,6 +76,36 @@ class OptionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
 
 
+class OptionNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('text',)
+
+    model = serializers.SerializerMethodField()
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Option
+        fields = (
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'text',
+            'warning',
+            'read_only',
+        )
+        warning_fields = (
+            'text',
+        )
+
+
 class OptionIndexSerializer(serializers.ModelSerializer):
 
     class Meta:

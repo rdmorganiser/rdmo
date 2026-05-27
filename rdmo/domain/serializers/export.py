@@ -5,8 +5,7 @@ from ..models import Attribute
 
 class AttributeExportSerializer(serializers.ModelSerializer):
 
-    parent = serializers.CharField(source='parent.uri', default=None, read_only=True)
-    parent_data = serializers.SerializerMethodField()
+    parent = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -17,9 +16,9 @@ class AttributeExportSerializer(serializers.ModelSerializer):
             'path',
             'comment',
             'parent',
-            'parent_data'
         )
 
-    def get_parent_data(self, obj):
-        if obj.parent is not None:
-            return AttributeExportSerializer(obj.parent).data
+    def get_parent(self, obj):
+        parent = self.context.get('attribute_map', {}).get(obj.parent_id)
+        if parent:
+            return AttributeExportSerializer(parent, context=self.context).data

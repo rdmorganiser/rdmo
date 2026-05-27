@@ -21,9 +21,6 @@ from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ViewSerializer
-    queryset = View.objects.prefetch_related('catalogs', 'sites', 'editors', 'groups') \
-                           .annotate(projects_count=models.Count('projects')) \
-                           .order_by('uri')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -35,6 +32,20 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         'sites',
         'editors'
     )
+
+    def get_queryset(self):
+        queryset = View.objects.all().order_by('uri')
+        if self.action in ['index']:
+            return queryset
+        else:
+            return queryset.prefetch_related(
+                'catalogs',
+                'sites',
+                'editors',
+                'groups'
+            ).annotate(
+                projects_count=models.Count('projects')
+            )
 
     @action(detail=False)
     def index(self, request):
@@ -56,13 +67,14 @@ class ViewViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
 
     @action(detail=True, url_path=r'export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
+        instance = self.get_object()
         if export_format == 'xml':
-            serializer = ViewExportSerializer(self.get_object())
+            serializer = ViewExportSerializer(instance)
             xml = ViewRenderer().render([serializer.data])
-            return XMLResponse(xml, name=self.get_object().uri_path)
+            return XMLResponse(xml, name=instance.uri_path)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().uri_path, 'views/export/views.html', {
-                    'views': [self.get_object()]
+                self.request, export_format, instance.uri_path, 'views/export/views.html', {
+                    'views': [instance]
                 }
             )

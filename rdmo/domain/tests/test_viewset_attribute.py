@@ -33,6 +33,7 @@ status_map = {
 }
 urlnames = {
     'list': 'v1-domain:attribute-list',
+    'index': 'v1-domain:attribute-index',
     'nested': 'v1-domain:attribute-nested',
     'export': 'v1-domain:attribute-export',
     'detail': 'v1-domain:attribute-detail',
@@ -48,6 +49,15 @@ def test_list(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_index(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['index'])
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.json()
 

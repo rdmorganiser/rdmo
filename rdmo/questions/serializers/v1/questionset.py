@@ -11,7 +11,7 @@ from rdmo.core.serializers import (
 
 from ...models import Page, QuestionSet, QuestionSetQuestion, QuestionSetQuestionSet
 from ...validators import QuestionSetLockedValidator, QuestionSetQuestionSetValidator, QuestionSetUniqueURIValidator
-from .question import QuestionSerializer
+from .question import QuestionNestedSerializer
 
 
 class QuestionSetQuestionSetSerializer(serializers.ModelSerializer):
@@ -52,9 +52,6 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
@@ -107,18 +104,57 @@ class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMi
             'title',
         )
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
 
+class QuestionSetNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('title',)
 
-class QuestionSetNestedSerializer(QuestionSetSerializer):
+    model = serializers.SerializerMethodField()
+
+    questionsets = QuestionSetQuestionSetSerializer(
+        source="questionset_questionsets",
+        read_only=False,
+        required=False,
+        many=True,
+    )
+    questions = QuestionSetQuestionSerializer(
+        source="questionset_questions",
+        read_only=False,
+        required=False,
+        many=True,
+    )
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(QuestionSetSerializer.Meta):
+    class Meta:
+        model = QuestionSet
         fields = (
-            *QuestionSetSerializer.Meta.fields,
-            'elements'
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'attribute',
+            'is_collection',
+            'title',
+            'questionsets',
+            'questions',
+            'conditions',
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris',
+            'elements',
+        )
+        warning_fields = (
+            'title',
         )
 
     def get_elements(self, obj):
@@ -126,7 +162,7 @@ class QuestionSetNestedSerializer(QuestionSetSerializer):
             if isinstance(element, QuestionSet):
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
-                yield QuestionSerializer(element, context=self.context).data
+                yield QuestionNestedSerializer(element, context=self.context).data
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):

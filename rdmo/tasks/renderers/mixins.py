@@ -17,8 +17,12 @@ class TasksRendererMixin:
                 self.render_text_element(xml, 'title', {'lang': lang_code}, task[f'title_{lang_code}'])
                 self.render_text_element(xml, 'text', {'lang': lang_code}, task[f'text_{lang_code}'])
 
-            self.render_text_element(xml, 'start_attribute',  {'dc:uri': task['start_attribute']}, None)
-            self.render_text_element(xml, 'end_attribute',  {'dc:uri': task['end_attribute']}, None)
+            self.render_text_element(xml, 'start_attribute',  {
+                'dc:uri': task['start_attribute']['uri'] if task['start_attribute'] is not None else None
+            }, None)
+            self.render_text_element(xml, 'end_attribute',  {
+                'dc:uri': task['end_attribute']['uri'] if task['end_attribute'] is not None else None
+            }, None)
             self.render_text_element(xml, 'days_before', {}, task['days_before'])
             self.render_text_element(xml, 'days_after', {}, task['days_after'])
 

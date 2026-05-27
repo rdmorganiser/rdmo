@@ -10,27 +10,12 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
 from ..managers import CatalogManager
+from ..prefetch import get_catalog_prefetch_lookups
 
 
 class Catalog(Model, TranslationMixin):
 
     objects = CatalogManager()
-
-    prefetch_lookups = (
-        'catalog_sections__section',
-        'catalog_sections__section__section_pages__page__attribute',
-        'catalog_sections__section__section_pages__page__conditions',
-        'catalog_sections__section__section_pages__page__page_questions__question__attribute',
-        'catalog_sections__section__section_pages__page__page_questions__question__conditions',
-        'catalog_sections__section__section_pages__page__page_questions__question__optionsets',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__attribute',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__conditions',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
-        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -213,7 +198,7 @@ class Catalog(Model, TranslationMixin):
         return list(filter(lambda q: q.is_optional, self.questions))
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *self.prefetch_lookups)
+        models.prefetch_related_objects([self], *get_catalog_prefetch_lookups())
 
     def to_dict(self):
         elements = [element.to_dict() for element in self.elements]
@@ -227,11 +212,11 @@ class Catalog(Model, TranslationMixin):
         }
 
     def get_section_for_page(self, page):
-        from . import Section
-        try:
-            return Section.objects.get(catalogs=self, pages=page)
-        except (Section.DoesNotExist, Section.MultipleObjectsReturned):
-            return None
+        for catalog_section in self.catalog_sections.all():
+            for section_page in catalog_section.section.section_pages.all():
+                if section_page.page.id == page.id:
+                    return catalog_section.section
+        return None
 
     def get_prev_page(self, page):
         try:
