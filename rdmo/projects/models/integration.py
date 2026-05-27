@@ -29,13 +29,13 @@ class Integration(models.Model):
         verbose_name_plural = _('Integrations')
 
     def __str__(self):
-        return f'{self.project.title} / {self.provider_key}'
+        return f'{self.project.title} / {self.url_name}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
     @property
-    def provider_key(self):
+    def url_name(self):
         if self.plugin:
             return self.plugin.url_name
         return ''
@@ -95,7 +95,7 @@ class IntegrationOption(models.Model):
         verbose_name_plural = _('Integration options')
 
     def __str__(self):
-        return f'{self.integration.project.title} / {self.integration.provider_key} / {self.key} = {self.value}'
+        return f'{self.integration.project.title} / {self.integration.url_name} / {self.key} = {self.value}'
 
     @property
     def title(self):

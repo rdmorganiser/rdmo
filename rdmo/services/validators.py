@@ -10,7 +10,7 @@ class ProviderValidator:
         provider = plugin.initialize_class() if plugin else None
         if provider is None or plugin.plugin_type != PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER:
             raise ValidationError({
-                'provider_key': 'Please provide a valid provider.'
+                'url_name': 'Please provide a valid provider.'
             })
 
         try:

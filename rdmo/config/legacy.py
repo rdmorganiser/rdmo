@@ -18,13 +18,13 @@ def get_plugins_from_legacy_settings() -> list[dict]:
         if not legacy_plugins:
             continue
 
-        for (key, label, dotted) in legacy_plugins:
+        for (key, label, python_path) in legacy_plugins:
 
             plugin_definitions.append({
                 "uri_prefix": settings.DEFAULT_URI_PREFIX,
                 "uri_path": f"{legacy_setting.lower()}/{key}",
                 "title": label,
-                "python_path": dotted,
+                "python_path": python_path,
                 "plugin_type": plugin_type,
                 "url_name": key,
             })
