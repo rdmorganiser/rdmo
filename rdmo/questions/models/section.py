@@ -8,26 +8,12 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import join_url
 
 from ..managers import SectionManager
+from ..prefetch import get_section_prefetch_lookups
 
 
 class Section(Model, TranslationMixin):
 
     objects = SectionManager()
-
-    prefetch_lookups = (
-        'section_pages__page__attribute',
-        'section_pages__page__conditions',
-        'section_pages__page__page_questions__question__attribute',
-        'section_pages__page__page_questions__question__conditions',
-        'section_pages__page__page_questions__question__optionsets',
-        'section_pages__page__page_questionsets__questionset__attribute',
-        'section_pages__page__page_questionsets__questionset__conditions',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
-        'section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
-        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
-        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -152,7 +138,7 @@ class Section(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *self.prefetch_lookups)
+        models.prefetch_related_objects([self], *get_section_prefetch_lookups())
 
     def to_dict(self):
         elements = [element.to_dict() for element in self.elements]

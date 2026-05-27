@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,6 +27,7 @@ from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet
+from rdmo.questions.prefetch import get_page_prefetch_lookups
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -64,6 +67,7 @@ from .serializers.v1 import (
     ProjectIssueSerializer,
     ProjectMembershipSerializer,
     ProjectMembershipUpdateSerializer,
+    ProjectResolveSerializer,
     ProjectSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
@@ -249,6 +253,74 @@ class ProjectViewSet(ModelViewSet):
                 pass
 
         return Response({'result': False})
+
+    @resolve.mapping.post
+    def resolve_post(self, request, pk=None):
+        project = self.get_object()
+
+        serializer = ProjectResolveSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+
+        # gather element_ids
+        element_ids = defaultdict(set)
+        for params in validated_data:
+            element_ids[params['element_type']].add(params['element_id'])
+
+        elements = defaultdict(lambda: defaultdict(set))
+
+        # gather conditions for pages
+        if 'pages' in element_ids:
+            queryset = Page.conditions.through.objects.filter(page_id__in=element_ids['pages'])
+            for page_id, condition_id in queryset.values_list('page_id', 'condition_id'):
+                elements['pages'][page_id].add(condition_id)
+
+        # gather conditions for questionsets
+        if 'questionsets' in element_ids:
+            queryset = QuestionSet.conditions.through.objects.filter(questionset_id__in=element_ids['questionsets'])
+            for questionset_id, condition_id in queryset.values_list('questionset_id', 'condition_id'):
+                elements['questionsets'][questionset_id].add(condition_id)
+
+        # gather conditions for questions
+        if 'questions' in element_ids:
+            queryset = Question.conditions.through.objects.filter(question_id__in=element_ids['questions'])
+            for question_id, condition_id in queryset.values_list('question_id', 'condition_id'):
+                elements['questions'][question_id].add(condition_id)
+
+        # gather conditions for optionsets
+        if 'optionsets' in element_ids:
+            queryset = OptionSet.conditions.through.objects.filter(optionset_id__in=element_ids['optionsets'])
+            for optionset_id, condition_id in queryset.values_list('optionset_id', 'condition_id'):
+                elements['optionsets'][optionset_id].add(condition_id)
+
+        # gather conditions
+        if 'conditions' in element_ids:
+            # construct a similar structure for conditions
+            for condition_id in element_ids['conditions']:
+                elements['conditions'][condition_id] = {condition_id}
+
+        # query conditions
+        condition_ids = set().union(*(
+            conditions_set
+            for element_dict in elements.values()
+            for conditions_set in element_dict.values()
+        ))
+        conditions = Condition.objects.select_related('source', 'target_option').in_bulk(condition_ids)
+
+        # get all values of the project
+        values = project.values.filter(snapshot=None).select_related('attribute', 'option')
+
+        # second pass: resolve conditions
+        for params in validated_data:
+            set_prefix = params['set_prefix']
+            set_index = params['set_index']
+            element_type = params['element_type']
+            element_id = params['element_id']
+
+            element_conditions = [conditions[condition_id] for condition_id in elements[element_type][element_id]]
+            params['result'] = check_conditions(element_conditions, values, set_prefix, set_index)
+
+        return Response(validated_data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):
@@ -696,12 +768,11 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def get_queryset(self):
         self.project.catalog.prefetch_elements()
-        page = Page.objects.filter_by_catalog(self.project.catalog).prefetch_related(
-            *Page.prefetch_lookups,
-            'page_questions__question__optionsets__optionset_options__option',
-            'page_questionsets__questionset__questionset_questions__question__optionsets__optionset_options__option',
+        return (
+            Page.objects
+            .filter_by_catalog(self.project.catalog)
+            .prefetch_related(*get_page_prefetch_lookups(optionsets=True, optionsets_conditions=True, options=True))
         )
-        return page
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

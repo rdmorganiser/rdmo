@@ -79,14 +79,39 @@ class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
 
 
-class SectionNestedSerializer(SectionSerializer):
+class SectionNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('title',)
+
+    model = serializers.SerializerMethodField()
+
+    pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(SectionSerializer.Meta):
+    class Meta:
+        model = Section
         fields = (
-            *SectionSerializer.Meta.fields,
-            'elements'
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'title',
+            'pages',
+            'warning',
+            'read_only',
+            'elements',
+        )
+        warning_fields = (
+            'title',
         )
 
     def get_elements(self, obj):
