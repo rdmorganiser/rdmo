@@ -108,7 +108,12 @@ def test_create_catalog(db, client, username, password):
                 'catalogs': [catalog.id]
             }
             response = client.post(url, data, content_type='application/json')
-            assert response.status_code == status_map['create'][username], response.json()
+            expected_status_code = status_map['create'][username]
+            if expected_status_code == 201 and not response.wsgi_request.user.has_perm(
+                'questions.change_catalog_object', catalog
+            ):
+                expected_status_code = 403
+            assert response.status_code == expected_status_code, response.json()
 
             if response.status_code == 201:
                 new_instance = Section.objects.get(id=response.json().get('id'))
