@@ -6,6 +6,7 @@ from django.core.validators import MaxLengthValidator
 from django.db.models import Max
 
 from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
@@ -73,6 +74,35 @@ class TranslationSerializerMixin:
 
 
 class ThroughModelSerializerMixin:
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        self.check_parent_object_permissions(attrs)
+        return attrs
+
+    def check_parent_object_permissions(self, attrs):
+        try:
+            parent_fields = self.Meta.parent_fields
+        except AttributeError:
+            return
+
+        # Parent fields create through-model rows on existing parent elements when this
+        # serializer creates a new child element.  That effectively changes the
+        # parent element (for example adding a section to an existing catalog), so
+        # require object-level change permission for each supplied parent.
+        if self.instance is not None:
+            return
+
+        request = self.context.get('request')
+        if request is None:
+            return
+
+        for field_name, _source_name, _target_name, _through_name in parent_fields:
+            for parent in attrs.get(field_name) or []:
+                opts = parent._meta
+                permission = f'{opts.app_label}.change_{opts.model_name}_object'
+                if not request.user.has_perm(permission, parent):
+                    raise PermissionDenied()
 
     def create(self, validated_data):
         parent_fields = self.get_parent_fields(validated_data)
