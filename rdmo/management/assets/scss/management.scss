@@ -255,21 +255,31 @@
 
         td[class*="marker"],
         td[class*="content"] {
-            padding: 8px 12px;
             vertical-align: top;
         }
 
         td[class*="marker"] {
-            padding: 8px 0 8px 8px;
+            padding-top: 4px;
+            padding-left: 8px;
 
             pre {
                 background-color: transparent;
                 border: none;
                 border-radius: 0;
                 box-shadow: none;
-                font-size: 13px;
-                line-height: 18px;
                 padding: 0;
+            }
+        }
+
+        td[class*="content"] {
+            padding: 6px 12px;
+
+            pre {
+                padding: 2px;
+            }
+
+            [class*="word-diff"] {
+                border-radius: 0;
             }
         }
     }
