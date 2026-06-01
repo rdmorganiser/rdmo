@@ -120,12 +120,9 @@ def test_create_section(db, client, username, password):
                 'sections': [section.id]
             }
             response = client.post(url, data, content_type='application/json')
-            expected_status_code = status_map['create'][username]
-            if expected_status_code == 201 and not response.wsgi_request.user.has_perm(
-                'questions.change_section_object', section
-            ):
-                expected_status_code = 403
-            assert response.status_code == expected_status_code, response.json()
+            assert response.status_code == get_obj_perms_status_code(
+                section, username, 'create-with-parent'
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = Page.objects.get(id=response.json().get('id'))

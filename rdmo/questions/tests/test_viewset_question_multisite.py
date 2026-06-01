@@ -121,12 +121,9 @@ def test_create_page(db, client, username, password):
                 'pages': [page.id]
             }
             response = client.post(url, data, content_type='application/json')
-            expected_status_code = status_map['create'][username]
-            if expected_status_code == 201 and not response.wsgi_request.user.has_perm(
-                'questions.change_page_object', page
-            ):
-                expected_status_code = 403
-            assert response.status_code == expected_status_code, response.json()
+            assert response.status_code == get_obj_perms_status_code(
+                page, username, 'create-with-parent'
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = Question.objects.get(id=response.json().get('id'))
@@ -168,12 +165,9 @@ def test_create_questionset(db, client, username, password):
                 'questionsets': [questionset.id]
             }
             response = client.post(url, data, content_type='application/json')
-            expected_status_code = status_map['create'][username]
-            if expected_status_code == 201 and not response.wsgi_request.user.has_perm(
-                'questions.change_questionset_object', questionset
-            ):
-                expected_status_code = 403
-            assert response.status_code == expected_status_code, response.json()
+            assert response.status_code == get_obj_perms_status_code(
+                questionset, username, 'create-with-parent'
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = Question.objects.get(id=response.json().get('id'))
