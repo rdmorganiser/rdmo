@@ -9,6 +9,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.utils import model_meta
 
+from rdmo.core.permissions import get_object_permission
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
 logger = logging.getLogger(__name__)
@@ -92,10 +93,10 @@ class ThroughModelSerializerMixin:
         if request is None:
             return
 
-        for _field_name, _through_model, parents in self.get_parent_field_data(attrs):
+        for parent_field in self.get_parent_field_data(attrs):
+            _field_name, _source_name, _target_name, _through_name, _through_model, parents = parent_field
             for parent in parents or []:
-                opts = parent._meta
-                permission = f'{opts.app_label}.change_{opts.model_name}_object'
+                permission = get_object_permission(parent, 'change')
                 if not request.user.has_perm(permission, parent):
                     raise PermissionDenied()
 
@@ -169,7 +170,7 @@ class ThroughModelSerializerMixin:
 
     def get_parent_fields(self, validated_data):
         parent_fields = self.get_parent_field_data(validated_data)
-        for field_name, _through_model, _parents in parent_fields:
+        for field_name, _source_name, _target_name, _through_name, _through_model, _parents in parent_fields:
             validated_data.pop(field_name, None)
         return parent_fields
 
@@ -182,13 +183,13 @@ class ThroughModelSerializerMixin:
         model_info = model_meta.get_field_info(self.Meta.model)
 
         parent_fields = []
-        for field_name, _source_name, _target_name, through_name in self.Meta.parent_fields:
+        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
             parent_model = model_info.reverse_relations[field_name].related_model
             parent_model_info = model_meta.get_field_info(parent_model)
 
             through_model = parent_model_info.reverse_relations[through_name].related_model
 
-            parent_fields.append((field_name, through_model, data.get(field_name)))
+            parent_fields.append((field_name, source_name, target_name, through_name, through_model, data.get(field_name)))  # noqa: E501
 
         return parent_fields
 
@@ -198,14 +199,11 @@ class ThroughModelSerializerMixin:
         except AttributeError:
             return instance
 
-        for field_data, parent_field in zip(parent_fields, self.Meta.parent_fields, strict=True):
-            _field_name, through_model, validated_data = field_data
-            _field_name, source_name, target_name, through_name = parent_field
-
-            if validated_data is None:
+        for _field_name, source_name, target_name, through_name, through_model, parents in parent_fields:
+            if parents is None:
                 continue
 
-            for parent in validated_data:
+            for parent in parents:
                 order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
                 through_model(**{
                     source_name: parent,
@@ -249,19 +247,12 @@ class ReadOnlyObjectPermissionSerializerMixin:
 
     OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
 
-    @staticmethod
-    def construct_object_permission(model, action_name: str) -> str:
-        model_app_label = model._meta.app_label
-        model_name = model._meta.model_name
-        perm = f'{model_app_label}.{action_name}_{model_name}_object'
-        return perm
-
     def get_read_only(self, obj) -> bool:
         request = self.context.get('request')
         if request is None:
             return False
         user = request.user
-        perms = (self.construct_object_permission(self.Meta.model, action_name)
+        perms = (get_object_permission(self.Meta.model, action_name)
                  for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
         return not all(user.has_perm(perm, obj) for perm in perms)
 
