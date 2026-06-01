@@ -81,11 +81,6 @@ class ThroughModelSerializerMixin:
         return attrs
 
     def check_parent_object_permissions(self, attrs):
-        try:
-            parent_fields = self.Meta.parent_fields
-        except AttributeError:
-            return
-
         # Parent fields create through-model rows on existing parent elements when this
         # serializer creates a new child element.  That effectively changes the
         # parent element (for example adding a section to an existing catalog), so
@@ -97,8 +92,8 @@ class ThroughModelSerializerMixin:
         if request is None:
             return
 
-        for field_name, _source_name, _target_name, _through_name in parent_fields:
-            for parent in attrs.get(field_name) or []:
+        for _field_name, _through_model, parents in self.get_parent_field_data(attrs):
+            for parent in parents or []:
                 opts = parent._meta
                 permission = f'{opts.app_label}.change_{opts.model_name}_object'
                 if not request.user.has_perm(permission, parent):
@@ -173,21 +168,27 @@ class ThroughModelSerializerMixin:
         return instance
 
     def get_parent_fields(self, validated_data):
+        parent_fields = self.get_parent_field_data(validated_data)
+        for field_name, _through_model, _parents in parent_fields:
+            validated_data.pop(field_name, None)
+        return parent_fields
+
+    def get_parent_field_data(self, data):
         try:
             self.Meta.parent_fields  # noqa: B018
         except AttributeError:
-            return None
+            return []
 
         model_info = model_meta.get_field_info(self.Meta.model)
 
-        parent_fields = {}
+        parent_fields = []
         for field_name, _source_name, _target_name, through_name in self.Meta.parent_fields:
             parent_model = model_info.reverse_relations[field_name].related_model
             parent_model_info = model_meta.get_field_info(parent_model)
 
             through_model = parent_model_info.reverse_relations[through_name].related_model
 
-            parent_fields[field_name] = (through_model, validated_data.pop(field_name, None))
+            parent_fields.append((field_name, through_model, data.get(field_name)))
 
         return parent_fields
 
@@ -197,8 +198,9 @@ class ThroughModelSerializerMixin:
         except AttributeError:
             return instance
 
-        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
-            through_model, validated_data = parent_fields[field_name]
+        for field_data, parent_field in zip(parent_fields, self.Meta.parent_fields, strict=True):
+            _field_name, through_model, validated_data = field_data
+            _field_name, source_name, target_name, through_name = parent_field
 
             if validated_data is None:
                 continue
