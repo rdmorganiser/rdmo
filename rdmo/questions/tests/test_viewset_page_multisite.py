@@ -120,13 +120,50 @@ def test_create_section(db, client, username, password):
                 'sections': [section.id]
             }
             response = client.post(url, data, content_type='application/json')
-            assert response.status_code == status_map['create'][username], response.json()
+            assert response.status_code == get_obj_perms_status_code(
+                section, username, 'create-with-parent'
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = Page.objects.get(id=response.json().get('id'))
                 section.refresh_from_db()
                 assert [*section_pages, (new_instance.id, order)] == \
                     list(section.section_pages.values_list('page', 'order'))
+
+
+def test_create_section_rejects_foreign_site_parent(db, client, site_settings):
+    site_settings('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    instance = Page.objects.get(uri_path='foo-page')
+    section = instance.sections.get(uri_path='foo-section')
+
+    section_pages = list(section.section_pages.values_list('page', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': f'{instance.uri_path}-bar-parent-denied',
+        'comment': instance.comment,
+        'attribute': instance.attribute.pk if instance.attribute else '',
+        'is_collection': instance.is_collection,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'help_en': instance.help_lang1,
+        'help_de': instance.help_lang2,
+        'verbose_name_en': instance.verbose_name_lang1,
+        'verbose_name_de': instance.verbose_name_lang2,
+        'sections': [section.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == get_obj_perms_status_code(
+        section, 'bar-editor', 'create-with-parent'
+    ), response.json()
+
+    section.refresh_from_db()
+    assert section_pages == list(section.section_pages.values_list('page', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

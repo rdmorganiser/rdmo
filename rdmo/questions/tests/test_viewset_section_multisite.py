@@ -108,13 +108,44 @@ def test_create_catalog(db, client, username, password):
                 'catalogs': [catalog.id]
             }
             response = client.post(url, data, content_type='application/json')
-            assert response.status_code == status_map['create'][username], response.json()
+            assert response.status_code == get_obj_perms_status_code(
+                catalog, username, 'create-with-parent'
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = Section.objects.get(id=response.json().get('id'))
                 catalog.refresh_from_db()
                 assert [*catalog_sections, (new_instance.id, order)] == \
                     list(catalog.catalog_sections.values_list('section', 'order'))
+
+
+def test_create_catalog_rejects_foreign_site_parent(db, client, site_settings):
+    site_settings('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    instance = Section.objects.get(uri_path='foo-section')
+    catalog = instance.catalogs.get(uri_path='foo-catalog')
+
+    catalog_sections = list(catalog.catalog_sections.values_list('section', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': f'{instance.uri_path}-bar-parent-denied',
+        'comment': instance.comment,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'catalogs': [catalog.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == get_obj_perms_status_code(
+        catalog, 'bar-editor', 'create-with-parent'
+    ), response.json()
+
+    catalog.refresh_from_db()
+    assert catalog_sections == list(catalog.catalog_sections.values_list('section', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

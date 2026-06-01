@@ -6,8 +6,10 @@ from django.core.validators import MaxLengthValidator
 from django.db.models import Max
 
 from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.utils import model_meta
 
+from rdmo.core.permissions import get_object_permission
 from rdmo.core.utils import get_language_warning, get_languages, markdown2html
 
 logger = logging.getLogger(__name__)
@@ -73,6 +75,30 @@ class TranslationSerializerMixin:
 
 
 class ThroughModelSerializerMixin:
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        self.check_parent_object_permissions(attrs)
+        return attrs
+
+    def check_parent_object_permissions(self, attrs):
+        # Parent fields create through-model rows on existing parent elements when this
+        # serializer creates a new child element.  That effectively changes the
+        # parent element (for example adding a section to an existing catalog), so
+        # require object-level change permission for each supplied parent.
+        if self.instance is not None:
+            return
+
+        request = self.context.get('request')
+        if request is None:
+            return
+
+        for parent_field in self.get_parent_field_data(attrs):
+            _field_name, _source_name, _target_name, _through_name, _through_model, parents = parent_field
+            for parent in parents or []:
+                permission = get_object_permission(parent, 'change')
+                if not request.user.has_perm(permission, parent):
+                    raise PermissionDenied()
 
     def create(self, validated_data):
         parent_fields = self.get_parent_fields(validated_data)
@@ -143,21 +169,27 @@ class ThroughModelSerializerMixin:
         return instance
 
     def get_parent_fields(self, validated_data):
+        parent_fields = self.get_parent_field_data(validated_data)
+        for field_name, _source_name, _target_name, _through_name, _through_model, _parents in parent_fields:
+            validated_data.pop(field_name, None)
+        return parent_fields
+
+    def get_parent_field_data(self, data):
         try:
             self.Meta.parent_fields  # noqa: B018
         except AttributeError:
-            return None
+            return []
 
         model_info = model_meta.get_field_info(self.Meta.model)
 
-        parent_fields = {}
-        for field_name, _source_name, _target_name, through_name in self.Meta.parent_fields:
+        parent_fields = []
+        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
             parent_model = model_info.reverse_relations[field_name].related_model
             parent_model_info = model_meta.get_field_info(parent_model)
 
             through_model = parent_model_info.reverse_relations[through_name].related_model
 
-            parent_fields[field_name] = (through_model, validated_data.pop(field_name, None))
+            parent_fields.append((field_name, source_name, target_name, through_name, through_model, data.get(field_name)))  # noqa: E501
 
         return parent_fields
 
@@ -167,13 +199,11 @@ class ThroughModelSerializerMixin:
         except AttributeError:
             return instance
 
-        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
-            through_model, validated_data = parent_fields[field_name]
-
-            if validated_data is None:
+        for _field_name, source_name, target_name, through_name, through_model, parents in parent_fields:
+            if parents is None:
                 continue
 
-            for parent in validated_data:
+            for parent in parents:
                 order = (getattr(parent, through_name).aggregate(order=Max('order')).get('order') or 0) + 1
                 through_model(**{
                     source_name: parent,
@@ -217,19 +247,12 @@ class ReadOnlyObjectPermissionSerializerMixin:
 
     OBJECT_PERMISSION_ACTION_NAMES = ('change', 'delete')
 
-    @staticmethod
-    def construct_object_permission(model, action_name: str) -> str:
-        model_app_label = model._meta.app_label
-        model_name = model._meta.model_name
-        perm = f'{model_app_label}.{action_name}_{model_name}_object'
-        return perm
-
     def get_read_only(self, obj) -> bool:
         request = self.context.get('request')
         if request is None:
             return False
         user = request.user
-        perms = (self.construct_object_permission(self.Meta.model, action_name)
+        perms = (get_object_permission(self.Meta.model, action_name)
                  for action_name in self.OBJECT_PERMISSION_ACTION_NAMES)
         return not all(user.has_perm(perm, obj) for perm in perms)
 
