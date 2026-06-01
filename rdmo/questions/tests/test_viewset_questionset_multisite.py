@@ -131,6 +131,41 @@ def test_create_page(db, client, username, password):
                     list(page.page_questionsets.values_list('questionset', 'order'))
 
 
+def test_create_page_rejects_foreign_site_parent(db, client, site_settings):
+    site_settings('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    instance = QuestionSet.objects.get(uri_path='foo-questionset')
+    page = instance.pages.get(uri_path='foo-page')
+
+    page_questionsets = list(page.page_questionsets.values_list('questionset', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': f'{instance.uri_path}-bar-parent-denied',
+        'comment': instance.comment,
+        'attribute': instance.attribute.pk if instance.attribute else '',
+        'is_collection': instance.is_collection,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'help_en': instance.help_lang1,
+        'help_de': instance.help_lang2,
+        'verbose_name_en': instance.verbose_name_lang1,
+        'verbose_name_de': instance.verbose_name_lang2,
+        'pages': [page.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == get_obj_perms_status_code(
+        page, 'bar-editor', 'create-with-parent'
+    ), response.json()
+
+    page.refresh_from_db()
+    assert page_questionsets == list(page.page_questionsets.values_list('questionset', 'order'))
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_create_parent(db, client, username, password):
     client.login(username=username, password=password)
@@ -167,6 +202,41 @@ def test_create_parent(db, client, username, password):
                 parent.refresh_from_db()
                 assert [*parent_questionsets, (new_instance.id, order)] == \
                     list(parent.questionset_questionsets.values_list('questionset', 'order'))
+
+
+def test_create_parent_rejects_foreign_site_parent(db, client, site_settings):
+    site_settings('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    instance = QuestionSet.objects.get(uri_path='foo-questionset')
+    parent = QuestionSet.objects.get(uri_path='foo-questionset-parent')
+
+    parent_questionsets = list(parent.questionset_questionsets.values_list('questionset', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': f'{instance.uri_path}-bar-parent-denied-parent',
+        'comment': instance.comment,
+        'attribute': instance.attribute.pk if instance.attribute else '',
+        'is_collection': instance.is_collection,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'help_en': instance.help_lang1,
+        'help_de': instance.help_lang2,
+        'verbose_name_en': instance.verbose_name_lang1,
+        'verbose_name_de': instance.verbose_name_lang2,
+        'parents': [parent.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == get_obj_perms_status_code(
+        parent, 'bar-editor', 'create-with-parent'
+    ), response.json()
+
+    parent.refresh_from_db()
+    assert parent_questionsets == list(parent.questionset_questionsets.values_list('questionset', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)

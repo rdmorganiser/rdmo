@@ -119,6 +119,35 @@ def test_create_catalog(db, client, username, password):
                     list(catalog.catalog_sections.values_list('section', 'order'))
 
 
+def test_create_catalog_rejects_foreign_site_parent(db, client, site_settings):
+    site_settings('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    instance = Section.objects.get(uri_path='foo-section')
+    catalog = instance.catalogs.get(uri_path='foo-catalog')
+
+    catalog_sections = list(catalog.catalog_sections.values_list('section', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': f'{instance.uri_path}-bar-parent-denied',
+        'comment': instance.comment,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'catalogs': [catalog.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == get_obj_perms_status_code(
+        catalog, 'bar-editor', 'create-with-parent'
+    ), response.json()
+
+    catalog.refresh_from_db()
+    assert catalog_sections == list(catalog.catalog_sections.values_list('section', 'order'))
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_create_m2m(db, client, username, password):
     client.login(username=username, password=password)
