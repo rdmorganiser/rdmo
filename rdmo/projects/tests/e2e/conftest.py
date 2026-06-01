@@ -1,15 +1,15 @@
 
 import pytest
 
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
-from rdmo.core.tests.e2e.conftest import (  # noqa: F401
+from rdmo.core.tests.e2e.fixtures import (  # noqa: F401
     PLAYWRIGHT_TIMEOUT,
     _set_django_allow_async_unsafe,
+    allow_live_server_host,
     authenticated_context,
     authenticated_page,
     django_db_setup,
-    fail_on_js_error,
 )
 
 
@@ -25,5 +25,5 @@ def e2e_username() -> str:
 def page(live_server, browser, authenticated_page: Page) -> Page: # noqa: F811
     """Navigates the authenticated page to /projects."""
     authenticated_page.goto("/projects")  # Navigate to the projects section
-    authenticated_page.wait_for_load_state()
+    expect(authenticated_page).to_have_url("/projects/")
     return authenticated_page

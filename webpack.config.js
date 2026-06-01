@@ -164,6 +164,17 @@ const ignorePerformanceWarnings = {
   },
 }
 
+const ignoreKnownDependencyWarnings = {
+  ignoreWarnings: [
+    {
+      // react-datepicker >=9.x triggers a webpack dynamic require warning
+      // upstream: https://github.com/Hacker0x01/react-datepicker/issues/6181
+      module: /react-datepicker/,
+      message: /Critical dependency: the request of a dependency is an expression/
+    }
+  ]
+}
+
 // combine config depending on the provided --mode command line option
 module.exports = (env, argv) => {
   return configList.map(config => {
@@ -176,7 +187,7 @@ module.exports = (env, argv) => {
       case 'production':
         if (env && env['ignore-perf']) {
           // build:dist will ignore performance warnings but fails on other warnings
-          return merge(config, baseConfig, productionConfig, ignorePerformanceWarnings)
+          return merge(config, baseConfig, productionConfig, ignorePerformanceWarnings, ignoreKnownDependencyWarnings)
         }
         // build:prod
         return merge(config, baseConfig, productionConfig)
