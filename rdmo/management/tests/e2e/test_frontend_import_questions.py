@@ -7,7 +7,7 @@ from rdmo.questions.models import Catalog, Question, Section
 from rdmo.questions.models import Page as PageModel
 from rdmo.questions.models.questionset import QuestionSet
 
-pytestmark = pytest.mark.e2e
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db(transaction=True)]
 
 
 def test_import_catalogs_in_management(db, page, delete_all_objects) -> None:

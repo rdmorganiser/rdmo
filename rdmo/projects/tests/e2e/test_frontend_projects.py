@@ -4,7 +4,7 @@ import pytest
 
 from playwright.sync_api import Page, expect
 
-pytestmark = pytest.mark.e2e
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db(transaction=True)]
 
 
 def test_projects_page(page: Page):

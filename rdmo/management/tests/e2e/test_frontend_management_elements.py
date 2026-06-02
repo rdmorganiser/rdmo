@@ -10,7 +10,7 @@ from rdmo.domain.models import Attribute
 from rdmo.management.tests.helpers_models import ModelHelper, model_helpers
 from rdmo.questions.models import Catalog
 
-pytestmark = pytest.mark.e2e
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db(transaction=True)]
 
 
 @pytest.mark.parametrize("page", ["page_single", "page_multisite"], indirect=True)
@@ -41,6 +41,7 @@ def test_management_has_items(page: Page, helper: ModelHelper) -> None:
     """Test all items in database are visible in management UI."""
     num_items_in_database = helper.model.objects.count()
     page.goto(f"/management/{helper.url}")
+    expect(page.get_by_role("heading", name="Management")).to_be_visible()
     items_in_ui = page.locator(".list-group > .list-group-item")
     expect(items_in_ui).to_have_count(num_items_in_database)
 
