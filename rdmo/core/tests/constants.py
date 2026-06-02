@@ -1,4 +1,3 @@
-
 multisite_status_map = {
     'list': {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,

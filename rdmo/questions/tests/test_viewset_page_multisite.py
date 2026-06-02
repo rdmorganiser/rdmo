@@ -131,8 +131,8 @@ def test_create_section(db, client, username, password):
                     list(section.section_pages.values_list('page', 'order'))
 
 
-def test_create_section_rejects_foreign_site_parent(db, client, site_settings):
-    site_settings('bar.com')
+def test_create_section_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
     instance = Page.objects.get(uri_path='foo-page')

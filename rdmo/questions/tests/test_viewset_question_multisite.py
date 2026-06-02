@@ -132,8 +132,8 @@ def test_create_page(db, client, username, password):
                     list(page.page_questions.values_list('question', 'order'))
 
 
-def test_create_page_rejects_foreign_site_parent(db, client, site_settings):
-    site_settings('bar.com')
+def test_create_page_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
     instance = Question.objects.get(uri_path='foo-question')
@@ -217,8 +217,8 @@ def test_create_questionset(db, client, username, password):
                     list(questionset.questionset_questions.values_list('question', 'order'))
 
 
-def test_create_questionset_rejects_foreign_site_parent(db, client, site_settings):
-    site_settings('bar.com')
+def test_create_questionset_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
     instance = Question.objects.get(uri_path='foo-question')

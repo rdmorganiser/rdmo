@@ -119,8 +119,8 @@ def test_create_catalog(db, client, username, password):
                     list(catalog.catalog_sections.values_list('section', 'order'))
 
 
-def test_create_catalog_rejects_foreign_site_parent(db, client, site_settings):
-    site_settings('bar.com')
+def test_create_catalog_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
     instance = Section.objects.get(uri_path='foo-section')

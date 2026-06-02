@@ -1,11 +1,13 @@
 import json
 import shutil
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.core.management import call_command
 
 from rdmo.accounts.utils import set_group_permissions
@@ -75,3 +77,18 @@ def delete_all_objects():
         for model in models:
             model.objects.all().delete()
     return delete_all
+
+
+@pytest.fixture
+def sites(settings):
+    Site.objects.clear_cache()
+
+    def activate(domain):
+        site = Site.objects.get(domain=domain)
+        settings.SITE_ID = site.id
+        Site.objects.clear_cache()
+        return site
+
+    yield SimpleNamespace(activate=activate)
+
+    Site.objects.clear_cache()
