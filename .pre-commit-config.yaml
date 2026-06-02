@@ -36,7 +36,7 @@ repos:
           - eslint-plugin-react@7.37.0
           - react@18.3.1
   - repo: https://github.com/crate-ci/typos
-    rev: 0758ccd3261dc7b0594e9b698113eb08d3ba25b5  # frozen: v1
+    rev: f8a58b6b53f2279f71eb605f03a4ae4d10608f45  # frozen: v1.47.0
     hooks:
     - id: typos
       exclude: |
