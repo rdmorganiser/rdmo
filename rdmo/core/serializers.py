@@ -81,25 +81,6 @@ class ThroughModelSerializerMixin:
         self.check_parent_object_permissions(attrs)
         return attrs
 
-    def check_parent_object_permissions(self, attrs):
-        # Parent fields create through-model rows on existing parent elements when this
-        # serializer creates a new child element.  That effectively changes the
-        # parent element (for example adding a section to an existing catalog), so
-        # require object-level change permission for each supplied parent.
-        if self.instance is not None:
-            return
-
-        request = self.context.get('request')
-        if request is None:
-            return
-
-        for parent_field in self.get_parent_field_data(attrs):
-            _field_name, _source_name, _target_name, _through_name, _through_model, parents = parent_field
-            for parent in parents or []:
-                permission = get_object_permission(parent, 'change')
-                if not request.user.has_perm(permission, parent):
-                    raise PermissionDenied()
-
     def create(self, validated_data):
         parent_fields = self.get_parent_fields(validated_data)
         through_fields = self.get_through_fields(validated_data)
@@ -169,28 +150,9 @@ class ThroughModelSerializerMixin:
         return instance
 
     def get_parent_fields(self, validated_data):
-        parent_fields = self.get_parent_field_data(validated_data)
-        for field_name, _source_name, _target_name, _through_name, _through_model, _parents in parent_fields:
+        parent_fields = self.resolve_parent_fields(validated_data)
+        for field_name, *_ in parent_fields:
             validated_data.pop(field_name, None)
-        return parent_fields
-
-    def get_parent_field_data(self, data):
-        try:
-            self.Meta.parent_fields  # noqa: B018
-        except AttributeError:
-            return []
-
-        model_info = model_meta.get_field_info(self.Meta.model)
-
-        parent_fields = []
-        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
-            parent_model = model_info.reverse_relations[field_name].related_model
-            parent_model_info = model_meta.get_field_info(parent_model)
-
-            through_model = parent_model_info.reverse_relations[through_name].related_model
-
-            parent_fields.append((field_name, source_name, target_name, through_name, through_model, data.get(field_name)))  # noqa: E501
-
         return parent_fields
 
     def set_parent_fields(self, instance, parent_fields):
@@ -212,6 +174,50 @@ class ThroughModelSerializerMixin:
                 }).save()
 
         return instance
+
+    def resolve_parent_fields(self, data):
+        try:
+            self.Meta.parent_fields  # noqa: B018
+        except AttributeError:
+            return []
+
+        model_info = model_meta.get_field_info(self.Meta.model)
+
+        parent_fields = []
+        for field_name, source_name, target_name, through_name in self.Meta.parent_fields:
+            parent_model = model_info.reverse_relations[field_name].related_model
+            parent_model_info = model_meta.get_field_info(parent_model)
+
+            through_model = parent_model_info.reverse_relations[through_name].related_model
+
+            parent_fields.append((
+                field_name,
+                source_name,
+                target_name,
+                through_name,
+                through_model,
+                data.get(field_name),
+            ))
+
+        return parent_fields
+
+    def check_parent_object_permissions(self, attrs):
+        # Parent fields create through-model rows on existing parent elements when this
+        # serializer creates a new child element.  That effectively changes the
+        # parent element (for example adding a section to an existing catalog), so
+        # require object-level change permission for each supplied parent.
+        if self.instance is not None:
+            return
+
+        request = self.context.get('request')
+        if request is None:
+            return
+
+        for *_, parents in self.resolve_parent_fields(attrs):
+            for parent in parents or []:
+                permission = get_object_permission(parent, 'change')
+                if not request.user.has_perm(permission, parent):
+                    raise PermissionDenied()
 
 
 class ElementModelSerializerMixin(serializers.ModelSerializer):
