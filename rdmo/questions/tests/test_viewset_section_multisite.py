@@ -8,7 +8,7 @@ from django.urls import reverse
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
 
-from ..models import Section
+from ..models import Catalog, Section
 from .test_viewset_section import export_formats, urlnames
 
 STATUS_CODES = {
@@ -202,18 +202,15 @@ def test_create_catalog_rejects_foreign_site_parent(db, client, sites):
     sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
-    instance = Section.objects.get(uri_path='foo-section')
-    catalog = instance.catalogs.get(uri_path='foo-catalog')
+    catalog = Catalog.objects.get(uri_path='foo-catalog')
 
     catalog_sections = list(catalog.catalog_sections.values_list('section', 'order'))
 
     url = reverse(urlnames['list'])
     data = {
         'uri_prefix': 'https://bar.com/terms',
-        'uri_path': f'{instance.uri_path}-bar-parent-denied',
-        'comment': instance.comment,
-        'title_en': instance.title_lang1,
-        'title_de': instance.title_lang2,
+        'uri_path': 'bar-section-with-foo-catalog-denied',
+        'title_en': 'Bar section with foo catalog denied',
         'catalogs': [catalog.id]
     }
 

@@ -210,7 +210,6 @@ def test_create_optionset_rejects_foreign_site_parent(db, client, sites):
     sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
-    instance = Option.objects.get(uri_path='foo-option-1')
     optionset = OptionSet.objects.get(uri_path='foo-optionset')
 
     optionset_options = list(optionset.optionset_options.values_list('option', 'order'))
@@ -218,10 +217,8 @@ def test_create_optionset_rejects_foreign_site_parent(db, client, sites):
     url = reverse(urlnames['list'])
     data = {
         'uri_prefix': 'https://bar.com/terms',
-        'uri_path': f'{instance.uri_path}-bar-parent-denied',
-        'comment': instance.comment,
-        'text_en': instance.text_lang1,
-        'text_de': instance.text_lang2,
+        'uri_path': 'bar-option-with-foo-optionset-denied',
+        'text_en': 'Bar option with foo optionset denied',
         'optionsets': [optionset.id]
     }
 

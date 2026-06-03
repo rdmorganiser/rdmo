@@ -8,7 +8,7 @@ from django.urls import reverse
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
 
-from ..models import QuestionSet
+from ..models import Page, QuestionSet
 from .test_viewset_questionset import export_formats, urlnames
 
 STATUS_CODES = {
@@ -286,24 +286,16 @@ def test_create_page_rejects_foreign_site_parent(db, client, sites):
     sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
-    instance = QuestionSet.objects.get(uri_path='foo-questionset')
-    page = instance.pages.get(uri_path='foo-page')
+    page = Page.objects.get(uri_path='foo-page')
 
     page_questionsets = list(page.page_questionsets.values_list('questionset', 'order'))
 
     url = reverse(urlnames['list'])
     data = {
         'uri_prefix': 'https://bar.com/terms',
-        'uri_path': f'{instance.uri_path}-bar-parent-denied',
-        'comment': instance.comment,
-        'attribute': instance.attribute.pk if instance.attribute else '',
-        'is_collection': instance.is_collection,
-        'title_en': instance.title_lang1,
-        'title_de': instance.title_lang2,
-        'help_en': instance.help_lang1,
-        'help_de': instance.help_lang2,
-        'verbose_name_en': instance.verbose_name_lang1,
-        'verbose_name_de': instance.verbose_name_lang2,
+        'uri_path': 'bar-questionset-with-foo-page-denied',
+        'is_collection': False,
+        'title_en': 'Bar questionset with foo page denied',
         'pages': [page.id]
     }
 
@@ -363,7 +355,6 @@ def test_create_parent_rejects_foreign_site_parent(db, client, sites):
     sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
-    instance = QuestionSet.objects.get(uri_path='foo-questionset')
     parent = QuestionSet.objects.get(uri_path='foo-questionset-parent')
 
     parent_questionsets = list(parent.questionset_questionsets.values_list('questionset', 'order'))
@@ -371,16 +362,9 @@ def test_create_parent_rejects_foreign_site_parent(db, client, sites):
     url = reverse(urlnames['list'])
     data = {
         'uri_prefix': 'https://bar.com/terms',
-        'uri_path': f'{instance.uri_path}-bar-parent-denied-parent',
-        'comment': instance.comment,
-        'attribute': instance.attribute.pk if instance.attribute else '',
-        'is_collection': instance.is_collection,
-        'title_en': instance.title_lang1,
-        'title_de': instance.title_lang2,
-        'help_en': instance.help_lang1,
-        'help_de': instance.help_lang2,
-        'verbose_name_en': instance.verbose_name_lang1,
-        'verbose_name_de': instance.verbose_name_lang2,
+        'uri_path': 'bar-questionset-with-foo-parent-denied',
+        'is_collection': False,
+        'title_en': 'Bar questionset with foo parent denied',
         'parents': [parent.id]
     }
 

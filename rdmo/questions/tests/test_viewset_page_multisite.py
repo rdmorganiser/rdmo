@@ -8,7 +8,7 @@ from django.urls import reverse
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
 
-from ..models import Page
+from ..models import Page, Section
 from .test_viewset_page import export_formats, urlnames
 
 STATUS_CODES = {
@@ -200,24 +200,16 @@ def test_create_section_rejects_foreign_site_parent(db, client, sites):
     sites.activate('bar.com')
     client.login(username='bar-editor', password='bar-editor')
 
-    instance = Page.objects.get(uri_path='foo-page')
-    section = instance.sections.get(uri_path='foo-section')
+    section = Section.objects.get(uri_path='foo-section')
 
     section_pages = list(section.section_pages.values_list('page', 'order'))
 
     url = reverse(urlnames['list'])
     data = {
         'uri_prefix': 'https://bar.com/terms',
-        'uri_path': f'{instance.uri_path}-bar-parent-denied',
-        'comment': instance.comment,
-        'attribute': instance.attribute.pk if instance.attribute else '',
-        'is_collection': instance.is_collection,
-        'title_en': instance.title_lang1,
-        'title_de': instance.title_lang2,
-        'help_en': instance.help_lang1,
-        'help_de': instance.help_lang2,
-        'verbose_name_en': instance.verbose_name_lang1,
-        'verbose_name_de': instance.verbose_name_lang2,
+        'uri_path': 'bar-page-with-foo-section-denied',
+        'is_collection': False,
+        'title_en': 'Bar page with foo section denied',
         'sections': [section.id]
     }
 
