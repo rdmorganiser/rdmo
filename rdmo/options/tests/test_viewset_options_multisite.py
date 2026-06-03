@@ -6,10 +6,91 @@ from django.urls import reverse
 
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
-from rdmo.core.tests.utils import get_obj_perms_status_code
 
 from ..models import Option
 from .test_viewset_options import urlnames
+
+STATUS_CODES = {
+    'detail': {
+        'https://foo.com/terms/options/foo-option-1': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://foo.com/terms/options/foo-option-2': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-1': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-2': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+    'update': {
+        'https://foo.com/terms/options/foo-option-1': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://foo.com/terms/options/foo-option-2': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-1': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-2': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+    'delete': {
+        'https://foo.com/terms/options/foo-option-1': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://foo.com/terms/options/foo-option-2': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-1': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 204, 'anonymous': 401,
+        },
+        'https://bar.com/terms/options/bar-option-2': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 204, 'anonymous': 401,
+        },
+    },
+}
+
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -53,7 +134,9 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['detail'].get(instance.uri, status_map['detail'])[username]
+        ), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -91,7 +174,9 @@ def test_update_multisite(db, client, username, password):
             'text_de': instance.text_lang2
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['update'].get(instance.uri, status_map['update'])[username]
+        ), response.json()
 
         instance.refresh_from_db()
         assert optionsets == [optionset.id for optionset in instance.optionsets.all()]
@@ -103,9 +188,8 @@ def test_delete(db, client, username, password):
     instances = Option.objects.all()
 
     for instance in instances:
-        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(
-            instance, username, 'delete', editors=editors
+        assert response.status_code == (
+            STATUS_CODES['delete'].get(instance.uri, status_map['delete'])[username]
         ), response.json()
