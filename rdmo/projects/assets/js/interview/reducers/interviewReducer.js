@@ -138,7 +138,7 @@ export default function interviewReducer(state = initialState, action) {
         return {
           ...state,
           values: state.values.map((value) => (
-            (value.id || value.tmp_id) == action.valueId ?  {...value, error: action.error, pending: false} : value
+            (value.id || value.tmp_id) == action.valueId ? {...value, error: action.error, pending: false} : value
           ))
         }
       } else {
