@@ -7,10 +7,155 @@ from django.urls import reverse
 
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
-from rdmo.core.tests.utils import get_obj_perms_status_code
 
-from ..models import QuestionSet
+from ..models import Page, QuestionSet
 from .test_viewset_questionset import export_formats, urlnames
+
+STATUS_CODES = {
+    'detail': {
+        'https://foo.com/terms/questions/foo-questionset': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset-parent': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset-parent': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+    'nested': {
+        'https://foo.com/terms/questions/foo-questionset': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset-parent': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset-parent': {
+            'user': 404, 'reviewer': 200, 'editor': 200,
+            'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+    'create-with-parent': {
+        'https://foo.com/terms/questions/foo-page': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-page': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset-parent': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset-parent': {
+            'user': 403, 'reviewer': 403, 'editor': 201,
+            'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
+        },
+    },
+    'update': {
+        'https://foo.com/terms/questions/foo-questionset': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset-parent': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset-parent': {
+            'user': 404, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+    'delete': {
+        'https://foo.com/terms/questions/foo-questionset': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 204, 'anonymous': 401,
+        },
+        'https://foo.com/terms/questions/foo-questionset-parent': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'https://bar.com/terms/questions/bar-questionset-parent': {
+            'user': 404, 'reviewer': 403, 'editor': 204,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
+            'bar-reviewer': 403, 'bar-editor': 204, 'anonymous': 401,
+        },
+    },
+}
+
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -55,7 +200,9 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'detail'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['detail'].get(instance.uri, status_map['detail'])[username]
+        ), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -66,7 +213,9 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'nested'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['nested'].get(instance.uri, status_map['nested'])[username]
+        ), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -120,13 +269,46 @@ def test_create_page(db, client, username, password):
                 'pages': [page.id]
             }
             response = client.post(url, data, content_type='application/json')
-            assert response.status_code == status_map['create'][username], response.json()
+            assert response.status_code == (
+                STATUS_CODES['create-with-parent'].get(
+                    page.uri, status_map['create-with-parent']
+                )[username]
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = QuestionSet.objects.get(id=response.json().get('id'))
                 page.refresh_from_db()
                 assert [*page_questionsets, (new_instance.id, order)] == \
                     list(page.page_questionsets.values_list('questionset', 'order'))
+
+
+def test_create_page_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    page = Page.objects.get(uri_path='foo-page')
+
+    page_questionsets = list(page.page_questionsets.values_list('questionset', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': 'bar-questionset-with-foo-page-denied',
+        'is_collection': False,
+        'title_en': 'Bar questionset with foo page denied',
+        'pages': [page.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == (
+        STATUS_CODES['create-with-parent'].get(
+            page.uri, status_map['create-with-parent']
+        )['bar-editor']
+    ), response.json()
+
+    page.refresh_from_db()
+    assert page_questionsets == list(page.page_questionsets.values_list('questionset', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -156,13 +338,46 @@ def test_create_parent(db, client, username, password):
                 'parents': [parent.id]
             }
             response = client.post(url, data, content_type='application/json')
-            assert response.status_code == status_map['create'][username], response.json()
+            assert response.status_code == (
+                STATUS_CODES['create-with-parent'].get(
+                    parent.uri, status_map['create-with-parent']
+                )[username]
+            ), response.json()
 
             if response.status_code == 201:
                 new_instance = QuestionSet.objects.get(id=response.json().get('id'))
                 parent.refresh_from_db()
                 assert [*parent_questionsets, (new_instance.id, order)] == \
                     list(parent.questionset_questionsets.values_list('questionset', 'order'))
+
+
+def test_create_parent_rejects_foreign_site_parent(db, client, sites):
+    sites.activate('bar.com')
+    client.login(username='bar-editor', password='bar-editor')
+
+    parent = QuestionSet.objects.get(uri_path='foo-questionset-parent')
+
+    parent_questionsets = list(parent.questionset_questionsets.values_list('questionset', 'order'))
+
+    url = reverse(urlnames['list'])
+    data = {
+        'uri_prefix': 'https://bar.com/terms',
+        'uri_path': 'bar-questionset-with-foo-parent-denied',
+        'is_collection': False,
+        'title_en': 'Bar questionset with foo parent denied',
+        'parents': [parent.id]
+    }
+
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == (
+        STATUS_CODES['create-with-parent'].get(
+            parent.uri, status_map['create-with-parent']
+        )['bar-editor']
+    ), response.json()
+
+    parent.refresh_from_db()
+    assert parent_questionsets == list(parent.questionset_questionsets.values_list('questionset', 'order'))
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -241,7 +456,9 @@ def test_update(db, client, username, password):
             'verbose_name_de': instance.verbose_name_lang2
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['update'].get(instance.uri, status_map['update'])[username]
+        ), response.json()
 
         instance.refresh_from_db()
         assert pages == [page.id for page in instance.pages.all()]
@@ -285,7 +502,9 @@ def test_update_m2m(db, client, username, password):
             'conditions': conditions
         }
         response = client.put(url, data, content_type='application/json')
-        assert response.status_code == get_obj_perms_status_code(instance, username, 'update'), response.json()
+        assert response.status_code == (
+            STATUS_CODES['update'].get(instance.uri, status_map['update'])[username]
+        ), response.json()
 
         if response.status_code == 200:
             instance.refresh_from_db()
@@ -306,11 +525,10 @@ def test_delete(db, client, username, password):
     instances = QuestionSet.objects.all()
 
     for instance in instances:
-        editors = list(instance.editors.values_list('domain', flat=True))
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        assert response.status_code == get_obj_perms_status_code(
-            instance, username, 'delete', editors=editors
+        assert response.status_code == (
+            STATUS_CODES['delete'].get(instance.uri, status_map['delete'])[username]
         ), response.json()
 
 

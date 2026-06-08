@@ -2,8 +2,7 @@ import pytest
 
 from django.urls import reverse
 
-from rdmo.core.tests.constants import multisite_users
-from rdmo.core.tests.utils import multisite_status_map
+from rdmo.core.tests.constants import multisite_status_map, multisite_users
 
 
 @pytest.mark.parametrize('username,password', multisite_users)

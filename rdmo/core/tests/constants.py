@@ -1,4 +1,3 @@
-
 multisite_status_map = {
     'list': {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
@@ -19,6 +18,12 @@ multisite_status_map = {
         'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'create': {
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 201,
+        'anonymous': 401, 'reviewer': 403, 'editor': 201,
+    },
+    'create-with-parent': {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
         'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
         'user': 403, 'example-reviewer': 403, 'example-editor': 201,
@@ -63,124 +68,6 @@ multisite_status_map = {
         'anonymous': 401, 'reviewer': 403, 'editor': 200,
     },
 
-}
-status_map_object_permissions = {
-    'copy': {
-        'foo-element': {
-            'foo-reviewer': 403, 'foo-editor': 201,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 201,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'detail': {
-        'foo-element': {
-            'foo-reviewer': 200, 'foo-editor': 200,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 200, 'example-editor': 200,  # because current site is example.com
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 200, 'bar-editor': 200,
-            'example-reviewer': 200, 'example-editor': 200, # because current site is example.com
-        },
-        'example-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 200, 'example-editor': 200,
-        }
-    },
-    'nested': {
-        'foo-element': {
-            'foo-reviewer': 200, 'foo-editor': 200,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 200, 'example-editor': 200,  # because current site is example.com
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 200, 'bar-editor': 200,
-            'example-reviewer': 200, 'example-editor': 200,  # because current site is example.com
-        },
-        'example-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 200, 'example-editor': 200,
-        }
-    },
-    'update': {
-        'all-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 403, 'example-editor': 200,
-        },
-        'foo-element': {
-            'foo-reviewer': 403, 'foo-editor': 200,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 200,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'upload-import': {
-        'all-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 403, 'example-editor': 200,
-        },
-        'foo-element': {
-            'foo-reviewer': 403, 'foo-editor': 200,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 200,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'delete': {
-        'all-element': {
-            'foo-reviewer': 403, 'foo-editor': 204,
-            'bar-reviewer': 403, 'bar-editor': 204,
-            'example-reviewer': 403, 'example-editor': 204,
-        },
-        'foo-element': {
-            'foo-reviewer': 403, 'foo-editor': 204,
-            'bar-reviewer': 404, 'bar-editor': 404,
-            'example-reviewer': 404, 'example-editor': 404,
-        },
-        'bar-element': {
-            'foo-reviewer': 404, 'foo-editor': 404,
-            'bar-reviewer': 403, 'bar-editor': 204,
-            'example-reviewer': 404, 'example-editor': 404,
-        }
-    },
-    'toggle-site': {
-        'all-element': {
-            # foo-editor can not apply own site(foo.com) in test run(example.com)
-            'foo-reviewer': 403, 'foo-editor': 403,
-            # bar-editor can not apply own site(bar.com) in test run(example.com)
-            'bar-reviewer': 403, 'bar-editor': 403,
-            'example-reviewer': 403, 'example-editor': 200,
-        },
-        'foo-element': {
-            'foo-reviewer': 403, 'foo-editor': 403,
-            'bar-reviewer': 403, 'bar-editor': 403,
-            'example-reviewer': 403, 'example-editor': 200,
-        },
-        'bar-element': {
-            'foo-reviewer': 403, 'foo-editor': 403,
-            'bar-reviewer': 403, 'bar-editor': 403,
-            'example-reviewer': 403, 'example-editor': 200,
-        }
-    }
 }
 multisite_users = (
     ('user', 'user'),

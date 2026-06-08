@@ -96,3 +96,8 @@ class HasPermission(BasePermission):
 
         # the viewset needs to set permission_required
         return request.user.has_perm(view.permission_required)
+
+
+def get_object_permission(model_or_instance, action):
+    model = model_or_instance if isinstance(model_or_instance, type) else model_or_instance._meta.model
+    return f'{model._meta.app_label}.{action}_{model._meta.model_name}_object'

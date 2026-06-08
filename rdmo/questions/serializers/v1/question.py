@@ -98,6 +98,7 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
         return super().to_internal_value(data)
 
     def validate(self, data):
+        data = super().validate(data)
         is_collection = data.get('is_collection')
         widget_type = data.get('widget_type')
         value_type = data.get('value_type')
