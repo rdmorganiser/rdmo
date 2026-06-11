@@ -6,29 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
+from .constants import RelationTypes
+
 
 class Condition(models.Model):
-
-    RELATION_EQUAL = 'eq'
-    RELATION_NOT_EQUAL = 'neq'
-    RELATION_CONTAINS = 'contains'
-    RELATION_GREATER_THAN = 'gt'
-    RELATION_GREATER_THAN_EQUAL = 'gte'
-    RELATION_LESSER_THAN = 'lt'
-    RELATION_LESSER_THAN_EQUAL = 'lte'
-    RELATION_EMPTY = 'empty'
-    RELATION_NOT_EMPTY = 'notempty'
-    RELATION_CHOICES = (
-        (RELATION_EQUAL, 'is equal to (==)'),
-        (RELATION_NOT_EQUAL, 'is not equal to (!=)'),
-        (RELATION_CONTAINS, 'contains'),
-        (RELATION_GREATER_THAN, 'is greater than (>)'),
-        (RELATION_GREATER_THAN_EQUAL, 'is greater than or equal (>=)'),
-        (RELATION_LESSER_THAN, 'is lesser than (<)'),
-        (RELATION_LESSER_THAN_EQUAL, 'is lesser than or equal (<=)'),
-        (RELATION_EMPTY, 'is empty'),
-        (RELATION_NOT_EMPTY, 'is not empty'),
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -67,7 +48,7 @@ class Condition(models.Model):
         help_text=_('The attribute of the value for this condition.')
     )
     relation = models.CharField(
-        max_length=8, choices=RELATION_CHOICES,
+        max_length=8, choices=RelationTypes,
         verbose_name=_('Relation'),
         help_text=_('The relation this condition is using.')
     )
@@ -134,31 +115,31 @@ class Condition(models.Model):
                 set_prefix, set_index = rpartition[0], int(rpartition[2])
                 return self.resolve(values, set_prefix, set_index)
 
-        if self.relation == self.RELATION_EQUAL:
+        if self.relation == RelationTypes.RELATION_EQUAL:
             return self._resolve_equal(source_values)
 
-        elif self.relation == self.RELATION_NOT_EQUAL:
+        elif self.relation == RelationTypes.RELATION_NOT_EQUAL:
             return not self._resolve_equal(source_values)
 
-        elif self.relation == self.RELATION_CONTAINS:
+        elif self.relation == RelationTypes.RELATION_CONTAINS:
             return self._resolve_contains(source_values)
 
-        elif self.relation == self.RELATION_GREATER_THAN:
+        elif self.relation == RelationTypes.RELATION_GREATER_THAN:
             return self._resolve_greater_than(source_values)
 
-        elif self.relation == self.RELATION_GREATER_THAN_EQUAL:
+        elif self.relation == RelationTypes.RELATION_GREATER_THAN_EQUAL:
             return self._resolve_greater_than_equal(source_values)
 
-        elif self.relation == self.RELATION_LESSER_THAN:
+        elif self.relation == RelationTypes.RELATION_LESSER_THAN:
             return self._resolve_lesser_than(source_values)
 
-        elif self.relation == self.RELATION_LESSER_THAN_EQUAL:
+        elif self.relation == RelationTypes.RELATION_LESSER_THAN_EQUAL:
             return self._resolve_lesser_than_equal(source_values)
 
-        elif self.relation == self.RELATION_EMPTY:
+        elif self.relation == RelationTypes.RELATION_EMPTY:
             return not self._resolve_not_empty(source_values)
 
-        elif self.relation == self.RELATION_NOT_EMPTY:
+        elif self.relation == RelationTypes.RELATION_NOT_EMPTY:
             return self._resolve_not_empty(source_values)
 
         else:

@@ -11,6 +11,7 @@ from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 
+from .constants import RelationTypes
 from .models import Condition
 from .renderers import ConditionRenderer
 from .serializers.export import ConditionExportSerializer
@@ -77,4 +78,4 @@ class ConditionViewSet(ModelViewSet):
 
 class RelationViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Condition.RELATION_CHOICES
+    queryset = RelationTypes.choices
