@@ -9,7 +9,7 @@ from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
-from rdmo.conditions.serializers.v1 import ConditionSerializer
+from rdmo.conditions.models import Condition
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Page, Question
@@ -508,13 +508,27 @@ class ProjectInviteUpdateSerializer(serializers.ModelSerializer):
             'role',
         )
 
+class ProjectIssueTaskConditionSerializer(serializers.ModelSerializer):
+
+    target_option_text = serializers.CharField(source='target_option.text', read_only=True)
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'source',
+            'relation',
+            'relation_label',
+            'target_text',
+            'target_option',
+            'target_option_text',
+        )
 
 class ProjectIssueTaskSerializer(serializers.ModelSerializer):
 
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    conditions = ConditionSerializer(read_only=True, many=True)
+    conditions = ProjectIssueTaskConditionSerializer(read_only=True, many=True)
 
     class Meta:
         model = Task
@@ -528,13 +542,8 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
             'task_area_display',
             'title',
             'text',
-            'condition_uris',
             'conditions',
         )
-
-    def get_condition_uris(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class ProjectIssueResourceSerializer(serializers.ModelSerializer):
 
@@ -567,6 +576,7 @@ class ProjectIssueQuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'attribute',
             'text',
             'help',
             'pages'
@@ -750,8 +760,7 @@ class IssueTaskSerializer(serializers.ModelSerializer):
 
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
-    conditions = ConditionSerializer(read_only=True, many=True)
+    conditions = ProjectIssueTaskConditionSerializer(read_only=True, many=True)
 
     class Meta:
         model = Task
@@ -765,13 +774,8 @@ class IssueTaskSerializer(serializers.ModelSerializer):
             'task_area_display',
             'title',
             'text',
-            'condition_uris',
             'conditions',
         )
-
-    def get_condition_uris(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
-
 
 class IssueResourceSerializer(serializers.ModelSerializer):
 

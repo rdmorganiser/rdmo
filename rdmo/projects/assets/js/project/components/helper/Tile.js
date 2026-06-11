@@ -25,7 +25,7 @@ const Tile = ({
       onClick={onCardClick}
       style={onCardClick ? { cursor: 'pointer' } : undefined} >
       <div className="card-body d-flex flex-column">
-        {label && <div className="text-success fw-semibold small mb-1">{label}</div>}
+        {label && <div className="fw-semibold small mb-1">{label}</div>}
         {title && <h3 className="card-title mb-2">{title}</h3>}
         <div className="card-text mb-2">{children}</div>
 

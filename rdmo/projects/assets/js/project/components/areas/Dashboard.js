@@ -17,21 +17,19 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
   const perms = useSelector(state => state.project.project.project.permissions) ?? {}
-  const issues = useSelector((state) => state.project.project.tasks) ?? []
+
+  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  /* Show only issues that resolve */
+  const issues = allIssues.filter((issue) => issue.resolve === true)
+
   // Mock dates for testing
   // issues.forEach((issue) => {
   //   issue.dates = [
-  //     ['2017-12-31', '2017-04-03'],
+  //     ['2017-04-03', '2017-12-31'],
   //     ['2017-04-03'],
   //     ['2017-04-04'],
   //   ]
   // })
-  // const allIssues = useSelector((state) => state.project.project.tasks) ?? []
-  const resolvedIssues = issues.filter((issue) => issue.resolve === true)
-  console.log('resolved issues', resolvedIssues)
-  // const issues = allIssues.filter((issue) => issue.resolve === true)
-  // console.log('resolved issues', issues)
-  console.log('all issues', issues)
 
   const statusOptions = [
     { value: 'open', label: gettext('Open') },
@@ -56,6 +54,8 @@ const Dashboard = () => {
     getTaskType(issue) === 'task'
   )
 
+  // console.log('task issues', taskIssues)
+
   const visibleTaskIssues = taskIssues
     .filter((issue) => showClosedTasks || !isClosed(issue))
     .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
@@ -63,6 +63,7 @@ const Dashboard = () => {
   const recommendationIssues = issues.filter((issue) =>
     getTaskType(issue) === 'recommendation'
   )
+  // console.log('recommendation issues', recommendationIssues)
 
   const visibleRecommendationIssues = recommendationIssues
     .filter((issue) => showClosedRecommendations || !isClosed(issue))
@@ -82,7 +83,7 @@ const Dashboard = () => {
     date.map((dateValue) => useFormattedDateTime(dateValue, language, 'dateOnly')).join(' - ')
   )
 
-  const renderIssueTiles = (visibleIssues) => (
+  const renderTaskIssueTiles = (visibleIssues) => (
     <div className="row">
       {
         visibleIssues.map((issue) => {
@@ -190,7 +191,7 @@ const Dashboard = () => {
                       {gettext('Show closed tasks')}
                     </label>
                   </div>
-                  {renderIssueTiles(visibleTaskIssues)}
+                  {renderTaskIssueTiles(visibleTaskIssues)}
                 </>
               )
             }
@@ -216,7 +217,7 @@ const Dashboard = () => {
                       {gettext('Show closed tasks')}
                     </label>
                   </div>
-                  {renderIssueTiles(visibleRecommendationIssues)}
+                  {renderTaskIssueTiles(visibleRecommendationIssues)}
                 </>
               )
             }
@@ -255,7 +256,7 @@ const Dashboard = () => {
                   onClose={() => setSelectedTaskIssue(null)}
                   size="modal-lg"
                 >
-                  <p>{selectedTaskIssue.id}</p>
+                  {/* <p>{selectedTaskIssue.id}</p> */}
                   <p>{selectedTaskIssue.task.text}</p>
                   {/* <p>{selectedTaskIssue.status}</p> */}
                   <Select
@@ -275,26 +276,38 @@ const Dashboard = () => {
                   />
                   <div className="row mt-3">
                     <div className="col-md-8">
+                      {/* questions */}
                       {
                         selectedTaskIssue.questions?.length > 0 && (
                           <>
-                            <div className="fw-bold mb-2">{gettext('Questions')}</div>
-
+                            <div className="fw-bold mb-2">{gettext('Why is this task shown?')}</div>
+                            <p>{gettext('This task is shown based on your answers:')}</p>
                             {
                               selectedTaskIssue.questions.map((question) => (
                                 <div key={question.id} className="mb-3">
-                                  <div>{question.text}</div>
-
                                   {
                                     question.pages?.map((page) => {
                                       const url = `${baseUrl}/projects/${projectId}/interview/${page.id}/`
 
                                       return (
                                         <div key={page.id}>
-                                          <a href={url}>{url}</a>
+                                          <p>{gettext('QUESTION:')} <a href={url}>{question.text}</a></p>
                                         </div>
                                       )
                                     })
+                                  }
+                                  {/* conditions */}
+                                  {
+                                    selectedTaskIssue.task.conditions?.length > 0 && (
+                                      selectedTaskIssue.task.conditions
+                                        ?.filter((condition) => condition.source === question.attribute)
+                                        .map((condition) => (
+                                          <div key={condition.id} className="mb-3">
+                                            <p>{gettext('YOUR ANSWER:')} {condition.relation_label} {' '}
+                                              {condition.target_option_text || condition.target_text}</p>
+                                          </div>
+                                        ))
+                                    )
                                   }
                                 </div>
                               ))
