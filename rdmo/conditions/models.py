@@ -186,7 +186,7 @@ class Condition(models.Model):
 
         return False
 
-    def _resolve_lesser_than(self, values):
+    def _resolve_less_than(self, values):
 
         for value in values:
             try:
@@ -197,7 +197,7 @@ class Condition(models.Model):
 
         return False
 
-    def _resolve_lesser_than_equal(self, values):
+    def _resolve_less_than_equal(self, values):
 
         for value in values:
             try:
