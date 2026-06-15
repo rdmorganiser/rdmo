@@ -130,11 +130,11 @@ class Condition(models.Model):
         elif self.relation == RelationTypes.RELATION_GREATER_THAN_EQUAL:
             return self._resolve_greater_than_equal(source_values)
 
-        elif self.relation == RelationTypes.RELATION_LESSER_THAN:
-            return self._resolve_lesser_than(source_values)
+        elif self.relation == RelationTypes.RELATION_LESS_THAN:
+            return self._resolve_less_than(source_values)
 
-        elif self.relation == RelationTypes.RELATION_LESSER_THAN_EQUAL:
-            return self._resolve_lesser_than_equal(source_values)
+        elif self.relation == RelationTypes.RELATION_LESS_THAN_EQUAL:
+            return self._resolve_less_than_equal(source_values)
 
         elif self.relation == RelationTypes.RELATION_EMPTY:
             return not self._resolve_not_empty(source_values)
