@@ -131,10 +131,10 @@ class Condition(models.Model):
             return self._resolve_greater_than_equal(source_values)
 
         elif self.relation == RelationTypes.RELATION_LESS_THAN:
-            return self._resolve_lesser_than(source_values)
+            return self._resolve_less_than(source_values)
 
         elif self.relation == RelationTypes.RELATION_LESS_THAN_EQUAL:
-            return self._resolve_lesser_than_equal(source_values)
+            return self._resolve_less_than_equal(source_values)
 
         elif self.relation == RelationTypes.RELATION_EMPTY:
             return not self._resolve_not_empty(source_values)
@@ -186,7 +186,7 @@ class Condition(models.Model):
 
         return False
 
-    def _resolve_lesser_than(self, values):
+    def _resolve_less_than(self, values):
 
         for value in values:
             try:
@@ -197,7 +197,7 @@ class Condition(models.Model):
 
         return False
 
-    def _resolve_lesser_than_equal(self, values):
+    def _resolve_less_than_equal(self, values):
 
         for value in values:
             try:
