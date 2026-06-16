@@ -109,6 +109,10 @@ class OptionSet(models.Model):
     def elements(self) -> list[Option]:
         return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
+    @property
+    def condition_uris(self):
+        return [condition.uri for condition in self.conditions.all()]
+
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
         if not uri_path:

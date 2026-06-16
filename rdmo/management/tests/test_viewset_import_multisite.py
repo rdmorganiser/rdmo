@@ -4,8 +4,84 @@ from django.urls import reverse
 
 from rdmo.core.tests.constants import multisite_status_map as status_map
 from rdmo.core.tests.constants import multisite_users as users
-from rdmo.core.tests.utils import get_obj_perms_status_code
 from rdmo.questions.models import Catalog, Page, Question, QuestionSet, Section
+
+STATUS_CODES = {
+    'upload-import': {
+        'foo-catalog': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-catalog': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'foo-section': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-section': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'foo-page': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-page': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'foo-questionset': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-questionset': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'foo-questionset-parent': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-questionset-parent': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+        'foo-question': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 403,
+            'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
+        },
+        'bar-question': {
+            'user': 403, 'reviewer': 403, 'editor': 200,
+            'example-reviewer': 404, 'example-editor': 404, 'foo-user': 403,
+            'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 403,
+            'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
+        },
+    },
+}
 
 catalog_uri_paths = [
     'catalog',
@@ -17,6 +93,7 @@ catalog_uri_paths = [
 urlnames = {
     'list': 'v1-management:import-list'
 }
+
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -63,7 +140,9 @@ def test_create_update(db, client, username, password, json_data):
     if response.status_code == 200:
         for element in response.json():
             assert element.get('created') is False
-            obj_perm_status_code = get_obj_perms_status_code(element.get('uri_path'), username, 'upload-import')
+            obj_perm_status_code = STATUS_CODES['upload-import'].get(
+                element['uri_path'], status_map['upload-import']
+            )[username]
             if obj_perm_status_code == 200:
                 assert element.get('updated') is True
             else:
@@ -85,7 +164,9 @@ def test_create_update_certain_catalog(db, client, username, password, catalog_u
 
     assert response.status_code == status_map['upload-import'].get(username), response.json()
     if response.status_code == 200:
-        obj_perm_status_code = get_obj_perms_status_code(catalog_uri_path, username, 'upload-import')
+        obj_perm_status_code = STATUS_CODES['upload-import'].get(
+            catalog_uri_path, status_map['upload-import']
+        )[username]
         for element in response.json():
             assert element.get('created') is False
             if obj_perm_status_code == 200:

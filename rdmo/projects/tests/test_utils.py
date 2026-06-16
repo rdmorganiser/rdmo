@@ -7,8 +7,13 @@ from django.http import QueryDict
 from rdmo.core.tests.utils import compute_checksum
 
 from ..filters import ProjectFilter
-from ..models import Project, Value
-from ..utils import compute_set_prefix_from_set_value, copy_project, set_context_querystring_with_filter_and_page
+from ..models import Invite, Project, Value
+from ..utils import (
+    compute_set_prefix_from_set_value,
+    copy_project,
+    get_invite_email_project_path,
+    set_context_querystring_with_filter_and_page,
+)
 
 GET_queries = [
     'page=2&title=project',
@@ -145,3 +150,118 @@ def test_copy_project(db, files):
 @pytest.mark.parametrize('set_value, value, result', SET_VALUES)
 def test_compute_set_prefix_from_set_value(set_value, value, result):
     assert compute_set_prefix_from_set_value(Value(**set_value), Value(**value)) == result
+
+INVITE_EMAIL_PROJECT_PATHS = [
+    (
+        {
+            'MULTISITE': False,
+            'PROJECT_INVITE_USE_PROJECT_SITE': False,
+            'user': 'current',
+        },
+        'http://testserver/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': False,
+            'PROJECT_INVITE_USE_PROJECT_SITE': False,
+            'user': None,
+        },
+        'http://testserver/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': False,
+            'PROJECT_INVITE_USE_PROJECT_SITE': True,
+            'user': 'current',
+        },
+        'http://example.com/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': False,
+            'PROJECT_INVITE_USE_PROJECT_SITE': True,
+            'user': None,
+        },
+        'http://example.com/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': False,
+            'user': 'current',
+        },
+        'http://testserver/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': False,
+            'user': 'other'
+        },
+        'http://foo.com/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': False,
+            'user': None,
+        },
+        'http://testserver/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': True,
+            'user': 'current'
+        },
+        'http://example.com/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': True,
+            'user': 'other'
+        },
+        'http://example.com/projects/join/test-token/'
+    ),
+    (
+        {
+            'MULTISITE': True,
+            'PROJECT_INVITE_USE_PROJECT_SITE': True,
+            'user': None,
+        },
+        'http://example.com/projects/join/test-token/'
+    ),
+]
+
+@pytest.mark.parametrize('config, expected', INVITE_EMAIL_PROJECT_PATHS)
+def test_get_invite_email_project_path(rf, db, settings, config, expected):
+    settings.MULTISITE = config['MULTISITE']
+    settings.PROJECT_INVITE_USE_PROJECT_SITE = config['PROJECT_INVITE_USE_PROJECT_SITE']
+
+    # this is where testserver comes from:
+    request = rf.get('/')
+
+    project = Project.objects.get(pk=1)
+    project.site.domain = 'example.com'
+
+    invite_kwargs = {
+        'project': project,
+        'role': 'author'
+    }
+
+    if config['user'] is not None:
+        if config['user'] == 'current':
+            user = User.objects.get(username='user')
+        else:
+            user = User.objects.get(username='foo-user')
+
+        invite_kwargs['user'] = user
+
+    else:
+        invite_kwargs['email'] = 'invite@example.com'
+
+    invite = Invite(**invite_kwargs)
+    invite.token = 'test-token'
+
+    assert get_invite_email_project_path(request, invite) == expected

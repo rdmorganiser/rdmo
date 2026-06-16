@@ -1,5 +1,51 @@
 # Changelog 📔
 
+## [RDMO 2.5.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.0)
+
+### Breaking changes ⚠️
+
+* Use [Django 5.2](https://docs.djangoproject.com/en/stable/releases/5.2/).
+  * Supports PostgreSQL 14 and higher. Drops support for PostgreSQL 13.
+  * Supports MySQL 8.0.11 and higher.
+  * Supports MariaDB 10.5 and higher.
+* Drop support for Python 3.9. Add support for Python 3.14.
+* Automatically include `openapi` urls, when the dependency is installed.
+  * `rdmo.core.urls.v1.openapi` needs to be removed from `rdmo-app/config/urls.py`.
+
+### Main improvements ⭐
+
+* Handle empty sections in AnswerTree (#1563)
+* Improve condition handling (#1579)
+* Improve email invitation (#1596)
+* Improve Django admin for `Site`
+* Remove unwanted spaces in view tag templates (#556)
+* Add nh3 to (optionally) clean markdown content (#453)
+* Remove unused `messages` cookie (#1189)
+* Add git hash to static files to invalidate browser cache
+* Optimize database access
+
+### Bug fixes 🐛
+
+* Fix image handling in Pandoc and deprecate Pandoc 1
+* Fix missing short title from navigation (#1586)
+* Fix `QuestionSetQuestionSetValidator` (#1610)
+* Fix Elements Sidebar export params (#1467)
+* Check for ancestor editor permissions in management (#1628)
+
+### Maintenance and dependencies 🔧
+
+* Add pypi-release to GitHub workflow
+* Update `react-diff-viewer-continued` and improve styling
+* Apply `pre-commit autoupdate --frozen` and update it manually in future
+* Make the e2e tests more robust
+* Switch to ubuntu-slim runner image
+
+**Milestones**:
+[2.4.5](https://github.com/rdmorganiser/rdmo/milestone/31?closed=1),
+[2.5.0](https://github.com/rdmorganiser/rdmo/milestone/26?closed=1)
+
+**Commit history**: [2.4.4...2.5.0](https://github.com/rdmorganiser/rdmo/compare/2.4.4...2.5.0)
+
 ## [RDMO 2.4.4](https://github.com/rdmorganiser/rdmo/releases/tag/2.4.4) (March 26, 2026)
 
 ### Bug fixes 🐛

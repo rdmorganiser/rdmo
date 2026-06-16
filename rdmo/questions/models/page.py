@@ -10,25 +10,12 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import PageManager
+from ..prefetch import get_page_prefetch_lookups
 
 
 class Page(Model, TranslationMixin):
 
     objects = PageManager()
-
-    prefetch_lookups = (
-        'conditions',
-        'page_questions__question__attribute',
-        'page_questions__question__conditions',
-        'page_questions__question__optionsets',
-        'page_questionsets__questionset__attribute',
-        'page_questionsets__questionset__conditions',
-        'page_questionsets__questionset__questionset_questions__question__attribute',
-        'page_questionsets__questionset__questionset_questions__question__conditions',
-        'page_questionsets__questionset__questionset_questions__question__optionsets',
-        'page_questionsets__questionset__questionset_questionsets__questionset__attribute',
-        'page_questionsets__questionset__questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -219,9 +206,17 @@ class Page(Model, TranslationMixin):
     def is_locked(self) -> bool:
         return self.locked or any(section.is_locked for section in self.sections.all())
 
+    @property
+    def attribute_uri(self) -> str:
+        return self.attribute.uri
+
     @cached_property
     def has_conditions(self) -> bool:
         return self.conditions.exists()
+
+    @property
+    def condition_uris(self):
+        return [condition.uri for condition in self.conditions.all()]
 
     @cached_property
     def elements(self) -> list:
@@ -236,7 +231,7 @@ class Page(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *self.prefetch_lookups)
+        models.prefetch_related_objects([self], *get_page_prefetch_lookups())
 
     def to_dict(self):
         return {

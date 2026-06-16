@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - '*'
   pull_request:
     # run CI only if files in these whitelisted paths are changed
     paths:
@@ -31,42 +33,42 @@ permissions: {}
 
 jobs:
 
-  build-wheel:
-    name: Build python wheel
+  build:
+    name: Build python package
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
         fetch-depth: 0  # important for setuptools_scm
-    # build the webpack bundle
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
       with:
         node-version: 22.22
-        cache: npm
-    - run: npm ci && npm run build:dist
+        cache: ${{ startsWith(github.ref, 'refs/tags/') && '' || 'npm' }}  # disable cache on tags
+    - name: build front end
+      run: npm ci && npm run build:dist
     - name: Build and inspect package
-      uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
+      uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df # v2.18.0
 
   test:
     name: "Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.10', '3.13']
+        python-version: ['3.10', '3.14']
         db-backend: [mysql, postgres]
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Download wheel
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
       with:
         name: Packages
         path: dist
@@ -94,7 +96,7 @@ jobs:
     - name: Run package status tests first
       run: |
         pytest rdmo/core/tests/test_package_status.py --nomigrations --verbose
-      if: matrix.python-version == '3.13' && matrix.db-backend == 'postgres'
+      if: matrix.python-version == '3.14' && matrix.db-backend == 'postgres'
     - name: Run Tests
       run: |
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
@@ -110,23 +112,23 @@ jobs:
 
   test-e2e:
     name: "End-to-end Test (Python: ${{ matrix.python-version }}, DB: ${{ matrix.db-backend }})"
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.13']
+        python-version: ['3.14']
         db-backend: [postgres]
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: ${{ matrix.python-version }}
         cache: pip
-    - name: Download wheel
-      uses: actions/download-artifact@v6
+    - name: Download package
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
       with:
         name: Packages
         path: dist
@@ -154,7 +156,7 @@ jobs:
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
       with:
         name: screenshots
         path: screenshots/**/*.png
@@ -163,7 +165,7 @@ jobs:
     name: Indicate completion to coveralls
     needs: test
     if: ${{ always() }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
     - name: Run Coveralls finish
       uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
@@ -179,30 +181,30 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
           cache: pip
       - run: python -Im pip install --editable .[dev]
       - run: python -Ic 'import rdmo; print(rdmo.__version__)'
 
   dependencies:
     name: Test installation of all dependencies
-    needs: build-wheel
+    needs: build
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
           cache: pip
-      - name: Download wheel
-        uses: actions/download-artifact@v6
+      - name: Download package
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           name: Packages
           path: dist
@@ -213,7 +215,7 @@ jobs:
         run: python -m pip install --no-compile "$(ls dist/*.whl)[all]"
       - name: Verify installed packages have compatible dependencies
         run: python -m pip check
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22
           cache: npm
@@ -244,16 +246,38 @@ jobs:
             echo -e "\`\`\`\n</details>"
           } >> $GITHUB_STEP_SUMMARY
 
+  pypi-release:
+    name: Publish distribution to PyPI
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+    - build
+    - test
+    - test-e2e
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/p/rdmo
+    permissions:
+      id-token: write
+    steps:
+    - name: Download package
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+      with:
+        name: Packages
+        path: dist
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b  # v1.14.0
+
   required-checks-pass:
     if: always()
     needs:
-      - build-wheel
+      - build
       - test
       - coveralls
       - test-e2e
       - dev-setup
       - dependencies
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     steps:
       - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:

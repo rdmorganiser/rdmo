@@ -9,7 +9,7 @@ from rdmo.questions.models import Question
 
 from ...models import OptionSet, OptionSetOption
 from ...validators import OptionSetLockedValidator, OptionSetUniqueURIValidator
-from .option import OptionSerializer
+from .option import OptionNestedSerializer
 
 
 class OptionSetOptionSerializer(serializers.ModelSerializer):
@@ -32,8 +32,6 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
 
     read_only = serializers.SerializerMethodField()
 
-    condition_uris = serializers.SerializerMethodField()
-
     class Meta:
         model = OptionSet
         fields = (
@@ -44,7 +42,6 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             'uri_path',
             'comment',
             'locked',
-            'read_only',
             'order',
             'provider_key',
             'options',
@@ -65,23 +62,36 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             OptionSetLockedValidator()
         )
 
-    def get_condition_uris(self, obj) -> list[str]:
-        return [condition.uri for condition in obj.conditions.all()]
 
+class OptionSetNestedSerializer(
+    ElementModelSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    serializers.ModelSerializer,
+):
+    model = serializers.SerializerMethodField()
 
-class OptionSetNestedSerializer(OptionSetSerializer):
+    read_only = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(OptionSetSerializer.Meta):
+    class Meta:
+        model = OptionSet
         fields = (
-            *OptionSetSerializer.Meta.fields,
-            'elements'
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'order',
+            'provider_key',
+            'conditions',
+            'read_only',
+            'condition_uris',
+            'elements',
         )
 
     def get_elements(self, obj) -> list[dict]:
         for element in obj.elements:
-            yield OptionSerializer(element, context=self.context).data
+            yield OptionNestedSerializer(element, context=self.context).data
 
 
 class OptionSetIndexSerializer(serializers.ModelSerializer):

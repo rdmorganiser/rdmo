@@ -659,6 +659,39 @@ def test_navigation_section(db, client, username, password, project_id):
             assert response.status_code == 401
 
 
+def test_navigation_without_sections(db, client):
+    from rdmo.questions.models.section import Section
+    project_id = 1
+    username = 'owner'
+    Section.objects.all().delete()
+
+    client.login(username=username, password=username)
+
+    url = reverse(urlnames['navigation'], args=[project_id])
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_navigation_without_pages(db, client):
+    from rdmo.questions.models.page import Page
+    project_id = 1
+    username = 'owner'
+    Page.objects.all().delete()
+
+    client.login(username=username, password=username)
+
+    url = reverse(urlnames['navigation'], args=[project_id])
+    response = client.get(url)
+    response_data = response.json()
+
+    assert response.status_code == 200
+    for data in response_data:
+        assert data['count'] == 0
+        assert data['first'] is None
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('condition_id', conditions)
@@ -671,6 +704,31 @@ def test_resolve(db, client, username, password, project_id, condition_id):
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('condition_id', conditions)
+def test_resolve_post(db, client, username, password, project_id, condition_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['resolve'], args=[project_id])
+    data = [{
+        'set_prefix': '',
+        'set_index': 0,
+        'element_type': 'conditions',
+        'element_id': condition_id
+    }]
+    response = client.post(url, data, content_type='application/json')
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
     else:
         if password:
             assert response.status_code == 404

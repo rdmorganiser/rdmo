@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.urls import include, path
 
 urlpatterns = [
@@ -14,3 +15,8 @@ urlpatterns = [
 
     path('core/', include('rdmo.core.urls.v1.core')),
 ]
+
+if apps.is_installed('drf_spectacular'):
+    urlpatterns += [
+        path('', include('rdmo.core.urls.v1.openapi')),
+    ]

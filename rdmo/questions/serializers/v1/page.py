@@ -11,8 +11,7 @@ from rdmo.core.serializers import (
 
 from ...models import Page, PageQuestion, PageQuestionSet, QuestionSet, Section
 from ...validators import PageLockedValidator, PageUniqueURIValidator
-from .question import QuestionSerializer
-from .questionset import QuestionSetNestedSerializer
+from .questionset import QuestionNestedSerializer, QuestionSetNestedSerializer
 
 
 class PageQuestionSetSerializer(serializers.ModelSerializer):
@@ -50,9 +49,6 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
 
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
-
-    attribute_uri = serializers.CharField(source='attribute.uri', read_only=True)
-    condition_uris = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
@@ -104,18 +100,47 @@ class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
             'title',
         )
 
-    def get_condition_uris(self, obj) -> list:
-        return [condition.uri for condition in obj.conditions.all()]
 
+class PageNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('title',)
 
-class PageNestedSerializer(PageSerializer):
+    model = serializers.SerializerMethodField()
+
+    questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
+    questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(PageSerializer.Meta):
+    class Meta:
+        model = Page
         fields = (
-            *PageSerializer.Meta.fields,
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'attribute',
+            'is_collection',
+            'title',
+            'questionsets',
+            'questions',
+            'conditions',
+            'warning',
+            'read_only',
+            'attribute_uri',
+            'condition_uris',
             'elements'
+        )
+        warning_fields = (
+            'title',
         )
 
     def get_elements(self, obj):
@@ -123,7 +148,7 @@ class PageNestedSerializer(PageSerializer):
             if isinstance(element, QuestionSet):
                 yield QuestionSetNestedSerializer(element, context=self.context).data
             else:
-                yield QuestionSerializer(element, context=self.context).data
+                yield QuestionNestedSerializer(element, context=self.context).data
 
 
 class PageIndexSerializer(serializers.ModelSerializer):

@@ -81,14 +81,41 @@ class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin,
         )
 
 
-class CatalogNestedSerializer(CatalogSerializer):
+class CatalogNestedSerializer(
+    ElementModelSerializerMixin,
+    ElementWarningSerializerMixin,
+    ReadOnlyObjectPermissionSerializerMixin,
+    MarkdownSerializerMixin,
+    serializers.ModelSerializer
+):
+    markdown_fields = ('title',)
+
+    model = serializers.SerializerMethodField()
+
+    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
+
+    warning = serializers.SerializerMethodField()
+    read_only = serializers.SerializerMethodField()
 
     elements = serializers.SerializerMethodField()
 
-    class Meta(CatalogSerializer.Meta):
+    class Meta:
+        model = Catalog
         fields = (
-            *CatalogSerializer.Meta.fields,
-            'elements'
+            'id',
+            'model',
+            'uri',
+            'locked',
+            'available',
+            'title',
+            'sections',
+            'sites',
+            'warning',
+            'read_only',
+            'elements',
+        )
+        warning_fields = (
+            'title',
         )
 
     def get_elements(self, obj):

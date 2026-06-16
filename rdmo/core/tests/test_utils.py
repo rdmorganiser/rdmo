@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from django.utils.translation import activate
+from django.utils import translation
 
 from rdmo.core.utils import (
     human2bytes,
@@ -42,7 +42,11 @@ valid_date_strings = [
 ]
 
 invalid_date_strings = [
-    ("2025-02-31","day is out of range for month"),
+    ("2025-02-31", (
+        "day is out of range for month",  # Python 3.10
+        "day 31 must be in range 1..28 for month 2 in year 2025"  # Python 3.14
+        )
+     ),
     ("2025-17-02", "month must be in 1..12"),
     ("99/99/9999", "Invalid date format"),
     ("abcd-ef-gh", "Invalid date format"),
@@ -85,17 +89,20 @@ def test_human2bytes(human: str | None, bytes: float):
 
 @pytest.mark.parametrize("locale, date_string, expected_date", valid_date_strings)
 def test_parse_date_from_string_valid_formats(settings, locale, date_string, expected_date):
-    activate(locale)
-    assert parse_date_from_string(date_string) == expected_date
+    with translation.override(locale):
+        assert parse_date_from_string(date_string) == expected_date
 
 
 @pytest.mark.parametrize("invalid_date, error_msg", invalid_date_strings)
 def test_parse_date_from_string_invalid_formats(settings, invalid_date, error_msg):
-    if not isinstance(invalid_date,str):
-        with pytest.raises(TypeError, match=error_msg):
+    patterns = error_msg if isinstance(error_msg, (tuple, list)) else (error_msg,)
+    match = "|".join(f"(?:{pattern})" for pattern in patterns)
+
+    if not isinstance(invalid_date, str):
+        with pytest.raises(TypeError, match=match):
             parse_date_from_string(invalid_date)
     else:
-        with pytest.raises(ValueError,match=error_msg):
+        with pytest.raises(ValueError, match=match):
             parse_date_from_string(invalid_date)
 
 

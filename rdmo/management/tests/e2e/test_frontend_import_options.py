@@ -6,7 +6,7 @@ from rdmo.management.tests.e2e.frontend_helpers import assert_warning_items
 from rdmo.management.tests.helpers_import_elements import IMPORT_ELEMENT_PANELS_LOCATOR
 from rdmo.options.models import Option, OptionSet
 
-pytestmark = pytest.mark.e2e
+pytestmark = [pytest.mark.e2e, pytest.mark.django_db(transaction=True)]
 
 import_xml = "./testing/xml/elements/optionsets.xml"
 import_xml_1 = "./testing/xml/elements/updated-and-changed/optionsets-1.xml"

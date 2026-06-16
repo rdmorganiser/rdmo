@@ -22,10 +22,10 @@ from ..models import (
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
+    attribute = serializers.SerializerMethodField()
     default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
-    optionsets = OptionSetExportSerializer(many=True)
-    conditions = ConditionExportSerializer(many=True)
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -56,6 +56,27 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'verbose_name'
         )
 
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
+
+    def get_optionsets(self, obj):
+        optionsets = obj.optionsets.all()
+
+        if self.context.get('optionsets'):
+            return OptionSetExportSerializer(optionsets, many=True, context=self.context).data
+
+        return [{'uri': optionset.uri} for optionset in optionsets]
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
+
 
 class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
 
@@ -69,12 +90,12 @@ class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
         )
 
     def get_questionset(self, obj):
-        return QuestionSetExportSerializer(obj.questionset).data
+        return QuestionSetExportSerializer(obj.questionset, context=self.context).data
 
 
 class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
 
-    question = QuestionExportSerializer()
+    question = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSetQuestion
@@ -83,11 +104,14 @@ class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_question(self, obj):
+        return QuestionExportSerializer(obj.question, context=self.context).data
+
 
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
-    conditions = ConditionExportSerializer(many=True)
+    attribute = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
 
     questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True)
     questionset_questions = QuestionSetQuestionExportSerializer(many=True)
@@ -111,10 +135,23 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'verbose_name'
         )
 
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
+
 
 class PageQuestionSetExportSerializer(serializers.ModelSerializer):
 
-    questionset = QuestionSetExportSerializer()
+    questionset = serializers.SerializerMethodField()
 
     class Meta:
         model = PageQuestionSet
@@ -123,10 +160,13 @@ class PageQuestionSetExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_questionset(self, obj):
+        return QuestionSetExportSerializer(obj.questionset, context=self.context).data
+
 
 class PageQuestionExportSerializer(serializers.ModelSerializer):
 
-    question = QuestionExportSerializer()
+    question = serializers.SerializerMethodField()
 
     class Meta:
         model = PageQuestion
@@ -135,11 +175,14 @@ class PageQuestionExportSerializer(serializers.ModelSerializer):
             'order'
         )
 
+    def get_question(self, obj):
+        return QuestionExportSerializer(obj.question, context=self.context).data
+
 
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    attribute = AttributeExportSerializer()
-    conditions = ConditionExportSerializer(many=True)
+    attribute = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
 
     page_questionsets = PageQuestionSetExportSerializer(many=True)
     page_questions = PageQuestionExportSerializer(many=True)
@@ -164,10 +207,23 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'verbose_name'
         )
 
+    def get_attribute(self, obj):
+        attribute = self.context.get('attribute_map', {}).get(obj.attribute_id)
+        if attribute:
+            return AttributeExportSerializer(attribute, context=self.context).data
+
+    def get_conditions(self, obj):
+        conditions = obj.conditions.all()
+
+        if self.context.get('conditions'):
+            return ConditionExportSerializer(conditions, many=True, context=self.context).data
+
+        return [{'uri': condition.uri} for condition in conditions]
+
 
 class SectionPageExportSerializer(serializers.ModelSerializer):
 
-    page = PageExportSerializer()
+    page = serializers.SerializerMethodField()
 
     class Meta:
         model = SectionPage
@@ -175,6 +231,9 @@ class SectionPageExportSerializer(serializers.ModelSerializer):
             'page',
             'order'
         )
+
+    def get_page(self, obj):
+        return PageExportSerializer(obj.page, context=self.context).data
 
 
 class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):

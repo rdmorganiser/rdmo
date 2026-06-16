@@ -386,3 +386,52 @@ def test_detail_export_full(db, client):
     assert 'http://example.com/terms/domain/blocks' in uris
     assert 'http://example.com/terms/options/one_two_three' in uris
     assert 'http://example.com/terms/options/one_two_three/one' in uris
+
+
+
+@pytest.mark.parametrize('questionset_uri,status_code', [
+    ('http://example.com/terms/questions/catalog/blocks/single/block', 200),
+    ('http://example.com/terms/questions/catalog/blocks/set/block/block', 400),
+    ('http://example.com/terms/questions/catalog/blocks/set/block', 400),
+])
+def test_update_questionset(db, client, questionset_uri, status_code):
+    client.login(username='editor', password='editor')
+
+    instance = QuestionSet.objects.get(uri='http://example.com/terms/questions/catalog/blocks/set/block/block')
+
+    questionset = QuestionSet.objects.get(uri=questionset_uri)
+    questionsets = [{
+        'questionset': questionset.id,
+        'order': 99
+    }]
+    questions = [{
+        'question': questionset_question.question.id,
+        'order': questionset_question.order
+    } for questionset_question in instance.questionset_questions.all()[:1]]
+    conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+    url = reverse(urlnames['detail'], args=[instance.pk])
+    data = {
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path,
+        'comment': instance.comment,
+        'attribute': instance.attribute.pk if instance.attribute else None,
+        'is_collection': instance.is_collection,
+        'title_en': instance.title_lang1,
+        'title_de': instance.title_lang2,
+        'help_en': instance.help_lang1,
+        'help_de': instance.help_lang2,
+        'verbose_name_en': instance.verbose_name_lang1,
+        'verbose_name_de': instance.verbose_name_lang2,
+        'questionsets': questionsets,
+        'questions': questions,
+        'conditions': conditions
+    }
+
+    response = client.put(url, data, content_type='application/json')
+    assert response.status_code == status_code
+
+    if response.status_code == 400:
+        assert response.json().get('questionsets') == [
+            'A question set may not be a child of itself or one of its descendants.'
+        ]

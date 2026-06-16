@@ -10,20 +10,12 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 
 from ..managers import QuestionSetManager
+from ..prefetch import get_questionset_prefetch_lookups
 
 
 class QuestionSet(Model, TranslationMixin):
 
     objects = QuestionSetManager()
-
-    prefetch_lookups = (
-        'conditions',
-        'questionset_questions__question__attribute',
-        'questionset_questions__question__conditions',
-        'questionset_questions__question__optionsets',
-        'questionset_questionsets__questionset__attribute',
-        'questionset_questionsets__questionset__conditions'
-    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -187,9 +179,17 @@ class QuestionSet(Model, TranslationMixin):
             any(page.is_locked for page in self.pages.all()) or \
             any(questionset.is_locked for questionset in self.questionsets.all())
 
+    @property
+    def attribute_uri(self) -> str:
+        return self.attribute.uri
+
     @cached_property
     def has_conditions(self) -> bool:
         return self.conditions.exists()
+
+    @property
+    def condition_uris(self):
+        return [condition.uri for condition in self.conditions.all()]
 
     @cached_property
     def elements(self) -> list:
@@ -207,7 +207,7 @@ class QuestionSet(Model, TranslationMixin):
         return descendants
 
     def prefetch_elements(self):
-        models.prefetch_related_objects([self], *self.prefetch_lookups)
+        models.prefetch_related_objects([self], *get_questionset_prefetch_lookups())
 
     def to_dict(self, *ancestors):
         return {

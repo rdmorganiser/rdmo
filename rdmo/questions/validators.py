@@ -40,7 +40,10 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
     def __call__(self, data, serializer=None):
         super().__call__(data, serializer)
 
-        questionsets = data.get('questionsets')
+        questionsets = data.get('questionsets') or [
+            questionset_questionset.get('questionset')
+            for questionset_questionset in data.get('questionset_questionsets', [])
+        ]
         if not questionsets:
             return
 

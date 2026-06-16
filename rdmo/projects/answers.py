@@ -44,12 +44,12 @@ class AnswerTree:
 
             if element_type in ['catalog', 'page', 'questionset']:
                 element_node.update({
-                    'title': markdown2html(element.title),
+                    'title': markdown2html(element.short_title) or markdown2html(element.title),
                     'help': markdown2html(element.help)
                 })
             elif element_type == 'section':
                 element_node.update({
-                    'title': markdown2html(element.title)
+                    'title': markdown2html(element.short_title) or markdown2html(element.title)
                 })
             elif element_type == 'question':
                 element_node.update({
@@ -79,7 +79,8 @@ class AnswerTree:
 
             # find the first element
             if element_type in self.verbose:
-                element_node['first'] = element_node['elements'][0]['id']
+                if element_node['elements']:
+                    element_node['first'] = element_node['elements'][0]['id']
 
             # aggregate count and total from the child elements
             element_node['count'] = sum(child_node['count'] for child_node in element_node['elements'])

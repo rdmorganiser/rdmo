@@ -29,7 +29,6 @@ class BaseAttributeSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermiss
             'comment',
             'locked',
             'read_only',
-            'editors',
             'parent'
         )
 
@@ -58,7 +57,8 @@ class AttributeSerializer(BaseAttributeSerializer):
             'tasks',
             'attributes',
             'values_count',
-            'projects_count'
+            'projects_count',
+            'editors',
         )
         extra_kwargs = {
             'key': {'required': True}
@@ -83,7 +83,6 @@ class AttributeListSerializer(BaseAttributeSerializer):
             *BaseAttributeSerializer.Meta.fields,
             'is_leaf_node'
         )
-
 
 class AttributeNestedSerializer(AttributeListSerializer):
 

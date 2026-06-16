@@ -24,11 +24,6 @@ from .serializers.v1 import (
 
 class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = Attribute.objects.annotate(values_count=models.Count('values')) \
-                                .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                                .prefetch_related('conditions', 'pages', 'questionsets', 'questions',
-                                                  'tasks_as_start', 'tasks_as_end', 'editors') \
-                                .order_by('path')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
@@ -39,6 +34,25 @@ class AttributeViewSet(ModelViewSet):
         'key',
         'parent'
     )
+
+    def get_queryset(self):
+        queryset = Attribute.objects.all().order_by('path')
+        if self.action in ('index', 'nested', 'export', 'detail_export'):
+            return queryset
+        else:
+            return queryset.annotate(
+                values_count=models.Count('values')
+            ).annotate(
+                projects_count=models.Count('values__project', distinct=True)
+            ).prefetch_related(
+                'conditions',
+                'pages',
+                'questionsets',
+                'questions',
+                'tasks_as_start',
+                'tasks_as_end',
+                'editors',
+            )
 
     def get_serializer_class(self):
         return AttributeListSerializer if self.action == 'list' else AttributeSerializer
@@ -58,7 +72,12 @@ class AttributeViewSet(ModelViewSet):
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
-            serializer = AttributeExportSerializer(queryset, many=True)
+            attributes = list(queryset)
+            serializer = AttributeExportSerializer(
+                queryset,
+                many=True,
+                context=self.get_export_serializer_context(attributes),
+            )
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name='attributes')
         elif export_format[:3] == 'csv':
@@ -72,18 +91,30 @@ class AttributeViewSet(ModelViewSet):
 
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
-        attributes = self.get_object().get_descendants(include_self=True)
+        instance = self.get_object()
+        attributes = instance.get_descendants(include_self=True)
         if export_format == 'xml':
-            serializer = AttributeExportSerializer(attributes, many=True)
+            serializer = AttributeExportSerializer(
+                attributes,
+                many=True,
+                context=self.get_export_serializer_context(attributes),
+            )
             xml = AttributeRenderer().render(serializer.data)
-            return XMLResponse(xml, name=self.get_object().key)
+            return XMLResponse(xml, name=instance.key)
         elif export_format[:3] == 'csv':
             rows = [(attribute.key, attribute.comment, attribute.uri) for attribute in attributes]
             delimiter = ',' if export_format == 'csvcomma' else ';'
             return render_to_csv('domain', rows, delimiter)
         else:
             return render_to_format(
-                self.request, export_format, self.get_object().key, 'domain/export/attributes.html', {
+                self.request, export_format, instance.key, 'domain/export/attributes.html', {
                     'attributes': attributes
                 }
             )
+
+    def get_export_serializer_context(self, attributes):
+        return {
+            'attribute_map': {
+                attribute.pk: attribute for attribute in attributes
+            }
+        }

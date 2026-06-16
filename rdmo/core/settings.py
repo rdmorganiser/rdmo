@@ -75,6 +75,8 @@ TEMPLATES = [
     },
 ]
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
@@ -162,6 +164,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
+
+STATICFILES_STORAGE = 'rdmo.core.storage.VersionedStaticFilesStorage'
 
 DATABASES = {
     'default': {
@@ -331,6 +335,9 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
     # for example: 'not_empty': 'core/text_blocks/template_for_not_empty.html',
 }
 
+MARKDOWN_CLEAN = False
+MARKDOWN_CLEAN_KWARGS = {}  # see https://nh3.readthedocs.io for available kwargs
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
@@ -364,6 +371,7 @@ PROJECT_FILE_QUOTA = '10Mb'
 PROJECT_SEND_ISSUE = False
 
 PROJECT_INVITE_TIMEOUT = None
+PROJECT_INVITE_USE_PROJECT_SITE = False
 
 PROJECT_SEND_INVITE = True
 

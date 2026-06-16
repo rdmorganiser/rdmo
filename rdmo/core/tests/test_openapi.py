@@ -1,5 +1,9 @@
 import pytest
 
+from django.contrib.auth.models import User
+
+from rest_framework.authtoken.models import Token
+
 import yaml
 
 pytestmark = pytest.mark.django_db
@@ -12,7 +16,7 @@ users = (
 
 
 @pytest.mark.parametrize('username', users)
-def test_openapi_schema(db, client, login, settings, username):
+def test_openapi_schema(db, client, login, username):
     login(username)
 
     response = client.get('/api/v1/schema/')
@@ -24,7 +28,26 @@ def test_openapi_schema(db, client, login, settings, username):
         assert len(schema['paths']) > 120
         assert len(schema['paths']) < 140
     else:
-        assert response.status_code == 302
+        assert response.status_code == 403
+
+
+def test_openapi_schema_token(db, client):
+    user = User.objects.get(username='user')
+    token, _ = Token.objects.get_or_create(user=user)
+
+    response = client.get('/api/v1/schema/', headers={
+        'Authorization': f'Token {token}'
+    })
+
+    assert response.status_code == 200
+
+
+def test_openapi_schema_token_forbidden(db, client, login):
+    response = client.get('/api/v1/schema/', headers={
+        'Authorization': 'Token wrong'
+    })
+
+    assert response.status_code == 403
 
 
 @pytest.mark.parametrize('username', users)
