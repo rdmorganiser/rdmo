@@ -83,9 +83,9 @@
     "model": "conditions.condition",
     "pk": 6,
     "fields": {
-      "uri": "http://example.com/terms/conditions/text_lesser_than_0",
+      "uri": "http://example.com/terms/conditions/text_less_than_0",
       "uri_prefix": "http://example.com/terms",
-      "uri_path": "text_lesser_than_0",
+      "uri_path": "text_less_than_0",
       "comment": "",
       "locked": false,
       "source": 81,
@@ -99,9 +99,9 @@
     "model": "conditions.condition",
     "pk": 7,
     "fields": {
-      "uri": "http://example.com/terms/conditions/text_lesser_than_equal_0",
+      "uri": "http://example.com/terms/conditions/text_less_than_equal_0",
       "uri_prefix": "http://example.com/terms",
-      "uri_path": "text_lesser_than_equal_0",
+      "uri_path": "text_less_than_equal_0",
       "comment": "",
       "locked": false,
       "source": 81,
