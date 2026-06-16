@@ -1,6 +1,6 @@
 # Changelog 📔
 
-## [RDMO 2.5.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.0)
+## [RDMO 2.5.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.0) (June 16, 2026)
 
 ### Breaking changes ⚠️
 
