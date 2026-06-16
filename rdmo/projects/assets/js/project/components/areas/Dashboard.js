@@ -258,7 +258,6 @@ const Dashboard = () => {
                 >
                   {/* <p>{selectedTaskIssue.id}</p> */}
                   <p>{selectedTaskIssue.task.text}</p>
-                  {/* <p>{selectedTaskIssue.status}</p> */}
                   <Select
                     isDisabled={!perms.can_change_issue}
                     label={gettext('Status')}
@@ -275,7 +274,7 @@ const Dashboard = () => {
                     }
                   />
                   <div className="row mt-3">
-                    <div className="col-md-8">
+                    <div className={selectedTaskIssue.dates?.length > 0 ? 'col-md-8' : 'col-md-12'}>
                       {/* questions */}
                       {
                         selectedTaskIssue.questions?.length > 0 && (
@@ -317,9 +316,9 @@ const Dashboard = () => {
                       }
                     </div>
 
-                    <div className="col-md-4">
-                      {
-                        selectedTaskIssue.dates?.length > 0 && (
+                    {
+                      selectedTaskIssue.dates?.length > 0 && (
+                        <div className="col-md-4">
                           <>
                             <div className="fw-bold mb-2">{gettext('Dates')}</div>
 
@@ -331,9 +330,9 @@ const Dashboard = () => {
                               ))
                             }
                           </>
-                        )
-                      }
-                    </div>
+                        </div>
+                      )
+                    }
                   </div>
                 </Modal>
               )
