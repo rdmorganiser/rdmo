@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { language } from 'rdmo/core/assets/js/utils'
-import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
-
-import Select from 'rdmo/core/assets/js/components/forms/Select'
 
 import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
-import { projectId } from '../../utils/meta'
 import { Tile } from '../helper'
 
+import IssueModal from './dashboard/IssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
@@ -33,15 +29,9 @@ const Dashboard = () => {
   //   ]
   // })
 
-  const statusOptions = [
-    { value: 'open', label: gettext('Open') },
-    { value: 'closed', label: gettext('Closed') },
-    { value: 'in_progress', label: gettext('In progress') },
-  ]
-
   const { showClosedTasks, showClosedRecommendations } = config
 
-  const [selectedTaskIssue, setSelectedTaskIssue] = useState(null)
+  const [selectedIssue, setSelectedIssue] = useState(null)
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -83,7 +73,7 @@ const Dashboard = () => {
             <Tile
               key={issue.id}
               size="normal"
-              onCardClick={() => setSelectedTaskIssue(issue)}
+              onCardClick={() => setSelectedIssue(issue)}
             >
               <div className="d-flex align-items-start">
                 <div className="me-3 mt-1">
@@ -226,92 +216,21 @@ const Dashboard = () => {
               )
             }
             {
-              selectedTaskIssue && (
-                <Modal
-                  show
-                  title={selectedTaskIssue.task.title}
-                  onClose={() => setSelectedTaskIssue(null)}
-                  size="modal-lg"
-                >
-                  {/* <p>{selectedTaskIssue.id}</p> */}
-                  <p>{selectedTaskIssue.task.text}</p>
-                  <Select
-                    isDisabled={!perms.can_change_issue}
-                    label={gettext('Status')}
-                    options={statusOptions}
-                    value={selectedTaskIssue.status}
-                    onChange={
-                      (status) => {
-                        dispatch(updateProjectTask(selectedTaskIssue.id, { status }))
-                        setSelectedTaskIssue({
-                          ...selectedTaskIssue,
-                          status,
-                        })
-                      }
+              selectedIssue && (
+                <IssueModal
+                  canChangeIssue={perms.can_change_issue}
+                  issue={selectedIssue}
+                  onClose={() => setSelectedIssue(null)}
+                  onStatusChange={
+                    (status) => {
+                      dispatch(updateProjectTask(selectedIssue.id, { status }))
+                      setSelectedIssue({
+                        ...selectedIssue,
+                        status,
+                      })
                     }
-                  />
-                  <div className="row mt-3">
-                    <div className={selectedTaskIssue.dates?.length > 0 ? 'col-md-8' : 'col-md-12'}>
-                      {/* questions */}
-                      {
-                        selectedTaskIssue.questions?.length > 0 && (
-                          <>
-                            <div className="fw-bold mb-2">{gettext('Why is this task shown?')}</div>
-                            <p>{gettext('This task is shown based on your answers:')}</p>
-                            {
-                              selectedTaskIssue.questions.map((question) => (
-                                <div key={question.id} className="mb-3">
-                                  {
-                                    question.pages?.map((page) => {
-                                      const url = `${baseUrl}/projects/${projectId}/interview/${page.id}/`
-
-                                      return (
-                                        <div key={page.id}>
-                                          <p>{gettext('QUESTION:')} <a href={url}>{question.text}</a></p>
-                                        </div>
-                                      )
-                                    })
-                                  }
-                                  {/* conditions */}
-                                  {
-                                    selectedTaskIssue.task.conditions?.length > 0 && (
-                                      selectedTaskIssue.task.conditions
-                                        ?.filter((condition) => condition.source === question.attribute)
-                                        .map((condition) => (
-                                          <div key={condition.id} className="mb-3">
-                                            <p>{gettext('YOUR ANSWER:')} {condition.relation_label} {' '}
-                                              {condition.target_option_text || condition.target_text}</p>
-                                          </div>
-                                        ))
-                                    )
-                                  }
-                                </div>
-                              ))
-                            }
-                          </>
-                        )
-                      }
-                    </div>
-
-                    {
-                      selectedTaskIssue.dates?.length > 0 && (
-                        <div className="col-md-4">
-                          <>
-                            <div className="fw-bold mb-2">{gettext('Dates')}</div>
-
-                            {
-                              selectedTaskIssue.dates.map((date, index) => (
-                                <div key={index} className="mb-2">
-                                  {renderDate(date)}
-                                </div>
-                              ))
-                            }
-                          </>
-                        </div>
-                      )
-                    }
-                  </div>
-                </Modal>
+                  }
+                />
               )
             }
           </>

@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Modal as BootstrapModal } from 'bootstrap'
 
-const Modal = ({ title, show, onClose, onSubmit, submitLabel, submitProps, children, modalProps = {}, size = '' }) => {
+const Modal = (
+  {title, show, onClose, closeLabel, onSubmit, submitLabel, submitProps, children, modalProps = {}, size = '' }) => {
   const modalRef = useRef(null)
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const Modal = ({ title, show, onClose, onSubmit, submitLabel, submitProps, child
               )
             }
             <button type="button" className="btn btn-secondary" onClick={onClose}>
-              {gettext('Cancel')}
+              {closeLabel ?? gettext('Cancel')}
             </button>
           </div>
         </div>
@@ -74,6 +75,7 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
   submitLabel: PropTypes.string,
+  closeLabel: PropTypes.string,
   submitProps: PropTypes.object,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
