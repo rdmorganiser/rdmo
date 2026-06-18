@@ -13,6 +13,8 @@ import { navigateDashboard, updateProjectTask } from '../../actions/projectActio
 import { projectId } from '../../utils/meta'
 import { Tile } from '../helper'
 
+import ShowClosedIssues from './dashboard/ShowClosedIssues'
+
 const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
@@ -50,23 +52,12 @@ const Dashboard = () => {
 
   const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
 
-  const taskIssues = issues.filter((issue) =>
-    getTaskType(issue) === 'task'
-  )
-
-  // console.log('task issues', taskIssues)
-
-  const visibleTaskIssues = taskIssues
-    .filter((issue) => showClosedTasks || !isClosed(issue))
+  const visibleTaskIssues = issues
+    .filter((issue) => getTaskType(issue) === 'task' && (showClosedTasks || !isClosed(issue)))
     .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
-  const recommendationIssues = issues.filter((issue) =>
-    getTaskType(issue) === 'recommendation'
-  )
-  // console.log('recommendation issues', recommendationIssues)
-
-  const visibleRecommendationIssues = recommendationIssues
-    .filter((issue) => showClosedRecommendations || !isClosed(issue))
+  const visibleRecommendationIssues = issues
+    .filter((issue) => getTaskType(issue) === 'recommendation' && (showClosedRecommendations || !isClosed(issue)))
     .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
   const guidanceIssues = issues.filter((issue) =>
@@ -83,7 +74,7 @@ const Dashboard = () => {
     date.map((dateValue) => useFormattedDateTime(dateValue, language, 'dateOnly')).join(' - ')
   )
 
-  const renderTaskIssueTiles = (visibleIssues) => (
+  const renderVisibleIssues = (visibleIssues) => (
     <div className="row">
       {
         visibleIssues.map((issue) => {
@@ -175,49 +166,35 @@ const Dashboard = () => {
               )
             }
             {
-              taskIssues.length > 0 && (
+              visibleTaskIssues.length > 0 && (
                 <>
                   <h2>{gettext('Tasks')}</h2>
-
-                  <div className="form-check form-switch mb-3">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="showClosedTasks"
-                      checked={showClosedTasks}
-                      onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
-                    />
-                    <label className="form-check-label" htmlFor="showClosedTasks">
-                      {gettext('Show closed tasks')}
-                    </label>
-                  </div>
-                  {renderTaskIssueTiles(visibleTaskIssues)}
+                  <ShowClosedIssues
+                    id="showClosedTasks"
+                    label={gettext('Show closed tasks')}
+                    checked={showClosedTasks}
+                    onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
+                  />
+                  {renderVisibleIssues(visibleTaskIssues)}
                 </>
               )
             }
             {
-              recommendationIssues.length > 0 && (
+              visibleRecommendationIssues.length > 0 && (
                 <>
                   <h2>{gettext('Recommendations')}</h2>
-
-                  <div className="form-check form-switch mb-3">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="showClosedRecommendations"
-                      checked={showClosedRecommendations}
-                      onChange={
-                        () => dispatch(configActions.updateConfig(
-                          'showClosedRecommendations',
-                          !showClosedRecommendations
-                        ))
-                      }
-                    />
-                    <label className="form-check-label" htmlFor="showClosedRecommendations">
-                      {gettext('Show closed tasks')}
-                    </label>
-                  </div>
-                  {renderTaskIssueTiles(visibleRecommendationIssues)}
+                  <ShowClosedIssues
+                    id="showClosedRecommendations"
+                    label={gettext('Show closed recommendations')}
+                    checked={showClosedRecommendations}
+                    onChange={
+                      () => dispatch(configActions.updateConfig(
+                        'showClosedRecommendations',
+                        !showClosedRecommendations
+                      ))
+                    }
+                  />
+                  {renderVisibleIssues(visibleRecommendationIssues)}
                 </>
               )
             }
