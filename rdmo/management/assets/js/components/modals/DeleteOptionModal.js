@@ -1,21 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { DeleteModal } from '../common/Modals'
+import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 
 const DeleteOptionModal = ({ option, info, show, onClose, onDelete }) => (
-  <DeleteModal title={gettext('Delete option')} show={show} onClose={onClose} onDelete={onDelete}>
+  <Modal
+    title={gettext('Delete option')}
+    show={show}
+    onClose={onClose}
+    onSubmit={onDelete}
+    submitLabel={gettext('Delete')}
+    submitProps={{ className: 'btn btn-danger' }}
+    size="modal-lg"
+  >
     <p>
       {gettext('You are about to permanently delete the option:')}
     </p>
     <p>
       <code className="code-options">{option.uri}</code>
     </p>
-    { info }
+    {info}
     <p className="text-danger">
       {gettext('This action cannot be undone!')}
     </p>
-  </DeleteModal>
+  </Modal>
 )
 
 DeleteOptionModal.propTypes = {

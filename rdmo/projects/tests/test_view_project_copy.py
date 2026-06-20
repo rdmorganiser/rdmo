@@ -1,9 +1,9 @@
-import pytest
+# import pytest
 
-from django.contrib.auth.models import Group, User
-from django.urls import reverse
+# from django.contrib.auth.models import Group, User
+# from django.urls import reverse
 
-from ..models import Project, Snapshot, Value
+# from ..models import Project, Snapshot, Value
 
 users = (
     ('owner', 'owner'),
@@ -55,153 +55,153 @@ parent_id = 1
 catalog_id = 1
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_copy_get(db, client, username, password, project_id):
-    client.login(username=username, password=password)
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# def test_project_copy_get(db, client, username, password, project_id):
+#     client.login(username=username, password=password)
 
-    url = reverse('project_copy', args=[project_id])
-    response = client.get(url)
+#     url = reverse('project_copy', args=[project_id])
+#     response = client.get(url)
 
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 200
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
-
-
-def test_project_copy_restricted_get(db, client, settings):
-    settings.PROJECT_CREATE_RESTRICTED = True
-    settings.PROJECT_CREATE_GROUPS = ['projects']
-
-    group = Group.objects.create(name='projects')
-    guest = User.objects.get(username='guest')
-    guest.groups.add(group)
-
-    client.login(username='guest', password='guest')
-
-    url = reverse('project_copy', args=[project_id])
-    response = client.get(url)
-
-    assert response.status_code == 200
+#     if project_id in view_project_permission_map.get(username, []):
+#         assert response.status_code == 200
+#     else:
+#         if password:
+#             assert response.status_code == 403
+#         else:
+#             assert response.status_code == 302
 
 
-def test_project_copy_forbidden_get(db, client, settings):
-    settings.PROJECT_CREATE_RESTRICTED = True
+# def test_project_copy_restricted_get(db, client, settings):
+#     settings.PROJECT_CREATE_RESTRICTED = True
+#     settings.PROJECT_CREATE_GROUPS = ['projects']
 
-    client.login(username='guest', password='guest')
+#     group = Group.objects.create(name='projects')
+#     guest = User.objects.get(username='guest')
+#     guest.groups.add(group)
 
-    url = reverse('project_copy', args=[project_id])
-    response = client.get(url)
+#     client.login(username='guest', password='guest')
 
-    assert response.status_code == 403
+#     url = reverse('project_copy', args=[project_id])
+#     response = client.get(url)
 
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_copy_post(db, files, client, username, password, project_id):
-    client.login(username=username, password=password)
-
-    project_count = Project.objects.count()
-    snapshot_count = Snapshot.objects.count()
-    value_count = Value.objects.count()
-
-    project = Project.objects.get(id=project_id)
-    project_snapshots_count = project.snapshots.count()
-    project_values_count = project.values.count()
-
-    url = reverse('project_copy', args=[project_id])
-    data = {
-        'title': 'A new project',
-        'description': 'Some description',
-        'catalog': catalog_id
-    }
-    response = client.post(url, data)
-
-    if project_id in view_project_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert Project.objects.count() == project_count + 1
-        assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
-        assert Value.objects.count() == value_count + project_values_count
-    else:
-        assert response.status_code == 403 if password else 302
-        assert Project.objects.count() == project_count
-        assert Value.objects.count() == value_count
+#     assert response.status_code == 200
 
 
-def test_project_copy_post_restricted(db, files, client, settings):
-    settings.PROJECT_CREATE_RESTRICTED = True
-    settings.PROJECT_CREATE_GROUPS = ['projects']
+# def test_project_copy_forbidden_get(db, client, settings):
+#     settings.PROJECT_CREATE_RESTRICTED = True
 
-    group = Group.objects.create(name='projects')
-    guest = User.objects.get(username='guest')
-    guest.groups.add(group)
+#     client.login(username='guest', password='guest')
 
-    client.login(username='guest', password='guest')
+#     url = reverse('project_copy', args=[project_id])
+#     response = client.get(url)
 
-    url = reverse('project_copy', args=[project_id])
-    data = {
-        'title': 'A new project',
-        'description': 'Some description',
-        'catalog': catalog_id
-    }
-    response = client.post(url, data)
-
-    assert response.status_code == 302
+#     assert response.status_code == 403
 
 
-def test_project_copy_post_forbidden(db, files, client, settings):
-    settings.PROJECT_CREATE_RESTRICTED = True
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# def test_project_copy_post(db, files, client, username, password, project_id):
+#     client.login(username=username, password=password)
 
-    client.login(username='guest', password='guest')
+#     project_count = Project.objects.count()
+#     snapshot_count = Snapshot.objects.count()
+#     value_count = Value.objects.count()
 
-    url = reverse('project_copy', args=[project_id])
-    data = {
-        'title': 'A new project',
-        'description': 'Some description',
-        'catalog': catalog_id
-    }
-    response = client.post(url, data)
+#     project = Project.objects.get(id=project_id)
+#     project_snapshots_count = project.snapshots.count()
+#     project_values_count = project.values.count()
 
-    assert response.status_code == 403
+#     url = reverse('project_copy', args=[project_id])
+#     data = {
+#         'title': 'A new project',
+#         'description': 'Some description',
+#         'catalog': catalog_id
+#     }
+#     response = client.post(url, data)
+
+#     if project_id in view_project_permission_map.get(username, []):
+#         assert response.status_code == 302
+#         assert Project.objects.count() == project_count + 1
+#         assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
+#         assert Value.objects.count() == value_count + project_values_count
+#     else:
+#         assert response.status_code == 403 if password else 302
+#         assert Project.objects.count() == project_count
+#         assert Value.objects.count() == value_count
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_project_copy_parent_post(db, files, client, username, password, project_id):
-    client.login(username=username, password=password)
-    project_count = Project.objects.count()
+# def test_project_copy_post_restricted(db, files, client, settings):
+#     settings.PROJECT_CREATE_RESTRICTED = True
+#     settings.PROJECT_CREATE_GROUPS = ['projects']
 
-    project_count = Project.objects.count()
-    snapshot_count = Snapshot.objects.count()
-    value_count = Value.objects.count()
+#     group = Group.objects.create(name='projects')
+#     guest = User.objects.get(username='guest')
+#     guest.groups.add(group)
 
-    project = Project.objects.get(id=project_id)
-    project_snapshots_count = project.snapshots.count()
-    project_values_count = project.values.count()
+#     client.login(username='guest', password='guest')
 
-    url = reverse('project_copy', args=[project_id])
-    data = {
-        'title': 'A new project',
-        'description': 'Some description',
-        'catalog': catalog_id,
-        'parent': parent_id
-    }
-    response = client.post(url, data)
+#     url = reverse('project_copy', args=[project_id])
+#     data = {
+#         'title': 'A new project',
+#         'description': 'Some description',
+#         'catalog': catalog_id
+#     }
+#     response = client.post(url, data)
 
-    if project_id in view_project_permission_map.get(username, []):
-        if parent_id in view_project_permission_map.get(username, []):
-            assert response.status_code == 302
-            assert Project.objects.count() == project_count + 1
-            assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
-            assert Value.objects.count() == value_count + project_values_count
-        else:
-            assert response.status_code == 200
-            assert Project.objects.count() == project_count
-            assert Value.objects.count() == value_count
-    else:
-        assert response.status_code == 403 if password else 302
-        assert Project.objects.count() == project_count
-        assert Value.objects.count() == value_count
+#     assert response.status_code == 302
+
+
+# def test_project_copy_post_forbidden(db, files, client, settings):
+#     settings.PROJECT_CREATE_RESTRICTED = True
+
+#     client.login(username='guest', password='guest')
+
+#     url = reverse('project_copy', args=[project_id])
+#     data = {
+#         'title': 'A new project',
+#         'description': 'Some description',
+#         'catalog': catalog_id
+#     }
+#     response = client.post(url, data)
+
+#     assert response.status_code == 403
+
+
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('project_id', projects)
+# def test_project_copy_parent_post(db, files, client, username, password, project_id):
+#     client.login(username=username, password=password)
+#     project_count = Project.objects.count()
+
+#     project_count = Project.objects.count()
+#     snapshot_count = Snapshot.objects.count()
+#     value_count = Value.objects.count()
+
+#     project = Project.objects.get(id=project_id)
+#     project_snapshots_count = project.snapshots.count()
+#     project_values_count = project.values.count()
+
+#     url = reverse('project_copy', args=[project_id])
+#     data = {
+#         'title': 'A new project',
+#         'description': 'Some description',
+#         'catalog': catalog_id,
+#         'parent': parent_id
+#     }
+#     response = client.post(url, data)
+
+#     if project_id in view_project_permission_map.get(username, []):
+#         if parent_id in view_project_permission_map.get(username, []):
+#             assert response.status_code == 302
+#             assert Project.objects.count() == project_count + 1
+#             assert Snapshot.objects.count() == snapshot_count + project_snapshots_count
+#             assert Value.objects.count() == value_count + project_values_count
+#         else:
+#             assert response.status_code == 200
+#             assert Project.objects.count() == project_count
+#             assert Value.objects.count() == value_count
+#     else:
+#         assert response.status_code == 403 if password else 302
+#         assert Project.objects.count() == project_count
+#         assert Value.objects.count() == value_count

@@ -123,6 +123,7 @@ ACCOUNT_PASSWORD_MIN_LENGTH = 4
 ACCOUNT_EMAIL_MAX_LENGTH = 190
 ACCOUNT_PREVENT_ENUMERATION = False
 ACCOUNT_ALLOW_USER_TOKEN = False
+ACCOUNT_LOGOUT_ON_GET = False
 
 SOCIALACCOUNT = False
 SOCIALACCOUNT_SIGNUP = False
@@ -221,6 +222,7 @@ SETTINGS_EXPORT = [
     'ACCOUNT_SIGNUP',
     'ACCOUNT_TERMS_OF_USE',
     'ACCOUNT_ALLOW_USER_TOKEN',
+    'ACCOUNT_LOGOUT_ON_GET',
     'SOCIALACCOUNT',
     'PROFILE_UPDATE',
     'PROFILE_DELETE',
@@ -229,6 +231,8 @@ SETTINGS_EXPORT = [
     'MULTISITE',
     'GROUPS',
     'EXPORT_FORMATS',
+    'HOME_IMAGES',
+    'HOME_IMAGES_TIMEOUT',
     'PROJECT_VISIBILITY',
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
@@ -250,7 +254,8 @@ SETTINGS_API = [
     'GROUPS',
     'EXPORT_FORMATS',
     'PROJECT_TABLE_PAGE_SIZE',
-    'PROJECT_CONTACT'
+    'PROJECT_SELECT_CATALOG',
+    'PROJECT_CONTACT',
 ]
 
 TEMPLATES_API = [
@@ -269,6 +274,18 @@ TEMPLATES_API = [
     'projects/project_interview_question_help.html',
     'projects/project_interview_questionset_help.html',
     'projects/project_interview_sidebar.html',
+    'projects/project_view_invite_member.html',
+    'projects/project_view_invite_member_user_help.html',
+    'projects/project_view_invite_member_silently_help.html',
+    'projects/project_view_manager_info.html',
+    'projects/project_view_guest_info.html',
+    'projects/project_view_author_info.html',
+    'projects/project_view_owner_info.html',
+    'projects/project_view_parent_help.html',
+    'projects/project_view_description_help.html',
+    'projects/project_view_title_help.html',
+    'projects/project_view_snapshot_description_help.html',
+    'projects/project_view_visibility_help.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
@@ -338,6 +355,31 @@ MARKDOWN_TEMPLATES: dict[str, str] = {
 MARKDOWN_CLEAN = False
 MARKDOWN_CLEAN_KWARGS = {}  # see https://nh3.readthedocs.io for available kwargs
 
+HOME_IMAGES_TIMEOUT = 6000
+HOME_IMAGES = [
+    {
+        'src': 'core/img/header/library.jpg',
+        'alt': 'Stockholm Public Library',
+        'attribution': '[Stockholm Public Library (Samantha Marx)](https://www.flickr.com/photos/spam/5086168739) / '
+                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+
+    },
+    {
+        'src': 'core/img/header/supercomputer.jpg',
+        'alt': 'Discover Supercomputer 3',
+        'attribution': '[Discover Supercomputer 3 (NASA Goddard Space Flight Center)]'
+                       '(https://www.flickr.com/photos/nasa_goddard/6559334541) / '
+                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+    },
+    {
+        'src': 'core/img/header/collection.jpg',
+        'alt': 'Nasssammlung',
+        'attribution': '[Nasssammlung (Christopher Bulle)]' # spellchecker:disable-line
+                       '(https://www.flickr.com/photos/bulle_de/9221247815) / '
+                       '[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)'
+    }
+]
+
 PROJECT_TABLE_PAGE_SIZE = 20
 
 PROJECT_VISIBILITY = True
@@ -377,6 +419,8 @@ PROJECT_SEND_INVITE = True
 
 PROJECT_VIEWS_SYNC = False
 PROJECT_TASKS_SYNC = False
+
+PROJECT_SELECT_CATALOG = 'radio'
 
 PROJECT_CREATE_RESTRICTED = False
 PROJECT_CREATE_GROUPS = []

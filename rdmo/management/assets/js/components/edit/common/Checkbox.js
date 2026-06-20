@@ -1,48 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import classNames from 'classnames'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
-import get from 'lodash/get'
 
-import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
-const Checkbox = ({ config, element, field, onChange }) => {
-  const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
-        warnings = get(element, ['warnings', field]),
-        errors = get(element, ['errors', field])
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
-  })
+const Checkbox = ({ element, field, onChange }) => {
+  const { meta } = useSelector((state) => state.config)
+
+  const id = getId(element, field)
+  const label = getLabel(element, field, meta)
+  const help = getHelp(element, field, meta)
+  const errors = get(element, ['errors', field])
 
   const checked = isNil(element[field]) ? '' : element[field]
 
   return (
-    <div className={className}>
-      <div className="checkbox">
-          <label>
-              <input id={id} type="checkbox" checked={checked} disabled={element.read_only}
-                     onChange={() => onChange(field, !checked)} />
-              <span>{label}</span>
-          </label>
+    <div className="mb-3">
+      <div className="form-check">
+        <input
+          type="checkbox"  id={id} disabled={element.read_only}
+          className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}
+          checked={checked} onChange={() => onChange(field, !checked)} />
+        <label className="form-check-label" htmlFor={id}>{label}</label>
+
+        <ErrorList errors={errors} />
+        <HelpText help={help} />
       </div>
-
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
     </div>
   )
 }
 
 Checkbox.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   onChange: PropTypes.func,

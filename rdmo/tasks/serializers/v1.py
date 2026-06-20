@@ -20,6 +20,9 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
 
     model = serializers.SerializerMethodField()
 
+    task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
+    task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
+
     warning = serializers.SerializerMethodField()
     read_only = serializers.SerializerMethodField()
 
@@ -43,6 +46,10 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'sites',
             'editors',
             'groups',
+            'task_type',
+            'task_type_display',
+            'task_area',
+            'task_area_display',
             'start_attribute',
             'end_attribute',
             'days_before',

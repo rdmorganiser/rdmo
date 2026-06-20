@@ -1,6 +1,5 @@
-import { isNil } from 'lodash'
-
 import { useEffect } from 'react'
+import { isNil } from 'lodash'
 
 const useFocusEffect = (ref, show) => {
   useEffect(() => {

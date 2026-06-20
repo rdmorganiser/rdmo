@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.tasks.constants import TaskTypes
 from rdmo.tasks.models import Task
 
 from ..managers import IssueManager
@@ -49,10 +50,13 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
-    def resolve(self, values):
-        for condition in self.task.conditions.all():
-            if condition.resolve(values):
-                return True
+    @property
+    def resolve(self):
+        values = self.project.values.filter(snapshot=None)
+
+        if self.task.task_type == TaskTypes.TASK:
+            return any(condition.resolve(values) for condition in self.task.conditions.all())
+        return True
 
     @property
     def dates(self):
@@ -92,6 +96,22 @@ class Issue(models.Model):
                 dates.append((end_date - days_before + days_after, ))
 
         return dates
+
+    @property
+    def questions(self):
+        # collect all source_ids from all conditions of the task of this issue
+        source_ids = {
+            condition.source_id
+            for condition in self.task.conditions.all()
+        }
+
+        # prefetch the catalog and filter all questions for the source_ids and all pages for those questions
+        self.project.catalog.prefetch_elements()
+        questions = list(filter(lambda q: q.attribute_id in source_ids, self.project.catalog.questions))
+        for question in questions:
+            question.page_list = list(filter(lambda p: question in p.elements, self.project.catalog.pages))
+
+        return questions
 
 
 class IssueResource(models.Model):

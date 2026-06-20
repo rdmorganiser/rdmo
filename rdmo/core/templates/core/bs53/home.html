@@ -1,0 +1,14 @@
+{% extends 'core/bs53/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+{% get_current_language as lang %}
+{% if lang == 'en' %}
+    {% include 'core/bs53/home_en.html' %}
+{% elif lang == 'de' %}
+    {% include 'core/bs53/home_de.html' %}
+{% endif %}
+
+{% endblock %}

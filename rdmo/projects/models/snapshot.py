@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.models import Model
 
 from ..managers import SnapshotManager
@@ -54,6 +55,12 @@ class Snapshot(Model):
 
                 if value.file:
                     value.copy_file(value.file_name, value.file)
+
+    def delete(self):
+        # remove the files for this snapshot individually, to ensure cleanup
+        for value in self.values.filter(value_type=VALUE_TYPE_FILE):
+            value.file.delete(save=False)
+        super().delete()
 
     def rollback(self):
         # remove all current values for this project

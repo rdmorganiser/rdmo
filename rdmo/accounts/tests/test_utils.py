@@ -1,10 +1,8 @@
 import pytest
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 
-from rdmo.accounts.models import Role
-from rdmo.accounts.utils import delete_user, get_full_name, get_user_from_db_or_none, is_site_manager
+from rdmo.accounts.utils import delete_user, get_full_name, get_user_from_db_or_none
 
 normal_users = (
     ('user', 'user', 'user@example.com'),
@@ -29,29 +27,6 @@ def test_get_full_name_returns_username(db, username, password, email):
     user.first_name = ''
     user.save()
     assert get_full_name(user) == username
-
-
-def test_is_site_manager_returns_true_for_superuser(admin_user):
-    assert is_site_manager(admin_user) is True
-
-
-def test_is_site_manager_returns_false_for_not_authenticated_user():
-    assert is_site_manager(AnonymousUser()) is False
-
-
-@pytest.mark.parametrize('username,password,email', site_managers)
-def test_is_site_manager_returns_true_for_site_managers(db, client, username, password, email):
-    client.login(username=username, password=password)
-    user = get_user_model().objects.get(username=username, email=email)
-    assert is_site_manager(user) is True
-
-
-@pytest.mark.parametrize('username,password,email', site_managers)
-def test_is_site_manager_returns_false_when_role_doesnotexist_(db, client, username, password, email):
-    client.login(username=username, password=password)
-    Role.objects.all().delete()
-    user = get_user_model().objects.get(username=username, email=email)
-    assert is_site_manager(user) is False
 
 
 @pytest.mark.parametrize('username,password,email', users)

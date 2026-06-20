@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDebouncedCallback } from 'use-debounce'
 import classNames from 'classnames'
+import { useDebouncedCallback } from 'use-debounce'
 import { isNil, toString } from 'lodash'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
@@ -63,10 +63,12 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
         aria-describedby={getQuestionHelpId(question)}
         disabled={disabled}
         value={inputValue}
-        onChange={(event) => {
-          setInputValue(event.target.value)
-          handleChange(value, event.target.value)
-        }}
+        onChange={
+          (event) => {
+            setInputValue(event.target.value)
+            handleChange(value, event.target.value)
+          }
+        }
       />
       <Unit unit={question.unit} inputValue={inputValue} />
       {buttons}

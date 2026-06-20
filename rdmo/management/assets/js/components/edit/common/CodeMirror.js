@@ -1,47 +1,55 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import classNames from 'classnames'
+import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
-import get from 'lodash/get'
-import ReactCodeMirror from '@uiw/react-codemirror'
+
+import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+
+import ErrorList from './ErrorList'
+import HelpText from './HelpText'
 import { html } from '@codemirror/lang-html'
+import { EditorView } from '@codemirror/view'
+import ReactCodeMirror from '@uiw/react-codemirror'
 
-import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+const CodeMirror = ({ element, field, onChange }) => {
+  const { meta } = useSelector((state) => state.config)
 
-const CodeMirror = ({ config, element, field, onChange }) => {
-  const id = getId(element, field),
-        label = getLabel(config, element, field),
-        help = getHelp(config, element, field),
-        warnings = get(element, ['warnings', field]),
-        errors = get(element, ['errors', field])
+  const id = getId(element, field)
+  const label = getLabel(element, field, meta)
+  const help = getHelp(element, field, meta)
+  const errors = get(element, ['errors', field])
 
-  const className = classNames({
-    'form-group': true,
-    'has-warning': !isEmpty(warnings),
-    'has-error': !isEmpty(errors)
+  const className = classNames('codemirror form-control', {
+    'is-invalid': !isEmpty(errors),
+    'disabled': element.read_only
   })
 
   const value = isNil(element[field]) ? '' : element[field]
 
+  const extensions = [html()]
+
+  if (element.read_only) {
+    extensions.push(EditorView.editable.of(false))
+  }
+
   return (
-    <div className={className}>
+    <div className="mb-3">
       <label className="control-label" htmlFor={id}>{label}</label>
 
-      <ReactCodeMirror className="codemirror form-control" id={id} value={value} extensions={[html()]}
-                       onChange={(value) => onChange(field, value)} disabled={element.read_only} />
+      <ReactCodeMirror
+        className={className} id={id} value={value} extensions={extensions}
+        onChange={(value) => onChange(field, value)} disabled={element.read_only} />
 
-      {help && <p className="help-block">{help}</p>}
-
-      {errors && <ul className="help-block list-unstyled">
-        {errors.map((error, index) => <li key={index}>{error}</li>)}
-      </ul>}
+      <ErrorList errors={errors} />
+      <HelpText help={help} />
     </div>
   )
 }
 
 CodeMirror.propTypes = {
-  config: PropTypes.object,
   element: PropTypes.object,
   field: PropTypes.string,
   onChange: PropTypes.func
