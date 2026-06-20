@@ -11,8 +11,8 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
-from rdmo.domain.models import Attribute
 from rdmo.core.views import ChoicesViewSet
+from rdmo.domain.models import Attribute
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .constants import TaskAreas, TaskTypes

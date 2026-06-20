@@ -2,7 +2,6 @@ import { first, isEmpty, isNil } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
 
 import { updateLocation } from '../utils/location'
 import { projectId } from '../utils/meta'

@@ -52,24 +52,26 @@ export default function interviewReducer(state = initialState, action) {
     case FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
     case RESOLVE_CONDITIONS_SUCCESS:
-      return { ...state, sets: state.sets.map(
-        (set) => {
+      return {
+        ...state, sets: state.sets.map(
+          (set) => {
           // filter all results for the current set
-          const results = action.results.filter((result) => (
-            result.set_prefix === set.set_prefix &&
+            const results = action.results.filter((result) => (
+              result.set_prefix === set.set_prefix &&
             result.set_index === set.set_index
-          ))
+            ))
 
-          // apply the results
-          return results.reduce((acc, result) => ({
-            ...acc,
-            [result.element_type]: {
-              ...acc[result.element_type],
-              [result.element_id]: result.result
-            },
-          }), set)
-        }
-      )}
+            // apply the results
+            return results.reduce((acc, result) => ({
+              ...acc,
+              [result.element_type]: {
+                ...acc[result.element_type],
+                [result.element_id]: result.result
+              },
+            }), set)
+          }
+        )
+      }
     case CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
     case UPDATE_VALUE:
