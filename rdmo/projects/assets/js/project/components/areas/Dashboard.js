@@ -42,12 +42,16 @@ const Dashboard = () => {
 
   const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
 
-  const visibleTaskIssues = issues
-    .filter((issue) => getTaskType(issue) === 'task' && (showClosedTasks || !isClosed(issue)))
+  // we need these 2 constants to not loose the toggle switch if all issues are closed (but not visible)
+  const taskIssues = issues.filter((issue) => getTaskType(issue) === 'task')
+  const recommendationIssues = issues.filter((issue) => getTaskType(issue) === 'recommendation')
+
+  const visibleTaskIssues = taskIssues
+    .filter((issue) => showClosedTasks || !isClosed(issue))
     .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
-  const visibleRecommendationIssues = issues
-    .filter((issue) => getTaskType(issue) === 'recommendation' && (showClosedRecommendations || !isClosed(issue)))
+  const visibleRecommendationIssues = recommendationIssues
+    .filter((issue) => showClosedRecommendations || !isClosed(issue))
     .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
 
   const guidanceIssues = issues.filter((issue) =>
@@ -156,7 +160,7 @@ const Dashboard = () => {
               )
             }
             {
-              visibleTaskIssues.length > 0 && (
+              taskIssues.length > 0 && (
                 <>
                   <h2>{gettext('Tasks')}</h2>
                   <ShowClosedIssues
@@ -170,7 +174,7 @@ const Dashboard = () => {
               )
             }
             {
-              visibleRecommendationIssues.length > 0 && (
+              recommendationIssues.length > 0 && (
                 <>
                   <h2>{gettext('Recommendations')}</h2>
                   <ShowClosedIssues
