@@ -89,11 +89,20 @@ class Issue(models.Model):
                 end_date = None
 
             if start_date and end_date:
-                dates.append((start_date - days_before, end_date + days_after))
+                dates.append({
+                    "start_date": start_date - days_before,
+                    "end_date": end_date + days_after,
+                })
             elif start_date:
-                dates.append((start_date - days_before + days_after, ))
+                dates.append({
+                    "start_date": start_date - days_before + days_after,
+                    "end_date": None,
+                })
             elif end_date:
-                dates.append((end_date - days_before + days_after, ))
+                dates.append({
+                    "start_date": None,
+                    "end_date": end_date - days_before + days_after,
+                })
 
         return dates
 
