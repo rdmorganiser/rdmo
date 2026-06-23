@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Link } from 'rdmo/core/assets/js/components'
-import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
 import { useModal } from 'rdmo/core/assets/js/hooks'
-import { language } from 'rdmo/core/assets/js/utils'
+import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 
 import { navigateDashboard } from '../../../actions/projectActions'
 import { buildPath } from '../../../utils/location'
@@ -63,7 +62,7 @@ const SnapshotTable = ({ snapshots }) => {
                     {snapshot.description}
                   </td>
                   <td>
-                    {useFormattedDateTime(snapshot.created, language)}
+                    {formatDateTime(snapshot.created, 'long')}
                   </td>
                   <td>
                     <div className="d-flex justify-content-end align-items-center gap-1">

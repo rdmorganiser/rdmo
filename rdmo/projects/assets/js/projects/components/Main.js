@@ -5,8 +5,8 @@ import { get, isEmpty } from 'lodash'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Link, SearchField } from 'rdmo/core/assets/js/components'
-import { useFormattedDateTime, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
-import { language } from 'rdmo/core/assets/js/utils'
+import { useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
+import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import * as projectsActions from '../actions/projectsActions'
@@ -267,8 +267,8 @@ const Main = () => {
       </>
     ),
     progress: (_content, row) => getProgressString(row),
-    created: content => useFormattedDateTime(content, language),
-    last_changed: content => useFormattedDateTime(content, language),
+    created: content => formatDateTime(content, 'long'),
+    last_changed: content => formatDateTime(content, 'long'),
     actions: (_content, row) => {
       const perms = row.permissions || {}
       return (
