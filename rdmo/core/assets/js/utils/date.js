@@ -1,4 +1,4 @@
-import { parse, set } from 'date-fns'
+import { format, parse, parseISO, set } from 'date-fns'
 import { de, enGB, es, fr, it } from 'date-fns/locale'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
@@ -18,7 +18,20 @@ export const getLocale = () => {
   }
 }
 
-export const getDateFormat = () => {
+export const getDateFormat = (formatType = 'short') => {
+  if (formatType === 'long') {
+    switch (lang) {
+      case 'de':
+        return 'd. MMM yyyy'
+      case 'it':
+      case 'es':
+      case 'fr':
+        return 'd MMM yyyy'
+      default:
+        return 'MMM d, yyyy'
+    }
+  }
+
   switch (lang) {
     case 'de':
       return 'dd.MM.yyyy'
@@ -45,4 +58,12 @@ export const parseDate = (value, end = false) => {
   } else {
     return parse(value, getDateFormat(), new Date())
   }
+}
+
+export const formatDate = (value, formatType = 'short') => {
+  if (!value) return ''
+
+  return format(parseISO(value), getDateFormat(formatType), {
+    locale: getLocale()
+  })
 }
