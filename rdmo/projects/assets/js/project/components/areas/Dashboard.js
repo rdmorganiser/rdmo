@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
-import { language } from 'rdmo/core/assets/js/utils'
 
 import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
+import { renderIssueDate } from '../../utils/renderIssueDate'
 import { Tile } from '../helper'
 
 import IssueModal from './dashboard/IssueModal'
@@ -19,15 +18,6 @@ const Dashboard = () => {
   const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
-
-  // Mock dates for testing
-  // issues.forEach((issue) => {
-  //   issue.dates = [
-  //     ['2017-04-03', '2017-12-31'],
-  //     ['2017-04-03'],
-  //     ['2017-04-04'],
-  //   ]
-  // })
 
   const { showClosedTasks, showClosedRecommendations } = config
 
@@ -59,10 +49,6 @@ const Dashboard = () => {
       status: currentStatus === 'closed' ? 'open' : 'closed'
     }))
   }
-
-  const renderDate = (date) => (
-    date.map((dateValue) => useFormattedDateTime(dateValue, language, 'dateOnly')).join(' - ')
-  )
 
   const renderVisibleIssues = (visibleIssues) => (
     <div className="row">
@@ -100,7 +86,7 @@ const Dashboard = () => {
                     issue.dates?.length > 0 && (
                       <div className="text-muted small mt-2 text-end">
                         <i className="bi bi-clock me-1" />
-                        {renderDate(issue.dates[0])}
+                        {renderIssueDate(issue.dates[0])}
                       </div>
                     )
                   }
