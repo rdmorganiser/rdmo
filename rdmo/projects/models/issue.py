@@ -96,11 +96,9 @@ class Issue(models.Model):
             elif start_date:
                 dates.append({
                     "start_date": start_date - days_before + days_after,
-                    "end_date": None,
                 })
             elif end_date:
                 dates.append({
-                    "start_date": None,
                     "end_date": end_date - days_before + days_after,
                 })
 
