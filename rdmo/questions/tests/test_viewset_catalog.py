@@ -4,7 +4,9 @@ import pytest
 
 from django.urls import reverse
 
-from ..models import Catalog
+from ..models import Catalog, Page, Question, QuestionSet
+
+DC_URI = r'{http://purl.org/dc/elements/1.1/}uri'
 
 users = (
     ('editor', 'editor'),
@@ -253,6 +255,38 @@ def test_detail_export(db, client, username, password, export_format):
             assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
+def test_detail_export_short_includes_attribute_reference_uris(db, client):
+    client.login(username='editor', password='editor')
+    instance = Catalog.objects.get(pk=1)
+
+    expected_attribute_uris = {
+        descendant.uri: descendant.attribute.uri
+        for descendant in instance.descendants
+        if isinstance(descendant, (Page, QuestionSet, Question)) and descendant.attribute_id
+    }
+    assert expected_attribute_uris
+
+    url = reverse(urlnames['detail_export'], args=[instance.pk]) + 'xml/'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    exported_attribute_uris = {
+        child.attrib[DC_URI]: child.find('attribute').attrib.get(DC_URI)
+        for child in root
+        if child.tag in ['page', 'questionset', 'question']
+    }
+
+    assert root.find('attribute') is None
+    assert exported_attribute_uris['http://example.com/terms/questions/catalog/set/collection-single'] == \
+        'http://example.com/terms/domain/set/id'
+    assert {
+        uri: attribute_uri
+        for uri, attribute_uri in expected_attribute_uris.items()
+        if exported_attribute_uris.get(uri) != attribute_uri
+    } == {}
+
+
 def test_detail_export_full(db, client):
     client.login(username='editor', password='editor')
 
@@ -263,7 +297,7 @@ def test_detail_export_full(db, client):
     root = et.fromstring(response.content)
     assert root.tag == 'rdmo'
 
-    uris = [child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] for child in root]
+    uris = [child.attrib[DC_URI] for child in root]
     assert 'http://example.com/terms/conditions/options_empty' in uris
     assert 'http://example.com/terms/domain/conditions' in uris
     assert 'http://example.com/terms/options/one_two_three' in uris
