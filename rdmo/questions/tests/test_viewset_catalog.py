@@ -49,6 +49,27 @@ urlnames = {
 
 export_formats = ('xml', 'html')
 
+detail_export_reference_uri_tests = (
+    (
+        'conditions=true',
+        'condition', 'http://example.com/terms/conditions/options_empty',
+        'source', 'http://example.com/terms/domain/conditions/option',
+        'attribute',
+    ),
+    (
+        'optionsets=true&conditions=true',
+        'condition', 'http://example.com/terms/conditions/optionset_bool_is_true',
+        'source', 'http://example.com/terms/domain/conditions/optionset/bool',
+        'attribute',
+    ),
+    (
+        'optionsets=true',
+        'optionset', 'http://example.com/terms/options/condition',
+        'conditions/condition', 'http://example.com/terms/conditions/optionset_bool_is_true',
+        'condition',
+    ),
+)
+
 
 @pytest.mark.parametrize('username,password', users)
 def test_list(db, client, username, password):
@@ -285,6 +306,28 @@ def test_detail_export_short_includes_attribute_reference_uris(db, client):
         for uri, attribute_uri in expected_attribute_uris.items()
         if exported_attribute_uris.get(uri) != attribute_uri
     } == {}
+
+
+@pytest.mark.parametrize(
+    'url_params,element_tag,element_uri,reference_path,expected_uri,absent_tag',
+    detail_export_reference_uri_tests,
+)
+def test_detail_export_includes_reference_uris(db, client, url_params, element_tag, element_uri, reference_path,
+                                              expected_uri, absent_tag):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + f'xml/?{url_params}'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    element = next(
+        child for child in root
+        if child.tag == element_tag and child.attrib[DC_URI] == element_uri
+    )
+
+    assert root.find(absent_tag) is None
+    assert element.find(reference_path).attrib[DC_URI] == expected_uri
 
 
 def test_detail_export_full(db, client):
