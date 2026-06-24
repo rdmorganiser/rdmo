@@ -1,4 +1,4 @@
-import { enGB, de, it, es, fr } from 'date-fns/locale'
+import { enGB, de, it, es, fr, fi} from 'date-fns/locale'
 import { parse, set } from 'date-fns'
 
 import lang from 'rdmo/core/assets/js/utils/lang'
@@ -13,6 +13,8 @@ export const getLocale = () => {
       return es
     case 'fr':
       return fr
+    case 'fi':
+      return fi
     default:
       return enGB
   }
@@ -27,6 +29,8 @@ export const getDateFormat = () => {
     case 'es':
       return 'dd/MM/yyyy'
     case 'fr':
+      return 'dd/MM/yyyy'
+    case 'fi':
       return 'dd/MM/yyyy'
     default:
       return 'dd/MM/yyyy'
