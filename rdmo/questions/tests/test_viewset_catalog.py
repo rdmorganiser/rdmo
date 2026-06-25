@@ -6,8 +6,6 @@ from django.urls import reverse
 
 from ..models import Catalog, Page, Question, QuestionSet
 
-DC_URI = r'{http://purl.org/dc/elements/1.1/}uri'
-
 users = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
@@ -48,27 +46,6 @@ urlnames = {
 }
 
 export_formats = ('xml', 'html')
-
-detail_export_reference_uri_tests = (
-    (
-        'conditions=true',
-        'condition', 'http://example.com/terms/conditions/options_empty',
-        'source', 'http://example.com/terms/domain/conditions/option',
-        'attribute',
-    ),
-    (
-        'optionsets=true&conditions=true',
-        'condition', 'http://example.com/terms/conditions/optionset_bool_is_true',
-        'source', 'http://example.com/terms/domain/conditions/optionset/bool',
-        'attribute',
-    ),
-    (
-        'optionsets=true',
-        'optionset', 'http://example.com/terms/options/condition',
-        'conditions/condition', 'http://example.com/terms/conditions/optionset_bool_is_true',
-        'condition',
-    ),
-)
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -276,7 +253,7 @@ def test_detail_export(db, client, username, password, export_format):
             assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
-def test_detail_export_short_includes_attribute_reference_uris(db, client):
+def test_detail_export_attribute_uris(db, client):
     client.login(username='editor', password='editor')
     instance = Catalog.objects.get(pk=1)
 
@@ -293,7 +270,9 @@ def test_detail_export_short_includes_attribute_reference_uris(db, client):
 
     root = et.fromstring(response.content)
     exported_attribute_uris = {
-        child.attrib[DC_URI]: child.find('attribute').attrib.get(DC_URI)
+        child.attrib[r'{http://purl.org/dc/elements/1.1/}uri']: child.find('attribute').attrib.get(
+            r'{http://purl.org/dc/elements/1.1/}uri'
+        )
         for child in root
         if child.tag in ['page', 'questionset', 'question']
     }
@@ -308,26 +287,70 @@ def test_detail_export_short_includes_attribute_reference_uris(db, client):
     } == {}
 
 
-@pytest.mark.parametrize(
-    'url_params,element_tag,element_uri,reference_path,expected_uri,absent_tag',
-    detail_export_reference_uri_tests,
-)
-def test_detail_export_includes_reference_uris(db, client, url_params, element_tag, element_uri, reference_path,
-                                              expected_uri, absent_tag):
+def test_detail_export_conditions(db, client):
     client.login(username='editor', password='editor')
 
-    url = reverse(urlnames['detail_export'], args=[1]) + f'xml/?{url_params}'
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?conditions=true'
     response = client.get(url)
     assert response.status_code == status_map['detail']['editor'], response.content
 
     root = et.fromstring(response.content)
-    element = next(
+    condition = next(
         child for child in root
-        if child.tag == element_tag and child.attrib[DC_URI] == element_uri
+        if (
+            child.tag == 'condition' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/conditions/options_empty'
+        )
     )
 
-    assert root.find(absent_tag) is None
-    assert element.find(reference_path).attrib[DC_URI] == expected_uri
+    assert root.find('attribute') is None
+    assert condition.find('source').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/domain/conditions/option'
+
+
+def test_detail_export_optionsets(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?optionsets=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    optionset = next(
+        child for child in root
+        if (
+            child.tag == 'optionset' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/options/condition'
+        )
+    )
+
+    assert root.find('condition') is None
+    assert optionset.find('conditions/condition').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/conditions/optionset_bool_is_true'
+
+
+def test_detail_export_optionsets_conditions(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?optionsets=true&conditions=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    condition = next(
+        child for child in root
+        if (
+            child.tag == 'condition' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/conditions/optionset_bool_is_true'
+        )
+    )
+
+    assert root.find('attribute') is None
+    assert condition.find('source').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/domain/conditions/optionset/bool'
 
 
 def test_detail_export_full(db, client):
@@ -340,7 +363,7 @@ def test_detail_export_full(db, client):
     root = et.fromstring(response.content)
     assert root.tag == 'rdmo'
 
-    uris = [child.attrib[DC_URI] for child in root]
+    uris = [child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] for child in root]
     assert 'http://example.com/terms/conditions/options_empty' in uris
     assert 'http://example.com/terms/domain/conditions' in uris
     assert 'http://example.com/terms/options/one_two_three' in uris

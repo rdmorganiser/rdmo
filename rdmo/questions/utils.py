@@ -21,7 +21,6 @@ def get_export_flags(request):
 def get_serializer_context(elements, export_flags):
     attribute_ids = set()
     question_ids = set()
-    include_condition_sources = export_flags.get('conditions') or export_flags.get('optionsets')
 
     for element in elements:
         for descendant in [element, *element.descendants]:
@@ -31,7 +30,7 @@ def get_serializer_context(elements, export_flags):
             if export_flags.get('optionsets') and isinstance(descendant, Question):
                 question_ids.add(descendant.id)
 
-            if include_condition_sources and isinstance(descendant, (Page, QuestionSet, Question)):
+            if export_flags.get('conditions') and isinstance(descendant, (Page, QuestionSet, Question)):
                 attribute_ids.update(
                     condition.source_id
                     for condition in descendant.conditions.all()
@@ -45,15 +44,15 @@ def get_serializer_context(elements, export_flags):
             ).values_list('source_id', flat=True)
         )
 
-    if not attribute_ids:
-        return export_flags
+    if attribute_ids:
+        return {
+            **export_flags,
+            'attribute_map': (
+                Attribute.objects.get_queryset_ancestors(
+                    Attribute.objects.filter(id__in=attribute_ids),
+                    include_self=True
+                ).in_bulk()
+            )
+        }
 
-    return {
-        **export_flags,
-        'attribute_map': (
-            Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
-        )
-    }
+    return export_flags
