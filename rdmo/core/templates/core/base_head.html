@@ -11,7 +11,7 @@
     <meta property="og:url" content="{{ request.site.domain }}" />
 
     <meta name="baseurl" content="{% url 'home' %}" />
-    <meta name="staticurl" content="{{ settings.STATIC_URL }}" />
+    <meta name="staticurl" content="{% get_static_prefix %}" />
     <meta name="site_id" content="{{ settings.SITE_ID }}" />
     <meta name="language" content="{{ LANGUAGE_CODE }}">
 
