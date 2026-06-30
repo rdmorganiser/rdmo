@@ -25,12 +25,12 @@ repos:
         exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 745be0411e3c150e246d527e531e5a221b8c3462  # frozen: v0.15.19
+    rev: c59bba8fb259db0fec2bbb77ad8ba51ea7341b56  # frozen: v0.15.20
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 97a8e4af05a8fa8a0ed79d2fbd1f4c86bf1a0178  # frozen: v10.5.0
+    rev: 8763fc929b6232999d541a3d8eb49965a6b71afb  # frozen: v10.6.0
     hooks:
       - id: eslint
         args: [--fix, --color]
