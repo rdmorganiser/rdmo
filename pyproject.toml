@@ -79,7 +79,7 @@ allauth = [
   "django-allauth[socialaccount,openid]>=64.1.0,<65.19.0",
 ]
 dev = [
-  "pipdeptree>=2.13,<3.0",
+  "pipdeptree>=2.13,<4.0",
   "pre-commit>=3.4,<5.0",
   "setuptools>=73,<83",
 ]
