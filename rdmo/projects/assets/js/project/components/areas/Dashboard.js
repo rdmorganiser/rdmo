@@ -9,12 +9,15 @@ import { Tile } from '../helper'
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
+import SendModal from './dashboard/SendModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
+  const settings = useSelector(state => state.settings)
   const perms = useSelector(state => state.project.project.project.permissions) ?? {}
+  console.log('settings', settings)
 
   const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   /* Show only issues that resolve */
@@ -23,6 +26,7 @@ const Dashboard = () => {
   const { showClosedTasks, showClosedRecommendations } = config
 
   const [selectedIssue, setSelectedIssue] = useState(null)
+  const [sendIssue, setSendIssue] = useState(null)
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -84,8 +88,31 @@ const Dashboard = () => {
                   </button>
                 </div>
                 <div className="flex-grow-1">
-                  <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
+                  {/* <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
                     {issue.task.title}
+                  </div> */}
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
+                      {issue.task.title}
+                    </div>
+                    {
+                      settings?.project_send_issue && (
+                        <button
+                          type="button"
+                          className="btn btn-sm p-0 border-0 bg-transparent ms-2"
+                          onClick={
+                            (e) => {
+                              e.stopPropagation()
+                              setSendIssue(issue)
+                            }
+                          }
+                          aria-label={gettext('Send task')}
+                          title={gettext('Send task')}
+                        >
+                          <i className="bi bi-send" aria-hidden="true" />
+                        </button>
+                      )
+                    }
                   </div>
                   {
                     issue.dates?.length > 0 && (
@@ -221,6 +248,15 @@ const Dashboard = () => {
                       })
                     }
                   }
+                />
+              )
+            }
+            {
+              sendIssue && (
+                <SendModal
+                  onClose={() => setSendIssue(null)}
+                  issue={sendIssue}
+                  settings={settings}
                 />
               )
             }
