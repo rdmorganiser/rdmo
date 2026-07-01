@@ -17,7 +17,6 @@ const Dashboard = () => {
   const config = useSelector(state => state.config)
   const settings = useSelector(state => state.settings)
   const perms = useSelector(state => state.project.project.project.permissions) ?? {}
-  console.log('settings', settings)
 
   const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   /* Show only issues that resolve */
@@ -95,9 +94,6 @@ const Dashboard = () => {
                   </button>
                 </div>
                 <div className="flex-grow-1">
-                  {/* <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
-                    {issue.task.title}
-                  </div> */}
                   <div className="d-flex justify-content-between align-items-start">
                     <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
                       {issue.task.title}

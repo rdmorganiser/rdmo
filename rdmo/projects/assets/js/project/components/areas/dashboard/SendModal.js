@@ -9,12 +9,34 @@ const SendModal = ({
   issue,
   onClose
 }) => {
+  const project = useSelector((state) => state.project.project.project)
+  const currentUser = useSelector((state) => state.user.currentUser) ?? {}
   const settings = useSelector(state => state.settings)
+  const sites = useSelector(state => state.sites) ?? {}
   const answers = useSelector((state) => state.project.project.answers) ?? {}
   const views = useSelector((state) => state.project.project.views) ?? []
   const snapshots = useSelector((state) => state.project.project.snapshots) ?? []
   const files = []
   const formats = settings.export_formats ?? []
+  const currentSite = Object.values(sites).find((site) => site.id === project.site)
+
+  const initialMessage = [
+    gettext('To whom it may concern,'),
+    '',
+    gettext('The following task was identified in the project'),
+    `"${project.title}" <${window.location.origin + `/projects/${project.id}/`}>:`,
+    '',
+    issue.task.text || '',
+    '',
+    gettext('Sincerely,'),
+    `    ${currentUser.first_name || ''} ${currentUser.last_name || ''}`,
+    '',
+    '--',
+    interpolate(
+      gettext('This message was generated using %s at %s.'),
+      [currentSite?.name || currentSite?.domain || '', window.location.origin + '/']
+    )
+  ].join('\n')
 
   const hasRecipientChoices = settings.email_recipients?.length > 0
   const hasRecipientInput = settings.email_recipients_input
@@ -24,7 +46,7 @@ const SendModal = ({
 
   const [formData, setFormData] = useState({
     subject: issue.task.title || '',
-    message: issue.task.text || '',
+    message: initialMessage,
 
     attachments_answers: [],
     attachments_views: [],
