@@ -151,6 +151,47 @@ def test_issue_send_post_email(db, client, username, password, issue_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
+def test_issue_send_post_email_split(db, client, settings, username, password, issue_id):
+    settings.EMAIL_RECIPIENTS = [
+        ('emmi', 'Emmi Email'),
+    ]
+    settings.EMAIL_RECIPIENTS_CHOICES = [
+        {
+            'key': 'emmi',
+            'label': 'Emmi Email',
+            'emails': ['email@example.com'],
+        },
+    ]
+    settings.EMAIL_RECIPIENTS_INPUT = False
+
+    client.login(username=username, password=password)
+    issue = Issue.objects.get(id=issue_id)
+
+    url = reverse('issue_send', args=[issue.project_id, issue_id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'recipients': ['emmi']
+    }
+    response = client.post(url, data)
+
+    if issue.project_id in change_issue_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert len(mail.outbox) == 1
+        assert mail.outbox[0].subject == '[example.com] Subject'
+        assert mail.outbox[0].body == 'Message'
+        assert mail.outbox[0].to == ['email@example.com']
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+        assert len(mail.outbox) == 0
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('issue_id', issues)
 def test_issue_send_post_attachments(db, client, files, username, password, issue_id):
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
