@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Dropdown } from 'bootstrap'
 import classNames from 'classnames'
 
-const ExportsDropdown = ({ onExport, align = 'end' }) => {
+const ExportsDropdown = ({ onExport, align = 'end', dropdownLabel = gettext('Download') }) => {
 
   const exportFormats = useSelector((state) => state.settings.export_formats) ?? {}
 
@@ -28,9 +28,9 @@ const ExportsDropdown = ({ onExport, align = 'end' }) => {
         data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
         onClick={(event) => event.stopPropagation()}
-        title={gettext('Download')}
+        title={dropdownLabel}
       >
-        {gettext('Download')} <i className="bi bi-caret-down-fill ms-1" />
+        {dropdownLabel} <i className="bi bi-caret-down-fill ms-1" />
       </button>
 
       <ul className="dropdown-menu">
@@ -50,7 +50,8 @@ const ExportsDropdown = ({ onExport, align = 'end' }) => {
 
 ExportsDropdown.propTypes = {
   onExport: PropTypes.func.isRequired,
-  align: PropTypes.oneOf(['start', 'end'])
+  align: PropTypes.oneOf(['start', 'end']),
+  dropdownLabel: PropTypes.string
 }
 
 export default ExportsDropdown

@@ -263,7 +263,6 @@ const Dashboard = () => {
                 <SendModal
                   onClose={() => setSendIssue(null)}
                   issue={sendIssue}
-                  settings={settings}
                 />
               )
             }
