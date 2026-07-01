@@ -29,7 +29,7 @@ const SendModal = ({
     issue.task.text || '',
     '',
     gettext('Sincerely,'),
-    `    ${currentUser.first_name || ''} ${currentUser.last_name || ''}`,
+    `    ${[currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || currentUser.username || ''}`,
     '',
     '--',
     interpolate(
@@ -41,6 +41,7 @@ const SendModal = ({
   const hasRecipientChoices = settings.email_recipients?.length > 0
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
+  /* TODO: fetch attached integrations to determine boolean; setting is not enough */
   const hasIntegrations = settings.project_issue_providers?.length > 0
   const isConfigured = hasMail || hasIntegrations
 
@@ -384,6 +385,7 @@ const SendModal = ({
 
               <div className="mb-4">
                 {
+                  /* TODO: switch to attached integrations and its structure */
                   settings.project_issue_providers.map(([key, label, provider]) => (
                     <div className="row align-items-center mb-3" key={key}>
                       <div className="col">
