@@ -84,8 +84,23 @@ PROJECT_SNAPSHOT_EXPORTS = [
 ]
 
 EMAIL_RECIPIENTS_CHOICES = [
-    ('email@example.com', 'Emmi Email <email@example.com>'),
+    {
+        'key': 'emmi',
+        'label': _('Emmi Email'),
+        'emails': ['email@example.com'],
+    },
+    {
+        'key': 'test',
+        'label': _('Accounts'),
+        'emails': ['test@example.com'],
+    },
 ]
+
+EMAIL_RECIPIENTS = [
+    (recipient['key'], recipient['label'])
+    for recipient in EMAIL_RECIPIENTS_CHOICES
+]
+
 EMAIL_RECIPIENTS_INPUT = True
 
 OPTIONSET_PROVIDERS = [
