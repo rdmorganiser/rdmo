@@ -123,7 +123,9 @@ def test_issue_send_get(db, client, username, password, issue_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
-def test_issue_send_post_email(db, client, username, password, issue_id):
+def test_issue_send_post_email(db, client, settings, username, password, issue_id):
+    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
+
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
 
@@ -131,7 +133,7 @@ def test_issue_send_post_email(db, client, username, password, issue_id):
     data = {
         'subject': 'Subject',
         'message': 'Message',
-        'recipients': ['email@example.com']
+        'recipients': [recipient_key]
     }
     response = client.post(url, data)
 
@@ -140,6 +142,7 @@ def test_issue_send_post_email(db, client, username, password, issue_id):
         assert len(mail.outbox) == 1
         assert mail.outbox[0].subject == '[example.com] Subject'
         assert mail.outbox[0].body == 'Message'
+        assert mail.outbox[0].to == ['email@example.com']
     else:
         if password:
             assert response.status_code == 403
@@ -151,7 +154,9 @@ def test_issue_send_post_email(db, client, username, password, issue_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
-def test_issue_send_post_attachments(db, client, files, username, password, issue_id):
+def test_issue_send_post_attachments(db, client, settings, files, username, password, issue_id):
+    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
+
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
 
@@ -163,7 +168,7 @@ def test_issue_send_post_attachments(db, client, files, username, password, issu
         data = {
             'subject': 'Subject',
             'message': 'Message',
-            'recipients': 'email@example.com',
+            'recipients': [recipient_key],
             'attachments_answers': 'project_answers',
             'attachments_views': str(view.id),
             'attachments_files': str(file.id),
@@ -177,6 +182,7 @@ def test_issue_send_post_attachments(db, client, files, username, password, issu
             assert len(mail.outbox) == 1
             assert mail.outbox[0].subject == '[example.com] Subject'
             assert mail.outbox[0].body == 'Message'
+            assert mail.outbox[0].to == ['email@example.com']
 
             attachments = mail.outbox[0].attachments
             assert len(attachments) == 3
