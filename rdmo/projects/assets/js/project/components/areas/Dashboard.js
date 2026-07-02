@@ -9,7 +9,7 @@ import { Tile } from '../helper'
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
-import SendModal from './dashboard/SendModal'
+import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
@@ -249,7 +249,7 @@ const Dashboard = () => {
             }
             {
               sendIssue && (
-                <SendModal
+                <SendIssueModal
                   onClose={() => setSendIssue(null)}
                   issue={sendIssue}
                 />
