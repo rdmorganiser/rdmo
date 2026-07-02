@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.projects.views import issue as issue_views
 
 from ..models import Issue, Project
 
@@ -124,48 +123,8 @@ def test_issue_send_get(db, client, username, password, issue_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
-def test_issue_send_post_email(db, client, username, password, issue_id):
-    client.login(username=username, password=password)
-    issue = Issue.objects.get(id=issue_id)
-
-    url = reverse('issue_send', args=[issue.project_id, issue_id])
-    data = {
-        'subject': 'Subject',
-        'message': 'Message',
-        'recipients': ['email@example.com']
-    }
-    response = client.post(url, data)
-
-    if issue.project_id in change_issue_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == '[example.com] Subject'
-        assert mail.outbox[0].body == 'Message'
-    else:
-        if password:
-            assert response.status_code == 403
-        else:
-            assert response.status_code == 302
-
-        assert len(mail.outbox) == 0
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('issue_id', issues)
-def test_issue_send_post_email_split(db, client, settings, monkeypatch, username, password, issue_id):
-    settings.EMAIL_RECIPIENTS = [
-        ('emmi', 'Emmi Email'),
-    ]
-    settings.EMAIL_RECIPIENTS_CHOICES = [
-        {
-            'key': 'emmi',
-            'label': 'Emmi Email',
-            'emails': ['email@example.com'],
-        },
-    ]
-    settings.EMAIL_RECIPIENTS_INPUT = False
-
-    monkeypatch.setattr(issue_views.IssueMailForm.base_fields['recipients'], 'choices', [('emmi', 'Emmi Email')])
+def test_issue_send_post_email(db, client, settings, username, password, issue_id):
+    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
 
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
@@ -174,7 +133,7 @@ def test_issue_send_post_email_split(db, client, settings, monkeypatch, username
     data = {
         'subject': 'Subject',
         'message': 'Message',
-        'recipients': ['emmi']
+        'recipients': [recipient_key]
     }
     response = client.post(url, data)
 
@@ -195,7 +154,9 @@ def test_issue_send_post_email_split(db, client, settings, monkeypatch, username
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
-def test_issue_send_post_attachments(db, client, files, username, password, issue_id):
+def test_issue_send_post_attachments(db, client, settings, files, username, password, issue_id):
+    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
+
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
 
@@ -207,7 +168,7 @@ def test_issue_send_post_attachments(db, client, files, username, password, issu
         data = {
             'subject': 'Subject',
             'message': 'Message',
-            'recipients': 'email@example.com',
+            'recipients': [recipient_key],
             'attachments_answers': 'project_answers',
             'attachments_views': str(view.id),
             'attachments_files': str(file.id),
@@ -221,6 +182,7 @@ def test_issue_send_post_attachments(db, client, files, username, password, issu
             assert len(mail.outbox) == 1
             assert mail.outbox[0].subject == '[example.com] Subject'
             assert mail.outbox[0].body == 'Message'
+            assert mail.outbox[0].to == ['email@example.com']
 
             attachments = mail.outbox[0].attachments
             assert len(attachments) == 3
