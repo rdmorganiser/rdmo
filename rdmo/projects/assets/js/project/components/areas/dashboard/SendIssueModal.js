@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
-const SendModal = ({
+const SendIssueModal = ({
   issue,
   onClose
 }) => {
@@ -16,6 +16,10 @@ const SendModal = ({
   const answers = useSelector((state) => state.project.project.answers) ?? {}
   const views = useSelector((state) => state.project.project.views) ?? []
   const snapshots = useSelector((state) => state.project.project.snapshots) ?? []
+  const snapshotOptions = [
+    { id: 'current', title: gettext('Current') },
+    ...snapshots
+  ]
   const files = []
   const formats = settings.export_formats ?? []
   const currentSite = Object.values(sites).find((site) => site.id === project.site)
@@ -52,7 +56,7 @@ const SendModal = ({
     attachments_answers: [],
     attachments_views: [],
     attachments_files: [],
-    attachments_snapshot: null,
+    attachments_snapshot: 'current',
     attachments_format: null,
 
     recipients: [],
@@ -231,33 +235,30 @@ const SendModal = ({
                       )
                     }
 
-                    {
-                      snapshots.length > 0 && (
-                        <div>
-                          <div className="fw-bold mb-2">{gettext('Snapshot')}</div>
-                          {
-                            snapshots.map((snapshot) => (
-                              <div className="form-check" key={snapshot.id}>
-                                <input
-                                  id={`id_attachments_snapshot_${snapshot.id}`}
-                                  name="attachments_snapshot"
-                                  type="radio"
-                                  className="form-check-input"
-                                  value={snapshot.id}
-                                  checked={formData.attachments_snapshot === snapshot.id}
-                                  onChange={() => setField('attachments_snapshot', snapshot.id)}
-                                />
-                                <label
-                                  className="form-check-label fw-normal"
-                                  htmlFor={`id_attachments_snapshot_${snapshot.id}`}>
-                                  {snapshot.title}
-                                </label>
-                              </div>
-                            ))
-                          }
-                        </div>
-                      )
-                    }
+                    <div>
+                      <div className="fw-bold mb-2">{gettext('Snapshot')}</div>
+                      {
+                        snapshotOptions.map((snapshot) => (
+                          <div className="form-check" key={snapshot.id}>
+                            <input
+                              id={`id_attachments_snapshot_${snapshot.id}`}
+                              name="attachments_snapshot"
+                              type="radio"
+                              className="form-check-input"
+                              value={snapshot.id}
+                              checked={formData.attachments_snapshot === snapshot.id}
+                              onChange={() => setField('attachments_snapshot', snapshot.id)}
+                            />
+                            <label
+                              className="form-check-label fw-normal"
+                              htmlFor={`id_attachments_snapshot_${snapshot.id}`}
+                            >
+                              {snapshot.title}
+                            </label>
+                          </div>
+                        ))
+                      }
+                    </div>
                   </div>
                 </div>
                 <div className="dropdown">
@@ -412,9 +413,9 @@ const SendModal = ({
   )
 }
 
-SendModal.propTypes = {
+SendIssueModal.propTypes = {
   issue: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired
 }
 
-export default SendModal
+export default SendIssueModal

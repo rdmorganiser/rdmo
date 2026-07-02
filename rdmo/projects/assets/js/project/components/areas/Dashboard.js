@@ -9,7 +9,7 @@ import { navigateDashboard, updateProjectTask } from '../../actions/projectActio
 import { Tile } from '../helper'
 
 import IssueModal from './dashboard/IssueModal'
-import SendModal from './dashboard/SendModal'
+import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
@@ -256,7 +256,7 @@ const Dashboard = () => {
             }
             {
               sendIssue && (
-                <SendModal
+                <SendIssueModal
                   onClose={() => setSendIssue(null)}
                   issue={sendIssue}
                 />
