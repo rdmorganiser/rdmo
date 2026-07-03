@@ -1,5 +1,17 @@
 # Changelog 📔
 
+## [RDMO 2.5.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.1) (July 3, 2026)
+
+### Bug fixes 🐛
+
+* Fix attribute URIs questions export (#1650)
+* Fix `STORAGES` settings
+
+**Milestones**:
+[2.5.1](https://github.com/rdmorganiser/rdmo/milestone/33?closed=1)
+
+**Commit history**: [2.5.0...2.5.1](https://github.com/rdmorganiser/rdmo/compare/2.5.0...2.5.1)
+
 ## [RDMO 2.5.0](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.0) (June 16, 2026)
 
 ### Breaking changes ⚠️
