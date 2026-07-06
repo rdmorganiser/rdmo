@@ -50,9 +50,11 @@ export function fetchProject() {
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
-      CatalogApi.fetchCatalogs()
+      CatalogApi.fetchCatalogs(),
+      ProjectApi.fetchProjectFiles(projectId)
     ])
-      .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
+      .then(([
+        project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs, files]) => {
         const projectData = {
           project,
           hierarchy,
@@ -61,7 +63,8 @@ export function fetchProject() {
           answers,
           tasks,
           memberships: [...memberships, ...membershipHierarchy],
-          catalogs
+          catalogs,
+          files
         }
 
         dispatch(removeFromPending('fetchProject'))

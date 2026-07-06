@@ -163,4 +163,8 @@ export default class ProjectApi extends BaseApi {
   static deleteProjectIntegration(projectId, integrationId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/integrations/${integrationId}/`)
   }
+
+  static fetchProjectFiles(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/files/`)
+  }
 }

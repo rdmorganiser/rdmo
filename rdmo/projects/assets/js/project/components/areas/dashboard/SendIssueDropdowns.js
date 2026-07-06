@@ -10,12 +10,12 @@ const SendIssueDropdowns = ({
 }) => {
   const answers = useSelector((state) => state.project.project.answers) ?? {}
   const views = useSelector((state) => state.project.project.views) ?? []
+  const files = useSelector((state) => state.project.project.files) ?? []
   const snapshots = useSelector((state) => state.project.project.snapshots) ?? []
   const snapshotOptions = [
     { id: 'current', title: gettext('Current') },
     ...snapshots
   ]
-  const files = []
 
   return (
     <div className="d-flex justify-content-end gap-3 mb-3">

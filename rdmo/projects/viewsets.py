@@ -70,6 +70,7 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectAnswersSerializer,
     ProjectCopySerializer,
+    ProjectFileSerializer,
     ProjectHierarchySerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
@@ -587,6 +588,18 @@ class ProjectViewSet(ModelViewSet):
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'files',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def files(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        files = project.values.filter(snapshot=None).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        serializer = ProjectFileSerializer(files, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
     @action(
