@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
+
+import { fetchProjectFiles } from '../../../actions/projectActions'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
 
@@ -11,6 +13,7 @@ const SendIssueModal = ({
   issue,
   onClose
 }) => {
+  const dispatch = useDispatch()
   const project = useSelector((state) => state.project.project.project)
   const currentUser = useSelector((state) => state.user.currentUser) ?? {}
   const settings = useSelector(state => state.settings)
@@ -48,7 +51,9 @@ const SendIssueModal = ({
 
     attachments_answers: [],
     attachments_views: [],
-    attachments_files: [],
+    attachments_files_by_snapshot: {
+      current: []
+    },
     attachments_snapshot: 'current',
     attachments_format: null,
 
@@ -71,13 +76,34 @@ const SendIssueModal = ({
     }))
   }
 
+  const handleFileChange = (fileId, checked) => {
+    setFormData(prev => {
+      const snapshotId = prev.attachments_snapshot
+      const selectedFiles = prev.attachments_files_by_snapshot[snapshotId] || []
+
+      return {
+        ...prev,
+        attachments_files_by_snapshot: {
+          ...prev.attachments_files_by_snapshot,
+          [snapshotId]: checked ? [...selectedFiles, fileId] : selectedFiles.filter(id => id !== fileId)
+        }
+      }
+    })
+  }
+
+  const handleSnapshotChange = (snapshotId) => {
+    setField('attachments_snapshot', snapshotId)
+    dispatch(fetchProjectFiles(snapshotId === 'current' ? undefined : snapshotId))
+  }
+
   const handleSend = (extraPayload = {}) => {
+    const attachmentsFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
     const payload = {
       subject: formData.subject,
       message: formData.message,
       attachments_answers: formData.attachments_answers,
       attachments_views: formData.attachments_views,
-      attachments_files: formData.attachments_files,
+      attachments_files: attachmentsFiles,
       attachments_snapshot: formData.attachments_snapshot,
       attachments_format: formData.attachments_format,
       ...extraPayload
@@ -124,6 +150,8 @@ const SendIssueModal = ({
                 formData={formData}
                 setField={setField}
                 onCheckboxChange={handleCheckboxChange}
+                onSnapshotChange={handleSnapshotChange}
+                onFileChange={handleFileChange}
                 formats={settings.export_formats ?? []}
               />
               {/* TODO: use a template for that? */}

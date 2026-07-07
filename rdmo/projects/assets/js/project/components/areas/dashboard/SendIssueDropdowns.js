@@ -6,6 +6,8 @@ const SendIssueDropdowns = ({
   formData,
   setField,
   onCheckboxChange,
+  onSnapshotChange,
+  onFileChange,
   formats
 }) => {
   const answers = useSelector((state) => state.project.project.answers) ?? {}
@@ -16,6 +18,7 @@ const SendIssueDropdowns = ({
     { id: 'current', title: gettext('Current') },
     ...snapshots
   ]
+  const selectedFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
 
   return (
     <div className="d-flex justify-content-end gap-3 mb-3">
@@ -109,10 +112,8 @@ const SendIssueDropdowns = ({
                         type="checkbox"
                         className="form-check-input"
                         value={file.id}
-                        checked={formData.attachments_files.includes(file.id)}
-                        onChange={
-                          (event) => onCheckboxChange('attachments_files', file.id, event.target.checked)
-                        }
+                        checked={selectedFiles.includes(file.id)}
+                        onChange={(event) => onFileChange(file.id, event.target.checked)}
                       />
                       <label
                         className="form-check-label fw-normal"
@@ -138,7 +139,7 @@ const SendIssueDropdowns = ({
                     className="form-check-input"
                     value={snapshot.id}
                     checked={formData.attachments_snapshot === snapshot.id}
-                    onChange={() => setField('attachments_snapshot', snapshot.id)}
+                    onChange={() => onSnapshotChange(snapshot.id)}
                   />
                   <label
                     className="form-check-label fw-normal"
@@ -196,6 +197,8 @@ SendIssueDropdowns.propTypes = {
   formData: PropTypes.object.isRequired,
   setField: PropTypes.func.isRequired,
   onCheckboxChange: PropTypes.func.isRequired,
+  onSnapshotChange: PropTypes.func.isRequired,
+  onFileChange: PropTypes.func.isRequired,
   formats: PropTypes.array.isRequired
 }
 

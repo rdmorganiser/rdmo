@@ -497,6 +497,28 @@ export function rollbackSnapshot(snapshotId) {
   }
 }
 
+// files
+
+export function fetchProjectFiles(snapshotId) {
+  const pendingId = isNil(snapshotId) ? 'fetchProjectFiles' : `fetchProjectFiles/${snapshotId}`
+
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_PROJECT_FILES_INIT })
+
+    return ProjectApi.fetchProjectFiles(projectId, snapshotId)
+      .then(files => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_SUCCESS, files })
+      })
+      .catch(error => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_ERROR, error })
+        throw error
+      })
+  }
+}
+
 // answers / views
 
 export function fetchAnswers(snapshotId) {
