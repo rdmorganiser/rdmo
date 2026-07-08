@@ -10,7 +10,7 @@ from django.views.generic import DeleteView, UpdateView
 from django.views.generic.edit import FormView
 
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.mail import MailSendError
+from rdmo.core.exceptions import MailSendError
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm

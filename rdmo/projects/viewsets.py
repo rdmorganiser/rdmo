@@ -24,7 +24,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
-from rdmo.core.mail import MailSendError
+from rdmo.core.exceptions import MailSendError
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet

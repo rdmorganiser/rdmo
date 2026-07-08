@@ -4,12 +4,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 
-
-class MailSendError(Exception):
-    def __init__(self, reason, original_exception=None):
-        super().__init__(reason)
-        self.reason = reason
-        self.original_exception = original_exception
+from rdmo.core.exceptions import MailSendError
 
 
 def _format_smtp_exception(exception):
