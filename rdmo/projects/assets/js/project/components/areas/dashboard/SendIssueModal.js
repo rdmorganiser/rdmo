@@ -20,6 +20,7 @@ const SendIssueModal = ({
   const sites = useSelector(state => state.sites) ?? {}
   const currentSite = Object.values(sites).find((site) => site.id === project.site)
 
+  /* TODO: use templates? */
   const initialMessage = [
     gettext('To whom it may concern,'),
     '',
