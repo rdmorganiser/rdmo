@@ -1,6 +1,33 @@
+import smtplib
+
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
+
+
+class MailSendError(Exception):
+    def __init__(self, reason, original_exception=None):
+        super().__init__(reason)
+        self.reason = reason
+        self.original_exception = original_exception
+
+
+def _format_smtp_exception(exception):
+    if isinstance(exception, smtplib.SMTPRecipientsRefused):
+        details = []
+        for _recipient, (_code, response) in exception.recipients.items():
+            if isinstance(response, bytes):
+                response = response.decode(errors='replace')
+            details.append(response)
+        return '; '.join(details) if details else str(exception)
+
+    if isinstance(exception, smtplib.SMTPResponseException):
+        response = exception.smtp_error
+        if isinstance(response, bytes):
+            response = response.decode(errors='replace')
+        return f'{response}' if response else str(exception)
+
+    return str(exception)
 
 
 def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, reply_to=None, attachments=None):
@@ -11,4 +38,7 @@ def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, rep
         from_email = settings.DEFAULT_FROM_EMAIL
 
     mail = EmailMessage(subject, message, from_email, to=to, cc=cc, bcc=bcc, reply_to=reply_to, attachments=attachments)
-    mail.send()
+    try:
+        mail.send()
+    except smtplib.SMTPException as e:
+        raise MailSendError(_format_smtp_exception(e), original_exception=e) from e

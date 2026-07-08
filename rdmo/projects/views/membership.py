@@ -1,13 +1,16 @@
 import logging
 
 from django.conf import settings
+from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView, UpdateView
 from django.views.generic.edit import FormView
 
 from rdmo.accounts.utils import is_site_manager
+from rdmo.core.mail import MailSendError
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm
@@ -43,9 +46,14 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
         return self.project.get_absolute_url()
 
     def form_valid(self, form):
-        invite = form.save()
-        if invite is not None and settings.PROJECT_SEND_INVITE:
-            send_invite_email(self.request, invite)
+        try:
+            with transaction.atomic():
+                invite = form.save()
+                if invite is not None and settings.PROJECT_SEND_INVITE:
+                    send_invite_email(self.request, invite)
+        except MailSendError as e:
+            form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': e.reason})
+            return self.form_invalid(form)
         return super().form_valid(form)
 
 
