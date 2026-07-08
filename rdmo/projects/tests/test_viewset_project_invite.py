@@ -3,6 +3,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from rdmo.core.exceptions import MailSendError
+
 from ..models import Invite
 
 users = (
@@ -38,6 +40,7 @@ urlnames = {
 
 projects = [1, 11]
 invites = [1, 2]
+excluded_invite_ids = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -119,6 +122,31 @@ def test_create_email(db, client, username, password, project_id):
         assert response.status_code == 403
     else:
         assert response.status_code == 404
+
+
+def test_create_email_mail_send_error(db, client, settings, mocker):
+    settings.PROJECT_SEND_INVITE = True
+    client.login(username='owner', password='owner')
+
+    mocker.patch(
+        'rdmo.projects.utils.send_mail',
+        side_effect=MailSendError(
+            '1.2.3 <name@non-existent-domain.abc>: Recipient address rejected: Domain not found'
+        )
+    )
+
+    url = reverse(urlnames['list'], args=[1])
+    response = client.post(url, {
+        'email': 'name@non-existent-domain.abc',
+        'role': 'guest'
+    })
+
+    assert response.status_code == 400
+    assert response.json()['non_field_errors'][0] == (
+        'Could not send e-mail: 1.2.3 <name@non-existent-domain.abc>: '
+        'Recipient address rejected: Domain not found'
+    )
+    assert not Invite.objects.exclude(id__in=excluded_invite_ids).exists()
 
 
 def test_create_error(db, client):
