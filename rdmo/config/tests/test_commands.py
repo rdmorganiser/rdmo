@@ -20,7 +20,7 @@ def test_checks(settings, enable_legacy_plugins, use_new_setting):
     call_command("check", stdout=stdout, stderr=stderr)
 
     output = stdout.getvalue() + stderr.getvalue()
-    assert "deprecated as of RDMO 2.5.0" in output
+    assert "deprecated as of RDMO 2.6.0" in output
     assert "rdmo.config.W001" in output
     if use_new_setting:
         assert "rdmo.config.W002" in output

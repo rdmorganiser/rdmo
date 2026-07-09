@@ -49,7 +49,7 @@ def test_deprecated_plugin_settings_with_legacy_only(enable_legacy_plugins, sett
     assert issue.id == "rdmo.config.W001"
 
     # the message mentions the deprecated keys
-    assert "deprecated as of RDMO 2.5.0" in issue.msg
+    assert "deprecated as of RDMO 2.6.0" in issue.msg
     assert "PROJECT_EXPORTS" in issue.msg
 
     # the hint uses repr_new_settings(...) and should contain python paths

@@ -32,7 +32,7 @@ def deprecated_plugin_settings_check(app_configs, **kwargs):
                 if len(entry) == 3:
                     _python_paths.add(entry[-1])
         issues.append(Warning(
-            f"{', '.join(legacy_settings_used_keys)} {_verb} deprecated as of RDMO 2.5.0; "
+            f"{', '.join(legacy_settings_used_keys)} {_verb} deprecated as of RDMO 2.6.0; "
             f"use PLUGINS = ['python.dotted.paths', ...] instead.",
             id="rdmo.config.W001",
             hint="Define the legacy plugin settings in PLUGINS and remove the legacy settings."
