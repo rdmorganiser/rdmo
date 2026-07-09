@@ -24,10 +24,14 @@ class PluginAdminForm(ElementAdminForm):
         fields = '__all__'
 
     def clean(self):
-        PluginUniqueURIValidator(self.instance)(self.cleaned_data)
-        PluginLockedValidator(self.instance)(self.cleaned_data)
-        PluginPythonPathValidator(self.instance)(self.cleaned_data)
-        PluginURLNameValidator(self.instance)(self.cleaned_data)
+        cleaned_data = super().clean()
+
+        PluginUniqueURIValidator(self.instance)(cleaned_data)
+        PluginLockedValidator(self.instance)(cleaned_data)
+        PluginPythonPathValidator(self.instance)(cleaned_data)
+        PluginURLNameValidator(self.instance)(cleaned_data)
+
+        return cleaned_data
 
 
 @admin.register(Plugin)
