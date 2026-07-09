@@ -28,7 +28,7 @@ def enable_legacy_plugins(settings):
     ]
 
     settings.OPTIONSET_PROVIDERS = [
-        ("simple_optionset_provider", "Simple OptionSet Provider", "plugins.optionset_providers.providers.SimpleProvider"),  # noqa: E501
+        ("simple_optionset_provider", "Simple OptionSet Provider", "plugins.optionset_providers.providers.SimpleOptionSetProvider"),  # noqa: E501
     ]
 
     settings.PROJECT_ISSUE_PROVIDERS = [

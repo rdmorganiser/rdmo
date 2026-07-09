@@ -98,7 +98,7 @@
     "help_lang4": "",
     "help_lang5": "",
     "available": false,
-    "python_path": "plugins.optionset_providers.providers.SimpleProvider",
+    "python_path": "plugins.optionset_providers.providers.SimpleOptionSetProvider",
     "plugin_type": "optionset_provider",
     "plugin_meta": {
       "search": false,

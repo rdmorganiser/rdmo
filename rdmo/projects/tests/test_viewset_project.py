@@ -770,7 +770,7 @@ def test_options(db, client, username, password):
 
 
 def test_options_text_and_help(db, client, mocker):
-    mocker.patch('plugins.optionset_providers.providers.SimpleProvider.get_options', return_value=[
+    mocker.patch('plugins.optionset_providers.providers.SimpleOptionSetProvider.get_options', return_value=[
         {
             'id': 'simple_1',
             'text': 'Simple answer 1'

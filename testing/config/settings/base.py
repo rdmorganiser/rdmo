@@ -97,7 +97,7 @@ PLUGINS = [  # introduced in 2.5
     'rdmo.projects.imports.RDMOXMLImport',
     'rdmo.projects.imports.URLImport',
     # rdmo/testing/plugins
-    'plugins.optionset_providers.providers.SimpleProvider',  # here or in app/test
+    'plugins.optionset_providers.providers.SimpleOptionSetProvider',  # here or in app/test
     'plugins.project_issue_providers.providers.SimpleIssueProvider',
     'plugins.project_export.exports.SimpleExportPlugin',
     'plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin',

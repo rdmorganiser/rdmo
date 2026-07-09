@@ -15,9 +15,9 @@ users = (
 
 @pytest.fixture
 def optionset_provider(settings):
-    assert 'plugins.optionset_providers.providers.SimpleProvider' in settings.PLUGINS
+    assert 'plugins.optionset_providers.providers.SimpleOptionSetProvider' in settings.PLUGINS
 
-    plugin = Plugin.objects.get(python_path='plugins.optionset_providers.providers.SimpleProvider')
+    plugin = Plugin.objects.get(python_path='plugins.optionset_providers.providers.SimpleOptionSetProvider')
     plugin.available = True
     plugin.title_lang1 = plugin.title_lang1 or 'Simple OptionSet Provider'
     plugin.url_name = plugin.url_name or 'simple'

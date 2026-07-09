@@ -1,7 +1,7 @@
 from rdmo.options.providers import Provider
 
 
-class SimpleProvider(Provider):
+class SimpleOptionSetProvider(Provider):
     default_uri_prefix = "https://rdmorganiser.github.io/terms"
     refresh = True
 
