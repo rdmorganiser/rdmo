@@ -171,7 +171,7 @@ const SendIssueModal = ({
               <Textarea
                 className="mb-4"
                 label={gettext('Message')}
-                rows="5"
+                rows="12"
                 value={formData.message}
                 onChange={(value) => setField('message', value)}
               />
@@ -182,12 +182,12 @@ const SendIssueModal = ({
           hasMail && (
             <>
               <h2>{gettext('Send by mail')}</h2>
-              <div className="form-label fw-bold">
+              <label className="form-label">
                 {gettext('Recipients')}
-              </div>
+              </label>
               {
                 hasRecipientChoices && (
-                  <div className="mb-3">
+                  <div>
                     {
                       settings.email_recipients.map(([value, label], index) => (
                         <div className="form-check" key={value}>
@@ -209,18 +209,15 @@ const SendIssueModal = ({
                   </div>
                 )
               }
-
               {
                 hasRecipientInput && (
-                  <>
-                    <Textarea
-                      className="mb-3"
-                      rows="3"
-                      placeholder={gettext('Enter recipients line by line')}
-                      value={formData.recipients_input}
-                      onChange={(value) => setField('recipients_input', value)}
-                    />
-                  </>
+                  <Textarea
+                    className="mb-3"
+                    rows="3"
+                    placeholder={gettext('Enter recipients line by line')}
+                    value={formData.recipients_input}
+                    onChange={(value) => setField('recipients_input', value)}
+                  />
                 )
               }
 
