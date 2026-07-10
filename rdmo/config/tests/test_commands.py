@@ -1,8 +1,10 @@
 import io
+import json
 
 import pytest
 
 from django.core.management import call_command
+from django.utils.module_loading import import_string
 
 from rdmo.config.models import Plugin
 from rdmo.config.tests.helpers import _install_dummy_plugin
@@ -91,6 +93,9 @@ def test_setup_plugins_dry_run_never_raises(db, settings, monkeypatch):
 
 def test_legacy_setup_plugins_skips_plugins_created_from_regular_settings(db, settings, monkeypatch):
     dotted = _install_dummy_plugin(monkeypatch, "dummy.mod.ExamplePlugin", key="example", label="Imported Label")
+    plugin_class = import_string(dotted)
+    plugin_class.uri_path = "project_exports/example"
+    plugin_class.url_name = "example"
     settings.PROJECT_EXPORTS = [('example', 'Legacy Label', dotted)]
     settings.PLUGINS = [dotted]
 
@@ -102,6 +107,94 @@ def test_legacy_setup_plugins_skips_plugins_created_from_regular_settings(db, se
     assert queryset.count() == 1
     instance = queryset.get()
     assert instance.title_lang1 == "Imported Label"
+
+
+def test_legacy_setup_plugins_creates_plugins_for_distinct_legacy_keys(db, settings, monkeypatch):
+    Plugin.objects.all().delete()
+    dotted = _install_dummy_plugin(
+        monkeypatch,
+        "legacy.mod.SharedOptionsetProvider",
+        plugin_type="optionset_provider",
+    )
+    settings.PROJECT_EXPORTS = []
+    settings.PROJECT_IMPORTS = []
+    settings.PROJECT_SNAPSHOT_EXPORTS = []
+    settings.PROJECT_ISSUE_PROVIDERS = []
+    settings.OPTIONSET_PROVIDERS = [
+        ("first-provider", "First Provider", dotted),
+        ("second-provider", "Second Provider", dotted),
+    ]
+    settings.PLUGINS = []
+
+    call_command("legacy_setup_plugins", stdout=io.StringIO(), stderr=io.StringIO())
+
+    assert Plugin.objects.filter(python_path=dotted).count() == 2
+    assert set(Plugin.objects.values_list("uri_path", flat=True)) == {
+        "optionset_providers/first-provider",
+        "optionset_providers/second-provider",
+    }
+    assert set(Plugin.objects.values_list("url_name", flat=True)) == {
+        "first-provider",
+        "second-provider",
+    }
+
+
+def test_dump_legacy_plugin_assignments(settings, tmp_path, monkeypatch):
+    settings.OPTIONSET_PROVIDERS = [
+        ("Software", "Options for Software", "plugins.optionset.SoftwareProvider"),
+    ]
+    settings.PROJECT_ISSUE_PROVIDERS = [
+        ("issue-provider", "Issue Provider", "plugins.issue.IssueProvider"),
+    ]
+
+    monkeypatch.setattr(
+        "rdmo.config.management.commands.dump_legacy_plugin_assignments.Command.get_optionsets",
+        lambda self: [{
+            "id": 1,
+            "uri": "https://example.com/options/software",
+            "uri_prefix": "https://example.com/terms",
+            "uri_path": "software",
+            "provider_key": "Software",
+        }],
+    )
+    monkeypatch.setattr(
+        "rdmo.config.management.commands.dump_legacy_plugin_assignments.Command.get_integrations",
+        lambda self: [{
+            "id": 2,
+            "project_id": 3,
+            "provider_key": "issue-provider",
+        }],
+    )
+    output_path = tmp_path / "legacy_plugin_assignments.json"
+
+    stdout = io.StringIO()
+    call_command("dump_legacy_plugin_assignments", "-o", output_path, stdout=stdout)
+
+    assert "created" in stdout.getvalue()
+    assert json.loads(output_path.read_text()) == {
+        "optionsets": [{
+            "id": 1,
+            "uri": "https://example.com/options/software",
+            "uri_prefix": "https://example.com/terms",
+            "uri_path": "software",
+            "provider_key": "Software",
+            "legacy_plugin": {
+                "key": "Software",
+                "label": "Options for Software",
+                "python_path": "plugins.optionset.SoftwareProvider",
+            },
+        }],
+        "integrations": [{
+            "id": 2,
+            "project_id": 3,
+            "provider_key": "issue-provider",
+            "legacy_plugin": {
+                "key": "issue-provider",
+                "label": "Issue Provider",
+                "python_path": "plugins.issue.IssueProvider",
+            },
+        }],
+    }
 
 
 def test_legacy_setup_plugins_from_issue_provider(db, settings, monkeypatch):
