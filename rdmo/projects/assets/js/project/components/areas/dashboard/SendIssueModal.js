@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { fetchProjectFiles } from '../../../actions/projectActions'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
@@ -14,11 +16,12 @@ const SendIssueModal = ({
   onClose
 }) => {
   const dispatch = useDispatch()
-  const project = useSelector((state) => state.project.project.project)
-  const currentUser = useSelector((state) => state.user.currentUser) ?? {}
+  const project = useSelector(state => state.project.project.project)
+  const currentUser = useSelector(state => state.user.currentUser) ?? {}
+  const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const sites = useSelector(state => state.sites) ?? {}
-  const currentSite = Object.values(sites).find((site) => site.id === project.site)
+  const currentSite = Object.values(sites).find(site => site.id === project.site)
 
   /* TODO: use templates? */
   const initialMessage = [
@@ -136,11 +139,11 @@ const SendIssueModal = ({
       size="modal-lg"
     >
       <form>
-        {/* TODO: use a template for that? */}
         {
           !isConfigured && (
             <p className="text-muted">
-              {gettext('The send task functionality is not properly configured yet.')}
+              {/* {gettext('The send task functionality is not properly configured yet.')} */}
+              <Html html={templates.project_issue_config_info} />
             </p>
           )
         }
@@ -155,8 +158,8 @@ const SendIssueModal = ({
                 onFileChange={handleFileChange}
                 formats={settings.export_formats ?? []}
               />
-              {/* TODO: use a template for that? */}
-              <p>{gettext('Sending a task will set the status to "in progress".')}</p>
+              <Html html={templates.project_issue_send_info} />
+              {/* <p>{gettext('Sending a task will set the status to "in progress".')}</p> */}
               <Input
                 className="mb-3"
                 label={gettext('Subject')}
@@ -210,7 +213,6 @@ const SendIssueModal = ({
               {
                 hasRecipientInput && (
                   <>
-                    {/* TODO: use a template for placeholder? */}
                     <Textarea
                       className="mb-3"
                       rows="3"

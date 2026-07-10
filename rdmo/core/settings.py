@@ -290,6 +290,8 @@ TEMPLATES_API = [
     'projects/project_view_snapshot_description_help.html',
     'projects/project_view_visibility_help.html',
     'projects/project_view_no_catalog_info.html',
+    'projects/project_issue_send_info.html',
+    'projects/project_issue_config_info.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
