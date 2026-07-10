@@ -837,7 +837,12 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
         return (
             Page.objects
             .filter_by_catalog(self.project.catalog)
-            .prefetch_related(*get_page_prefetch_lookups(optionsets=True, optionsets_conditions=True, options=True))
+            .prefetch_related(*get_page_prefetch_lookups(
+                optionsets=True,
+                optionsets_conditions=True,
+                optionsets_plugins=True,
+                options=True
+            ))
         )
 
     def get_serializer_context(self):

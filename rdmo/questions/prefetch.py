@@ -31,7 +31,12 @@ def get_questionset_prefetch_lookups(**kwargs):
     )
 
 
-def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False, options=False):
+def get_question_prefetch_lookups(
+    optionsets=False,
+    optionsets_conditions=False,
+    optionsets_plugins=False,
+    options=False,
+):
     additional_lookups = []
     if optionsets:
         additional_lookups += [
@@ -40,6 +45,10 @@ def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False,
     if optionsets_conditions:
         additional_lookups += [
             condition_prefetch('optionsets__conditions'),
+        ]
+    if optionsets_plugins:
+        additional_lookups += [
+            'optionsets__plugins',
         ]
     if options:
         additional_lookups += [
@@ -109,7 +118,7 @@ def questionset_questionset_prefetch(lookup, **kwargs):
     )
 
 
-def question_prefetch(lookup, optionsets=False, optionsets_conditions=False, options=False):
+def question_prefetch(lookup, optionsets=False, optionsets_conditions=False, optionsets_plugins=False, options=False):
     from .models import Question
 
     additional_fields = ['default_option'] if options else []
@@ -121,6 +130,10 @@ def question_prefetch(lookup, optionsets=False, optionsets_conditions=False, opt
     if optionsets_conditions:
         additional_lookups += [
             condition_prefetch('optionsets__conditions'),
+        ]
+    if optionsets_plugins:
+        additional_lookups += [
+            'optionsets__plugins',
         ]
     if options:
         additional_lookups += [

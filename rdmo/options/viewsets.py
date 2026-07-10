@@ -49,6 +49,7 @@ class OptionSetViewSet(ModelViewSet):
             return queryset.prefetch_related(
                 'optionset_options__option',
                 'conditions',
+                'plugins',
             )
         else:
             return queryset.prefetch_related(

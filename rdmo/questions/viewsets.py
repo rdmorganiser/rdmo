@@ -67,10 +67,12 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         if self.action in ['nested']:
             return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
+            export_flags = get_export_flags(self.request)
             return queryset.prefetch_elements(
                 optionsets=True,
-                optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                optionsets_conditions=export_flags.get('conditions'),
+                optionsets_plugins=export_flags.get('optionsets'),
+                options=export_flags.get('options')
             )
         else:
             return queryset.prefetch_related(
@@ -149,10 +151,12 @@ class SectionViewSet(ModelViewSet):
         if self.action in ['nested']:
             return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
+            export_flags = get_export_flags(self.request)
             return queryset.prefetch_elements(
                 optionsets=True,
-                optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                optionsets_conditions=export_flags.get('conditions'),
+                optionsets_plugins=export_flags.get('optionsets'),
+                options=export_flags.get('options')
             )
         else:
             return queryset.prefetch_related(
@@ -232,10 +236,12 @@ class PageViewSet(ModelViewSet):
         if self.action in ['nested']:
             return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
+            export_flags = get_export_flags(self.request)
             return queryset.prefetch_elements(
                 optionsets=True,
-                optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                optionsets_conditions=export_flags.get('conditions'),
+                optionsets_plugins=export_flags.get('optionsets'),
+                options=export_flags.get('options')
             )
         else:
             return queryset.prefetch_related(
@@ -318,10 +324,12 @@ class QuestionSetViewSet(ModelViewSet):
         elif self.action in ['nested']:
             return queryset.prefetch_elements(optionsets=True)
         elif self.action in ['export', 'detail_export']:
+            export_flags = get_export_flags(self.request)
             return queryset.prefetch_elements(
                 optionsets=True,
-                optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                optionsets_conditions=export_flags.get('conditions'),
+                optionsets_plugins=export_flags.get('optionsets'),
+                options=export_flags.get('options')
             )
         else:
             return queryset.prefetch_related(
@@ -406,10 +414,12 @@ class QuestionViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         elif self.action in ['export', 'detail_export']:
+            export_flags = get_export_flags(self.request)
             return queryset.prefetch_elements(
                 optionsets=True,
-                optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                optionsets_conditions=export_flags.get('conditions'),
+                optionsets_plugins=export_flags.get('optionsets'),
+                options=export_flags.get('options')
             )
         else:
             return queryset.prefetch_related(
