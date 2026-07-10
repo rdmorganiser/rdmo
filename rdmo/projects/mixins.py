@@ -163,6 +163,11 @@ class ProjectImportMixin:
                 'views': import_plugin.views
             })
 
+        return render(self.request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('Files of this type cannot be imported.')]
+        }, status=400)
+
     def import_file(self):
         current_project = self.object
 

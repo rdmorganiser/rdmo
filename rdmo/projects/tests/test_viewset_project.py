@@ -854,9 +854,9 @@ def test_imports(db, client, username, password):
         assert response.status_code == 200
         if username == 'admin':
             assert len(response.json()) == 3
-            assert {i['key'] for i in response.json()} == {'url', 'xml', 'simple'}
+            assert {i['url_name'] for i in response.json()} == {'url', 'xml', 'simple'}
         else:
             assert len(response.json()) == 2
-            assert {i['key'] for i in response.json()} == {'url', 'xml'}
+            assert {i['url_name'] for i in response.json()} == {'url', 'xml'}
     else:
         assert response.status_code == 401

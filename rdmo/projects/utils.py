@@ -18,10 +18,10 @@ from rdmo.core.utils import remove_double_newlines
 logger = logging.getLogger(__name__)
 
 
-def get_project_export_plugin(project, user, url_name, request=None):
+def get_export_plugin(filter_project, plugin_type, user, url_name, request=None, **context):
     export_plugin_instance = Plugin.objects.filter_plugins_for_project(
-        project=project,
-        plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+        project=filter_project,
+        plugin_type=plugin_type,
         user=user,
         url_name=url_name,
     ).first()
@@ -29,11 +29,36 @@ def get_project_export_plugin(project, user, url_name, request=None):
     if export_plugin_instance is None:
         raise Http404
 
-    export_plugin = export_plugin_instance.initialize_class()
-    export_plugin.project = project
+    plugin = export_plugin_instance.initialize_class()
+
+    for name, value in context.items():
+        setattr(plugin, name, value)
+
     if request is not None:
-        export_plugin.request = request
-    return export_plugin
+        plugin.request = request
+    return plugin
+
+
+def get_project_export_plugin(project, user, url_name, request=None):
+    return get_export_plugin(
+        filter_project=project,
+        plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+        user=user,
+        url_name=url_name,
+        request=request,
+        project=project,
+    )
+
+
+def get_snapshot_export_plugin(snapshot, user, url_name, request=None):
+    return get_export_plugin(
+        filter_project=snapshot.project,
+        plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
+        user=user,
+        url_name=url_name,
+        request=request,
+        snapshot=snapshot,
+    )
 
 
 def get_value_path(project, snapshot=None):

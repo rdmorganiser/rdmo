@@ -361,5 +361,39 @@
       "groups": [],
       "catalogs": [1]
     }
+  },
+  {
+    "model": "config.plugin",
+    "pk": 11,
+    "fields": {
+      "created": "2025-11-24T11:11:11Z",
+      "updated": "2025-11-24T11:11:11Z",
+      "uri": "http://example.com/terms/plugins/testing/project/snapshot/export",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "testing/project/snapshot/export",
+      "url_name": "xml",
+      "comment": "",
+      "locked": false,
+      "order": 0,
+      "title_lang1": "RDMO XML",
+      "title_lang2": "",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "python_path": "plugins.project_snapshot_export.exports.SimpleSnapshotExportPlugin",
+      "plugin_meta": {},
+      "plugin_type": "project_snapshot_export",
+      "plugin_settings": {},
+      "sites": [],
+      "editors": [],
+      "groups": [],
+      "catalogs": [1]
+    }
   }
 ]
