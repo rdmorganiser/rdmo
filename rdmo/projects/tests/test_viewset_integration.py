@@ -73,6 +73,10 @@ def test_detail(db, client, username, password, integration_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json().get('id') == integration_id
+        assert response.json().get('title') == integration.title
+        assert response.json().get('description') == integration.description
+        assert response.json().get('add_label') == integration.add_label
+        assert response.json().get('send_label') == integration.send_label
     elif password:
         assert response.status_code == 404
     else:

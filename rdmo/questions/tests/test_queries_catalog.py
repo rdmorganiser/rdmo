@@ -12,10 +12,10 @@ max_queries = [
     ('index', 3, {}, {}),
     ('nested', 31, {'pk': 1}, {}),
     ('export', 36, {'export_format': 'xml'}, {}),
-    ('export', 42, {'export_format': 'xml'}, {'full': '1'}),
+    ('export', 45, {'export_format': 'xml'}, {'full': '1'}),
     ('detail', 8, {'pk': 1}, {}),
     ('detail_export', 36, {'pk': 1, 'export_format': 'xml'}, {}),
-    ('detail_export', 39, {'pk': 1, 'export_format': 'xml'}, {'full': '1'}),
+    ('detail_export', 41, {'pk': 1, 'export_format': 'xml'}, {'full': '1'}),
 ]
 
 

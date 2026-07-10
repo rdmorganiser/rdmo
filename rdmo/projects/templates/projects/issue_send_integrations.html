@@ -13,8 +13,8 @@
         {% for integration in integrations %}
         {% if integration.provider %}
         <tr>
-            <td>{{ integration.provider.label }}</td>
-            <td>{{ integration.provider.description }}</td>
+            <td>{{ integration.title }}</td>
+            <td>{{ integration.description }}</td>
             <td>
                 {% for option in integration.options.all %}
                 {% if not option.secret %}

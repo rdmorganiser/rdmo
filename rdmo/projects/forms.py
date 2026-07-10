@@ -5,11 +5,13 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
+from django.http import Http404
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
@@ -348,14 +350,24 @@ class IntegrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
-        self.provider_key = kwargs.pop('provider_key', None)
+        self.url_name = kwargs.pop('url_name', None)
         super().__init__(*args, **kwargs)
+        self.plugin = None
 
         # get the provider
-        if self.provider_key:
-            self.provider = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        if self.url_name:
+
+            self.plugin = Plugin.objects.filter_plugins_for_project(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project, url_name=self.url_name
+            ).first()
+            if self.plugin is None:
+                raise Http404
+            self.provider = self.plugin.initialize_class()
         else:
+            self.plugin = self.instance.plugin
             self.provider = self.instance.provider
+            if self.provider is None:
+                raise Http404
 
         # add fields for the integration options
         for field in self.provider.fields:
@@ -377,15 +389,12 @@ class IntegrationForm(forms.ModelForm):
                                                             help_text=field.get('help'))
 
     def save(self):
-        # the the project and the provider_key
         self.instance.project = self.project
-        if self.provider_key:
-            self.instance.provider_key = self.provider_key
+        if self.plugin:
+            self.instance.plugin = self.plugin
 
-        # call the form's save method
         super().save()
 
-        # save the integration options
         self.instance.save_options(self.cleaned_data)
 
 

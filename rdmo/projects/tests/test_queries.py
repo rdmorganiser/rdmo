@@ -10,8 +10,8 @@ max_queries = [
     ('get', 'v1-projects:project-answers', 43, [1]),
     ('post', 'v1-projects:project-progress', 44, [1]),
     ('get', 'v1-projects:project-page-detail', 46, [1, 1]),
-    ('get', 'v1-projects:project-page-detail', 50, [1, 42]),
-    ('get', 'v1-projects:project-page-detail', 62, [1, 87]),
+    ('get', 'v1-projects:project-page-detail', 51, [1, 42]),
+    ('get', 'v1-projects:project-page-detail', 63, [1, 87]),
 ]
 
 

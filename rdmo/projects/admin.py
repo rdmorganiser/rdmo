@@ -94,8 +94,8 @@ class VisibilityAdmin(admin.ModelAdmin):
 
 @admin.register(Integration)
 class IntegrationAdmin(admin.ModelAdmin):
-    search_fields = ('project__title', 'provider_key')
-    list_display = ('project', 'provider_key')
+    search_fields = ('project__title', 'plugin__url_name', 'plugin__title_lang1')
+    list_display = ('project', 'plugin')
 
 
 @admin.register(IntegrationOption)

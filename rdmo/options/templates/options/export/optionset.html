@@ -15,11 +15,17 @@
         {% endfor %}
     </ul>
 
-    {% if optionset.provider_key %}
+    {% if optionset.plugins.all %}
 
     <p>
-        <strong>{% trans 'Provider' %}:</strong> {{ optionset.provider.label }}
+        <strong>{% trans 'Plugins' %}:</strong>
     </p>
+
+    <ul>
+        {% for plugin in optionset.plugins.all %}
+        {% include 'config/export/plugin.html' with option=option %}
+        {% endfor %}
+    </ul>
 
     {% endif %}
 

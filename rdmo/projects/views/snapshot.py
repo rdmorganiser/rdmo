@@ -1,15 +1,15 @@
 import logging
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from rdmo.core.plugins import get_plugin
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import SnapshotCreateForm
 from ..models import Project, Snapshot
+from ..utils import get_snapshot_export_plugin
 
 logger = logging.getLogger(__name__)
 
@@ -78,14 +78,12 @@ class SnapshotExportView(ObjectPermissionMixin, DetailView):
         return self.get_object().project
 
     def get_export_plugin(self):
-        export_plugin = get_plugin('PROJECT_SNAPSHOT_EXPORTS', self.kwargs.get('format'))
-        if export_plugin is None:
-            raise Http404
-
-        export_plugin.request = self.request
-        export_plugin.snapshot = self.object
-
-        return export_plugin
+        return get_snapshot_export_plugin(
+            self.object,
+            self.request.user,
+            self.kwargs.get('url_name'),
+            request=self.request,
+        )
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

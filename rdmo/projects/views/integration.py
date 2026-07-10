@@ -6,9 +6,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, DeleteView, UpdateView, View
 
-from rdmo.core.plugins import get_plugin
+from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
+from ...config.models import Plugin
 from ..forms import IntegrationForm
 from ..models import Integration, Project
 
@@ -22,7 +23,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
-        self.provider_key = self.kwargs['provider_key']
+        self.url_name = self.kwargs['url_name']
         return super().dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -31,11 +32,22 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['project'] = self.project
-        kwargs['provider_key'] = self.provider_key
+        kwargs['url_name'] = self.url_name
         return kwargs
 
     def get_context_data(self, **kwargs):
-        kwargs['provider'] = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
+        plugin = (
+            Plugin.objects
+                .filter_plugins_for_project(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER, project=self.project,
+                user=self.request.user, url_name=self.url_name
+            ).first()
+       )
+        if plugin is not None:
+            kwargs['provider'] = plugin.initialize_class()
+        else:
+            kwargs['provider'] = None
+
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):

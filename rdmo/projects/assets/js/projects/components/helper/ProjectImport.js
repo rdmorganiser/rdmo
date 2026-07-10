@@ -11,9 +11,9 @@ const ProjectImport = ({ allowedTypes, handleImport, importUrls}) => {
         <label className="control-label">{gettext('Import directly')}</label>
         <ul className='list-unstyled mb-0'>
         {importUrls.map((url) => (
-          <li key={url.key}>
+          <li key={url.url_name}>
             <a href={url.href} target='_blank' rel='noopener noreferrer'>
-              {url.label}
+              {url.title}
             </a>
           </li>
         ))}

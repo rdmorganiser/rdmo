@@ -65,6 +65,7 @@ def api(request):
                 'accounts',
                 'conditions',
                 'core',
+                'config',
                 'domain',
                 'management',
                 'options',

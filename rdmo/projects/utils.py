@@ -1,20 +1,64 @@
 import logging
-import mimetypes
 from collections import defaultdict
 from pathlib import Path
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
 
+from rdmo.config.constants import PLUGIN_TYPES
+from rdmo.config.models import Plugin
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines
 
 logger = logging.getLogger(__name__)
+
+
+def get_export_plugin(filter_project, plugin_type, user, url_name, request=None, **context):
+    export_plugin_instance = Plugin.objects.filter_plugins_for_project(
+        project=filter_project,
+        plugin_type=plugin_type,
+        user=user,
+        url_name=url_name,
+    ).first()
+
+    if export_plugin_instance is None:
+        raise Http404
+
+    plugin = export_plugin_instance.initialize_class()
+
+    for name, value in context.items():
+        setattr(plugin, name, value)
+
+    if request is not None:
+        plugin.request = request
+    return plugin
+
+
+def get_project_export_plugin(project, user, url_name, request=None):
+    return get_export_plugin(
+        filter_project=project,
+        plugin_type=PLUGIN_TYPES.PROJECT_EXPORT,
+        user=user,
+        url_name=url_name,
+        request=request,
+        project=project,
+    )
+
+
+def get_snapshot_export_plugin(snapshot, user, url_name, request=None):
+    return get_export_plugin(
+        filter_project=snapshot.project,
+        plugin_type=PLUGIN_TYPES.PROJECT_SNAPSHOT_EXPORT,
+        user=user,
+        url_name=url_name,
+        request=request,
+        snapshot=snapshot,
+    )
 
 
 def get_value_path(project, snapshot=None):
@@ -282,27 +326,14 @@ def set_context_querystring_with_filter_and_page(context: dict) -> dict:
     return context
 
 
-def get_upload_accept():
+def get_upload_accept(plugins):
     accept = defaultdict(set)
-    for import_plugin in get_plugins('PROJECT_IMPORTS').values():
-        if isinstance(import_plugin.accept, dict):
-            for mime_type, suffixes in import_plugin.accept.items():
-                accept[mime_type].update(suffixes)
-
-        elif isinstance(import_plugin.accept, str):
-            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
-            suffix = import_plugin.accept
-            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
-            if mime_type:
-                accept[mime_type].update([suffix])
-
-        elif import_plugin.upload is True:
-            # if one of the plugins does not have the accept field, but is marked as upload plugin
-            # all file types are allowed
+    for plugin in plugins:
+        if plugin.upload_accept is None:
             return {}
-
-    return accept
-
+        for mime_type, suffixes in plugin.upload_accept.items():
+            accept[mime_type].update(suffixes)
+    return {mime_type: sorted(suffixes) for mime_type, suffixes in accept.items()}
 
 def compute_set_prefix_from_set_value(set_value, value):
     set_prefix_length = len(set_value.set_prefix.split('|')) if set_value.set_prefix else 0

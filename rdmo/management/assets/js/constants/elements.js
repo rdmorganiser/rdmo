@@ -9,7 +9,8 @@ const elementTypes = {
   'options.option': 'options',
   'conditions.condition': 'conditions',
   'tasks.task': 'tasks',
-  'views.view': 'views'
+  'views.view': 'views',
+  'config.plugin': 'plugins'
 }
 
 const elementModules = {
@@ -23,7 +24,8 @@ const elementModules = {
   'options.option': 'options',
   'conditions.condition': 'conditions',
   'tasks.task': 'tasks',
-  'views.view': 'views'
+  'views.view': 'views',
+  'config.plugin': 'plugins'
 }
 
 const codeClass = {
@@ -37,7 +39,8 @@ const codeClass = {
   'options.option': 'code-options',
   'conditions.condition': 'code-conditions',
   'tasks.task': 'code-tasks',
-  'views.view': 'code-views'
+  'views.view': 'code-views',
+  'config.plugin': 'code-config'
 }
 
 const verboseNames = {
@@ -51,7 +54,8 @@ const verboseNames = {
   'options.option': gettext('Option'),
   'conditions.condition': gettext('Condition'),
   'tasks.task': gettext('Task'),
-  'views.view': gettext('View')
+  'views.view': gettext('View'),
+  'config.plugin': gettext('Plugin')
 }
 
 export { elementTypes, elementModules, codeClass, verboseNames }
