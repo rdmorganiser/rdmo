@@ -3,18 +3,13 @@ from collections import defaultdict
 from django.core.checks import Warning, register
 from django.utils.module_loading import import_string
 
+from rdmo.config.constants import LEGACY_PLUGIN_SETTINGS
+
 
 @register()
 def deprecated_plugin_settings_check(app_configs, **kwargs):
     from django.conf import settings
-    legacy_settings = [
-        "PROJECT_EXPORTS",
-        "PROJECT_SNAPSHOT_EXPORTS",
-        "PROJECT_IMPORTS",
-        "PROJECT_ISSUE_PROVIDERS",
-        "PROJECT_IMPORTS_LIST",
-        "OPTIONSET_PROVIDERS",
-    ]
+    legacy_settings = (*LEGACY_PLUGIN_SETTINGS, "PROJECT_IMPORTS_LIST")
     issues = []
     legacy_settings_used_keys = {
         i for i in legacy_settings if hasattr(settings, i)

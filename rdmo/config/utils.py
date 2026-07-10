@@ -1,13 +1,7 @@
 from django.conf import settings
 from django.utils.module_loading import import_string
 
-PLUGINS_URL_NAMES = {
-    "rdmo.projects.exports.RDMOXMLExport": "xml",
-    "rdmo.projects.exports.CSVCommaExport": "csvcomma",
-    "rdmo.projects.exports.CSVSemicolonExport": "csvsemicolon",
-    "rdmo.projects.exports.JSONExport": "json",
-    "rdmo.projects.imports.RDMOXMLImport": "xml",
-}
+from rdmo.config.constants import PLUGINS_URL_NAMES
 
 
 def get_plugins_from_settings() -> list[dict]:
@@ -24,8 +18,8 @@ def get_plugins_from_settings() -> list[dict]:
         plugin_type = plugin_class.plugin_type
 
         url_name = (
-            PLUGINS_URL_NAMES.get(python_path)
-            or getattr(plugin_class, "url_name", None)
+                PLUGINS_URL_NAMES.get(python_path)
+                or getattr(plugin_class, "url_name", None)
         )
         uri_path = (
             getattr(plugin_class, "uri_path", None)

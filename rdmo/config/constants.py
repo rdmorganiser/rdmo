@@ -9,6 +9,14 @@ class PLUGIN_TYPES(TextChoices):
     OPTIONSET_PROVIDER = "optionset_provider", "Optionset provider"
 
 
+LEGACY_PLUGIN_SETTINGS = (
+    'PROJECT_EXPORTS',
+    'PROJECT_IMPORTS',
+    'PROJECT_SNAPSHOT_EXPORTS',
+    'PROJECT_ISSUE_PROVIDERS',
+    'OPTIONSET_PROVIDERS',
+)
+
 PLUGIN_META_ATTRIBUTES = (
     'accept',
     'upload',
@@ -18,3 +26,11 @@ PLUGIN_META_ATTRIBUTES = (
     'distribution_name',
     'distribution_version',
 )
+
+PLUGINS_URL_NAMES = {
+    "rdmo.projects.exports.RDMOXMLExport": "xml",
+    "rdmo.projects.exports.CSVCommaExport": "csvcomma",
+    "rdmo.projects.exports.CSVSemicolonExport": "csvsemicolon",
+    "rdmo.projects.exports.JSONExport": "json",
+    "rdmo.projects.imports.RDMOXMLImport": "xml",
+}
