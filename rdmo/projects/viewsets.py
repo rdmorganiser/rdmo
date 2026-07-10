@@ -64,6 +64,7 @@ from .serializers.v1 import (
     MembershipSerializer,
     ProjectCopySerializer,
     ProjectImportPluginSerializer,
+    ProjectIntegrationProviderSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
@@ -352,7 +353,14 @@ class ProjectViewSet(ModelViewSet):
                 and optionset.has_plugins
             ):
                 options = []
-                for plugin in optionset.plugins.all():
+                if settings.MULTISITE:
+                    plugins = Plugin.objects.filter_plugins_for_project(
+                        plugin_type=PLUGIN_TYPES.OPTIONSET_PROVIDER, user=request.user
+                    ).filter(optionsets=optionset)
+                else:
+                    plugins = optionset.plugins.all()
+
+                for plugin in plugins:
                     provider = plugin.initialize_class()
                     if provider is None:
                         continue  # skip when plugin class initialization fails
@@ -495,6 +503,19 @@ class ProjectViewSet(ModelViewSet):
             ).exclude(url_name='')
         )
         serializer = ProjectImportPluginSerializer(plugins, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
+    def providers(self, request, pk=None):
+        project = self.get_object()
+        plugins = (
+            Plugin.objects.filter_plugins_for_project(
+                plugin_type=PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER,
+                project=project,
+                user=request.user,
+            ).exclude(url_name='')
+        )
+        serializer = ProjectIntegrationProviderSerializer(plugins, many=True, context={'project': project})
         return Response(serializer.data)
 
     def perform_create(self, serializer):

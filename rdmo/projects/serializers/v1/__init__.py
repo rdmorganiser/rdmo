@@ -172,6 +172,40 @@ class ProjectImportPluginSerializer(serializers.ModelSerializer):
         return reverse('project_create_import', args=[obj.url_name])
 
 
+class ProjectIntegrationProviderSerializer(serializers.ModelSerializer):
+
+    href = serializers.SerializerMethodField()
+    add_label = serializers.SerializerMethodField()
+    send_label = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Plugin
+        fields = (
+            'title',
+            'url_name',
+            'href',
+            'add_label',
+            'send_label',
+            'description',
+        )
+
+    def get_href(self, obj) -> str:
+        project = self.context.get('project')
+        if project is None:
+            return ''
+        return reverse('integration_create', args=[project.pk, obj.url_name])
+
+    def get_add_label(self, obj):
+        return getattr(obj.initialize_class(), 'add_label', '')
+
+    def get_send_label(self, obj):
+        return getattr(obj.initialize_class(), 'send_label', '')
+
+    def get_description(self, obj):
+        return getattr(obj.initialize_class(), 'description', '')
+
+
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -187,6 +221,10 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
     options = ProjectIntegrationOptionSerializer(many=True)
     plugin = serializers.PrimaryKeyRelatedField(read_only=True)
     url_name = serializers.CharField()
+    title = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
+    add_label = serializers.CharField(read_only=True)
+    send_label = serializers.CharField(read_only=True)
 
     class Meta:
         model = Integration
@@ -194,6 +232,10 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
             'id',
             'plugin',
             'url_name',
+            'title',
+            'description',
+            'add_label',
+            'send_label',
             'options'
         )
 
@@ -377,6 +419,10 @@ class IntegrationSerializer(serializers.ModelSerializer):
 
     options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
     url_name = serializers.CharField(read_only=True)
+    title = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
+    add_label = serializers.CharField(read_only=True)
+    send_label = serializers.CharField(read_only=True)
 
     class Meta:
         model = Integration
@@ -385,6 +431,10 @@ class IntegrationSerializer(serializers.ModelSerializer):
             'project',
             'plugin',
             'url_name',
+            'title',
+            'description',
+            'add_label',
+            'send_label',
             'options'
         )
 

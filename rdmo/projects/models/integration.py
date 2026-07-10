@@ -41,6 +41,29 @@ class Integration(models.Model):
         return ''
 
     @property
+    def title(self):
+        if self.plugin:
+            return self.plugin.title
+        return ''
+
+    @property
+    def description(self):
+        provider_description = getattr(self.provider, 'description', '')
+        if provider_description:
+            return provider_description
+        if self.plugin:
+            return self.plugin.text
+        return ''
+
+    @property
+    def add_label(self):
+        return getattr(self.provider, 'add_label', '')
+
+    @property
+    def send_label(self):
+        return getattr(self.provider, 'send_label', '')
+
+    @property
     def provider(self):
         if self.plugin and self.plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER:
             return self.plugin.initialize_class()

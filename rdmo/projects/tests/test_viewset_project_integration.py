@@ -78,6 +78,10 @@ def test_detail(db, client, username, password, project_id, integration_id):
     if integration and project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 200
         assert response.json().get('id') == integration_id
+        assert response.json().get('title') == integration.title
+        assert response.json().get('description') == integration.description
+        assert response.json().get('add_label') == integration.add_label
+        assert response.json().get('send_label') == integration.send_label
     else:
         assert response.status_code == 404
 

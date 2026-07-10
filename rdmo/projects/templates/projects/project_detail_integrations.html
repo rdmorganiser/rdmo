@@ -24,10 +24,10 @@
             {% if integration.provider %}
             <tr>
                 <td>
-                    {{ integration.provider.label }}
+                    {{ integration.title }}
                 </td>
                 <td>
-                    {{ integration.provider.description }}
+                    {{ integration.description }}
                 </td>
                 <td>
                     {% for option in integration.options.all %}
