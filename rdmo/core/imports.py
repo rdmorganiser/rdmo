@@ -1,3 +1,4 @@
+import json
 import logging
 import tempfile
 import time
@@ -294,6 +295,17 @@ def set_extra_field(instance, field_name, element,
 
         if extra_field_helper.overwrite_in_element:
             element[field_name] = extra_field_value
+
+    if extra_field_value is not None:
+        model_field = instance._meta.get_field(field_name)
+        if isinstance(model_field, models.JSONField) and isinstance(extra_field_value, str):
+            try:
+                extra_field_value = json.loads(extra_field_value)
+            except json.JSONDecodeError:
+                pass
+            else:
+                if extra_field_helper is not None and extra_field_helper.overwrite_in_element:
+                    element[field_name] = extra_field_value
 
     if extra_field_value is not None:
         setattr(instance, field_name, extra_field_value)

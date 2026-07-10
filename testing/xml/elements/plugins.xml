@@ -17,7 +17,7 @@
     <title lang="en">Simple Import Plugin</title>
     <title lang="de">Einfaches Import Plugin</title>
     <python_path>plugins.project_import.imports.SimpleImportPlugin</python_path>
-    <plugin_settings>{"filetypes": ["xml", "json"], "enabled": false}</plugin_settings>
+    <plugin_settings>{"API_URL": "https://api.example.com", "CLIENT_SECRET": "secret", "DEFAULT_VALUE": "xml", "TIMEOUT": 10}</plugin_settings>
     <order>1</order>
     <url_name>simple</url_name>
   </plugin>
