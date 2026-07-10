@@ -32,7 +32,7 @@ def enable_legacy_plugins(settings):
     ]
 
     settings.PROJECT_ISSUE_PROVIDERS = [
-        ("simple_issue_provider", "Simple Issue Provider", "plugins.project_snapshot_export.exports.SimpleIssueProvider"),  # noqa: E501
+        ("simple_issue_provider", "Simple Issue Provider", "plugins.project_issue_providers.providers.SimpleIssueProvider"),  # noqa: E501
     ]
 
     return settings

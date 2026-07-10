@@ -4,6 +4,7 @@ import os
 import re
 from datetime import datetime
 from importlib import metadata
+from inspect import Parameter
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -354,3 +355,18 @@ def get_distribution_version(distribution_name):
         return Version(metadata.version(distribution_name))
     except metadata.PackageNotFoundError:
         return None
+
+
+def accepts_kwarg(sig, name):
+    return (
+        name in sig.parameters or
+        any(parameter.kind == Parameter.VAR_KEYWORD for parameter in sig.parameters.values())
+    )
+
+
+def has_empty_signature(sig):
+    return not any(
+        parameter.default is Parameter.empty and
+        parameter.kind in (Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD, Parameter.KEYWORD_ONLY)
+        for parameter in sig.parameters.values()
+    )

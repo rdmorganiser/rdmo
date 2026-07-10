@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 
 from rdmo.config.constants import PLUGIN_TYPES
 from rdmo.config.models import Plugin
+from rdmo.config.serializers.v1 import PluginSerializer
 from rdmo.config.utils import get_plugins_from_settings
 from rdmo.config.validators import PluginURLNameValidator
 from rdmo.core.utils import get_model_field_meta
@@ -14,6 +15,21 @@ from rdmo.projects.exports import Export
 from rdmo.projects.imports import Import
 from rdmo.projects.models import Project
 from rdmo.projects.providers import IssueProvider
+
+
+class CustomInitExport(Export):
+    url_name = 'custom-init-export'
+
+    def __init__(self):
+        self.initialized = True
+
+
+class LegacyExport(Export):
+
+    def __init__(self, key, label, python_path):
+        self.key = key
+        self.label = label
+        self.python_path = python_path
 
 
 def test_get_plugin_types_from_internal_plugins():
@@ -62,6 +78,236 @@ def test_plugin_save_sets_issue_provider_type():
 
     plugin = Plugin.objects.get(pk=instance.pk)
     assert plugin.plugin_type == PLUGIN_TYPES.PROJECT_ISSUE_PROVIDER
+
+
+@pytest.mark.django_db
+def test_plugin_settings_resolution_order(settings):
+    settings.SIMPLE_IMPORT_PLUGIN = {
+        'API_URL': 'https://django.example.org/api',
+        'CLIENT_SECRET': 'django-secret',
+    }
+    plugin_settings = {
+        'API_URL': 'https://plugin.example.org/api',
+    }
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-import-plugin",
+        python_path="plugins.project_import.imports.SimpleImportPlugin",
+        title_lang1="Test Simple Import Plugin",
+        plugin_settings=plugin_settings,
+    )
+
+    plugin = instance.initialize_class()
+
+    assert plugin.plugin == instance
+    assert plugin.plugin_settings == plugin_settings
+    assert plugin.plugin_metadata == instance.plugin_meta
+    assert plugin.settings.API_URL == 'https://plugin.example.org/api'
+    assert plugin.settings.CLIENT_SECRET == 'django-secret'
+    assert plugin.settings.DEFAULT_VALUE == 'default'
+    assert plugin.settings.TIMEOUT == 10
+
+
+@pytest.mark.django_db
+def test_plugin_settings_form_restricts_settings_names():
+    instance = Plugin(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-import-plugin",
+        python_path="plugins.project_import.imports.SimpleImportPlugin",
+        title_lang1="Test Simple Import Plugin",
+        plugin_settings={
+            'API_URL': 'https://plugin.example.org/api',
+            'CLIENT_SECRET': 'plugin-secret',
+            'UNKNOWN_SETTING': 'invalid',
+        },
+    )
+
+    with pytest.raises(ValidationError) as excinfo:
+        instance.full_clean()
+
+    assert 'Unknown plugin setting(s): UNKNOWN_SETTING' in excinfo.value.message_dict['plugin_settings']
+
+
+@pytest.mark.django_db
+def test_plugin_settings_form_validates_missing_required_settings(settings):
+    settings.SIMPLE_IMPORT_PLUGIN = {}
+    instance = Plugin(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-import-plugin",
+        python_path="plugins.project_import.imports.SimpleImportPlugin",
+        title_lang1="Test Simple Import Plugin",
+        plugin_settings={
+            'API_URL': 'https://plugin.example.org/api',
+        },
+    )
+
+    with pytest.raises(ValidationError) as excinfo:
+        instance.full_clean()
+
+    assert any(
+        'CLIENT_SECRET' in message
+        for message in excinfo.value.message_dict['plugin_settings']
+    )
+
+
+@pytest.mark.django_db
+def test_plugin_settings_without_form_remain_flexible():
+    instance = Plugin(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-custom-init-export",
+        python_path="rdmo.config.tests.test_plugins.CustomInitExport",
+        title_lang1="Test Custom Init Export",
+        plugin_settings=['not', 'an', 'object'],
+    )
+
+    instance.full_clean()
+
+
+@pytest.mark.django_db
+def test_plugin_settings_form_requires_settings_namespace_for_django_settings(settings):
+    settings.CLIENT_SECRET = 'django-secret'
+    settings.TIMEOUT = 99
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-import-plugin",
+        python_path="plugins.project_import.imports.SimpleImportPlugin",
+        title_lang1="Test Simple Import Plugin",
+        plugin_settings={
+            'API_URL': 'https://plugin.example.org/api',
+            'CLIENT_SECRET': 'plugin-secret',
+        },
+    )
+
+    plugin = instance.initialize_class()
+
+    assert plugin.settings.CLIENT_SECRET == 'plugin-secret'
+    assert plugin.settings.TIMEOUT == 10
+
+
+@pytest.mark.django_db
+def test_plugin_settings_fall_back_to_flat_namespaced_django_settings(settings):
+    settings.SIMPLE_IMPORT_PLUGIN = {}
+    settings.SIMPLE_IMPORT_PLUGIN_API_URL = 'https://django.example.org/api'
+    settings.SIMPLE_IMPORT_PLUGIN_CLIENT_SECRET = 'django-secret'
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-flat-simple-import-plugin",
+        python_path="plugins.project_import.imports.SimpleImportPlugin",
+        title_lang1="Test Flat Simple Import Plugin",
+    )
+
+    plugin = instance.initialize_class()
+
+    assert plugin.settings.API_URL == 'https://django.example.org/api'
+    assert plugin.settings.CLIENT_SECRET == 'django-secret'
+    assert plugin.settings.DEFAULT_VALUE == 'default'
+
+
+@pytest.mark.django_db
+def test_plugin_settings_without_form_support_namespaced_django_settings(settings):
+    settings.SIMPLE_EXPORT_PLUGIN = {
+        'CLIENT_SECRET': 'django-secret',
+    }
+    settings.SECRET_PLUGIN_VALUE = 'secret'
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-export-plugin",
+        python_path="plugins.project_export.exports.SimpleExportPlugin",
+        title_lang1="Test Simple Export Plugin",
+        plugin_settings={
+            'API_URL': 'https://plugin.example.org/api',
+        },
+    )
+
+    plugin = instance.initialize_class()
+
+    assert plugin.settings.API_URL == 'https://plugin.example.org/api'
+    assert plugin.settings.CLIENT_SECRET == 'django-secret'
+    assert plugin.settings.TIMEOUT == 10
+
+    setting_name = 'SECRET_PLUGIN_VALUE'
+    with pytest.raises(AttributeError):
+        getattr(plugin.settings, setting_name)
+
+
+@pytest.mark.django_db
+def test_plugin_serializer_validates_settings_form(settings):
+    python_path = "plugins.project_import.imports.SimpleImportPlugin"
+    settings.PLUGINS = [python_path]
+    serializer = PluginSerializer(data={
+        'uri_prefix': "https://example.org/terms",
+        'uri_path': "test-simple-import-plugin",
+        'python_path': python_path,
+        'plugin_settings': {
+            'API_URL': 'https://plugin.example.org/api',
+            'CLIENT_SECRET': 'plugin-secret',
+            'UNKNOWN_SETTING': 'invalid',
+        },
+        'title_en': "Test Simple Import Plugin",
+        'title_de': "Test Simple Import Plugin",
+        'help_en': "",
+        'help_de': "",
+    })
+    serializer.fields['python_path'].choices = [(python_path, python_path)]
+
+    assert serializer.is_valid() is False
+    assert 'plugin_settings' in serializer.errors
+
+
+@pytest.mark.django_db
+def test_initialize_class_supports_settings_form_on_optionset_provider():
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-simple-optionset-provider",
+        python_path="plugins.optionset_providers.providers.SimpleOptionSetProvider",
+        title_lang1="Test Simple Option Set Provider",
+        plugin_settings={'PROVIDER_LABEL': 'Provider label'},
+    )
+
+    plugin = instance.initialize_class()
+
+    assert instance.plugin_type == PLUGIN_TYPES.OPTIONSET_PROVIDER
+    assert instance.plugin_meta['search'] is False
+    assert instance.plugin_meta['refresh'] is True
+    assert plugin.plugin == instance
+    assert plugin.settings.PROVIDER_LABEL == 'Provider label'
+    assert plugin.get_options(project=None)[0] == {
+        'id': 'simple_1',
+        'text': 'Provider label',
+        'help': 'One'
+    }
+
+
+@pytest.mark.django_db
+def test_initialize_class_attaches_plugin_to_custom_init_plugin():
+    instance = Plugin.objects.create(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-custom-init-export",
+        python_path="rdmo.config.tests.test_plugins.CustomInitExport",
+        title_lang1="Test Custom Init Export",
+        plugin_settings={'TEST_PLUGIN_ONLY': 'plugin'},
+    )
+
+    plugin = instance.initialize_class()
+
+    assert plugin.initialized is True
+    assert plugin.plugin == instance
+    assert plugin.plugin_settings == {'TEST_PLUGIN_ONLY': 'plugin'}
+
+
+@pytest.mark.django_db
+def test_initialize_class_rejects_legacy_signature():
+    instance = Plugin(
+        uri_prefix="https://example.org/terms",
+        uri_path="test-legacy-export",
+        python_path="rdmo.config.tests.test_plugins.LegacyExport",
+        title_lang1="Test Legacy Export",
+        url_name="legacy-export",
+        plugin_settings={'TEST_PLUGIN_ONLY': 'plugin'},
+    )
+
+    with pytest.raises(ValueError, match='Could not initialize class'):
+        instance.initialize_class()
 
 
 @pytest.mark.django_db

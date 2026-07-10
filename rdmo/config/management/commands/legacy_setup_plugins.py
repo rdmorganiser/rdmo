@@ -47,13 +47,17 @@ class Command(BaseCommand):
     def save_plugin(self, plugin_config, dry_run):
         import_string(plugin_config["python_path"])
         data = self.get_serializer_data(plugin_config)
-        existing_plugin = Plugin.objects.filter(python_path=plugin_config["python_path"]).first()
-        if not existing_plugin:
-            existing_plugin = Plugin.objects.filter(
-                uri_prefix=data["uri_prefix"], uri_path=data["uri_path"]
-            ).first()
+        existing_plugin = Plugin.objects.filter(
+            uri_prefix=data["uri_prefix"], uri_path=data["uri_path"]
+        ).first()
 
         if existing_plugin:
+            if existing_plugin.python_path != plugin_config["python_path"]:
+                raise CommandError(
+                    f"Plugin already exists for {existing_plugin.uri} with python_path "
+                    f"{existing_plugin.python_path}; cannot also use {plugin_config['python_path']}."
+                )
+            self.set_multisite(existing_plugin)
             self.stdout.write(
                 self.style.WARNING(f"skipped(exists): {existing_plugin.python_path} -> {existing_plugin.uri}")
             )
@@ -109,5 +113,6 @@ class Command(BaseCommand):
     def set_multisite(self, plugin):
         if settings.MULTISITE:
             current_site = Site.objects.get_current()
-            plugin.editors.set([current_site])
-            plugin.sites.set([current_site])
+            plugin.sites.add([current_site])
+            if not plugin.editors.exists():  # only set editors if not already set
+                plugin.editors.set([current_site])

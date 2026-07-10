@@ -104,6 +104,11 @@ PLUGINS = [  # introduced in 2.5
     'plugins.project_import.imports.SimpleImportPlugin',
 ]
 
+SIMPLE_IMPORT_PLUGIN = {
+    'API_URL': 'https://example.org/api',
+    'CLIENT_SECRET': 'test-client-secret',
+}
+
 PROJECT_VALUES_VALIDATION = True
 
 PROJECT_CONTACT = True

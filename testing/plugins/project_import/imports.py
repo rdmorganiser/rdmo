@@ -13,7 +13,19 @@ class SimpleImportPlugin(Import):
 
     accept = {"text/plain": [".txt"]}
     default_uri_prefix = "https://rdmorganiser.github.io/terms"
+    settings_defaults = {
+        'DEFAULT_VALUE': 'default',
+    }
+    settings_namespace = 'SIMPLE_IMPORT_PLUGIN'
     url_name = "simple"
+
+    class SettingsForm(forms.Form):
+        API_URL = forms.URLField(required=True)
+        CLIENT_SECRET = forms.CharField(required=True)
+        DEFAULT_VALUE = forms.CharField(required=True)
+        TIMEOUT = forms.IntegerField(required=False, initial=10)
+
+    settings_form_class = SettingsForm
 
     def check(self) -> bool:
         # Approve files ending with .txt

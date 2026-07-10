@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+
 from rest_framework import serializers
 
 from rdmo.core.serializers import (
@@ -79,6 +81,23 @@ class PluginSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
 
     def get_plugin_type(self, obj) -> str:
         return obj.plugin_type
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+
+        instance = self.instance or Plugin()
+        for attr in ('python_path', 'plugin_settings'):
+            if attr in attrs:
+                setattr(instance, attr, attrs[attr])
+
+        try:
+            instance.validate_plugin_settings()
+        except DjangoValidationError as e:
+            if hasattr(e, 'message_dict'):
+                raise serializers.ValidationError(e.message_dict) from e
+            raise serializers.ValidationError(e.messages) from e
+
+        return attrs
 
 class PluginIndexSerializer(serializers.ModelSerializer):
 

@@ -1,5 +1,62 @@
 # Changelog 📔
 
+## Unreleased
+
+### Important ⚠️
+
+* Optionset and integration provider settings are moved to plugins. The
+  migrations remove the legacy `OptionSet.provider_key` and
+  `Integration.provider_key` fields, but do not automatically assign plugins to
+  existing optionsets or integrations. Before upgrading, administrators should
+  back up the affected objects, for example with:
+
+  ```shell
+  python manage.py dumpdata options.OptionSet -o dumps/optionsets.json --indent 2
+  python manage.py dumpdata projects.Integration -o dumps/project_integrations.json --indent 2
+  python manage.py dump_legacy_plugin_assignments -o dumps/legacy_plugin_assignments.json
+  ```
+
+  After the upgrade, run `legacy_setup_plugins` or `setup_plugins` as needed
+  and assign the corresponding plugins manually to the affected option sets and
+  project integrations.
+
+* Plugins can now declare a `settings_namespace` and optionally a
+  `settings_form_class`. Plugin runtime settings are resolved from
+  `Plugin.plugin_settings` first, then from explicitly namespaced Django
+  settings in `local.py`, and finally from plugin defaults or form initial
+  values. Secrets such as client secrets or signing keys should stay in
+  deployment settings, while non-secret plugin settings can be managed in the
+  database when desired.
+
+  A plugin can define its settings contract like this:
+
+  ```python
+  from django import forms
+
+  class MyImportPlugin(Import):
+      settings_namespace = 'MY_IMPORT_PLUGIN'
+      settings_defaults = {
+          'TIMEOUT': 10,
+      }
+
+      class SettingsForm(forms.Form):
+          API_URL = forms.URLField(required=True)
+          CLIENT_SECRET = forms.CharField(required=True)
+          TIMEOUT = forms.IntegerField(required=False, initial=10)
+
+      settings_form_class = SettingsForm
+  ```
+
+  The corresponding deployment settings can stay in `local.py`, especially for
+  secrets:
+
+  ```python
+  MY_IMPORT_PLUGIN = {
+      'API_URL': 'https://example.org/api',
+      'CLIENT_SECRET': 'change-me',
+  }
+  ```
+
 ## [RDMO 2.5.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.1) (July 3, 2026)
 
 ### Bug fixes 🐛

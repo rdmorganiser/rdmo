@@ -4,14 +4,23 @@ from inspect import signature
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.config.constants import PLUGIN_META_ATTRIBUTES, PLUGIN_TYPES
 from rdmo.config.managers import PluginManager
+from rdmo.config.plugins import BasePlugin
+from rdmo.config.utils import PLUGIN_SETTING_MISSING, get_plugin_django_setting
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import get_distribution_name_from_class, get_distribution_version, join_url
+from rdmo.core.utils import (
+    accepts_kwarg,
+    get_distribution_name_from_class,
+    get_distribution_version,
+    has_empty_signature,
+    join_url,
+)
 
 
 class Plugin(Model, TranslationMixin):
@@ -165,11 +174,16 @@ class Plugin(Model, TranslationMixin):
         plugin_class = self.get_plugin_class()
         if not self.url_name:
             self.url_name = getattr(plugin_class, "url_name", "")
+        self.validate_plugin_settings(plugin_class=plugin_class)
         self.initialize_class(plugin_class=plugin_class)
         self.plugin_type = plugin_class.plugin_type
         self.plugin_meta = self.build_plugin_meta(plugin_class)
 
         super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        self.validate_plugin_settings()
 
     @property
     def title(self) -> str:
@@ -273,12 +287,62 @@ class Plugin(Model, TranslationMixin):
     def initialize_class(self, plugin_class=None):
         cls = plugin_class or self.get_plugin_class()
         sig = signature(cls)
-        if len(sig.parameters) == 0:
-            return cls()
-        if len(sig.parameters) == 2:
-            if sig.parameters['args'].name == 'args' and sig.parameters['kwargs'].name == 'kwargs':
-                return cls()
-        if len(sig.parameters) == 3:  # the legacy signature, should not be called anymore
-            key = self.url_name if self.url_name else self.uri_path
-            return cls(key, self.title, self.python_path)
-        raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
+
+        if issubclass(cls, BasePlugin) and has_empty_signature(sig):
+            instance = cls()
+        elif accepts_kwarg(sig, 'plugin'):
+            instance = cls(plugin=self)
+        elif has_empty_signature(sig):
+            instance = cls()
+        else:
+            raise ValueError(f'Could not initialize class {self.python_path} for {sig}')
+
+        if hasattr(instance, 'plugin'):
+            instance.plugin = self
+
+        return instance
+
+    def validate_plugin_settings(self, plugin_class=None):
+        cls = plugin_class or self.get_plugin_class()
+        form_class = getattr(cls, 'settings_form_class', None)
+
+        if form_class is None:
+            return
+
+        if not isinstance(self.plugin_settings, dict):
+            raise ValidationError({
+                'plugin_settings': _('Plugin settings must be a JSON object.')
+            })
+
+        form_fields = form_class.base_fields
+        unknown_settings = sorted(set(self.plugin_settings) - set(form_fields))
+        if unknown_settings:
+            raise ValidationError({
+                'plugin_settings': _('Unknown plugin setting(s): %(settings)s') % {
+                    'settings': ', '.join(unknown_settings)
+                }
+            })
+
+        form_data = {}
+        settings_defaults = getattr(cls, 'settings_defaults', {}) or {}
+        for name in form_fields:
+            if name in self.plugin_settings:
+                form_data[name] = self.plugin_settings[name]
+            else:
+                django_setting = get_plugin_django_setting(cls, name)
+                if django_setting is not PLUGIN_SETTING_MISSING:
+                    form_data[name] = django_setting
+                elif name in settings_defaults:
+                    form_data[name] = settings_defaults[name]
+                elif form_fields[name].initial is not None:
+                    initial = form_fields[name].initial
+                    form_data[name] = initial() if callable(initial) else initial
+
+        form = form_class(data=form_data)
+        if not form.is_valid():
+            errors = [
+                f'{field}: {error}'
+                for field, field_errors in form.errors.items()
+                for error in field_errors
+            ]
+            raise ValidationError({'plugin_settings': errors})

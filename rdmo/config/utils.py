@@ -3,6 +3,34 @@ from django.utils.module_loading import import_string
 
 from rdmo.config.constants import PLUGINS_URL_NAMES
 
+PLUGIN_SETTING_MISSING = object()
+
+
+def get_plugin_django_setting(plugin_or_class, name, default=PLUGIN_SETTING_MISSING):
+    settings_namespace = getattr(plugin_or_class, 'settings_namespace', None)
+    if isinstance(settings_namespace, str):
+        settings_namespaces = (settings_namespace, )
+    else:
+        settings_namespaces = settings_namespace or ()
+
+    for namespace in settings_namespaces:
+        try:
+            namespace_settings = getattr(settings, namespace)
+        except AttributeError:
+            pass
+        else:
+            if isinstance(namespace_settings, dict) and name in namespace_settings:
+                return namespace_settings[name]
+
+        flat_name = f'{namespace}_{name}'
+        for setting_name in (flat_name, flat_name.upper()):
+            try:
+                return getattr(settings, setting_name)
+            except AttributeError:
+                pass
+
+    return default
+
 
 def get_plugins_from_settings() -> list[dict]:
     """
