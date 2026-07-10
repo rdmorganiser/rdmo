@@ -111,6 +111,32 @@ def test_nested(db, client, username, password):
         assert response.status_code == status_map['detail'][username], response.json()
 
 
+def test_nested_payload(db, client):
+    client.login(username='editor', password='editor')
+
+    instance = OptionSet.objects.get(uri_path='condition')
+    condition = instance.conditions.get()
+    url = reverse(urlnames['nested'], args=[instance.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200, response.json()
+    assert response.json()['conditions'] == [condition.pk]
+    assert response.json()['condition_uris'] == [condition.uri]
+    assert response.json()['plugins'] == []
+    assert response.json()['plugin_uris'] == []
+
+    instance = OptionSet.objects.get(uri_path='plugin')
+    plugin = instance.plugins.get()
+    url = reverse(urlnames['nested'], args=[instance.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200, response.json()
+    assert response.json()['conditions'] == []
+    assert response.json()['condition_uris'] == []
+    assert response.json()['plugins'] == [plugin.pk]
+    assert response.json()['plugin_uris'] == [plugin.uri]
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)

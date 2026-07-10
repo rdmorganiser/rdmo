@@ -107,6 +107,10 @@ class OptionSet(models.Model):
     def condition_uris(self):
         return [condition.uri for condition in self.conditions.all()]
 
+    @property
+    def plugin_uris(self):
+        return [plugin.uri for plugin in self.plugins.all()]
+
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
         if not uri_path:

@@ -65,6 +65,7 @@ class OptionSetSerializer(ThroughModelSerializerMixin, ElementModelSerializerMix
             'editors',
             'read_only',
             'condition_uris',
+            'plugin_uris',
         )
         through_fields = (
             ('options', 'optionset', 'option', 'optionset_options'),
@@ -97,10 +98,11 @@ class OptionSetNestedSerializer(
             'uri',
             'locked',
             'order',
-            'provider_key',
+            'plugins',
             'conditions',
             'read_only',
             'condition_uris',
+            'plugin_uris',
             'elements',
         )
 
