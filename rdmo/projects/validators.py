@@ -61,8 +61,12 @@ class ValueConflictValidator:
             # check the widget type, which is provided with the post request
             widget_type = serializer.context['view'].request.data.get('widget_type')
             if widget_type == 'checkbox':
-                # for checkboxes, fail if a value with the same option exist
-                get_kwargs['option'] = data.get('option')
+                # for checkboxes, fail if a value with the same option exists. Dynamic optionset provider
+                # values do not have an option FK, so use their external_id instead.
+                if data.get('option') is None and data.get('external_id'):
+                    get_kwargs['external_id'] = data.get('external_id')
+                else:
+                    get_kwargs['option'] = data.get('option')
             else:
                 # for all other widget_types, fail if a value with the same collection_index exist
                 get_kwargs['collection_index'] = data.get('collection_index')
