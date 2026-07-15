@@ -155,7 +155,7 @@ $variant-background-color: #f5f5f5 !default;
 }
 
 @media (min-width: 992px) {
-  .interview-question:nth-child(4n + 3) {
+  .interview-question.col-md-6:nth-child(4n + 3) {
     clear: both;
     float: right;
   }
