@@ -154,6 +154,12 @@ $variant-background-color: #f5f5f5 !default;
     }
 }
 
+@media (min-width: 992px) {
+  .interview-question.col-md-6:nth-child(2n + 1) {
+    clear: left;
+  }
+}
+
 .interview-questionset {
     .interview-questionset-label {
         margin-bottom: 10px;
