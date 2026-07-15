@@ -338,7 +338,8 @@ class ProjectViewSet(ModelViewSet):
                     optionset.provider is not None:
                 options = []
                 for option in optionset.provider.get_options(project, search=request.GET.get('search'),
-                                                             user=request.user, site=request.site):
+                                                             user=request.user, site=request.site,
+                                                             optionset=optionset):
                     if 'id' not in option:
                         raise RuntimeError(f"'id' is missing in options of '{optionset.provider.class_name}'")
                     elif 'text' not in option:
