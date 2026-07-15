@@ -182,9 +182,9 @@ const SendIssueModal = ({
           hasMail && (
             <>
               <h2>{gettext('Send by mail')}</h2>
-              <label className="form-label">
+              <div className="fw-semibold mb-2">
                 {gettext('Recipients')}
-              </label>
+              </div>
               {
                 hasRecipientChoices && (
                   <div>
