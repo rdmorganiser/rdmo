@@ -94,4 +94,4 @@ def test_send_mail_recipient_refused(db, mocker):
     with pytest.raises(MailSendError) as e:
         send_mail('Subject', 'Message', to=['name@non-existent-domain.abc'])
 
-    assert e.value.reason == str(smtp_exception)
+    assert str(e.value) == str(smtp_exception)
