@@ -6,8 +6,8 @@ from django.core import mail
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from rdmo.core.exceptions import MailSendError
 from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.exceptions import MailSendError
 
 from ..models import Issue, Project
 
