@@ -169,11 +169,7 @@ def test_membership_create_post_mail_send_error(db, client, settings, mocker):
     settings.PROJECT_SEND_INVITE = True
     client.login(username='owner', password='owner')
 
-    reason = (
-        "{'name@non-existent-domain.abc': (550, "
-        "b'1.2.3 <name@non-existent-domain.abc>: Recipient address rejected: "
-        "Domain not found')}"
-    )
+    reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
     mocker.patch(
         'rdmo.projects.utils.send_mail',
         side_effect=MailSendError(reason)

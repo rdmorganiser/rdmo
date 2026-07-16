@@ -197,11 +197,7 @@ def test_contact_post_error(db, client, username, password, project_id):
 def test_contact_post_mail_send_error(db, client, mocker):
     client.login(username='owner', password='owner')
 
-    reason = (
-        "{'name@non-existent-domain.abc': (550, "
-        "b'1.2.3 <name@non-existent-domain.abc>: Recipient address rejected: "
-        "Domain not found')}"
-    )
+    reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
     mocker.patch(
         'rdmo.projects.utils.send_mail',
         side_effect=MailSendError(reason)

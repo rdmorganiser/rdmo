@@ -82,7 +82,7 @@ def test_send_mail_recipient_refused(db, mocker):
     smtp_exception = smtplib.SMTPRecipientsRefused({
         'name@non-existent-domain.abc': (
             550,
-            b'1.2.3 <name@non-existent-domain.abc>: Recipient address rejected: Domain not found'
+            b'Domain not found'
         )
     })
 
