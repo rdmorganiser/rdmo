@@ -451,7 +451,7 @@ class ProjectViewSet(ModelViewSet):
                         send_contact_message(request, subject, message)
                     except MailSendError as e:
                         raise ValidationError({'non_field_errors': [
-                            _('Could not send e-mail: %(reason)s') % {'reason': e.reason}
+                            _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
                         ]}) from e
                     return Response(status=status.HTTP_204_NO_CONTENT)
                 else:
@@ -576,7 +576,7 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                     send_invite_email(self.request, serializer.instance)
         except MailSendError as e:
             raise ValidationError({'non_field_errors': [
-                _('Could not send e-mail: %(reason)s') % {'reason': e.reason}
+                _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
             ]}) from e
 
 

@@ -52,7 +52,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
                 if invite is not None and settings.PROJECT_SEND_INVITE:
                     send_invite_email(self.request, invite)
         except MailSendError as e:
-            form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': e.reason})
+            form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': str(e)})
             return self.form_invalid(form)
         return super().form_valid(form)
 
