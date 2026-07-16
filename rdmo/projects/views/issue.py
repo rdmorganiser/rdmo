@@ -7,9 +7,11 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework.reverse import reverse
 
+from rdmo.core.exceptions import MailSendError
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -159,8 +161,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                     cc_emails = [request.user.email]
                     reply_to = [request.user.email]
 
-                    # send the email
-                    send_mail(subject, message, to=to_emails, cc=cc_emails, reply_to=reply_to, attachments=attachments)
+                    try:
+                        # send the email
+                        send_mail(subject, message, to=to_emails, cc=cc_emails, reply_to=reply_to, attachments=attachments)
+                    except MailSendError as e:
+                        mail_form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': str(e)})
+                        return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))
 
                     # update issue status
                     issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
