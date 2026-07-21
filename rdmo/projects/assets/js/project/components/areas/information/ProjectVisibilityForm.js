@@ -13,8 +13,12 @@ const ProjectVisibilityForm = () => {
   const dispatch = useDispatch()
   const visibility = useSelector((state) => state.project.visibility)
   const project = useSelector((state) => state.project.project.project) || {}
+  const groups = useSelector((state) => state.groups)
+  const settings = useSelector((state) => state.settings)
+  const sites = useSelector((state) => state.sites)
+  const templates = useSelector((state) => state.templates)
+
   const perms = project.permissions || {}
-  const { groups, settings, sites, templates } = useSelector((state) => state)
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
@@ -24,7 +28,7 @@ const ProjectVisibilityForm = () => {
     setGroupIds(visibility?.groups || [])
   }, [visibility])
 
-  const canUpdateVisibility =  visibility && perms.can_change_visibility && (settings.multisite || settings.groups)
+  const canUpdateVisibility = visibility && perms.can_change_visibility && (settings.multisite || settings.groups)
   const canSetVisibility = !visibility && perms.can_add_visibility
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({

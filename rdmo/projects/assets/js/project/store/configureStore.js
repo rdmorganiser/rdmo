@@ -92,7 +92,10 @@ export default function configureStore() {
       if (permissions.can_view_visibility) {
         store.dispatch(sitesActions.fetchSites())
         store.dispatch(groupsActions.fetchGroups())
-        store.dispatch(projectActions.fetchProjectVisibility(projectId))
+        const project = store.getState().project.project.project
+        if (project.visibility) {
+          store.dispatch(projectActions.fetchProjectVisibility(projectId))
+        }
       }
       initDashboardFromLocation()
     })
