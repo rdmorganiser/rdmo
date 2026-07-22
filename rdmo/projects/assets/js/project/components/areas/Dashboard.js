@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
-import { renderIssueDate } from '../../utils/renderIssueDate'
 import { Tile } from '../helper'
+
+import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
@@ -90,7 +91,7 @@ const Dashboard = () => {
                     issue.dates?.length > 0 && (
                       <div className="text-muted small mt-2 text-end">
                         <i className="bi bi-clock me-1" />
-                        {renderIssueDate(issue.dates[0])}
+                        <IssueDate date={issue.dates[0]} />
                       </div>
                     )
                   }

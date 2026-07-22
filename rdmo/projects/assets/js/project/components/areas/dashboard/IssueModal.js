@@ -7,7 +7,8 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
 import { projectId } from '../../../utils/meta'
-import { renderIssueDate } from '../../../utils/renderIssueDate'
+
+import IssueDate from '../../../common/components/IssueDate'
 
 const IssueModal = ({
   canChangeIssue = false,
@@ -89,7 +90,7 @@ const IssueModal = ({
               {
                 issue.dates.map((date, index) => (
                   <div key={index} className="mb-2">
-                    {renderIssueDate(date)}
+                    <IssueDate date={date} />
                   </div>
                 ))
               }

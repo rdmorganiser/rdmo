@@ -1,6 +1,8 @@
+import PropTypes from 'prop-types'
+
 import { formatDate } from 'rdmo/core/assets/js/utils/date'
 
-export const renderIssueDate = (date) => {
+const IssueDate = ({ date }) => {
   const { start_date: startDate, end_date: endDate } = date
 
   if (startDate && endDate) {
@@ -12,4 +14,11 @@ export const renderIssueDate = (date) => {
   ) : `${gettext('End date')}: ${formatDate(endDate, 'long')}`
 }
 
-export default renderIssueDate
+IssueDate.propTypes = {
+  date: PropTypes.shape({
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+  }).isRequired,
+}
+
+export default IssueDate
