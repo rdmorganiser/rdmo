@@ -47,7 +47,12 @@ export const getDateFormat = (formatType = 'short') => {
 }
 
 export const getDateTimeFormat = (formatType = 'short') => {
-  return `${getDateFormat(formatType)}, ${lang === 'en' ? 'h:mm a' : 'H:mm'}`
+  switch (lang) {
+    case 'en':
+      return `${getDateFormat(formatType)}, h:mm a`
+    default:
+      return `${getDateFormat(formatType)}, H:mm`
+  }
 }
 
 export const parseDate = (value, end = false) => {

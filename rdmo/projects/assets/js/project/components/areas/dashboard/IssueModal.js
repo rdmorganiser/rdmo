@@ -8,7 +8,7 @@ import Select from 'rdmo/core/assets/js/components/forms/Select'
 
 import { projectId } from '../../../utils/meta'
 
-import IssueDate from '../../../common/components/IssueDate'
+import IssueDate from '../../../../common/components/IssueDate'
 
 const IssueModal = ({
   canChangeIssue = false,
