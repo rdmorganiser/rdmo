@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 
 from ..models import Issue, Project
 
@@ -159,7 +159,7 @@ def test_issue_send_post_email_error(db, client, mocker, username, password, iss
     reason = 'Domain not found'
     mocker.patch(
         'rdmo.projects.views.issue.send_mail',
-        side_effect=MailSendError(reason)
+        side_effect=SendMailException(reason)
     )
 
     url = reverse('issue_send', args=[issue.project_id, issue_id])

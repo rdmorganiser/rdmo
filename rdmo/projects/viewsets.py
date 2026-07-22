@@ -24,7 +24,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.utils import human2bytes, is_truthy, return_file_response
 from rdmo.options.models import OptionSet
@@ -449,7 +449,7 @@ class ProjectViewSet(ModelViewSet):
                 if subject and message:
                     try:
                         send_contact_message(request, subject, message)
-                    except MailSendError as e:
+                    except SendMailException as e:
                         raise ValidationError({'non_field_errors': [
                             _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
                         ]}) from e
@@ -574,7 +574,7 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                 super().perform_create(serializer)
                 if settings.PROJECT_SEND_INVITE:
                     send_invite_email(self.request, serializer.instance)
-        except MailSendError as e:
+        except SendMailException as e:
             raise ValidationError({'non_field_errors': [
                 _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
             ]}) from e

@@ -1,6 +1,8 @@
+from smtplib import SMTPException
+
+
 class RDMOException(Exception):
     pass
 
-
-class MailSendError(Exception):
+class SendMailException(SMTPException):
     pass

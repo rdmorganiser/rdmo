@@ -3,7 +3,7 @@ import pytest
 from django.core import mail
 from django.urls import reverse
 
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.projects.models import Project, Value
 from rdmo.questions.models import Page, Question
 
@@ -200,7 +200,7 @@ def test_contact_post_mail_send_error(db, client, mocker):
     reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
     mocker.patch(
         'rdmo.projects.utils.send_mail',
-        side_effect=MailSendError(reason)
+        side_effect=SendMailException(reason)
     )
 
     url = reverse(urlnames['contact'], args=[1])

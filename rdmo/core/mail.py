@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 
 
 def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, reply_to=None, attachments=None):
@@ -18,4 +18,4 @@ def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, rep
     try:
         mail.send()
     except smtplib.SMTPException as e:
-        raise MailSendError(str(e)) from e
+        raise SendMailException(str(e)) from e

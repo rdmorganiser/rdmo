@@ -5,7 +5,7 @@ import pytest
 from django.conf import settings
 from django.core import mail
 
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.mail import send_mail
 
 
@@ -91,7 +91,7 @@ def test_send_mail_recipient_refused(db, mocker):
         side_effect=smtp_exception
     )
 
-    with pytest.raises(MailSendError) as e:
+    with pytest.raises(SendMailException) as e:
         send_mail('Subject', 'Message', to=['name@non-existent-domain.abc'])
 
     assert str(e.value) == str(smtp_exception)

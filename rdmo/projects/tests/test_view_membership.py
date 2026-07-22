@@ -3,7 +3,7 @@ import pytest
 from django.core import mail
 from django.urls import reverse
 
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.projects.models import Invite, Membership
 
 users = (
@@ -172,7 +172,7 @@ def test_membership_create_post_mail_send_error(db, client, settings, mocker):
     reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
     mocker.patch(
         'rdmo.projects.utils.send_mail',
-        side_effect=MailSendError(reason)
+        side_effect=SendMailException(reason)
     )
 
     url = reverse('membership_create', args=[1])

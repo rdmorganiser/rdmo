@@ -11,7 +11,7 @@ from django.views.generic import DetailView, UpdateView
 
 from rest_framework.reverse import reverse
 
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.mail import send_mail
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -167,7 +167,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                             subject, message, to=to_emails, cc=cc_emails, reply_to=reply_to,
                             attachments=attachments,
                         )
-                    except MailSendError as e:
+                    except SendMailException as e:
                         mail_form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': str(e)})
                         return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))
 

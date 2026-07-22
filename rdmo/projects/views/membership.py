@@ -10,7 +10,7 @@ from django.views.generic import DeleteView, UpdateView
 from django.views.generic.edit import FormView
 
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.exceptions import MailSendError
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm
@@ -51,7 +51,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
                 invite = form.save()
                 if invite is not None and settings.PROJECT_SEND_INVITE:
                     send_invite_email(self.request, invite)
-        except MailSendError as e:
+        except SendMailException as e:
             form.add_error(None, _('Could not send e-mail: %(reason)s') % {'reason': str(e)})
             return self.form_invalid(form)
         return super().form_valid(form)
