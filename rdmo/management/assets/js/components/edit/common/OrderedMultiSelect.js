@@ -12,7 +12,6 @@ import get from 'lodash/get'
 import maxBy from 'lodash/maxBy'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
@@ -77,6 +76,19 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
   }
 
+  const handleMenuOpen = () => {
+    setTimeout(() => {
+      document
+        .querySelector(
+          '.react-select__menu-portal .react-select__option--is-selected'
+        )
+        ?.scrollIntoView({
+          block: 'center',
+          inline: 'nearest'
+        })
+    }, 0)
+  }
+
   return (
     <>
       {
@@ -96,7 +108,8 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
                        options={selectOptions} value={selectValue}
                        onChange={option => handleChange(option, index)}
                        menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
-                       aria-labelledby={ariaLabelledBy} />
+                       aria-labelledby={ariaLabelledBy}
+                       onMenuOpen={handleMenuOpen} />
         </div>
         {
           errors && errors[index] &&
