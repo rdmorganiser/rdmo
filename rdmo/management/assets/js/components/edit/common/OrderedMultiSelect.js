@@ -14,6 +14,33 @@ import maxBy from 'lodash/maxBy'
 import Link from 'rdmo/core/assets/js/components/Link'
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
+// const formatOptionLabel = ({ label }) => (
+//   <span>
+//     {label.split('/').map((part, index) => (
+//       index === 0 ? part : [<wbr key={index} />, '/', part]
+//     ))}
+//   </span>
+// )
+
+const formatOptionLabel = ({ label }, { context }) => {
+  if (context === 'value') {
+    const separatorIndex = label.indexOf(': ')
+    const prefix = separatorIndex >= 0 ? label.slice(0, separatorIndex + 2) : ''
+    const value = separatorIndex >= 0 ? label.slice(separatorIndex + 2) : label
+    const lastSegment = value.split('/').filter(Boolean).pop()
+
+    return `${prefix}${lastSegment}`
+  }
+
+  return (
+    <span>
+      {label.split('/').map((part, index) => (
+        index === 0 ? part : [<wbr key={index} />, '/', part]
+      ))}
+    </span>
+  )
+}
+
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
   const dragRef = useRef(null)
@@ -106,6 +133,7 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
         <div className="ordered-multi-select-item-select">
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
+                       formatOptionLabel={formatOptionLabel}
                        onChange={option => handleChange(option, index)}
                        menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
                        aria-labelledby={ariaLabelledBy}
