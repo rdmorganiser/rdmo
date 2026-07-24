@@ -26,8 +26,8 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const fetchCopy = () => elementActions.fetchElement('catalogs', catalog.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('catalogs', catalog.id, 'nested')
 
-  const toggleAvailable = () => elementActions.storeElement('catalogs', {...catalog, available: !catalog.available })
-  const toggleLocked = () => elementActions.storeElement('catalogs', {...catalog, locked: !catalog.locked })
+  const toggleAvailable = () => elementActions.patchElement('catalogs', { id: catalog.id, available: !catalog.available })
+  const toggleLocked = () => elementActions.patchElement('catalogs', { id: catalog.id, locked: !catalog.locked })
 
   const toggleCurrentSite = () => elementActions.storeElement('catalogs', catalog, 'toggle-site')
 

@@ -23,6 +23,10 @@ class ViewsApi extends BaseApi {
     }
   }
 
+  static patchView(view) {
+    return this.patch(`/api/v1/views/views/${view.id}/`, view)
+  }
+
   static deleteView(view) {
     return this.delete(`/api/v1/views/views/${view.id}/`)
   }

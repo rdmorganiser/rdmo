@@ -23,6 +23,10 @@ class TasksApi extends BaseApi {
     }
   }
 
+  static patchTask(task) {
+    return this.patch(`/api/v1/tasks/tasks/${task.id}/`, task)
+  }
+
   static deleteTask(task) {
     return this.delete(`/api/v1/tasks/tasks/${task.id}/`)
   }

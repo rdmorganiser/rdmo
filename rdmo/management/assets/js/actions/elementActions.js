@@ -1,4 +1,4 @@
-import { get, isNil } from 'lodash'
+import { get, isNil, pick } from 'lodash'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -109,7 +109,7 @@ export function fetchElementsError(error) {
 
 // fetch element
 
-export function fetchElement(elementType, elementId, elementAction=null) {
+export function fetchElement(elementType, elementId, elementAction = null) {
   const pendingId = `fetchElement/${elementType}/${elementId}` + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch, getState) {
@@ -461,6 +461,81 @@ export function storeElementError(element, error) {
   return {type: 'elements/storeElementError', element, error}
 }
 
+// patch element
+
+export function patchElement(elementType, element) {
+  const pendingId = `patchElement/${elementType}/${element.id}`
+
+  return function(dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch(patchElementInit(element))
+
+    let action
+    switch (elementType) {
+      case 'catalogs':
+        action = () => QuestionsApi.patchCatalog(element)
+        break
+
+      case 'sections':
+        action = () => QuestionsApi.patchSection(element)
+        break
+
+      case 'pages':
+        action = () => QuestionsApi.patchPage(element)
+        break
+
+      case 'questionsets':
+        action = () => QuestionsApi.patchQuestionSet(element)
+        break
+
+      case 'questions':
+        action = () => QuestionsApi.patchQuestion(element)
+        break
+
+      case 'attributes':
+        action = () => DomainApi.patchAttribute(element)
+        break
+
+      case 'optionsets':
+        action = () => OptionsApi.patchOptionSet(element)
+        break
+
+      case 'options':
+        action = () => OptionsApi.patchOption(element)
+        break
+
+      case 'conditions':
+        action = () => ConditionsApi.patchCondition(element)
+        break
+
+      case 'tasks':
+        action = () => TasksApi.patchTask(element)
+        break
+
+      case 'views':
+        action = () => ViewsApi.patchView(element)
+        break
+    }
+
+    return dispatch(action)
+      .then(element => dispatch(patchElementSuccess(element)))
+      .catch(error => dispatch(patchElementError(element, error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
+  }
+}
+
+export function patchElementInit(element) {
+  return {type: 'elements/patchElementInit', element}
+}
+
+export function patchElementSuccess(element) {
+  return {type: 'elements/patchElementSuccess', element}
+}
+
+export function patchElementError(element, error) {
+  return {type: 'elements/patchElementError', element, error}
+}
+
 // createElement
 
 export function createElement(elementType, parent={}) {
@@ -701,12 +776,27 @@ export function dropElement(dragElement, dropElement, mode) {
     // an element cannot be dropped on itself or on one of its descendants
     if (canMoveElement(dragElement, dropElement)) {
       const element = {...getState().elements.element}
+
+      // dragParent is the element where the element is dragged from and dropParent where it has been dropped on
+      // dropParent is empty when the element is dragged onto the same parent, i.e. dragParent == dropParent
       const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
 
-    dispatch(storeElement(elementTypes[dragParent.model], dragParent))
-    if (!isNil(dropParent)) {
-      dispatch(storeElement(elementTypes[dropParent.model], dropParent))
-      }
+      const payloads = [dragParent, dropParent].filter(parent => !isNil(parent)).map(parent => {
+        const elementType = elementTypes[parent.model]
+        switch(elementType) {
+          case 'catalogs':
+            return [elementType, pick(parent, ['id', 'uri_prefix', 'uri_path', 'sections'])]
+          case 'sections':
+            return [elementType, pick(parent, ['id', 'uri_prefix', 'uri_path', 'pages'])]
+          case 'pages':
+          case 'questionsets':
+            return [elementType, pick(parent, ['id', 'uri_prefix', 'uri_path', 'questionsets', 'questions'])]
+        }
+      })
+
+      payloads.forEach(([elementType, payload]) => {
+        dispatch(patchElement(elementType, payload))
+      })
     }
   }
 }

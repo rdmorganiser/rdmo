@@ -22,8 +22,12 @@ class ConditionsApi extends BaseApi {
     }
   }
 
-  static deleteCondition(question) {
-    return this.delete(`/api/v1/conditions/conditions/${question.id}/`)
+  static patchCondition(condition) {
+    return this.patch(`/api/v1/conditions/conditions/${condition.id}/`, condition)
+  }
+
+  static deleteCondition(condition) {
+    return this.delete(`/api/v1/conditions/conditions/${condition.id}/`)
   }
 
   static fetchRelations() {

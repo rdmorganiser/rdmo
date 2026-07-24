@@ -29,7 +29,7 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
   const fetchEdit = () => elementActions.fetchElement('questionsets', questionset.id)
   const fetchCopy = () => elementActions.fetchElement('questionsets', questionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('questionsets', questionset.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('questionsets', {...questionset, locked: !questionset.locked })
+  const toggleLocked = () => elementActions.patchElement('questionsets', { id: questionset.id, locked: !questionset.locked })
   const toggleElements = () => elementActions.toggleElements(questionset)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { questionset })

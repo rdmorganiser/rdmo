@@ -26,6 +26,10 @@ class QuestionsApi extends BaseApi {
     }
   }
 
+  static patchCatalog(catalog) {
+    return this.patch(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
+  }
+
   static deleteCatalog(catalog) {
     return this.delete(`/api/v1/questions/catalogs/${catalog.id}/`)
   }
@@ -49,6 +53,10 @@ class QuestionsApi extends BaseApi {
     } else {
       return this.put(`/api/v1/questions/sections/${section.id}/`, section)
     }
+  }
+
+  static patchSection(section) {
+    return this.patch(`/api/v1/questions/sections/${section.id}/`, section)
   }
 
   static deleteSection(section) {
@@ -76,6 +84,10 @@ class QuestionsApi extends BaseApi {
     }
   }
 
+  static patchPage(page) {
+    return this.patch(`/api/v1/questions/pages/${page.id}/`, page)
+  }
+
   static deletePage(page) {
     return this.delete(`/api/v1/questions/pages/${page.id}/`)
   }
@@ -101,6 +113,10 @@ class QuestionsApi extends BaseApi {
     }
   }
 
+  static patchQuestionSet(questionset) {
+    return this.patch(`/api/v1/questions/questionsets/${questionset.id}/`, questionset)
+  }
+
   static deleteQuestionSet(questionset) {
     return this.delete(`/api/v1/questions/questionsets/${questionset.id}/`)
   }
@@ -121,6 +137,10 @@ class QuestionsApi extends BaseApi {
     } else {
       return this.put(`/api/v1/questions/questions/${question.id}/`, question)
     }
+  }
+
+  static patchQuestion(question) {
+    return this.patch(`/api/v1/questions/questions/${question.id}/`, question)
   }
 
   static deleteQuestion(question) {

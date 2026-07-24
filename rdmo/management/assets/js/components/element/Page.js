@@ -30,7 +30,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
+  const toggleLocked = () => elementActions.patchElement('pages', { id: page.id, locked: !page.locked })
   const toggleElements = () => elementActions.toggleElements(page)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
