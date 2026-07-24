@@ -47,6 +47,10 @@ const Sidebar = () => {
         <div className="card-body py-2">
           <h2 className="font-large mb-2">{project.project.title}</h2>
           <p className="font-normal text-muted m-0">{catalog.title}</p>
+          {
+            project.project?.visibility ? (
+              <p className="font-normal text-muted m-0 mt-2">{project.project.visibility}</p>) : null
+          }
         </div>
       </div>
 
