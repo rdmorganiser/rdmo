@@ -13,7 +13,7 @@ import SnapshotDeleteModal from './SnapshotDeleteModal'
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
 
-const SnapshotTable = ({ snapshots }) => {
+const SnapshotTable = ({ snapshots, onClick}) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
@@ -51,76 +51,99 @@ const SnapshotTable = ({ snapshots }) => {
         </thead>
         <tbody>
           {
-            snapshots?.map((snapshot) => {
-              const documentsLocation = { area: 'snapshots', snapshotId: snapshot.id }
-              return (
-                <tr key={snapshot.id}>
-                  <td>
-                    <strong>{snapshot.title}</strong>
-                  </td>
-                  <td>
-                    {snapshot.description}
-                  </td>
-                  <td>
-                    {formatDateTime(snapshot.created, 'long')}
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-end align-items-center gap-1">
-                      {
-                        perms.can_view_snapshot && (
-                          <Link
-                            title={gettext('View documents')}
-                            href={buildPath(documentsLocation)}
-                            onClick={() => dispatch(navigateDashboard(documentsLocation))}
-                          >
-                            <i className={'bi bi-file-text'} aria-hidden="true" />
-                          </Link>
-                        )
-                      }
-                      {
-                        perms.can_change_snapshot && (
-                          <button
-                            type="button"
-                            className="link"
-                            aria-label={gettext('Update snapshot')}
-                            title={gettext('Update snapshot')}
-                            onClick={() => openUpdateModal(snapshot)}
-                          >
-                            <i className={'bi bi-pencil'} aria-hidden="true" />
-                          </button>
-                        )
-                      }
-                      {
-                        perms.can_rollback_snapshot && (
-                          <button
-                            type="button"
-                            className="link"
-                            aria-label={gettext('Rollback to snapshot')}
-                            title={gettext('Rollback to snapshot')}
-                            onClick={() => openRollbackModal(snapshot)}
-                          >
-                            <i className={'bi bi-reply-fill'} aria-hidden="true" />
-                          </button>
-                        )
-                      }
-                      {
-                        perms.can_delete_snapshot && (
-                          <button
-                            type="button"
-                            className="link"
-                            aria-label={gettext('Delete snapshot')}
-                            title={gettext('Delete snapshot')}
-                            onClick={() => openDeleteModal(snapshot)}
-                          >
-                            <i className={'bi bi-trash'} aria-hidden="true" />
-                          </button>
-                        )
-                      }
-                    </div>
-                  </td>
-                </tr>
-              )
-            })
+            snapshots?.length ? (
+              snapshots?.map((snapshot) => {
+                const documentsLocation = { area: 'snapshots', snapshotId: snapshot.id }
+                return (
+                  <tr key={snapshot.id}>
+                    <td>
+                      <strong>{snapshot.title}</strong>
+                    </td>
+                    <td>
+                      {snapshot.description}
+                    </td>
+                    <td>
+                      {formatDateTime(snapshot.created, 'long')}
+                    </td>
+                    <td>
+                      <div className="d-flex justify-content-end align-items-center gap-1">
+                        {
+                          perms.can_view_snapshot && (
+                            <Link
+                              title={gettext('View documents')}
+                              href={buildPath(documentsLocation)}
+                              onClick={() => dispatch(navigateDashboard(documentsLocation))}
+                            >
+                              <i className={'bi bi-file-text'} aria-hidden="true" />
+                            </Link>
+                          )
+                        }
+                        {
+                          perms.can_change_snapshot && (
+                            <button
+                              type="button"
+                              className="link"
+                              aria-label={gettext('Update snapshot')}
+                              title={gettext('Update snapshot')}
+                              onClick={() => openUpdateModal(snapshot)}
+                            >
+                              <i className={'bi bi-pencil'} aria-hidden="true" />
+                            </button>
+                          )
+                        }
+                        {
+                          perms.can_rollback_snapshot && (
+                            <button
+                              type="button"
+                              className="link"
+                              aria-label={gettext('Rollback to snapshot')}
+                              title={gettext('Rollback to snapshot')}
+                              onClick={() => openRollbackModal(snapshot)}
+                            >
+                              <i className={'bi bi-reply-fill'} aria-hidden="true" />
+                            </button>
+                          )
+                        }
+                        {
+                          perms.can_delete_snapshot && (
+                            <button
+                              type="button"
+                              className="link"
+                              aria-label={gettext('Delete snapshot')}
+                              title={gettext('Delete snapshot')}
+                              onClick={() => openDeleteModal(snapshot)}
+                            >
+                              <i className={'bi bi-trash'} aria-hidden="true" />
+                            </button>
+                          )
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            ) : (
+              <tr>
+                <td colSpan={4}>
+                  <div
+                    className="d-flex flex-column align-items-center justify-content-center py-5"
+                    style={{ minHeight: '250px' }}
+                  >
+                    <p className="text-muted mb-3">
+                      {gettext('There are currently no snapshots.')}
+                    </p>
+
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => onClick()}
+                    >
+                      {gettext('Create new snapshot')}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            )
           }
         </tbody>
       </table>
@@ -147,7 +170,8 @@ const SnapshotTable = ({ snapshots }) => {
 }
 
 SnapshotTable.propTypes = {
-  snapshots: PropTypes.array.isRequired,
+  snapshots: PropTypes.array,
+  onClick: PropTypes.func
 }
 
 export default SnapshotTable
