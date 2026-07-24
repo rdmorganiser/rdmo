@@ -109,10 +109,7 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
         .querySelector(
           '.react-select__menu-portal .react-select__option--is-selected'
         )
-        ?.scrollIntoView({
-          block: 'center',
-          inline: 'nearest'
-        })
+        ?.scrollIntoView({ block: 'nearest'})
     }, 0)
   }
 
