@@ -26,13 +26,13 @@ from rdmo.core.validators import InstanceValidator
 class ProjectParentValidator(InstanceValidator):
 
     def __call__(self, data, serializer=None):
-        super().__call__(data, serializer)
+        instance = self.get_instance(serializer)
 
-        if self.instance and self.instance.id \
-                and data.get('parent') in self.instance.get_descendants(include_self=True):
-            raise self.raise_validation_error({
+        parent = data.get('parent')
+        if instance and instance.id and parent in instance.get_descendants(include_self=True):
+            self.raise_validation_error({
                 'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
-            })
+            }, serializer)
 
 
 class ValueConflictValidator:
