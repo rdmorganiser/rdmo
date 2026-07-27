@@ -30,6 +30,8 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
 
     projects_count = serializers.IntegerField(read_only=True)
 
+    sendable = serializers.BooleanField(source='is_sendable', read_only=True)
+
     class Meta:
         model = Task
         fields = (
@@ -61,6 +63,7 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'read_only',
             'condition_uris',
             'projects_count',
+            'sendable'
         )
         trans_fields = (
             'title',
