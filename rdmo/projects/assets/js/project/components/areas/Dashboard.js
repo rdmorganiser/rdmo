@@ -9,6 +9,7 @@ import { Tile } from '../helper'
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
+import SendIssueButton from './dashboard/SendIssueButton'
 import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
@@ -36,7 +37,7 @@ const Dashboard = () => {
 
   const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
 
-  // we need these 2 constants to not loose the toggle switch if all issues are closed (but not visible)
+  // we need these 2 constants to avoid losing the toggle switch if all issues are closed (but not visible)
   const taskIssues = issues.filter((issue) => getTaskType(issue) === 'task')
   const recommendationIssues = issues.filter((issue) => getTaskType(issue) === 'recommendation')
 
@@ -92,22 +93,8 @@ const Dashboard = () => {
                       {issue.task.title}
                     </div>
                     {
-                      (settings?.project_send_issue && perms.can_change_issue && issue.task.sendable) && (
-                        <button
-                          type="button"
-                          className="btn btn-sm p-0 border-0 bg-transparent ms-2"
-                          onClick={
-                            (e) => {
-                              e.stopPropagation()
-                              setSendIssue(issue)
-                            }
-                          }
-                          aria-label={gettext('Send task')}
-                          title={gettext('Send task')}
-                        >
-                          <i className="bi bi-send" aria-hidden="true" />
-                        </button>
-                      )
+                      (settings?.project_send_issue && perms.can_change_issue && issue.task.sendable) &&
+                      <SendIssueButton onClick={() => setSendIssue(issue)} />
                     }
                   </div>
                   {
