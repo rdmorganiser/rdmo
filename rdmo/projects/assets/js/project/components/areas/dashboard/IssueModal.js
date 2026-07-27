@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
-import { useFormattedDateTime } from 'rdmo/core/assets/js/hooks'
-import { language } from 'rdmo/core/assets/js/utils'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 
 import { projectId } from '../../../utils/meta'
+
+import IssueDate from '../../../../common/components/IssueDate'
 
 const IssueModal = ({
   canChangeIssue = false,
@@ -22,10 +22,6 @@ const IssueModal = ({
     { value: 'closed', label: gettext('Closed') },
     { value: 'in_progress', label: gettext('In progress') },
   ]
-
-  const renderDate = (date) => (
-    date.map((dateValue) => useFormattedDateTime(dateValue, language, 'dateOnly')).join(' - ')
-  )
 
   return (
     <Modal
@@ -94,7 +90,7 @@ const IssueModal = ({
               {
                 issue.dates.map((date, index) => (
                   <div key={index} className="mb-2">
-                    {renderDate(date)}
+                    <IssueDate date={date} />
                   </div>
                 ))
               }
