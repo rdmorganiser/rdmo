@@ -3,6 +3,7 @@ import pytest
 from django.core import mail
 from django.urls import reverse
 
+from rdmo.core.exceptions import SendMailException
 from rdmo.projects.models import Project, Value
 from rdmo.questions.models import Page, Question
 
@@ -191,3 +192,23 @@ def test_contact_post_error(db, client, username, password, project_id):
             assert response.status_code == 401
 
         assert len(mail.outbox) == 0
+
+
+def test_contact_post_mail_send_error(db, client, mocker):
+    client.login(username='owner', password='owner')
+
+    reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
+    mocker.patch(
+        'rdmo.projects.utils.send_mail',
+        side_effect=SendMailException(reason)
+    )
+
+    url = reverse(urlnames['contact'], args=[1])
+    response = client.post(url, {
+        'subject': 'Test subject',
+        'message': 'Test message'
+    })
+
+    assert response.status_code == 400
+    assert response.json()['non_field_errors'][0] == f'Could not send e-mail: {reason}'
+    assert len(mail.outbox) == 0
