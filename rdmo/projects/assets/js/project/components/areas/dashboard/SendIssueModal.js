@@ -142,7 +142,6 @@ const SendIssueModal = ({
         {
           !isConfigured && (
             <p className="text-muted">
-              {/* {gettext('The send task functionality is not properly configured yet.')} */}
               <Html html={templates.project_issue_config_info} />
             </p>
           )
@@ -159,7 +158,6 @@ const SendIssueModal = ({
                 formats={settings.export_formats ?? []}
               />
               <Html html={templates.project_issue_send_info} />
-              {/* <p>{gettext('Sending a task will set the status to "in progress".')}</p> */}
               <Input
                 className="mb-3"
                 label={gettext('Subject')}
