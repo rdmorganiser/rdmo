@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -117,6 +117,10 @@ const QuestionSet = ({ config, questionset, configActions, elementActions, displ
                 </div>
               </Drop>
             )
+          }
+          {
+            !isEmpty(questionset.elements) &&
+            <Drop element={questionset.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
             showElements && questionset.elements.map((element, index) => {

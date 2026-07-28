@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -118,6 +118,10 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
                 </div>
               </Drop>
             )
+          }
+          {
+            !isEmpty(page.elements) &&
+            <Drop element={page.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
             showElements && page.elements.map((element, index) => {
