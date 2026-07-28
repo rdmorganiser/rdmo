@@ -9,7 +9,7 @@ class Provider(Plugin):
     # determines if the page needs to be refreshed after a value is stored
     refresh = False
 
-    def get_options(self, project, search=None, user=None, site=None, optionset=None):
+    def get_options(self, project, search=None, user=None, site=None):
         raise NotImplementedError
 
 
@@ -17,7 +17,7 @@ class SimpleProvider(Provider):
 
     refresh = True
 
-    def get_options(self, project, search=None, user=None, site=None, optionset=None):
+    def get_options(self, project, search=None, user=None, site=None):
         return [
             {
                 'id': 'simple_1',
