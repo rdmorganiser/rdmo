@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 const Breadcrumb = ({ overview, page, fetchPage }) => {
@@ -26,7 +27,7 @@ const Breadcrumb = ({ overview, page, fetchPage }) => {
         page && (
           <li>
             <a href={`${baseUrl}/projects/${overview.id}/interview/${page.section.first}/`} onClick={handleClick}>
-              {page.section.title}
+              <Html html={page.section.title} />
             </a>
           </li>
         )
