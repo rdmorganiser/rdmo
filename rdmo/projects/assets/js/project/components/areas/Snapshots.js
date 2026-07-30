@@ -26,7 +26,7 @@ const Snapshots = () => {
       </div>
       {
         perms.can_view_snapshot && (
-          <SnapshotTable snapshots={snapshots} onClick={openSnapshot}/>
+          <SnapshotTable snapshots={snapshots} onCreate={openSnapshot}/>
         )
       }
       <SnapshotModal show={showSnapshot} onClose={closeSnapshot} />

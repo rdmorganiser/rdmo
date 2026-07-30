@@ -13,7 +13,7 @@ import SnapshotDeleteModal from './SnapshotDeleteModal'
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
 
-const SnapshotTable = ({ snapshots, onClick}) => {
+const SnapshotTable = ({ snapshots, onCreate}) => {
   const dispatch = useDispatch()
   const { project } = useSelector((state) => state.project.project) || {}
   const perms = project?.permissions || {}
@@ -136,7 +136,7 @@ const SnapshotTable = ({ snapshots, onClick}) => {
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={() => onClick()}
+                      onClick={() => onCreate()}
                     >
                       {gettext('Create new snapshot')}
                     </button>
@@ -171,7 +171,7 @@ const SnapshotTable = ({ snapshots, onClick}) => {
 
 SnapshotTable.propTypes = {
   snapshots: PropTypes.array,
-  onClick: PropTypes.func
+  onCreate: PropTypes.func
 }
 
 export default SnapshotTable
