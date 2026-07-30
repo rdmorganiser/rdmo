@@ -153,3 +153,17 @@ def test_serializer_update_error(db):
         validator({
             'locked': True
         }, serializer)
+
+
+def test_serializer_update_partial_error(db):
+    attribute = Attribute.objects.get(uri='http://example.com/terms/domain/individual/single/text')
+    attribute.locked = True
+    attribute.save()
+
+    validator = AttributeLockedValidator()
+    serializer = AttributeSerializer(instance=attribute, partial=True)
+
+    with pytest.raises(RestFrameworkValidationError):
+        validator({
+            'comment': 'Updated comment'
+        }, serializer)
