@@ -251,7 +251,7 @@ const Main = () => {
             row.highest_role && <div className="text-secondary">{highestRoleString}</div>
           }
           {
-            row.visibility_display && <div className="text-secondary">{row.visibility_display}</div>
+            row.visibility?.help_display && <div className="text-secondary">{row.visibility?.help_display}</div>
           }
         </>
       )
@@ -262,7 +262,7 @@ const Main = () => {
           {row.owners.map(owner => owner.full_name).join('; ')}
         </div>
         {
-          row.visibility_display && <div className="text-secondary">{row.visibility_display}</div>
+          row.visibility?.help_display && <div className="text-secondary">{row.visibility?.help_display}</div>
         }
       </>
     ),

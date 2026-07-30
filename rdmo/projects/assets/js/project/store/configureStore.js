@@ -1,5 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 import thunk from 'redux-thunk'
+import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
@@ -93,7 +94,7 @@ export default function configureStore() {
         store.dispatch(sitesActions.fetchSites())
         store.dispatch(groupsActions.fetchGroups())
         const project = store.getState().project.project.project
-        if (project.has_visibility) {
+        if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }
       }
