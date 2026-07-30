@@ -20,6 +20,8 @@
 }
 
 .management {
+    position: relative;
+
     .panel {
         p {
             margin-bottom: 5px;
@@ -152,6 +154,11 @@
     }
 
     .drop {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 8px;
+
         display: none;
         margin-top: -10px;
         padding: 4px 0;
