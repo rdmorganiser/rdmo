@@ -423,7 +423,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
     def get_provider(self, obj):
         return {
-            getattr(obj.provider, attr, None)
+            attr: getattr(obj.provider, attr, None)
             for attr in ['send_label', 'description']
         }
 
@@ -744,7 +744,7 @@ class IntegrationSerializer(serializers.ModelSerializer):
 
     def get_provider(self, obj):
         return {
-            getattr(obj.provider, attr, None)
+            attr: getattr(obj.provider, attr, None)
             for attr in ['send_label', 'description']
         }
 
