@@ -23,6 +23,9 @@ class InstanceValidator:
         # admin interface case, where a fresh validator is built per call
         self.instance = instance
 
+    def __call__(self, data, serializer=None):
+        raise NotImplementedError
+
     def get_instance(self, serializer):
         if serializer is not None:
             return serializer.instance
