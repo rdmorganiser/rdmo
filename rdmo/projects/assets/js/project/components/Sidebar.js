@@ -48,8 +48,9 @@ const Sidebar = () => {
           <h2 className="font-large mb-2">{project.project.title}</h2>
           <p className="font-normal text-muted m-0">{catalog.title}</p>
           {
-            visibility && project.project?.visibility ? (
-              <p className="font-normal text-muted m-0 mt-2">{project.project.visibility}</p>) : null
+            visibility?.help_display && (
+              <p className="font-normal text-muted m-0 mt-2">{visibility?.help_display}</p>
+            )
           }
         </div>
       </div>

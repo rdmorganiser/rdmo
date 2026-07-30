@@ -93,7 +93,7 @@ export default function configureStore() {
         store.dispatch(sitesActions.fetchSites())
         store.dispatch(groupsActions.fetchGroups())
         const project = store.getState().project.project.project
-        if (project.visibility) {
+        if (project.has_visibility) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }
       }
