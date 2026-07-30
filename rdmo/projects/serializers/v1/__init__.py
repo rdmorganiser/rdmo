@@ -144,6 +144,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     highest_role = serializers.SerializerMethodField()
     last_changed = serializers.DateTimeField(read_only=True)
 
+    visibility_display = serializers.CharField(source='visibility.get_help_display', read_only=True)
+
     class Meta:
         model = Project
         fields = (
@@ -168,6 +170,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'progress_total',
             'progress_count',
             'has_visibility',
+            'visibility_display',
             'ancestors',
             'permissions',
         )
