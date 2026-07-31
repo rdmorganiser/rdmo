@@ -136,7 +136,6 @@ class LockedValidator(InstanceValidator):
         # lock if the instance is now locked and was locked before
         locked = self.get_value(data, instance, 'locked')
         if locked and instance is not None and instance.locked:
-            if data.get('locked'):
-                self.raise_validation_error({
-                    'locked': _('The element is locked.')
-                }, serializer)
+            self.raise_validation_error({
+                'locked': _('The element is locked.')
+            }, serializer)
