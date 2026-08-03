@@ -14,13 +14,33 @@ import maxBy from 'lodash/maxBy'
 import Link from 'rdmo/core/assets/js/components/Link'
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const formatOptionLabel = ({ label }) => (
-  <span>
-    {label.split('/').map((part, index) => (
-      index === 0 ? part : [<wbr key={index} />, '/', part]
-    ))}
-  </span>
-)
+const formatOptionLabel = ({ label }, { context }) => {
+  const parts = label.split('/')
+
+  if (context === 'menu') {
+    // insert <wbr> at /
+    return (
+      <span>
+        {
+          parts.map((part, index) => (
+            index === 0 ? part : [<wbr key={index} />, '/', part]
+          ))
+        }
+      </span>
+    )
+  } else if (parts.length >= 3) {
+    const head = `${parts.slice(0, -3).join('/')}`
+    const tail = `/${parts.slice(-3).join('/')}`
+    return (
+      <span className="truncate-option-label">
+        <span className="truncate-option-label-head">{head}</span>
+        <span className="truncate-option-label-tail">{tail}</span>
+      </span>
+    )
+  } else {
+    return label
+  }
+}
 
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
