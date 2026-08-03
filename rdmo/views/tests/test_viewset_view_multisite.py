@@ -210,7 +210,7 @@ def test_update_view_toggle_site(db, client, username, password, add_or_remove, 
 
         url = reverse(urlnames['view-toggle-site'], kwargs={'pk': instance.pk})
 
-        response = client.put(url, {}, content_type='application/json')
+        response = client.patch(url, {}, content_type='application/json')
         assert response.status_code == (
             STATUS_CODES['toggle-site'].get(instance.uri, status_map['toggle-site'])[username]
         ), response.json()

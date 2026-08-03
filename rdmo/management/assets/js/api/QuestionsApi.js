@@ -26,8 +26,9 @@ class QuestionsApi extends BaseApi {
     }
   }
 
-  static patchCatalog(catalog) {
-    return this.patch(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
+  static patchCatalog(catalog, action) {
+    const actionPath = isNil(action) ? '' : `${action}/`
+    return this.patch(`/api/v1/questions/catalogs/${catalog.id}/${actionPath}`, catalog)
   }
 
   static deleteCatalog(catalog) {

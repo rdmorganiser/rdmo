@@ -23,8 +23,9 @@ class ViewsApi extends BaseApi {
     }
   }
 
-  static patchView(view) {
-    return this.patch(`/api/v1/views/views/${view.id}/`, view)
+  static patchView(view, action) {
+    const actionPath = isNil(action) ? '' : `${action}/`
+    return this.patch(`/api/v1/views/views/${view.id}/${actionPath}`, view)
   }
 
   static deleteView(view) {

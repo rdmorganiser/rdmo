@@ -23,8 +23,9 @@ class TasksApi extends BaseApi {
     }
   }
 
-  static patchTask(task) {
-    return this.patch(`/api/v1/tasks/tasks/${task.id}/`, task)
+  static patchTask(task, action) {
+    const actionPath = isNil(action) ? '' : `${action}/`
+    return this.patch(`/api/v1/tasks/tasks/${task.id}/${actionPath}`, task)
   }
 
   static deleteTask(task) {

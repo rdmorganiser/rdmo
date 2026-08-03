@@ -86,7 +86,7 @@ class ImportViewSet(viewsets.ViewSet):
 
 class ElementToggleCurrentSiteViewSetMixin:
 
-    @action(detail=True, methods=['put'], url_path="toggle-site", permission_classes=[CanToggleElementCurrentSite])
+    @action(detail=True, methods=['patch'], url_path="toggle-site", permission_classes=[CanToggleElementCurrentSite])
     def toggle_site(self, request, pk=None):
         obj = self.get_object()
         current_site = get_current_site(request)

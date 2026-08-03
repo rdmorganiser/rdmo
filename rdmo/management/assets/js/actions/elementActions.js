@@ -463,8 +463,9 @@ export function storeElementError(element, error) {
 
 // patch element
 
-export function patchElement(elementType, element) {
+export function patchElement(elementType, element, elementAction = null) {
   const pendingId = `patchElement/${elementType}/${element.id}`
+                                                  + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
@@ -473,7 +474,7 @@ export function patchElement(elementType, element) {
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.patchCatalog(element)
+        action = () => QuestionsApi.patchCatalog(element, elementAction)
         break
 
       case 'sections':
@@ -509,11 +510,11 @@ export function patchElement(elementType, element) {
         break
 
       case 'tasks':
-        action = () => TasksApi.patchTask(element)
+        action = () => TasksApi.patchTask(element, elementAction)
         break
 
       case 'views':
-        action = () => ViewsApi.patchView(element)
+        action = () => ViewsApi.patchView(element, elementAction)
         break
     }
 

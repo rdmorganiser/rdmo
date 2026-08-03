@@ -22,7 +22,7 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
   const fetchCopy = () => elementActions.fetchElement('views', view.id, 'copy')
   const toggleAvailable = () => elementActions.patchElement('views', { id: view.id, available: !view.available })
   const toggleLocked = () => elementActions.patchElement('views', { id: view.id, locked: !view.locked })
-  const toggleCurrentSite = () => elementActions.storeElement('views', view, 'toggle-site')
+  const toggleCurrentSite = () => elementActions.patchElement('views', view, 'toggle-site')
 
   return showElement && (
     <li className="list-group-item">
