@@ -60,6 +60,7 @@ const DateWidget = ({ page, question, sets, values, siblings, currentSet, disabl
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
+        updateValue={updateValue}
         copyValue={copyValue}
       />
       <QuestionCopyValues

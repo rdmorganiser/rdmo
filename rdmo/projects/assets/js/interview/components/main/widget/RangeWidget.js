@@ -73,6 +73,7 @@ const RangeWidget = ({ page, question, sets, values, siblings, currentSet, disab
         currentSet={currentSet}
         disabled={disabled}
         createValue={handleCreateValue}
+        updateValue={updateValue}
         copyValue={copyValue}
       />
       <QuestionCopyValues
