@@ -81,7 +81,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     loadOptions(search, callback)
   }, 500)
 
-  // handle default external ids by loading the options an set a default value option
+  // handle default external ids by loading the options and setting a default value option
   useEffect(() => {
     setDefaultValueOption(null)
 
@@ -112,6 +112,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     classNamePrefix: 'react-select',
     className: classnames,
     backspaceRemovesValue: false,
+    autoFocus: value.focus,
     isDisabled: disabled,
     placeholder: gettext('Select ...'),
     'aria-label': getQuestionTextId(question),
