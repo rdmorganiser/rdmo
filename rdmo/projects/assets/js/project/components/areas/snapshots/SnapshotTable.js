@@ -132,14 +132,17 @@ const SnapshotTable = ({ snapshots, onCreate}) => {
                     <p className="text-muted mb-3">
                       {gettext('There are currently no snapshots.')}
                     </p>
-
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => onCreate()}
-                    >
-                      {gettext('Create new snapshot')}
-                    </button>
+                    {
+                      perms.can_add_snapshot && (
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => onCreate()}
+                        >
+                          {gettext('Create new snapshot')}
+                        </button>
+                      )
+                    }
                   </div>
                 </td>
               </tr>
