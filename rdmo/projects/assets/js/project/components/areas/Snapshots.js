@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
@@ -26,8 +25,8 @@ const Snapshots = () => {
         }
       </div>
       {
-        !isEmpty(snapshots) && perms.can_view_snapshot && (
-          <SnapshotTable snapshots={snapshots} />
+        perms.can_view_snapshot && (
+          <SnapshotTable snapshots={snapshots} onCreate={openSnapshot}/>
         )
       }
       <SnapshotModal show={showSnapshot} onClose={closeSnapshot} />
