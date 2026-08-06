@@ -59,7 +59,8 @@ urlnames = {
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
     'upload_accept': 'v1-projects:project-upload-accept',
-    'imports': 'v1-projects:project-imports'
+    'imports': 'v1-projects:project-imports',
+    'providers': 'v1-projects:project-providers'
 }
 
 projects = [1, 2, 3, 4, 5, 12]
@@ -898,5 +899,21 @@ def test_imports(db, client, username, password):
         assert response.status_code == 200
         assert len(response.json()) == 1
         assert response.json()[0]['key'] == 'url'
+    else:
+        assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_providers(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['providers'])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()['simple']['add_label']
+        assert response.json()['simple']['description']
     else:
         assert response.status_code == 401

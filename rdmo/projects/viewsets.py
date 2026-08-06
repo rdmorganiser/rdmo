@@ -26,6 +26,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
 from rdmo.core.views import ChoicesViewSet
 from rdmo.options.models import OptionSet
@@ -706,6 +707,15 @@ class ProjectViewSet(ModelViewSet):
             'href': reverse('project_create_import', args=[key])
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
+    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    def providers(self, request):
+        return Response({
+            key: {
+                'add_label': plugin.add_label,
+                'description': plugin.description,
+            }
+            for key, plugin in get_plugins('PROJECT_ISSUE_PROVIDERS').items()
+        })
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)

@@ -388,7 +388,7 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
 
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
-
+    provider = serializers.SerializerMethodField()
     options = ProjectIntegrationOptionSerializer(many=True)
 
     class Meta:
@@ -396,6 +396,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'provider_key',
+            'provider',
             'options'
         )
         validators = [
@@ -419,6 +420,12 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         integration.save_options(options)
 
         return integration
+
+    def get_provider(self, obj):
+        return {
+            attr: getattr(obj.provider, attr, None)
+            for attr in ['send_label', 'description']
+        }
 
 
 class ProjectInviteSerializer(serializers.ModelSerializer):
@@ -722,7 +729,7 @@ class MembershipSerializer(serializers.ModelSerializer):
 
 
 class IntegrationSerializer(serializers.ModelSerializer):
-
+    provider = serializers.SerializerMethodField()
     options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -731,8 +738,15 @@ class IntegrationSerializer(serializers.ModelSerializer):
             'id',
             'project',
             'provider_key',
+            'provider',
             'options'
         )
+
+    def get_provider(self, obj):
+        return {
+            attr: getattr(obj.provider, attr, None)
+            for attr in ['send_label', 'description']
+        }
 
 
 class InviteSerializer(serializers.ModelSerializer):
