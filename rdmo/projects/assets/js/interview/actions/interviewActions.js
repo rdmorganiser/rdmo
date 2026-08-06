@@ -182,33 +182,25 @@ export function fetchOptionsError(error) {
   return {type: FETCH_OPTIONS_ERROR, error}
 }
 
-export function fetchValues(page, preserveUnsaved = false) {
+export function fetchValues(page, refresh = false) {
   const pendingId = `fetchValues/${page.id}`
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
-      .then((values) => {
-        if (preserveUnsaved) {
-          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
-
-          unsavedValues.forEach((value) => {
-            const question = page.questions.find((question) => question.attribute === value.attribute)
-            const widgetType = question && question.widget_type
-
-            if (!values.some((fetchedValue) => compareValues(fetchedValue, value, widgetType))) {
-              values.push(value)
-            }
+      .then((fetchedValues) => {
+        const values = refresh ? (
+          // if the values are just refreshed after a value is stores or deleted, loop
+          // over the existing values and inject the fetched values, keeping unsaved values
+          getState().interview.values.map(value => {
+            const fetchedValue = fetchedValues.find(v => compareValues(v, value))
+            return isNil(fetchedValue) ? value : fetchedValue
           })
-
-          values.sort((a, b) => (
-            (a.attribute - b.attribute) ||
-            a.set_prefix.localeCompare(b.set_prefix) ||
-            (a.set_index - b.set_index) ||
-            (a.collection_index - b.collection_index)
-          ))
-        }
+        ) : (
+          // when loading the page, discard all existing values
+          fetchedValues
+        )
 
         const sets = gatherSets(values, page)
 
