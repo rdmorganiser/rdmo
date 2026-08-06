@@ -212,7 +212,6 @@ export function deleteProjectVisibility() {
       .then(() => {
         dispatch(removeFromPending('deleteProjectVisibility'))
         dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
-        return dispatch(fetchProjectVisibility())
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectVisibility'))

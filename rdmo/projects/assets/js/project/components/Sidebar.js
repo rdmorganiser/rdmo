@@ -12,7 +12,7 @@ const Sidebar = () => {
   const dispatch = useDispatch()
 
   const { area } = useSelector((state) => state.config)
-  const { project } = useSelector((state) => state.project)
+  const { project, visibility } = useSelector((state) => state.project)
 
   const catalog = project?.catalogs.find(catalog => catalog.id == project.project.catalog)
 
@@ -47,6 +47,11 @@ const Sidebar = () => {
         <div className="card-body py-2">
           <h2 className="font-large mb-2">{project.project.title}</h2>
           <p className="font-normal text-muted m-0">{catalog.title}</p>
+          {
+            visibility?.help_display && (
+              <p className="font-normal text-muted m-0 mt-2">{visibility?.help_display}</p>
+            )
+          }
         </div>
       </div>
 

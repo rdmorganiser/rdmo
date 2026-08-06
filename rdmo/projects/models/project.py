@@ -134,6 +134,10 @@ class Project(MPTTModel, Model):
         return ', '.join(str(i) for i in self.groups if i is not None)
 
     @property
+    def has_visibility(self) -> bool:
+        return hasattr(self, 'visibility')
+
+    @property
     def file_size(self) -> int:
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])

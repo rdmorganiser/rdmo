@@ -66,7 +66,7 @@ const ProjectVisibilityForm = () => {
         <h3 className="mb-0">{gettext('Project visibility')}</h3>
         <span className="text-muted small">
           {
-            visibility ? project?.visibility : gettext('Not set')
+            visibility ? visibility.help_display : gettext('Not set')
           }
         </span>
       </div>

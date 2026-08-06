@@ -144,7 +144,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     highest_role = serializers.SerializerMethodField()
     last_changed = serializers.DateTimeField(read_only=True)
 
-    visibility = serializers.CharField(source='visibility.get_help_display', read_only=True)
+    visibility = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -258,6 +258,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_ancestors(self, obj) -> list[dict[str, Any]]:
         return ProjectAncestorSerializer(obj.get_cached_ancestors(), many=True, context=self.context).data
 
+    def get_visibility(self, obj) -> dict:
+        if hasattr(obj, 'visibility'):
+            return {
+                'help_display': obj.visibility.get_help_display()
+            }
+
 
 class ProjectListSerializer(ProjectSerializer):
 
@@ -291,13 +297,15 @@ class ProjectResolveSerializer(serializers.Serializer):
 
 
 class ProjectVisibilitySerializer(serializers.ModelSerializer):
+    help_display = serializers.CharField(source='get_help_display', read_only=True)
 
     class Meta:
         model = Visibility
         fields = (
             'project',
             'sites',
-            'groups'
+            'groups',
+            'help_display',
         )
 
 
