@@ -64,6 +64,7 @@ const SelectWidget = ({ page, question, sets, values, siblings, currentSet, disa
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
+        updateValue={updateValue}
       />
       <QuestionCopyValues
         question={question}
