@@ -48,7 +48,6 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
-        updateValue={updateValue}
       />
     </div>
   )

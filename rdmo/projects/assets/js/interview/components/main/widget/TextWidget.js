@@ -58,7 +58,6 @@ const TextWidget = ({ page, question, sets, values, siblings, currentSet, disabl
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
-        updateValue={updateValue}
       />
       <QuestionCopyValues
         question={question}
