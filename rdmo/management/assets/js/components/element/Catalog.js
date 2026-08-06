@@ -29,7 +29,7 @@ const Catalog = ({ config, catalog, elementActions, display='list',
   const toggleAvailable = () => elementActions.patchElement('catalogs', { id: catalog.id, available: !catalog.available })
   const toggleLocked = () => elementActions.patchElement('catalogs', { id: catalog.id, locked: !catalog.locked })
 
-  const toggleCurrentSite = () => elementActions.patchElement('catalogs', catalog, 'toggle-site')
+  const toggleCurrentSite = () => elementActions.toggleElementSite('catalogs', catalog)
 
   const createSection = () => elementActions.createElement('sections', { catalog })
 

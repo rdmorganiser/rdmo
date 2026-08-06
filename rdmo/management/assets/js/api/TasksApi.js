@@ -14,18 +14,20 @@ class TasksApi extends BaseApi {
     return this.get(`/api/v1/tasks/tasks/${id}/`)
   }
 
-  static storeTask(task, action) {
+  static storeTask(task) {
     if (isNil(task.id)) {
       return this.post('/api/v1/tasks/tasks/', task)
     } else {
-      const actionPath = isNil(action) ? '' : `${action}/`
-      return this.put(`/api/v1/tasks/tasks/${task.id}/${actionPath}`, task)
+      return this.put(`/api/v1/tasks/tasks/${task.id}/`, task)
     }
   }
 
-  static patchTask(task, action) {
-    const actionPath = isNil(action) ? '' : `${action}/`
-    return this.patch(`/api/v1/tasks/tasks/${task.id}/${actionPath}`, task)
+  static patchTask(task) {
+    return this.patch(`/api/v1/tasks/tasks/${task.id}/`, task)
+  }
+
+  static toggleTaskSite(catalog) {
+    return this.post(`/api/v1/tasks/tasks/${catalog.id}/toggle-site/`, {})
   }
 
   static deleteTask(task) {

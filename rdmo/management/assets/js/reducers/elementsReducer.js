@@ -58,6 +58,7 @@ export default function elementsReducer(state = initialState, action) {
     // store/patch element
     case 'elements/storeElementInit':
     case 'elements/patchElementInit':
+    case 'elements/toggleElementSiteInit':
       if (isNil(state.element)) {
         return state
       } else {
@@ -66,6 +67,7 @@ export default function elementsReducer(state = initialState, action) {
       }
     case 'elements/storeElementError':
     case 'elements/patchElementError':
+    case 'elements/toggleElementSiteError':
       if (isNil(state.element) || state.elementAction == 'nested') {
         // create a fake element with just the id and the model and the error for updateElement works,
         // but the element won't get updated in the view
@@ -76,6 +78,7 @@ export default function elementsReducer(state = initialState, action) {
       // there is not break here on purpose
     case 'elements/storeElementSuccess':  // eslint-disable-line no-fallthrough
     case 'elements/patchElementSuccess':
+    case 'elements/toggleElementSiteSuccess':
       if (isNil(state.element)) {
         return {...state,
           [state.elementType]: state[state.elementType].map(element => updateElement(element, action.element))

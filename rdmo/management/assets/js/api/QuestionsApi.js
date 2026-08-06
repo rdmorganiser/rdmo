@@ -17,18 +17,20 @@ class QuestionsApi extends BaseApi {
     return this.get(url)
   }
 
-  static storeCatalog(catalog, action) {
+  static storeCatalog(catalog) {
     if (isNil(catalog.id)) {
       return this.post('/api/v1/questions/catalogs/', catalog)
     } else {
-      const actionPath = isNil(action) ? '' : `${action}/`
-      return this.put(`/api/v1/questions/catalogs/${catalog.id}/${actionPath}`, catalog)
+      return this.put(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
     }
   }
 
-  static patchCatalog(catalog, action) {
-    const actionPath = isNil(action) ? '' : `${action}/`
-    return this.patch(`/api/v1/questions/catalogs/${catalog.id}/${actionPath}`, catalog)
+  static patchCatalog(catalog) {
+    return this.patch(`/api/v1/questions/catalogs/${catalog.id}/`, catalog)
+  }
+
+  static toggleCatalogSite(catalog) {
+    return this.post(`/api/v1/questions/catalogs/${catalog.id}/toggle-site/`, {})
   }
 
   static deleteCatalog(catalog) {

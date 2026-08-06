@@ -14,18 +14,20 @@ class ViewsApi extends BaseApi {
     return this.get(`/api/v1/views/views/${id}/`)
   }
 
-  static storeView(view, action) {
+  static storeView(view) {
     if (isNil(view.id)) {
       return this.post('/api/v1/views/views/', view)
     } else {
-      const actionPath = isNil(action) ? '' : `${action}/`
-      return this.put(`/api/v1/views/views/${view.id}/${actionPath}`, view)
+      return this.put(`/api/v1/views/views/${view.id}/`, view)
     }
   }
 
-  static patchView(view, action) {
-    const actionPath = isNil(action) ? '' : `${action}/`
-    return this.patch(`/api/v1/views/views/${view.id}/${actionPath}`, view)
+  static patchView(view) {
+    return this.patch(`/api/v1/views/views/${view.id}/`, view)
+  }
+
+  static toggleViewSite(view) {
+    return this.post(`/api/v1/views/views/${view.id}/toggle-site/`, {})
   }
 
   static deleteView(view) {

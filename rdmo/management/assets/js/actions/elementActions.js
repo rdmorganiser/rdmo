@@ -379,9 +379,8 @@ export function fetchElementError(error) {
 
 // store element
 
-export function storeElement(elementType, element, elementAction = null, back = false) {
+export function storeElement(elementType, element, back = false) {
   const pendingId = `storeElement/${elementType}` + (isNil(element.id) ? '' : `/${element.id}`)
-                                                  + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch, getState) {
 
@@ -391,7 +390,7 @@ export function storeElement(elementType, element, elementAction = null, back = 
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.storeCatalog(element, elementAction)
+        action = () => QuestionsApi.storeCatalog(element)
         break
 
       case 'sections':
@@ -427,11 +426,11 @@ export function storeElement(elementType, element, elementAction = null, back = 
         break
 
       case 'tasks':
-        action = () => TasksApi.storeTask(element, elementAction)
+        action = () => TasksApi.storeTask(element)
         break
 
       case 'views':
-        action = () => ViewsApi.storeView(element, elementAction)
+        action = () => ViewsApi.storeView(element)
         break
     }
 
@@ -463,9 +462,8 @@ export function storeElementError(element, error) {
 
 // patch element
 
-export function patchElement(elementType, element, elementAction = null) {
+export function patchElement(elementType, element) {
   const pendingId = `patchElement/${elementType}/${element.id}`
-                                                  + (isNil(elementAction) ? '' : `/${elementAction}`)
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
@@ -474,7 +472,7 @@ export function patchElement(elementType, element, elementAction = null) {
     let action
     switch (elementType) {
       case 'catalogs':
-        action = () => QuestionsApi.patchCatalog(element, elementAction)
+        action = () => QuestionsApi.patchCatalog(element)
         break
 
       case 'sections':
@@ -510,11 +508,11 @@ export function patchElement(elementType, element, elementAction = null) {
         break
 
       case 'tasks':
-        action = () => TasksApi.patchTask(element, elementAction)
+        action = () => TasksApi.patchTask(element)
         break
 
       case 'views':
-        action = () => ViewsApi.patchView(element, elementAction)
+        action = () => ViewsApi.patchView(element)
         break
     }
 
@@ -535,6 +533,49 @@ export function patchElementSuccess(element) {
 
 export function patchElementError(element, error) {
   return {type: 'elements/patchElementError', element, error}
+}
+
+// toggle element site
+
+export function toggleElementSite(elementType, element) {
+  const pendingId = `toggleElementSite/${elementType}/${element.id}`
+
+  return function(dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch(toggleElementSiteInit(element))
+
+    let action
+    switch (elementType) {
+      case 'catalogs':
+        action = () => QuestionsApi.toggleCatalogSite(element)
+        break
+
+      case 'tasks':
+        action = () => TasksApi.toggleTaskSite(element)
+        break
+
+      case 'views':
+        action = () => ViewsApi.toggleViewSite(element)
+        break
+    }
+
+    return dispatch(action)
+      .then(element => dispatch(toggleElementSiteSuccess(element)))
+      .catch(error => dispatch(toggleElementSiteError(element, error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
+  }
+}
+
+export function toggleElementSiteInit(element) {
+  return {type: 'elements/toggleElementSiteInit', element}
+}
+
+export function toggleElementSiteSuccess(element) {
+  return {type: 'elements/toggleElementSiteSuccess', element}
+}
+
+export function toggleElementSiteError(element, error) {
+  return {type: 'elements/toggleElementSiteError', element, error}
 }
 
 // createElement

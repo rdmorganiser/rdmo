@@ -23,9 +23,11 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
 
   const fetchEdit = () => elementActions.fetchElement('tasks', task.id)
   const fetchCopy = () => elementActions.fetchElement('tasks', task.id, 'copy')
+
   const toggleAvailable = () => elementActions.patchElement('tasks', { id: task.id, available: !task.available })
   const toggleLocked = () => elementActions.patchElement('tasks', { id: task.id, locked: !task.locked })
-  const toggleCurrentSite = () => elementActions.patchElement('tasks', task, 'toggle-site')
+
+  const toggleCurrentSite = () => elementActions.toggleElementSite('tasks', task, 'toggle-site')
 
   const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
 

@@ -301,19 +301,19 @@ def test_update_catalog_toggle_site(db, client, username, password, add_or_remov
         instance.locked = locked
         instance.save()
 
-        before_has_current_site = instance.sites.filter(id=current_site.id).exists()
+        before_put_has_current_site = instance.sites.filter(id=current_site.id).exists()
 
         url = reverse(urlnames['catalog-toggle-site'], kwargs={'pk': instance.pk})
 
-        response = client.patch(url, {}, content_type='application/json')
+        response = client.post(url, {}, content_type='application/json')
         assert response.status_code == (
             STATUS_CODES['toggle-site'].get(instance.uri, status_map['toggle-site'])[username]
         ), response.json()
         instance.refresh_from_db()
-        after_has_current_site = instance.sites.filter(id=current_site.id).exists()
+        after_put_has_current_site = instance.sites.filter(id=current_site.id).exists()
         if response.status_code == 200:
             # check if instance now has the current site or not
-            assert after_has_current_site is has_current_site_check
+            assert after_put_has_current_site is has_current_site_check
         else:
             # check that the instance was not updated
-            assert after_has_current_site is before_has_current_site
+            assert after_put_has_current_site is before_put_has_current_site
