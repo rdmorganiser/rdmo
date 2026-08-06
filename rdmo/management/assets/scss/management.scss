@@ -284,3 +284,21 @@
         }
     }
 }
+
+.truncate-option-label {
+    display: flex;
+    max-width: 100%;
+    min-width: 0;
+
+    .truncate-option-label-head {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .truncate-option-label-tail {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+}
