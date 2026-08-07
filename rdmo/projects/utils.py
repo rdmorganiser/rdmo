@@ -272,16 +272,6 @@ def send_invite_email(request, invite):
     send_mail(subject, message, to=[invite.email])
 
 
-def set_context_querystring_with_filter_and_page(context: dict) -> dict:
-    '''prepares the filter part of the querystring for the next and previous hyperlinks in the pagination'''
-    if context["filter"].data:
-        querystring = context["filter"].data.copy()
-        if context["filter"].data.get('page'):
-            del querystring['page']
-        context['querystring'] = querystring.urlencode()
-    return context
-
-
 def get_upload_accept():
     accept = defaultdict(set)
     for import_plugin in get_plugins('PROJECT_IMPORTS').values():
