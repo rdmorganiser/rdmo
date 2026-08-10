@@ -120,6 +120,10 @@ const ProjectForm = ({
       delete payload.parent
     }
 
+    if (!isProjectCatalogAvailable) {
+      delete payload.catalog
+    }
+
     return dispatch(updateProject(payload))
   }
 
