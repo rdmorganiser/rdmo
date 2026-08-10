@@ -153,15 +153,13 @@ const Main = () => {
   }
 
   const renderTitle = (row) => {
-    const catalog = catalogs.find(c => c.id === row.catalog)
+    // const catalog = catalogs.find(c => c.id === row.catalog)
 
     return (
       <div>
         {buildAncestorLink(row.ancestors)}
         {
-          catalog && (
-            <div className="text-secondary">{catalog.title}</div>
-          )
+          <div className="text-secondary">{row?.catalog_title}</div>
         }
       </div>
     )

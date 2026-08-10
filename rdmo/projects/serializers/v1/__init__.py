@@ -154,6 +154,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'description',
             'catalog',
             'catalog_uri',
+            'catalog_title',
+            'catalog_help',
             'parent',
             'parent_title',
             'owners',

@@ -14,8 +14,6 @@ const Sidebar = () => {
   const { area } = useSelector((state) => state.config)
   const { project, visibility } = useSelector((state) => state.project)
 
-  const catalog = project?.catalogs.find(catalog => catalog.id == project.project.catalog)
-
   const menuItems = [
     {
       title: '',
@@ -46,7 +44,7 @@ const Sidebar = () => {
       <div className="d-none d-lg-block card w-100 mb-3">
         <div className="card-body py-2">
           <h2 className="font-large mb-2">{project.project.title}</h2>
-          <p className="font-normal text-muted m-0">{catalog.title}</p>
+          <p className="font-normal text-muted m-0">{project.project.catalog_title}</p>
           {
             visibility?.help_display && (
               <p className="font-normal text-muted m-0 mt-2">{visibility?.help_display}</p>
