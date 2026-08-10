@@ -32,7 +32,7 @@ const ProjectForm = ({
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
-  const project = currentProject ?? storeData?.project
+  const project = mode === 'create' ? {} : currentProject ?? storeData?.project
   const catalogs = catalogsProp ?? storeData?.catalogs
 
   if (!project) return null
@@ -68,7 +68,7 @@ const ProjectForm = ({
 
   const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
 
-  const isProjectCatalogAvailable = availableCatalogs.some(
+  const isProjectCatalogAvailable = mode !== 'edit' || availableCatalogs.some(
     catalog => catalog.id === project.catalog
   )
 
