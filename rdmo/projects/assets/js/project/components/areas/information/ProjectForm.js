@@ -231,7 +231,7 @@ const ProjectForm = ({
         <label className="form-label mb-0">{gettext('Catalog')}</label>
         <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
         {
-          !isProjectCatalogAvailable &&
+          !isProjectCatalogAvailable && project.permissions.can_change_project &&
             <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
         }
 
