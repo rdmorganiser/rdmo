@@ -69,7 +69,7 @@ const ProjectForm = ({
   const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
 
   const isProjectCatalogAvailable = mode !== 'edit' || availableCatalogs.some(
-    catalog => catalog.id === project.catalog
+    catalog => catalog.id === formData.catalog
   )
 
   const catalogOptions = (
@@ -84,7 +84,11 @@ const ProjectForm = ({
   ).map(catalog => ({
     value: catalog.id,
     label: (
-      <>
+      <span
+        className={
+          !isProjectCatalogAvailable && catalog.id === project.catalog ? 'text-muted' : ''
+        }
+      >
         {catalog.title}{' '}
         <Tooltip
           title={catalog.help || gettext('No help available for this catalog.')}
@@ -98,7 +102,7 @@ const ProjectForm = ({
             style={{ cursor: 'help' }}
           />
         </Tooltip>
-      </>
+      </span>
     )
   }))
 
@@ -237,7 +241,7 @@ const ProjectForm = ({
               className="mt-2"
               placeholder={gettext('Select catalog')}
               isClearable={false}
-              isDisabled={disabled || !isProjectCatalogAvailable}
+              isDisabled={disabled}
               options={catalogOptions}
               value={formData.catalog}
               onChange={(value) => handleChange('catalog', value)}
@@ -253,7 +257,7 @@ const ProjectForm = ({
                   value={opt.value}
                   checked={formData.catalog === opt.value}
                   onChange={(e) => handleChange('catalog', Number(e.target.value))}
-                  disabled={disabled || !isProjectCatalogAvailable}
+                  disabled={disabled}
                 />
                 <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
                   {opt.label}
