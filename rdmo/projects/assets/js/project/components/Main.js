@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 import Dashboard from './areas/Dashboard'
 import Documents from './areas/Documents'
 import Information from './areas/Information'
+import Integrations from './areas/Integrations'
 import Interview from './areas/Interview'
 import Memberships from './areas/Memberships'
-import Plugins from './areas/Plugins'
 import Snapshots from './areas/Snapshots'
 import View from './helper/View'
 
@@ -28,8 +28,8 @@ const Main = () => {
         return <Information />
       case 'memberships':
         return <Memberships />
-      case 'plugins':
-        return <Plugins />
+      case 'integrations':
+        return <Integrations />
       default:
         return <h2>Page Not Found</h2>
     }
