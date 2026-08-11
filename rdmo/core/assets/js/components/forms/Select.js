@@ -41,6 +41,7 @@ const Select = ({
       <label className="control-label" htmlFor={id}>{label}</label>
 
       <ReactSelect
+        inputId={id}
         classNamePrefix="react-select"
         className={
           classNames('react-select', {

@@ -98,6 +98,12 @@ export default function configureStore() {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }
       }
+      if (permissions.can_add_integration || permissions.can_change_integration) {
+        store.dispatch(projectActions.fetchProviders())
+      }
+      if (permissions.can_view_integration) {
+        store.dispatch(projectActions.fetchProjectIntegrations(projectId))
+      }
       initDashboardFromLocation()
     })
   })

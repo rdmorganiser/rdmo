@@ -562,6 +562,100 @@ export function downloadView(snapshotId, viewId, format) {
   }
 }
 
+// providers
+
+export function fetchProviders() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProviders'))
+    dispatch({ type: actionTypes.FETCH_PROVIDERS_INIT })
+
+    return ProjectApi.fetchProviders()
+      .then(providers => {
+        dispatch(removeFromPending('fetchProviders'))
+        dispatch({ type: actionTypes.FETCH_PROVIDERS_SUCCESS, providers })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchProviders'))
+        dispatch({ type: actionTypes.FETCH_PROVIDERS_ERROR, error })
+        throw error
+      })
+  }
+}
+
+// integrations
+
+export function fetchProjectIntegrations() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectIntegrations'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_INIT })
+
+    return ProjectApi.fetchProjectIntegrations(projectId)
+      .then(integrations => {
+        dispatch(removeFromPending('fetchProjectIntegrations'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_SUCCESS, integrations })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('fetchProjectIntegrations'))
+        dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function createProjectIntegration(data) {
+  return function (dispatch) {
+    dispatch(addToPending('createProjectIntegration'))
+    dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_INIT })
+
+    return ProjectApi.createProjectIntegration(projectId, data)
+      .then(integration => {
+        dispatch(removeFromPending('createProjectIntegration'))
+        dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_SUCCESS, integration })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('createProjectIntegration'))
+        dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function updateProjectIntegration(integrationId, data) {
+  return function (dispatch) {
+    dispatch(addToPending('updateProjectIntegration'))
+    dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_INIT })
+
+    return ProjectApi.updateProjectIntegration(projectId, integrationId, data)
+      .then(integration => {
+        dispatch(removeFromPending('updateProjectIntegration'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_SUCCESS, integration })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('updateProjectIntegration'))
+        dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_ERROR, error })
+        throw error
+      })
+  }
+}
+
+export function deleteProjectIntegration(integrationId) {
+  return function (dispatch) {
+    dispatch(addToPending('deleteProjectIntegration'))
+    dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_INIT })
+
+    return ProjectApi.deleteProjectIntegration(projectId, integrationId)
+      .then(() => {
+        dispatch(removeFromPending('deleteProjectIntegration'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_SUCCESS, integrationId })
+      })
+      .catch(error => {
+        dispatch(removeFromPending('deleteProjectIntegration'))
+        dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_ERROR, error })
+        throw error
+      })
+  }
+}
+
 // synchronous actions
 
 export function clearProjectErrors() {
