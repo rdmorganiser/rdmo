@@ -713,6 +713,15 @@ class ProjectViewSet(ModelViewSet):
             key: {
                 'add_label': plugin.add_label,
                 'description': plugin.description,
+                'fields': [
+                    {
+                        **field,
+                        'title': field.get('title', field['key'].title().replace('_', ' ')),
+                        'required': field.get('required', True),
+                        'secret': field.get('secret', False),
+                    }
+                    for field in plugin.fields
+                ],
             }
             for key, plugin in get_plugins('PROJECT_ISSUE_PROVIDERS').items()
         })

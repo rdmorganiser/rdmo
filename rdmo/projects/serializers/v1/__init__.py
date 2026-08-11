@@ -398,13 +398,37 @@ class ProjectMembershipHierarchySerializer(serializers.ModelSerializer):
 
 
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
+    secret = serializers.SerializerMethodField()
+    value = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = IntegrationOption
         fields = (
             'key',
-            'value'
+            'title',
+            'value',
+            'secret'
         )
+
+    def get_secret(self, obj):
+        if obj.secret:
+            return True
+
+        provider = obj.integration.provider
+        if provider is None:
+            return False
+
+        return any(
+            field.get('key') == obj.key and field.get('secret', False)
+            for field in provider.fields
+        )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if representation['secret']:
+            representation['configured'] = bool(instance.value)
+            representation.pop('value', None)
+        return representation
 
 
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
@@ -437,14 +461,21 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
     def update(self, integration, validated_data):
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
+        for field in integration.provider.fields:
+            key = field.get('key')
+            if field.get('secret', False) and key not in options:
+                options[key] = integration.get_option_value(key)
+
         integration.save_options(options)
 
         return integration
 
     def get_provider(self, obj):
+        if obj.provider is None:
+            return None
         return {
             attr: getattr(obj.provider, attr, None)
-            for attr in ['send_label', 'description']
+            for attr in ['label', 'send_label', 'description']
         }
 
 
@@ -763,9 +794,11 @@ class IntegrationSerializer(serializers.ModelSerializer):
         )
 
     def get_provider(self, obj):
+        if obj.provider is None:
+            return None
         return {
             attr: getattr(obj.provider, attr, None)
-            for attr in ['send_label', 'description']
+            for attr in ['label', 'send_label', 'description']
         }
 
 
