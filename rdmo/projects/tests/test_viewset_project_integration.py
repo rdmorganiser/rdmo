@@ -152,7 +152,7 @@ def test_create_error2(db, client, username, password, project_id):
 
     if project_id in add_integration_permission_map.get(username, []):
         assert response.status_code == 400, response.json()
-        assert response.json()['options'][0]['value'], response.json()
+        assert response.json()['options'] == ['Key "project_url" must not be blank.'], response.json()
     elif project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -213,11 +213,15 @@ def test_update(db, client, username, password, project_id, integration_id):
         assert sorted(response.json().get('options'), key=lambda obj: obj['key']) == [
             {
                 'key': 'project_url',
-                'value': 'https://example.com/projects/2'
+                'title': 'Project Url',
+                'value': 'https://example.com/projects/2',
+                'secret': False
             },
             {
                 'key': 'secret',
-                'value': ''
+                'title': 'Secret',
+                'secret': True,
+                'configured': bool(integration.get_option_value('secret'))
             }
         ]
     elif integration and project_id in view_integration_permission_map.get(username, []):
