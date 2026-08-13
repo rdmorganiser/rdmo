@@ -52,7 +52,6 @@ const Integrations = () => {
       {
         perms.can_view_integration && (
           <>
-            <h2>{gettext('Added integrations')}</h2>
             <p className="text-muted">
               {
                 gettext(
