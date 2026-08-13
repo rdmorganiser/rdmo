@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Input, Select } from 'rdmo/core/assets/js/components/forms'
+import { Input } from 'rdmo/core/assets/js/components/forms'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import { createProjectIntegration } from '../../actions/projectActions'
+
+import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
 import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
 import IntegrationUpdateModal from './integrations/IntegrationUpdateModal'
@@ -23,10 +25,7 @@ const Integrations = () => {
   const updateModal = useModal()
   const deleteModal = useModal()
 
-  const providerOptions = Object.entries(providers).map(([key, provider]) => ({
-    value: key,
-    label: provider.add_label
-  }))
+  const hasProviders = Object.keys(providers).length > 0
   const provider = providers[providerKey]
   const visibleIntegrations = integrations.filter((integration) => integration.provider)
   const requiredFieldsComplete = provider?.fields
@@ -83,25 +82,22 @@ const Integrations = () => {
 
   return (
     <div className="project-integrations">
-      <h1 className="mb-5">{gettext('Integrations')}</h1>
+      <div className="d-lg-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-lg-0">{gettext('Integrations')}</h1>
+        {
+          perms.can_add_integration && hasProviders && (
+            <IntegrationsDropdown providers={providers} onChange={handleProviderChange} />
+          )
+        }
+      </div>
 
       {
-        perms.can_add_integration && providerOptions.length > 0 && (
+        perms.can_add_integration && provider && (
           <div className="card card-tile mb-4">
             <div className="card-body">
               <h2>{gettext('Add integration to project')}</h2>
 
               <form onSubmit={handleSubmit}>
-                <Select
-                  className="mb-3"
-                  label={gettext('Provider')}
-                  placeholder={gettext('Select provider')}
-                  isClearable
-                  options={providerOptions}
-                  value={providerKey}
-                  onChange={handleProviderChange}
-                />
-
                 {
                   provider && (
                     <>

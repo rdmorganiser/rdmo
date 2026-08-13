@@ -711,6 +711,7 @@ class ProjectViewSet(ModelViewSet):
     def providers(self, request):
         return Response({
             key: {
+                'label': plugin.label,
                 'add_label': plugin.add_label,
                 'description': plugin.description,
                 'fields': [

@@ -1,4 +1,5 @@
 export { default as ExportsDropdown } from './ExportsDropdown'
+export { default as IntegrationsDropdown } from './IntegrationsDropdown'
 export { default as SnapshotsDropdown } from './SnapshotsDropdown'
 export { default as Tile } from './Tile'
 export { default as View } from './View'
