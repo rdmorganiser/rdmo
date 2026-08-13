@@ -1,47 +1,31 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { Input } from 'rdmo/core/assets/js/components/forms'
 import { useModal } from 'rdmo/core/assets/js/hooks'
-
-import { createProjectIntegration } from '../../actions/projectActions'
 
 import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
 import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
-import IntegrationUpdateModal from './integrations/IntegrationUpdateModal'
+import IntegrationModal from './integrations/IntegrationModal'
 
 const Integrations = () => {
-  const dispatch = useDispatch()
   const perms = useSelector((state) => state.project.project.project.permissions) ?? {}
   const providers = useSelector((state) => state.project.providers) ?? {}
   const integrations = useSelector((state) => state.project.integrations) ?? []
-  const isSubmitting = useSelector((state) => state.pending.items.includes('createProjectIntegration'))
 
   const [providerKey, setProviderKey] = useState(null)
-  const [optionValues, setOptionValues] = useState({})
   const [selectedIntegration, setSelectedIntegration] = useState(null)
 
+  const createModal = useModal()
   const updateModal = useModal()
   const deleteModal = useModal()
 
   const hasProviders = Object.keys(providers).length > 0
-  const provider = providers[providerKey]
   const visibleIntegrations = integrations.filter((integration) => integration.provider)
-  const requiredFieldsComplete = provider?.fields
-    .filter((field) => field.required)
-    .every((field) => optionValues[field.key]?.trim()) ?? false
 
   const handleProviderChange = (value) => {
     setProviderKey(value)
-    setOptionValues({})
-  }
-
-  const handleOptionChange = (key, value) => {
-    setOptionValues((currentValues) => ({
-      ...currentValues,
-      [key]: value
-    }))
+    createModal.open()
   }
 
   const openUpdateModal = (integration) => {
@@ -52,32 +36,6 @@ const Integrations = () => {
   const openDeleteModal = (integration) => {
     setSelectedIntegration(integration)
     deleteModal.open()
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-
-    if (!provider || !requiredFieldsComplete || isSubmitting) {
-      return
-    }
-
-    const options = provider.fields
-      .filter((field) => field.required || optionValues[field.key]?.trim())
-      .map((field) => ({
-        key: field.key,
-        value: optionValues[field.key]
-      }))
-
-    try {
-      await dispatch(createProjectIntegration({
-        provider_key: providerKey,
-        options
-      }))
-      setProviderKey(null)
-      setOptionValues({})
-    } catch {
-      // Keep the form values so errors can be corrected and submitted again.
-    }
   }
 
   return (
@@ -92,68 +50,20 @@ const Integrations = () => {
       </div>
 
       {
-        perms.can_add_integration && provider && (
-          <div className="card card-tile mb-4">
-            <div className="card-body">
-              <h2>{gettext('Add integration to project')}</h2>
-
-              <form onSubmit={handleSubmit}>
-                {
-                  provider && (
-                    <>
-                      <p className="text-muted">{provider.description}</p>
-
-                      {
-                        provider.fields.map((field) => (
-                          <Input
-                            key={field.key}
-                            type={field.secret ? 'password' : 'text'}
-                            className="mb-3"
-                            label={`${field.title}${field.required ? ' *' : ''}`}
-                            placeholder={field.placeholder}
-                            help={field.help}
-                            value={optionValues[field.key] ?? ''}
-                            onChange={(value) => handleOptionChange(field.key, value)}
-                          />
-                        ))
-                      }
-                    </>
-                  )
-                }
-
-                {
-                  provider && (
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={!requiredFieldsComplete || isSubmitting}
-                    >
-                      {gettext('Add integration')}
-                    </button>
-                  )
-                }
-              </form>
-            </div>
-          </div>
-        )
-      }
-
-      {
-        perms.can_view_integration && visibleIntegrations.length > 0 && (
-          <div className="card card-tile mb-4">
-            <div className="card-body">
-              <h2>{gettext('Added integrations')}</h2>
-              <p className="text-muted">
-                {
-                  gettext(
-                    'Integrations can be used to send tasks to various external tools. ' +
+        perms.can_view_integration && (
+          <>
+            <h2>{gettext('Added integrations')}</h2>
+            <p className="text-muted">
+              {
+                gettext(
+                  'Integrations can be used to send tasks to various external tools. ' +
                   'Please follow the descriptions of the integrations to use them.'
-                  )
-                }
-              </p>
-
-              <div className="table-responsive">
-                <table className="table mb-0">
+                )
+              }
+            </p>
+            {
+              visibleIntegrations.length > 0 && (
+                <table className="table">
                   <thead>
                     <tr>
                       <th style={{ width: '15%' }}>{gettext('Provider')}</th>
@@ -222,16 +132,22 @@ const Integrations = () => {
                     }
                   </tbody>
                 </table>
-              </div>
-            </div>
-          </div>
+              )
+            }
+          </>
         )
       }
+
+      <IntegrationModal
+        show={createModal.show}
+        onClose={createModal.close}
+        providerKey={providerKey}
+      />
 
       {
         selectedIntegration && (
           <>
-            <IntegrationUpdateModal
+            <IntegrationModal
               show={updateModal.show}
               onClose={updateModal.close}
               integration={selectedIntegration}

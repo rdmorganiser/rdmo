@@ -5,26 +5,31 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { Input } from 'rdmo/core/assets/js/components/forms'
 
-import { clearProjectErrors, updateProjectIntegration } from '../../../actions/projectActions'
+import {
+  clearProjectErrors,
+  createProjectIntegration,
+  updateProjectIntegration
+} from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
-const IntegrationUpdateModal = ({ show, onClose, integration }) => {
+const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
   const dispatch = useDispatch()
   const providers = useSelector((state) => state.project.providers) ?? {}
-  const isSubmitting = useSelector((state) => state.pending.items.includes('updateProjectIntegration'))
   const errors = useFieldErrors()
 
   const [optionValues, setOptionValues] = useState({})
   const [replaceSecrets, setReplaceSecrets] = useState({})
 
-  const provider = providers[integration?.provider_key]
-  const formId = `update-integration-${integration?.id}`
+  const isEdit = !!(integration && integration.id)
+  const currentProviderKey = integration?.provider_key ?? providerKey
+  const provider = providers[currentProviderKey]
+  const formId = isEdit ? 'update-integration-form' : 'create-integration-form'
 
   useEffect(() => {
     if (show && provider) {
       setOptionValues(Object.fromEntries(
         provider.fields.map((field) => {
-          const option = integration.options.find((item) => item.key === field.key)
+          const option = integration?.options.find((item) => item.key === field.key)
           return [field.key, option?.secret ? '' : option?.value ?? '']
         })
       ))
@@ -33,35 +38,11 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
     }
   }, [show, integration, provider, dispatch])
 
-  const hasStoredSecret = (key) => integration?.options.some(
+  const hasStoredSecret = (key) => isEdit && integration.options.some(
     (option) => option.key === key && option.secret && option.configured
   )
 
-  const hasChanges = provider?.fields.some((field) => {
-    if (field.secret && hasStoredSecret(field.key)) {
-      return replaceSecrets[field.key] ?? false
-    }
-
-    const option = integration?.options.find((item) => item.key === field.key)
-    const initialValue = option?.value?.trim() ?? ''
-    const currentValue = optionValues[field.key]?.trim() ?? ''
-    return currentValue !== initialValue
-  }) ?? false
-
-  const requiredFieldsComplete = provider?.fields.every((field) => {
-    const valueEntered = !!optionValues[field.key]?.trim()
-
-    if (field.secret && hasStoredSecret(field.key)) {
-      if (!replaceSecrets[field.key] || !field.required) {
-        return true
-      }
-      return valueEntered
-    }
-
-    return field.required ? valueEntered : true
-  }) ?? false
-
-  const handleOptionChange = (key, value) => {
+  const setField = (key, value) => {
     setOptionValues((currentValues) => ({
       ...currentValues,
       [key]: value
@@ -73,18 +54,11 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
       ...currentValues,
       [key]: replace
     }))
-    setOptionValues((currentValues) => ({
-      ...currentValues,
-      [key]: ''
-    }))
+    setField(key, '')
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
-    if (!provider || !requiredFieldsComplete || !hasChanges || isSubmitting) {
-      return
-    }
 
     const options = provider.fields
       .filter((field) => {
@@ -98,31 +72,31 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
         value: optionValues[field.key]
       }))
 
+    const data = {
+      provider_key: currentProviderKey,
+      options
+    }
+
     try {
-      await dispatch(updateProjectIntegration(integration.id, {
-        provider_key: integration.provider_key,
-        options
-      }))
+      if (isEdit) {
+        await dispatch(updateProjectIntegration(integration.id, data))
+      } else {
+        await dispatch(createProjectIntegration(data))
+      }
       onClose()
     } catch {
-      // Keep the modal open so errors can be corrected and submitted again.
+      // keep modal open; errors are shown via useFieldErrors
     }
   }
 
   return (
     <Modal
-      title={gettext('Update integration')}
+      title={isEdit ? gettext('Update integration') : provider?.add_label ?? gettext('Add integration')}
       show={show}
       onClose={onClose}
-      onSubmit={() => { }}
-      submitLabel={gettext('Update integration')}
-      submitProps={
-        {
-          type: 'submit',
-          form: formId,
-          disabled: !requiredFieldsComplete || !hasChanges || isSubmitting
-        }
-      }
+      onSubmit={() => { }} // render the Modal's submit button
+      submitLabel={isEdit ? gettext('Update integration') : gettext('Add integration')}
+      submitProps={{ type: 'submit', form: formId }}
       size="modal-lg"
     >
       <form id={formId} onSubmit={handleSubmit}>
@@ -132,7 +106,7 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
           provider?.fields.map((field) => {
             const storedSecret = field.secret && hasStoredSecret(field.key)
             const replaceSecret = replaceSecrets[field.key] ?? false
-            const switchId = `replace-integration-${integration.id}-${field.key}`
+            const switchId = `replace-integration-${integration?.id}-${field.key}`
 
             return (
               <div key={field.key}>
@@ -178,7 +152,8 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
                         ) : field.help
                       }
                       value={optionValues[field.key] ?? ''}
-                      onChange={(value) => handleOptionChange(field.key, value)}
+                      onChange={(value) => setField(field.key, value)}
+                      errors={errors[field.key]}
                     />
                   )
                 }
@@ -188,7 +163,7 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
         }
 
         {
-          errors.non_field_errors?.map((error, index) => (
+          [...(errors.options ?? []), ...(errors.non_field_errors ?? [])].map((error, index) => (
             <div key={index} className="text-danger mt-1">{error}</div>
           ))
         }
@@ -197,10 +172,11 @@ const IntegrationUpdateModal = ({ show, onClose, integration }) => {
   )
 }
 
-IntegrationUpdateModal.propTypes = {
+IntegrationModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  integration: PropTypes.object.isRequired
+  providerKey: PropTypes.string,
+  integration: PropTypes.object
 }
 
-export default IntegrationUpdateModal
+export default IntegrationModal
