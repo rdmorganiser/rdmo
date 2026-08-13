@@ -42,8 +42,8 @@ const IntegrationDeleteModal = ({ show, onClose, integration }) => {
       <Html
         html={
           interpolate(
-            gettext('You are about to permanently delete the <b>%s</b> integration <b>#%s</b>.'),
-            [integration.provider?.label ?? integration.provider_key, integration.id]
+            gettext('You are about to permanently delete the <b>%s</b> integration.'),
+            [integration.title]
           )
         }
       />

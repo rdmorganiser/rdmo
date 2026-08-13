@@ -66,7 +66,7 @@ const Integrations = () => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th style={{ width: '15%' }}>{gettext('Provider')}</th>
+                      <th style={{ width: '15%' }}>{gettext('Title')}</th>
                       <th style={{ width: '45%' }}>{gettext('Description')}</th>
                       <th style={{ width: '30%' }}>{gettext('Options')}</th>
                       <th style={{ width: '10%' }}>
@@ -79,10 +79,7 @@ const Integrations = () => {
                       visibleIntegrations.map((integration) => (
                         <tr key={integration.id}>
                           <td>
-                            {integration.provider.label}
-                            <div className="small text-muted">
-                              {interpolate(gettext('Integration #%s'), [integration.id])}
-                            </div>
+                            {integration.title}
                           </td>
                           <td>{integration.provider.description}</td>
                           <td>

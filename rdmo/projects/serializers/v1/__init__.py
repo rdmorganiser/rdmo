@@ -439,6 +439,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         model = Integration
         fields = (
             'id',
+            'title',
             'provider_key',
             'provider',
             'options'
@@ -452,14 +453,28 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         project = validated_data.get('project')
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
-        integration = Integration(project=project, provider_key=provider_key)
+        integration = Integration(project=project, title=validated_data.get('title'), provider_key=provider_key)
         integration.save()
         integration.save_options(options)
 
         return integration
 
+    def validate_title(self, title):
+        integrations = self.context['view'].project.integrations.filter(title=title)
+
+        if self.instance:
+            integrations = integrations.exclude(pk=self.instance.pk)
+
+        if integrations.exists():
+            raise serializers.ValidationError(_('An integration with this title already exists.'))
+
+        return title
+
     def update(self, integration, validated_data):
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
+
+        integration.title = validated_data.get('title')
+        integration.save(update_fields=('title', ))
 
         for field in integration.provider.fields:
             key = field.get('key')
@@ -788,6 +803,7 @@ class IntegrationSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'project',
+            'title',
             'provider_key',
             'provider',
             'options'

@@ -17,6 +17,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
   const providers = useSelector((state) => state.project.providers) ?? {}
   const errors = useFieldErrors()
 
+  const [title, setTitle] = useState('')
   const [optionValues, setOptionValues] = useState({})
   const [replaceSecrets, setReplaceSecrets] = useState({})
 
@@ -27,6 +28,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
 
   useEffect(() => {
     if (show && provider) {
+      setTitle(integration?.title ?? provider.label)
       setOptionValues(Object.fromEntries(
         provider.fields.map((field) => {
           const option = integration?.options.find((item) => item.key === field.key)
@@ -73,6 +75,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
       }))
 
     const data = {
+      title,
       provider_key: currentProviderKey,
       options
     }
@@ -101,6 +104,15 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
     >
       <form id={formId} onSubmit={handleSubmit}>
         <p className="text-muted">{provider?.description}</p>
+
+        <Input
+          type="text"
+          className="mb-3"
+          label={`${gettext('Title')} *`}
+          value={title}
+          onChange={setTitle}
+          errors={errors.title}
+        />
 
         {
           provider?.fields.map((field) => {
