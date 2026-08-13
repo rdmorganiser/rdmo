@@ -69,42 +69,41 @@ const ProjectForm = ({
   const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
 
   const isProjectCatalogAvailable = mode !== 'edit' || availableCatalogs.some(
-    catalog => catalog.id === formData.catalog
+    catalog => catalog.id === project.catalog
   )
+  const [unavailableCatalog] = useState(() => isProjectCatalogAvailable ? null : {
+    id: project.catalog,
+    title: project.catalog_title,
+    help: project.catalog_help
+  })
 
   const catalogOptions = (
-    isProjectCatalogAvailable ? availableCatalogs : [
-      {
-        id: project.catalog,
-        title: project.catalog_title,
-        help: project.catalog_help
-      },
-      ...availableCatalogs
-    ]
-  ).map(catalog => ({
-    value: catalog.id,
-    label: (
-      <span
-        className={
-          !isProjectCatalogAvailable && catalog.id === project.catalog ? 'text-muted' : ''
-        }
-      >
-        {catalog.title}{' '}
-        <Tooltip
-          title={catalog.help || gettext('No help available for this catalog.')}
-          placement="right"
-        >
-          <i
-            className="bi bi-info-circle ms-2"
-            tabIndex={0}
-            role="img"
-            aria-label={gettext('Catalog help')}
-            style={{ cursor: 'help' }}
-          />
-        </Tooltip>
-      </span>
-    )
-  }))
+    unavailableCatalog ? [unavailableCatalog, ...availableCatalogs] : availableCatalogs
+  ).map(catalog => {
+    const isDisabled = catalog.id === unavailableCatalog?.id
+
+    return {
+      value: catalog.id,
+      isDisabled,
+      label: (
+        <span className={isDisabled ? 'text-muted' : ''}>
+          {catalog.title}{' '}
+          <Tooltip
+            title={catalog.help || gettext('No help available for this catalog.')}
+            placement="right"
+          >
+            <i
+              className="bi bi-info-circle ms-2"
+              tabIndex={0}
+              role="img"
+              aria-label={gettext('Catalog help')}
+              style={{ cursor: 'help' }}
+            />
+          </Tooltip>
+        </span>
+      )
+    }
+  })
 
   const saveProject = (currentFormData) => {
     if (mode === 'create') {
@@ -124,7 +123,7 @@ const ProjectForm = ({
       delete payload.parent
     }
 
-    if (!isProjectCatalogAvailable) {
+    if (!isProjectCatalogAvailable && currentFormData.catalog === project.catalog) {
       delete payload.catalog
     }
 
@@ -257,7 +256,7 @@ const ProjectForm = ({
                   value={opt.value}
                   checked={formData.catalog === opt.value}
                   onChange={(e) => handleChange('catalog', Number(e.target.value))}
-                  disabled={disabled}
+                  disabled={disabled || opt.isDisabled}
                 />
                 <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
                   {opt.label}
