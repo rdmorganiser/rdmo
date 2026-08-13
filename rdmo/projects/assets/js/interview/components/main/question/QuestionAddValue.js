@@ -13,9 +13,6 @@ const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
       set_index: currentSet.set_index,
       set_collection: question.set_collection,
       collection_index: collectionIndex,
-      text: question.default_text,
-      option: question.default_option,
-      external_id: question.default_external_id,
       unit: question.unit,
       value_type: question.value_type
     })
