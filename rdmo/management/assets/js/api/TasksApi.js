@@ -26,8 +26,8 @@ class TasksApi extends BaseApi {
     return this.patch(`/api/v1/tasks/tasks/${task.id}/`, task)
   }
 
-  static toggleTaskSite(catalog) {
-    return this.post(`/api/v1/tasks/tasks/${catalog.id}/toggle-site/`, {})
+  static toggleTaskSite(task) {
+    return this.post(`/api/v1/tasks/tasks/${task.id}/toggle-site/`, {})
   }
 
   static deleteTask(task) {

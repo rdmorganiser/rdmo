@@ -27,7 +27,7 @@ const Task = ({ config, task, elementActions, filter=false, filterSites=false, f
   const toggleAvailable = () => elementActions.patchElement('tasks', { id: task.id, available: !task.available })
   const toggleLocked = () => elementActions.patchElement('tasks', { id: task.id, locked: !task.locked })
 
-  const toggleCurrentSite = () => elementActions.toggleElementSite('tasks', task, 'toggle-site')
+  const toggleCurrentSite = () => elementActions.toggleElementSite('tasks', task)
 
   const fetchCondition = (index) => elementActions.fetchElement('conditions', task.conditions[index])
 

@@ -24,7 +24,7 @@ const View = ({ config, view, elementActions, filter=false, filterSites=false, f
   const toggleAvailable = () => elementActions.patchElement('views', { id: view.id, available: !view.available })
   const toggleLocked = () => elementActions.patchElement('views', { id: view.id, locked: !view.locked })
 
-  const toggleCurrentSite = () => elementActions.toggleElementSite('views', view, 'toggle-site')
+  const toggleCurrentSite = () => elementActions.toggleElementSite('views', view)
 
   return showElement && (
     <li className="list-group-item">
