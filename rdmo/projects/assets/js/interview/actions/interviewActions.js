@@ -193,7 +193,7 @@ export function fetchValues(page, refresh = false) {
         const values = refresh ? (
           // if the values are just refreshed after a value is stores or deleted, loop
           // over the existing values and inject the fetched values, keeping unsaved values
-          getState().interview.values.filter(value => !isNil(value.id)).map(value => {
+          getState().interview.values.map(value => {
             const fetchedValue = fetchedValues.find(v => compareValues(v, value))
             return isNil(fetchedValue) ? value : fetchedValue
           })
