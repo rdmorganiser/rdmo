@@ -12,6 +12,8 @@ import {
 } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
+import IntegrationSecretField from './IntegrationSecretField'
+
 const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
   const dispatch = useDispatch()
   const providers = useSelector((state) => state.project.providers) ?? {}
@@ -19,7 +21,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
 
   const [title, setTitle] = useState('')
   const [optionValues, setOptionValues] = useState({})
-  const [replaceSecrets, setReplaceSecrets] = useState({})
+  const [secretActions, setSecretActions] = useState({})
 
   const isEdit = !!(integration && integration.id)
   const currentProviderKey = integration?.provider_key ?? providerKey
@@ -35,7 +37,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
           return [field.key, option?.secret ? '' : option?.value ?? '']
         })
       ))
-      setReplaceSecrets({})
+      setSecretActions({})
       dispatch(clearProjectErrors())
     }
   }, [show, integration, provider, dispatch])
@@ -45,16 +47,16 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
   )
 
   const setField = (key, value) => {
-    setOptionValues((currentValues) => ({
-      ...currentValues,
+    setOptionValues(prev => ({
+      ...prev,
       [key]: value
     }))
   }
 
-  const handleReplaceSecretChange = (key, replace) => {
-    setReplaceSecrets((currentValues) => ({
-      ...currentValues,
-      [key]: replace
+  const setSecretAction = (key, action) => {
+    setSecretActions(prev => ({
+      ...prev,
+      [key]: action
     }))
     setField(key, '')
   }
@@ -65,13 +67,13 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
     const options = provider.fields
       .filter((field) => {
         if (field.secret && hasStoredSecret(field.key)) {
-          return replaceSecrets[field.key]
+          return ['replace', 'remove'].includes(secretActions[field.key])
         }
         return field.required || optionValues[field.key]?.trim()
       })
       .map((field) => ({
         key: field.key,
-        value: optionValues[field.key]
+        value: field.secret && secretActions[field.key] === 'remove' ? '' : optionValues[field.key]
       }))
 
     const data = {
@@ -118,59 +120,36 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
         {
           provider?.fields.map((field) => {
             const storedSecret = field.secret && hasStoredSecret(field.key)
-            const replaceSecret = replaceSecrets[field.key] ?? false
-            const switchId = `replace-integration-${integration?.id}-${field.key}`
+
+            if (field.secret) {
+              return (
+                <IntegrationSecretField
+                  key={field.key}
+                  show={show}
+                  formId={formId}
+                  field={field}
+                  configured={storedSecret}
+                  value={optionValues[field.key] ?? ''}
+                  action={secretActions[field.key] ?? 'keep'}
+                  errors={errors[field.key]}
+                  onChange={(value) => setField(field.key, value)}
+                  onActionChange={(action) => setSecretAction(field.key, action)}
+                />
+              )
+            }
 
             return (
-              <div key={field.key}>
-                {
-                  storedSecret && (
-                    <>
-                      <div className="mb-2">
-                        {gettext('Current secret:')} <span aria-hidden="true">••••••••</span>
-                        <span className="visually-hidden">{gettext('Secret is configured')}</span>
-                      </div>
-                      <div className="form-check form-switch mb-3">
-                        <input
-                          id={switchId}
-                          type="checkbox"
-                          className="form-check-input"
-                          checked={replaceSecret}
-                          onChange={(event) => handleReplaceSecretChange(field.key, event.target.checked)}
-                        />
-                        <label className="form-check-label" htmlFor={switchId}>
-                          {gettext('Change or remove current secret')}
-                        </label>
-                      </div>
-                    </>
-                  )
-                }
-
-                {
-                  (!storedSecret || replaceSecret) && (
-                    <Input
-                      type={field.secret ? 'password' : 'text'}
-                      className="mb-3"
-                      label={
-                        `${storedSecret ? interpolate(gettext('New %s'), [field.title]) : field.title}` +
-                        `${field.required ? ' *' : ''}`
-                      }
-                      placeholder={field.placeholder}
-                      help={
-                        storedSecret && !field.required ? (
-                          <>
-                            {field.help && <>{field.help}<br /></>}
-                            {gettext('Leave this field blank to remove the current secret.')}
-                          </>
-                        ) : field.help
-                      }
-                      value={optionValues[field.key] ?? ''}
-                      onChange={(value) => setField(field.key, value)}
-                      errors={errors[field.key]}
-                    />
-                  )
-                }
-              </div>
+              <Input
+                key={field.key}
+                type="text"
+                className="mb-3"
+                label={`${field.title}${field.required ? ' *' : ''}`}
+                placeholder={field.placeholder}
+                help={field.help}
+                value={optionValues[field.key] ?? ''}
+                onChange={(value) => setField(field.key, value)}
+                errors={errors[field.key]}
+              />
             )
           })
         }

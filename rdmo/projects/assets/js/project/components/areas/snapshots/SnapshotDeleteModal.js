@@ -11,9 +11,9 @@ import { useFieldErrors } from '../../../hooks/useFieldErrors'
 const SnapshotDeleteModal = ({ show, onClose, snapshot }) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      dispatch(deleteSnapshot(snapshot.id))
+      await dispatch(deleteSnapshot(snapshot.id))
       onClose()
     } catch {
       // keep modal open; errors are shown via useFieldErrors

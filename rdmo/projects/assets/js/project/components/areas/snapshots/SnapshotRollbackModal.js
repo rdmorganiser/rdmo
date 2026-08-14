@@ -11,9 +11,9 @@ import { useFieldErrors } from '../../../hooks/useFieldErrors'
 const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      dispatch(rollbackSnapshot(snapshot.id))
+      await dispatch(rollbackSnapshot(snapshot.id))
       onClose()
     } catch {
       // keep modal open; errors are shown via useFieldErrors
