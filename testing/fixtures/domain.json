@@ -1892,5 +1892,95 @@
       "level": 1,
       "editors": []
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 141,
+    "fields": {
+      "uri": "http://example.com/terms/domain/defaults",
+      "uri_prefix": "http://example.com/terms",
+      "key": "defaults",
+      "path": "defaults",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 10,
+      "tree_id": 11,
+      "level": 0,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 142,
+    "fields": {
+      "uri": "http://example.com/terms/domain/defaults/collections",
+      "uri_prefix": "http://example.com/terms",
+      "key": "collections",
+      "path": "defaults/collections",
+      "comment": "",
+      "locked": false,
+      "parent": 141,
+      "lft": 2,
+      "rght": 9,
+      "tree_id": 11,
+      "level": 1,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 143,
+    "fields": {
+      "uri": "http://example.com/terms/domain/defaults/collections/text",
+      "uri_prefix": "http://example.com/terms",
+      "key": "text",
+      "path": "defaults/collections/text",
+      "comment": "",
+      "locked": false,
+      "parent": 142,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 11,
+      "level": 2,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 144,
+    "fields": {
+      "uri": "http://example.com/terms/domain/defaults/collections/select",
+      "uri_prefix": "http://example.com/terms",
+      "key": "select",
+      "path": "defaults/collections/select",
+      "comment": "",
+      "locked": false,
+      "parent": 142,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 11,
+      "level": 2,
+      "editors": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 145,
+    "fields": {
+      "uri": "http://example.com/terms/domain/defaults/collections/select_creatable",
+      "uri_prefix": "http://example.com/terms",
+      "key": "select_creatable",
+      "path": "defaults/collections/select_creatable",
+      "comment": "",
+      "locked": false,
+      "parent": 142,
+      "lft": 7,
+      "rght": 8,
+      "tree_id": 11,
+      "level": 2,
+      "editors": []
+    }
   }
 ]

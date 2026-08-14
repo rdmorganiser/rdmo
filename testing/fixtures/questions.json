@@ -2568,6 +2568,43 @@
     }
   },
   {
+    "model": "questions.page",
+    "pk": 113,
+    "fields": {
+      "created": "2025-06-05T08:20:00.000Z",
+      "updated": "2025-06-05T08:20:00.000Z",
+      "uri": "http://example.com/terms/questions/catalog/collections/defaults",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/collections/defaults",
+      "comment": "",
+      "locked": false,
+      "attribute": null,
+      "is_collection": false,
+      "title_lang1": "Defaults",
+      "title_lang2": "Vorgabewerte",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "short_title_lang1": "",
+      "short_title_lang2": "",
+      "short_title_lang3": "",
+      "short_title_lang4": "",
+      "short_title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "editors": [],
+      "conditions": []
+    }
+  },
+  {
     "model": "questions.pagequestion",
     "pk": 1,
     "fields": {
@@ -3420,6 +3457,33 @@
       "page": 98,
       "question": 110,
       "order": 0
+    }
+  },
+  {
+    "model": "questions.pagequestion",
+    "pk": 99,
+    "fields": {
+      "page": 113,
+      "question": 128,
+      "order": 0
+    }
+  },
+  {
+    "model": "questions.pagequestion",
+    "pk": 100,
+    "fields": {
+      "page": 113,
+      "question": 129,
+      "order": 1
+    }
+  },
+  {
+    "model": "questions.pagequestion",
+    "pk": 101,
+    "fields": {
+      "page": 113,
+      "question": 130,
+      "order": 2
     }
   },
   {
@@ -8782,6 +8846,154 @@
     }
   },
   {
+    "model": "questions.question",
+    "pk": 128,
+    "fields": {
+      "created": "2025-06-05T08:20:00.000Z",
+      "updated": "2025-06-05T08:20:00.000Z",
+      "uri": "http://example.com/terms/questions/catalog/collections/defaults/text",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/collections/defaults/text",
+      "comment": "",
+      "locked": false,
+      "attribute": 143,
+      "is_collection": true,
+      "is_optional": false,
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "text_lang1": "Text default?",
+      "text_lang2": "Textvorgabewert?",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "default_text_lang1": "Default text",
+      "default_text_lang2": "Standardtext",
+      "default_text_lang3": "",
+      "default_text_lang4": "",
+      "default_text_lang5": "",
+      "default_option": null,
+      "default_external_id": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "widget_type": "text",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": null,
+      "editors": [],
+      "optionsets": [],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 129,
+    "fields": {
+      "created": "2025-06-05T08:20:00.000Z",
+      "updated": "2025-06-05T08:20:00.000Z",
+      "uri": "http://example.com/terms/questions/catalog/collections/defaults/select",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/collections/defaults/select",
+      "comment": "",
+      "locked": false,
+      "attribute": 144,
+      "is_collection": true,
+      "is_optional": false,
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "text_lang1": "Select default?",
+      "text_lang2": "Auswahlvorgabewert?",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "default_text_lang1": "",
+      "default_text_lang2": "",
+      "default_text_lang3": "",
+      "default_text_lang4": "",
+      "default_text_lang5": "",
+      "default_option": 1,
+      "default_external_id": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "widget_type": "select",
+      "value_type": "option",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": null,
+      "editors": [],
+      "optionsets": [
+        1
+      ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 130,
+    "fields": {
+      "created": "2025-06-05T08:20:00.000Z",
+      "updated": "2025-06-05T08:20:00.000Z",
+      "uri": "http://example.com/terms/questions/catalog/collections/defaults/select_creatable",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/collections/defaults/select_creatable",
+      "comment": "",
+      "locked": false,
+      "attribute": 145,
+      "is_collection": true,
+      "is_optional": false,
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "text_lang1": "Select-creatable default?",
+      "text_lang2": "Auswahlvorgabewert?",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "default_text_lang1": "",
+      "default_text_lang2": "",
+      "default_text_lang3": "",
+      "default_text_lang4": "",
+      "default_text_lang5": "",
+      "default_option": null,
+      "default_external_id": "simple_1",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "widget_type": "select_creatable",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": null,
+      "editors": [],
+      "optionsets": [
+        4
+      ],
+      "conditions": []
+    }
+  },
+  {
     "model": "questions.questionset",
     "pk": 89,
     "fields": {
@@ -10195,6 +10407,15 @@
       "section": 5,
       "page": 112,
       "order": 16
+    }
+  },
+  {
+    "model": "questions.sectionpage",
+    "pk": 64,
+    "fields": {
+      "section": 6,
+      "page": 113,
+      "order": 31
     }
   }
 ]

@@ -72,6 +72,31 @@ def test_detail_order_in_page(db, client):
     assert question_ids == ordered_page_question_ids.get(ordered_page)
 
 
+def test_detail_defaults(db, client):
+    client.login(username='owner', password='owner')
+
+    url = reverse(urlnames['detail'], args=[1, 113])
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert {
+        question['uri']: (
+            question['is_collection'],
+            question['default_text'],
+            question['default_option'],
+            question['default_external_id'],
+        )
+        for question in response.json()['elements']
+    } == {
+        'http://example.com/terms/questions/catalog/collections/defaults/text':
+            (True, 'Default text', None, ''),
+        'http://example.com/terms/questions/catalog/collections/defaults/select':
+            (True, '', 1, ''),
+        'http://example.com/terms/questions/catalog/collections/defaults/select_creatable':
+            (True, '', None, 'simple_1'),
+    }
+
+
 def test_detail_page_with_nested_questionsets(db, client):
     project_id = 1
     username = 'owner'
