@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 import rules
-from rules.predicates import is_superuser
 
 
 @rules.predicate
@@ -76,11 +75,8 @@ def is_visible(user, project):
 
 @rules.predicate
 def is_site_manager(user, project):
-    return user.is_authenticated and user.role.is_site_manager
+    return user.is_authenticated and user.role.manager.filter(id=project.site.id).exists()
 
-
-# Add rule for check in template
-rules.add_rule('projects.can_view_all_projects', is_site_manager | is_superuser)
 
 rules.add_perm('projects.add_project', can_add_project)
 rules.add_perm('projects.view_project_object', is_project_member | is_visible | is_site_manager)
@@ -91,7 +87,7 @@ rules.add_perm('projects.leave_project_object', is_current_project_member & ~is_
 rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.import_project_object', is_project_owner | is_project_manager | is_site_manager)
 
-rules.add_perm('projects.view_visibility_object', is_site_manager)
+rules.add_perm('projects.view_visibility_object', is_project_member | is_visible | is_site_manager)
 rules.add_perm('projects.add_visibility_object', is_site_manager)
 rules.add_perm('projects.change_visibility_object', is_site_manager)
 rules.add_perm('projects.delete_visibility_object', is_site_manager)
