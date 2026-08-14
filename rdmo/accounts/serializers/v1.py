@@ -68,6 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
     groups = UserGroupSerializer(many=True)
     role = UserRoleSerializer()
     memberships = UserMembershipSerializer(many=True)
+    permissions = serializers.SerializerMethodField()
 
     is_site_manager = serializers.BooleanField(source='role.is_site_manager')
 
@@ -78,6 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
             'groups',
             'role',
             'memberships',
+            'permissions',
             'is_superuser',
             'is_staff',
             'is_site_manager'
@@ -91,6 +93,12 @@ class UserSerializer(serializers.ModelSerializer):
                 'last_login',
                 'date_joined',
             ]
+
+    def get_permissions(self, obj) -> dict[str, bool]:
+        return {
+            'can_change_visibility': obj.has_perm('projects.change_visibility'),
+        }
+
 
 class UserLookupSerializer(serializers.Serializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
