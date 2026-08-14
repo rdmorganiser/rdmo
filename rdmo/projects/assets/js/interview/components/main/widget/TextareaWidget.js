@@ -58,6 +58,7 @@ const TextareaWidget = ({ page, question, sets, values, siblings, currentSet, di
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
+        updateValue={updateValue}
       />
       <QuestionCopyValues
         question={question}

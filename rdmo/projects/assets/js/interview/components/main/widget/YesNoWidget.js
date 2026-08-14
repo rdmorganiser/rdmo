@@ -60,6 +60,7 @@ const YesNoWidget = ({ page, question, sets, values, siblings, currentSet, disab
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
+        updateValue={updateValue}
       />
       <QuestionCopyValues
         question={question}
