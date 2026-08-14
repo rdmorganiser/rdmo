@@ -182,7 +182,7 @@ export function fetchOptionsError(error) {
   return {type: FETCH_OPTIONS_ERROR, error}
 }
 
-export function fetchValues(page, refresh = false) {
+export function fetchValues(page, refresh = false, rejectOnError = false) {
   const pendingId = `fetchValues/${page.id}`
 
   return (dispatch, getState) => {
@@ -214,6 +214,9 @@ export function fetchValues(page, refresh = false) {
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
         dispatch(fetchValuesError(error))
+        if (rejectOnError) {
+          throw error
+        }
       })
   }
 }
@@ -293,7 +296,7 @@ export function resolveConditionsError(error) {
   return {type: RESOLVE_CONDITIONS_ERROR, error}
 }
 
-export function storeValue(value) {
+export function storeValue(value, rejectOnError = false) {
   const valueId = value.id || value.tmp_id
   if (isNil(valueId)) {
     throw new Error('Could not determine valueId in storeValue')
@@ -318,55 +321,65 @@ export function storeValue(value) {
       dispatch(addToPending(pendingId))
       dispatch(storeValueInit(valueId))
 
+      const handleSuccess = (value, refreshValues = true) => {
+        // set the success flag and start the timeout to remove it. the flag is actually
+        // the stored timeout, so we can cancel any old timeout before starting the a new
+        // one in order to prolong the time the indicator is show with each save
+        clearTimeout(valueSuccess)
+        value.success = setTimeout(() => {
+          dispatch(updateValue(value, {success: false}, false))
+        }, 1000)
+
+        // replace the text with the old text if it was trimmed by the backend
+        // (but not if a new text was inserted, e.g. by an optionset provider)
+        if (valueText.trim() == value.text) {
+          value.text = valueText
+        }
+
+        dispatch(removeFromPending(pendingId))
+        dispatch(storeValueSuccess(value, valueId))
+
+        if (refreshValues) {
+          if (refresh) {
+            // Refresh after storing the value, so the response replaces the temporary value.
+            const promise = dispatch(fetchValues(page, true, rejectOnError))
+            return rejectOnError ? promise : null
+          } else {
+            dispatch(resolveConditions(page, sets))
+          }
+        }
+      }
+
       return ValueApi.storeValue(projectId, { ...value, widget_type })
         .then((value) => {
 
           dispatch(fetchNavigation(page))
           dispatch(updateProgress())
 
-          if (refresh) {
-            // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues. Preserve unsaved values,
-            // since they are not included in the response from the backend.
-            dispatch(fetchValues(page, true))
-          } else {
-            dispatch(resolveConditions(page, sets))
-          }
-
-          // set the success flag and start the timeout to remove it. the flag is actually
-          // the stored timeout, so we can cancel any old timeout before starting the a new
-          // one in order to prolong the time the indicator is show with each save
-          clearTimeout(valueSuccess)
-          value.success = setTimeout(() => {
-            dispatch(updateValue(value, {success: false}, false))
-          }, 1000)
-
-          // replace the text with the old text if it was trimmed by the backend
-          // (but not if a new text was inserted, e.g. by an optionset provider)
-          if (valueText.trim() == value.text) {
-            value.text = valueText
-          }
-
           // check if there is a file or if a filename is set (when the file was just erased)
           if (isNil(valueFile) && isNil(value.file_name)) {
-            dispatch(removeFromPending(pendingId))
-            dispatch(storeValueSuccess(value, valueId))
+            return handleSuccess(value)
           } else {
             // upload file after the value is created
+            if (refresh) {
+              dispatch(fetchValues(page, true))
+            } else {
+              dispatch(resolveConditions(page, sets))
+            }
+
             return ValueApi.storeFile(projectId, value, valueFile)
-              .then((value) => {
-                dispatch(removeFromPending(pendingId))
-                dispatch(storeValueSuccess(value, valueId))
-              })
+              .then((value) => handleSuccess(value, false))
               .catch((error) => {
                 dispatch(removeFromPending(pendingId))
                 dispatch(storeValueError(error, valueId))
               })
           }
-        })
-        .catch((error) => {
+        }, (error) => {
           dispatch(removeFromPending(pendingId))
           dispatch(storeValueError(error, valueId))
+          if (rejectOnError) {
+            throw error
+          }
         })
     }
   }
@@ -384,16 +397,29 @@ export function storeValueError(error, valueId) {
   return {type: STORE_VALUE_ERROR, error, valueId}
 }
 
-export function createValue(attrs, store) {
+export function createValue(attrs) {
   const value = ValueFactory.create(attrs)
 
   // focus the new value
   value.focus = true
 
-  if (isNil(store)) {
-    return {type: CREATE_VALUE, value}
-  } else {
-    return storeValue(value)
+  return (dispatch, getState) => {
+    const { page, values } = getState().interview
+    const defaultValue = gatherDefaultValues(page, values).find((defaultValue) => (
+      defaultValue.attribute === value.attribute &&
+      defaultValue.set_prefix === value.set_prefix &&
+      defaultValue.set_index === value.set_index
+    ))
+
+    if (isNil(defaultValue)) {
+      return dispatch({type: CREATE_VALUE, value})
+    } else if (defaultValue.pending) {
+      return dispatch({type: NOOP})
+    } else {
+      return dispatch(storeValue(defaultValue, true))
+        .then(() => dispatch({type: CREATE_VALUE, value}))
+        .catch(() => null)
+    }
   }
 }
 
