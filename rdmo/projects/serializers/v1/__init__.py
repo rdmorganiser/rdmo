@@ -399,7 +399,8 @@ class ProjectMembershipHierarchySerializer(serializers.ModelSerializer):
 
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
     secret = serializers.SerializerMethodField()
-    value = serializers.CharField(allow_blank=True)
+    value = serializers.CharField(allow_blank=True, required=False)
+    remove = serializers.BooleanField(default=False, required=False, write_only=True)
 
     class Meta:
         model = IntegrationOption
@@ -407,7 +408,8 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
             'key',
             'title',
             'value',
-            'secret'
+            'secret',
+            'remove'
         )
 
     def get_secret(self, obj):
@@ -470,8 +472,24 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
         return title
 
+    def validate(self, data):
+        if self.instance:
+            secret_keys = {
+                field.get('key') for field in self.instance.provider.fields if field.get('secret', False)
+            }
+            for option in data.get('options', []):
+                if option.get('key') in secret_keys and not option.get('remove') and not option.get('value'):
+                    raise serializers.ValidationError({
+                        option.get('key'): _('This field may not be blank.')
+                    })
+
+        return data
+
     def update(self, integration, validated_data):
-        options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
+        options = {
+            option.get('key'): '' if option.get('remove', False) else option.get('value')
+            for option in validated_data.get('options', [])
+        }
 
         integration.title = validated_data.get('title')
         integration.save(update_fields=('title', ))

@@ -71,10 +71,17 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
         }
         return field.required || optionValues[field.key]?.trim()
       })
-      .map((field) => ({
-        key: field.key,
-        value: field.secret && secretActions[field.key] === 'remove' ? '' : optionValues[field.key]
-      }))
+      .map((field) => {
+        const option = { key: field.key }
+
+        if (field.secret && secretActions[field.key] === 'remove') {
+          option.remove = true
+        } else {
+          option.value = optionValues[field.key]
+        }
+
+        return option
+      })
 
     const data = {
       title,

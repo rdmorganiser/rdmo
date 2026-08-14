@@ -88,7 +88,6 @@ const IntegrationSecretField = ({
               value={value}
               onChange={onChange}
               errors={errors}
-              required={configured}
             />
             <div className="form-check mb-3">
               <input

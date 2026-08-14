@@ -68,7 +68,6 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
         <Input
           className="mt-2"
           label={gettext('Title')}
-          name="title"
           value={formData.title}
           onChange={(value) => setField('title', value)}
           errors={errors.title}
