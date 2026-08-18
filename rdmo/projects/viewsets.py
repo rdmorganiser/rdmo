@@ -964,8 +964,13 @@ class ValueViewSet(ReadOnlyModelViewSet):
         try:
             set_attribute = int(request.GET.get('set_attribute'))
             set_label_subquery = Subquery(
-                Value.objects.filter(attribute=set_attribute, set_prefix='', set_index=OuterRef('set_index'))
-                             .values('text')[:1]
+                Value.objects.filter(
+                    project_id=OuterRef('project_id'),
+                    attribute=set_attribute,
+                    set_prefix='',
+                    set_index=OuterRef('set_index')
+                )
+                .values('text')[:1]
             )
             queryset = queryset.annotate(set_label=set_label_subquery)
         except (ValueError, TypeError):
