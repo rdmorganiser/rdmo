@@ -25,7 +25,7 @@ const Question = ({ config, question, elementActions, display='list', indent=0,
 
   const fetchEdit = () => elementActions.fetchElement('questions', question.id)
   const fetchCopy = () => elementActions.fetchElement('questions', question.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('questions', {...question, locked: !question.locked })
+  const toggleLocked = () => elementActions.patchElement('questions', { id: question.id, locked: !question.locked })
 
   const fetchAttribute = () => elementActions.fetchElement('attributes', question.attribute)
   const fetchCondition = (index) => elementActions.fetchElement('conditions', question.conditions[index])

@@ -24,7 +24,7 @@ const OptionSet = ({ config, optionset, elementActions, display='list', filter=f
   const fetchEdit = () => elementActions.fetchElement('optionsets', optionset.id)
   const fetchCopy = () => elementActions.fetchElement('optionsets', optionset.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('optionsets', optionset.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('optionsets', {...optionset, locked: !optionset.locked })
+  const toggleLocked = () => elementActions.patchElement('optionsets', { id: optionset.id, locked: !optionset.locked })
 
   const createOption = () => elementActions.createElement('options', { optionset })
   const fetchCondition = (index) => elementActions.fetchElement('conditions', optionset.conditions[index])

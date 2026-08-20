@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 
 from django.core.exceptions import ValidationError
@@ -7,56 +9,70 @@ from rest_framework import serializers
 from ..validators import InstanceValidator
 
 
-def test_instance_validator():
+def test_empty():
     validator = InstanceValidator()
     assert validator.instance is None
-    assert validator.serializer is None
 
 
-def test_instance_validator_instance():
-    instance = object()
-    validator = InstanceValidator(instance)
-    assert validator.instance is instance
-    assert validator.serializer is None
-
-
-def test_instance_validator_serializer():
+def test_not_implemented():
     validator = InstanceValidator()
     serializer = serializers.Serializer()
 
-    validator({}, serializer)
-
-    assert validator.serializer == serializer
-    assert validator.serializer.instance is None
+    with pytest.raises(NotImplementedError):
+        validator({}, serializer)
 
 
-def test_instance_validator_serializer_instance():
+def test_get_instance():
+    instance = Mock()
+    validator = InstanceValidator(instance)
+    assert validator.instance is instance
+    assert validator.get_instance(None) is instance
+
+
+def test_get_instance_serializer():
     validator = InstanceValidator()
-    instance = object()
+    instance = Mock()
     serializer = serializers.Serializer(instance=instance)
-
-    validator({}, serializer)
-
-    assert validator.serializer == serializer
-    assert validator.serializer.instance == serializer.instance
+    assert validator.instance is None
+    assert validator.get_instance(serializer) is instance
 
 
-def test_instance_validator_validation_error():
+def test_get_instance_none():
+    validator = InstanceValidator()
+    assert validator.instance is None
+    assert validator.get_instance(None) is None
+
+
+def test_get_value_data():
+    validator = InstanceValidator()
+    data = {
+        'foo': 'bar'
+    }
+    assert validator.get_value(data, None, 'foo') == 'bar'
+
+
+def test_get_value_instance():
+    validator = InstanceValidator()
+    data = {}
+    instance = Mock()
+    instance.foo = 'baz'
+    assert validator.get_value(data, instance, 'foo') == 'baz'
+
+
+def test_get_value_data_instance():
+    validator = InstanceValidator()
+    data = {
+        'foo': 'bar'
+    }
+    instance = Mock()
+    instance.foo = 'baz'
+    assert validator.get_value(data, instance, 'foo') == 'bar'
+
+
+def test_raise_validation_error():
     validator = InstanceValidator()
 
     with pytest.raises(ValidationError):
-        validator.raise_validation_error({
-            'foo': 'bar'
-        })
-
-
-def test_instance_validator_validation_serializer_error():
-    validator = InstanceValidator()
-    serializer = serializers.Serializer()
-
-    validator({}, serializer)
-
-    with pytest.raises(serializers.ValidationError):
         validator.raise_validation_error({
             'foo': 'bar'
         })

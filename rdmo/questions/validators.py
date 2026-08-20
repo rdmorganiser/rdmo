@@ -38,7 +38,7 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
 class QuestionSetQuestionSetValidator(InstanceValidator):
 
     def __call__(self, data, serializer=None):
-        super().__call__(data, serializer)
+        instance = self.get_instance(serializer)
 
         questionsets = data.get('questionsets') or [
             questionset_questionset.get('questionset')
@@ -47,12 +47,12 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
         if not questionsets:
             return
 
-        if not self.serializer and not self.instance:
+        if not serializer and not instance:
             return
 
-        if self.serializer:
+        if serializer:
             # check copied attributes
-            view = self.serializer.context.get('view')
+            view = serializer.context.get('view')
             if view and view.action == 'copy':
                 # get the original from the view when cloning an attribute
                 obj = view.get_object()
@@ -61,19 +61,19 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
                         self.raise_validation_error({
                             'questionset': [_('A question set may not be cloned to be a child of itself or one of '
                                               'its descendants.')]
-                        })
-            if not self.instance:
+                        }, serializer)
+            if not instance:
                 return
 
         # only check updated attributes
-        if not self.instance:
+        if not instance:
             return
 
         for questionset in questionsets:
-            if self.instance in [questionset, *questionset.descendants]:
+            if instance in [questionset, *questionset.descendants]:
                 self.raise_validation_error({
                     'questionsets': [_('A question set may not be a child of itself or one of its descendants.')]
-                })
+                }, serializer)
 
 
 class CatalogLockedValidator(LockedValidator):

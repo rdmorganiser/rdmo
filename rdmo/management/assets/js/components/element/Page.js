@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -30,7 +30,7 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
   const fetchEdit = () => elementActions.fetchElement('pages', page.id)
   const fetchCopy = () => elementActions.fetchElement('pages', page.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('pages', page.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('pages', {...page, locked: !page.locked })
+  const toggleLocked = () => elementActions.patchElement('pages', { id: page.id, locked: !page.locked })
   const toggleElements = () => elementActions.toggleElements(page)
 
   const createQuestionSet = () => elementActions.createElement('questionsets', { page })
@@ -118,6 +118,10 @@ const Page = ({ config, page, configActions, elementActions, display='list', ind
                 </div>
               </Drop>
             )
+          }
+          {
+            !isEmpty(page.elements) &&
+            <Drop element={page.elements[0]} elementActions={elementActions} indent={indent + 1} mode="before" />
           }
           {
             showElements && page.elements.map((element, index) => {
