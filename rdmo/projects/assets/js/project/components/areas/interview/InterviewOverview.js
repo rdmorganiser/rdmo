@@ -1,16 +1,16 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import { navigateDashboard } from '../../../actions/navigationActions'
+import Link from '../../helper/Link'
 
 const InterviewOverview = () => {
-  const dispatch = useDispatch()
-
-  const { navigation } = useSelector((state) => state.project) ?? {}
+  const { navigation } = useSelector((state) => state.project)
 
   return navigation && (
     <div className="project-interview-overview">
+      <h2>{gettext('Interview')}</h2>
+
       {
         navigation.map((section) => (
           <div key={section.id} className="card card-tile mb-4 rounded-3">
@@ -24,12 +24,9 @@ const InterviewOverview = () => {
                         {
                           section.pages.map((page) => (
                             <li key={page.id}>
-                              <button
-                                className="link"
-                                onClick={() => dispatch(navigateDashboard({area: 'interview', pageId: page.id}))}
-                              >
+                              <Link location={{area: 'interview', pageId: page.id}}>
                                 {page.title}
-                              </button>
+                              </Link>
                             </li>
                           ))
                         }
