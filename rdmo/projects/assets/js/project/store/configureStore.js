@@ -20,6 +20,7 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
+import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
@@ -64,7 +65,7 @@ export default function configureStore() {
 
   const initDashboardFromLocation = () => {
     const location = parseLocation()
-    store.dispatch(projectActions.navigateDashboard(location))
+    store.dispatch(navigationActions.navigateDashboard(location))
   }
 
   // this event is triggered when the page first loads

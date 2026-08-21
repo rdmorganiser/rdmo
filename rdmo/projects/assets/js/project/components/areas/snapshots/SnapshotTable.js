@@ -6,7 +6,7 @@ import { Link } from 'rdmo/core/assets/js/components'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 
-import { navigateDashboard } from '../../../actions/projectActions'
+import { navigateDashboard } from '../../../actions/navigationActions'
 import { buildPath } from '../../../utils/location'
 
 import SnapshotDeleteModal from './SnapshotDeleteModal'

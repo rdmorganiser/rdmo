@@ -1,12 +1,10 @@
 import { isNil } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
-import { locationKeys, updateLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -14,24 +12,6 @@ import ProjectApi from '../api/ProjectApi'
 import * as actionTypes from './actionTypes'
 
 // asynchronous actions
-
-export function navigateDashboard(location) {
-  return (dispatch) => {
-    // update the location in the url
-    updateLocation(location)
-
-    // update the location in the config store
-    locationKeys.forEach(key => dispatch(updateConfig(key, location[key] ?? null, false)))
-
-    if (!isNil(location.viewId)) {
-      dispatch(fetchView(location.snapshotId, location.viewId))
-    } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId))
-    } else {
-      dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
-    }
-  }
-}
 
 // project
 
@@ -532,6 +512,46 @@ export function fetchView(snapshotId, viewId) {
       .catch(error => {
         dispatch(removeFromPending(pendingId))
         dispatch({ type: actionTypes.FETCH_VIEW_ERROR, error })
+      })
+  }
+}
+
+// navigation
+
+export function fetchNavigation() {
+  const pendingId = 'fetchNavigation'
+
+  return (dispatch) => {
+    dispatch(addToPending(pendingId))
+    dispatch({type: actionTypes.FETCH_NAVIGATION_INIT})
+
+    return ProjectApi.fetchProjectNavigation(projectId)
+      .then((navigation) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({type: actionTypes.FETCH_NAVIGATION_SUCCESS, navigation})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({type: actionTypes.FETCH_NAVIGATION_ERROR, error})
+      })
+  }
+}
+
+// progress
+
+export function fetchProgress() {
+  return (dispatch) => {
+    dispatch(addToPending('fetchProgress'))
+    dispatch({type: actionTypes.FETCH_PROGRESS_INIT})
+
+    return ProjectApi.fetchProjectProgress(projectId)
+      .then((progress) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_SUCCESS, progress})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_ERROR, error})
       })
   }
 }
