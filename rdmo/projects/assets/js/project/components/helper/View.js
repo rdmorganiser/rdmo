@@ -4,7 +4,8 @@ import { isNil } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
+import { navigateDashboard } from '../../actions/navigationActions'
+import { downloadAnswers, downloadView } from '../../actions/projectActions'
 
 import ExportsDropdown from './ExportsDropdown'
 import SnapshotsDropdown from './SnapshotsDropdown'

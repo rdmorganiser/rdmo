@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
-import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
+import { navigateDashboard } from '../../actions/navigationActions'
+import { updateProjectTask } from '../../actions/projectActions'
 import { Tile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
