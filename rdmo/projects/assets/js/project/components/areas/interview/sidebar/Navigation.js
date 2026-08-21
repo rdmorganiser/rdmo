@@ -7,7 +7,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Link from '../../../helper/Link'
 
 const Navigation = () => {
-  const { navigation } = useSelector((state) => state.project)
+  const navigation = useSelector((state) => state.project.navigation)
   const templates = useSelector((state) => state.templates)
 
   const currentSection = {

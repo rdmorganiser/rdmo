@@ -537,6 +537,25 @@ export function fetchNavigation() {
   }
 }
 
+// progress
+
+export function fetchProgress() {
+  return (dispatch) => {
+    dispatch(addToPending('fetchProgress'))
+    dispatch({type: actionTypes.FETCH_PROGRESS_INIT})
+
+    return ProjectApi.fetchProjectProgress(projectId)
+      .then((progress) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_SUCCESS, progress})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_ERROR, error})
+      })
+  }
+}
+
 // download
 
 export function downloadAnswers(snapshotId, format) {

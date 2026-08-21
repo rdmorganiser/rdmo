@@ -38,6 +38,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_INIT:
     case actionTypes.FETCH_VIEW_INIT:
     case actionTypes.FETCH_PROJECT_VISIBILITY_INIT:
+    case actionTypes.FETCH_NAVIGATION_INIT:
+    case actionTypes.FETCH_PROGRESS_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
       return clearErrors(state)
     // ERROR actions - append error
@@ -58,6 +60,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_ERROR:
     case actionTypes.FETCH_VIEW_ERROR:
     case actionTypes.FETCH_PROJECT_VISIBILITY_ERROR:
+    case actionTypes.FETCH_NAVIGATION_ERROR:
+    case actionTypes.FETCH_PROGRESS_ERROR:
       return appendError(state, action)
     // SUCCESS actions
     case actionTypes.FETCH_PROJECT_SUCCESS:
@@ -151,6 +155,11 @@ export default function projectReducer(state = initialState, action) {
       return {
         ...state,
         navigation: action.navigation
+      }
+    case actionTypes.FETCH_PROGRESS_SUCCESS:
+      return {
+        ...state,
+        progress: action.progress
       }
     case actionTypes.CLEAR_CURRENT_VIEW:
       return {
