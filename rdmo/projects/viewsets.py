@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
@@ -257,17 +256,8 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
-        # if a section is provided, check if it actually exists in the catalog
-        if section_id is None:
-            section = None
-        else:
-            try:
-                section = project.catalog.sections.get(pk=section_id)
-            except ObjectDoesNotExist as e:
-                raise NotFound() from e
-
         # compute navigation from the answer tree
-        navigation = compute_navigation(project, section)
+        navigation = compute_navigation(project)
 
         return Response(navigation)
 
