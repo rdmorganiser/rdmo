@@ -1,3 +1,4 @@
+export { default as DocumentOptionsDropdown } from './DocumentOptionsDropdown'
 export { default as ExportsDropdown } from './ExportsDropdown'
 export { default as IntegrationsDropdown } from './IntegrationsDropdown'
 export { default as SnapshotsDropdown } from './SnapshotsDropdown'

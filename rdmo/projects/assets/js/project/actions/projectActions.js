@@ -485,14 +485,14 @@ export function fetchProjectFiles(snapshotId) {
 
 // answers / views
 
-export function fetchAnswers(snapshotId) {
+export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
 
-    return ProjectApi.fetchProjectAnswers(projectId, snapshotId)
+    return ProjectApi.fetchProjectAnswers(projectId, snapshotId, params)
       .then(view => {
         dispatch(removeFromPending(pendingId))
         dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
@@ -527,12 +527,12 @@ export function fetchView(snapshotId, viewId) {
 
 // download
 
-export function downloadAnswers(snapshotId, format) {
+export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
     dispatch(addToPending('downloadAnswers'))
     dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
 
-    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format)
+    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, params)
       .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
       .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error }))
       .finally(() => dispatch(removeFromPending('downloadAnswers')))
