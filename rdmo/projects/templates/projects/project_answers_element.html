@@ -5,6 +5,9 @@
     {# this is a question #}
 
     <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
+    {% if include_help %}
+        <section class="question-help"><p>{{ element.help|markdown }}</p></section>
+    {% endif %}
 
     {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
     {% for set_prefix in set_prefixes %}

@@ -578,12 +578,15 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist as e:
             raise Http404 from e
 
+        include_help = 'help' in request.GET
+
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
                 'project_wrapper': ProjectWrapper(project, snapshot),
-                'export_formats': settings.EXPORT_FORMATS
+                'export_formats': settings.EXPORT_FORMATS,
+                'include_help': include_help,
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
