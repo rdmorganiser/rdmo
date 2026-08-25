@@ -579,7 +579,7 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist as e:
             raise Http404 from e
 
-        include_help = 'help' in request.GET
+        include_help = 'include_help' in request.GET
 
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
@@ -618,10 +618,13 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist as e:
             raise Http404 from e
 
+        include_help = 'include_help' in request.GET
+
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
             'project': project,
             'snapshot': snapshot,
-            'project_wrapper': ProjectWrapper(project, snapshot)
+            'project_wrapper': ProjectWrapper(project, snapshot),
+            'include_help': include_help,
         })
 
     @action(
