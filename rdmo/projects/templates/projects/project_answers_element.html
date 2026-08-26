@@ -6,7 +6,7 @@
 
     <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
     {% if include_help %}
-        <section class="question-help"><p>{{ element.help|markdown }}</p></section>
+        <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
     {% endif %}
 
     {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
