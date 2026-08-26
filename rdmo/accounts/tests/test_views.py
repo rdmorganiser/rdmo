@@ -3,12 +3,13 @@ from datetime import datetime, timedelta
 
 import pytest
 
+from django.contrib.auth import SESSION_KEY
 from django.core import mail
 from django.db.models import ObjectDoesNotExist
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 
-from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
+from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed
 
 from rdmo.accounts.models import CONSENT_SESSION_KEY, ConsentFieldValue
 
@@ -792,21 +793,53 @@ def test_shibboleth_login_view(db, client, settings, username, password):
 #             assert response.status_code == 404
 
 
-@pytest.mark.parametrize('shibboleth', boolean_toggle)
-@pytest.mark.parametrize('username,password', users)
-def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, username, password):
-    settings.SHIBBOLETH = shibboleth
-    settings.SHIBBOLETH_USERNAME_PATTERN = username
+@pytest.mark.parametrize('account', boolean_toggle)
+def test_shibboleth_logout(db, client, settings, account):
+    settings.SHIBBOLETH = True
+    settings.ACCOUNT = account
+    settings.SOCIALACCOUNT = False
+    settings.SHIBBOLETH_USERNAME_PATTERN = None
     reload_urls('rdmo.accounts.urls')
 
-    client.login(username=username, password=password)
-    if settings.SHIBBOLETH:
-        url = reverse('shibboleth_logout')
-        response = client.get(url)
-        if password is not None:
-            assertURLEqual(response.url, reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}')
-        else:
-            assertURLEqual(response.url, reverse('account_logout'))
+    client.login(username='user', password='user')
+    url = reverse('shibboleth_logout')
+
+    assert client.get(url).status_code == 405
+
+    response = client.post(url, follow=True)
+
+    assert response.redirect_chain == [
+        (reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}', 307),
+        (settings.SHIBBOLETH_LOGOUT_URL, 302),
+    ]
+    assert SESSION_KEY not in client.session
+
+
+def test_shibboleth_logout_username_pattern_does_not_match(db, client, settings):
+    settings.SHIBBOLETH = True
+    settings.ACCOUNT = False
+    settings.SOCIALACCOUNT = False
+    settings.SHIBBOLETH_USERNAME_PATTERN = r'@example.com$'
+    reload_urls('rdmo.accounts.urls')
+
+    client.login(username='user', password='user')
+    response = client.post(reverse('shibboleth_logout'), follow=True)
+
+    assert response.redirect_chain == [
+        (reverse('account_logout'), 307),
+        (settings.LOGIN_REDIRECT_URL, 302),
+    ]
+    assert SESSION_KEY not in client.session
+
+
+def test_navigation_uses_logout_form_without_allauth(db, client, settings):
+    settings.ACCOUNT = False
+    settings.SOCIALACCOUNT = False
+
+    client.login(username='user', password='user')
+    response = client.get(reverse('about'))
+
+    assertContains(response, f'<form class="logout-form" action="{settings.LOGOUT_URL}" method="POST">')
 
 
 @pytest.mark.parametrize('username,password', users)
