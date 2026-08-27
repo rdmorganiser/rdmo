@@ -196,40 +196,6 @@ def test_create_error3(db, client, username, password, project_id):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_create_error4(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-
-    title = f'Integration {project_id}'
-    Integration.objects.create(
-        project_id=project_id,
-        title=title,
-        provider_key='simple'
-    )
-
-    url = reverse(urlnames['list'], args=[project_id])
-    data = {
-        'title': title,
-        'provider_key': 'simple',
-        'options': [
-            {
-                'key': 'project_url',
-                'value': 'https://example.com/projects/1'
-            }
-        ]
-    }
-    response = client.post(url, data=json.dumps(data), content_type="application/json")
-
-    if project_id in add_integration_permission_map.get(username, []):
-        assert response.status_code == 400, response.json()
-        assert response.json()['title'] == ['An integration with this title already exists.'], response.json()
-    elif project_id in view_integration_permission_map.get(username, []):
-        assert response.status_code == 403
-    else:
-        assert response.status_code == 404
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('integration_id', integrations)
 def test_update(db, client, username, password, project_id, integration_id):
     client.login(username=username, password=password)

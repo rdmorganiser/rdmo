@@ -463,17 +463,6 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
         return integration
 
-    def validate_title(self, title):
-        integrations = self.context['view'].project.integrations.filter(title=title)
-
-        if self.instance:
-            integrations = integrations.exclude(pk=self.instance.pk)
-
-        if integrations.exists():
-            raise serializers.ValidationError(_('An integration with this title already exists.'))
-
-        return title
-
     def validate(self, data):
         if self.instance:
             secret_keys = {
