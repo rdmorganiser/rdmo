@@ -88,18 +88,22 @@ const ProjectForm = ({
       label: (
         <span className={isDisabled ? 'text-muted' : ''}>
           {catalog.title}{' '}
-          <Tooltip
-            title={catalog.help || gettext('No help available for this catalog.')}
-            placement="right"
-          >
-            <i
-              className="bi bi-info-circle ms-2"
-              tabIndex={0}
-              role="img"
-              aria-label={gettext('Catalog help')}
-              style={{ cursor: 'help' }}
-            />
-          </Tooltip>
+          {
+            catalog.help && (
+              <Tooltip
+                title={catalog.help}
+                placement="right"
+              >
+                <i
+                  className="bi bi-info-circle ms-2"
+                  tabIndex={0}
+                  role="img"
+                  aria-label={gettext('Catalog help')}
+                  style={{ cursor: 'help' }}
+                />
+              </Tooltip>
+            )
+          }
         </span>
       )
     }

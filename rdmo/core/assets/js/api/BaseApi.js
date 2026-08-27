@@ -98,9 +98,9 @@ class BaseApi {
     })
   }
 
-  static patch(url, data) {
+  static put(url, data) {
     return fetch(baseUrl + url, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': Cookies.get('csrftoken')
@@ -121,9 +121,9 @@ class BaseApi {
     })
   }
 
-  static put(url, data) {
+  static patch(url, data) {
     return fetch(baseUrl + url, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': Cookies.get('csrftoken')
