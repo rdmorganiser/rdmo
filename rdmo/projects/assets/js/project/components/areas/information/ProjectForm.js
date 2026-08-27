@@ -68,13 +68,16 @@ const ProjectForm = ({
 
   const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
 
-  const isProjectCatalogAvailable = mode !== 'edit' || availableCatalogs.some(
-    catalog => catalog.id === project.catalog
-  )
-  const [unavailableCatalog] = useState(() => isProjectCatalogAvailable ? null : {
-    id: project.catalog,
-    title: project.catalog_title,
-    help: project.catalog_help
+  const [unavailableCatalog] = useState(() => {
+    const isAvailable = mode !== 'edit' || availableCatalogs.some(
+      catalog => catalog.id === project.catalog
+    )
+
+    return isAvailable ? null : {
+      id: project.catalog,
+      title: project.catalog_title,
+      help: project.catalog_help
+    }
   })
 
   const catalogOptions = (
@@ -230,11 +233,6 @@ const ProjectForm = ({
         <label className="form-label mb-0">{gettext('Catalog')}</label>
         <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
         {
-          !isProjectCatalogAvailable && project.permissions.can_change_project &&
-            <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
-        }
-
-        {
           selectCatalog == 'select' ? (
             <Select
               className="mt-2"
@@ -264,6 +262,11 @@ const ProjectForm = ({
               </div>
             ))
           )
+        }
+
+        {
+          unavailableCatalog && project.permissions.can_change_project &&
+            <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
         }
 
         {
