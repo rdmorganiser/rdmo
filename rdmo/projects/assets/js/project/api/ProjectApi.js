@@ -47,7 +47,7 @@ export default class ProjectApi extends BaseApi {
   }
 
   static updateProject(projectId, data) {
-    return this.patch(`/api/v1/projects/projects/${projectId}/`, data)
+    return this.put(`/api/v1/projects/projects/${projectId}/`, data)
   }
 
   static updateProjectVisibility(projectId, data) {

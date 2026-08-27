@@ -3,6 +3,7 @@ from typing import Any
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -120,7 +121,16 @@ class ProjectSerializer(serializers.ModelSerializer):
     class CatalogField(serializers.PrimaryKeyRelatedField):
 
         def get_queryset(self):
-            return Catalog.objects.filter_for_user(self.context['request'].user)
+            queryset = Catalog.objects.filter_for_user(self.context['request'].user)
+
+            # find the projects current catalog
+            instance = self.root.instance
+            catalog_id = getattr(instance, 'catalog_id', None)
+            if catalog_id is None:
+                return queryset
+
+            # allow the project to keep its current catalog, even if it is unavailable to the user
+            return Catalog.objects.filter(Q(pk__in=queryset.values('pk')) | Q(pk=catalog_id))
 
     class ParentField(serializers.PrimaryKeyRelatedField):
 
