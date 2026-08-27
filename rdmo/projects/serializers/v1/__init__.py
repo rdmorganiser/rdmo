@@ -425,6 +425,7 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
             for field in provider.fields
         )
 
+    # if the value is secret, set configured and remove value
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if representation['secret']:
@@ -453,9 +454,10 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         provider_key = validated_data.get('provider_key')
         project = validated_data.get('project')
+        title = validated_data.get('title')
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
-        integration = Integration(project=project, title=validated_data.get('title'), provider_key=provider_key)
+        integration = Integration(project=project, title=title, provider_key=provider_key)
         integration.save()
         integration.save_options(options)
 
@@ -491,8 +493,10 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
             for option in validated_data.get('options', [])
         }
 
-        integration.title = validated_data.get('title')
-        integration.save(update_fields=('title', ))
+        title = validated_data.get('title')
+        if title is not None:
+            integration.title = title
+            integration.save(update_fields=('title', ))
 
         for field in integration.provider.fields:
             key = field.get('key')

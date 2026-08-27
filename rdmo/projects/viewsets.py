@@ -714,6 +714,8 @@ class ProjectViewSet(ModelViewSet):
                 'label': plugin.label,
                 'add_label': plugin.add_label,
                 'description': plugin.description,
+                # The creation of the title is a bit buried here. Lets keep it for now.
+                # We should keep this in mind when we merge this with the new way plugins are organized.
                 'fields': [
                     {
                         **field,

@@ -121,7 +121,7 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
           value={title}
           onChange={setTitle}
           errors={errors.title}
-          help={gettext('A unique title for the integration.')}
+          help={gettext('A title for the integration.')}
         />
 
         {
