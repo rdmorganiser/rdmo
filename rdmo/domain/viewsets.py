@@ -37,8 +37,10 @@ class AttributeViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Attribute.objects.all().order_by('path')
-        if self.action in ('index', 'nested', 'export', 'detail_export'):
+        if self.action in ('index', 'nested'):
             return queryset
+        elif self.action in ('export', 'detail_export'):
+            return queryset.select_related('parent')
         else:
             return queryset.annotate(
                 values_count=models.Count('values')
@@ -97,7 +99,8 @@ class AttributeViewSet(ModelViewSet):
             serializer = AttributeExportSerializer(
                 attributes,
                 many=True,
-                context=self.get_export_serializer_context(attributes),
+                include_parent=False,
+                context=self.get_export_serializer_context(attributes, parent=instance.parent),
             )
             xml = AttributeRenderer().render(serializer.data)
             return XMLResponse(xml, name=instance.key)
@@ -112,9 +115,11 @@ class AttributeViewSet(ModelViewSet):
                 }
             )
 
-    def get_export_serializer_context(self, attributes):
+    def get_export_serializer_context(self, attributes, parent=None):
+        attribute_list = [parent, *attributes] if parent else attributes
+
         return {
             'attribute_map': {
-                attribute.pk: attribute for attribute in attributes
+                attribute.pk: attribute for attribute in attribute_list
             }
         }
