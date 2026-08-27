@@ -121,29 +121,6 @@ class BaseApi {
     })
   }
 
-  static patch(url, data) {
-    return fetch(baseUrl + url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': Cookies.get('csrftoken')
-      },
-      body: JSON.stringify(data)
-    }).catch(error => {
-      throw new ApiError(error.message)
-    }).then(response => {
-      if (response.ok) {
-        return response.json()
-      } else if (response.status == 400) {
-        return response.json().then(errors => {
-          throw new ValidationError(errors)
-        })
-      } else {
-        throw new ApiError(response.statusText, response.status)
-      }
-    })
-  }
-
   static delete(url) {
     return fetch(baseUrl + url, {
       method: 'DELETE',
