@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input } from 'rdmo/core/assets/js/components/forms'
-
 const IntegrationSecretField = ({
   show,
   formId,
@@ -30,87 +28,131 @@ const IntegrationSecretField = ({
     }
   }, [value])
 
-  const actions = [
-    { value: 'keep', label: gettext('Keep current secret') },
-    { value: 'replace', label: gettext('Replace current secret') }
-  ]
-
-  if (!field.required) {
-    actions.push({ value: 'remove', label: gettext('Remove current secret') })
-  }
-
   return (
     <div>
       {
-        configured && (
+        configured && action === 'keep' && (
           <div className="mb-3">
-            <label className="control-label">
+            <label className="control-label" htmlFor={`${id}-current`}>
               {field.title}{field.required ? ' *' : ''}
             </label>
-            <div className="mb-3">
-              {gettext('Current secret:')} <span aria-hidden="true">••••••••</span>
-              <span className="visually-hidden">{gettext('Secret is configured')}</span>
+            <div className="input-group">
+              <input
+                id={`${id}-current`}
+                type="password"
+                className="form-control"
+                value="configured"
+                aria-label={`${field.title}: ${gettext('Secret is configured')}`}
+                readOnly
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                title={gettext('Replace current secret')}
+                aria-label={gettext('Replace current secret')}
+                onClick={() => onActionChange('replace')}
+              >
+                <i className="bi bi-pencil" aria-hidden="true" />
+              </button>
+              {
+                !field.required && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    title={gettext('Remove current secret')}
+                    aria-label={gettext('Remove current secret')}
+                    onClick={() => onActionChange('remove')}
+                  >
+                    <i className="bi bi-trash" aria-hidden="true" />
+                  </button>
+                )
+              }
             </div>
-
-            {
-              actions.map((option) => (
-                <div className="form-check mb-1" key={option.value}>
-                  <input
-                    id={`${id}-${option.value}`}
-                    type="radio"
-                    name={`${id}-action`}
-                    className="form-check-input"
-                    checked={action === option.value}
-                    onChange={() => onActionChange(option.value)}
-                  />
-                  <label className="form-check-label" htmlFor={`${id}-${option.value}`}>
-                    {option.label}
-                  </label>
-                </div>
-              ))
-            }
           </div>
         )
       }
 
       {
         inputVisible && (
-          <>
-            <Input
-              type={showSecret ? 'text' : 'password'}
-              className="mb-1"
-              label={
-                `${configured ? interpolate(gettext('New %s'), [field.title]) : field.title}` +
-                `${field.required || configured ? ' *' : ''}`
-              }
-              placeholder={field.placeholder}
-              help={field.help}
-              value={value}
-              onChange={onChange}
-              errors={errors}
-            />
-            <div className="form-check mb-3">
+          <div className="form-group mb-3">
+            <label className="control-label" htmlFor={`${id}-input`}>
+              {configured ? interpolate(gettext('New %s'), [field.title]) : field.title}
+              {field.required || configured ? ' *' : ''}
+            </label>
+            <div className="input-group has-validation">
               <input
-                id={`${id}-show`}
-                type="checkbox"
-                className="form-check-input"
-                checked={showSecret}
-                disabled={!value}
-                onChange={(event) => setShowSecret(event.target.checked)}
+                id={`${id}-input`}
+                type={showSecret ? 'text' : 'password'}
+                className={errors?.length ? 'form-control is-invalid' : 'form-control'}
+                placeholder={field.placeholder}
+                value={value}
+                onChange={(event) => onChange(event.target.value)}
               />
-              <label className="form-check-label" htmlFor={`${id}-show`}>
-                {gettext('Show secret')}
-              </label>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                title={showSecret ? gettext('Hide secret') : gettext('Show secret')}
+                aria-label={showSecret ? gettext('Hide secret') : gettext('Show secret')}
+                disabled={!value}
+                onClick={() => setShowSecret(!showSecret)}
+              >
+                <i className={`bi ${showSecret ? 'bi-eye-slash' : 'bi-eye'}`} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                title={configured ? gettext('Keep current secret') : gettext('Clear secret')}
+                aria-label={configured ? gettext('Keep current secret') : gettext('Clear secret')}
+                disabled={!configured && !value}
+                onClick={() => configured ? onActionChange('keep') : onChange('')}
+              >
+                <i className="bi bi-x-lg" aria-hidden="true" />
+              </button>
+              {
+                errors && (
+                  <div className="invalid-feedback">
+                    {errors.map((error, index) => <div key={index}>{error}</div>)}
+                  </div>
+                )
+              }
             </div>
-          </>
+            {
+              field.help && <div className="form-text">{field.help}</div>
+            }
+          </div>
         )
       }
 
       {
         configured && action === 'remove' && (
-          <p className="text-danger mb-3">
-            {gettext('The current secret will be removed when the integration is updated.')}
-          </p>
+          <div className="mb-3">
+            <label className="control-label" htmlFor={`${id}-current`}>
+              {field.title}
+            </label>
+            <div className="input-group">
+              <input
+                id={`${id}-current`}
+                type="password"
+                className="form-control"
+                value="configured"
+                aria-label={`${field.title}: ${gettext('Secret is configured')}`}
+                readOnly
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                title={gettext('Keep current secret')}
+                aria-label={gettext('Keep current secret')}
+                onClick={() => onActionChange('keep')}
+              >
+                <i className="bi bi-arrow-counterclockwise me-1" aria-hidden="true" />
+                {gettext('Keep secret')}
+              </button>
+            </div>
+            <div className="form-text text-danger">
+              {gettext('The current secret will be removed when the integration is updated.')}
+            </div>
+          </div>
         )
       }
     </div>
