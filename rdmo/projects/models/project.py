@@ -101,6 +101,16 @@ class Project(MPTTModel, Model):
         if self.catalog is not None:
             return self.catalog.uri
 
+    @property
+    def catalog_title(self) -> str | None:
+        if self.catalog is not None:
+            return self.catalog.title
+
+    @property
+    def catalog_help(self) -> str | None:
+        if self.catalog is not None:
+            return self.catalog.help
+
     @cached_property
     def member(self) -> list:
         return self.get_prefetched_members()

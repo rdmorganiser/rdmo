@@ -32,14 +32,16 @@ const ProjectForm = ({
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
-  const project = currentProject ?? storeData?.project
+  const project = mode === 'create' ? {} : currentProject ?? storeData?.project
   const catalogs = catalogsProp ?? storeData?.catalogs
+
+  if (!project) return null
 
   const [formData, setFormData] = useState(project || {})
 
-  const [enableParent, setEnableParent] = useState(!!project?.parent)
+  const [enableParent, setEnableParent] = useState(!!project.parent)
   const [parentOptions, setParentOptions] = useState(() => {
-    if (mode === 'edit' && project?.parent) {
+    if (mode === 'edit' && project.parent) {
       return [{ value: project.parent, label: project.parent_title }]
     }
     return []
@@ -64,31 +66,51 @@ const ProjectForm = ({
       })
   }, [])
 
-  const catalogOptions = useMemo(
-    () => (catalogs || [])
-      .filter(catalog => catalog.available)
-      .map(catalog => ({
-        value: catalog.id,
-        label: (
-          <>
-            {catalog.title}{' '}
-            <Tooltip
-              title={catalog.help || gettext('No help available for this catalog.')}
-              placement="right"
-            >
-              <i
-                className="bi bi-info-circle ms-2"
-                tabIndex={0}
-                role="img"
-                aria-label={gettext('Catalog help')}
-                style={{ cursor: 'help' }}
-              />
-            </Tooltip>
-          </>
-        )
-      })),
-    [catalogs]
-  )
+  const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
+
+  const [unavailableCatalog] = useState(() => {
+    const isAvailable = mode !== 'edit' || availableCatalogs.some(
+      catalog => catalog.id === project.catalog
+    )
+
+    return isAvailable ? null : {
+      id: project.catalog,
+      title: project.catalog_title,
+      help: project.catalog_help
+    }
+  })
+
+  const catalogOptions = (
+    unavailableCatalog ? [unavailableCatalog, ...availableCatalogs] : availableCatalogs
+  ).map(catalog => {
+    const isDisabled = catalog.id === unavailableCatalog?.id
+
+    return {
+      value: catalog.id,
+      isDisabled,
+      label: (
+        <span className={isDisabled ? 'text-muted' : ''}>
+          {catalog.title}{' '}
+          {
+            catalog.help && (
+              <Tooltip
+                title={catalog.help}
+                placement="right"
+              >
+                <i
+                  className="bi bi-info-circle ms-2"
+                  tabIndex={0}
+                  role="img"
+                  aria-label={gettext('Catalog help')}
+                  style={{ cursor: 'help' }}
+                />
+              </Tooltip>
+            )
+          }
+        </span>
+      )
+    }
+  })
 
   const saveProject = (currentFormData) => {
     if (mode === 'create') {
@@ -99,7 +121,7 @@ const ProjectForm = ({
       return dispatch(copyProject(currentProject.id, currentFormData))
     }
 
-    const currentProjectParent = project?.parent ?? null
+    const currentProjectParent = project.parent ?? null
     const currentFormDataParent = currentFormData.parent ?? null
 
     const payload = { ...currentFormData }
@@ -136,7 +158,7 @@ const ProjectForm = ({
     ProjectApi.fetchProjects({ search })
       .then(response => {
         const options = response.results
-          .filter(p => !project?.id || p.id !== project?.id)
+          .filter(p => !project.id || p.id !== project.id)
           .map(project => ({
             value: project.id,
             label: project.title
@@ -151,9 +173,9 @@ const ProjectForm = ({
     if (enableParent || submitMode === 'submit') {
       ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
         const options = results
-          .filter(p => !project?.id || p.id !== project?.id)
+          .filter(p => !project.id || p.id !== project.id)
           .map(p => ({ value: p.id, label: p.title }))
-        if (project?.parent && !options.some(opt => opt.value === formData.parent)) {
+        if (project.parent && !options.some(opt => opt.value === formData.parent)) {
           options.unshift({
             value: project.parent,
             label: project.parent_title
@@ -210,7 +232,6 @@ const ProjectForm = ({
       <div className="mb-3">
         <label className="form-label mb-0">{gettext('Catalog')}</label>
         <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
-
         {
           selectCatalog == 'select' ? (
             <Select
@@ -233,7 +254,7 @@ const ProjectForm = ({
                   value={opt.value}
                   checked={formData.catalog === opt.value}
                   onChange={(e) => handleChange('catalog', Number(e.target.value))}
-                  disabled={disabled}
+                  disabled={disabled || opt.isDisabled}
                 />
                 <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
                   {opt.label}
@@ -241,6 +262,11 @@ const ProjectForm = ({
               </div>
             ))
           )
+        }
+
+        {
+          unavailableCatalog && project.permissions.can_change_project &&
+            <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
         }
 
         {
