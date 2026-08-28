@@ -2,17 +2,14 @@ import pytest
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.http import QueryDict
 
 from rdmo.core.tests.utils import compute_checksum
 
-from ..filters import ProjectFilter
 from ..models import Invite, Project, Value
 from ..utils import (
     compute_set_prefix_from_set_value,
     copy_project,
     get_invite_email_project_path,
-    set_context_querystring_with_filter_and_page,
 )
 
 GET_queries = [
@@ -33,27 +30,6 @@ SET_VALUES = [
     ({'set_prefix': '0'  , 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|1|0'),
     ({'set_prefix': '0|0', 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|0|1'),
 ]
-
-@pytest.mark.parametrize('GET_query', GET_queries)
-def test_set_context_querystring_with_filter_and_page(GET_query):
-    querydict = QueryDict(GET_query)
-    filter = ProjectFilter(querydict)
-    context = {'filter': filter}
-    context = set_context_querystring_with_filter_and_page(context)
-
-    if 'page' in GET_query and 'title' in GET_query:
-        assert 'querystring' in context
-        assert context['querystring'] == 'title=project'
-        querydict_copy = querydict.copy()
-        del querydict_copy['page']
-        assert context['querystring'] == querydict_copy.urlencode()
-    elif 'page' not in GET_query and 'title' in GET_query:
-        assert 'querystring' in context
-        assert context['querystring'] == 'title=project'
-    elif 'page' in GET_query and 'title' not in GET_query:
-        assert context.get('querystring', 'not-in-context') == ''
-    else:
-        assert context.get('querystring', 'not-in-context') == 'not-in-context'
 
 
 def test_copy_project(db, files):

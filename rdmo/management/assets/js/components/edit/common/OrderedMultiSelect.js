@@ -12,13 +12,41 @@ import get from 'lodash/get'
 import maxBy from 'lodash/maxBy'
 
 import Link from 'rdmo/core/assets/js/components/Link'
-
 import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
+
+const formatOptionLabel = ({ label }, { context }) => {
+  const parts = label.split('/')
+
+  if (context === 'menu') {
+    // insert <wbr> at /
+    return (
+      <span>
+        {
+          parts.map((part, index) => (
+            index === 0 ? part : [<wbr key={index} />, '/', part]
+          ))
+        }
+      </span>
+    )
+  } else if (parts.length >= 3) {
+    const head = `${parts.slice(0, -3).join('/')}`
+    const tail = `/${parts.slice(-3).join('/')}`
+    return (
+      <span className="truncate-option-label">
+        <span className="truncate-option-label-head">{head}</span>
+        <span className="truncate-option-label-tail">{tail}</span>
+      </span>
+    )
+  } else {
+    return label
+  }
+}
 
 const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
                                   handleChange, handleEdit, handleRemove, handleDrag }) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
+  const firstDropRef = useRef(null)
 
   const [{}, drag] = useDrag(() => ({
     type: field,
@@ -32,7 +60,17 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
       isOver: monitor.isOver()
     }),
     drop: (item) => {
-      handleDrag(item.index, index)
+      handleDrag(item.index, index + 1)
+    },
+  }))
+
+  const [{ isOver: isOverFirst }, firstDrop] = useDrop(() => ({
+    accept: field,
+    collect: (monitor) => ({
+      isOver: monitor.isOver()
+    }),
+    drop: (item) => {
+      handleDrag(item.index, 0)
     },
   }))
 
@@ -40,6 +78,12 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
     'drop': true,
     'show': isDragging,
     'over': isOver
+  })
+
+  const firstDropClassName = classNames({
+    'drop': true,
+    'show': isDragging,
+    'over': isOverFirst
   })
 
   const dragClassName = classNames({
@@ -50,14 +94,32 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
   if (!disabled) {
     drag(dragRef)
     drop(dropRef)
+
+    if (index === 0) {
+      firstDrop(firstDropRef)
+    }
   }
 
   const styles = {
     container: provided => ({...provided, marginRight: 8 + 12 + 4 + 11 + 4 + 14})
   }
 
+  const handleMenuOpen = () => {
+    setTimeout(() => {
+      document
+        .querySelector(
+          '.react-select__menu-portal .react-select__option--is-selected'
+        )
+        ?.scrollIntoView({ block: 'nearest'})
+    }, 0)
+  }
+
   return (
     <>
+      {
+        index === 0 &&
+        <div ref={firstDropRef} className={firstDropClassName}></div>
+      }
       <div className="ordered-multi-select-item">
         <div className="ordered-multi-select-item-options">
           <Link className="fa fa-pencil" title={gettext('Edit')}
@@ -69,9 +131,11 @@ const OrderedMultiSelectItem = ({ index, field, selectValue, selectOptions, erro
         <div className="ordered-multi-select-item-select">
           <ReactSelect classNamePrefix="react-select" className="react-select"
                        options={selectOptions} value={selectValue}
+                       formatOptionLabel={formatOptionLabel}
                        onChange={option => handleChange(option, index)}
                        menuPortalTarget={document.body} styles={styles} isDisabled={disabled}
-                       aria-labelledby={ariaLabelledBy} />
+                       aria-labelledby={ariaLabelledBy}
+                       onMenuOpen={handleMenuOpen} />
         </div>
         {
           errors && errors[index] &&
@@ -192,7 +256,9 @@ class OrderedMultiSelect extends Component {
 
     const dragValue = values[dragIndex]
     values.splice(dragIndex, 1)
-    values.splice(dropIndex, 0, dragValue)
+
+    const insertIndex = dragIndex < dropIndex ? dropIndex - 1 : dropIndex
+    values.splice(insertIndex, 0, dragValue)
 
     // re-order the array
     values.forEach((value, index) => {

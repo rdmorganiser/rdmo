@@ -45,11 +45,12 @@ class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
 
     search_fields = ('title', 'user__username')
-    list_display = ('title', 'owners', 'updated', 'created')
+    list_display = ('title', 'site', 'catalog', 'owners', 'updated', 'created')
+    list_filter = ('site', 'catalog')
     readonly_fields = ('progress_count', 'progress_total')
 
     def get_queryset(self, request):
-        return Project.objects.prefetch_related(
+        return Project.objects.select_related('site', 'catalog').prefetch_related(
             Prefetch(
                 'memberships',
                 queryset=Membership.objects.filter(role='owner').select_related('user'),

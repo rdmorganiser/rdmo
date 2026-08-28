@@ -4,10 +4,12 @@ from django.urls import reverse
 def test_project_search(db, client):
     client.login(username='admin', password='admin')
 
-    url = reverse('admin:projects_project_changelist') + '?q=test'
-    response = client.get(url)
+    url = reverse('admin:projects_project_changelist')
 
-    assert response.status_code == 200
+    for params in ({'q': 'test'}, {'site__id__exact': 1}, {'catalog__id__exact': 1}):
+        response = client.get(url, params)
+
+        assert response.status_code == 200
 
 
 def test_membership_search(db, client):

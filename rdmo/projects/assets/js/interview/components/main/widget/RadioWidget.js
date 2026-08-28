@@ -63,7 +63,6 @@ const RadioWidget = ({ page, question, sets, values, siblings, currentSet, disab
         currentSet={currentSet}
         disabled={disabled}
         createValue={createValue}
-        copyValue={copyValue}
       />
       <QuestionCopyValues
         question={question}

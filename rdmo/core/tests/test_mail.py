@@ -1,6 +1,11 @@
+import smtplib
+
+import pytest
+
 from django.conf import settings
 from django.core import mail
 
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.mail import send_mail
 
 
@@ -71,3 +76,22 @@ def test_send_mail_from_attachments(db):
     assert mail.outbox[0].attachments == [
         ('Attachment', b'attachment', 'plain/text')
     ]
+
+
+def test_send_mail_recipient_refused(db, mocker):
+    smtp_exception = smtplib.SMTPRecipientsRefused({
+        'name@non-existent-domain.abc': (
+            550,
+            b'Domain not found'
+        )
+    })
+
+    mocker.patch(
+        'rdmo.core.mail.EmailMessage.send',
+        side_effect=smtp_exception
+    )
+
+    with pytest.raises(SendMailException) as e:
+        send_mail('Subject', 'Message', to=['name@non-existent-domain.abc'])
+
+    assert str(e.value) == str(smtp_exception)

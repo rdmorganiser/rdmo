@@ -11,8 +11,10 @@ const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
       attribute: question.attribute,
       set_prefix: currentSet.set_prefix,
       set_index: currentSet.set_index,
+      set_collection: question.set_collection,
       collection_index: collectionIndex,
-      set_collection: question.set_collection
+      unit: question.unit,
+      value_type: question.value_type
     })
   }
 
