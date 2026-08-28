@@ -40,13 +40,13 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
     setFormData(prev => ({ ...prev, [key]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
       if (snapshot && snapshot.id) {
-        dispatch(updateSnapshot(snapshot.id, formData))
+        await dispatch(updateSnapshot(snapshot.id, formData))
       } else {
-        dispatch(createSnapshot(formData))
+        await dispatch(createSnapshot(formData))
       }
       onClose()
     } catch {
@@ -66,14 +66,11 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
     >
       <form id={formId} onSubmit={handleSubmit}>
         <Input
-          id="snapshot-title"
-          type="text"
           className="mt-2"
           label={gettext('Title')}
-          name="title"
-          required
           value={formData.title}
           onChange={(value) => setField('title', value)}
+          errors={errors.title}
         />
         <Textarea
           id="snapshot-description"

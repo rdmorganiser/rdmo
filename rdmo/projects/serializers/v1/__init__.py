@@ -398,13 +398,40 @@ class ProjectMembershipHierarchySerializer(serializers.ModelSerializer):
 
 
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
+    secret = serializers.SerializerMethodField()
+    value = serializers.CharField(allow_blank=True, required=False)
+    remove = serializers.BooleanField(default=False, required=False, write_only=True)
 
     class Meta:
         model = IntegrationOption
         fields = (
             'key',
-            'value'
+            'title',
+            'value',
+            'secret',
+            'remove'
         )
+
+    def get_secret(self, obj):
+        if obj.secret:
+            return True
+
+        provider = obj.integration.provider
+        if provider is None:
+            return False
+
+        return any(
+            field.get('key') == obj.key and field.get('secret', False)
+            for field in provider.fields
+        )
+
+    # if the value is secret, set configured and remove value
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if representation['secret']:
+            representation['configured'] = bool(instance.value)
+            representation.pop('value', None)
+        return representation
 
 
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
@@ -415,6 +442,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
         model = Integration
         fields = (
             'id',
+            'title',
             'provider_key',
             'provider',
             'options'
@@ -426,25 +454,41 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         provider_key = validated_data.get('provider_key')
         project = validated_data.get('project')
+        title = validated_data.get('title')
         options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
 
-        integration = Integration(project=project, provider_key=provider_key)
+        integration = Integration(project=project, title=title, provider_key=provider_key)
         integration.save()
         integration.save_options(options)
 
         return integration
 
     def update(self, integration, validated_data):
-        options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
+        options = {
+            option.get('key'): '' if option.get('remove', False) else option.get('value')
+            for option in validated_data.get('options', [])
+        }
+
+        title = validated_data.get('title')
+        if title is not None:
+            integration.title = title
+            integration.save(update_fields=('title', ))
+
+        for field in integration.provider.fields:
+            key = field.get('key')
+            if field.get('secret', False) and key not in options:
+                options[key] = integration.get_option_value(key)
 
         integration.save_options(options)
 
         return integration
 
     def get_provider(self, obj):
+        if obj.provider is None:
+            return None
         return {
             attr: getattr(obj.provider, attr, None)
-            for attr in ['send_label', 'description']
+            for attr in ['label', 'send_label', 'description']
         }
 
 
@@ -757,15 +801,18 @@ class IntegrationSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'project',
+            'title',
             'provider_key',
             'provider',
             'options'
         )
 
     def get_provider(self, obj):
+        if obj.provider is None:
+            return None
         return {
             attr: getattr(obj.provider, attr, None)
-            for attr in ['send_label', 'description']
+            for attr in ['label', 'send_label', 'description']
         }
 
 

@@ -143,4 +143,24 @@ export default class ProjectApi extends BaseApi {
       )
     }
   }
+
+  static fetchProviders() {
+    return this.get('/api/v1/projects/projects/providers/')
+  }
+
+  static fetchProjectIntegrations(projectId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/integrations/`)
+  }
+
+  static createProjectIntegration(projectId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/integrations/`, data)
+  }
+
+  static updateProjectIntegration(projectId, integrationId, data) {
+    return this.put(`/api/v1/projects/projects/${projectId}/integrations/${integrationId}/`, data)
+  }
+
+  static deleteProjectIntegration(projectId, integrationId) {
+    return this.delete(`/api/v1/projects/projects/${projectId}/integrations/${integrationId}/`)
+  }
 }

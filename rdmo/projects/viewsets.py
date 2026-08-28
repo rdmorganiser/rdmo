@@ -711,8 +711,20 @@ class ProjectViewSet(ModelViewSet):
     def providers(self, request):
         return Response({
             key: {
+                'label': plugin.label,
                 'add_label': plugin.add_label,
                 'description': plugin.description,
+                # The creation of the title is a bit buried here. Lets keep it for now.
+                # We should keep this in mind when we merge this with the new way plugins are organized.
+                'fields': [
+                    {
+                        **field,
+                        'title': field.get('title', field['key'].title().replace('_', ' ')),
+                        'required': field.get('required', True),
+                        'secret': field.get('secret', False),
+                    }
+                    for field in plugin.fields
+                ],
             }
             for key, plugin in get_plugins('PROJECT_ISSUE_PROVIDERS').items()
         })

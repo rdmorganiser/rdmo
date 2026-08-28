@@ -77,7 +77,7 @@ class SimpleIssueProvider(OauthIssueProvider):
 
     add_label = _('Add Simple integration')
     send_label = _('Send to Simple')
-    description = _('This integration allow the creation of issues in arbitrary Simple repositories. '
+    description = _('This integration allows the creation of issues in arbitrary Simple repositories. '
                     'The upload of attachments is not supported.')
 
     @property

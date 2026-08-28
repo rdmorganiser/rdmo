@@ -5,7 +5,9 @@ const initialState = {
   invites: null,
   errors: [],
   currentView: null,
-  visibility: null
+  visibility: null,
+  providers: null,
+  integrations: []
 }
 
 const clearErrors = (state) => ({
@@ -38,6 +40,11 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_INIT:
     case actionTypes.FETCH_VIEW_INIT:
     case actionTypes.FETCH_PROJECT_VISIBILITY_INIT:
+    case actionTypes.FETCH_PROVIDERS_INIT:
+    case actionTypes.FETCH_PROJECT_INTEGRATIONS_INIT:
+    case actionTypes.CREATE_PROJECT_INTEGRATION_INIT:
+    case actionTypes.UPDATE_PROJECT_INTEGRATION_INIT:
+    case actionTypes.DELETE_PROJECT_INTEGRATION_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
       return clearErrors(state)
     // ERROR actions - append error
@@ -58,6 +65,11 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_ERROR:
     case actionTypes.FETCH_VIEW_ERROR:
     case actionTypes.FETCH_PROJECT_VISIBILITY_ERROR:
+    case actionTypes.FETCH_PROVIDERS_ERROR:
+    case actionTypes.FETCH_PROJECT_INTEGRATIONS_ERROR:
+    case actionTypes.CREATE_PROJECT_INTEGRATION_ERROR:
+    case actionTypes.UPDATE_PROJECT_INTEGRATION_ERROR:
+    case actionTypes.DELETE_PROJECT_INTEGRATION_ERROR:
       return appendError(state, action)
     case actionTypes.FETCH_PROJECT_SUCCESS:
       return { ...state, project: action.project }
@@ -165,6 +177,33 @@ export default function projectReducer(state = initialState, action) {
       return {
         ...state,
         visibility: null
+      }
+    case actionTypes.FETCH_PROVIDERS_SUCCESS:
+      return {
+        ...state,
+        providers: action.providers
+      }
+    case actionTypes.FETCH_PROJECT_INTEGRATIONS_SUCCESS:
+      return {
+        ...state,
+        integrations: action.integrations
+      }
+    case actionTypes.CREATE_PROJECT_INTEGRATION_SUCCESS:
+      return {
+        ...state,
+        integrations: [...state.integrations, action.integration]
+      }
+    case actionTypes.UPDATE_PROJECT_INTEGRATION_SUCCESS:
+      return {
+        ...state,
+        integrations: state.integrations.map(i =>
+          i.id === action.integration.id ? { ...i, ...action.integration } : i
+        )
+      }
+    case actionTypes.DELETE_PROJECT_INTEGRATION_SUCCESS:
+      return {
+        ...state,
+        integrations: state.integrations.filter(i => i.id !== action.integrationId)
       }
     default:
       return state
