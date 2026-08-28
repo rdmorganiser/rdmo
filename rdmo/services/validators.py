@@ -7,7 +7,9 @@ from rdmo.core.plugins import get_plugin
 
 class ProviderValidator:
 
-    def __call__(self, data):
+    requires_context = True
+
+    def __call__(self, data, serializer):
         provider_key = data.get('provider_key')
         provider = get_plugin('PROJECT_ISSUE_PROVIDERS', provider_key)
         if provider is None:
@@ -32,6 +34,12 @@ class ProviderValidator:
             if field.get('required', True):
                 key = field.get('key')
                 if key not in options:
+                    if (
+                        serializer.instance
+                        and field.get('secret', False)
+                        and serializer.instance.get_option_value(key)
+                    ):
+                        continue
                     raise ValidationError({
                         key: _('This field is required.')
                     })
