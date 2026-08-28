@@ -38,8 +38,8 @@ repos:
           - eslint@8.56.0
           - eslint-plugin-react@7.37.0
           - react@18.3.1
-  - repo: https://github.com/crate-ci/typos
-    rev: 37bb98842b0d8c4ffebdb75301a13db0267cef89  # frozen: v1.47.2
+  - repo: https://github.com/rdmorganiser/mirrors-typos
+    rev: d6e5277aba90cd6dbf28e43c557b407d2689368d  # frozen: v1.49.0
     hooks:
     - id: typos
       exclude: |
