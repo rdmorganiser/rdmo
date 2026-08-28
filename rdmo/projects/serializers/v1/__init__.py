@@ -463,19 +463,6 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
         return integration
 
-    def validate(self, data):
-        if self.instance:
-            secret_keys = {
-                field.get('key') for field in self.instance.provider.fields if field.get('secret', False)
-            }
-            for option in data.get('options', []):
-                if option.get('key') in secret_keys and not option.get('remove') and not option.get('value'):
-                    raise serializers.ValidationError({
-                        option.get('key'): _('This field may not be blank.')
-                    })
-
-        return data
-
     def update(self, integration, validated_data):
         options = {
             option.get('key'): '' if option.get('remove', False) else option.get('value')
