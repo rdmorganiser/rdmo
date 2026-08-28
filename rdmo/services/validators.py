@@ -1,3 +1,5 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework.serializers import ValidationError
 
 from rdmo.core.plugins import get_plugin
@@ -31,9 +33,9 @@ class ProviderValidator:
                 key = field.get('key')
                 if key not in options:
                     raise ValidationError({
-                        'options': f'Key "{key}" is required.'
+                        key: _('This field is required.')
                     })
                 if not options[key]:
                     raise ValidationError({
-                        'options': f'Key "{key}" must not be blank.'
+                        key: _('This field may not be blank.')
                     })
