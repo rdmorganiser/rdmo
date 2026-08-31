@@ -38,7 +38,7 @@ const Documents = () => {
                 title={view.title}
                 help={view.help}
                 onClick={() => dispatch(navigateDashboard({ area, snapshotId, viewId: view.id }))}
-                onExport={(format) => dispatch(downloadView(null, view.id, format))}
+                onExport={(format) => dispatch(downloadView(snapshotId, view.id, format))}
               />
             </div>
           ))
