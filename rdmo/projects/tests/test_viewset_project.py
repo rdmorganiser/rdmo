@@ -2,11 +2,8 @@ import pytest
 
 from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
-from django.db import connection
-from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
-from rdmo.conditions.models import Condition
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -742,42 +739,6 @@ def test_resolve_post(db, client, username, password, project_id, condition_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
-
-
-def test_resolve_post_empty_payload_does_not_load_values(db, client):
-    client.login(username='owner', password='owner')
-
-    with CaptureQueriesContext(connection) as queries:
-        response = client.post(
-            reverse(urlnames['resolve'], args=[1]),
-            [],
-            content_type='application/json'
-        )
-
-    assert response.status_code == 200
-    assert response.json() == []
-    assert not any(Value._meta.db_table in query['sql'] for query in queries)
-
-
-def test_resolve_post_missing_condition_returns_false(db, client):
-    client.login(username='owner', password='owner')
-    latest_condition_id = Condition.objects.order_by('-id').values_list('id', flat=True).first() or 0
-
-    with CaptureQueriesContext(connection) as queries:
-        response = client.post(
-            reverse(urlnames['resolve'], args=[1]),
-            [{
-                'set_prefix': '',
-                'set_index': 0,
-                'element_type': 'conditions',
-                'element_id': latest_condition_id + 1,
-            }],
-            content_type='application/json'
-        )
-
-    assert response.status_code == 200
-    assert response.json()[0]['result'] is False
-    assert not any(Value._meta.db_table in query['sql'] for query in queries)
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -1,9 +1,7 @@
-from collections import defaultdict
-
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
-from .utils import check_conditions, compute_attribute_values_map, compute_sets
+from .utils import check_conditions, compute_attribute_values_map, compute_set_values_map, compute_sets
 
 
 class AnswerTree:
@@ -11,18 +9,15 @@ class AnswerTree:
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
-        self.attribute_values_map = compute_attribute_values_map(self.values)
-        self.condition_results = {}
         self.verbose = tuple(verbose or ())
 
-        self.sets = compute_sets(
-            (value.attribute_id, value.set_prefix, value.set_index)
-            for value in self.values
-        )
-        self.conditions = catalog.conditions.in_bulk()
+        # build lookup maps once for repeated answer-tree traversal.
+        self.attribute_values_map = compute_attribute_values_map(self.values)
+        self.set_values_map = compute_set_values_map(self.values)
+        self.sets = compute_sets(self.set_values_map.keys())
 
-        # buffer for the resolved conditions: self.resolved_conditions[element][parent_set]
-        self.resolved_conditions = defaultdict(lambda: defaultdict(dict))
+        self.condition_results = {}
+        self.element_condition_results = {}
 
     def compute(self):
         # Main function of this class, which Computes the answer tree recursively.
@@ -154,17 +149,17 @@ class AnswerTree:
         level = self.compute_set_level(parent_set)
 
         # for pages, add the sets for the attribute of the page
-        if parent_set is None and element.attribute:
+        if parent_set is None and element.attribute_id:
             element_sets.update(
                 (set_prefix, set_index)
-                for set_prefix, set_index in self.sets[element.attribute.id]
+                for set_prefix, set_index in self.sets[element.attribute_id]
                 if set_prefix == ''  # only include sets for pages
             )
 
         # for each descendant find the sets and add the set for this element, which is
         # needed to "reach" the descendant set
         for descendant in element.descendants:
-            if descendant.attribute and descendant.attribute.id in self.sets:
+            if descendant.attribute_id and descendant.attribute_id in self.sets:
                 descendant_sets = self.filter_descendant_sets(descendant, parent_set)
 
                 if descendant in element.elements:
@@ -188,12 +183,8 @@ class AnswerTree:
     def compute_element_values(self, element, parent_set):
         set_prefix, set_index = parent_set
 
-        # filter the values for this element and set
-        element_values = list(filter(lambda v: all((
-            v.attribute == element.attribute,
-            v.set_prefix == set_prefix,
-            v.set_index == set_index,
-        )), self.values))
+        # get the values for this element and set
+        element_values = self.set_values_map.get((element.attribute_id, set_prefix, set_index), ())
 
         if element_values:
             # if there are values, return them
@@ -207,7 +198,7 @@ class AnswerTree:
                 self.compute_value_node(Value())
             ]
 
-    def compute_value_node(self, value=None):
+    def compute_value_node(self, value):
         if 'value' in self.verbose:
             return value.as_dict
         else:
@@ -217,19 +208,19 @@ class AnswerTree:
             }
 
     def resolve_conditions(self, element, parent_set):
-        # cache each resolved condition in self.resolved_conditions
-        if self.resolved_conditions.get(element, {}).get(parent_set) is None:
-            conditions = [self.conditions[condition.id] for condition in element.conditions.all()]
+        key = (element, parent_set)
+        if key not in self.element_condition_results:
+            conditions = element.conditions.all()
             set_prefix, set_index = parent_set if parent_set else (None, None)
-            self.resolved_conditions[element][parent_set] = bool(conditions) and check_conditions(
+            self.element_condition_results[key] = bool(conditions) and check_conditions(
                 conditions, self.attribute_values_map, set_prefix, set_index, self.condition_results
             )
 
-        return self.resolved_conditions[element][parent_set]
+        return self.element_condition_results[key]
 
     def filter_descendant_sets(self, descendant, parent_set):
         # find descendant sets and only include sets which are below the provided parent set
-        descendant_sets = self.sets[descendant.attribute.id]
+        descendant_sets = self.sets[descendant.attribute_id]
 
         if parent_set:
             child_set_prefix = self.compute_child_set_prefix(parent_set)
