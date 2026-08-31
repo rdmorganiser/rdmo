@@ -230,7 +230,7 @@ class Condition(models.Model):
     def _resolve_not_empty(self, values):
 
         for value in values:
-            if bool(value.text) or bool(value.option_id):
+            if value.text or value.option_id:
                 return True
 
         return False

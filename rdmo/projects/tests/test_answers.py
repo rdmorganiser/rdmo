@@ -2,6 +2,28 @@ import pytest
 
 from rdmo.projects.answers import AnswerTree
 
+from ..models import Project
+
+
+def iter_answer_tree_nodes(node):
+    yield node
+    for element in node.get('elements', ()):
+        yield from iter_answer_tree_nodes(element)
+    for element_set in node.get('sets', ()):
+        yield from iter_answer_tree_nodes(element_set)
+
+
+def test_answer_tree_preserves_collection_value_order(db):
+    answer_tree = Project.objects.get(id=1).get_answer_tree()
+    collection_indexes = [
+        [value['collection_index'] for value in node['values']]
+        for node in iter_answer_tree_nodes(answer_tree)
+        if node.get('model') == 'questions.question' and len(node.get('values', ())) > 1
+    ]
+
+    assert collection_indexes
+    assert all(indexes == sorted(indexes) for indexes in collection_indexes)
+
 
 @pytest.mark.parametrize('parent_set, set_level', [
     (None, 0),
