@@ -276,31 +276,21 @@ class ProjectViewSet(ModelViewSet):
         for params in validated_data:
             element_ids[params['element_type']].add(params['element_id'])
 
-        elements = defaultdict(lambda: defaultdict(set))
+        elements = defaultdict(dict)
 
-        # gather conditions for pages
-        if 'pages' in element_ids:
-            queryset = Page.conditions.through.objects.filter(page_id__in=element_ids['pages'])
-            for page_id, condition_id in queryset.values_list('page_id', 'condition_id'):
-                elements['pages'][page_id].add(condition_id)
-
-        # gather conditions for questionsets
-        if 'questionsets' in element_ids:
-            queryset = QuestionSet.conditions.through.objects.filter(questionset_id__in=element_ids['questionsets'])
-            for questionset_id, condition_id in queryset.values_list('questionset_id', 'condition_id'):
-                elements['questionsets'][questionset_id].add(condition_id)
-
-        # gather conditions for questions
-        if 'questions' in element_ids:
-            queryset = Question.conditions.through.objects.filter(question_id__in=element_ids['questions'])
-            for question_id, condition_id in queryset.values_list('question_id', 'condition_id'):
-                elements['questions'][question_id].add(condition_id)
-
-        # gather conditions for optionsets
-        if 'optionsets' in element_ids:
-            queryset = OptionSet.conditions.through.objects.filter(optionset_id__in=element_ids['optionsets'])
-            for optionset_id, condition_id in queryset.values_list('optionset_id', 'condition_id'):
-                elements['optionsets'][optionset_id].add(condition_id)
+        # gather conditions and keep empty sets for existing elements without conditions
+        for element_type, element_model in (
+            ('pages', Page),
+            ('questionsets', QuestionSet),
+            ('questions', Question),
+            ('optionsets', OptionSet),
+        ):
+            if element_type in element_ids:
+                queryset = element_model.objects.filter(id__in=element_ids[element_type]).order_by()
+                for element_id, condition_id in queryset.values_list('id', 'conditions'):
+                    element_condition_ids = elements[element_type].setdefault(element_id, set())
+                    if condition_id is not None:
+                        element_condition_ids.add(condition_id)
 
         # gather conditions
         if 'conditions' in element_ids:
@@ -331,7 +321,11 @@ class ProjectViewSet(ModelViewSet):
             element_type = params['element_type']
             element_id = params['element_id']
 
-            element_condition_ids = elements[element_type][element_id]
+            element_condition_ids = elements.get(element_type, {}).get(element_id)
+            if element_condition_ids is None:
+                params['result'] = False
+                continue
+
             cache_key = (tuple(sorted(element_condition_ids)), set_prefix, set_index)
             if cache_key not in resolved_conditions:
                 if element_condition_ids.isdisjoint(missing_condition_ids):

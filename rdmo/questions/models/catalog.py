@@ -200,6 +200,22 @@ class Catalog(Model, TranslationMixin):
     def prefetch_elements(self):
         models.prefetch_related_objects([self], *get_catalog_prefetch_lookups())
 
+    def get_prefetched_conditions(self):
+        conditions = {}
+        for element in self.descendants:
+            if element._meta.model_name not in ('page', 'questionset', 'question'):
+                continue
+
+            # Catalog.prefetch_elements stores conditions in Django's prefetch cache.
+            prefetched_conditions = getattr(element, '_prefetched_objects_cache', {}).get('conditions')
+            if prefetched_conditions is None:
+                return None
+
+            for condition in prefetched_conditions:
+                conditions[condition.pk] = condition
+
+        return conditions
+
     def to_dict(self):
         elements = [element.to_dict() for element in self.elements]
         return {

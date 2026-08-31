@@ -780,24 +780,50 @@ def test_resolve_post_empty_payload_does_not_load_values(db, client, mocker):
     assert for_condition_resolution.call_count == 0
 
 
-def test_resolve_post_missing_condition_returns_false(db, client, mocker):
+@pytest.mark.parametrize('element_type', ('pages', 'questionsets', 'questions', 'optionsets', 'conditions'))
+def test_resolve_post_missing_element_returns_false(db, client, mocker, element_type):
     client.login(username='owner', password='owner')
     for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
-    latest_condition_id = Condition.objects.order_by('-id').values_list('id', flat=True).first() or 0
 
     response = client.post(
         reverse(urlnames['resolve'], args=[1]),
         [{
             'set_prefix': '',
             'set_index': 0,
-            'element_type': 'conditions',
-            'element_id': latest_condition_id + 1,
+            'element_type': element_type,
+            'element_id': 10000,
         }],
         content_type='application/json'
     )
 
     assert response.status_code == 200
     assert response.json()[0]['result'] is False
+    assert for_condition_resolution.call_count == 0
+
+
+@pytest.mark.parametrize('element_type,element_id', (
+    ('pages', 1),
+    ('questionsets', 89),
+    ('questions', 1),
+    ('optionsets', 1),
+))
+def test_resolve_post_element_without_conditions_returns_true(db, client, mocker, element_type, element_id):
+    client.login(username='owner', password='owner')
+    for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
+
+    response = client.post(
+        reverse(urlnames['resolve'], args=[1]),
+        [{
+            'set_prefix': '',
+            'set_index': 0,
+            'element_type': element_type,
+            'element_id': element_id,
+        }],
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    assert response.json()[0]['result'] is True
     assert for_condition_resolution.call_count == 0
 
 

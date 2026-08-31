@@ -176,7 +176,7 @@ class ValueQuerySet(models.QuerySet):
             return self.none()
 
     def for_condition_resolution(self):
-        # Keep relation ids and the file loaded because initialization hooks can otherwise trigger deferred queries.
+        # Keep relation ids and the file loaded because Value initialization hooks access them.
         return self.order_by().only(
             'id',
             'project_id',
@@ -188,6 +188,24 @@ class ValueQuerySet(models.QuerySet):
             'text',
             'option_id',
             'file',
+        )
+
+    def for_answer_tree(self):
+        # Use local fields to preserve collection order without related-model ordering joins.
+        # Keep relation ids and the file loaded because Value initialization hooks access them.
+        return self.order_by('attribute_id', 'set_prefix', 'set_index', 'collection_index').only(
+            'id',
+            'project_id',
+            'snapshot_id',
+            'attribute_id',
+            'set_prefix',
+            'set_index',
+            'set_collection',
+            'collection_index',
+            'text',
+            'option_id',
+            'file',
+            'external_id',
         )
 
     def filter_empty(self):

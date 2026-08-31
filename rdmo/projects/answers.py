@@ -3,17 +3,29 @@ from collections import defaultdict
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
+from .utils import check_conditions
 
 
 class AnswerTree:
 
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
-        self.values = values
+        self.values = tuple(values)
         self.verbose = tuple(verbose or ())
 
-        self.sets = values.compute_sets()
-        self.conditions = catalog.conditions.in_bulk()
+        # index values once because answer-tree traversal repeatedly looks them up by attribute and set.
+        self.values_by_attribute = defaultdict(list)
+        self.values_by_scope = defaultdict(list)
+        self.sets = defaultdict(set)
+        for value in self.values:
+            self.values_by_attribute[value.attribute_id].append(value)
+            self.values_by_scope[(value.attribute_id, value.set_prefix, value.set_index)].append(value)
+            self.sets[value.attribute_id].add((value.set_prefix, value.set_index))
+
+        # reuse conditions loaded by Catalog.prefetch_elements. Use the catalog lookup for other callers.
+        self.conditions = self.catalog.get_prefetched_conditions()
+        if self.conditions is None:
+            self.conditions = self.catalog.conditions.in_bulk()
 
         # buffer for the resolved conditions: self.resolved_conditions[element][parent_set]
         self.resolved_conditions = defaultdict(lambda: defaultdict(dict))
@@ -183,11 +195,7 @@ class AnswerTree:
         set_prefix, set_index = parent_set
 
         # filter the values for this element and set
-        element_values = list(filter(lambda v: all((
-            v.attribute == element.attribute,
-            v.set_prefix == set_prefix,
-            v.set_index == set_index,
-        )), self.values))
+        element_values = self.values_by_scope.get((element.attribute_id, set_prefix, set_index), ())
 
         if element_values:
             # if there are values, return them
@@ -213,16 +221,15 @@ class AnswerTree:
     def resolve_conditions(self, element, parent_set):
         # cache each resolved condition in self.resolved_conditions
         if self.resolved_conditions.get(element, {}).get(parent_set) is None:
+            conditions = [self.conditions[condition.id] for condition in element.conditions.all()]
             if parent_set:
                 set_prefix, set_index = parent_set
-                self.resolved_conditions[element][parent_set] = any(
-                    self.conditions[condition.id].resolve(self.values, set_prefix, set_index)
-                    for condition in element.conditions.all()
+                self.resolved_conditions[element][parent_set] = check_conditions(
+                    conditions, self.values_by_attribute, set_prefix, set_index
                 )
             else:
-                self.resolved_conditions[element][parent_set] = any(
-                    self.conditions[condition.id].resolve(self.values)
-                    for condition in element.conditions.all()
+                self.resolved_conditions[element][parent_set] = check_conditions(
+                    conditions, self.values_by_attribute
                 )
 
         return self.resolved_conditions[element][parent_set]
