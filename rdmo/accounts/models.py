@@ -11,6 +11,7 @@ from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import parse_date_from_string
 
 CONSENT_SESSION_KEY = "user_has_consented"
+CONSENT_SESSION_DATE_KEY = "user_has_consented_for_date"
 
 
 class AdditionalField(models.Model, TranslationMixin):
@@ -140,8 +141,9 @@ class ConsentFieldValue(RDMOTimeStampedModel):
         )
 
         if has_valid_consent:
-            if session:
+            if session is not None:
                 session[CONSENT_SESSION_KEY] = True
+                session[CONSENT_SESSION_DATE_KEY] = settings.ACCOUNT_TERMS_OF_USE_DATE
             return True
 
         obj.delete()  # Remove when consent is outdated
@@ -152,8 +154,13 @@ class ConsentFieldValue(RDMOTimeStampedModel):
         if not settings.ACCOUNT_TERMS_OF_USE:
             return True  # If terms are disabled, assume accepted.
 
-        # Check session cache first
-        if CONSENT_SESSION_KEY in session:
+        # Only use a cached result for the terms version for which it was computed.
+        # Existing sessions without the date key are deliberately recalculated once.
+        if (
+            CONSENT_SESSION_KEY in session
+            and CONSENT_SESSION_DATE_KEY in session
+            and session[CONSENT_SESSION_DATE_KEY] == settings.ACCOUNT_TERMS_OF_USE_DATE
+        ):
             return session[CONSENT_SESSION_KEY]
 
         consent = cls.objects.filter(user=user).only("updated").first()
@@ -164,6 +171,7 @@ class ConsentFieldValue(RDMOTimeStampedModel):
         )
 
         session[CONSENT_SESSION_KEY] = has_valid_consent  # Cache result
+        session[CONSENT_SESSION_DATE_KEY] = settings.ACCOUNT_TERMS_OF_USE_DATE
         return has_valid_consent
 
     def is_consent_valid(self) -> bool:
