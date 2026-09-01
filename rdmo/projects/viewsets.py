@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
@@ -130,7 +129,12 @@ class ProjectViewSet(ModelViewSet):
     filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
 
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
+        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct()
+        if self.action == 'navigation':
+            # navigation only needs the project catalog and visibility before computing the answer tree.
+            return queryset.select_related('catalog', 'visibility')
+
+        queryset = queryset.prefetch_related(
             'snapshots',
             'views',
             Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
@@ -183,14 +187,13 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
-        # if a section is provided, check if it actually exists in the catalog
+        # if a section is provided, find it in the prefetched catalog elements to avoid another database query
         if section_id is None:
             section = None
         else:
-            try:
-                section = project.catalog.sections.get(pk=section_id)
-            except ObjectDoesNotExist as e:
-                raise NotFound() from e
+            section = project.catalog.get_section(section_id)
+            if section is None:
+                raise NotFound()
 
         # compute navigation from the answer tree
         navigation = compute_navigation(project, section)
