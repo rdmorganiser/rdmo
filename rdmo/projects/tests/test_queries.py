@@ -8,7 +8,8 @@ max_queries = [
     # action, max_queries, url_kwargs, url_params
     ('project_answers', 38, {'pk': 1}, {}),
     ('project_answers_export', 31, {'pk': 1, 'format': 'html'}, {}),
-    ('navigation', 43, {'pk': 1}, {}),
+    ('navigation', 40, {'pk': 1}, {}),
+    ('navigation', 40, {'pk': 1, 'section_id': 1}, {}),
     ('answers', 43, {'pk': 1}, {}),
     ('page_detail', 46, {'parent_lookup_project': 1, 'pk': 1}, {}),
     ('page_detail', 50, {'parent_lookup_project': 1, 'pk': 42}, {}),
