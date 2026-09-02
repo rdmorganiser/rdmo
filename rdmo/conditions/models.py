@@ -116,7 +116,7 @@ class Condition(models.Model):
         return self.locked
 
     def resolve(self, values, set_prefix=None, set_index=None):
-        source_values = filter(lambda value: value.attribute == self.source, values)
+        source_values = filter(lambda value: value.attribute_id == self.source_id, values)
 
         if set_prefix is not None:
             source_values = filter(lambda value: value.set_prefix == set_prefix, source_values)
@@ -168,8 +168,8 @@ class Condition(models.Model):
         results = []
 
         for value in values:
-            if self.target_option:
-                results.append(value.option == self.target_option)
+            if self.target_option_id:
+                results.append(value.option_id == self.target_option_id)
             else:
                 results.append(value.text == self.target_text)
 
@@ -230,7 +230,7 @@ class Condition(models.Model):
     def _resolve_not_empty(self, values):
 
         for value in values:
-            if bool(value.text) or bool(value.option):
+            if bool(value.text) or bool(value.option_id):
                 return True
 
         return False

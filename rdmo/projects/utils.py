@@ -33,9 +33,17 @@ def is_last_owner(project, user):
         return False
 
 
-def check_conditions(conditions, values, set_prefix=None, set_index=None):
+def compute_values_by_attribute(values):
+    values_by_attribute = defaultdict(list)
+    for value in values:
+        values_by_attribute[value.attribute_id].append(value)
+    return values_by_attribute
+
+
+def check_conditions(conditions, values_by_attribute, set_prefix=None, set_index=None):
     if conditions:
         for condition in conditions:
+            values = values_by_attribute.get(condition.source_id, ())
             if condition.resolve(values, set_prefix, set_index):
                 return True
         return False
