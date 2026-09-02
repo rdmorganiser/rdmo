@@ -8,6 +8,7 @@ from rdmo.conditions.models import Condition
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from ..managers import ValueQuerySet
 from ..models import Membership, Project, Snapshot, Value, Visibility
 
 users = (
@@ -749,7 +750,7 @@ def test_resolve_post_resolves_duplicate_condition_once(db, client, mocker):
         'set_prefix': '',
         'set_index': 0,
         'element_type': 'conditions',
-        'element_id': 1
+        'element_id': 1,
     }
 
     response = client.post(
@@ -760,7 +761,44 @@ def test_resolve_post_resolves_duplicate_condition_once(db, client, mocker):
 
     assert response.status_code == 200
     assert response.json()[0] == response.json()[1] == response.json()[2]
+    assert response.json()[0]['result'] is True
     assert resolve.call_count == 1
+
+
+def test_resolve_post_empty_payload_does_not_load_values(db, client, mocker):
+    client.login(username='owner', password='owner')
+    for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
+
+    response = client.post(
+        reverse(urlnames['resolve'], args=[1]),
+        [],
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    assert response.json() == []
+    assert for_condition_resolution.call_count == 0
+
+
+def test_resolve_post_missing_condition_returns_false(db, client, mocker):
+    client.login(username='owner', password='owner')
+    for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
+    latest_condition_id = Condition.objects.order_by('-id').values_list('id', flat=True).first() or 0
+
+    response = client.post(
+        reverse(urlnames['resolve'], args=[1]),
+        [{
+            'set_prefix': '',
+            'set_index': 0,
+            'element_type': 'conditions',
+            'element_id': latest_condition_id + 1,
+        }],
+        content_type='application/json'
+    )
+
+    assert response.status_code == 200
+    assert response.json()[0]['result'] is False
+    assert for_condition_resolution.call_count == 0
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -44,7 +44,7 @@ def test_resolve_queries(db, client, django_assert_max_num_queries):
         'element_id': 1,
     }
 
-    with django_assert_max_num_queries(19):
+    with django_assert_max_num_queries(16):
         response = client.post(url, [params, params, params], content_type='application/json')
 
     assert response.status_code == 200
@@ -57,7 +57,7 @@ def test_resolve_empty_queries(db, client, django_assert_max_num_queries):
     client.login(username='owner', password='owner')
     url = reverse(urlnames['resolve'], kwargs={'pk': 1})
 
-    with django_assert_max_num_queries(17):
+    with django_assert_max_num_queries(14):
         response = client.post(url, [], content_type='application/json')
 
     assert response.status_code == 200
