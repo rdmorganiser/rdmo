@@ -168,7 +168,7 @@ class Condition(models.Model):
         results = []
 
         for value in values:
-            if self.target_option_id:
+            if self.target_option_id is not None:
                 results.append(value.option_id == self.target_option_id)
             else:
                 results.append(value.text == self.target_text)
@@ -230,7 +230,7 @@ class Condition(models.Model):
     def _resolve_not_empty(self, values):
 
         for value in values:
-            if bool(value.text) or bool(value.option_id):
+            if value.text or value.option_id is not None:
                 return True
 
         return False

@@ -173,7 +173,7 @@ class Value(Model):
     def is_true(self):
         return any([
             self.text not in self.FALSE_TEXT,
-            self.option,
+            self.option_id is not None,
             self.file,
             self.external_id != ''
         ])
@@ -182,7 +182,7 @@ class Value(Model):
     def is_false(self):
         return all([
             self.text in self.FALSE_TEXT,
-            not self.option,
+            self.option_id is None,
             not self.file,
             self.external_id == ''
         ])
@@ -191,7 +191,7 @@ class Value(Model):
     def is_empty(self):
         return all([
             self.text == '',
-            not self.option,
+            self.option_id is None,
             not self.file,
             self.external_id == ''
         ])

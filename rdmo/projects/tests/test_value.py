@@ -41,6 +41,15 @@ def test_value_radio(db, mocker):
     assert value.option_additional_input == 'text'
 
 
+def test_value_predicates_do_not_fetch_option(db, django_assert_num_queries):
+    value = Value.objects.filter(id=4).for_answer_tree().get()
+
+    with django_assert_num_queries(0):
+        assert value.is_true is True
+        assert value.is_false is False
+        assert value.is_empty is False
+
+
 def test_value_select(db, mocker):
     value = Value.objects.get(id=5)
     mocker.patch('rdmo.options.models.Option.trans', mocked_trans)
