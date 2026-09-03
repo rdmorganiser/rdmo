@@ -113,8 +113,8 @@ The modules directly depend on each other (e.g. by importing classes or function
 
 Besides those dependencies:
 
-* Functions in `utils.py` and `managers.py` must be isolated from other code in the same module. Their dependencies
-  on models or other modules must follow the relationships above.
+* `utils.py` and `managers.py` must remain importable at the top of `models.py` and therefore must not depend, directly or indirectly on models defined in the same module.
+
 * `models.py` must only depend on `utils.py` and `managers.py`.
 
 Utility functions that depend on models defined in the same module are placed in special files, e.g. `process.py`.
