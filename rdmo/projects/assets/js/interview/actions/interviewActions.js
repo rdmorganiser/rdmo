@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil, sortBy } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -189,18 +189,23 @@ export function fetchValues(page, refresh = false) {
     dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
-      .then((fetchedValues) => {
-        const values = refresh ? (
-          // if the values are just refreshed after a value is stores or deleted, loop
-          // over the existing values and inject the fetched values, keeping unsaved values
-          getState().interview.values.map(value => {
-            const fetchedValue = fetchedValues.find(v => compareValues(v, value))
-            return isNil(fetchedValue) ? value : fetchedValue
-          })
-        ) : (
-          // when loading the page, discard all existing values
-          fetchedValues
-        )
+      .then((values) => {
+        if (refresh) {
+          // if the values are just refreshed after a value is stored or deleted, loop
+          // over the existing values and add all temporary values which were not stored yet
+          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+
+          // extend values with all unsaved values, which are not found in values
+          const keptUnsavedValues = unsavedValues.filter(
+            (value) => isNil(values.find((v) => compareValues(v, value)))
+          )
+
+          // resort the values, to ensure the correct collection_index order
+          values = sortBy(
+            [...values, ...keptUnsavedValues],
+            ['attribute', 'set_prefix', 'set_index', 'collection_index']
+          )
+        }
 
         const sets = gatherSets(values, page)
 
