@@ -593,33 +593,6 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=['get'],
-        url_path=r'files',
-        permission_classes=(HasModelPermission | HasProjectPermission, )
-    )
-    def files(self, request, pk, snapshot_id=None):
-        project = self.get_object()
-        try:
-            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
-        except Snapshot.DoesNotExist as e:
-            raise Http404 from e
-
-        files = project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
-        serializer = ProjectFileSerializer(files, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
-
-    @action(
-        detail=True,
-        methods=['get'],
-        url_path=r'snapshots/(?P<snapshot_id>\d+)/files',
-        permission_classes=(HasModelPermission | HasProjectPermission, )
-    )
-    def files_snapshot(self, request, pk, snapshot_id):
-        # extra method since DRF does not officially support optional named parameters inside url_path
-        return self.files(request, pk, snapshot_id)
-
-    @action(
-        detail=True,
-        methods=['get'],
         url_path=r'snapshots/(?P<snapshot_id>\d+)/answers',
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
@@ -721,6 +694,33 @@ class ProjectViewSet(ModelViewSet):
     def view_export_snapshot(self, request, pk, view_id, export_format, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.view_export(request, pk, view_id, export_format, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'files',
+        permission_classes=(HasModelPermission | HasProjectPermission, ),
+    )
+    def files(self, request, pk, snapshot_id=None):
+        project = self.get_object()
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        files = project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        serializer = ProjectFileSerializer(files, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/files',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def files_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.files(request, pk, snapshot_id)
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):

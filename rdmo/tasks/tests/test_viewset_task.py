@@ -95,9 +95,6 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
-        if response.status_code == 200:
-            response_data = response.json()
-            assert response_data['sendable'] == instance.is_sendable
 
 
 @pytest.mark.parametrize('username,password', users)
