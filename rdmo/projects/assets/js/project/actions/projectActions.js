@@ -28,7 +28,7 @@ export function navigateDashboard(location) {
     } else if (location.detail == 'answers') {
       dispatch(fetchAnswers(location.snapshotId))
     } else if (location.detail == 'answers-including-help') {
-      dispatch(fetchAnswers(location.snapshotId, true))
+      dispatch(fetchAnswers(location.snapshotId, {'include_help': 'true'}))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
@@ -498,14 +498,14 @@ export function rollbackSnapshot(snapshotId) {
 
 // answers / views
 
-export function fetchAnswers(snapshotId, includeHelp = false) {
+export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
 
-    return ProjectApi.fetchProjectAnswers(projectId, snapshotId, includeHelp)
+    return ProjectApi.fetchProjectAnswers(projectId, snapshotId, params)
       .then(view => {
         dispatch(removeFromPending(pendingId))
         dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
@@ -540,12 +540,12 @@ export function fetchView(snapshotId, viewId) {
 
 // download
 
-export function downloadAnswers(snapshotId, format, includeHelp = false) {
+export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
     dispatch(addToPending('downloadAnswers'))
     dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
 
-    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, includeHelp)
+    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, params)
       .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
       .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error }))
       .finally(() => dispatch(removeFromPending('downloadAnswers')))

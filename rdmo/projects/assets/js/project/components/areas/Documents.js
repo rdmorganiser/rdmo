@@ -68,7 +68,7 @@ const Documents = () => {
             title={gettext('List all answers')}
             help={gettext('Overview of all questions, help texts, and answers')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers-including-help' }))}
-            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, true))}
+            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, {'include_help': 'true'}))}
           />
         </div>
       </div>
