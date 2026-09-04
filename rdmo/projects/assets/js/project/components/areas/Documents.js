@@ -52,6 +52,7 @@ const Documents = () => {
             title={gettext('List all questions')}
             help={gettext('Overview of all questions')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
+            // TODO: implement export of questions
             onExport={(format) => {console.log(format)}}
           />
         </div>

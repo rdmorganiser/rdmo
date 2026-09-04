@@ -61,6 +61,7 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
             'read_only',
             'condition_uris',
             'projects_count',
+            'is_sendable'
         )
         trans_fields = (
             'title',

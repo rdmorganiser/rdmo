@@ -9,11 +9,14 @@ import { Tile } from '../helper'
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
+import SendIssueButton from './dashboard/SendIssueButton'
+import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
+  const settings = useSelector(state => state.settings)
   const perms = useSelector(state => state.project.project.project.permissions) ?? {}
 
   const allIssues = useSelector((state) => state.project.project.tasks) ?? []
@@ -23,6 +26,7 @@ const Dashboard = () => {
   const { showClosedTasks, showClosedRecommendations } = config
 
   const [selectedIssue, setSelectedIssue] = useState(null)
+  const [sendIssue, setSendIssue] = useState(null)
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -33,7 +37,7 @@ const Dashboard = () => {
 
   const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
 
-  // we need these 2 constants to not loose the toggle switch if all issues are closed (but not visible)
+  // we need these 2 constants to avoid losing the toggle switch if all issues are closed (but not visible)
   const taskIssues = issues.filter((issue) => getTaskType(issue) === 'task')
   const recommendationIssues = issues.filter((issue) => getTaskType(issue) === 'recommendation')
 
@@ -84,8 +88,14 @@ const Dashboard = () => {
                   </button>
                 </div>
                 <div className="flex-grow-1">
-                  <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
-                    {issue.task.title}
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
+                      {issue.task.title}
+                    </div>
+                    {
+                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
+                      <SendIssueButton onClick={() => setSendIssue(issue)} />
+                    }
                   </div>
                   {
                     issue.dates?.length > 0 && (
@@ -221,6 +231,14 @@ const Dashboard = () => {
                       })
                     }
                   }
+                />
+              )
+            }
+            {
+              sendIssue && (
+                <SendIssueModal
+                  onClose={() => setSendIssue(null)}
+                  issue={sendIssue}
                 />
               )
             }

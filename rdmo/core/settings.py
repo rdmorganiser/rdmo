@@ -256,6 +256,9 @@ SETTINGS_API = [
     'PROJECT_TABLE_PAGE_SIZE',
     'PROJECT_SELECT_CATALOG',
     'PROJECT_CONTACT',
+    'PROJECT_SEND_ISSUE',
+    'EMAIL_RECIPIENTS_CHOICES',
+    'EMAIL_RECIPIENTS_INPUT'
 ]
 
 TEMPLATES_API = [
@@ -287,6 +290,8 @@ TEMPLATES_API = [
     'projects/project_view_snapshot_description_help.html',
     'projects/project_view_visibility_help.html',
     'projects/project_view_no_catalog_info.html',
+    'projects/project_issue_send_info.html',
+    'projects/project_issue_config_info.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
@@ -294,6 +299,7 @@ TEMPLATES_EXECUTE_SCRIPT_TAGS = False
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@example.com'
 
+EMAIL_RECIPIENTS = []
 EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 

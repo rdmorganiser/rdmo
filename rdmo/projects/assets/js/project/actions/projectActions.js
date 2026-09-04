@@ -50,9 +50,11 @@ export function fetchProject() {
       ProjectApi.fetchProjectTasks(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
-      CatalogApi.fetchCatalogs()
+      CatalogApi.fetchCatalogs(),
+      ProjectApi.fetchProjectFiles(projectId)
     ])
-      .then(([project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs]) => {
+      .then(([
+        project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs, files]) => {
         const projectData = {
           project,
           hierarchy,
@@ -61,7 +63,8 @@ export function fetchProject() {
           answers,
           tasks,
           memberships: [...memberships, ...membershipHierarchy],
-          catalogs
+          catalogs,
+          files
         }
 
         dispatch(removeFromPending('fetchProject'))
@@ -489,6 +492,28 @@ export function rollbackSnapshot(snapshotId) {
       .catch(error => {
         dispatch(removeFromPending('rollbackSnapshot'))
         dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_ERROR, error })
+        throw error
+      })
+  }
+}
+
+// files
+
+export function fetchProjectFiles(snapshotId) {
+  const pendingId = isNil(snapshotId) ? 'fetchProjectFiles' : `fetchProjectFiles/${snapshotId}`
+
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_PROJECT_FILES_INIT })
+
+    return ProjectApi.fetchProjectFiles(projectId, snapshotId)
+      .then(files => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_SUCCESS, files })
+      })
+      .catch(error => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_ERROR, error })
         throw error
       })
   }

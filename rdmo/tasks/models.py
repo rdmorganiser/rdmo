@@ -194,6 +194,10 @@ class Task(TranslationMixin, models.Model):
     def is_locked(self):
         return self.locked
 
+    @property
+    def is_sendable(self):
+        return self.task_type in [TaskTypes.TASK, TaskTypes.RECOMMENDATION]
+
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
         if not uri_path:

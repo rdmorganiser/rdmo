@@ -621,6 +621,7 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
             'title',
             'text',
             'conditions',
+            'is_sendable'
         )
 
 class ProjectIssueResourceSerializer(serializers.ModelSerializer):
@@ -755,6 +756,18 @@ class ProjectAnswersSerializer(serializers.Serializer):
     attachments = ProjectAttachmentSerializer(many=True, read_only=True)
 
 
+class ProjectFileSerializer(serializers.ModelSerializer):
+
+    file_name = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'file_name',
+        )
+
+
 class ProjectViewSerializer(serializers.ModelSerializer):
 
     html = serializers.SerializerMethodField()
@@ -863,6 +876,7 @@ class IssueTaskSerializer(serializers.ModelSerializer):
             'title',
             'text',
             'conditions',
+            'is_sendable'
         )
 
 class IssueResourceSerializer(serializers.ModelSerializer):

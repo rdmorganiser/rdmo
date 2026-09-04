@@ -444,15 +444,25 @@ class IssueSendForm(forms.Form):
 
 class IssueMailForm(forms.Form):
 
-    if settings.EMAIL_RECIPIENTS_CHOICES:
+    def _get_recipient_choices():
+        recipient_choices = getattr(settings, 'EMAIL_RECIPIENTS', None)
+
+        if not recipient_choices:
+            recipient_choices = getattr(settings, 'EMAIL_RECIPIENTS_CHOICES', [])
+
+        return recipient_choices
+
+    recipient_choices = _get_recipient_choices()
+
+    if recipient_choices:
         recipients = forms.MultipleChoiceField(label=_('Recipients'), widget=forms.CheckboxSelectMultiple,
                                                required=not settings.EMAIL_RECIPIENTS_INPUT,
-                                               choices=settings.EMAIL_RECIPIENTS_CHOICES)
+                                               choices=recipient_choices)
 
     if settings.EMAIL_RECIPIENTS_INPUT:
         recipients_input = forms.CharField(label=_('Recipients'), widget=forms.Textarea(attrs={
             'placeholder': _('Enter recipients line by line')
-        }), required=not settings.EMAIL_RECIPIENTS_CHOICES)
+        }), required=not recipient_choices)
 
     def clean(self):
         cleaned_data = super().clean()
