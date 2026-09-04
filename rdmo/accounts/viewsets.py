@@ -43,7 +43,10 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
                                      'role__editor', 'role__reviewer',
                                      'memberships')
 
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    @action(
+        detail=False,
+        permission_classes=(IsAuthenticated,),
+        serializer_class=CurrentUserSerializer,
+    )
     def current(self, request):
-        serializer = CurrentUserSerializer(request.user)
-        return Response(serializer.data)
+        return Response(self.get_serializer(request.user).data)
