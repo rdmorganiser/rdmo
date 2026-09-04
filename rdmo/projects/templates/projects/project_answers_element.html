@@ -5,7 +5,7 @@
     {# this is a question #}
 
     <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
-    {% if include_help %}
+    {% if include_help and element.help %}
         <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
     {% endif %}
 
