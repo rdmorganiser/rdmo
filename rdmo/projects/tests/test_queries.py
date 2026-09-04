@@ -4,6 +4,8 @@ from django.urls import reverse
 
 max_queries = [
     # method, urlname, max_queries, url_args
+    ('get', 'v1-projects:project-list', 16, []),
+    ('get', 'v1-projects:project-detail', 12, [1]),
     ('get', 'v1-projects:project-navigation', 43, [1]),
     ('get', 'v1-projects:project-answers', 43, [1]),
     ('post', 'v1-projects:project-progress', 44, [1]),

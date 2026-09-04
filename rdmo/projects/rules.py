@@ -75,8 +75,7 @@ def is_visible(user, project):
 
 @rules.predicate
 def is_project_site_manager(user, project):
-    return user.is_authenticated and user.role.manager.filter(id=project.site_id).exists()
-
+    return user.is_authenticated and project.site_id in user.role.manager_set
 
 rules.add_perm('projects.add_project', can_add_project)
 rules.add_perm('projects.view_project_object', is_project_member | is_visible | is_project_site_manager)
