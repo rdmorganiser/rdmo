@@ -48,6 +48,10 @@
 {% else %}
     {# this is a questionset #}
 
+    <h4>{{ element.title }}</h4>
+    {% if include_help and element.help %}
+        <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
+    {% endif %}
     {% for element in element.elements %}
         {% include 'projects/project_answers_element.html' %}
     {% endfor %}
