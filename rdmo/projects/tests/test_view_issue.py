@@ -124,7 +124,7 @@ def test_issue_send_get(db, client, username, password, issue_id):
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
 def test_issue_send_post_email(db, client, settings, username, password, issue_id):
-    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
+    recipient_key = settings.EMAIL_RECIPIENTS_CHOICES[0][0]
 
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)
@@ -155,7 +155,7 @@ def test_issue_send_post_email(db, client, settings, username, password, issue_i
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('issue_id', issues)
 def test_issue_send_post_attachments(db, client, settings, files, username, password, issue_id):
-    recipient_key = settings.EMAIL_RECIPIENTS[0][0]
+    recipient_key = settings.EMAIL_RECIPIENTS_CHOICES[0][0]
 
     client.login(username=username, password=password)
     issue = Issue.objects.get(id=issue_id)

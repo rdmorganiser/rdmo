@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import { Modal } from 'rdmo/core/assets/js/_bs53/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
@@ -42,11 +43,11 @@ const SendIssueModal = ({
     )
   ].join('\n')
 
-  const hasRecipientChoices = settings.email_recipients?.length > 0
+  const hasRecipientChoices = !isEmpty(settings.email_recipients_choices)
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
   /* TODO: fetch attached integrations to determine boolean; setting is not enough */
-  const hasIntegrations = settings.project_issue_providers?.length > 0
+  const hasIntegrations = !isEmpty(settings.project_issue_providers)
   const isConfigured = hasMail || hasIntegrations
 
   const [formData, setFormData] = useState({
@@ -187,7 +188,7 @@ const SendIssueModal = ({
                 hasRecipientChoices && (
                   <div>
                     {
-                      settings.email_recipients.map(([value, label], index) => (
+                      settings.email_recipients_choices.map(([value, label], index) => (
                         <div className="form-check" key={value}>
                           <input
                             id={`id_recipients_${index}`}
