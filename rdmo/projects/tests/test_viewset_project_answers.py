@@ -1,6 +1,5 @@
 import pytest
 
-from django.http import QueryDict
 from django.urls import reverse
 
 from ..models import Snapshot
@@ -148,13 +147,9 @@ def test_view_includes_help_text(db, client, include_help):
 
     client.login(username=username, password=password)
 
-    query = QueryDict(mutable=True)
-    if include_help:
-        query["include_help"]=""
+    url = reverse(urlnames['answers'], args=[project_id])
 
-    url = reverse(urlnames['answers'], args=[project_id], query=query)
-
-    response = client.get(url)
+    response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.data["html"]
 
     assert include_help == ('class="question-help"' in content)
@@ -169,13 +164,9 @@ def test_view_export_includes_help_text(db, client, export_format, include_help)
 
     client.login(username=username, password=password)
 
-    query = QueryDict(mutable=True)
-    if include_help:
-        query["include_help"]=""
+    url = reverse(urlnames['answers-export'], args=[project_id, export_format])
 
-    url = reverse(urlnames['answers-export'], args=[project_id, export_format], query=query)
-
-    response = client.get(url)
+    response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.content.decode()
 
     assert include_help == ('class="question-help"' in content)
@@ -190,13 +181,9 @@ def test_view_snapshot_includes_help_text(db, client, snapshot_id, include_help)
     snapshot = Snapshot.objects.get(pk=snapshot_id)
     project_id = snapshot.project.id
 
-    query = QueryDict(mutable=True)
-    if include_help:
-        query["include_help"] = ""
+    url = reverse(urlnames['answers-snapshot'], args=[project_id, snapshot_id])
 
-    url = reverse(urlnames['answers-snapshot'], args=[project_id, snapshot_id], query=query)
-
-    response = client.get(url)
+    response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.data["html"]
 
     assert include_help == ('class="question-help"' in content)
@@ -212,13 +199,9 @@ def test_view_snapshot_export_includes_help_text(db, client, snapshot_id, export
     snapshot = Snapshot.objects.get(pk=snapshot_id)
     project_id = snapshot.project.id
 
-    query = QueryDict(mutable=True)
-    if include_help:
-        query["include_help"] = ""
+    url = reverse(urlnames['answers-export-snapshot'], args=[project_id, snapshot_id, export_format])
 
-    url = reverse(urlnames['answers-export-snapshot'], args=[project_id, snapshot_id, export_format], query=query)
-
-    response = client.get(url)
+    response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.content.decode()
 
     assert include_help == ('class="question-help"' in content)
