@@ -93,7 +93,7 @@ const Dashboard = () => {
                       {issue.task.title}
                     </div>
                     {
-                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.sendable) &&
+                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
                       <SendIssueButton onClick={() => setSendIssue(issue)} />
                     }
                   </div>

@@ -607,7 +607,6 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
     conditions = ProjectIssueTaskConditionSerializer(read_only=True, many=True)
-    sendable = serializers.BooleanField(source='is_sendable', read_only=True)
 
     class Meta:
         model = Task
@@ -622,7 +621,7 @@ class ProjectIssueTaskSerializer(serializers.ModelSerializer):
             'title',
             'text',
             'conditions',
-            'sendable'
+            'is_sendable'
         )
 
 class ProjectIssueResourceSerializer(serializers.ModelSerializer):
@@ -863,7 +862,6 @@ class IssueTaskSerializer(serializers.ModelSerializer):
     task_type_display = serializers.CharField(source='get_task_type_display', read_only=True)
     task_area_display = serializers.CharField(source='get_task_area_display', read_only=True)
     conditions = ProjectIssueTaskConditionSerializer(read_only=True, many=True)
-    sendable = serializers.BooleanField(source='is_sendable', read_only=True)
 
     class Meta:
         model = Task
@@ -878,7 +876,7 @@ class IssueTaskSerializer(serializers.ModelSerializer):
             'title',
             'text',
             'conditions',
-            'sendable'
+            'is_sendable'
         )
 
 class IssueResourceSerializer(serializers.ModelSerializer):
