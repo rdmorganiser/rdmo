@@ -2,8 +2,9 @@ import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
-import { buildUri, buildPathForAttribute } from '../utils/elements'
-import processElementDiffs from '../utils/processElementDiffs'
+import * as actionTypes from '../actions/actionTypes'
+import { processElementDiffs } from '../utils/diff'
+import { buildPathForAttribute, buildUri } from '../utils/elements'
 
 
 const initialState = {
@@ -14,78 +15,97 @@ const initialState = {
 }
 
 export default function importsReducer(state = initialState, action) {
-  let index, elements, elementsMap = {}
+  let index
+  let elements
+  let elementsMap = {}
 
-  switch(action.type) {
+  switch (action.type) {
+    case actionTypes.FETCH_ELEMENTS_INIT:
+    case actionTypes.FETCH_ELEMENT_INIT:
+      return { ...state, elements: [], errors: [], success: false }
+
     // upload file
-    case 'import/uploadFileInit':
-      return {...state, ...initialState,  file: action.file}
-    case 'elements/fetchElementsInit':
-    case 'elements/fetchElementInit':
-      return {...state, elements: [], errors: [], success: false}
-    case 'import/uploadFileSuccess':
-      return {...state, elements: action.elements.map(element => {
-        element = processElementDiffs(element)
-        if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
-          element.available = true
-        }
-        element.show = false
-        element.import = true
-        return element
-      })}
-    case 'import/uploadFileError':
-      return {...state, errors: action.error.errors}
+    case actionTypes.UPLOAD_IMPORT_FILE_INIT:
+      return { ...state, ...initialState, file: action.file }
+    case actionTypes.UPLOAD_IMPORT_FILE_SUCCESS:
+      return {
+        ...state,
+        elements: action.elements.map(element => {
+          element = processElementDiffs(element)
+          if (['questions.catalogs', 'tasks.task', 'views.view'].includes(element.model)) {
+            element.available = true
+          }
+          element.show = false
+          element.import = true
+          return element
+        })
+      }
+    case actionTypes.UPLOAD_IMPORT_FILE_ERROR:
+      return { ...state, errors: action.error.errors }
 
     // import elements
-    case 'import/importElementsSuccess':
-      return {...state, elements: action.elements, success: true}
-    case 'import/importElementsError':
-      return {...state, errors: action.error.errors}
+    case actionTypes.IMPORT_ELEMENTS_SUCCESS:
+      return { ...state, elements: action.elements.map(element => processElementDiffs(element)), success: true }
+    case actionTypes.IMPORT_ELEMENTS_ERROR:
+      return { ...state, errors: action.error.errors }
 
     // update element
-    case 'import/updateElement':
+    case actionTypes.UPDATE_IMPORT_ELEMENT:
       index = state.elements.findIndex(element => element === action.element)
       if (index > -1) {
         const elements = [...state.elements]
-        elements[index] = {...elements[index], ...action.values}
+        elements[index] = { ...elements[index], ...action.values }
         if (elements[index].model === 'domain.attribute') {
-          elements[index].path = buildPathForAttribute(elements[index].key, elements[index].parent ? elements[index].parent.uri : null)
+          elements[index].path =
+            buildPathForAttribute(elements[index].key, elements[index].parent ? elements[index].parent.uri : null)
         }
         const newUri = buildUri(elements[index])
         if (!isNil(newUri)) {
           elements[index].uri = newUri
         }
-        return {...state, elements}
+        return { ...state, elements }
       } else {
         return state
       }
-    case 'import/selectElements':
-      return {...state, elements: state.elements.map(element => {
-          return {...element, import: action.value}
-      })}
-    case 'import/selectChangedElements':
-      return {...state, elements: state.elements.map(element => {
-        if (element.changed || element.created ) {
-          return {...element, import: action.value}
-        }
-        else if (action.value) {return {...element, import: !action.value}}
+    case actionTypes.SELECT_IMPORT_ELEMENTS:
+      return {
+        ...state,
+        elements: state.elements.map(element => {
+          return { ...element, import: action.value }
+        })
+      }
+    case actionTypes.SELECT_CHANGED_IMPORT_ELEMENTS:
+      return {
+        ...state,
+        elements: state.elements.map(element => {
+          if (element.changed || element.created) {
+            return { ...element, import: action.value }
+          }
+          else if (action.value) { return { ...element, import: !action.value } }
           else { return element }
-      }
-      )}
-    case 'import/showElements':
-      return {...state, elements: state.elements.map(element => {
-        return {...element, show: action.value}
-      })}
-    case 'import/showChangedElements':
-      return {...state, elements: state.elements.map(element => {
-        if (element.changed || element.created ) {
-          return {...element, show: action.value}
         }
-        else if (action.value) {return {...element, show: !action.value}}
-        else { return element }
+        )
       }
-      )}
-    case 'import/updateUriPrefix':
+    case actionTypes.SHOW_IMPORT_ELEMENTS:
+      return {
+        ...state,
+        elements: state.elements.map(element => {
+          return { ...element, show: action.value }
+        })
+      }
+    case actionTypes.SHOW_CHANGED_IMPORT_ELEMENTS:
+      return {
+        ...state,
+        elements: state.elements.map(element => {
+          if (element.changed || element.created) {
+            return { ...element, show: action.value }
+          }
+          else if (action.value) { return { ...element, show: !action.value } }
+          else { return element }
+        }
+        )
+      }
+    case actionTypes.UPDATE_IMPORT_URI_PREFIX:
       elements = state.elements.map(element => {
         element.uri_prefix = action.uriPrefix
 
@@ -117,9 +137,9 @@ export default function importsReducer(state = initialState, action) {
         })
       })
 
-      return {...state, elements}
-    case 'import/resetElements':
-      return {...state, elements: []}
+      return { ...state, elements }
+    case actionTypes.RESET_IMPORT_ELEMENTS:
+      return { ...state, elements: [] }
     default:
       return state
   }

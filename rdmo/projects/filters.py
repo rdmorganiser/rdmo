@@ -35,6 +35,19 @@ class ProjectUserFilterBackend(BaseFilterBackend):
         return queryset
 
 
+class ProjectRoleFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        role = request.GET.get('role')
+        if role:
+            queryset = queryset.filter(Q(current_role=role) | Q(highest_role=role))
+
+        return queryset
+
+
 class ProjectSearchFilterBackend(SearchFilter):
 
     def filter_queryset(self, request, queryset, view):
@@ -124,11 +137,8 @@ class ProjectOrderingFilter(OrderingFilter):
                 queryset = queryset.annotate(progress=(F('progress_count') + F('progress_total')))
 
             elif 'role' in ordering or '-role' in ordering:
-                # annotate with the progress ratio
-                role_subquery = Subquery(
-                    Membership.objects.filter(project=OuterRef('pk'), user=request.user).values('role')
-                )
-                queryset = queryset.annotate(role=role_subquery)
+                # just order by highest_role
+                queryset = queryset.annotate(role=F('highest_role'))
 
             # order the queryset
             queryset = queryset.order_by(*ordering)

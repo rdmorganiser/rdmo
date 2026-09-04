@@ -32,6 +32,11 @@ class ProjectsView(LoginRequiredMixin, CSRFViewMixin, StoreIdViewMixin, Template
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
+    permission_required = 'projects.view_project_object'
+
+
+class OldProjectDetailView(ObjectPermissionMixin, DetailView):
+    model = Project
     queryset = Project.objects.prefetch_related(
         'issues',
         'issues__task',
@@ -43,6 +48,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         'values'
     )
     permission_required = 'projects.view_project_object'
+    template_name = 'projects/old/project_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

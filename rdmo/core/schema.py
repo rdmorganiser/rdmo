@@ -159,6 +159,7 @@ class ProjectIssueViewSetExtension(ParentLookupIdMixin, ViewExtension):
 
 class ProjectMembershipViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectMembershipViewSet'
+    actions = ['hierarchy', 'leave']
 
 
 class ProjectPageViewSetExtension(ParentLookupIdMixin, ViewExtension):

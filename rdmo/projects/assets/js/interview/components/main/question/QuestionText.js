@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { getQuestionTextId } from '../../../utils/question'
-
 import Html from 'rdmo/core/assets/js/components/Html'
+
+import { getQuestionTextId } from '../../../utils/question'
 
 const QuestionText = ({ question }) => {
   const classnames = classNames({

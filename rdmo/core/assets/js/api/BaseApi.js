@@ -168,6 +168,37 @@ class BaseApi {
     })
   }
 
+  static download(url) {
+    let filename
+
+    return fetch(baseUrl + url).catch(error => {
+      throw new ApiError(error.message)
+    }).then(response => {
+      if (response.ok) {
+        const contentDisposition = response.headers.get('Content-Disposition')
+        filename = contentDisposition?.match(/filename="?([^"]+)"?/)?.[1] ?? 'download'
+        return response.blob()
+      } else if (response.status === 400) {
+        return response.json().then(errors => {
+          throw new BadRequestError(response.statusText, response.status, errors)
+        })
+      } else if (response.status === 404) {
+        return response.json().then(errors => {
+          throw new NotFoundError(response.statusText, response.status, errors)
+        })
+      } else {
+        throw new ApiError(response.statusText, response.status)
+      }
+    }).then((blob) => {
+      const objectUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = objectUrl
+      a.download = filename
+      a.click()
+      URL.revokeObjectURL(objectUrl)
+    })
+  }
+
 }
 
 export default BaseApi

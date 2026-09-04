@@ -7,8 +7,8 @@ import FileWidget from '../widget/FileWidget'
 import RadioWidget from '../widget/RadioWidget'
 import RangeWidget from '../widget/RangeWidget'
 import SelectWidget from '../widget/SelectWidget'
-import TextWidget from '../widget/TextWidget'
 import TextareaWidget from '../widget/TextareaWidget'
+import TextWidget from '../widget/TextWidget'
 import YesNoWidget from '../widget/YesNoWidget'
 
 const QuestionWidget = (props) => {

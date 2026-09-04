@@ -16,6 +16,7 @@ from ..viewsets import (
     ProjectSnapshotViewSet,
     ProjectValueViewSet,
     ProjectViewSet,
+    RoleViewSet,
     SnapshotViewSet,
     ValueViewSet,
 )
@@ -45,6 +46,7 @@ router.register(r'issues', IssueViewSet, basename='issue')
 router.register(r'snapshots', SnapshotViewSet, basename='snapshot')
 router.register(r'values', ValueViewSet, basename='value')
 router.register(r'catalogs', CatalogViewSet, basename='catalog')
+router.register(r'roles', RoleViewSet, basename='role')
 
 urlpatterns = [
     path('', include(router.urls)),

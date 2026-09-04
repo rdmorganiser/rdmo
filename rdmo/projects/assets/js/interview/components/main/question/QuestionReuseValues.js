@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
@@ -75,37 +75,43 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
     }
   }, [formValues, formValues.value])
 
-  return !disabled && <>
-    <button type="button" className="btn btn-link btn-reuse-value"
-            title={gettext('Reuse answers')} aria-label={gettext('Reuse answers')}
-            onClick={() => setShow(true)}>
-      <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
-    </button>
+  return !disabled && (
+    <>
+      <button
+        type="button" className="btn btn-link btn-reuse-value"
+        title={gettext('Reuse answers')} aria-label={gettext('Reuse answers')}
+        onClick={() => setShow(true)}>
+        <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
+      </button>
 
-    <Modal title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
-           submitProps={{className: 'btn btn-primary'}}
-           onClose={() => setShow(false)} onSubmit={handleSubmit}>
-      <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
-        <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
-          {gettext('Answer')}
-        </label>
+      <Modal
+        title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
+        submitProps={{className: 'btn btn-primary'}}
+        onClose={() => setShow(false)} onSubmit={handleSubmit}>
+        <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
+          <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
+            {gettext('Answer')}
+          </label>
 
-        <Search
-          page={page}
-          question={question}
-          attribute={question.attribute}
-          values={formValues}
-          setValues={setFormValues}
-          collection={true}
-        />
+          <Search
+            page={page}
+            question={question}
+            attribute={question.attribute}
+            values={formValues}
+            setValues={setFormValues}
+            collection={true}
+          />
 
-        <p className="help-block mb-0">
-          {gettext('You can reuse an answer from a similar question in any ' +
-                   'project you have access to.')}
-        </p>
-      </div>
-    </Modal>
-  </>
+          <p className="help-block mb-0">
+            {
+              gettext('You can reuse an answer from a similar question in any ' +
+                   'project you have access to.')
+            }
+          </p>
+        </div>
+      </Modal>
+    </>
+  )
 }
 
 QuestionReuseValues.propTypes = {

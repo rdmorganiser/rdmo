@@ -105,7 +105,10 @@
 
                         {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
                         <li>
-                            {% include 'account/logout_form.html' %}
+                            <form action="{{ settings.LOGOUT_URL }}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit">{% trans 'Logout' %}</button>
+                            </form>
                         </li>
                         {% else %}
                         <li>

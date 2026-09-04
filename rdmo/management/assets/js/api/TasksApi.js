@@ -27,6 +27,14 @@ class TasksApi extends BaseApi {
     return this.delete(`/api/v1/tasks/tasks/${task.id}/`)
   }
 
+  static fetchTaskTypes() {
+    return this.get('/api/v1/tasks/tasktypes/')
+  }
+
+  static fetchTaskAreas() {
+    return this.get('/api/v1/tasks/taskareas/')
+  }
+
 }
 
 export default TasksApi

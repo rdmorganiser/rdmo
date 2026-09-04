@@ -22,6 +22,34 @@ from ..utils import get_value_path
 logger = logging.getLogger(__name__)
 
 
+def _get_recipient_email_map():
+    recipients = getattr(settings, 'EMAIL_RECIPIENTS_CHOICES', None)
+
+    if recipients is None:
+        return {}
+
+    if isinstance(recipients, dict):
+        recipients = recipients.values()
+
+    recipient_email_map = {}
+    for recipient in recipients:
+        if not isinstance(recipient, dict):
+            continue
+
+        key = recipient.get('key')
+        emails = recipient.get('emails', [])
+
+        if not key:
+            continue
+
+        if isinstance(emails, str):
+            emails = [emails]
+
+        recipient_email_map[key] = list(emails)
+
+    return recipient_email_map
+
+
 class IssueDetailView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.view_issue_object'
 
@@ -154,8 +182,19 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                     pass
             else:
                 if mail_form.is_valid():
-                    to_emails = [*mail_form.cleaned_data.get('recipients', []),
-                                 *mail_form.cleaned_data.get('recipients_input', [])]
+                    recipient_email_map = _get_recipient_email_map()
+
+                    to_emails = []
+                    selected_recipients = mail_form.cleaned_data.get('recipients', [])
+                    if recipient_email_map:
+                        for recipient_key in selected_recipients:
+                            to_emails.extend(recipient_email_map.get(recipient_key, []))
+                    else:
+                        to_emails.extend(selected_recipients)
+
+                    to_emails.extend(mail_form.cleaned_data.get('recipients_input', []))
+                    to_emails = list(dict.fromkeys(email for email in to_emails if email))
+
                     cc_emails = [request.user.email]
                     reply_to = [request.user.email]
 

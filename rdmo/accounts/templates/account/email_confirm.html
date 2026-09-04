@@ -1,8 +1,8 @@
-{% extends 'core/page.html' %}
+{% extends 'core/bs53/main.html' %}
 {% load i18n %}
 {% load account %}
 
-{% block page %}
+{% block main %}
 
     <h1>{% trans "Confirm E-mail Address" %}</h1>
 
@@ -18,7 +18,10 @@
 
     <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
         {% csrf_token %}
-        <input type="submit" class="btn btn-primary" value="{% trans 'Confirm' %}" />
+
+        <button type="submit" class="btn btn-primary">
+            {% trans 'Confirm' %}
+        </button>
     </form>
 
     {% else %}

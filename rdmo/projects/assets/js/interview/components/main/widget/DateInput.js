@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash'
 
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 import { isDefaultValue } from '../../../utils/value'
 
 const DateInput = ({ question, value, disabled, updateValue, buttons }) => {

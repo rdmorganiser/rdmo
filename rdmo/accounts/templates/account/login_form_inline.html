@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load core_tags %}
+
+<div class="login-form">
+    <form method="post" action="{% url 'account_login' %}" class="d-lg-flex justify-content-center gap-2">
+        {% csrf_token %}
+
+        {% if form.login %}
+        <div class="mb-lg-0 mb-2">
+            <label for="{{ form.login.id_for_label }}" class="visually-hidden">
+                {{ form.login.label }}
+            </label>
+            <input type="text" class="form-control"
+                   id="{{ form.login.id_for_label }}"
+                   name="{{ form.login.html_name }}"
+                   placeholder="{{ form.login.label }}" />
+        </div>
+
+        {% else %}
+
+        <div class="mb-lg-0 mb-2">
+            <label for="{{ form.username.id_for_label }}" class="visually-hidden">
+                {{ form.username.label }}
+            </label>
+            <input type="text" class="form-control"
+                   id="{{ form.username.id_for_label }}"
+                   name="{{ form.username.html_name }}"
+                   placeholder="{{ form.username.label }}" />
+        </div>
+
+        {% endif %}
+
+        <div class="mb-lg-0 mb-2">
+            <label for="{{ form.password.id_for_label }}" class="visually-hidden">
+                {{ form.password.label }}
+            </label>
+            <input type="password" class="form-control"
+                   id="{{ form.password.id_for_label }}"
+                   name="{{ form.password.html_name }}"
+                   placeholder="{{ form.password.label }}" />
+        </div>
+        <div class="d-flex gap-2 mb-0">
+            <button type="submit" class="d-block flex-grow-1 btn btn-primary">{% trans 'Sign in' %}</button>
+            {% if settings.ACCOUNT_SIGNUP %}
+            <a class="d-block btn btn-light" href="{{ signup_url }}">{% trans 'Sign up' %}</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if settings.ACCOUNT %}
+    {% url 'account_reset_password' as reset_url %}
+    <div class="mt-1 small">
+        <a href="{{ reset_url }}">{% trans 'Forgot your password?' %}</a>
+    </div>
+    {% endif %}
+</div>

@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
-
 import useFocusEffect from '../../../hooks/useFocusEffect'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
+import { isDefaultValue } from '../../../utils/value'
 
 import Unit from './common/Unit'
 
@@ -45,10 +44,12 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
           aria-labelledby={getQuestionTextId(question)}
           aria-describedby={getQuestionHelpId(question)}
           value={inputValue}
-          onChange={(event) => {
-            setInputValue(event.target.value)
-            handleChange(value, event.target.value)
-          }}
+          onChange={
+            (event) => {
+              setInputValue(event.target.value)
+              handleChange(value, event.target.value)
+            }
+          }
         />
       </div>
       <Unit unit={question.unit} />

@@ -2,6 +2,8 @@ import pytest
 
 from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_catalogs_and_tasks
 from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_catalogs_and_views
+from rdmo.projects.tests.helpers.sync.constants import extra_task_ids
+from rdmo.tasks.models import Task
 
 
 @pytest.mark.django_db
@@ -9,6 +11,7 @@ def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings):
     settings.PROJECT_TASKS_SYNC = True
 
     P, C, T = arrange_projects_catalogs_and_tasks()
+    extra_tasks = set(Task.objects.filter(pk__in=extra_task_ids))
     # === Initial state ===
     # P1 (with C1) has V1, etc..
     assert set(P[1].tasks.all()) == {T[1]}
@@ -20,8 +23,8 @@ def test_project_tasks_sync_when_changing_a_catalog_on_a_project(settings):
     P[2].catalog = C[1]
     P[2].save()
     # Assert: T1 and T2 were swapped
-    assert set(P[1].tasks.all()) == {T[2]}
-    assert set(P[2].tasks.all()) == {T[1]}
+    assert set(P[1].tasks.all()) == {T[2]} | extra_tasks
+    assert set(P[2].tasks.all()) == {T[1]} | extra_tasks
     assert set(P[3].tasks.all()) == {T[3]}
 
 

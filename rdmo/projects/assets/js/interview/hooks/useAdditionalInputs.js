@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { get, isNil } from 'lodash'
 
 const useAdditionalInputs = (value, options) => {

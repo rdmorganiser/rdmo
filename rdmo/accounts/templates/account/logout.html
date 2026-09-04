@@ -1,7 +1,7 @@
-{% extends 'core/page.html' %}
+{% extends 'core/bs53/main.html' %}
 {% load i18n %}
 
-{% block page %}
+{% block main %}
 
     <h1>{% trans "Logout" %}</h1>
 
@@ -16,7 +16,9 @@
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
 
-        <input type="submit" class="btn btn-primary" value="{% trans 'Logout' %}" />
+        <button type="submit" class="btn btn-primary">
+            {% trans 'Logout' %}"
+        </button>
     </form>
 
 {% endblock %}

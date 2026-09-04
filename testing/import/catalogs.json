@@ -3501,11 +3501,11 @@
     ]
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than/text_less_than",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/conditions/text_lesser_than/text_lesser_than",
+    "uri_path": "catalog/conditions/text_less_than/text_less_than",
     "comment": null,
     "attribute": {
       "uri": "http://example.com/terms/domain/conditions/text",
@@ -3514,12 +3514,12 @@
     "is_collection": "False",
     "is_optional": "False",
     "help_en": null,
-    "text_en": "text_lesser_than?",
+    "text_en": "text_less_than?",
     "default_text_en": null,
     "verbose_name_en": null,
     "verbose_name_plural_en": null,
     "help_de": null,
-    "text_de": "text_lesser_than?",
+    "text_de": "text_less_than?",
     "default_text_de": null,
     "verbose_name_de": null,
     "verbose_name_plural_de": null,
@@ -3536,11 +3536,11 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than",
     "type": "pages",
     "model": "questions.page",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/conditions/text_lesser_than",
+    "uri_path": "catalog/conditions/text_less_than",
     "comment": null,
     "attribute": null,
     "is_collection": "False",
@@ -3555,24 +3555,24 @@
     "questionsets": null,
     "questions": [
       {
-        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than",
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than/text_less_than",
         "type": "questions",
         "order": "0"
       }
     ],
     "conditions": [
       {
-        "uri": "http://example.com/terms/conditions/text_lesser_than_0",
+        "uri": "http://example.com/terms/conditions/text_less_than_0",
         "type": "conditions"
       }
     ]
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than_equal/text_less_than_equal",
     "type": "questions",
     "model": "questions.question",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+    "uri_path": "catalog/conditions/text_less_than_equal/text_less_than_equal",
     "comment": null,
     "attribute": {
       "uri": "http://example.com/terms/domain/conditions/text",
@@ -3581,12 +3581,12 @@
     "is_collection": "False",
     "is_optional": "False",
     "help_en": null,
-    "text_en": "text_lesser_than_equal?",
+    "text_en": "text_less_than_equal?",
     "default_text_en": null,
     "verbose_name_en": null,
     "verbose_name_plural_en": null,
     "help_de": null,
-    "text_de": "text_lesser_than_equal?",
+    "text_de": "text_less_than_equal?",
     "default_text_de": null,
     "verbose_name_de": null,
     "verbose_name_plural_de": null,
@@ -3603,11 +3603,11 @@
     "conditions": null
   },
   {
-    "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal",
+    "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than_equal",
     "type": "pages",
     "model": "questions.page",
     "uri_prefix": "http://example.com/terms",
-    "uri_path": "catalog/conditions/text_lesser_than_equal",
+    "uri_path": "catalog/conditions/text_less_than_equal",
     "comment": null,
     "attribute": null,
     "is_collection": "False",
@@ -3622,14 +3622,14 @@
     "questionsets": null,
     "questions": [
       {
-        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal",
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than_equal/text_less_than_equal",
         "type": "questions",
         "order": "0"
       }
     ],
     "conditions": [
       {
-        "uri": "http://example.com/terms/conditions/text_lesser_than_equal_0",
+        "uri": "http://example.com/terms/conditions/text_less_than_equal_0",
         "type": "conditions"
       }
     ]
@@ -4529,12 +4529,12 @@
         "order": "15"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than",
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than",
         "type": "pages",
         "order": "16"
       },
       {
-        "uri": "http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal",
+        "uri": "http://example.com/terms/questions/catalog/conditions/text_less_than_equal",
         "type": "pages",
         "order": "17"
       },

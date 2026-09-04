@@ -4,18 +4,18 @@ import {isUndefined} from 'lodash'
 
 const renderElementLengthInfo = (label, length) => (
   length > 0 && (
-    <span className='ml-5'>{gettext(label)}: {length} </span>
+    <span className="ml-5">{gettext(label)}: {length} </span>
   )
 )
 
 const ImportInfo = ({
-                      elementsLength,
-                      updatedLength,
-                      createdLength,
-                      changedLength,
-                      warningsLength,
-                      errorsLength
-                    }) => {
+  elementsLength,
+  updatedLength,
+  createdLength,
+  changedLength,
+  warningsLength,
+  errorsLength
+}) => {
   if (isUndefined(elementsLength) || elementsLength === 0) {
     return null
   }

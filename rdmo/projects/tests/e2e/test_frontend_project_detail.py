@@ -19,4 +19,4 @@ def test_project_detail_page(page: Page):
 
     # Assert project detail page
     expect(page.get_by_role("heading", name="Test")).to_be_visible()
-    expect(page.get_by_role("link", name="Answer questions")).to_be_visible()
+    expect(page.get_by_text("Interview")).to_be_visible()

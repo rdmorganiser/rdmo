@@ -1,0 +1,18 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+    <title>{{ request.site.name }}</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta property="og:title" content="{{ request.site.name }}" />
+    <meta property="og:url" content="{{ request.site.domain }}" />
+
+    <meta name='baseurl' content="{% url 'home' %}" />
+    <meta name='staticurl' content="{% static '' %}" />
+    <meta name='site_id' content="{{ settings.SITE_ID }}" />
+    <meta name='language' content="{{ LANGUAGE_CODE }}">
+
+    <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}" type="image/png" />
