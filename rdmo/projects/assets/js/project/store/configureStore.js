@@ -3,9 +3,9 @@ import thunk from 'redux-thunk'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
+// import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
-import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
+// import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
@@ -90,9 +90,11 @@ export default function configureStore() {
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
+
       if (permissions.can_view_visibility) {
-        store.dispatch(sitesActions.fetchSites())
-        store.dispatch(groupsActions.fetchGroups())
+        // TODO: enable again and guard with the new user permissions
+        // store.dispatch(sitesActions.fetchSites())
+        // store.dispatch(groupsActions.fetchGroups())
         const project = store.getState().project.project.project
         if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
