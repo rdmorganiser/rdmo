@@ -104,6 +104,7 @@ class CurrentUserSerializer(UserSerializer):
 
     def get_permissions(self, obj) -> dict[str, bool]:
         return {
+            'can_add_project': obj.has_perm('projects.add_project'),
             'can_view_project': obj.has_perm('projects.view_project'),
             'can_change_project': obj.has_perm('projects.change_project'),
             'can_delete_project': obj.has_perm('projects.delete_project'),
