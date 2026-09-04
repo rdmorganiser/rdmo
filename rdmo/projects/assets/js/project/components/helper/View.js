@@ -27,7 +27,7 @@ const View = () => {
     if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format))
     } else if (detail == 'answers-including-help') {
-      dispatch(downloadAnswers(snapshotId, format, true))
+      dispatch(downloadAnswers(snapshotId, format, {'include_help': 'true'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }

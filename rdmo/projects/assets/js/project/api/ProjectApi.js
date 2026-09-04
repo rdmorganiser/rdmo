@@ -106,24 +106,24 @@ export default class ProjectApi extends BaseApi {
     return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
   }
 
-  static fetchProjectAnswers(projectId, snapshotId, includeHelp = false) {
-    let query = includeHelp ? '?include_help' : ''
+  static fetchProjectAnswers(projectId, snapshotId, params = {}) {
+    const query = new URLSearchParams(params).toString()
 
     if (isNil(snapshotId)) {
-      return this.get(`/api/v1/projects/projects/${projectId}/answers/${query}`)
+      return this.get(`/api/v1/projects/projects/${projectId}/answers/?${query}`)
     } else {
-      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/${query}`)
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/?${query}`)
     }
   }
 
-  static downloadProjectAnswers(projectId, snapshotId, format, includeHelp = false) {
-    let query = includeHelp ? '?include_help' : ''
+  static downloadProjectAnswers(projectId, snapshotId, format, params = {}) {
+    const query = new URLSearchParams(params).toString()
 
     if (isNil(snapshotId)) {
-      return this.download(`/api/v1/projects/projects/${projectId}/answers/export/${format}/${query}`)
+      return this.download(`/api/v1/projects/projects/${projectId}/answers/export/${format}/?${query}`)
     } else {
       return this.download(
-        `/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/export/${format}/${query}`
+        `/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/answers/export/${format}/?${query}`
       )
     }
   }
