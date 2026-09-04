@@ -38,7 +38,7 @@ const Documents = () => {
                 title={view.title}
                 help={view.help}
                 onClick={() => dispatch(navigateDashboard({ area, snapshotId, viewId: view.id }))}
-                onExport={(format) => dispatch(downloadView(null, view.id, format))}
+                onExport={(format) => dispatch(downloadView(snapshotId, view.id, format))}
               />
             </div>
           ))
@@ -60,7 +60,7 @@ const Documents = () => {
             title={gettext('List all answers')}
             help={gettext('Overview of all questions and answers')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
-            onExport={(format) => dispatch(downloadAnswers(null, format))}
+            onExport={(format) => dispatch(downloadAnswers(snapshotId, format))}
           />
         </div>
       </div>
