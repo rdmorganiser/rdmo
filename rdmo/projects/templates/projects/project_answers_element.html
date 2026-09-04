@@ -5,6 +5,9 @@
     {# this is a question #}
 
     <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
+    {% if include_help and element.help %}
+        <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
+    {% endif %}
 
     {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
     {% for set_prefix in set_prefixes %}
@@ -45,6 +48,10 @@
 {% else %}
     {# this is a questionset #}
 
+    <h4>{{ element.title }}</h4>
+    {% if include_help and element.help %}
+        <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
+    {% endif %}
     {% for element in element.elements %}
         {% include 'projects/project_answers_element.html' %}
     {% endfor %}
