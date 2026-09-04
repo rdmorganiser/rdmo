@@ -92,6 +92,58 @@ class UserSerializer(serializers.ModelSerializer):
                 'date_joined',
             ]
 
+
+class CurrentUserSerializer(UserSerializer):
+    permissions = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = [
+            *UserSerializer.Meta.fields,
+            'permissions',
+        ]
+
+    def get_permissions(self, obj) -> dict[str, bool]:
+        return {
+            'can_add_project': obj.has_perm('projects.add_project'),
+            'can_view_project': obj.has_perm('projects.view_project'),
+            'can_change_project': obj.has_perm('projects.change_project'),
+            'can_delete_project': obj.has_perm('projects.delete_project'),
+            'can_leave_project': obj.has_perm('projects.leave_project'),
+            'can_export_project': obj.has_perm('projects.export_project'),
+            'can_import_project': obj.has_perm('projects.import_project'),
+            'can_view_visibility': obj.has_perm('projects.view_visibility'),
+            'can_add_visibility': obj.has_perm('projects.add_visibility'),
+            'can_change_visibility': obj.has_perm('projects.change_visibility'),
+            'can_delete_visibility': obj.has_perm('projects.delete_visibility'),
+            'can_view_membership': obj.has_perm('projects.view_membership'),
+            'can_add_membership': obj.has_perm('projects.add_membership'),
+            'can_change_membership': obj.has_perm('projects.change_membership'),
+            'can_delete_membership': obj.has_perm('projects.delete_membership'),
+            'can_view_invite': obj.has_perm('projects.view_invite'),
+            'can_add_invite': obj.has_perm('projects.add_invite'),
+            'can_change_invite': obj.has_perm('projects.change_invite'),
+            'can_delete_invite': obj.has_perm('projects.delete_invite'),
+            'can_view_integration': obj.has_perm('projects.view_integration'),
+            'can_add_integration': obj.has_perm('projects.add_integration'),
+            'can_change_integration': obj.has_perm('projects.change_integration'),
+            'can_delete_integration': obj.has_perm('projects.delete_integration'),
+            'can_view_issue': obj.has_perm('projects.view_issue'),
+            'can_add_issue': obj.has_perm('projects.add_issue'),
+            'can_change_issue': obj.has_perm('projects.change_issue'),
+            'can_delete_issue': obj.has_perm('projects.delete_issue'),
+            'can_view_snapshot': obj.has_perm('projects.view_snapshot'),
+            'can_add_snapshot': obj.has_perm('projects.add_snapshot'),
+            'can_change_snapshot': obj.has_perm('projects.change_snapshot'),
+            'can_delete_snapshot': obj.has_perm('projects.delete_snapshot'),
+            'can_rollback_snapshot': obj.has_perm('projects.rollback_snapshot'),
+            'can_export_snapshot': obj.has_perm('projects.export_snapshot'),
+            'can_view_value': obj.has_perm('projects.view_value'),
+            'can_add_value': obj.has_perm('projects.add_value'),
+            'can_change_value': obj.has_perm('projects.change_value'),
+            'can_delete_value': obj.has_perm('projects.delete_value')
+        }
+
+
 class UserLookupSerializer(serializers.Serializer):
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)

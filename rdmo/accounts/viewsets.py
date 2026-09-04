@@ -9,7 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 
-from .serializers.v1 import UserSerializer
+from .serializers.v1 import CurrentUserSerializer, UserSerializer
 
 
 class UserViewSetMixin:
@@ -43,7 +43,10 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
                                      'role__editor', 'role__reviewer',
                                      'memberships')
 
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    @action(
+        detail=False,
+        permission_classes=(IsAuthenticated,),
+        serializer_class=CurrentUserSerializer,
+    )
     def current(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        return Response(self.get_serializer(request.user).data)
