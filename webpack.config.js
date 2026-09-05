@@ -43,11 +43,6 @@ const configList = [
         patterns: [
           {
             from: '**/*',
-            to: './/fonts/',
-            context: './rdmo/core/assets/fonts/'
-          },
-          {
-            from: '**/*',
             to: './/img/',
             context: './rdmo/core/assets/img/'
           }
