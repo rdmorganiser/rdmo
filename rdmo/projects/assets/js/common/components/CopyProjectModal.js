@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
+import { Modal } from 'rdmo/core/assets/js/components'
 
 import ProjectForm from '../../project/components/areas/information/ProjectForm'
 

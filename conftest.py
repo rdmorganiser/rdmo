@@ -21,7 +21,6 @@ def fixtures():
         'domain',
         'groups',
         'options',
-        'overlays',
         'projects',
         'questions',
         'sites',
