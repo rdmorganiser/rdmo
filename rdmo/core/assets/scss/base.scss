@@ -1,7 +1,13 @@
-$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
-
-@import '~bootstrap-sass';
-@import '~font-awesome/css/font-awesome.css';
-@import 'react-datepicker/dist/react-datepicker.css';
-
-@import 'utils.scss'
+@import 'base/card';
+@import 'base/code';
+@import 'base/content';
+@import 'base/datepicker';
+@import 'base/dropdown';
+@import 'base/dropzone';
+@import 'base/forms';
+@import 'base/nav';
+@import 'base/select';
+@import 'base/sidebar';
+@import 'base/table';
+@import 'base/typography';
+@import 'base/variables';

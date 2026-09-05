@@ -18,21 +18,21 @@ const configList = [
   {
     name: 'core',
     entry: {
-      base: [
+      'bootstrap': [
+        './rdmo/core/assets/js/bootstrap.js',
+        './rdmo/core/assets/scss/bootstrap.scss'
+      ],
+      'base': [
         './rdmo/core/assets/js/base.js',
         './rdmo/core/assets/scss/base.scss'
       ],
-      'bootstrap-bs53': [
-        './rdmo/core/assets/js/_bs53/bootstrap.js',
-        './rdmo/core/assets/scss/_bs53/bootstrap.scss'
+      'home': [
+        './rdmo/core/assets/js/home.js',
+        './rdmo/core/assets/scss/home.scss'
       ],
-      'base-bs53': [
-        './rdmo/core/assets/js/_bs53/base.js',
-        './rdmo/core/assets/scss/_bs53/base.scss'
-      ],
-      'app-bs53': [
-        './rdmo/core/assets/js/_bs53/app.js',
-        './rdmo/core/assets/scss/_bs53/app.scss'
+      'app': [
+        './rdmo/core/assets/js/app.js',
+        './rdmo/core/assets/scss/app.scss'
       ]
     },
     output: {
@@ -45,6 +45,11 @@ const configList = [
             from: '**/*',
             to: './/fonts/',
             context: './rdmo/core/assets/fonts/'
+          },
+          {
+            from: '**/*',
+            to: './/img/',
+            context: './rdmo/core/assets/img/'
           }
         ]
       })

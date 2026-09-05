@@ -79,18 +79,3 @@ header {
 main {
     flex-grow: 1;
 }
-
-section {
-    &:nth-child(even) {
-        background-color: var(--rdmo-color-alt-bg);
-    }
-}
-
-footer {
-    color: var(--rdmo-color-footer);
-    background-color: var(--rdmo-color-footer-bg);
-
-    .logo {
-        max-height: 6rem;
-    }
-}

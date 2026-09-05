@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
+import { Modal } from 'rdmo/core/assets/js/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Html from 'rdmo/core/assets/js/components/Html'

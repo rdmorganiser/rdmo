@@ -1,7 +1,7 @@
 {% load static %}
 
 <header id="header" class="home">
-    {% include 'core/bs53/home_images.html' %}
+    {% include 'core/home_images.html' %}
 
     <div class="container">
         <div class="text-center">
@@ -12,7 +12,7 @@
                 A tool to support the planning, implementation, and organisation of research data management.
             </p>
 
-            {% include 'core/bs53/home_login.html' %}
+            {% include 'core/home_login.html' %}
         </div>
     </div>
 </header>
@@ -42,7 +42,7 @@
         </div>
     </section>
 
-    <section>
+    <section class="bg-secondary-subtle">
         <div class="container py-5">
             <div class="row justify-content-center text-center">
                 <div class="col-6">
@@ -68,12 +68,18 @@
                         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
                     </p>
                 </div>
+
+                <div class="mt-4">
+                    <a href="">
+                        <img class="logo" src="{% static 'core/img/rdmo-logo.svg' %}" alt="RDMO logo"/>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="home">
+<footer class="home text-light bg-dark">
     <div class="container py-5 text-center">
         <p>
             Lorem ipsum: consetetur 6:30 – 8:30 Uhr
@@ -88,11 +94,5 @@
         <p>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
         </p>
-
-        <div class="mt-5">
-            <a href="">
-                <img class="logo" src="{% static 'core/img/rdmo-logo.svg' %}" alt="RDMO logo"/>
-            </a>
-        </div>
     </div>
 </footer>
