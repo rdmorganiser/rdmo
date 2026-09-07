@@ -3,7 +3,7 @@ from collections import defaultdict
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
-from .utils import check_conditions, compute_sets, compute_values_by_attribute
+from .utils import check_conditions, compute_attribute_values_map, compute_sets
 
 
 class AnswerTree:
@@ -11,7 +11,7 @@ class AnswerTree:
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
-        self.values_by_attribute = compute_values_by_attribute(self.values)
+        self.attribute_values_map = compute_attribute_values_map(self.values)
         self.condition_results = {}
         self.verbose = tuple(verbose or ())
 
@@ -222,7 +222,7 @@ class AnswerTree:
             conditions = [self.conditions[condition.id] for condition in element.conditions.all()]
             set_prefix, set_index = parent_set if parent_set else (None, None)
             self.resolved_conditions[element][parent_set] = bool(conditions) and check_conditions(
-                conditions, self.values_by_attribute, set_prefix, set_index, self.condition_results
+                conditions, self.attribute_values_map, set_prefix, set_index, self.condition_results
             )
 
         return self.resolved_conditions[element][parent_set]
