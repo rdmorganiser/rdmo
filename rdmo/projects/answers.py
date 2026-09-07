@@ -3,6 +3,7 @@ from collections import defaultdict
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
+from .utils import check_conditions, compute_sets, compute_values_by_attribute
 
 
 class AnswerTree:
@@ -10,9 +11,14 @@ class AnswerTree:
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
         self.values = values
+        self.values_by_attribute = compute_values_by_attribute(self.values)
+        self.condition_results = {}
         self.verbose = tuple(verbose or ())
 
-        self.sets = values.compute_sets()
+        self.sets = compute_sets(
+            (value.attribute_id, value.set_prefix, value.set_index)
+            for value in self.values
+        )
         self.conditions = catalog.conditions.in_bulk()
 
         # buffer for the resolved conditions: self.resolved_conditions[element][parent_set]
@@ -213,17 +219,11 @@ class AnswerTree:
     def resolve_conditions(self, element, parent_set):
         # cache each resolved condition in self.resolved_conditions
         if self.resolved_conditions.get(element, {}).get(parent_set) is None:
-            if parent_set:
-                set_prefix, set_index = parent_set
-                self.resolved_conditions[element][parent_set] = any(
-                    self.conditions[condition.id].resolve(self.values, set_prefix, set_index)
-                    for condition in element.conditions.all()
-                )
-            else:
-                self.resolved_conditions[element][parent_set] = any(
-                    self.conditions[condition.id].resolve(self.values)
-                    for condition in element.conditions.all()
-                )
+            conditions = [self.conditions[condition.id] for condition in element.conditions.all()]
+            set_prefix, set_index = parent_set if parent_set else (None, None)
+            self.resolved_conditions[element][parent_set] = bool(conditions) and check_conditions(
+                conditions, self.values_by_attribute, set_prefix, set_index, self.condition_results
+            )
 
         return self.resolved_conditions[element][parent_set]
 

@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -9,6 +7,8 @@ from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
+
+from .utils import compute_sets
 
 
 class ProjectQuerySet(TreeQuerySet):
@@ -175,21 +175,6 @@ class ValueQuerySet(models.QuerySet):
         else:
             return self.none()
 
-    def for_condition_resolution(self):
-        # Keep relation ids and the file loaded because initialization hooks can otherwise trigger deferred queries.
-        return self.order_by().only(
-            'id',
-            'project_id',
-            'snapshot_id',
-            'attribute_id',
-            'set_prefix',
-            'set_index',
-            'set_collection',
-            'text',
-            'option_id',
-            'file',
-        )
-
     def filter_empty(self):
         return self.filter((Q(text='') | Q(text=None)) & Q(option=None) & (Q(file='') | Q(file=None)))
 
@@ -227,10 +212,7 @@ class ValueQuerySet(models.QuerySet):
         )
 
     def compute_sets(self):
-        sets = defaultdict(set)
-        for attribute, set_prefix, set_index in self.distinct_list():
-            sets[attribute].add((set_prefix, set_index))
-        return sets
+        return compute_sets(self.distinct_list())
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):

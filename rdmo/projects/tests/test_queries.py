@@ -50,6 +50,7 @@ def test_resolve_queries(db, client, django_assert_max_num_queries):
     assert response.status_code == 200
     assert len(response.json()) == 3
     assert response.json()[0] == response.json()[1] == response.json()[2]
+    assert response.json()[0]['result'] is True
 
 
 @pytest.mark.performance

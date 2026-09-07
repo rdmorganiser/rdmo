@@ -2,13 +2,14 @@ import pytest
 
 from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
 from rdmo.conditions.models import Condition
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..managers import ValueQuerySet
 from ..models import Membership, Project, Snapshot, Value, Visibility
 
 users = (
@@ -743,62 +744,40 @@ def test_resolve_post(db, client, username, password, project_id, condition_id):
             assert response.status_code == 401
 
 
-def test_resolve_post_resolves_duplicate_condition_once(db, client, mocker):
+def test_resolve_post_empty_payload_does_not_load_values(db, client):
     client.login(username='owner', password='owner')
-    resolve = mocker.spy(Condition, 'resolve')
-    params = {
-        'set_prefix': '',
-        'set_index': 0,
-        'element_type': 'conditions',
-        'element_id': 1,
-    }
 
-    response = client.post(
-        reverse(urlnames['resolve'], args=[1]),
-        [params, params, params],
-        content_type='application/json'
-    )
-
-    assert response.status_code == 200
-    assert response.json()[0] == response.json()[1] == response.json()[2]
-    assert response.json()[0]['result'] is True
-    assert resolve.call_count == 1
-
-
-def test_resolve_post_empty_payload_does_not_load_values(db, client, mocker):
-    client.login(username='owner', password='owner')
-    for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
-
-    response = client.post(
-        reverse(urlnames['resolve'], args=[1]),
-        [],
-        content_type='application/json'
-    )
+    with CaptureQueriesContext(connection) as queries:
+        response = client.post(
+            reverse(urlnames['resolve'], args=[1]),
+            [],
+            content_type='application/json'
+        )
 
     assert response.status_code == 200
     assert response.json() == []
-    assert for_condition_resolution.call_count == 0
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
 
 
-def test_resolve_post_missing_condition_returns_false(db, client, mocker):
+def test_resolve_post_missing_condition_returns_false(db, client):
     client.login(username='owner', password='owner')
-    for_condition_resolution = mocker.spy(ValueQuerySet, 'for_condition_resolution')
     latest_condition_id = Condition.objects.order_by('-id').values_list('id', flat=True).first() or 0
 
-    response = client.post(
-        reverse(urlnames['resolve'], args=[1]),
-        [{
-            'set_prefix': '',
-            'set_index': 0,
-            'element_type': 'conditions',
-            'element_id': latest_condition_id + 1,
-        }],
-        content_type='application/json'
-    )
+    with CaptureQueriesContext(connection) as queries:
+        response = client.post(
+            reverse(urlnames['resolve'], args=[1]),
+            [{
+                'set_prefix': '',
+                'set_index': 0,
+                'element_type': 'conditions',
+                'element_id': latest_condition_id + 1,
+            }],
+            content_type='application/json'
+        )
 
     assert response.status_code == 200
     assert response.json()[0]['result'] is False
-    assert for_condition_resolution.call_count == 0
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
 
 
 @pytest.mark.parametrize('username,password', users)

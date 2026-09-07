@@ -40,11 +40,27 @@ def compute_values_by_attribute(values):
     return values_by_attribute
 
 
-def check_conditions(conditions, values_by_attribute, set_prefix=None, set_index=None):
+def compute_sets(distinct_values):
+    sets = defaultdict(set)
+    for attribute_id, set_prefix, set_index in distinct_values:
+        sets[attribute_id].add((set_prefix, set_index))
+    return sets
+
+
+def resolve_condition(condition, values_by_attribute, resolved_conditions, set_prefix=None, set_index=None):
+    condition_index = (condition.pk, set_prefix, set_index)
+    if condition_index not in resolved_conditions:
+        values = values_by_attribute.get(condition.source_id, ())
+        resolved_conditions[condition_index] = condition.resolve(values, set_prefix, set_index)
+    return resolved_conditions[condition_index]
+
+
+def check_conditions(conditions, values_by_attribute, set_prefix=None, set_index=None, resolved_conditions=None):
+    if resolved_conditions is None:
+        resolved_conditions = {}
     if conditions:
         for condition in conditions:
-            values = values_by_attribute.get(condition.source_id, ())
-            if condition.resolve(values, set_prefix, set_index):
+            if resolve_condition(condition, values_by_attribute, resolved_conditions, set_prefix, set_index):
                 return True
         return False
     else:
