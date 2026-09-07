@@ -25,12 +25,12 @@ repos:
         exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: c59bba8fb259db0fec2bbb77ad8ba51ea7341b56  # frozen: v0.15.20
+    rev: 321478e58f4938179c6b86e4ddfa923d1547a49b  # frozen: v0.16.6
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 8763fc929b6232999d541a3d8eb49965a6b71afb  # frozen: v10.6.0
+    rev: 8ba198123f6fb414e19d879a1270d6d72116d89b  # frozen: v10.10.0
     hooks:
       - id: eslint
         args: [--fix, --color]
@@ -39,7 +39,7 @@ repos:
           - eslint-plugin-react@7.37.0
           - react@18.3.1
   - repo: https://github.com/crate-ci/typos
-    rev: 37bb98842b0d8c4ffebdb75301a13db0267cef89  # frozen: v1.47.2
+    rev: c132f8b9e3ac7f8f0625490b1cb5b906d1d6a63a  # frozen: v1
     hooks:
     - id: typos
       exclude: |
@@ -53,7 +53,7 @@ repos:
             testing/.*.xml
         )$
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: e3eebf65325ccc992422292cb7a4baee967cf815  # frozen: v1.26.1
+    rev: cef8b8350da46d8114c7e6b7272aebdccdf193ce  # frozen: v1.30.0
     hooks:
     - id: zizmor
       args: [--fix, --offline]
