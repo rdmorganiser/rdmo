@@ -13,7 +13,7 @@ set_indexes = (0, 1)
 @pytest.mark.parametrize('condition_id', [1, 10])
 def test_check_conditions_matches_condition_resolve(db, condition_id):
     condition = Condition.objects.get(id=condition_id)
-    values = Project.objects.get(id=project_id).values.filter(snapshot=None).for_condition_resolution()
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
     values_by_attribute = compute_values_by_attribute(values)
 
     assert check_conditions([condition], values_by_attribute) is True
@@ -22,7 +22,7 @@ def test_check_conditions_matches_condition_resolve(db, condition_id):
 
 def test_check_conditions_preserves_set_prefix_fallback(db):
     condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
-    values = Project.objects.get(id=project_id).values.filter(snapshot=None).for_condition_resolution()
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
     values_by_attribute = compute_values_by_attribute(values)
 
     assert check_conditions([condition], values_by_attribute, set_prefix='0', set_index=0) is True
@@ -38,6 +38,7 @@ def test_set_collection(db, set_index):
 
     result = condition.resolve(values, set_index=set_index)
     assert result is True
+    assert check_conditions([condition], compute_values_by_attribute(values), set_index=set_index) is result
 
 
 @pytest.mark.parametrize('set_index', set_indexes)
@@ -51,6 +52,7 @@ def test_set_collection_error_none(db, set_index):
     values = Project.objects.get(id=project_id).values.filter(snapshot=None)
     result = condition.resolve(values, set_index=set_index)
     assert result is (True if set_index == 0 else False)
+    assert check_conditions([condition], compute_values_by_attribute(values), set_index=set_index) is result
 
 
 @pytest.mark.parametrize('set_index', set_indexes)
@@ -64,3 +66,4 @@ def test_set_collection_error_true(db, set_index):
     values = Project.objects.get(id=project_id).values.filter(snapshot=None)
     result = condition.resolve(values, set_index=set_index)
     assert result is (True if set_index == 0 else False)
+    assert check_conditions([condition], compute_values_by_attribute(values), set_index=set_index) is result

@@ -209,15 +209,16 @@ class ProjectViewSet(ModelViewSet):
         set_prefix = request.GET.get('set_prefix')
         set_index = request.GET.get('set_index')
 
-        values = self.get_object().values.filter(snapshot_id=snapshot_id).for_condition_resolution()
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
         values_by_attribute = compute_values_by_attribute(values)
+        resolved_conditions = {}
 
         page_id = request.GET.get('page')
         if page_id:
             try:
                 page = Page.objects.get(id=page_id)
                 conditions = page.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index):
+                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Page.DoesNotExist:
                 pass
@@ -227,7 +228,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 questionset = QuestionSet.objects.get(id=questionset_id)
                 conditions = questionset.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index):
+                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except QuestionSet.DoesNotExist:
                 pass
@@ -237,7 +238,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 question = Question.objects.get(id=question_id)
                 conditions = question.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index):
+                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Question.DoesNotExist:
                 pass
@@ -247,7 +248,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 optionset = OptionSet.objects.get(id=optionset_id)
                 conditions = optionset.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index):
+                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except OptionSet.DoesNotExist:
                 pass
@@ -256,7 +257,7 @@ class ProjectViewSet(ModelViewSet):
         if condition_id:
             try:
                 condition = Condition.objects.get(id=condition_id)
-                if check_conditions([condition], values_by_attribute, set_prefix, set_index):
+                if check_conditions([condition], values_by_attribute, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Condition.DoesNotExist:
                 pass
@@ -318,10 +319,10 @@ class ProjectViewSet(ModelViewSet):
         missing_condition_ids = condition_ids.difference(conditions)
 
         if conditions:
-            values = project.values.filter(snapshot=None).for_condition_resolution()
-            values_by_attribute = compute_values_by_attribute(values)
+            values = project.values.filter(snapshot=None).order_by()
+            attribute_map = compute_values_by_attribute(values)
         else:
-            values_by_attribute = {}
+            attribute_map = {}
 
         # second pass: resolve conditions
         resolved_conditions = {}
@@ -332,16 +333,13 @@ class ProjectViewSet(ModelViewSet):
             element_id = params['element_id']
 
             element_condition_ids = elements[element_type][element_id]
-            cache_key = (tuple(sorted(element_condition_ids)), set_prefix, set_index)
-            if cache_key not in resolved_conditions:
-                if element_condition_ids.isdisjoint(missing_condition_ids):
-                    element_conditions = [conditions[condition_id] for condition_id in element_condition_ids]
-                    resolved_conditions[cache_key] = check_conditions(
-                        element_conditions, values_by_attribute, set_prefix, set_index
-                    )
-                else:
-                    resolved_conditions[cache_key] = False
-            params['result'] = resolved_conditions[cache_key]
+            if element_condition_ids.isdisjoint(missing_condition_ids):
+                element_conditions = [conditions[condition_id] for condition_id in element_condition_ids]
+                params['result'] = check_conditions(
+                    element_conditions, attribute_map, set_prefix, set_index, resolved_conditions
+                )
+            else:
+                params['result'] = False
 
         return Response(validated_data)
 
