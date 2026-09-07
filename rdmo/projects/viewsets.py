@@ -85,8 +85,8 @@ from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
+    compute_attribute_values_map,
     compute_set_prefix_from_set_value,
-    compute_values_by_attribute,
     copy_project,
     get_contact_message,
     get_upload_accept,
@@ -210,7 +210,7 @@ class ProjectViewSet(ModelViewSet):
         set_index = request.GET.get('set_index')
 
         values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
-        values_by_attribute = compute_values_by_attribute(values)
+        attribute_values_map = compute_attribute_values_map(values)
         resolved_conditions = {}
 
         page_id = request.GET.get('page')
@@ -218,7 +218,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 page = Page.objects.get(id=page_id)
                 conditions = page.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
+                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Page.DoesNotExist:
                 pass
@@ -228,7 +228,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 questionset = QuestionSet.objects.get(id=questionset_id)
                 conditions = questionset.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
+                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except QuestionSet.DoesNotExist:
                 pass
@@ -238,7 +238,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 question = Question.objects.get(id=question_id)
                 conditions = question.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
+                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Question.DoesNotExist:
                 pass
@@ -248,7 +248,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 optionset = OptionSet.objects.get(id=optionset_id)
                 conditions = optionset.conditions.all()
-                if check_conditions(conditions, values_by_attribute, set_prefix, set_index, resolved_conditions):
+                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except OptionSet.DoesNotExist:
                 pass
@@ -257,7 +257,7 @@ class ProjectViewSet(ModelViewSet):
         if condition_id:
             try:
                 condition = Condition.objects.get(id=condition_id)
-                if check_conditions([condition], values_by_attribute, set_prefix, set_index, resolved_conditions):
+                if check_conditions([condition], attribute_values_map, set_prefix, set_index, resolved_conditions):
                     return Response({'result': True})
             except Condition.DoesNotExist:
                 pass
@@ -320,9 +320,9 @@ class ProjectViewSet(ModelViewSet):
 
         if conditions:
             values = project.values.filter(snapshot=None).order_by()
-            attribute_map = compute_values_by_attribute(values)
+            attribute_values_map = compute_attribute_values_map(values)
         else:
-            attribute_map = {}
+            attribute_values_map = {}
 
         # second pass: resolve conditions
         resolved_conditions = {}
@@ -336,7 +336,7 @@ class ProjectViewSet(ModelViewSet):
             if element_condition_ids.isdisjoint(missing_condition_ids):
                 element_conditions = [conditions[condition_id] for condition_id in element_condition_ids]
                 params['result'] = check_conditions(
-                    element_conditions, attribute_map, set_prefix, set_index, resolved_conditions
+                    element_conditions, attribute_values_map, set_prefix, set_index, resolved_conditions
                 )
             else:
                 params['result'] = False

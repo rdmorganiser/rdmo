@@ -33,11 +33,11 @@ def is_last_owner(project, user):
         return False
 
 
-def compute_values_by_attribute(values):
-    values_by_attribute = defaultdict(list)
+def compute_attribute_values_map(values):
+    attribute_values_map = defaultdict(list)
     for value in values:
-        values_by_attribute[value.attribute_id].append(value)
-    return values_by_attribute
+        attribute_values_map[value.attribute_id].append(value)
+    return attribute_values_map
 
 
 def compute_sets(distinct_values):
@@ -47,20 +47,20 @@ def compute_sets(distinct_values):
     return sets
 
 
-def resolve_condition(condition, values_by_attribute, resolved_conditions, set_prefix=None, set_index=None):
+def resolve_condition(condition, attribute_values_map, resolved_conditions, set_prefix=None, set_index=None):
     condition_index = (condition.pk, set_prefix, set_index)
     if condition_index not in resolved_conditions:
-        values = values_by_attribute.get(condition.source_id, ())
+        values = attribute_values_map.get(condition.source_id, ())
         resolved_conditions[condition_index] = condition.resolve(values, set_prefix, set_index)
     return resolved_conditions[condition_index]
 
 
-def check_conditions(conditions, values_by_attribute, set_prefix=None, set_index=None, resolved_conditions=None):
+def check_conditions(conditions, attribute_values_map, set_prefix=None, set_index=None, resolved_conditions=None):
     if resolved_conditions is None:
         resolved_conditions = {}
     if conditions:
         for condition in conditions:
-            if resolve_condition(condition, values_by_attribute, resolved_conditions, set_prefix, set_index):
+            if resolve_condition(condition, attribute_values_map, resolved_conditions, set_prefix, set_index):
                 return True
         return False
     else:
