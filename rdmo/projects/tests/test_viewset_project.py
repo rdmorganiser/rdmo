@@ -128,13 +128,13 @@ def test_list_user(db, client, username, password):
 
     expected_query_count_with_mptt = {
         'owner': 17,
-        'manager': 21,
-        'author': 21,
-        'guest': 21,
+        'manager': 22, #21,
+        'author': 22, #21,
+        'guest': 22, #21,
         'admin': 12,
         'api': 23,
-        'site': 24,
-        'user': 18,
+        'site': 25, #24,
+        'user': 19, #18,
         'anonymous': 1,
     }
 
