@@ -119,7 +119,34 @@ def test_list_user(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list']) + f'?user={owner_id}'
-    response = client.get(url)
+
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    from rest_framework.response import Response
+
+
+    expected_query_count_with_mptt = {
+        'owner': 17,
+        'manager': 21,
+        'author': 21,
+        'guest': 21,
+        'admin': 12,
+        'api': 23,
+        'site': 24,
+        'user': 18,
+        'anonymous': 1,
+    }
+
+    response: Response|None = None
+    with CaptureQueriesContext(connection) as context:
+        response = client.get(url)
+
+        assert len(context.captured_queries) == expected_query_count_with_mptt[username]
+
+#    response = client.get(url)
+
+
     response_data = response.json()
 
     if password:
