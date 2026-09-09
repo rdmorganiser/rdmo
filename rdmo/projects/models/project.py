@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.models import TreeModel
+from rdmo.core.models import Model, TreeModel
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -17,7 +17,7 @@ from ..answers import AnswerTree
 from ..managers import ProjectManager
 
 
-class Project(TreeModel):
+class Project(TreeModel, Model):
 
     objects = ProjectManager()
 
