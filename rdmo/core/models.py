@@ -6,6 +6,8 @@ from django.utils.timezone import now
 from django.utils.translation import get_language, get_supported_language_variant
 from django.utils.translation import gettext_lazy as _
 
+from treebeard.ns_tree import NS_Node
+
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
@@ -26,6 +28,31 @@ class Model(models.Model):
         self.updated = now()
 
         super().save(*args, **kwargs)
+
+
+class TreeModel(NS_Node, Model):
+
+    parent = models.ForeignKey(
+        'self', null=True, blank=True,
+        on_delete=models.DO_NOTHING, related_name='children', db_index=True,
+    )
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        print(self.lft, self.rgt)
+        if self.lft is None or self.rgt is None:
+            self.__class__.objects.add_root(instance=self)
+            return
+
+        super().save(*args, **kwargs)
+
+        current_parent = self.__class__.objects.get_parent(self)
+        if self.parent != current_parent:
+            self.__class__.objects.move(self, self.parent, pos="last-child")
+
+
 
 
 class TranslationMixin:

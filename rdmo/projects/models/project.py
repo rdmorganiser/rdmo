@@ -8,9 +8,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from treebeard.ns_tree import NS_Node
-
-from rdmo.core.models import Model
+from rdmo.core.models import TreeModel
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -19,7 +17,7 @@ from ..answers import AnswerTree
 from ..managers import ProjectManager
 
 
-class Project(NS_Node, Model):
+class Project(TreeModel):
 
     objects = ProjectManager()
 
@@ -91,7 +89,7 @@ class Project(NS_Node, Model):
 
     def save(self, *args, **kwargs):
         # ensure that the project hierarchy is not disturbed
-        if self.id and self.parent in self.objects.get_descendants(self, include_self=True):
+        if self.id and self.parent in self.__class__.objects.get_descendants(self, include_self=True):
             raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
 
         super().save(*args, **kwargs)
@@ -163,7 +161,7 @@ class Project(NS_Node, Model):
         # this caches the ancestors, different to a @cached_property, this is also done
         # in the __init__ of ProjectSerializer
         if not hasattr(self, '_cached_ancestors'):
-            self._cached_ancestors = self.objects.get_ancestors(self)
+            self._cached_ancestors = self.__class__.objects.get_ancestors(self)
         return self._cached_ancestors
 
     def get_prefetched_members(self, role=None):
