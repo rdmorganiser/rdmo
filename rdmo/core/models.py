@@ -30,7 +30,7 @@ class Model(models.Model):
         super().save(*args, **kwargs)
 
 
-class TreeModel(NS_Node, Model):
+class TreeModel(NS_Node):
 
     parent = models.ForeignKey(
         'self', null=True, blank=True,
@@ -43,14 +43,16 @@ class TreeModel(NS_Node, Model):
     def save(self, *args, **kwargs):
         print(self.lft, self.rgt)
         if self.lft is None or self.rgt is None:
-            self.__class__.objects.add_root(instance=self)
-            return
+            if self.parent is None:
+                self.__class__.objects.add_root(instance=self)
+            else:
+                self.__class__.objects.add_child(self.parent, instance=self)
+        else:
+            super().save(*args, **kwargs)
 
-        super().save(*args, **kwargs)
-
-        current_parent = self.__class__.objects.get_parent(self)
-        if self.parent != current_parent:
-            self.__class__.objects.move(self, self.parent, pos="last-child")
+            current_parent = self.__class__.objects.get_parent(self)
+            if self.parent != current_parent:
+                self.__class__.objects.move(self, self.parent, pos="last-child")
 
 
 
