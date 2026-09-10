@@ -41,7 +41,6 @@ class TreeModel(NS_Node):
         abstract = True
 
     def save(self, *args, **kwargs):
-        print(self.lft, self.rgt)
         if self.lft is None or self.rgt is None:
             if self.parent is None:
                 self.__class__.objects.add_root(instance=self)
@@ -57,8 +56,6 @@ class TreeModel(NS_Node):
                     self.__class__.objects.move(self, a_root_node, pos="last-sibling")
                 else:
                     self.__class__.objects.move(self, self.parent, pos="last-child")
-
-    save.alters_data = True
 
 
 class TranslationMixin:

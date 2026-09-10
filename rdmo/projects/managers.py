@@ -37,7 +37,7 @@ class ProjectQuerySet(models.query.QuerySet):
 
                 # add descendant projects
                 for instance in queryset:
-                    queryset |= instance.get_descendants()
+                    queryset |= instance.__class__.objects.get_descendants(instance)
                 return queryset.distinct()
         else:
             return self.none()
