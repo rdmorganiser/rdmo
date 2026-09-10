@@ -49,8 +49,8 @@ class TreeModel(NS_Node):
         else:
             super().save(*args, **kwargs)
 
-            current_parent = self.__class__.objects.get_parent(self)
-            if self.parent != current_parent:
+            cached_parent = self._meta.get_field("parent").get_cached_value(self)
+            if self.parent != cached_parent:
                 if self.parent is None:
                     a_root_node = self.__class__.objects.get_root_nodes()[0]
                     self.__class__.objects.move(self, a_root_node, pos="last-sibling")
