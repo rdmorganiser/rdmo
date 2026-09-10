@@ -76,19 +76,25 @@ updates:
       patterns:
       - redux*
     babel:
+      dependency-type: development
       patterns:
       - '@babel*'
       - babel*
-    webpack:
+    eslint:
+      dependency-type: development
+      patterns:
+      - eslint*
+    frontend-build:
+      dependency-type: development
       patterns:
       - webpack*
       - copy-webpack-plugin
-    eslint:
-      patterns:
-      - eslint*
+      - css-loader
+      - file-loader
+      - mini-css-extract-plugin
+      - sass
+      - sass-loader
     prod-dependencies:
       dependency-type: production
-    dev-dependencies:
-      dependency-type: development
   cooldown:
     default-days: 7
