@@ -179,6 +179,6 @@ class Project(TreeModel, Model):
 
 @receiver(pre_delete, sender=Project)
 def reparent_children(sender, instance, **kwargs):
-    for child in instance.get_children():
+    for child in Project.objects.get_children(instance):
         child.parent = instance.parent
         child.save()

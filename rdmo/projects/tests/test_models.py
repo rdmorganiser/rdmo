@@ -51,7 +51,7 @@ def test_visibility_str(db):
 def test_project_delete(db, project_id):
     project = Project.objects.get(id=project_id)
     project_parent_id = project.parent_id if project.parent else None
-    project_children = [child.id for child in project.get_children()]
+    project_children = [child.id for child in Project.objects.get_children(project)]
 
     project.delete()
 

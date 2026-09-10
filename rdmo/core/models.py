@@ -52,9 +52,13 @@ class TreeModel(NS_Node):
 
             current_parent = self.__class__.objects.get_parent(self)
             if self.parent != current_parent:
-                self.__class__.objects.move(self, self.parent, pos="last-child")
+                if self.parent is None:
+                    a_root_node = self.__class__.objects.get_root_nodes()[0]
+                    self.__class__.objects.move(self, a_root_node, pos="last-sibling")
+                else:
+                    self.__class__.objects.move(self, self.parent, pos="last-child")
 
-
+    save.alters_data = True
 
 
 class TranslationMixin:
