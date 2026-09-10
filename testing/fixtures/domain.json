@@ -1599,7 +1599,7 @@
       "locked": false,
       "parent": null,
       "lft": 1,
-      "rgt": 16,
+      "rgt": 18,
       "tree_id": 9,
       "depth": 1,
       "editors": []
@@ -1706,8 +1706,8 @@
       "comment": "",
       "locked": false,
       "parent": 124,
-      "lft": 8,
-      "rgt": 9,
+      "lft": 10,
+      "rgt": 11,
       "tree_id": 9,
       "depth": 2,
       "editors": []
@@ -1724,8 +1724,8 @@
       "comment": "",
       "locked": false,
       "parent": 124,
-      "lft": 10,
-      "rgt": 11,
+      "lft": 12,
+      "rgt": 13,
       "tree_id": 9,
       "depth": 2,
       "editors": []
@@ -1742,8 +1742,8 @@
       "comment": "",
       "locked": false,
       "parent": 124,
-      "lft": 12,
-      "rgt": 13,
+      "lft": 14,
+      "rgt": 15,
       "tree_id": 9,
       "depth": 2,
       "editors": []
@@ -1760,8 +1760,8 @@
       "comment": "",
       "locked": false,
       "parent": 124,
-      "lft": 14,
-      "rgt": 15,
+      "lft": 16,
+      "rgt": 17,
       "tree_id": 9,
       "depth": 2,
       "editors": []
