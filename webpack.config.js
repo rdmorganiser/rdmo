@@ -3,7 +3,6 @@ const { merge } = require('webpack-merge')
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
 const semver = require('semver')
 
 // get the engines from package.json and check that we are actually on the correct node version
@@ -151,8 +150,7 @@ const productionConfig = {
     })
   ],
   optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()]
+    minimize: true
   },
 }
 
