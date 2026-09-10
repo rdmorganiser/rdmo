@@ -371,7 +371,7 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 1,
-      "rgt": 6,
+      "rgt": 8,
       "tree_id": 4,
       "depth": 1,
       "views": [
@@ -414,8 +414,8 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "lft": 10,
-      "rgt": 11,
+      "lft": 6,
+      "rgt": 7,
       "tree_id": 4,
       "depth": 2,
       "views": [
