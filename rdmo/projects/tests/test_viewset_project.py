@@ -604,7 +604,7 @@ def test_copy_parent(db, files, client, project_id):
 def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
-    project_ancestors = project.get_ancestors()
+    project_ancestors = Project.objects.get_ancestors(project)
 
     current_role, highest_role = get_project_roles(project, project_ancestors, username)
 
