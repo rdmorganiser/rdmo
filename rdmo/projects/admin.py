@@ -45,7 +45,7 @@ class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
 
     search_fields = ('title', 'user__username')
-    list_display = ('title', 'owners')
+    list_display = ('title', 'owners', 'updated', 'created')
     readonly_fields = ('progress_count', 'progress_total')
 
     def get_queryset(self, request):
