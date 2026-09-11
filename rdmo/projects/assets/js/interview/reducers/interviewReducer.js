@@ -134,14 +134,22 @@ export default function interviewReducer(state = initialState, action) {
     case RESOLVE_CONDITIONS_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_ERROR:
-      if (action.valueIndex > -1) {
-         return {
-          ...state, values: state.values.map((value, valueIndex) => (
-            valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
+      if (state.values.some((value) => (
+        (value.id || value.tmp_id) == action.valueId
+      ))) {
+        return {
+          ...state,
+          values: state.values.map((value) => (
+            (value.id || value.tmp_id) == action.valueId
+              ? {...value, error: action.error, pending: false}
+              : value
           ))
         }
       } else {
-        return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+        return {
+          ...state,
+          errors: [...state.errors, { actionType: action.type, ...action.error }]
+        }
       }
     case DELETE_VALUE_ERROR:
     case DELETE_SET_ERROR:
