@@ -36,9 +36,18 @@ class TreeModel(NS_Node):
         'self', null=True, blank=True,
         on_delete=models.DO_NOTHING, related_name='children', db_index=True,
     )
+    __cached_parent = None
 
     class Meta:
         abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        models.signals.post_init.connect(self.__class__.post_init, sender=self.__class__)
+
+    @classmethod
+    def post_init(cls, sender, instance, **kwargs):
+        instance.__original_parent = instance.parent
 
     def save(self, *args, **kwargs):
         if self.lft is None or self.rgt is None:
@@ -49,16 +58,19 @@ class TreeModel(NS_Node):
         else:
             super().save(*args, **kwargs)
 
-            cached_parent = self._meta.get_field("parent").get_cached_value(self)
-            if self.parent != cached_parent:
+            if self.parent != self.__cached_parent:
+                self.__cached_parent = self.parent
                 if self.parent is None:
                     a_root_node = self.__class__.objects.get_root_nodes()[0]
                     self.__class__.objects.move(self, a_root_node, pos="last-sibling")
                 else:
                     self.__class__.objects.move(self, self.parent, pos="last-child")
 
+    save.alters_data = True
+
     def full_clean(self, exclude=("lft", "rgt", "tree_id", "depth"), validate_unique=True, validate_constraints=True):
         super().full_clean(exclude=exclude, validate_unique=validate_unique, validate_constraints=validate_constraints)
+
 
 
 class TranslationMixin:
