@@ -57,6 +57,9 @@ class TreeModel(NS_Node):
                 else:
                     self.__class__.objects.move(self, self.parent, pos="last-child")
 
+    def full_clean(self, exclude=("lft", "rgt", "tree_id", "depth"), validate_unique=True, validate_constraints=True):
+        super().full_clean(exclude=exclude, validate_unique=validate_unique, validate_constraints=validate_constraints)
+
 
 class TranslationMixin:
 
