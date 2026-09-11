@@ -8,7 +8,6 @@ def filter_endpoints(endpoints):
     for (path, path_regex, method, callback) in endpoints:
         if not path.startswith((
             '/api/v1/management/',
-            '/api/v1/overlays/'
         )):
             yield (path, path_regex, method, callback)
 

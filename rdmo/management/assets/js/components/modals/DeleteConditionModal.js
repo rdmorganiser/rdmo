@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 const DeleteConditionModal = ({ condition, info, show, onClose, onDelete }) => (
   <Modal
