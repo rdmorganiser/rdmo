@@ -16,7 +16,19 @@ from rdmo.core.views import ChoicesViewSet
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .constants import WIDGET_TYPE_CHOICES
-from .models import Catalog, Page, Question, QuestionSet, Section
+from .models import (
+    Catalog,
+    CatalogSection,
+    Page,
+    PageQuestion,
+    PageQuestionSet,
+    Question,
+    QuestionSet,
+    QuestionSetQuestion,
+    QuestionSetQuestionSet,
+    Section,
+    SectionPage,
+)
 from .renderers import CatalogRenderer, PageRenderer, QuestionRenderer, QuestionSetRenderer, SectionRenderer
 from .serializers.export import (
     CatalogExportSerializer,
@@ -77,7 +89,10 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 'sites',
                 'editors',
                 'groups',
-                'catalog_sections__section',
+                models.Prefetch(
+                    'catalog_sections',
+                    queryset=CatalogSection.objects.select_related('section'),
+                ),
             )
 
     @action(detail=True)
@@ -158,7 +173,10 @@ class SectionViewSet(ModelViewSet):
             return queryset.prefetch_related(
                 'catalogs',
                 'editors',
-                'section_pages__page',
+                models.Prefetch(
+                    'section_pages',
+                    queryset=SectionPage.objects.select_related('page'),
+                ),
             )
 
     @action(detail=True)
@@ -242,8 +260,14 @@ class PageViewSet(ModelViewSet):
                 'conditions',
                 'sections',
                 'editors',
-                'page_questionsets__questionset',
-                'page_questions__question',
+                models.Prefetch(
+                    'page_questionsets',
+                    queryset=PageQuestionSet.objects.select_related('questionset'),
+                ),
+                models.Prefetch(
+                    'page_questions',
+                    queryset=PageQuestion.objects.select_related('question'),
+                ),
             ).select_related('attribute')
 
     @action(detail=True)
@@ -329,8 +353,14 @@ class QuestionSetViewSet(ModelViewSet):
                 'pages',
                 'parents',
                 'editors',
-                'questionset_questionsets__questionset',
-                'questionset_questions__question',
+                models.Prefetch(
+                    'questionset_questionsets',
+                    queryset=QuestionSetQuestionSet.objects.select_related('questionset'),
+                ),
+                models.Prefetch(
+                    'questionset_questions',
+                    queryset=QuestionSetQuestion.objects.select_related('question'),
+                ),
             ).select_related('attribute')
 
     @action(detail=True)
