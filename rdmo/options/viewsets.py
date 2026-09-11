@@ -110,16 +110,17 @@ class OptionSetViewSet(ModelViewSet):
         }
 
     def get_export_serializer_context(self, optionsets):
-        return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in={
+        queryset = Attribute.objects.filter(id__in={
                     condition.source_id
                     for optionset in optionsets
                     for condition in optionset.conditions.all()
-                }),
-                include_self=True
-            ).in_bulk()
+                })
+        for attribute in queryset:
+            queryset |= Attribute.objects.get_ancestors(attribute)
+        return {
+            'attribute_map': queryset.in_bulk()
         }
+
 
 
 class OptionViewSet(ModelViewSet):

@@ -119,7 +119,34 @@ def test_list_user(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list']) + f'?user={owner_id}'
-    response = client.get(url)
+
+    from django.db import connection
+    from django.test.utils import CaptureQueriesContext
+
+    from rest_framework.response import Response
+
+
+    expected_query_count_with_mptt = {
+        'owner': 17,
+        'manager': 22, #21,
+        'author': 22, #21,
+        'guest': 22, #21,
+        'admin': 12,
+        'api': 23,
+        'site': 25, #24,
+        'user': 19, #18,
+        'anonymous': 1,
+    }
+
+    response: Response|None = None
+    with CaptureQueriesContext(connection) as context:
+        response = client.get(url)
+
+        assert len(context.captured_queries) == expected_query_count_with_mptt[username]
+
+#    response = client.get(url)
+
+
     response_data = response.json()
 
     if password:
@@ -577,7 +604,7 @@ def test_copy_parent(db, files, client, project_id):
 def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
-    project_ancestors = project.get_ancestors()
+    project_ancestors = Project.objects.get_ancestors(project)
 
     current_role, highest_role = get_project_roles(project, project_ancestors, username)
 

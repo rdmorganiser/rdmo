@@ -6,6 +6,8 @@ from django.utils.timezone import now
 from django.utils.translation import get_language, get_supported_language_variant
 from django.utils.translation import gettext_lazy as _
 
+from treebeard.ns_tree import NS_Node
+
 from rdmo.core.utils import get_languages
 
 logger = logging.getLogger(__name__)
@@ -26,6 +28,49 @@ class Model(models.Model):
         self.updated = now()
 
         super().save(*args, **kwargs)
+
+
+class TreeModel(NS_Node):
+
+    parent = models.ForeignKey(
+        'self', null=True, blank=True,
+        on_delete=models.DO_NOTHING, related_name='children', db_index=True,
+    )
+
+    class Meta:
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        self._cache = {}
+        super().__init__(*args, **kwargs)
+        models.signals.post_init.connect(self.__class__.post_init, sender=self.__class__)
+
+    @classmethod
+    def post_init(cls, sender, instance, **kwargs):
+        instance._cache["parent"] = instance.parent_id
+
+    def save(self, *args, **kwargs):
+        if self.lft is None or self.rgt is None:
+            if self.parent is None:
+                self.__class__.objects.add_root(instance=self)
+            else:
+                self.__class__.objects.add_child(self.parent, instance=self)
+        else:
+            super().save(*args, **kwargs)
+
+            current_parent = self.parent_id
+            if current_parent != self._cache.get("parent"):
+                if self.parent is None:
+                    a_root_node = self.__class__.objects.get_root_nodes()[0]
+                    self.__class__.objects.move(self, a_root_node, pos="last-sibling")
+                else:
+                    self.__class__.objects.move(self, self.parent, pos="last-child")
+
+    save.alters_data = True
+
+    def full_clean(self, exclude=("lft", "rgt", "tree_id", "depth"), validate_unique=True, validate_constraints=True):
+        super().full_clean(exclude=exclude, validate_unique=validate_unique, validate_constraints=validate_constraints)
+
 
 
 class TranslationMixin:

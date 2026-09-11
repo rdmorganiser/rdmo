@@ -56,10 +56,10 @@ class OldProjectDetailView(ObjectPermissionMixin, DetailView):
         ancestors = project.get_ancestors(include_self=True)
         values = project.values.filter(snapshot=None).select_related('attribute', 'option')
         highest = Membership.objects.filter(project__in=ancestors, user_id=OuterRef('user_id')) \
-                                    .order_by('-project__level')
+                                    .order_by('-project__depth')
         memberships = Membership.objects.filter(project__in=ancestors) \
-                                        .annotate(highest=Subquery(highest.values('project__level')[:1])) \
-                                        .filter(highest=F('project__level')) \
+                                        .annotate(highest=Subquery(highest.values('project__depth')[:1])) \
+                                        .filter(highest=F('project__depth')) \
                                         .select_related('user')
 
         if settings.SOCIALACCOUNT:
@@ -90,8 +90,8 @@ class OldProjectDetailView(ObjectPermissionMixin, DetailView):
             if self.request.user.has_perm('projects.view_project_object', instance):
                 ancestors_import.append(instance)
         context['ancestors_import'] = ancestors_import
-        context['memberships'] = memberships.order_by('user__last_name', '-project__level')
-        context['integrations'] = integrations.order_by('provider_key', '-project__level')
+        context['memberships'] = memberships.order_by('user__last_name', '-project__depth')
+        context['integrations'] = integrations.order_by('provider_key', '-project__depth')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
         context['issues'] = [
             issue for issue in project.issues.order_by('-status', 'task__order', 'task__uri') if issue.resolve(values)

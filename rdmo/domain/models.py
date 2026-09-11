@@ -3,12 +3,11 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from mptt.models import MPTTModel, TreeForeignKey
-
+from rdmo.core.models import TreeModel
 from rdmo.core.utils import join_url
 
 
-class Attribute(MPTTModel):
+class Attribute(TreeModel):
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -45,7 +44,7 @@ class Attribute(MPTTModel):
         verbose_name=_('Editors'),
         help_text=_('The sites that can edit this attribute (in a multi site setup).')
     )
-    parent = TreeForeignKey(
+    parent = models.ForeignKey(
         'self', null=True, blank=True,
         on_delete=models.CASCADE, related_name='children', db_index=True,
         verbose_name=_('Parent attribute'),
@@ -71,7 +70,7 @@ class Attribute(MPTTModel):
 
     @property
     def is_locked(self) -> bool:
-        return self.get_ancestors(include_self=True).filter(locked=True).exists()
+        return bool(self.locked) or self.__class__.objects.get_ancestors(self).filter(locked=True).exists()
 
     @property
     def is_leaf_node(self) -> bool:

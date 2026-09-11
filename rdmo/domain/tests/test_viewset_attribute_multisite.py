@@ -84,7 +84,7 @@ def test_list(db, client, username, password):
 def test_nested(db, client, username, password):
     ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
@@ -114,7 +114,7 @@ def test_export(db, client, username, password):
 def test_detail(db, client, username, password):
     ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -128,7 +128,7 @@ def test_detail(db, client, username, password):
 def test_create(db, client, username, password):
     ''' only users and status_map are unique for this test '''
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['list'])
@@ -145,7 +145,7 @@ def test_create(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
 
@@ -166,7 +166,7 @@ def test_update(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])

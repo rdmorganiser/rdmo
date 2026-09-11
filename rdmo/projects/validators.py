@@ -29,7 +29,9 @@ class ProjectParentValidator(InstanceValidator):
         super().__call__(data, serializer)
 
         if self.instance and self.instance.id \
-                and data.get('parent') in self.instance.get_descendants(include_self=True):
+                and data.get('parent') in [
+                    self.instance, *self.instance.__class__.objects.get_descendants(self.instance)
+                ]:
             raise self.raise_validation_error({
                 'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
             })
