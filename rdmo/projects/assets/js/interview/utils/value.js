@@ -108,10 +108,63 @@ const compareValues = (a, b, widget_type = null) => {
   }
 }
 
-const isEmptyValue = (value) => {
-  return isNil(value.id) || (
-    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
-  )
+const isEmptyValue = (value, widget_type = null) => {
+  // Unsaved values are initialized/default frontend values and do not count
+  // as answers yet.
+  if (isNil(value.id)) {
+    return true
+  }
+
+  switch (widget_type) {
+    case 'checkbox':
+    case 'radio':
+      // These widgets render a selection only through option/external_id.
+      // text can contain stale data or additional input from another widget.
+      return isNil(value.option) && isEmpty(value.external_id)
+
+    case 'date':
+    case 'range':
+    case 'text':
+    case 'textarea':
+    case 'yesno':
+      // These widgets render their answer from text.
+      return isEmpty(value.text)
+
+    case 'file':
+      return isEmpty(value.file_name)
+
+    case 'select':
+    case 'select_creatable':
+    default:
+      return (
+        isEmpty(value.text) &&
+        isNil(value.option) &&
+        isEmpty(value.external_id)
+      )
+  }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue }
+const getValueAttrs = (question, value) => {
+  const attrs = {
+    text: value.text,
+    unit: question.unit,
+    value_type: question.value_type
+  }
+
+  switch (question.widget_type) {
+    case 'checkbox':
+    case 'radio':
+    case 'select':
+    case 'select_creatable':
+      return {
+        ...attrs,
+        option: value.option,
+        external_id: value.external_id
+      }
+
+    default:
+      return attrs
+  }
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue, getValueAttrs }
