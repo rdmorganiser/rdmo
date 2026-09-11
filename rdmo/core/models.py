@@ -36,18 +36,18 @@ class TreeModel(NS_Node):
         'self', null=True, blank=True,
         on_delete=models.DO_NOTHING, related_name='children', db_index=True,
     )
-    __cached_parent = None
 
     class Meta:
         abstract = True
 
     def __init__(self, *args, **kwargs):
+        self._cache = {}
         super().__init__(*args, **kwargs)
         models.signals.post_init.connect(self.__class__.post_init, sender=self.__class__)
 
     @classmethod
     def post_init(cls, sender, instance, **kwargs):
-        instance.__original_parent = instance.parent
+        instance._cache["parent"] = instance.parent_id
 
     def save(self, *args, **kwargs):
         if self.lft is None or self.rgt is None:
@@ -58,8 +58,8 @@ class TreeModel(NS_Node):
         else:
             super().save(*args, **kwargs)
 
-            if self.parent != self.__cached_parent:
-                self.__cached_parent = self.parent
+            current_parent = self.parent_id
+            if current_parent != self._cache.get("parent"):
                 if self.parent is None:
                     a_root_node = self.__class__.objects.get_root_nodes()[0]
                     self.__class__.objects.move(self, a_root_node, pos="last-sibling")
