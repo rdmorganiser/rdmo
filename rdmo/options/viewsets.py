@@ -15,7 +15,7 @@ from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.domain.models import Attribute
 
-from .models import Option, OptionSet
+from .models import Option, OptionSet, OptionSetOption
 from .renderers import OptionRenderer, OptionSetRenderer
 from .serializers.export import OptionExportSerializer, OptionSetExportSerializer
 from .serializers.v1 import (
@@ -46,12 +46,16 @@ class OptionSetViewSet(ModelViewSet):
             return queryset
         elif self.action in ['nested', 'export', 'detail_export']:
             return queryset.prefetch_related(
-                'optionset_options__option',
+                models.Prefetch(
+                    'optionset_options',
+                    queryset=OptionSetOption.objects.select_related('option'),
+                ),
                 'conditions',
             )
+
         else:
             return queryset.prefetch_related(
-                'optionset_options__option',
+                'optionset_options',
                 'conditions',
                 'questions',
                 'editors',
