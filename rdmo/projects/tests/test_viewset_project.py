@@ -208,7 +208,7 @@ def test_user(db, client, username, password):
 def test_detail(db, client, username, password, project_id):
     client.login(username=username, password=password)
     project = Project.objects.get(pk=project_id)
-    project_ancestors = project.get_ancestors()
+    project_ancestors = Project.objects.get_ancestors(project)
 
     current_role, highest_role = get_project_roles(project, project_ancestors, username)
 
@@ -343,7 +343,7 @@ def test_create_catalog_not_available(db, client):
 @pytest.mark.parametrize('project_id', projects)
 def test_create_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
-    project_ancestors = Project.objects.get(id=project_id).get_ancestors().values_list('id', flat=True)
+    project_ancestors = Project.objects.get_ancestors(Project.objects.get(id=project_id)).values_list('id', flat=True)
 
     url = reverse(urlnames['list'])
     data = {

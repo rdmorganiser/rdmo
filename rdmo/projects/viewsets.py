@@ -872,7 +872,7 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixi
     @action(detail=False, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ))
     def hierarchy(self, request, parent_lookup_project=None):
         # get the ancestors of this project
-        ancestors = self.project.get_ancestors()
+        ancestors = Project.objects.get_ancestors(self.project)
 
         # add a subquery to find the highest occurrence of a user in the project hierarchy
         highest_project = Membership.objects.filter(
