@@ -148,11 +148,11 @@ class Project(MPTTModel, Model):
 
     def get_answer_tree(self, snapshot=None, verbose=None):
         verbose = tuple(verbose or ())
-        values = self.values.filter(snapshot=snapshot)
+        values = self.values.filter(snapshot=snapshot).order_by(
+            'attribute_id', 'set_prefix', 'set_index', 'collection_index'
+        )
         if 'value' in verbose:
             values = values.select_related('attribute', 'option')
-        else:
-            values = values.order_by('attribute_id', 'set_prefix', 'set_index', 'collection_index')
 
         return AnswerTree(
             self.catalog,

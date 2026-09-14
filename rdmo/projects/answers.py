@@ -1,19 +1,17 @@
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
-from .utils import check_conditions, compute_attribute_values_map, compute_set_values_map, compute_sets
+from .utils import check_conditions, compute_sets, compute_value_maps
 
 
 class AnswerTree:
 
     def __init__(self, catalog, values, verbose=None):
         self.catalog = catalog
-        self.values = values
         self.verbose = tuple(verbose or ())
 
         # build lookup maps once for repeated answer-tree traversal.
-        self.attribute_values_map = compute_attribute_values_map(self.values)
-        self.set_values_map = compute_set_values_map(self.values)
+        self.attribute_values_map, self.set_values_map = compute_value_maps(values)
         self.sets = compute_sets(self.set_values_map.keys())
 
         self.condition_results = {}
@@ -158,11 +156,12 @@ class AnswerTree:
 
         # for each descendant find the sets and add the set for this element, which is
         # needed to "reach" the descendant set
+        direct_elements = set(element.elements)
         for descendant in element.descendants:
             if descendant.attribute_id and descendant.attribute_id in self.sets:
                 descendant_sets = self.filter_descendant_sets(descendant, parent_set)
 
-                if descendant in element.elements:
+                if descendant in direct_elements:
                     # for the direct children (i.e. questions), we add just the sets
                     element_sets.update(descendant_sets)
                 else:

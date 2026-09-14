@@ -40,13 +40,15 @@ def compute_attribute_values_map(values):
     return attribute_values_map
 
 
-def compute_set_values_map(values):
+def compute_value_maps(values):
+    attribute_values_map = defaultdict(list)
     set_values_map = defaultdict(list)
     for value in values:
+        attribute_values_map[value.attribute_id].append(value)
         set_values_map[
             (value.attribute_id, value.set_prefix, value.set_index)
         ].append(value)
-    return set_values_map
+    return attribute_values_map, set_values_map
 
 
 def compute_sets(distinct_values):
