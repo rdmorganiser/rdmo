@@ -183,7 +183,7 @@ class ProjectViewSet(ModelViewSet):
                 user=self.request.user,
                 project__tree_id=OuterRef('tree_id'),
                 project__lft__lte=OuterRef('lft'),
-                project__rght__gte=OuterRef('rght'),
+                project__rgt__gte=OuterRef('rgt'),
             )
             .annotate(role_rank=role_rank_case)
             .order_by('-role_rank')
@@ -533,7 +533,7 @@ class ProjectViewSet(ModelViewSet):
     def hierarchy(self, request, pk):
         # get the cached family of this project
         project = self.get_object()
-        cached_trees = project.get_family().get_cached_trees()
+        cached_trees = Project.objects.get_tree(project) | Project.objects.get_ancestors(project)
         serializer_context = self.get_serializer_context()
         serializer_context['project'] = self.get_object()
         serializer = ProjectHierarchySerializer(cached_trees[0], context=serializer_context)
@@ -876,12 +876,12 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixi
         # add a subquery to find the highest occurrence of a user in the project hierarchy
         highest_project = Membership.objects.filter(
             project__in=ancestors, user_id=OuterRef('user_id')
-        ).order_by('-project__level')
+        ).order_by('-project__depth')
 
         # query memberships for all ancestors, but only the highest level
         memberships = Membership.objects.filter(project__in=ancestors) \
-                                        .annotate(highest=Subquery(highest_project.values('project__level')[:1])) \
-                                        .filter(highest=F('project__level')) \
+                                        .annotate(highest=Subquery(highest_project.values('project__depth')[:1])) \
+                                        .filter(highest=F('project__depth')) \
                                         .select_related('project', 'user')
 
         if settings.SOCIALACCOUNT:

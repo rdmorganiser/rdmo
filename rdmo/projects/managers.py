@@ -4,13 +4,12 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 
-from mptt.models import TreeManager
-from mptt.querysets import TreeQuerySet
+from treebeard.ns_tree import NS_NodeManager, NS_NodeQuerySet
 
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
-class ProjectQuerySet(TreeQuerySet):
+class ProjectQuerySet(NS_NodeQuerySet):
 
     def filter_user(self, user, filter_for_user=False):
         if user.is_authenticated:
@@ -217,7 +216,7 @@ class ValueQuerySet(models.QuerySet):
         return sets
 
 
-class ProjectManager(CurrentSiteManagerMixin, TreeManager):
+class ProjectManager(CurrentSiteManagerMixin, NS_NodeManager):
 
     def get_queryset(self):
         return ProjectQuerySet(self.model, using=self._db)
@@ -235,7 +234,7 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
         # collect the constraints for all projects
         filters = Q()
         for project in projects:
-            filters |= (Q(tree_id=project.tree_id) & Q(lft__lt=project.lft) & Q(rght__gt=project.rght))
+            filters |= (Q(tree_id=project.tree_id) & Q(lft__lt=project.lft) & Q(rgt__gt=project.rgt))
 
         # Fetch all ancestors in one query
         ancestors = self.filter(filters).order_by('tree_id', 'lft')
@@ -246,7 +245,7 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
         }
         for ancestor in ancestors:
             for project in projects:
-                if ancestor.tree_id == project.tree_id and ancestor.lft < project.lft and ancestor.rght > project.rght:
+                if ancestor.tree_id == project.tree_id and ancestor.lft < project.lft and ancestor.rgt > project.rgt:
                     prefetched_ancestors[project.id].append(ancestor)
 
         # add the project as last ancestor
