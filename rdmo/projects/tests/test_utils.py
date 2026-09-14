@@ -8,9 +8,31 @@ from rdmo.core.tests.utils import compute_checksum
 from ..models import Invite, Project, Value
 from ..utils import (
     compute_set_prefix_from_set_value,
+    compute_value_maps,
     copy_project,
     get_invite_email_project_path,
 )
+
+
+def test_compute_value_maps():
+    first = Value(attribute_id=1, set_prefix='', set_index=0, collection_index=2)
+    second = Value(attribute_id=1, set_prefix='', set_index=0, collection_index=1)
+    nested = Value(attribute_id=1, set_prefix='0', set_index=1)
+    other = Value(attribute_id=2, set_prefix='', set_index=0)
+
+    attribute_values, set_values = compute_value_maps(iter((first, nested, other, second)))
+
+    assert attribute_values == {1: [first, nested, second], 2: [other]}
+    assert set_values == {
+        (1, '', 0): [first, second],
+        (1, '0', 1): [nested],
+        (2, '', 0): [other],
+    }
+
+
+def test_compute_value_maps_empty():
+    assert compute_value_maps(iter(())) == ({}, {})
+
 
 GET_queries = [
     'page=2&title=project',

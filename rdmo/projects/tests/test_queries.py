@@ -35,6 +35,23 @@ def test_queries(db, client, django_assert_max_num_queries, action, max_queries,
 
 
 @pytest.mark.performance
+@pytest.mark.parametrize('params,result,max_queries', [
+    ({}, False, 15),
+    ({'page': -1}, False, 16),
+    ({'page': 1}, True, 17),
+])
+def test_resolve_get_without_values_queries(db, client, django_assert_max_num_queries, params, result, max_queries):
+    client.login(username='owner', password='owner')
+
+    with django_assert_max_num_queries(max_queries) as queries:
+        response = client.get(reverse(urlnames['resolve'], kwargs={'pk': 1}), params)
+
+    assert response.status_code == 200
+    assert response.json() == {'result': result}
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
+
+
+@pytest.mark.performance
 def test_resolve_queries(db, client, django_assert_max_num_queries):
     client.login(username='owner', password='owner')
     url = reverse(urlnames['resolve'], kwargs={'pk': 1})
