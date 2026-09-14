@@ -349,9 +349,9 @@
       "progress_total": 97,
       "progress_count": 58,
       "lft": 1,
-      "rght": 2,
+      "rgt": 2,
       "tree_id": 1,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -371,9 +371,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 1,
-      "rght": 6,
+      "rgt": 8,
       "tree_id": 4,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -393,9 +393,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 2,
-      "rght": 5,
+      "rgt": 5,
       "tree_id": 4,
-      "level": 1,
+      "depth": 2,
       "views": [
         1
       ]
@@ -414,10 +414,10 @@
       "catalog": 1,
       "progress_total": null,
       "progress_count": null,
-      "lft": 10,
-      "rght": 11,
+      "lft": 6,
+      "rgt": 7,
       "tree_id": 4,
-      "level": 1,
+      "depth": 2,
       "views": [
         1
       ]
@@ -437,9 +437,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 3,
-      "rght": 4,
+      "rgt": 4,
       "tree_id": 4,
-      "level": 2,
+      "depth": 3,
       "views": [
         1
       ]
@@ -459,9 +459,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 2,
-      "rght": 7,
+      "rgt": 7,
       "tree_id": 5,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -481,9 +481,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 6,
-      "rght": 8,
+      "rgt": 8,
       "tree_id": 6,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -503,9 +503,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 7,
-      "rght": 9,
+      "rgt": 9,
       "tree_id": 7,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -525,9 +525,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 8,
-      "rght": 12,
+      "rgt": 12,
       "tree_id": 8,
-      "level": 0,
+      "depth": 1,
       "views": [
         1
       ]
@@ -547,9 +547,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 1,
-      "rght": 2,
+      "rgt": 2,
       "tree_id": 9,
-      "level": 0,
+      "depth": 1,
       "views": [
         1,
         2,
@@ -571,9 +571,9 @@
       "progress_total": null,
       "progress_count": null,
       "lft": 1,
-      "rght": 2,
+      "rgt": 2,
       "tree_id": 10,
-      "level": 0,
+      "depth": 1,
       "views": [
         1,
         2,
@@ -595,9 +595,9 @@
       "progress_total": 29,
       "progress_count": 1,
       "lft": 1,
-      "rght": 2,
+      "rgt": 2,
       "tree_id": 11,
-      "level": 0,
+      "depth": 1,
       "views": [
         1,
         2,

@@ -118,11 +118,11 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
             for condition in task.conditions.all():
                 attribute_ids.add(condition.source_id)
 
+        queryset = Attribute.objects.filter(id__in=attribute_ids)
+        for attribute in queryset:
+            queryset |= Attribute.objects.get_ancestors(attribute)
         return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
+            'attribute_map': queryset.in_bulk()
         }
 
 

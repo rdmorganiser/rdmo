@@ -52,7 +52,7 @@ class AttributeParentValidator(InstanceValidator):
 
             # only check updated attributes
             if self.instance:
-                if parent in self.instance.get_descendants(include_self=True):
+                if parent in Attribute.objects.get_descendants(self.instance, include_self=True):
                     self.raise_validation_error({
                         'parent': [
                             _('An attribute may not be moved to be a child of itself or one of its descendants.')
