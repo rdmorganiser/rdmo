@@ -4,12 +4,12 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 
-from treebeard.ns_tree import NS_NodeManager, NS_NodeQuerySet
+from treebeard.ns_tree import NS_NodeManager
 
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
-class ProjectQuerySet(NS_NodeQuerySet):
+class ProjectQuerySet(models.query.QuerySet):
 
     def filter_user(self, user, filter_for_user=False):
         if user.is_authenticated:
@@ -37,7 +37,7 @@ class ProjectQuerySet(NS_NodeQuerySet):
 
                 # add descendant projects
                 for instance in queryset:
-                    queryset |= instance.get_descendants()
+                    queryset |= instance.__class__.objects.get_descendants(instance)
                 return queryset.distinct()
         else:
             return self.none()
