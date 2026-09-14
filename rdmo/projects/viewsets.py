@@ -210,57 +210,34 @@ class ProjectViewSet(ModelViewSet):
         set_index = request.GET.get('set_index')
 
         values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
-        attribute_values_map = compute_attribute_values_map(values)
+        attribute_values_map = None
         resolved_conditions = {}
 
-        page_id = request.GET.get('page')
-        if page_id:
-            try:
-                page = Page.objects.get(id=page_id)
-                conditions = page.conditions.all()
-                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
-                    return Response({'result': True})
-            except Page.DoesNotExist:
-                pass
+        for element_type, element_model in (
+            ('page', Page),
+            ('questionset', QuestionSet),
+            ('question', Question),
+            ('optionset', OptionSet),
+            ('condition', Condition),
+        ):
+            element_id = request.GET.get(element_type)
+            if not element_id:
+                continue
 
-        questionset_id = request.GET.get('questionset')
-        if questionset_id:
             try:
-                questionset = QuestionSet.objects.get(id=questionset_id)
-                conditions = questionset.conditions.all()
-                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
-                    return Response({'result': True})
-            except QuestionSet.DoesNotExist:
-                pass
+                element = element_model.objects.get(id=element_id)
+            except element_model.DoesNotExist:
+                continue
 
-        question_id = request.GET.get('question')
-        if question_id:
-            try:
-                question = Question.objects.get(id=question_id)
-                conditions = question.conditions.all()
-                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
-                    return Response({'result': True})
-            except Question.DoesNotExist:
-                pass
+            conditions = [element] if element_model is Condition else element.conditions.all()
+            if not conditions:
+                return Response({'result': True})
 
-        optionset_id = request.GET.get('optionset')
-        if optionset_id:
-            try:
-                optionset = OptionSet.objects.get(id=optionset_id)
-                conditions = optionset.conditions.all()
-                if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
-                    return Response({'result': True})
-            except OptionSet.DoesNotExist:
-                pass
+            if attribute_values_map is None:
+                attribute_values_map = compute_attribute_values_map(values)
 
-        condition_id = request.GET.get('condition')
-        if condition_id:
-            try:
-                condition = Condition.objects.get(id=condition_id)
-                if check_conditions([condition], attribute_values_map, set_prefix, set_index, resolved_conditions):
-                    return Response({'result': True})
-            except Condition.DoesNotExist:
-                pass
+            if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
+                return Response({'result': True})
 
         return Response({'result': False})
 
