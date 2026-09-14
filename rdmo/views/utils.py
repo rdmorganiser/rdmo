@@ -153,6 +153,6 @@ class ProjectWrapper:
     def _build_tree(self, projects):
         return [{
             'id': project.id,
-            'level': project.level,
+            'depth': project.depth,
             'children': self.build_tree(project.get_children())
         } for project in projects]
