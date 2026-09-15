@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rdmo.conditions.prefetch import condition_prefetch
 from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -16,6 +17,7 @@ from rdmo.core.views import ChoicesViewSet
 from rdmo.domain.models import Attribute
 
 from .models import Option, OptionSet
+from .prefetch import optionset_options_prefetch
 from .renderers import OptionRenderer, OptionSetRenderer
 from .serializers.export import OptionExportSerializer, OptionSetExportSerializer
 from .serializers.v1 import (
@@ -44,14 +46,19 @@ class OptionSetViewSet(ModelViewSet):
         queryset = OptionSet.objects.all()
         if self.action in ['index']:
             return queryset
-        elif self.action in ['nested', 'export', 'detail_export']:
+        elif self.action == 'nested':
             return queryset.prefetch_related(
-                'optionset_options__option',
+                optionset_options_prefetch('optionset_options'),
                 'conditions',
+            )
+        elif self.action in ['export', 'detail_export']:
+            return queryset.prefetch_related(
+                optionset_options_prefetch('optionset_options'),
+                condition_prefetch('conditions'),
             )
         else:
             return queryset.prefetch_related(
-                'optionset_options__option',
+                'optionset_options',
                 'conditions',
                 'questions',
                 'editors',
