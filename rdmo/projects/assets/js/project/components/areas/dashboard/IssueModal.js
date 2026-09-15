@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Modal } from 'rdmo/core/assets/js/_bs53/components'
+import { Modal } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'

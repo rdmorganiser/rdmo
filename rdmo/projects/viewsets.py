@@ -728,11 +728,12 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def imports(self, request):
+        # TODO: update after import refactoring
         return Response([{
             'key': key,
             'label': label,
             'class_name': class_name,
-            'href': reverse('project_create_import', args=[key])
+            'href': ""
         } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { Tooltip } from 'rdmo/core/assets/js/_bs53/components'
+import { Tooltip } from 'rdmo/core/assets/js/components'
 
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'

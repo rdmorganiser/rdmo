@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Modal from 'rdmo/core/assets/js/_bs53/components/Modal'
 import Html from 'rdmo/core/assets/js/components/Html'
+import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import { deleteProjectInvite, deleteProjectMember, leaveProject } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks/useFieldErrors'
