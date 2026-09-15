@@ -4,7 +4,7 @@ import pytest
 
 from django.urls import reverse
 
-from ..models import OptionSet
+from ..models import Option, OptionSet, OptionSetOption
 
 users = (
     ('editor', 'editor'),
@@ -43,6 +43,31 @@ urlnames = {
 }
 
 export_formats = ('xml', 'html')
+
+
+def test_list_many_options(db, admin_client):
+    uri_prefix = 'https://example.com/terms'
+    optionset = OptionSet.objects.create(uri_prefix=uri_prefix, uri_path='large-optionset')
+    options = Option.objects.bulk_create([
+        Option(
+            uri=f'{uri_prefix}/options/large-option-{index}',
+            uri_prefix=uri_prefix,
+            uri_path=f'large-option-{index}',
+        )
+        for index in range(1100)
+    ])
+    OptionSetOption.objects.bulk_create([
+        OptionSetOption(optionset=optionset, option=option, order=index)
+        for index, option in enumerate(options)
+    ])
+
+    response = admin_client.get(reverse(urlnames['list']), {'uri': optionset.uri})
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+    assert response.json()[0]['options'] == [
+        {'option': option.pk, 'order': index}
+        for index, option in enumerate(options)
+    ]
 
 
 @pytest.mark.parametrize('username,password', users)
