@@ -210,8 +210,9 @@ def test_create_external(db, client, username, password, project_id, value_type,
 def test_update(db, client, username, password, value_id):
     client.login(username=username, password=password)
     value = Value.objects.get(id=value_id)
+    project_id = value.project_id
 
-    url = reverse(urlnames['detail'], args=[value.project_id, value_id])
+    url = reverse(urlnames['detail'], args=[project_id, value_id])
     data = {
         'attribute': attribute_id,
         'set_index': 0,
@@ -227,6 +228,10 @@ def test_update(db, client, username, password, value_id):
         assert isinstance(response.json(), dict)
         assert response.json().get('id') in Value.objects.filter(project_id=value.project_id) \
                                                          .values_list('id', flat=True)
+
+        value.refresh_from_db()
+        assert value.project_id == project_id
+
     elif value.project_id in view_value_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -272,11 +277,8 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     if set_value.project_id in copy_value_permission_map.get(username, []):
         assert response.status_code == 201
         assert len(response.json()) == set_values_count + 1
-        assert Value.objects.get(
-            project=set_value.project_id,
-            snapshot=None,
-            **data
-        )
+        assert Value.objects.get(project=set_value.project_id, snapshot=None, **data)
+
         assert Value.objects.count() == values_count + set_values_count + 1  # one is for set/id
         for value_data in response.json():
             if value_data['set_prefix'] == data['set_prefix']:
@@ -291,6 +293,40 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     else:
         assert response.status_code == 404
         assert Value.objects.count() == values_count
+
+
+@pytest.mark.parametrize('value_id, set_values_count', set_values)
+def test_copy_set_project(db, client, value_id, set_values_count):
+    client.login(username='owner', password='owner')
+    set_value = Value.objects.get(id=value_id)
+
+    project_id = set_value.project_id
+    other_id = 11
+
+    project_values_count = Value.objects.filter(project_id=project_id).count()
+    other_values_count = Value.objects.filter(project_id=other_id).count()
+
+    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 2,
+        'text': 'new',
+    }
+    response = client.post(url, data=json.dumps(dict(
+        **data,
+        copy_set_value=value_id,
+        project=11,  # Project: Other
+    )), content_type="application/json")
+
+    assert response.status_code == 201
+    assert len(response.json()) == set_values_count + 1
+
+    assert Value.objects.filter(project=project_id, snapshot=None, **data).exists()
+    assert not Value.objects.filter(project=other_id, snapshot=None, **data).exists()
+
+    assert Value.objects.filter(project_id=project_id).count() == project_values_count + set_values_count + 1
+    assert Value.objects.filter(project_id=other_id).count() == other_values_count
 
 
 @pytest.mark.parametrize('username,password', users)
