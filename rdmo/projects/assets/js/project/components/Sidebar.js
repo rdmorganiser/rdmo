@@ -13,7 +13,9 @@ const Sidebar = () => {
 
   const { area } = useSelector((state) => state.config)
   const { project, visibility } = useSelector((state) => state.project)
+  const providers = useSelector((state) => state.project.providers) ?? {}
 
+  console.log(providers)
   const menuItems = [
     {
       title: '',
@@ -34,7 +36,11 @@ const Sidebar = () => {
       items: [
         { area: 'information', name: gettext('Project information'), icon: 'bi-info-square' },
         { area: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
-        { area: 'integrations', name: gettext('Integrations'), icon: 'bi-wrench' },
+        ...(
+          Object.keys(providers).length > 0 ? (
+            [{ area: 'integrations', name: gettext('Integrations'), icon: 'bi-wrench' }]
+          ) : []
+        ),
       ],
     },
   ]
