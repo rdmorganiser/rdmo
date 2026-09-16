@@ -8,14 +8,14 @@ from .test_viewset_catalog import urlnames
 
 max_queries = [
     # action, max_queries, url_kwargs, url_params
-    ('list', 8, {}, {}),
+    ('list', 7, {}, {}),
     ('index', 3, {}, {}),
-    ('nested', 31, {'pk': 1}, {}),
-    ('export', 36, {'export_format': 'xml'}, {}),
-    ('export', 42, {'export_format': 'xml'}, {'full': '1'}),
-    ('detail', 8, {'pk': 1}, {}),
-    ('detail_export', 36, {'pk': 1, 'export_format': 'xml'}, {}),
-    ('detail_export', 39, {'pk': 1, 'export_format': 'xml'}, {'full': '1'}),
+    ('nested', 24, {'pk': 1}, {}),
+    ('export', 29, {'export_format': 'xml'}, {}),
+    ('export', 32, {'export_format': 'xml'}, {'full': '1'}),
+    ('detail', 7, {'pk': 1}, {}),
+    ('detail_export', 29, {'pk': 1, 'export_format': 'xml'}, {}),
+    ('detail_export', 30, {'pk': 1, 'export_format': 'xml'}, {'full': '1'}),
 ]
 
 

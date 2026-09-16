@@ -77,7 +77,7 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 'sites',
                 'editors',
                 'groups',
-                'catalog_sections__section',
+                'catalog_sections',
             )
 
     @action(detail=True)
@@ -158,7 +158,7 @@ class SectionViewSet(ModelViewSet):
             return queryset.prefetch_related(
                 'catalogs',
                 'editors',
-                'section_pages__page',
+                'section_pages',
             )
 
     @action(detail=True)
@@ -242,8 +242,8 @@ class PageViewSet(ModelViewSet):
                 'conditions',
                 'sections',
                 'editors',
-                'page_questionsets__questionset',
-                'page_questions__question',
+                'page_questionsets',
+                'page_questions',
             ).select_related('attribute')
 
     @action(detail=True)
@@ -329,8 +329,8 @@ class QuestionSetViewSet(ModelViewSet):
                 'pages',
                 'parents',
                 'editors',
-                'questionset_questionsets__questionset',
-                'questionset_questions__question',
+                'questionset_questionsets',
+                'questionset_questions',
             ).select_related('attribute')
 
     @action(detail=True)
