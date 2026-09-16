@@ -1,11 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { isNil } from 'lodash'
+import { get, isNil } from 'lodash'
+
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
 
+import DocumentOptionsDropdown from './DocumentOptionsDropdown'
 import ExportsDropdown from './ExportsDropdown'
 import SnapshotsDropdown from './SnapshotsDropdown'
 
@@ -13,7 +17,22 @@ const View = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.config)
+  const config = useSelector((state) => state.config)
   const { currentView } = useSelector((state) => state.project)
+
+  const toggleDocumentOption = (field) => {
+    if(field == 'includeHelp'){
+      const current = isTruthy(get(config, 'document.includeHelp', false))
+      dispatch(configActions.updateConfig('document.includeHelp', !current))
+    } else
+      if(field == 'hideAnswers'){
+        const current = isTruthy(get(config, 'document.hideAnswers', false))
+        dispatch(configActions.updateConfig('document.hideAnswers', !current))
+      }
+
+    const area = snapshotId == null ? 'documents' : 'snapshots'
+    dispatch(navigateDashboard({area, snapshotId, viewId, detail}))
+  }
 
   const handleSnapshotChange = (snapshot) => {
     if (isNil(snapshot)) {
@@ -24,10 +43,12 @@ const View = () => {
   }
 
   const handleExport = (format) => {
+    const include_help = isTruthy(get(config, 'document.includeHelp')) ? 'true' : 'false'
+    const hide_answers = isTruthy(get(config, 'document.hideAnswers')) ? 'true' : 'false'
+    const params = {'include_help': include_help, 'hide_answers': hide_answers}
+
     if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format))
-    } else if (detail == 'answers-including-help') {
-      dispatch(downloadAnswers(snapshotId, format, {'include_help': 'true'}))
+      dispatch(downloadAnswers(snapshotId, format, params))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
@@ -47,6 +68,11 @@ const View = () => {
         <button className="link" onClick={handleBack}>
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
+        {
+          detail == 'answers' && (
+            <DocumentOptionsDropdown onToggleOption={toggleDocumentOption}/>
+          )
+        }
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>

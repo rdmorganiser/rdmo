@@ -1,7 +1,8 @@
-import { isNil } from 'lodash'
+import { get, isNil } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
@@ -16,7 +17,7 @@ import * as actionTypes from './actionTypes'
 // asynchronous actions
 
 export function navigateDashboard(location) {
-  return (dispatch) => {
+  return function(dispatch, getState) {
     // update the location in the url
     updateLocation(location)
 
@@ -26,9 +27,13 @@ export function navigateDashboard(location) {
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId))
-    } else if (location.detail == 'answers-including-help') {
-      dispatch(fetchAnswers(location.snapshotId, {'include_help': 'true'}))
+      const config = getState().config
+
+      const include_help = isTruthy(get(config, 'document.includeHelp')) ? 'true' : 'false'
+      const hide_answers = isTruthy(get(config, 'document.hideAnswers')) ? 'true' : 'false'
+      const params = {'include_help': include_help, 'hide_answers': hide_answers}
+
+      dispatch(fetchAnswers(location.snapshotId, params))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
