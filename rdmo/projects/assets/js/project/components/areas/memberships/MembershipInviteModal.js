@@ -8,16 +8,15 @@ import { Modal, Tooltip } from 'rdmo/core/assets/js/components'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useEffectivePermissions, useFieldErrors } from '../../../hooks'
 
 const initialForm = { lookup: '', role: 'author' }
 
 const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
-  const { project } = useSelector((state) => state.project.project) || {}
   const errors = useFieldErrors()
-  const perms = project?.permissions || {}
+  const perms = useEffectivePermissions()
   const roleOptions = useSelector((state) => state.roles?.roles) || []
 
   const [formData, setFormData] = useState(initialForm)

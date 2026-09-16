@@ -13,7 +13,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 import ProjectApi from '../../../api/ProjectApi'
 
@@ -265,7 +265,7 @@ const ProjectForm = ({
         }
 
         {
-          unavailableCatalog && project.permissions.can_change_project &&
+          unavailableCatalog && !disabled &&
             <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
         }
 
