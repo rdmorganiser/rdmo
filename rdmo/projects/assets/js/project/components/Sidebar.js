@@ -15,7 +15,6 @@ const Sidebar = () => {
   const { project, visibility } = useSelector((state) => state.project)
   const providers = useSelector((state) => state.project.providers) ?? {}
 
-  console.log(providers)
   const menuItems = [
     {
       title: '',
