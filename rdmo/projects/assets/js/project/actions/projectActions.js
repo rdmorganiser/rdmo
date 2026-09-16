@@ -207,14 +207,27 @@ export function updateProjectVisibility(data) {
 }
 
 export function deleteProjectVisibility() {
-  return function (dispatch) {
+  return function (dispatch, getState) {
     dispatch(addToPending('deleteProjectVisibility'))
     dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_INIT })
 
     return ProjectApi.deleteProjectVisibility(projectId)
       .then(() => {
-        dispatch(removeFromPending('deleteProjectVisibility'))
         dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
+
+        // visibility updates lead to change of project objects visibility property
+        const state = getState()
+        const currentBundle = state.project.project
+        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
+      })
+      .then(({ project, currentBundle }) => {
+        const updatedBundle = {
+          ...currentBundle,
+          project
+        }
+        dispatch(removeFromPending('deleteProjectVisibility'))
+        dispatch(fetchProjectVisibility())
+        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectVisibility'))

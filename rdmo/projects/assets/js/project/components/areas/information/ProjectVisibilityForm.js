@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -17,8 +19,38 @@ const ProjectVisibilityForm = () => {
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const templates = useSelector((state) => state.templates)
+  const currentUser = useSelector((state) => state.user.currentUser)
 
-  const perms = project.permissions || {}
+  const projectPerms = project?.permissions || {}
+  const userPerms = currentUser?.permissions || {}
+
+
+  let ownSite
+  let ownSiteIsVisible
+  if (!currentUser?.is_superuser) {
+    ownSite = currentUser.role.manager.find(
+      (site) => site.id === siteId
+    )
+
+    ownSiteIsVisible = ownSite && visibility && (
+      visibility.sites.length === 0 ||
+    visibility.sites.includes(ownSite.id)
+    )
+  }
+
+  const visibilityPermissions = [
+    'can_view_visibility',
+    'can_add_visibility',
+    'can_change_visibility',
+    'can_delete_visibility'
+  ]
+
+  visibilityPermissions.forEach((permission) => {
+    console.log(permission, {
+      user: userPerms[permission],
+      project: projectPerms[permission]
+    })
+  })
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
@@ -28,8 +60,8 @@ const ProjectVisibilityForm = () => {
     setGroupIds(visibility?.groups || [])
   }, [visibility])
 
-  const canUpdateVisibility = visibility && perms.can_change_visibility && (settings.multisite || settings.groups)
-  const canSetVisibility = !visibility && perms.can_add_visibility
+  const canUpdateVisibility = visibility && userPerms.can_change_visibility && (settings.multisite || settings.groups)
+  const canSetVisibility = !visibility && userPerms.can_add_visibility
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({
     value: site.id,
@@ -73,64 +105,100 @@ const ProjectVisibilityForm = () => {
       <Html html={templates?.project_view_visibility_help} />
 
       {
-        settings.multisite && (
-          <Select
-            className="mb-3"
-            label={gettext('Sites')}
-            placeholder={gettext('Select sites')}
-            isClearable={true}
-            isDisabled={!perms.can_change_visibility}
-            isMulti={true}
-            options={siteOptions}
-            value={siteIds}
-            onChange={(value) => setSiteIds(value || [])}
-          />
-        )
-      }
+        currentUser?.is_superuser ? (
+          <>
+            {
+              settings.multisite && (
+                <Select
+                  className="mb-3"
+                  label={gettext('Sites')}
+                  placeholder={gettext('Select sites')}
+                  isClearable={true}
+                  isDisabled={!userPerms.can_change_visibility}
+                  isMulti={true}
+                  options={siteOptions}
+                  value={siteIds}
+                  onChange={(value) => setSiteIds(value || [])}
+                />
+              )
+            }
 
-      {
-        settings.groups && (
-          <Select
-            className="mb-3"
-            label={gettext('Groups')}
-            placeholder={gettext('Select groups')}
-            isClearable={true}
-            isDisabled={!perms.can_change_visibility}
-            isMulti={true}
-            options={groupOptions}
-            value={groupIds}
-            onChange={(value) => setGroupIds(value || [])}
-          />
-        )
-      }
+            {
+              settings.groups && (
+                <Select
+                  className="mb-3"
+                  label={gettext('Groups')}
+                  placeholder={gettext('Select groups')}
+                  isClearable={true}
+                  isDisabled={!userPerms.can_change_visibility}
+                  isMulti={true}
+                  options={groupOptions}
+                  value={groupIds}
+                  onChange={(value) => setGroupIds(value || [])}
+                />
+              )
+            }
 
-      <div className="d-flex gap-2">
-        {
-          (canUpdateVisibility || canSetVisibility) && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleSave}
-            >
+            <div className="d-flex gap-2">
               {
-                canUpdateVisibility ? gettext('Update visibility') : gettext('Make visible')
+                (canUpdateVisibility || canSetVisibility) && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSave}
+                  >
+                    {
+                      canUpdateVisibility ? gettext('Update visibility') : gettext('Make visible')
+                    }
+                  </button>
+                )
               }
-            </button>
-          )
-        }
 
-        {
-          visibility && perms.can_delete_visibility && (
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={handleDelete}
-            >
-              {gettext('Remove visibility')}
-            </button>
-          )
-        }
-      </div>
+              {
+                visibility && userPerms.can_delete_visibility && (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={handleDelete}
+                  >
+                    {gettext('Remove visibility')}
+                  </button>
+                )
+              }
+            </div>
+          </>
+        ) : (
+          <div className="mb-3">
+            <div>
+              {
+                ownSiteIsVisible ? (
+                  projectPerms.can_delete_visibility && (
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={handleDelete}
+                    >
+                      {gettext('Remove')} {ownSite.name}
+                    </button>
+                  )
+                ) : (
+                  projectPerms.can_add_visibility && (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleSave}
+                    >
+                      {gettext('Add')} {ownSite.name}
+                    </button>
+                  )
+                )
+              }
+            </div>
+          </div>
+        )
+
+      }
+
     </div>
   )
 }
