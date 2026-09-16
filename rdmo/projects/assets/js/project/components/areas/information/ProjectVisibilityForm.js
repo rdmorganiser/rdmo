@@ -8,6 +8,7 @@ import {
   deleteProjectVisibility,
   updateProjectVisibility
 } from '../../../actions/projectActions'
+import { useEffectivePermissions } from '../../../hooks'
 
 const ProjectVisibilityForm = () => {
   const dispatch = useDispatch()
@@ -18,7 +19,7 @@ const ProjectVisibilityForm = () => {
   const sites = useSelector((state) => state.sites)
   const templates = useSelector((state) => state.templates)
 
-  const perms = project.permissions || {}
+  const perms = useEffectivePermissions()
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
@@ -73,6 +74,8 @@ const ProjectVisibilityForm = () => {
       <Html html={templates?.project_view_visibility_help} />
 
       {
+        // TODO: Only global admins should select arbitrary sites.
+        // Site managers should only add or remove their own site.
         settings.multisite && (
           <Select
             className="mb-3"

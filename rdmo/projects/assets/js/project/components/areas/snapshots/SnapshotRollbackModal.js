@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import { rollbackSnapshot } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 const SnapshotRollbackModal = ({ show, onClose, snapshot }) => {
   const dispatch = useDispatch()

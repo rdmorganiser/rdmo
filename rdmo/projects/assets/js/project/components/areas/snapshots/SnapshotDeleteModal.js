@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import { deleteSnapshot } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 const SnapshotDeleteModal = ({ show, onClose, snapshot }) => {
   const dispatch = useDispatch()

@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import { deleteProjectInvite, deleteProjectMember, leaveProject } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 const MembershipDeleteModal = ({
   type, show, person, onClose, isAdminOrSiteManager = false,

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { Link } from 'rdmo/core/assets/js/components'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 
 import { navigateDashboard } from '../../../actions/projectActions'
+import { useEffectivePermissions } from '../../../hooks'
 import { buildPath } from '../../../utils/location'
 
 import SnapshotDeleteModal from './SnapshotDeleteModal'
@@ -15,8 +16,7 @@ import SnapshotRollbackModal from './SnapshotRollbackModal'
 
 const SnapshotTable = ({ snapshots, onCreate}) => {
   const dispatch = useDispatch()
-  const { project } = useSelector((state) => state.project.project) || {}
-  const perms = project?.permissions || {}
+  const perms = useEffectivePermissions()
 
   const updateModal = useModal()
   const rollbackModal = useModal()

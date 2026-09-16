@@ -9,6 +9,7 @@ import { useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import { getEffectivePermissions } from '../../common/utils/permissions'
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 
@@ -39,6 +40,7 @@ const Main = () => {
   if (!projectsObject.ready) return null
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
   const { currentUser } = currentUserObject
+  const userPerms = currentUser.permissions ?? {}
   const { myProjects } = config
 
   const invitationsModalProps = {
@@ -266,7 +268,7 @@ const Main = () => {
     created: content => formatDateTime(content, 'long'),
     last_changed: content => formatDateTime(content, 'long'),
     actions: (_content, row) => {
-      const perms = row.permissions || {}
+      const perms = getEffectivePermissions(row.permissions, userPerms)
       return (
         <div className="d-flex align-items-center gap-1">
           <Link

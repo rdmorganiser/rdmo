@@ -4,15 +4,17 @@ import { isEmpty } from 'lodash'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
+import { useEffectivePermissions } from '../../hooks'
+
 import MembershipInviteModal from './memberships/MembershipInviteModal'
 import MembershipTable from './memberships/MembershipTable'
 
 const Memberships = () => {
   const { show: showInvite, open: openInvite, close: closeInvite } = useModal()
 
-  const { memberships, project } = useSelector((state) => state.project.project) ?? {}
+  const { memberships } = useSelector((state) => state.project.project) ?? {}
   const { invites } = useSelector((state) => state.project)
-  const perms = project?.permissions ?? {}
+  const perms = useEffectivePermissions()
 
   return (
     <>
