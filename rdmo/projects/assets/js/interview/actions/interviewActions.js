@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil, sortBy } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -11,7 +11,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue, getValueAttrs } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -406,7 +406,19 @@ export function updateValue(value, attrs, store = true) {
 }
 
 export function copyValue(question, ...originalValues) {
-  const firstValue = first(originalValues)
+  const valuesToCopy = sortBy(
+    originalValues.filter(
+      (value) => !isEmptyValue(value, question.widget_type)
+    ),
+    ['collection_index']
+  )
+
+  const firstValue = first(valuesToCopy)
+
+  if (isNil(firstValue)) {
+    return {type: NOOP}
+  }
+
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
   return (dispatch, getState) => {
@@ -414,65 +426,111 @@ export function copyValue(question, ...originalValues) {
 
     const { sets, values } = getState().interview
 
-    // create copies for each value for all it's empty siblings
-    const copies = originalValues.reduce((copies, value) => {
-      return [
-        ...copies,
-        ...sets.filter((set) => (
-          (set.set_prefix == value.set_prefix) &&
-          (set.set_index != value.set_index) &&
-          (set.element == question.parent)
-        )).map((set) => {
-          // check if every sibling is empty
-          if (values.filter((v) => (
-            (v.attribute == value.attribute) &&
-            (v.set_prefix == set.set_prefix) &&
-            (v.set_index == set.set_index)
-          )).every(v => isEmptyValue(v))) {
-            // find the corresponding sibling to this original value
-            const siblingIndex = values.findIndex((v) => (
-              (v.attribute == value.attribute) &&
-              (v.set_prefix == set.set_prefix) &&
-              (v.set_index == set.set_index) &&
-              (v.collection_index == value.collection_index)
-            ))
+    const targetSets = sets.filter((set) => (
+      (set.set_prefix == firstValue.set_prefix) &&
+      (set.set_index != firstValue.set_index) &&
+      (set.element == question.parent)
+    ))
 
-            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
+    const copies = targetSets.reduce((copies, set) => {
+      const siblings = sortBy(
+        values.filter((value) => (
+          (value.attribute == firstValue.attribute) &&
+          (value.set_prefix == set.set_prefix) &&
+          (value.set_index == set.set_index)
+        )),
+        ['collection_index']
+      )
 
-            if (isNil(sibling)) {
-              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
-            } else if (isEmptyValue(sibling)) {
-              // the spread operator { ...sibling } does prevent an update in place
-              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
-            } else {
-              return null
-            }
+      // never merge into or overwrite a partially populated collection
+      if (!siblings.every(
+        (value) => isEmptyValue(value, question.widget_type)
+      )) {
+        return copies
+      }
+
+      const nextCollectionIndex = isEmpty(siblings)
+        ? 0
+        : siblings[siblings.length - 1].collection_index + 1
+
+      const setCopies = valuesToCopy.map((value, valueIndex) => {
+        const attrs = getValueAttrs(question, value)
+
+        if (question.widget_type == 'checkbox') {
+          // checkbox collection indexes correspond to option positions and
+          // therefore need to be preserved
+          const sibling = siblings.find((sibling) => (
+            sibling.collection_index == value.collection_index
+          ))
+
+          if (isNil(sibling)) {
+            return ValueFactory.create({
+              attribute: value.attribute,
+              set_prefix: set.set_prefix,
+              set_index: set.set_index,
+              set_collection: value.set_collection,
+              collection_index: value.collection_index,
+              ...attrs
+            })
           } else {
-            return null
+            return ValueFactory.update({ ...sibling }, attrs)
           }
-        }).filter((value) => !isNil(value))
-      ]
+        }
+
+        // reuse existing empty target rows before creating new ones
+        const sibling = siblings[valueIndex]
+
+        if (isNil(sibling)) {
+          return ValueFactory.create({
+            attribute: value.attribute,
+            set_prefix: set.set_prefix,
+            set_index: set.set_index,
+            set_collection: value.set_collection,
+            collection_index: nextCollectionIndex + valueIndex - siblings.length,
+            ...attrs
+          })
+        } else {
+          return ValueFactory.update({ ...sibling }, attrs)
+        }
+      })
+
+      return [...copies, ...setCopies]
     }, [])
 
-    // dispatch storeValueInit for each of the updated values,
-    // created values have valueIndex -1 and will be skipped
-    // eslint-disable-next-line no-unused-vars
-    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+    if (isEmpty(copies)) {
+      dispatch(removeFromPending(pendingId))
+      return Promise.resolve()
+    }
 
-    // loop over all copies and store the values on the server
-    // afterwards fetchNavigation, updateProgress and check refresh once
+    copies.forEach((value) => {
+      dispatch(storeValueInit(value.id || value.tmp_id))
+    })
+
     return Promise.all(
-      copies.map(([value, valueIndex]) => {
-        return ValueApi.storeValue(projectId, value)
-          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
+      copies.map((value) => {
+        const valueId = value.id || value.tmp_id
+
+        return ValueApi.storeValue(projectId, {
+          ...value,
+          widget_type: question.widget_type
+        })
+          .then((storedValue) => {
+            dispatch(storeValueSuccess(storedValue, valueId))
+          })
+          .catch((error) => {
+            dispatch(storeValueError(error, valueId))
+          })
       })
     ).then(() => {
       dispatch(removeFromPending(pendingId))
 
       const page = getState().interview.page
       const sets = getState().interview.sets
-      const question = page.questions.find((question) => question.attribute === firstValue.attribute)
-      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
+      const currentQuestion = page.questions.find(
+        (question) => question.attribute === firstValue.attribute
+      )
+      const refresh = currentQuestion &&
+        currentQuestion.optionsets.some((optionset) => optionset.has_refresh)
 
       dispatch(fetchNavigation(page))
       dispatch(updateProgress())
