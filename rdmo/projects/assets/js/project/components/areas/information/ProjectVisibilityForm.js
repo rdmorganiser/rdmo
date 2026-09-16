@@ -38,20 +38,6 @@ const ProjectVisibilityForm = () => {
     )
   }
 
-  const visibilityPermissions = [
-    'can_view_visibility',
-    'can_add_visibility',
-    'can_change_visibility',
-    'can_delete_visibility'
-  ]
-
-  visibilityPermissions.forEach((permission) => {
-    console.log(permission, {
-      user: userPerms[permission],
-      project: projectPerms[permission]
-    })
-  })
-
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
 
