@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from rest_framework.authtoken.models import Token
 
@@ -104,12 +105,13 @@ def shibboleth_login(request):
         return HttpResponseRedirect(login_url)
 
 
+@require_POST
 def shibboleth_logout(request):
     logout_url = reverse('account_logout')
     if settings.SHIBBOLETH_USERNAME_PATTERN is None \
             or re.search(settings.SHIBBOLETH_USERNAME_PATTERN, request.user.username):
         logout_url += f'?next={settings.SHIBBOLETH_LOGOUT_URL}'
-    return HttpResponseRedirect(logout_url)
+    return HttpResponseRedirect(logout_url, preserve_request=True)
 
 
 def terms_of_use_accept(request):

@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.exceptions import SendMailException
 
 from ..models import Issue, Project
 
@@ -147,6 +148,41 @@ def test_issue_send_post_email(db, client, username, password, issue_id):
             assert response.status_code == 302
 
         assert len(mail.outbox) == 0
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('issue_id', issues)
+def test_issue_send_post_email_error(db, client, mocker, username, password, issue_id):
+    client.login(username=username, password=password)
+    issue = Issue.objects.get(id=issue_id)
+
+    reason = 'Domain not found'
+    mocker.patch(
+        'rdmo.projects.views.issue.send_mail',
+        side_effect=SendMailException(reason)
+    )
+
+    url = reverse('issue_send', args=[issue.project_id, issue_id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'recipients': ['email@example.com']
+    }
+    response = client.post(url, data)
+
+    if issue.project_id in change_issue_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert Issue.objects.get(id=issue_id).status == issue.status
+        assert response.context_data['mail_form'].non_field_errors()[0] == (
+            f'Could not send e-mail: {reason}'
+        )
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+        assert Issue.objects.get(id=issue_id).status == issue.status
 
 
 @pytest.mark.parametrize('username,password', users)

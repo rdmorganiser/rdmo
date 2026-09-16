@@ -19,7 +19,7 @@ const Option = ({ config, option, elementActions, display='list', indent=0, filt
 
   const fetchEdit = () => elementActions.fetchElement('options', option.id)
   const fetchCopy = () => elementActions.fetchElement('options', option.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('options', {...option, locked: !option.locked })
+  const toggleLocked = () => elementActions.patchElement('options', { id: option.id, locked: !option.locked })
 
   const elementNode = (
     <div className="element">

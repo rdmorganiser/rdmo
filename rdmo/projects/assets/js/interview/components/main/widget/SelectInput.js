@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
 import CreatableSelect from 'react-select/creatable'
@@ -23,6 +23,7 @@ import SelectValueContainer from './SelectValueContainer'
 const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
 
   const [inputValue, setInputValue] = useState('')
+  const [defaultValueOption, setDefaultValueOption] = useState(null)
 
   const handleChange = (option) => {
     if (isNil(option)) {
@@ -52,11 +53,12 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     }
   }
 
-  const handleLoadOptions = useDebouncedCallback((searchText, callback) => {
+  const loadOptions = (search, callback) => {
     // Updating "options" through the redux store is buggy, so we use AsyncSelect
     // and use a asynchronous callback to update the options in the select field.
     // Note that the "options" array in the component remains [].
-    const search = searchText || value.text
+    // This method is called either by handleLoadOptions when the user types in the async
+    // component or by useEffect when the component is used with a default external_id.
     if (isEmpty(search)) {
       callback([])
     } else {
@@ -70,14 +72,38 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
         callback(options)
       })
     }
+  }
+
+  const handleLoadOptions = useDebouncedCallback((searchText, callback) => {
+    // use either the search text (typed by the user) or the text stored with the value
+    // for when the select is opened.
+    const search = searchText || value.text
+    loadOptions(search, callback)
   }, 500)
+
+  // handle default external ids by loading the options and setting a default value option
+  useEffect(() => {
+    setDefaultValueOption(null)
+
+    if (isEmpty(value.text) && !isNil(value.external_id) && isDefaultValue(question, value)) {
+      let pending = true
+      loadOptions(value.external_id, (loadedOptions) => {
+        const option = loadedOptions.find((o) => o.id === value.external_id)
+        if (pending && !isNil(option)) {
+          value.text = option.text
+          setDefaultValueOption(option)
+        }
+      })
+      return () => { pending = false }
+    }
+  }, [value.id, value.external_id, value.text])
 
   const classnames = classNames({
     'react-select': true,
     'default': isDefaultValue(question, value)
   })
 
-  const valueOption = getValueOption(options, value)
+  const valueOption = defaultValueOption ?? getValueOption(options, value)
 
   const isAsync = question.optionsets.some((optionset) => optionset.has_search)
 
@@ -86,6 +112,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     classNamePrefix: 'react-select',
     className: classnames,
     backspaceRemovesValue: false,
+    autoFocus: value.focus,
     isDisabled: disabled,
     placeholder: gettext('Select ...'),
     'aria-label': getQuestionTextId(question),

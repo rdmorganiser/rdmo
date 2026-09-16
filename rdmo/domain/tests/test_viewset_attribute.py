@@ -253,7 +253,7 @@ def test_delete(db, client, username, password):
 @pytest.mark.parametrize('export_format', export_formats)
 def test_detail_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
-    instance = Attribute.objects.first()
+    instance = Attribute.objects.get(pk=1)
 
     url = reverse(urlnames['detail_export'], args=[instance.pk]) + export_format + '/'
     response = client.get(url)
@@ -262,5 +262,6 @@ def test_detail_export(db, client, username, password, export_format):
     if response.status_code == 200 and export_format == 'xml':
         root = et.fromstring(response.content)
         assert root.tag == 'rdmo'
+        assert root.find('attribute/parent').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == instance.parent.uri
         for child in root:
             assert child.tag in ['attribute']

@@ -305,7 +305,7 @@ def test_update_catalog_toggle_site(db, client, username, password, add_or_remov
 
         url = reverse(urlnames['catalog-toggle-site'], kwargs={'pk': instance.pk})
 
-        response = client.put(url, {}, content_type='application/json')
+        response = client.post(url, {}, content_type='application/json')
         assert response.status_code == (
             STATUS_CODES['toggle-site'].get(instance.uri, status_map['toggle-site'])[username]
         ), response.json()

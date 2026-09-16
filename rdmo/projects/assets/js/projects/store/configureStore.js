@@ -29,7 +29,10 @@ export default function configureStore() {
   const initialState = {
     config: {
       myProjects: true,
-      prefix: 'rdmo.projects.config'
+      prefix: 'rdmo.projects.config',
+      params: {
+        ordering: '-last_changed'
+      }
     }
   }
 

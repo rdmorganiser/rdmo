@@ -9,9 +9,7 @@ class AttributeRendererMixin:
             self.render_text_element(xml, 'key', {}, attribute['key'])
             self.render_text_element(xml, 'path', {}, attribute['path'])
             self.render_text_element(xml, 'dc:comment', {}, attribute['comment'])
-            self.render_text_element(xml, 'parent', {
-                'dc:uri': attribute['parent']['uri'] if attribute['parent'] is not None else None
-            }, None)
+            self.render_text_element(xml, 'parent', {'dc:uri': attribute['parent_uri']}, None)
             xml.endElement('attribute')
 
         if include_children:

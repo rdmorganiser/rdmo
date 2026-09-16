@@ -103,17 +103,9 @@
 
                         <li role="separator" class="divider"></li>
 
-                        {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
                         <li>
                             {% include 'account/logout_form.html' %}
                         </li>
-                        {% else %}
-                        <li>
-                            <a href="{{ settings.LOGOUT_URL }}">
-                                {% trans 'Logout' %}
-                            </a>
-                        </li>
-                        {% endif %}
                     </ul>
                 </li>
 
