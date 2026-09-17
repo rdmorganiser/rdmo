@@ -20,23 +20,23 @@ const ProjectVisibilityForm = () => {
   const sites = useSelector((state) => state.sites)
   const templates = useSelector((state) => state.templates)
   const currentUser = useSelector((state) => state.user.currentUser)
+  const isSubmitting = useSelector((state) => (
+    state.pending.items.includes('updateProjectVisibility') ||
+    state.pending.items.includes('deleteProjectVisibility')
+  ))
 
   const projectPerms = project?.permissions || {}
   const userPerms = currentUser?.permissions || {}
 
+  const ownSite = !userPerms.can_change_visibility &&
+    currentUser?.role?.manager?.find((site) => site.id === siteId)
 
-  let ownSite
-  let ownSiteIsVisible
-  if (!userPerms?.can_change_visibility) {
-    ownSite = currentUser.role.manager.find(
-      (site) => site.id === siteId
-    )
-
-    ownSiteIsVisible = ownSite && visibility && (
+  const ownSiteIsVisible = Boolean(
+    ownSite && visibility && (
       visibility.sites.length === 0 ||
       visibility.sites.includes(ownSite.id)
     )
-  }
+  )
 
   const [siteIds, setSiteIds] = useState(visibility?.sites || [])
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
@@ -48,6 +48,7 @@ const ProjectVisibilityForm = () => {
 
   const canUpdateVisibility = visibility && userPerms.can_change_visibility && (settings.multisite || settings.groups)
   const canSetVisibility = !visibility && userPerms.can_add_visibility
+  const canAddOwnSite = visibility ? projectPerms.can_change_visibility : projectPerms.can_add_visibility
 
   const siteOptions = sites ? Object.values(sites).map((site) => ({
     value: site.id,
@@ -129,6 +130,7 @@ const ProjectVisibilityForm = () => {
                   <button
                     type="button"
                     className="btn btn-primary"
+                    disabled={isSubmitting}
                     onClick={handleSave}
                   >
                     {
@@ -143,6 +145,7 @@ const ProjectVisibilityForm = () => {
                   <button
                     type="button"
                     className="btn btn-danger"
+                    disabled={isSubmitting}
                     onClick={handleDelete}
                   >
                     {gettext('Remove visibility')}
@@ -159,16 +162,18 @@ const ProjectVisibilityForm = () => {
                   <button
                     type="button"
                     className="btn btn-danger"
+                    disabled={isSubmitting}
                     onClick={handleDelete}
                   >
                     {interpolate(gettext('Remove %s'), [ownSite.name])}
                   </button>
                 )
               ) : (
-                projectPerms.can_add_visibility && (
+                canAddOwnSite && (
                   <button
                     type="button"
                     className="btn btn-primary"
+                    disabled={isSubmitting}
                     onClick={handleSave}
                   >
                     {interpolate(gettext('Make %s visible'), [ownSite.name])}
