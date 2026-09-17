@@ -27,7 +27,7 @@ const ProjectVisibilityForm = () => {
 
   let ownSite
   let ownSiteIsVisible
-  if (!currentUser?.is_superuser) {
+  if (!userPerms?.can_add_visibility) {
     ownSite = currentUser.role.manager.find(
       (site) => site.id === siteId
     )
@@ -91,7 +91,7 @@ const ProjectVisibilityForm = () => {
       <Html html={templates?.project_view_visibility_help} />
 
       {
-        currentUser?.is_superuser ? (
+        userPerms?.can_change_visibility ? (
           <>
             {
               settings.multisite && (
@@ -100,7 +100,6 @@ const ProjectVisibilityForm = () => {
                   label={gettext('Sites')}
                   placeholder={gettext('Select sites')}
                   isClearable={true}
-                  isDisabled={!userPerms.can_change_visibility}
                   isMulti={true}
                   options={siteOptions}
                   value={siteIds}
@@ -116,7 +115,6 @@ const ProjectVisibilityForm = () => {
                   label={gettext('Groups')}
                   placeholder={gettext('Select groups')}
                   isClearable={true}
-                  isDisabled={!userPerms.can_change_visibility}
                   isMulti={true}
                   options={groupOptions}
                   value={groupIds}
@@ -174,7 +172,7 @@ const ProjectVisibilityForm = () => {
                       className="btn btn-primary"
                       onClick={handleSave}
                     >
-                      {gettext('Add')} {ownSite.name}
+                      {gettext('Make')} {ownSite.name} {gettext('visible')}
                     </button>
                   )
                 )
