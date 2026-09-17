@@ -176,27 +176,15 @@ export function fetchProjectVisibility() {
 }
 
 export function updateProjectVisibility(data) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(addToPending('updateProjectVisibility'))
     dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_INIT })
 
     return ProjectApi.updateProjectVisibility(projectId, data)
-      .then(visibility => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
-
-        // visibility updates lead to change of project objects visibility property
-        const state = getState()
-        const currentBundle = state.project.project
-        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
-      })
-      .then(({ project, currentBundle }) => {
-        const updatedBundle = {
-          ...currentBundle,
-          project
-        }
+      .then((visibility) => {
         dispatch(removeFromPending('updateProjectVisibility'))
         dispatch(fetchProjectVisibility())
-        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
+        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectVisibility'))
@@ -207,27 +195,15 @@ export function updateProjectVisibility(data) {
 }
 
 export function deleteProjectVisibility() {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(addToPending('deleteProjectVisibility'))
     dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_INIT })
 
     return ProjectApi.deleteProjectVisibility(projectId)
       .then(() => {
-        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
-
-        // visibility updates lead to change of project objects visibility property
-        const state = getState()
-        const currentBundle = state.project.project
-        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
-      })
-      .then(({ project, currentBundle }) => {
-        const updatedBundle = {
-          ...currentBundle,
-          project
-        }
         dispatch(removeFromPending('deleteProjectVisibility'))
         dispatch(fetchProjectVisibility())
-        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
+        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectVisibility'))
