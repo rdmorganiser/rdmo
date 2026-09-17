@@ -198,8 +198,8 @@ parametrize-names-type = "csv"
 strict = true
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo/*/tests"]
-pythonpath = [".", "testing"]
-addopts = ["-ra", "-p no:randomly", "-m", "not e2e"]
+pythonpath = ["testing"]
+addopts = ["-ra", "-p no:randomly", "-m", "not e2e", "--import-mode=importlib"]
 markers = [
   "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
   "performance: marks query-count regression tests",
