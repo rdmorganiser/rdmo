@@ -9,6 +9,9 @@ DEBUG_LOGGING = False
 
 SECRET_KEY = "this is a not very secret key"
 
+if os.environ.get('GITHUB_ACTIONS') == 'true':
+    STATICFILES_FINDERS = [*STATICFILES_FINDERS, 'rdmo.core.tests.finders.StaticRootFinder']
+
 GITHUB_DB_BACKEND = os.getenv('GITHUB_DB_BACKEND')
 if GITHUB_DB_BACKEND == 'mysql':
     DATABASES = {
