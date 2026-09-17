@@ -6,7 +6,7 @@ import Truncate from 'rdmo/core/assets/js/components/Truncate'
 
 import ExportsDropdown from './ExportsDropdown'
 
-const ViewTile = ({ title, help, onClick, onExport }) => (
+const ViewTile = ({ title, help, onClick, onExport, additionalExportItems }) => (
   <div className="card card-tile cursor-pointer mb-4" onClick={onClick}>
     <div className="d-flex">
       <Img src="/core/img/document.png" className="img-fluid" alt={gettext('Document image')} />
@@ -21,7 +21,7 @@ const ViewTile = ({ title, help, onClick, onExport }) => (
             </p>
             {
               onExport && (
-                <ExportsDropdown onExport={onExport} align="start" />
+                <ExportsDropdown onExport={onExport} additionalItems={additionalExportItems} align="start" />
               )
             }
           </div>
@@ -35,7 +35,8 @@ ViewTile.propTypes = {
   title: PropTypes.string.isRequired,
   help: PropTypes.string,
   onClick: PropTypes.func,
-  onExport: PropTypes.func
+  onExport: PropTypes.func,
+  additionalExportItems: PropTypes.object,
 }
 
 export default ViewTile
