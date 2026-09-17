@@ -213,9 +213,15 @@ filterwarnings = [
 ]
 
 [tool.coverage.run]
-source = ["rdmo"]
+source_pkgs = ["rdmo"]
 branch = true
 parallel = true
+
+[tool.coverage.paths]
+source = [
+    "rdmo/",
+    "*/site-packages/rdmo/",
+]
 
 [tool.coverage.report]
 omit = [
