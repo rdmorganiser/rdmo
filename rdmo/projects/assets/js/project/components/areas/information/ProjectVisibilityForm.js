@@ -27,14 +27,14 @@ const ProjectVisibilityForm = () => {
 
   let ownSite
   let ownSiteIsVisible
-  if (!userPerms?.can_add_visibility) {
+  if (!userPerms?.can_change_visibility) {
     ownSite = currentUser.role.manager.find(
       (site) => site.id === siteId
     )
 
     ownSiteIsVisible = ownSite && visibility && (
       visibility.sites.length === 0 ||
-    visibility.sites.includes(ownSite.id)
+      visibility.sites.includes(ownSite.id)
     )
   }
 
@@ -62,7 +62,7 @@ const ProjectVisibilityForm = () => {
   const handleSave = () => {
     const data = new FormData()
     if (settings.multisite) {
-      siteIds.forEach((siteId) => data.append('sites', siteId))
+      siteIds.forEach((selectedSiteId) => data.append('sites', selectedSiteId))
     }
     if (settings.groups) {
       groupIds.forEach((groupId) => data.append('groups', groupId))
@@ -151,35 +151,33 @@ const ProjectVisibilityForm = () => {
               }
             </div>
           </>
-        ) : (
+        ) : ownSite ? (
           <div className="mb-3">
-            <div>
-              {
-                ownSiteIsVisible ? (
-                  projectPerms.can_delete_visibility && (
-                    <button
-                      type="button"
-                      className="btn btn-danger"
-                      onClick={handleDelete}
-                    >
-                      {gettext('Remove')} {ownSite.name}
-                    </button>
-                  )
-                ) : (
-                  projectPerms.can_add_visibility && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleSave}
-                    >
-                      {gettext('Make')} {ownSite.name} {gettext('visible')}
-                    </button>
-                  )
+            {
+              ownSiteIsVisible ? (
+                projectPerms.can_delete_visibility && (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={handleDelete}
+                  >
+                    {interpolate(gettext('Remove %s'), [ownSite.name])}
+                  </button>
                 )
-              }
-            </div>
+              ) : (
+                projectPerms.can_add_visibility && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSave}
+                  >
+                    {interpolate(gettext('Make %s visible'), [ownSite.name])}
+                  </button>
+                )
+              )
+            }
           </div>
-        )
+        ) : null
 
       }
 
