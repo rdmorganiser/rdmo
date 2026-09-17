@@ -2,14 +2,17 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
-import { downloadView, navigateDashboard } from '../../actions/projectActions'
+import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
+import { paramsFromConfig } from '../../utils/documentoptions'
 
+import DocumentOptions from '../helper/DocumentOptions'
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
 
 const Documents = () => {
   const dispatch = useDispatch()
 
+  const config = useSelector((state) => state.config)
   const { snapshotId, viewId, detail } = useSelector((state) => state.config)
   const { views } = useSelector((state) => state.project.project) ?? {}
   const area = snapshotId ? 'snapshots' : 'documents'
@@ -52,6 +55,19 @@ const Documents = () => {
             title={gettext('Configurable list of questions')}
             help={gettext('Overview of all questions. Optionally with answers and/or help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
+            onExport={
+              (format) => {
+                dispatch(downloadAnswers(snapshotId, format, paramsFromConfig(config)))
+              }
+            }
+            additionalExportItems={
+              (
+                <>
+                  <DocumentOptions/>
+                  <hr />
+                </>
+              )
+            }
           />
         </div>
       </div>

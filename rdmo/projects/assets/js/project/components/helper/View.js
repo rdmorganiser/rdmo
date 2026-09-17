@@ -1,9 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isNil } from 'lodash'
-
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { isNil } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -21,16 +18,7 @@ const View = () => {
   const config = useSelector((state) => state.config)
   const { currentView } = useSelector((state) => state.project)
 
-  const toggleDocumentOption = (field) => {
-    if(field == 'includeHelp'){
-      const current = isTruthy(get(config, 'document.includeHelp', false))
-      dispatch(configActions.updateConfig('document.includeHelp', !current))
-    } else
-      if(field == 'hideAnswers'){
-        const current = isTruthy(get(config, 'document.hideAnswers', false))
-        dispatch(configActions.updateConfig('document.hideAnswers', !current))
-      }
-
+  const reloadView = () => {
     const area = snapshotId == null ? 'documents' : 'snapshots'
     dispatch(navigateDashboard({area, snapshotId, viewId, detail}))
   }
@@ -67,7 +55,7 @@ const View = () => {
         </button>
         {
           detail == 'answers' && (
-            <DocumentOptionsDropdown onToggleOption={toggleDocumentOption}/>
+            <DocumentOptionsDropdown onChanged={reloadView}/>
           )
         }
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
