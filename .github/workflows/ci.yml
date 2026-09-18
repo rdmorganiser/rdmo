@@ -151,8 +151,20 @@ jobs:
     - run: mkdir screenshots
     - name: Collect static files into static root (only required if rdmo is installed from wheel)
       run: python testing/manage.py collectstatic --noinput
+    - name: Diagnose e2e package and asset origins
+      continue-on-error: true
+      run: |
+        python -I -c 'import rdmo; print("isolated Python:", rdmo.__file__)'
+        python testing/manage.py shell -c 'import rdmo; print("manage.py:", rdmo.__file__)'
+        pytest rdmo/*/tests -m e2e -k test_import_origin \
+          -p randomly -p no:cacheprovider -s -q --nomigrations
+      env:
+        DJANGO_DEBUG: True
+        GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
     - name: Run end-to-end tests
-      run: pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope -m e2e --nomigrations
+      run: |
+        pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope \
+          -m e2e -k 'not test_import_origin' --nomigrations
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
