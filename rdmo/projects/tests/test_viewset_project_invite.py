@@ -1,9 +1,10 @@
 import pytest
 
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.urls import reverse
 
-from ..models import Invite
+from ..models import Invite, Membership
 
 users = (
     ('owner', 'owner'),
@@ -85,9 +86,14 @@ def test_detail(db, client, username, password, project_id, invite_id):
         assert response.status_code == 404
 
 
+@pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_create_user(db, client, username, password, project_id):
+def test_create_user(db, client, settings, project_send_invite, username, password, project_id):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+
+    Invite.objects.all().delete()
+
     client.login(username=username, password=password)
 
     user = get_user_model().objects.get(username='user')
@@ -101,40 +107,70 @@ def test_create_user(db, client, username, password, project_id):
 
     if project_id in add_invite_permission_map.get(username, []):
         assert response.status_code == 201
-    elif project_id in view_invite_permission_map.get(username, []):
-        assert response.status_code == 403
+
+        assert Invite.objects.get(project_id=project_id, user=user, role='guest')
+        assert not Membership.objects.filter(project_id=project_id, user=user, role='guest').exists()
+        assert len(mail.outbox) == (1 if project_send_invite else 0)
     else:
-        assert response.status_code == 404
+        if project_id in view_invite_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
 
 
+@pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_create_email(db, client, username, password, project_id):
+def test_create_email(db, client, settings, project_send_invite, username, password, project_id):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+
+    Invite.objects.all().delete()
+
     client.login(username=username, password=password)
+
+    user = get_user_model().objects.get(username='user')
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'email': 'user@example.com',
+        'email': user.email,
         'role': 'guest'
     }
     response = client.post(url, data)
 
     if project_id in add_invite_permission_map.get(username, []):
         assert response.status_code == 201
-    elif project_id in view_invite_permission_map.get(username, []):
-        assert response.status_code == 403
+
+        assert Invite.objects.get(project_id=project_id, user=user, role='guest')
+        assert not Membership.objects.filter(project_id=project_id, user=user, role='guest').exists()
+        assert len(mail.outbox) == (1 if project_send_invite else 0)
     else:
-        assert response.status_code == 404
+        if project_id in view_invite_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
 
 
+@pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_create_with_lookup_as_username(db, client, username, password, project_id):
+def test_create_with_lookup_as_username(db, client, settings, project_send_invite, username, password, project_id):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+
+    Invite.objects.all().delete()
+
     client.login(username=username, password=password)
+
+    user = get_user_model().objects.get(username='user')
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
-        'lookup': 'user',
+        'lookup': user.username,
         'role': 'guest'
     }
     response = client.post(url, data)
@@ -148,16 +184,32 @@ def test_create_with_lookup_as_username(db, client, username, password, project_
         assert response_data['user']['last_name']
         assert response_data['user']['email']
 
-    elif project_id in view_invite_permission_map.get(username, []):
-        assert response.status_code == 403
+        assert Invite.objects.get(project_id=project_id, user=user, role='guest')
+        assert not Membership.objects.filter(project_id=project_id, user=user, role='guest').exists()
+        assert len(mail.outbox) == (1 if project_send_invite else 0)
     else:
-        assert response.status_code == 404
+        if project_id in view_invite_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
 
 
+@pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_create_with_lookup_as_email_on_existing_user(db, client, username, password, project_id):
+def test_create_with_lookup_as_email_on_existing_user(
+    db, client, settings, project_send_invite, username, password, project_id
+):
+    settings.PROJECT_SEND_INVITE = project_send_invite
+
+    Invite.objects.all().delete()
+
     client.login(username=username, password=password)
+
+    user = get_user_model().objects.get(username='user')
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
@@ -175,19 +227,30 @@ def test_create_with_lookup_as_email_on_existing_user(db, client, username, pass
         assert response_data['user']['last_name']
         assert response_data['user']['email']
 
-    elif project_id in view_invite_permission_map.get(username, []):
-        assert response.status_code == 403
+        assert Invite.objects.get(project_id=project_id, user=user, role='guest')
+        assert not Membership.objects.filter(project_id=project_id, user=user, role='guest').exists()
+        assert len(mail.outbox) == (1 if project_send_invite else 0)
+
     else:
-        assert response.status_code == 404
+        if project_id in view_invite_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
 
 
 @pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_create_with_lookup_as_email_on_non_existing_user(
-        db, client, settings, username, password, project_id, project_send_invite
-    ):
+    db, client, settings, project_send_invite, username, password, project_id
+):
     settings.PROJECT_SEND_INVITE = project_send_invite
+
+    Invite.objects.all().delete()
+
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
@@ -198,20 +261,32 @@ def test_create_with_lookup_as_email_on_non_existing_user(
     response = client.post(url, data)
 
     if project_id in add_invite_permission_map.get(username, []):
-        if settings.PROJECT_SEND_INVITE:
+        if project_send_invite:
             assert response.status_code == 201
             assert 'id' in response.json()
             assert 'timestamp' in response.json()
             assert response.json()['user'] is None
             assert response.json()['email'] == data['lookup']
             assert response.json()['role'] == data['role']
+
+            assert Invite.objects.get(project_id=project_id, email='nosuchuser@example.com', role='guest')
+            assert len(mail.outbox) == 1
+
         else:
             assert response.status_code == 400
             assert response.json()['lookup'][0] == 'No user found.'
-    elif project_id in view_invite_permission_map.get(username, []):
-        assert response.status_code == 403
+
+            assert not Invite.objects.exists()
+            assert len(mail.outbox) == 0
     else:
-        assert response.status_code == 404
+
+        if project_id in view_invite_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
 
 
 def test_create_error(db, client):
@@ -251,6 +326,7 @@ def test_create_error_user_and_email(db, client):
     response = client.post(url, data)
     assert response.status_code == 400
     assert response.json()['non_field_errors'][0] == 'User and e-mail are mutually exclusive.'
+
 
 @pytest.mark.parametrize('project_send_invite', [True, False])
 @pytest.mark.parametrize('lookup,expected_error', [

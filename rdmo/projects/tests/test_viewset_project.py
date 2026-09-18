@@ -243,6 +243,8 @@ def test_detail(db, client, username, password, project_id):
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
 
+    project_count = Project.objects.count()
+
     url = reverse(urlnames['list'])
     data = {
         'title': 'Lorem ipsum dolor sit amet',
@@ -254,6 +256,7 @@ def test_create(db, client, username, password):
 
     if password:
         assert response.status_code == 201
+        assert Project.objects.count() == project_count + 1
         assert Project.objects.get(id=response_data['id'])
 
         assert response_data['title'] == data['title']
@@ -269,6 +272,7 @@ def test_create(db, client, username, password):
         ]
     else:
         assert response.status_code == 401
+        assert Project.objects.count() == project_count
 
 
 def test_create_restricted(db, client, settings):
