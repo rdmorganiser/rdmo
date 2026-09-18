@@ -74,6 +74,21 @@ def test_project_visibility_post_create(db, client, username, password):
             assert Project.objects.get(pk=project_id).visibility
 
 
+def test_project_visibility_post_create_site(db, client, settings):
+    settings.MULTISITE = True
+
+    client.login(username='site', password='site')
+
+    project = Project.objects.get(id=project_id)
+    project.visibility.delete()
+
+    url = reverse('v1-projects:project-visibility', args=[project_id])
+    response = client.post(url, {})
+
+    assert response.status_code == 200
+    assert list(Project.objects.get(pk=project_id).visibility.sites.values_list('id', flat=True)) == [1]
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_project_visibility_post_update(db, client, username, password):
     client.login(username=username, password=password)
