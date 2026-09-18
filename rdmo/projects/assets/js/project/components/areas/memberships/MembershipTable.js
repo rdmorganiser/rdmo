@@ -15,8 +15,6 @@ import MembershipDeleteModal from './MembershipDeleteModal'
 const MembershipTable = ({ persons, type }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
-  // projectPerms are here explicitly needed for 'can_leave_project' permission check
-  const projectPerms = useSelector((state) => state.project.project?.project?.permissions) ?? {}
   const perms = useEffectivePermissions()
   const roleOptions = useSelector((state) => state.roles?.roles) || []
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
@@ -56,7 +54,7 @@ const MembershipTable = ({ persons, type }) => {
               const isOwner = isCurrentUser && person.role == 'owner'
 
               const showMemberAction = (type === 'memberships') && (
-                isCurrentUser ? projectPerms.can_leave_project : perms.can_delete_membership
+                isCurrentUser ? perms.can_leave_project : perms.can_delete_membership
               )
               const showInviteAction = (type === 'invites') && perms.can_delete_invite
               const showActions = (
