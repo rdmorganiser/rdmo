@@ -22,7 +22,8 @@ const ProjectVisibilityForm = () => {
   const currentUser = useSelector((state) => state.user.currentUser)
   const isSubmitting = useSelector((state) => (
     state.pending.items.includes('updateProjectVisibility') ||
-    state.pending.items.includes('deleteProjectVisibility')
+    state.pending.items.includes('deleteProjectVisibility') ||
+    state.pending.items.includes('fetchProjectVisibility')
   ))
 
   const projectPerms = project?.permissions || {}

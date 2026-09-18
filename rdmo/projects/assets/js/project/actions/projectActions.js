@@ -158,12 +158,9 @@ export function fetchProjectVisibility() {
 
     return ProjectApi.fetchProjectVisibility(projectId)
       .then(visibility => {
-        dispatch(removeFromPending('fetchProjectVisibility'))
         dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility })
       })
       .catch(error => {
-        dispatch(removeFromPending('fetchProjectVisibility'))
-
         if (error?.status === 404) {
           dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility: null })
           return null
@@ -172,6 +169,7 @@ export function fetchProjectVisibility() {
         dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('fetchProjectVisibility')))
   }
 }
 
@@ -182,14 +180,13 @@ export function updateProjectVisibility(data) {
 
     return ProjectApi.updateProjectVisibility(projectId, data)
       .then((visibility) => {
-        dispatch(removeFromPending('updateProjectVisibility'))
         dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
       })
       .catch(error => {
-        dispatch(removeFromPending('updateProjectVisibility'))
         dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('updateProjectVisibility')))
   }
 }
 
@@ -200,15 +197,14 @@ export function deleteProjectVisibility() {
 
     return ProjectApi.deleteProjectVisibility(projectId)
       .then(() => {
-        dispatch(removeFromPending('deleteProjectVisibility'))
         dispatch(fetchProjectVisibility())
         dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
       })
       .catch(error => {
-        dispatch(removeFromPending('deleteProjectVisibility'))
         dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('deleteProjectVisibility')))
   }
 }
 
