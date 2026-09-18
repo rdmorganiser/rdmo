@@ -13,6 +13,7 @@ const Sidebar = () => {
 
   const { area } = useSelector((state) => state.config)
   const { project, visibility } = useSelector((state) => state.project)
+  const providers = useSelector((state) => state.project.providers) ?? {}
 
   const menuItems = [
     {
@@ -64,18 +65,20 @@ const Sidebar = () => {
               <nav className="nav nav-pills nav-fill flex-column">
                 {
                   group.items.map((item, itemIndex) => (
-                    <Link
-                      key={itemIndex}
-                      href={buildPath({ area: item.area })}
-                      title={item.name}
-                      className={classNames('nav-link', { active: area === item.area })}
-                      onClick={() => dispatch(navigateDashboard({ area: item.area }))}
-                    >
-                      <div className="d-flex align-items-center gap-2">
-                        <i className={`bi ${item.icon}`}></i>
-                        <span className="d-none d-lg-inline">{item.name}</span>
-                      </div>
-                    </Link>
+                    (item.area !== 'integrations' || Object.keys(providers).length > 0) && (
+                      <Link
+                        key={itemIndex}
+                        href={buildPath({ area: item.area })}
+                        title={item.name}
+                        className={classNames('nav-link', { active: area === item.area })}
+                        onClick={() => dispatch(navigateDashboard({ area: item.area }))}
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <i className={`bi ${item.icon}`}></i>
+                          <span className="d-none d-lg-inline">{item.name}</span>
+                        </div>
+                      </Link>
+                    )
                   ))
                 }
               </nav>
