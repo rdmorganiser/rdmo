@@ -20,6 +20,7 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
+import { getEffectivePermissions } from '../../common/utils/permissions'
 import * as projectActions from '../actions/projectActions'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
@@ -86,7 +87,14 @@ export default function configureStore() {
       store.dispatch(projectActions.fetchProject()),
       store.dispatch(rolesActions.fetchRoles())
     ]).then(() => {
-      const permissions = store.getState().project.project.project.permissions
+      const state = store.getState()
+      const project = state.project.project.project
+
+      const permissions = getEffectivePermissions(
+        project.permissions,
+        state.user.currentUser.permissions
+      )
+
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
@@ -95,7 +103,6 @@ export default function configureStore() {
         // TODO: enable again and guard with the new user permissions
         // store.dispatch(sitesActions.fetchSites())
         // store.dispatch(groupsActions.fetchGroups())
-        const project = store.getState().project.project.project
         if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }

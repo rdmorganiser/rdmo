@@ -3,14 +3,16 @@ import { useSelector } from 'react-redux'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
+import { useEffectivePermissions } from '../../hooks'
+
 import SnapshotModal from './snapshots/SnapshotModal'
 import SnapshotTable from './snapshots/SnapshotTable'
 
 const Snapshots = () => {
   const { show: showSnapshot, open: openSnapshot, close: closeSnapshot } = useModal()
 
-  const { snapshots, project } = useSelector((state) => state.project.project) ?? {}
-  const perms = project?.permissions ?? {}
+  const { snapshots } = useSelector((state) => state.project.project) ?? {}
+  const perms = useEffectivePermissions()
 
   return (
     <div className="project-snapshots">

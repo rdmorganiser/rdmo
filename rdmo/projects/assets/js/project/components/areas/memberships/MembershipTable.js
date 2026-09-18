@@ -8,14 +8,14 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 import Select from 'rdmo/core/assets/js/components/Select'
 
 import { updateProjectInvite, updateProjectMember } from '../../../actions/projectActions'
+import { useEffectivePermissions } from '../../../hooks'
 
 import MembershipDeleteModal from './MembershipDeleteModal'
 
 const MembershipTable = ({ persons, type }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
-  const { project } = useSelector((state) => state.project.project) || {}
-  const perms = project?.permissions || {}
+  const perms = useEffectivePermissions()
   const roleOptions = useSelector((state) => state.roles?.roles) || []
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
   const [modalState, setModalState] = useState(null)

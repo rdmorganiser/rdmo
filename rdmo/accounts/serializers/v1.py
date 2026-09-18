@@ -108,7 +108,6 @@ class CurrentUserSerializer(UserSerializer):
             'can_view_project': obj.has_perm('projects.view_project'),
             'can_change_project': obj.has_perm('projects.change_project'),
             'can_delete_project': obj.has_perm('projects.delete_project'),
-            'can_leave_project': obj.has_perm('projects.leave_project'),
             'can_export_project': obj.has_perm('projects.export_project'),
             'can_import_project': obj.has_perm('projects.import_project'),
             'can_view_visibility': obj.has_perm('projects.view_visibility'),
