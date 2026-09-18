@@ -232,6 +232,12 @@ class Catalog(Model, TranslationMixin):
         except (ValueError, IndexError):
             return None
 
+    def get_section(self, section_id):
+        try:
+            return next(section for section in self.elements if section.id == int(section_id))
+        except (StopIteration, ValueError):
+            return None
+
     def get_page(self, page_id):
         try:
             return next(page for page in self.pages if page.id == int(page_id))

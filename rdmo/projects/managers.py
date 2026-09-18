@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -9,6 +7,8 @@ from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
+
+from .utils import compute_sets
 
 
 class ProjectQuerySet(TreeQuerySet):
@@ -212,10 +212,7 @@ class ValueQuerySet(models.QuerySet):
         )
 
     def compute_sets(self):
-        sets = defaultdict(set)
-        for attribute, set_prefix, set_index in self.distinct_list():
-            sets[attribute].add((set_prefix, set_index))
-        return sets
+        return compute_sets(self.distinct_list())
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):

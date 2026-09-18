@@ -2,7 +2,6 @@ from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Greatest
@@ -86,6 +85,7 @@ from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
+    compute_attribute_values_map,
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
@@ -130,7 +130,14 @@ class ProjectViewSet(ModelViewSet):
     filter_for_user = False  # flag for get_queryset to return only projects like for a regular user
 
     def get_queryset(self):
-        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct().prefetch_related(
+        queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct()
+        if self.action == 'navigation':
+            # navigation only needs the project catalog and visibility before computing the answer tree.
+            return queryset.select_related('catalog', 'visibility')
+        elif self.action in ('resolve', 'resolve_post'):
+            return queryset
+
+        queryset = queryset.prefetch_related(
             'snapshots',
             'views',
             Prefetch('memberships', queryset=Membership.objects.select_related('user'), to_attr='memberships_list')
@@ -183,14 +190,13 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
-        # if a section is provided, check if it actually exists in the catalog
+        # if a section is provided, find it in the prefetched catalog elements to avoid another database query
         if section_id is None:
             section = None
         else:
-            try:
-                section = project.catalog.sections.get(pk=section_id)
-            except ObjectDoesNotExist as e:
-                raise NotFound() from e
+            section = project.catalog.get_section(section_id)
+            if section is None:
+                raise NotFound()
 
         # compute navigation from the answer tree
         navigation = compute_navigation(project, section)
@@ -203,56 +209,35 @@ class ProjectViewSet(ModelViewSet):
         set_prefix = request.GET.get('set_prefix')
         set_index = request.GET.get('set_index')
 
-        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
+        attribute_values_map = None
+        resolved_conditions = {}
 
-        page_id = request.GET.get('page')
-        if page_id:
-            try:
-                page = Page.objects.get(id=page_id)
-                conditions = page.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Page.DoesNotExist:
-                pass
+        for element_type, element_model in (
+            ('page', Page),
+            ('questionset', QuestionSet),
+            ('question', Question),
+            ('optionset', OptionSet),
+            ('condition', Condition),
+        ):
+            element_id = request.GET.get(element_type)
+            if not element_id:
+                continue
 
-        questionset_id = request.GET.get('questionset')
-        if questionset_id:
             try:
-                questionset = QuestionSet.objects.get(id=questionset_id)
-                conditions = questionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except QuestionSet.DoesNotExist:
-                pass
+                element = element_model.objects.get(id=element_id)
+            except element_model.DoesNotExist:
+                continue
 
-        question_id = request.GET.get('question')
-        if question_id:
-            try:
-                question = Question.objects.get(id=question_id)
-                conditions = question.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Question.DoesNotExist:
-                pass
+            conditions = [element] if element_model is Condition else element.conditions.all()
+            if not conditions:
+                return Response({'result': True})
 
-        optionset_id = request.GET.get('optionset')
-        if optionset_id:
-            try:
-                optionset = OptionSet.objects.get(id=optionset_id)
-                conditions = optionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except OptionSet.DoesNotExist:
-                pass
+            if attribute_values_map is None:
+                attribute_values_map = compute_attribute_values_map(values)
 
-        condition_id = request.GET.get('condition')
-        if condition_id:
-            try:
-                condition = Condition.objects.select_related('source', 'target_option').get(id=condition_id)
-                if check_conditions([condition], values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Condition.DoesNotExist:
-                pass
+            if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
+                return Response({'result': True})
 
         return Response({'result': False})
 
@@ -269,31 +254,21 @@ class ProjectViewSet(ModelViewSet):
         for params in validated_data:
             element_ids[params['element_type']].add(params['element_id'])
 
-        elements = defaultdict(lambda: defaultdict(set))
+        elements = defaultdict(dict)
 
-        # gather conditions for pages
-        if 'pages' in element_ids:
-            queryset = Page.conditions.through.objects.filter(page_id__in=element_ids['pages'])
-            for page_id, condition_id in queryset.values_list('page_id', 'condition_id'):
-                elements['pages'][page_id].add(condition_id)
-
-        # gather conditions for questionsets
-        if 'questionsets' in element_ids:
-            queryset = QuestionSet.conditions.through.objects.filter(questionset_id__in=element_ids['questionsets'])
-            for questionset_id, condition_id in queryset.values_list('questionset_id', 'condition_id'):
-                elements['questionsets'][questionset_id].add(condition_id)
-
-        # gather conditions for questions
-        if 'questions' in element_ids:
-            queryset = Question.conditions.through.objects.filter(question_id__in=element_ids['questions'])
-            for question_id, condition_id in queryset.values_list('question_id', 'condition_id'):
-                elements['questions'][question_id].add(condition_id)
-
-        # gather conditions for optionsets
-        if 'optionsets' in element_ids:
-            queryset = OptionSet.conditions.through.objects.filter(optionset_id__in=element_ids['optionsets'])
-            for optionset_id, condition_id in queryset.values_list('optionset_id', 'condition_id'):
-                elements['optionsets'][optionset_id].add(condition_id)
+        # gather conditions and keep empty sets for existing elements without conditions
+        for element_type, element_model in (
+            ('pages', Page),
+            ('questionsets', QuestionSet),
+            ('questions', Question),
+            ('optionsets', OptionSet),
+        ):
+            if element_type in element_ids:
+                queryset = element_model.objects.filter(id__in=element_ids[element_type]).order_by()
+                for element_id, condition_id in queryset.values_list('id', 'conditions'):
+                    element_condition_ids = elements[element_type].setdefault(element_id, set())
+                    if condition_id is not None:
+                        element_condition_ids.add(condition_id)
 
         # gather conditions
         if 'conditions' in element_ids:
@@ -307,20 +282,35 @@ class ProjectViewSet(ModelViewSet):
             for element_dict in elements.values()
             for conditions_set in element_dict.values()
         ))
-        conditions = Condition.objects.select_related('source', 'target_option').in_bulk(condition_ids)
+        conditions = Condition.objects.in_bulk(condition_ids)
+        missing_condition_ids = condition_ids.difference(conditions)
 
-        # get all values of the project
-        values = project.values.filter(snapshot=None).select_related('attribute', 'option')
+        if conditions:
+            values = project.values.filter(snapshot=None).order_by()
+            attribute_values_map = compute_attribute_values_map(values)
+        else:
+            attribute_values_map = {}
 
         # second pass: resolve conditions
+        resolved_conditions = {}
         for params in validated_data:
             set_prefix = params['set_prefix']
             set_index = params['set_index']
             element_type = params['element_type']
             element_id = params['element_id']
 
-            element_conditions = [conditions[condition_id] for condition_id in elements[element_type][element_id]]
-            params['result'] = check_conditions(element_conditions, values, set_prefix, set_index)
+            element_condition_ids = elements.get(element_type, {}).get(element_id)
+            if element_condition_ids is None:
+                params['result'] = False
+                continue
+
+            if element_condition_ids.isdisjoint(missing_condition_ids):
+                element_conditions = [conditions[condition_id] for condition_id in element_condition_ids]
+                params['result'] = check_conditions(
+                    element_conditions, attribute_values_map, set_prefix, set_index, resolved_conditions
+                )
+            else:
+                params['result'] = False
 
         return Response(validated_data)
 

@@ -2,29 +2,118 @@ import pytest
 
 from django.urls import reverse
 
+from ..models import Value
+from .test_viewset_project import urlnames
+
 max_queries = [
-    # method, urlname, max_queries, url_args
-    ('get', 'project_answers', 38, [1]),
-    ('get', 'project_answers_export', 31, [1, 'html']),
-    ('get', 'v1-projects:project-navigation', 43, [1]),
-    ('get', 'v1-projects:project-answers', 43, [1]),
-    ('post', 'v1-projects:project-progress', 44, [1]),
-    ('get', 'v1-projects:project-page-detail', 46, [1, 1]),
-    ('get', 'v1-projects:project-page-detail', 50, [1, 42]),
-    ('get', 'v1-projects:project-page-detail', 62, [1, 87]),
+    # action, max_queries, url_kwargs, url_params
+    ('project_answers', 38, {'pk': 1}, {}),
+    ('project_answers_export', 31, {'pk': 1, 'format': 'html'}, {}),
+    ('navigation', 38, {'pk': 1}, {}),
+    ('navigation', 38, {'pk': 1, 'section_id': 1}, {}),
+    ('answers', 41, {'pk': 1}, {}),
+    ('page_detail', 44, {'parent_lookup_project': 1, 'pk': 1}, {}),
+    ('page_detail', 48, {'parent_lookup_project': 1, 'pk': 42}, {}),
+    ('page_detail', 60, {'parent_lookup_project': 1, 'pk': 87}, {}),
+    ('progress', 42, {'pk': 1}, {}),
 ]
 
 
 @pytest.mark.performance
-@pytest.mark.parametrize('method,urlname,max_queries,url_args', max_queries)
-def test_queries(db, client, django_assert_max_num_queries, method, urlname, max_queries, url_args):
+@pytest.mark.parametrize('action,max_queries,url_kwargs,url_params', max_queries)
+def test_queries(db, client, django_assert_max_num_queries, action, max_queries, url_kwargs, url_params):
     client.login(username='owner', password='owner')
-    url = reverse(urlname, args=url_args)
+    url = reverse(urlnames[action], kwargs=url_kwargs)
 
     with django_assert_max_num_queries(max_queries):
-        if method == 'get':
-            response = client.get(url)
-        elif method == 'post':
-            response = client.post(url)
+        if action == 'progress':
+            response = client.post(url, query_params=url_params)
+        else:
+            response = client.get(url, query_params=url_params)
 
     assert response.status_code == 200
+
+
+@pytest.mark.performance
+@pytest.mark.parametrize('params,result,max_queries', [
+    ({}, False, 15),
+    ({'page': -1}, False, 16),
+    ({'page': 1}, True, 17),
+])
+def test_resolve_get_without_values_queries(db, client, django_assert_max_num_queries, params, result, max_queries):
+    client.login(username='owner', password='owner')
+
+    with django_assert_max_num_queries(max_queries) as queries:
+        response = client.get(reverse(urlnames['resolve'], kwargs={'pk': 1}), params)
+
+    assert response.status_code == 200
+    assert response.json() == {'result': result}
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
+
+
+@pytest.mark.performance
+def test_resolve_queries(db, client, django_assert_max_num_queries):
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['resolve'], kwargs={'pk': 1})
+    params = [
+        {
+            'set_prefix': '',
+            'set_index': 0,
+            'element_type': 'questionsets',
+            'element_id': 94,
+        },
+        {
+            'set_prefix': '',
+            'set_index': 0,
+            'element_type': 'questions',
+            'element_id': 104,
+        },
+        {
+            'set_prefix': '',
+            'set_index': 0,
+            'element_type': 'optionsets',
+            'element_id': 3,
+        },
+    ]
+
+    with django_assert_max_num_queries(19):
+        response = client.post(url, params, content_type='application/json')
+
+    assert response.status_code == 200
+    results = response.json()
+    assert len(results) == 3
+    assert [result['result'] for result in results] == [False, False, False]
+
+
+@pytest.mark.performance
+def test_resolve_empty_queries(db, client, django_assert_max_num_queries):
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['resolve'], kwargs={'pk': 1})
+
+    with django_assert_max_num_queries(14) as queries:
+        response = client.post(url, [], content_type='application/json')
+
+    assert response.status_code == 200
+    assert response.json() == []
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
+
+
+@pytest.mark.performance
+@pytest.mark.parametrize('element_type', ['pages', 'questionsets', 'questions', 'optionsets', 'conditions'])
+def test_resolve_missing_element_queries(db, client, django_assert_max_num_queries, element_type):
+    client.login(username='owner', password='owner')
+    params = [{
+        'set_prefix': '',
+        'set_index': 0,
+        'element_type': element_type,
+        'element_id': -1,
+    }]
+
+    with django_assert_max_num_queries(15) as queries:
+        response = client.post(
+            reverse(urlnames['resolve'], kwargs={'pk': 1}), params, content_type='application/json'
+        )
+
+    assert response.status_code == 200
+    assert response.json()[0]['result'] is False
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)

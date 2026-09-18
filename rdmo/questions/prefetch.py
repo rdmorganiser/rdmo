@@ -105,6 +105,8 @@ def questionset_questionset_prefetch(lookup, **kwargs):
         ).prefetch_related(
             condition_prefetch('conditions'),
             question_prefetch('questionset_questions__question', **kwargs),
+            # load questionsets through models too, including empty relations used by elements.
+            'questionset_questionsets',
         )
     )
 
