@@ -42,9 +42,17 @@ const ProjectVisibilityForm = () => {
   const [groupIds, setGroupIds] = useState(visibility?.groups || [])
 
   useEffect(() => {
-    setSiteIds(visibility?.sites || [])
-    setGroupIds(visibility?.groups || [])
-  }, [visibility])
+    if (visibility?.sites.length === 0) {
+      setSiteIds(Object.values(sites || {}).map((site) => site.id))
+    } else {
+      setSiteIds(visibility?.sites || [])
+    }
+    if (visibility?.groups.length === 0) {
+      setGroupIds(Object.values(groups || {}).map((group) => group.id))
+    } else {
+      setGroupIds(visibility?.groups || [])
+    }
+  }, [visibility, sites, groups])
 
   const canUpdateVisibility = visibility && userPerms.can_change_visibility && (settings.multisite || settings.groups)
   const canSetVisibility = !visibility && userPerms.can_add_visibility
@@ -63,10 +71,12 @@ const ProjectVisibilityForm = () => {
   const handleSave = () => {
     const data = new FormData()
     if (settings.multisite) {
-      siteIds.forEach((selectedSiteId) => data.append('sites', selectedSiteId))
+      const selectedSiteIds = siteIds.length === siteOptions.length ? [] : siteIds
+      selectedSiteIds.forEach((selectedSiteId) => data.append('sites', selectedSiteId))
     }
     if (settings.groups) {
-      groupIds.forEach((groupId) => data.append('groups', groupId))
+      const selectedGroupIds = groupIds.length === groupOptions.length ? [] : groupIds
+      selectedGroupIds.forEach((selectedGroupId) => data.append('groups', selectedGroupId))
     }
     dispatch(updateProjectVisibility(data))
   }
@@ -100,7 +110,7 @@ const ProjectVisibilityForm = () => {
                   className="mb-3"
                   label={gettext('Sites')}
                   placeholder={gettext('Select sites')}
-                  isClearable={true}
+                  isClearable={false}
                   isMulti={true}
                   options={siteOptions}
                   value={siteIds}
@@ -115,7 +125,7 @@ const ProjectVisibilityForm = () => {
                   className="mb-3"
                   label={gettext('Groups')}
                   placeholder={gettext('Select groups')}
-                  isClearable={true}
+                  isClearable={false}
                   isMulti={true}
                   options={groupOptions}
                   value={groupIds}
