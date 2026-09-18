@@ -15,40 +15,41 @@ const Navigation = ({ overview, currentPage, navigation, help, fetchPage }) => {
       <ul className="list-unstyled interview-navigation">
         {
           navigation.map((section, sectionIndex) => (
-              <li key={sectionIndex}>
-                <NavigationLink
-                  element={section}
-                  href={`/projects/${overview.id}/interview/${section.first}/`}
-                  onClick={() => fetchPage(section.first)}
-                />
-                {
-                  section.pages && (
-                    <ul className="list-unstyled">
-                      {
-                        section.pages.map((page, pageIndex) => (
-                            <li key={pageIndex} className={classNames({
-                              'active': currentPage ? page.id == currentPage.id : false})
-                            }>
-                              {
-                                page.show ? (
-                                  <NavigationLink
-                                    element={page}
-                                    href={`/projects/${overview.id}/interview/${page.id}/`}
-                                    onClick={() => fetchPage(page.id)}
-                                  />
-                                ) : (
-                                  <span className="text-muted">{page.title}</span>
-                                )
-                              }
-                            </li>
-                          )
-                        )
-                      }
-                    </ul>
-                  )
-                }
-              </li>
-            )
+            <li key={sectionIndex}>
+              <NavigationLink
+                element={section}
+                href={`/projects/${overview.id}/interview/${section.first}/`}
+                onClick={() => fetchPage(section.first)}
+              />
+              {
+                section.pages && (
+                  <ul className="list-unstyled">
+                    {
+                      section.pages.map((page, pageIndex) => (
+                        <li
+                          key={pageIndex} className={
+                            classNames({'active': currentPage ? page.id == currentPage.id : false})
+                          }>
+                          {
+                            page.show ? (
+                              <NavigationLink
+                                element={page}
+                                href={`/projects/${overview.id}/interview/${page.id}/`}
+                                onClick={() => fetchPage(page.id)}
+                              />
+                            ) : (
+                              <span className="text-muted">{page.title}</span>
+                            )
+                          }
+                        </li>
+                      )
+                      )
+                    }
+                  </ul>
+                )
+              }
+            </li>
+          )
           )
         }
       </ul>

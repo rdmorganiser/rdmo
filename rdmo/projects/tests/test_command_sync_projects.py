@@ -8,6 +8,8 @@ from rdmo.projects.tests.helpers.sync.assert_cli_output import assert_sync_proje
 from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
+from rdmo.projects.tests.helpers.sync.constants import extra_task_ids
+from rdmo.tasks.models import Task
 
 PROJECT_SHOW_TEMPLATE = 'Project "{}" [id={}]:'
 
@@ -17,6 +19,7 @@ def test_command_sync_projects_for_tasks(settings):
 
     # Arrange: pre-linked projects and catalog-based task relationships
     P, _, T = arrange_projects_catalogs_and_tasks()
+    extra_tasks = set(Task.objects.filter(pk__in=extra_task_ids))
 
     # Arrange: project.tasks are in a random initial state
     P[1].tasks.set([T[1], T[2], T[3]])
@@ -26,10 +29,10 @@ def test_command_sync_projects_for_tasks(settings):
     # === Act: run the management command for task sync ===
     call_command('sync_projects', '--tasks')
 
-    # === Assert: each project should only be linked to tasks with matching catalogs ===
-    assert set(P[1].tasks.all()) == {T[1]}
-    assert set(P[2].tasks.all()) == {T[2]}
-    assert set(P[3].tasks.all()) == {T[3]}
+    # === Assert: each project should only be linked to tasks with matching catalogs and sites ===
+    assert set(P[1].tasks.all()) == {T[1]} | extra_tasks
+    assert set(P[2].tasks.all()) == {T[2]} | extra_tasks
+    assert set(P[3].tasks.all()) == {T[3]} | extra_tasks
 
     # Additional assertion using your existing helper
     for task in T.values():
@@ -88,6 +91,7 @@ def test_command_sync_projects_for_tasks_and_views_with_show(settings, capsys):
     # Arrange task and view state
     P1, _, T = arrange_projects_catalogs_and_tasks()
     P2, _, V = arrange_projects_catalogs_and_views()
+    extra_tasks = set(Task.objects.filter(pk__in=extra_task_ids))
 
     # Arrange random desynced state
     P1[1].tasks.set([T[1], T[2], T[3]])
@@ -102,9 +106,9 @@ def test_command_sync_projects_for_tasks_and_views_with_show(settings, capsys):
     call_command('sync_projects', '--tasks', '--views', '--show')
 
     # === Assert: state is fully synced
-    assert set(P1[1].tasks.all()) == {T[1]}
-    assert set(P1[2].tasks.all()) == {T[2]}
-    assert set(P1[3].tasks.all()) == {T[3]}
+    assert set(P1[1].tasks.all()) == {T[1]} | extra_tasks
+    assert set(P1[2].tasks.all()) == {T[2]} | extra_tasks
+    assert set(P1[3].tasks.all()) == {T[3]} | extra_tasks
 
     assert set(P2[1].views.all()) == {V[1]}
     assert set(P2[2].views.all()) == {V[2]}

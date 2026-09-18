@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+{% load accounts_tags %}
+
+    <a title="{% sign_in_text provider.app.name %}"
+       class="btn {{ button_class|default:'btn-primary' }} {{ provider.app.provider_id }}-login"
+       href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
+
+        <div class="d-flex justify-content-center align-items-center gap-1">
+            {% if provider.app.settings.login_logo %}
+            <img class="{{ provider.app.provider_id }}-login-logo"
+                 src="{% static provider.app.settings.login_logo %}"
+                 alt="{% trans 'Logo' %}" />
+            {% else %}
+            <span class="bi bi-{{ provider.app.provider_id }}"></span>
+            {% endif %}
+
+            {% if provider.app.settings.login_text %}
+            <span>
+                {{ provider.app.settings.login_text }}
+            </span>
+            {% elif provider.app.settings.login_text == False %}
+            {# Do not display a text on the button #}
+            {% else %}
+            <span>{% sign_in_text provider.app.name %}</span>
+            {% endif %}
+        </div>
+    </a>

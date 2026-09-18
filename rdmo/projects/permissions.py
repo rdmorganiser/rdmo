@@ -71,6 +71,12 @@ class HasProjectPagePermission(HasProjectPermission):
         return ('projects.view_page_object', )
 
 
+class HasProjectLeavePermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        return ('projects.leave_project_object', )
+
+
 class HasProjectProgressModelPermission(HasModelPermission):
 
     def get_required_permissions(self, method, model_cls):

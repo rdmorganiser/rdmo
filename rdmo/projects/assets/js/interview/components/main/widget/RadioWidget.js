@@ -15,8 +15,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import RadioInput from './RadioInput'
 
-const RadioWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-                       createValue, updateValue, deleteValue, copyValue }) => {
+const RadioWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
   return (
     <div className="interview-widgets">
       {
@@ -30,26 +32,28 @@ const RadioWidget = ({ page, question, sets, values, siblings, currentSet, disab
                 disabled={disabled}
                 updateValue={updateValue}
                 buttons={
-                  <div className="buttons">
-                    <QuestionSuccess value={value}/>
-                    <QuestionReuseValue
-                      page={page}
-                      question={question}
-                      value={value}
-                      disabled={disabled}
-                      updateValue={updateValue}
-                    />
-                    <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
-                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
-                    <QuestionRemoveValue
-                      question={question}
-                      values={values}
-                      value={value}
-                      disabled={disabled}
-                      deleteValue={deleteValue}
-                    />
-                    <QuestionDefault question={question} value={value} />
-                  </div>
+                  (
+                    <div className="buttons">
+                      <QuestionSuccess value={value}/>
+                      <QuestionReuseValue
+                        page={page}
+                        question={question}
+                        value={value}
+                        disabled={disabled}
+                        updateValue={updateValue}
+                      />
+                      <QuestionCopyValue question={question} value={value} siblings={siblings} copyValue={copyValue} />
+                      <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                      <QuestionRemoveValue
+                        question={question}
+                        values={values}
+                        value={value}
+                        disabled={disabled}
+                        deleteValue={deleteValue}
+                      />
+                      <QuestionDefault question={question} value={value} />
+                    </div>
+                  )
                 }
               />
               <QuestionError value={value} />

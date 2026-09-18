@@ -89,6 +89,7 @@ def test_create(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
+        'title': f'Integration {username} {project_id}',
         'provider_key': 'simple',
         'options': [
             {
@@ -101,6 +102,7 @@ def test_create(db, client, username, password, project_id):
 
     if project_id in add_integration_permission_map.get(username, []):
         assert response.status_code == 201, response.content
+        assert response.json()['title'] == data['title']
     elif project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -114,6 +116,7 @@ def test_create_error1(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
+        'title': f'Integration {username} {project_id}',
         'provider_key': 'wrong',
         'options': [
             {
@@ -140,6 +143,7 @@ def test_create_error2(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
+        'title': f'Integration {username} {project_id}',
         'provider_key': 'simple',
         'options': [
             {
@@ -152,7 +156,7 @@ def test_create_error2(db, client, username, password, project_id):
 
     if project_id in add_integration_permission_map.get(username, []):
         assert response.status_code == 400, response.json()
-        assert response.json()['options'][0]['value'], response.json()
+        assert response.json()['project_url'] == ['This field may not be blank.'], response.json()
     elif project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -166,6 +170,7 @@ def test_create_error3(db, client, username, password, project_id):
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {
+        'title': f'Integration {username} {project_id}',
         'provider_key': 'simple',
         'options': [
             {
@@ -198,6 +203,7 @@ def test_update(db, client, username, password, project_id, integration_id):
 
     url = reverse(urlnames['detail'], args=[project_id, integration_id])
     data = {
+        'title': f'Integration {username} {project_id}-{integration_id}',
         'provider_key': 'simple',
         'options': [
             {
@@ -210,14 +216,19 @@ def test_update(db, client, username, password, project_id, integration_id):
 
     if integration and project_id in change_integration_permission_map.get(username, []):
         assert response.status_code == 200
+        assert response.json()['title'] == data['title']
         assert sorted(response.json().get('options'), key=lambda obj: obj['key']) == [
             {
                 'key': 'project_url',
-                'value': 'https://example.com/projects/2'
+                'title': 'Project Url',
+                'value': 'https://example.com/projects/2',
+                'secret': False
             },
             {
                 'key': 'secret',
-                'value': ''
+                'title': 'Secret',
+                'secret': True,
+                'configured': bool(integration.get_option_value('secret'))
             }
         ]
     elif integration and project_id in view_integration_permission_map.get(username, []):

@@ -1,6 +1,8 @@
-import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
-import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 import { isUndefined } from 'lodash'
+
+import { encodeParams } from 'rdmo/core/assets/js/utils/api'
+
+import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
 class ValueApi extends BaseApi {
 

@@ -1,0 +1,252 @@
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+
+import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
+import { Tile } from '../helper'
+
+import IssueDate from '../../../common/components/IssueDate'
+
+import IssueModal from './dashboard/IssueModal'
+import SendIssueButton from './dashboard/SendIssueButton'
+import SendIssueModal from './dashboard/SendIssueModal'
+import ShowClosedIssues from './dashboard/ShowClosedIssues'
+
+const Dashboard = () => {
+  const dispatch = useDispatch()
+  const config = useSelector(state => state.config)
+  const settings = useSelector(state => state.settings)
+  const perms = useSelector(state => state.project.project.project.permissions) ?? {}
+
+  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  /* Show only issues that resolve */
+  const issues = allIssues.filter((issue) => issue.resolve === true)
+
+  const { showClosedTasks, showClosedRecommendations } = config
+
+  const [selectedIssue, setSelectedIssue] = useState(null)
+  const [sendIssue, setSendIssue] = useState(null)
+
+  const isClosed = (issue) => issue.status === 'closed'
+  const getTaskType = (issue) => issue.task?.task_type
+
+  const stepIssues = issues.filter((issue) =>
+    getTaskType(issue) === 'step'
+  ).sort((a, b) => a.task.order - b.task.order)
+
+  const activeStepIssue = stepIssues.find((issue) => !isClosed(issue))
+
+  // we need these 2 constants to avoid losing the toggle switch if all issues are closed (but not visible)
+  const taskIssues = issues.filter((issue) => getTaskType(issue) === 'task')
+  const recommendationIssues = issues.filter((issue) => getTaskType(issue) === 'recommendation')
+
+  const visibleTaskIssues = taskIssues
+    .filter((issue) => showClosedTasks || !isClosed(issue))
+    .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
+
+  const visibleRecommendationIssues = recommendationIssues
+    .filter((issue) => showClosedRecommendations || !isClosed(issue))
+    .sort((a, b) => Number(isClosed(a)) - Number(isClosed(b)))
+
+  const guidanceIssues = issues.filter((issue) =>
+    getTaskType(issue) === 'guidance'
+  ).sort((a, b) => a.task.order - b.task.order)
+
+  const toggleTaskDone = (issueId, currentStatus) => {
+    dispatch(updateProjectTask(issueId, {
+      status: currentStatus === 'closed' ? 'open' : 'closed'
+    }))
+  }
+
+  const renderVisibleIssues = (visibleIssues) => (
+    <div className="row">
+      {
+        visibleIssues.map((issue) => {
+          const closed = isClosed(issue)
+          return (
+            <Tile
+              key={issue.id}
+              size="normal"
+              onCardClick={() => setSelectedIssue(issue)}
+            >
+              <div className="d-flex align-items-start">
+                <div className="me-3 mt-1">
+                  <button
+                    type="button"
+                    className="btn p-0 border-0 bg-transparent"
+                    disabled={!perms.can_change_issue}
+                    onClick={
+                      (e) => {
+                        e.stopPropagation()
+                        toggleTaskDone(issue.id, issue.status)
+                      }
+                    }
+                    aria-label={closed ? 'Mark task as not done' : 'Mark task as done'}
+                  >
+                    <i className={`bi ${closed ? 'bi-check-circle-fill' : 'bi-circle'}`} />
+                  </button>
+                </div>
+                <div className="flex-grow-1">
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
+                      {issue.task.title}
+                    </div>
+                    {
+                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
+                      <SendIssueButton onClick={() => setSendIssue(issue)} />
+                    }
+                  </div>
+                  {
+                    issue.dates?.length > 0 && (
+                      <div className="text-muted small mt-2 text-end">
+                        <i className="bi bi-clock me-1" />
+                        <IssueDate date={issue.dates[0]} />
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </Tile>
+          )
+        })
+      }
+    </div>
+  )
+
+  return (
+    <div>
+      <h1>{gettext('Dashboard')}</h1>
+      {
+        perms.can_view_issue && (
+          <>
+            {
+              stepIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Create your data management plan')}</h2>
+                  <div className="row mb-4">
+                    {
+                      stepIssues.map((issue, index) => {
+                        const isActiveStep = activeStepIssue?.id === issue.id
+                        return (
+                          <Tile
+                            key={issue.id}
+                            title={issue.task.title}
+                            label={`${gettext('Step')} ${index + 1}`}
+                            buttonLabel={issue.task?.task_area_display}
+                            buttonClassName={isActiveStep ? 'btn-primary' : 'btn-outline-primary'}
+                            buttonIconClassName="bi bi-arrow-right"
+                            onClick={
+                              issue.task.task_area ? (
+                                () => {
+                                  dispatch(navigateDashboard({ area: issue.task.task_area }))
+                                  if (isActiveStep) {
+                                    dispatch(updateProjectTask(issue.id, { status: 'closed'}))
+                                  }
+                                }
+                              ) : undefined
+                            }
+                          >
+                            <p>{issue.task.text}</p>
+                          </Tile>
+                        )
+                      })
+                    }
+                  </div>
+                </>
+              )
+            }
+            {
+              taskIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Tasks')}</h2>
+                  <ShowClosedIssues
+                    id="showClosedTasks"
+                    label={gettext('Show closed tasks')}
+                    checked={showClosedTasks}
+                    onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
+                  />
+                  {renderVisibleIssues(visibleTaskIssues)}
+                </>
+              )
+            }
+            {
+              recommendationIssues.length > 0 && (
+                <>
+                  <h2>{gettext('Recommendations')}</h2>
+                  <ShowClosedIssues
+                    id="showClosedRecommendations"
+                    label={gettext('Show closed recommendations')}
+                    checked={showClosedRecommendations}
+                    onChange={
+                      () => dispatch(configActions.updateConfig(
+                        'showClosedRecommendations',
+                        !showClosedRecommendations
+                      ))
+                    }
+                  />
+                  {renderVisibleIssues(visibleRecommendationIssues)}
+                </>
+              )
+            }
+            {
+              guidanceIssues.length > 0 && (
+                <>
+                  <h2>{gettext('More actions')}</h2>
+                  <div className="row mb-4">
+                    {
+                      guidanceIssues.map((issue) => (
+                        <Tile
+                          key={issue.id}
+                          title={issue.task.title}
+                          buttonLabel={issue.task.task_area_display}
+                          buttonIconClassName="bi bi-arrow-right"
+                          onClick={
+                            issue.task.task_area ? (
+                              () => dispatch(navigateDashboard({ area: issue.task.task_area }))
+                            ) : undefined
+                          }
+                          size="compact"
+                        >
+                          <p>{issue.task.text}</p>
+                        </Tile>
+                      ))
+                    }
+                  </div>
+                </>
+              )
+            }
+            {
+              selectedIssue && (
+                <IssueModal
+                  canChangeIssue={perms.can_change_issue}
+                  issue={selectedIssue}
+                  onClose={() => setSelectedIssue(null)}
+                  onStatusChange={
+                    (status) => {
+                      dispatch(updateProjectTask(selectedIssue.id, { status }))
+                      setSelectedIssue({
+                        ...selectedIssue,
+                        status,
+                      })
+                    }
+                  }
+                />
+              )
+            }
+            {
+              sendIssue && (
+                <SendIssueModal
+                  onClose={() => setSendIssue(null)}
+                  issue={sendIssue}
+                />
+              )
+            }
+          </>
+        )
+      }
+    </div>
+  )
+}
+
+export default Dashboard
