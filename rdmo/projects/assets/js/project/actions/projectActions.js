@@ -183,7 +183,6 @@ export function updateProjectVisibility(data) {
     return ProjectApi.updateProjectVisibility(projectId, data)
       .then((visibility) => {
         dispatch(removeFromPending('updateProjectVisibility'))
-        dispatch(fetchProjectVisibility())
         dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
       })
       .catch(error => {
