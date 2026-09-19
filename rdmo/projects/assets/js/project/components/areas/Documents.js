@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
+import { paramsFromConfig } from '../../utils/documentoptions'
 
+import DocumentOptions from '../helper/DocumentOptions'
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
 
 const Documents = () => {
   const dispatch = useDispatch()
 
+  const config = useSelector((state) => state.config)
   const { snapshotId, viewId, detail } = useSelector((state) => state.config)
   const { views } = useSelector((state) => state.project.project) ?? {}
   const area = snapshotId ? 'snapshots' : 'documents'
@@ -49,27 +52,22 @@ const Documents = () => {
       <div className="row mb-4">
         <div className="col-lg-6">
           <ViewTile
-            title={gettext('List all questions')}
-            help={gettext('Overview of all questions')}
-            onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
-            // TODO: implement export of questions
-            onExport={(format) => {console.log(format)}}
-          />
-        </div>
-        <div className="col-lg-6">
-          <ViewTile
-            title={gettext('List all answers')}
-            help={gettext('Overview of all questions and answers')}
+            title={gettext('Configurable list of questions')}
+            help={gettext('Overview of all questions. Optionally with answers and/or help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
-            onExport={(format) => dispatch(downloadAnswers(snapshotId, format))}
-          />
-        </div>
-        <div className="col-lg-6">
-          <ViewTile
-            title={gettext('List all answers')}
-            help={gettext('Overview of all questions, help texts, and answers')}
-            onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers-including-help' }))}
-            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, {'include_help': 'true'}))}
+            onExport={
+              (format) => {
+                dispatch(downloadAnswers(snapshotId, format, paramsFromConfig(config)))
+              }
+            }
+            additionalExportItems={
+              (
+                <>
+                  <DocumentOptions/>
+                  <hr />
+                </>
+              )
+            }
           />
         </div>
       </div>

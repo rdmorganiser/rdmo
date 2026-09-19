@@ -6,6 +6,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
+import { paramsFromConfig } from '../utils/documentoptions'
 import { locationKeys, updateLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -16,7 +17,7 @@ import * as actionTypes from './actionTypes'
 // asynchronous actions
 
 export function navigateDashboard(location) {
-  return (dispatch) => {
+  return function(dispatch, getState) {
     // update the location in the url
     updateLocation(location)
 
@@ -26,9 +27,7 @@ export function navigateDashboard(location) {
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId))
-    } else if (location.detail == 'answers-including-help') {
-      dispatch(fetchAnswers(location.snapshotId, {'include_help': 'true'}))
+      dispatch(fetchAnswers(location.snapshotId, paramsFromConfig(getState().config)))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
