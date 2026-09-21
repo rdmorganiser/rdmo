@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
-import { paramsFromConfig } from '../../utils/documentoptions'
+import { getDocumentParameters } from '../../utils/documentoptions'
 
 import DocumentOptions from '../helper/DocumentOptions'
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
@@ -57,7 +57,9 @@ const Documents = () => {
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
             onExport={
               (format) => {
-                dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'true'}))
+                dispatch(downloadAnswers(snapshotId, format,
+                  {...getDocumentParameters(config), 'hide_answers': 'true'})
+                )
               }
             }
             additionalExportItems={
@@ -77,7 +79,9 @@ const Documents = () => {
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
             onExport={
               (format) => {
-                dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'false'}))
+                dispatch(downloadAnswers(snapshotId, format,
+                  {...getDocumentParameters(config), 'hide_answers': 'false'})
+                )
               }
             }
             additionalExportItems={

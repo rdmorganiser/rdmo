@@ -5,7 +5,7 @@ import { isNil } from 'lodash'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
-import { paramsFromConfig } from '../../utils/documentoptions'
+import { getDocumentParameters } from '../../utils/documentoptions'
 
 import DocumentOptionsDropdown from './DocumentOptionsDropdown'
 import ExportsDropdown from './ExportsDropdown'
@@ -33,9 +33,9 @@ const View = () => {
 
   const handleExport = (format) => {
     if (detail == 'questions') {
-      dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'true'}))
+      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'true'}))
     } else if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'false'}))
+      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
