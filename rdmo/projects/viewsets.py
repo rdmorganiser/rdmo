@@ -656,11 +656,13 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             # if an id is given in the post request, this is an import
             try:
                 # look for the set value for the set we want to import into
-                set_value = Value.objects.filter_user(self.request.user).get(id=set_value_id)
+                # this is done with get_queryset since we already checked that the user
+                # has write permissions on this project
+                set_value = self.get_queryset().get(id=set_value_id)
 
                 # collect all non-empty values for this set and all descendants and convert
                 # them to a list to compare them later to the new values
-                set_values = Value.objects.filter_user(self.request.user).filter_set(set_value)
+                set_values = self.get_queryset().filter_set(set_value)
                 set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
                 set_empty_values_list = set_values.filter_empty().values_list(
                     'attribute', 'set_prefix', 'set_index', 'collection_index'
