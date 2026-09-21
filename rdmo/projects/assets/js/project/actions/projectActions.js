@@ -6,7 +6,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
-import { paramsFromConfig } from '../utils/documentoptions'
+import { getDocumentParameters } from '../utils/documentoptions'
 import { locationKeys, updateLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -27,9 +27,13 @@ export function navigateDashboard(location) {
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
     } else if (location.detail == 'questions') {
-      dispatch(fetchAnswers(location.snapshotId, {...paramsFromConfig(getState().config), 'hide_answers': 'true' }))
+      dispatch(fetchAnswers(location.snapshotId,
+        {...getDocumentParameters(getState().config), 'hide_answers': 'true' })
+      )
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId, {...paramsFromConfig(getState().config), 'hide_answers': 'false' }))
+      dispatch(fetchAnswers(location.snapshotId,
+        {...getDocumentParameters(getState().config), 'hide_answers': 'false' })
+      )
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
