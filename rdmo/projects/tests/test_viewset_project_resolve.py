@@ -231,6 +231,26 @@ def test_resolve_post_multiple_conditions(db, client, text, result):
     assert response.json() == results
 
 
+def test_resolve_post_existing_element_without_conditions(db, client):
+    client.login(username='author', password='author')
+
+    question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
+    question.conditions.clear()
+    data = [{
+        'set_prefix': '',
+        'set_index': 0,
+        'element_type': 'questions',
+        'element_id': question.id,
+    }]
+
+    response = client.post(
+        reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json'
+    )
+
+    assert response.status_code == 200, response.content
+    assert response.json() == [{**data[0], 'result': True}]
+
+
 def test_resolve_post_uses_current_values(db, client):
     client.login(username='author', password='author')
 

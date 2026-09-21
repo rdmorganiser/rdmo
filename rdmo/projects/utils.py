@@ -42,40 +42,35 @@ def compute_attribute_values_map(values):
 
 def compute_value_maps(values):
     attribute_values_map = defaultdict(list)
-    set_values_map = defaultdict(list)
+    attribute_sets_map = defaultdict(set)
+    attribute_set_values_map = defaultdict(list)
+
     for value in values:
         attribute_values_map[value.attribute_id].append(value)
-        set_values_map[
-            (value.attribute_id, value.set_prefix, value.set_index)
-        ].append(value)
-    return attribute_values_map, set_values_map
+        attribute_sets_map[value.attribute_id].add((value.set_prefix, value.set_index))
+        attribute_set_values_map[(value.attribute_id, value.set_prefix, value.set_index)].append(value)
 
-
-def compute_sets(distinct_values):
-    sets = defaultdict(set)
-    for attribute_id, set_prefix, set_index in distinct_values:
-        sets[attribute_id].add((set_prefix, set_index))
-    return sets
-
-
-def resolve_condition(condition, attribute_values_map, resolved_conditions, set_prefix=None, set_index=None):
-    condition_index = (condition.pk, set_prefix, set_index)
-    if condition_index not in resolved_conditions:
-        values = attribute_values_map.get(condition.source_id, ())
-        resolved_conditions[condition_index] = condition.resolve(values, set_prefix, set_index)
-    return resolved_conditions[condition_index]
+    return attribute_values_map, attribute_sets_map, attribute_set_values_map
 
 
 def check_conditions(conditions, attribute_values_map, set_prefix=None, set_index=None, resolved_conditions=None):
+    if not conditions:
+        return True
+
     if resolved_conditions is None:
         resolved_conditions = {}
-    if conditions:
-        for condition in conditions:
-            if resolve_condition(condition, attribute_values_map, resolved_conditions, set_prefix, set_index):
-                return True
-        return False
-    else:
-        return True
+
+    for condition in conditions:
+        condition_key = (condition.id, set_prefix, set_index)
+
+        if condition_key not in resolved_conditions:
+            values = attribute_values_map.get(condition.source_id, ())
+            resolved_conditions[condition_key] = condition.resolve(values, set_prefix, set_index)
+
+        if resolved_conditions[condition_key]:
+            return True
+
+    return False
 
 
 def check_options(project, value):

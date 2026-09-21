@@ -20,10 +20,14 @@ def test_compute_value_maps():
     nested = Value(attribute_id=1, set_prefix='0', set_index=1)
     other = Value(attribute_id=2, set_prefix='', set_index=0)
 
-    attribute_values, set_values = compute_value_maps(iter((first, nested, other, second)))
+    attribute_values, attribute_sets, attribute_set_values = compute_value_maps(iter((first, nested, other, second)))
 
     assert attribute_values == {1: [first, nested, second], 2: [other]}
-    assert set_values == {
+    assert attribute_sets == {
+        1: {('', 0), ('0', 1)},
+        2: {('', 0)},
+    }
+    assert attribute_set_values == {
         (1, '', 0): [first, second],
         (1, '0', 1): [nested],
         (2, '', 0): [other],
@@ -31,7 +35,24 @@ def test_compute_value_maps():
 
 
 def test_compute_value_maps_empty():
-    assert compute_value_maps(iter(())) == ({}, {})
+    assert compute_value_maps(iter(())) == ({}, {}, {})
+
+
+def test_value_queryset_compute_sets(db):
+    project = Project.objects.get(id=1)
+    values = [
+        Value.objects.create(project=project, attribute_id=3, set_prefix='', set_index=0),
+        Value.objects.create(project=project, attribute_id=3, set_prefix='', set_index=0),
+        Value.objects.create(project=project, attribute_id=3, set_prefix='0', set_index=1),
+        Value.objects.create(project=project, attribute_id=4, set_prefix='', set_index=0),
+    ]
+
+    attribute_sets = Value.objects.filter(pk__in=[value.pk for value in values]).compute_sets()
+
+    assert attribute_sets == {
+        3: {('', 0), ('0', 1)},
+        4: {('', 0)},
+    }
 
 
 GET_queries = [

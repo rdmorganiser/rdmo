@@ -49,7 +49,7 @@ def test_preloaded_answer_tree_needs_no_queries(db, django_assert_num_queries, v
         'attribute_id', 'set_prefix', 'set_index', 'collection_index'
     )
     if 'value' in verbose:
-        values = values.select_related('attribute', 'option')
+        values = values.select_related('option')
     values = list(values)
 
     # Include construction and the first traversal; do not warm model cached properties.
@@ -58,6 +58,52 @@ def test_preloaded_answer_tree_needs_no_queries(db, django_assert_num_queries, v
 
     assert answer_tree['id'] == project.catalog_id
     assert answer_tree['elements']
+
+
+def test_answer_tree_consumes_values_once(db, mocker):
+    project = Project.objects.select_related('catalog').get(pk=1)
+    project.catalog.prefetch_elements()
+    queryset = project.values.filter(snapshot=None).order_by(
+        'attribute_id', 'set_prefix', 'set_index', 'collection_index'
+    )
+    values = mocker.MagicMock()
+    values.__iter__.side_effect = lambda: iter(queryset)
+
+    answer_tree = AnswerTree(project.catalog, values).compute()
+
+    assert answer_tree['elements']
+    assert values.__iter__.call_count == 1
+
+
+def test_answer_tree_reuses_condition_result(db, mocker):
+    project = Project.objects.get(pk=1)
+    template = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')
+    condition = Condition.objects.create(
+        uri_prefix=template.uri_prefix,
+        uri_path='answer-tree-cache-test',
+        source_id=template.source_id,
+        relation=template.relation,
+        target_text=template.target_text,
+    )
+    questions = list(Question.objects.filter(uri__in=(
+        'http://example.com/terms/questions/catalog/individual/text/text',
+        'http://example.com/terms/questions/catalog/individual/textarea/textarea',
+    )))
+    assert len(questions) == 2
+    for question in questions:
+        question.conditions.set([condition])
+
+    project.catalog.prefetch_elements()
+    resolve_spy = mocker.spy(Condition, 'resolve')
+    answer_tree = project.get_answer_tree()
+    question_nodes = {
+        node['id']: node
+        for node in iter_answer_tree_nodes(answer_tree)
+        if node.get('model') == 'questions.question'
+    }
+
+    assert all(question_nodes[question.id]['show'] for question in questions)
+    assert sum(call.args[0].pk == condition.pk for call in resolve_spy.call_args_list) == 1
 
 
 @pytest.mark.parametrize('condition_uris,show', [

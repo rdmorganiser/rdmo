@@ -152,7 +152,7 @@ class Project(MPTTModel, Model):
             'attribute_id', 'set_prefix', 'set_index', 'collection_index'
         )
         if 'value' in verbose:
-            values = values.select_related('attribute', 'option')
+            values = values.select_related('option')
 
         return AnswerTree(
             self.catalog,

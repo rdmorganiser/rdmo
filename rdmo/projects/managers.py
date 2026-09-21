@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -7,8 +9,6 @@ from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
-
-from .utils import compute_sets
 
 
 class ProjectQuerySet(TreeQuerySet):
@@ -185,9 +185,6 @@ class ValueQuerySet(models.QuerySet):
         optional_values = self.filter(attribute__in=[q.attribute for q in catalog.optional_questions])
         return self.exclude(id__in=optional_values.filter_empty().values_list('id', flat=True))
 
-    def distinct_list(self):
-        return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
-
     def filter_set(self, set_value):
         # get the catalog and prefetch most elements of the catalog
         catalog = set_value.project.catalog
@@ -212,7 +209,14 @@ class ValueQuerySet(models.QuerySet):
         )
 
     def compute_sets(self):
-        return compute_sets(self.distinct_list())
+        attribute_sets_map = defaultdict(set)
+
+        value_keys = self.order_by().values_list("attribute_id", "set_prefix", "set_index").distinct()
+
+        for attribute_id, set_prefix, set_index in value_keys:
+            attribute_sets_map[attribute_id].add((set_prefix, set_index))
+
+        return attribute_sets_map
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):

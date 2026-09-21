@@ -1,7 +1,7 @@
 from rdmo.core.utils import markdown2html
 
 from .models.value import Value
-from .utils import check_conditions, compute_sets, compute_value_maps
+from .utils import check_conditions, compute_value_maps
 
 
 class AnswerTree:
@@ -11,11 +11,13 @@ class AnswerTree:
         self.verbose = tuple(verbose or ())
 
         # build lookup maps once for repeated answer-tree traversal.
-        self.attribute_values_map, self.set_values_map = compute_value_maps(values)
-        self.sets = compute_sets(self.set_values_map.keys())
+        (
+            self.attribute_values_map,
+            self.attribute_sets_map,
+            self.attribute_set_values_map,
+        ) = compute_value_maps(values)
 
-        self.condition_results = {}
-        self.element_condition_results = {}
+        self.resolved_conditions = {}
 
     def compute(self):
         # Main function of this class, which Computes the answer tree recursively.
@@ -150,7 +152,7 @@ class AnswerTree:
         if parent_set is None and element.attribute_id:
             element_sets.update(
                 (set_prefix, set_index)
-                for set_prefix, set_index in self.sets[element.attribute_id]
+                for set_prefix, set_index in self.attribute_sets_map[element.attribute_id]
                 if set_prefix == ''  # only include sets for pages
             )
 
@@ -158,11 +160,11 @@ class AnswerTree:
         # needed to "reach" the descendant set
         direct_elements = set(element.elements)
         for descendant in element.descendants:
-            if descendant.attribute_id and descendant.attribute_id in self.sets:
+            if descendant.attribute_id and descendant.attribute_id in self.attribute_sets_map:
                 descendant_sets = self.filter_descendant_sets(descendant, parent_set)
 
                 if descendant in direct_elements:
-                    # for the direct children (i.e. questions), we add just the sets
+                    # for direct child elements (i.e. questions), we add their sets directly
                     element_sets.update(descendant_sets)
                 else:
                     # for the other descendants (i.e. questions in questionsets), we need
@@ -183,7 +185,7 @@ class AnswerTree:
         set_prefix, set_index = parent_set
 
         # get the values for this element and set
-        element_values = self.set_values_map.get((element.attribute_id, set_prefix, set_index), ())
+        element_values = self.attribute_set_values_map.get((element.attribute_id, set_prefix, set_index), ())
 
         if element_values:
             # if there are values, return them
@@ -207,19 +209,15 @@ class AnswerTree:
             }
 
     def resolve_conditions(self, element, parent_set):
-        key = (element, parent_set)
-        if key not in self.element_condition_results:
-            conditions = element.conditions.all()
-            set_prefix, set_index = parent_set if parent_set else (None, None)
-            self.element_condition_results[key] = bool(conditions) and check_conditions(
-                conditions, self.attribute_values_map, set_prefix, set_index, self.condition_results
-            )
-
-        return self.element_condition_results[key]
+        conditions = element.conditions.all()
+        set_prefix, set_index = parent_set if parent_set else (None, None)
+        return check_conditions(
+            conditions, self.attribute_values_map, set_prefix, set_index, self.resolved_conditions
+        )
 
     def filter_descendant_sets(self, descendant, parent_set):
         # find descendant sets and only include sets which are below the provided parent set
-        descendant_sets = self.sets[descendant.attribute_id]
+        descendant_sets = self.attribute_sets_map[descendant.attribute_id]
 
         if parent_set:
             child_set_prefix = self.compute_child_set_prefix(parent_set)
