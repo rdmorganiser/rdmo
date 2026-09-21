@@ -116,6 +116,9 @@ class Condition(models.Model):
         return self.locked
 
     def resolve(self, values, set_prefix=None, set_index=None):
+        if self.source_id is None:
+            return False
+
         source_values = filter(lambda value: value.attribute_id == self.source_id, values)
 
         if set_prefix is not None:

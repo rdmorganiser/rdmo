@@ -75,6 +75,14 @@ def test_answer_tree_consumes_values_once(db, mocker):
     assert values.__iter__.call_count == 1
 
 
+def test_answer_tree_resolves_empty_conditions(db):
+    question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
+    question.conditions.clear()
+    answer_tree = AnswerTree(catalog=None, values=[])
+
+    assert answer_tree.resolve_conditions(question, ('', 0)) is True
+
+
 def test_answer_tree_reuses_condition_result(db, mocker):
     project = Project.objects.get(pk=1)
     template = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')

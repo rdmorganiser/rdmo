@@ -2,6 +2,7 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
 
@@ -126,6 +127,28 @@ def test_resolve_visible_project_queries(db, client, django_assert_max_num_queri
 
     assert response.status_code == 200
     assert response.json() == []
+    assert not any(Value._meta.db_table in query['sql'] for query in queries)
+
+
+@pytest.mark.performance
+def test_resolve_without_sources_queries(db, client, django_assert_max_num_queries):
+    client.login(username='owner', password='owner')
+    condition = Condition.objects.create(
+        uri_prefix='http://example.com/terms', uri_path='resolve-without-source',
+        source=None, relation=Condition.RELATION_EMPTY,
+    )
+    params = [{
+        'set_prefix': '', 'set_index': 0,
+        'element_type': 'conditions', 'element_id': condition.id,
+    }]
+
+    with django_assert_max_num_queries(15) as queries:
+        response = client.post(
+            reverse(urlnames['resolve'], kwargs={'pk': 1}), params, content_type='application/json'
+        )
+
+    assert response.status_code == 200
+    assert response.json() == [{**params[0], 'result': False}]
     assert not any(Value._meta.db_table in query['sql'] for query in queries)
 
 

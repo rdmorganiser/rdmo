@@ -6,6 +6,7 @@ from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
 
+from .. import viewsets
 from ..models import Value
 
 urlnames = {
@@ -229,6 +230,82 @@ def test_resolve_post_multiple_conditions(db, client, text, result):
 
     assert response.status_code == 200, response.content
     assert response.json() == results
+
+
+def test_resolve_post_condition_without_source_preserves_or(db, client):
+    client.login(username='author', password='author')
+    question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
+    valid = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')
+    invalid = Condition.objects.create(
+        uri_prefix='http://example.com/terms', uri_path='resolve-invalid-or',
+        source=None, relation=Condition.RELATION_EQUAL, target_text='test',
+    )
+    question.conditions.set([invalid, valid])
+    data = [{
+        'set_prefix': '', 'set_index': 0,
+        'element_type': 'questions', 'element_id': question.id,
+    }]
+
+    response = client.post(reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json')
+
+    assert response.status_code == 200
+    assert response.json() == [{**data[0], 'result': True}]
+
+
+def test_resolve_post_filters_value_sources(db, client, mocker):
+    client.login(username='author', password='author')
+    conditions = list(Condition.objects.filter(uri__in=(
+        'http://example.com/terms/conditions/text_equal_test',
+        'http://example.com/terms/conditions/options_equal_one',
+    )))
+    source_ids = {condition.source_id for condition in conditions}
+    assert len(source_ids) == 2
+    unrelated_question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
+    excluded_values = [
+        Value.objects.create(project_id=project_id, attribute_id=unrelated_question.attribute_id, text='unrelated'),
+        Value.objects.create(project_id=2, attribute_id=conditions[0].source_id, text='other project'),
+        Value.objects.create(
+            project_id=project_id, snapshot_id=1, attribute_id=conditions[0].source_id, text='snapshot'
+        ),
+    ]
+    data = [{
+        'set_prefix': '', 'set_index': 0,
+        'element_type': 'conditions', 'element_id': condition.id,
+    } for condition in conditions]
+    map_spy = mocker.spy(viewsets, 'compute_attribute_values_map')
+
+    response = client.post(reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json')
+
+    assert response.status_code == 200
+    assert [item['result'] for item in response.json()] == [True, True]
+    map_spy.assert_called_once()
+    values = list(map_spy.call_args.args[0])
+    assert {value.attribute_id for value in values} == source_ids
+    assert all(value.project_id == project_id and value.snapshot_id is None for value in values)
+    assert {value.pk for value in values}.isdisjoint(value.pk for value in excluded_values)
+
+
+def test_resolve_post_caches_each_set_context(db, client, mocker):
+    client.login(username='author', password='author')
+    condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')
+    for set_index, text in ((0, 'test'), (1, 'other')):
+        Value.objects.update_or_create(
+            project_id=project_id, snapshot=None, attribute_id=condition.source_id,
+            set_prefix='999', set_index=set_index, collection_index=0,
+            defaults={'text': text, 'set_collection': True},
+        )
+    data = [{
+        'set_prefix': '999', 'set_index': set_index,
+        'element_type': 'conditions', 'element_id': condition.id,
+    } for set_index in (0, 0, 1, 1)]
+    resolve_spy = mocker.spy(Condition, 'resolve')
+
+    response = client.post(reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json')
+
+    assert response.status_code == 200
+    assert [item['result'] for item in response.json()] == [True, True, False, False]
+    assert resolve_spy.call_count == 2
+    assert [call.args[2:] for call in resolve_spy.call_args_list] == [('999', 0), ('999', 1)]
 
 
 def test_resolve_post_existing_element_without_conditions(db, client):

@@ -54,14 +54,14 @@ def test_check_conditions_preserves_set_context(db, set_collection, set_index, e
 def test_check_conditions_reuses_condition_result(db, mocker):
     condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
     values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
-    condition_results = {}
+    resolved_conditions = {}
     resolve_spy = mocker.spy(condition, 'resolve')
 
     attribute_values_map = compute_attribute_values_map(values)
     for _ in range(2):
         assert check_conditions(
             [condition], attribute_values_map,
-            set_prefix='', set_index=0, resolved_conditions=condition_results
+            set_prefix='', set_index=0, resolved_conditions=resolved_conditions
         ) is True
 
     assert resolve_spy.call_count == 1

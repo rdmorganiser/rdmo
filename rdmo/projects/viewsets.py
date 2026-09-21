@@ -285,8 +285,12 @@ class ProjectViewSet(ModelViewSet):
         conditions = Condition.objects.in_bulk(condition_ids)
         missing_condition_ids = condition_ids.difference(conditions)
 
-        if conditions:
-            values = project.values.filter(snapshot=None).order_by()
+        source_ids = {
+            condition.source_id for condition in conditions.values()
+            if condition.source_id is not None
+        }
+        if source_ids:
+            values = project.values.filter(snapshot=None, attribute_id__in=source_ids).order_by()
             attribute_values_map = compute_attribute_values_map(values)
         else:
             attribute_values_map = {}
