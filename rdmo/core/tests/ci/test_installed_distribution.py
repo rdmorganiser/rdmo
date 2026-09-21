@@ -1,5 +1,3 @@
-"""CI diagnostic: inspect application and asset origins after suite collection."""
-
 import os
 import sys
 from importlib.metadata import distribution
@@ -12,15 +10,13 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.template.loader import get_template
 
+pytestmark = pytest.mark.skipif(
+    os.getenv("GITHUB_ACTIONS") != "true",
+    reason="Only run in GitHub Actions",
+)
 
-@pytest.fixture(autouse=True)
-def allow_live_server_host():
-    """Override the browser fixture: this diagnostic needs no live server or database."""
-
-
-@pytest.mark.e2e
-@pytest.mark.skipif(os.getenv("GITHUB_ACTIONS") != "true", reason="Only run in GitHub Actions")
-def test_import_origin(pytestconfig):
+@pytest.mark.ci
+def test_installed_distribution(pytestconfig):
     import rdmo
 
     imported = Path(rdmo.__file__).resolve().parent
