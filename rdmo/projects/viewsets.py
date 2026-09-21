@@ -131,8 +131,8 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Project.objects.filter_user(self.request.user, self.filter_for_user).distinct()
-        if self.action == 'navigation':
-            # navigation only needs the project catalog and visibility before computing the answer tree.
+        if self.action in ('navigation', 'answers'):
+            # these actions only need the project catalog and visibility before computing the answer tree.
             return queryset.select_related('catalog', 'visibility')
         elif self.action in ('resolve', 'resolve_post'):
             return queryset
