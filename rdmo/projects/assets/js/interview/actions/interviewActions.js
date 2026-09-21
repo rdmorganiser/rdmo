@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil, sortBy } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -182,14 +182,31 @@ export function fetchOptionsError(error) {
   return {type: FETCH_OPTIONS_ERROR, error}
 }
 
-export function fetchValues(page) {
+export function fetchValues(page, refresh = false) {
   const pendingId = `fetchValues/${page.id}`
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
+        if (refresh) {
+          // if the values are just refreshed after a value is stored or deleted, loop
+          // over the existing values and add all temporary values which were not stored yet
+          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+
+          // extend values with all unsaved values, which are not found in values
+          const keptUnsavedValues = unsavedValues.filter(
+            (value) => isNil(values.find((v) => compareValues(v, value)))
+          )
+
+          // resort the values, to ensure the correct collection_index order
+          values = sortBy(
+            [...values, ...keptUnsavedValues],
+            ['attribute', 'set_prefix', 'set_index', 'collection_index']
+          )
+        }
+
         const sets = gatherSets(values, page)
 
         initSets(sets, page)
@@ -314,8 +331,9 @@ export function storeValue(value) {
 
           if (refresh) {
             // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues
-            dispatch(fetchValues(page))
+            // resolveConditions will be called in fetchValues. Preserve unsaved values,
+            // since they are not included in the response from the backend.
+            dispatch(fetchValues(page, true))
           } else {
             dispatch(resolveConditions(page, sets))
           }
@@ -466,8 +484,9 @@ export function copyValue(question, ...originalValues) {
 
       if (refresh) {
         // if the refresh flag is set, reload all values for the page,
-        // resolveConditions will be called in fetchValues
-        dispatch(fetchValues(page))
+        // resolveConditions will be called in fetchValues. Preserve unsaved values,
+        // since they are not included in the response from the backend.
+        dispatch(fetchValues(page, true))
       } else {
         dispatch(resolveConditions(page, sets))
       }
@@ -491,6 +510,7 @@ export function deleteValue(value) {
       dispatch(deleteValueInit(valueId))
 
       if (isNil(value.id)) {
+        dispatch(removeFromPending(pendingId))
         return dispatch(deleteValueSuccess(valueId))
       } else {
         return ValueApi.deleteValue(projectId, value)
@@ -505,8 +525,9 @@ export function deleteValue(value) {
 
             if (refresh) {
               // if the refresh flag is set, reload all values for the page,
-              // resolveConditions will be called in fetchValues
-              dispatch(fetchValues(page))
+              // resolveConditions will be called in fetchValues. Preserve unsaved values,
+              // since they are not included in the response from the backend.
+              dispatch(fetchValues(page, true))
             } else {
               dispatch(resolveConditions(page, sets))
             }

@@ -3,6 +3,7 @@ import pytest
 from django.core import mail
 from django.urls import reverse
 
+from rdmo.core.exceptions import SendMailException
 from rdmo.projects.models import Invite, Membership
 
 users = (
@@ -162,6 +163,31 @@ def test_membership_create_post_mail_error(db, client, username, password, membe
             assert response.status_code == 403
         else:
             assert response.status_code == 302
+
+
+def test_membership_create_post_mail_send_error(db, client, settings, mocker):
+    settings.PROJECT_SEND_INVITE = True
+    client.login(username='owner', password='owner')
+
+    reason = "{'name@non-existent-domain.abc': (550, b'Domain not found')}"
+    mocker.patch(
+        'rdmo.projects.utils.send_mail',
+        side_effect=SendMailException(reason)
+    )
+
+    url = reverse('membership_create', args=[1])
+    response = client.post(url, {
+        'username_or_email': 'someuser@example.com',
+        'role': 'guest'
+    })
+
+    assert response.status_code == 200
+    assert not Invite.objects.filter(project_id=1, user=None,
+                                     email='someuser@example.com').exists()
+    assert len(mail.outbox) == 0
+    assert response.context_data['form'].non_field_errors()[0] == (
+        f'Could not send e-mail: {reason}'
+    )
 
 
 @pytest.mark.parametrize('username,password', users)

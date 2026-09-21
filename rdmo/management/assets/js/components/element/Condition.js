@@ -18,7 +18,7 @@ const Condition = ({ config, condition, elementActions, filter=false, filterEdit
 
   const fetchEdit = () => elementActions.fetchElement('conditions', condition.id)
   const fetchCopy = () => elementActions.fetchElement('conditions', condition.id, 'copy')
-  const toggleLocked = () => elementActions.storeElement('conditions', {...condition, locked: !condition.locked })
+  const toggleLocked = () => elementActions.patchElement('conditions', { id: condition.id, locked: !condition.locked })
 
   return showElement && (
     <li className="list-group-item">

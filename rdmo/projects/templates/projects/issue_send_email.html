@@ -25,6 +25,14 @@
     {% endwith %}
 {% endif %}
 
+{% if mail_form.non_field_errors %}
+<ul class="text-danger list-unstyled form-errors">
+    {% for error in mail_form.non_field_errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <div class="text-right">
     <button type="submit" class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
         {% trans 'Send by mail' %}
