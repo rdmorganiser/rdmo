@@ -52,12 +52,32 @@ const Documents = () => {
       <div className="row mb-4">
         <div className="col-lg-6">
           <ViewTile
-            title={gettext('Configurable list of questions')}
-            help={gettext('Overview of all questions. Optionally with answers and/or help texts.')}
+            title={gettext('List all questions')}
+            help={gettext('Overview of all questions. Optionally with help texts.')}
+            onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
+            onExport={
+              (format) => {
+                dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'true'}))
+              }
+            }
+            additionalExportItems={
+              (
+                <>
+                  <DocumentOptions/>
+                  <hr />
+                </>
+              )
+            }
+          />
+        </div>
+        <div className="col-lg-6">
+          <ViewTile
+            title={gettext('List all answers')}
+            help={gettext('Overview of all questions and answers. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
             onExport={
               (format) => {
-                dispatch(downloadAnswers(snapshotId, format, paramsFromConfig(config)))
+                dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'false'}))
               }
             }
             additionalExportItems={

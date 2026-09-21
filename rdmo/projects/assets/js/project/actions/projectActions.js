@@ -26,8 +26,10 @@ export function navigateDashboard(location) {
 
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
+    } else if (location.detail == 'questions') {
+      dispatch(fetchAnswers(location.snapshotId, {...paramsFromConfig(getState().config), 'hide_answers': 'true' }))
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId, paramsFromConfig(getState().config)))
+      dispatch(fetchAnswers(location.snapshotId, {...paramsFromConfig(getState().config), 'hide_answers': 'false' }))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }

@@ -32,8 +32,10 @@ const View = () => {
   }
 
   const handleExport = (format) => {
-    if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format, paramsFromConfig(config)))
+    if (detail == 'questions') {
+      dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'true'}))
+    } else if (detail == 'answers') {
+      dispatch(downloadAnswers(snapshotId, format, {...paramsFromConfig(config), 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
@@ -54,7 +56,7 @@ const View = () => {
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
         {
-          detail == 'answers' && (
+          ['answers', 'questions'].includes(detail) && (
             <DocumentOptionsDropdown onChanged={reloadView}/>
           )
         }
