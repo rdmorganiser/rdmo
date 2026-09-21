@@ -14,9 +14,6 @@ const DocumentOptions = ({ onChanged }) => {
     if(field == 'includeHelp'){
       const current = isTruthy(get(config, 'document.includeHelp', false))
       dispatch(configActions.updateConfig('document.includeHelp', !current))
-    } else if(field == 'hideAnswers'){
-      const current = isTruthy(get(config, 'document.hideAnswers', false))
-      dispatch(configActions.updateConfig('document.hideAnswers', !current))
     }
   }
 
@@ -38,16 +35,6 @@ const DocumentOptions = ({ onChanged }) => {
             className="form-check-input"
             onChange={(event) => handleClick(event, 'includeHelp')}/>
         &nbsp; {gettext('Include help')}
-        </label>
-      </li>
-      <li>
-        <label className="dropdown-item">
-          <input
-            type="checkbox"
-            checked={isTruthy(get(config, 'document.hideAnswers'))}
-            className="form-check-input"
-            onChange={(event) => handleClick(event, 'hideAnswers')}/>
-        &nbsp; {gettext('Hide answers')}
         </label>
       </li>
     </div>
