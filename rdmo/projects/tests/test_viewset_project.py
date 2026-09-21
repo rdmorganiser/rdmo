@@ -54,15 +54,10 @@ urlnames = {
     'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
     'navigation': 'v1-projects:project-navigation',
-    'answers': 'v1-projects:project-answers',
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
-    'page_detail': 'v1-projects:project-page-detail',
-    'progress': 'v1-projects:project-progress',
     'upload_accept': 'v1-projects:project-upload-accept',
     'imports': 'v1-projects:project-imports',
-    'project_answers': 'project_answers',
-    'project_answers_export': 'project_answers_export',
 }
 
 projects = [1, 2, 3, 4, 5, 12]
