@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty } from 'lodash'
 
 import { isEmptyValue } from '../../../utils/value'
 
@@ -17,28 +16,30 @@ const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copy
     </button>
   )
 
-  const hasValues = values.some((value) => !isEmptyValue(value))
+  const hasValues = values.some((value) => !isEmptyValue(value, question.widget_type))
 
-  const hasEmptySiblings = sets.filter((set) => (
+  const hasEmptySiblingSet = sets.filter((set) => (
       (set.set_prefix == currentSet.set_prefix) &&
       (set.set_index != currentSet.set_index) &&
       (set.element == question.parent)
     )).some((set) => {
-      // loop over all other sets and filter siblings accordingly
       const setSiblings = siblings.filter((value) => (
         (value.set_prefix == set.set_prefix) &&
         (value.set_index == set.set_index)
       ))
 
-      // check if this set has no sibling at all (for checkboxes) or if they are empty
-      return isEmpty(setSiblings) || setSiblings.some((value) => isEmptyValue(value))
+      // check if this set has no siblings at all (e.g. checkboxes)
+      // or if all existing siblings are empty for this widget
+      return setSiblings.every(
+        (value) => isEmptyValue(value, question.widget_type)
+      )
     })
 
   return (
     question.is_collection &&
     question.set_collection &&
     hasValues &&
-    hasEmptySiblings &&
+    hasEmptySiblingSet &&
     button
   )
 }

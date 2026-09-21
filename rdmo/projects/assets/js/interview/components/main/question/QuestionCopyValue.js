@@ -7,8 +7,8 @@ const QuestionCopyValue = ({ question, value, siblings, copyValue }) => {
   return (
     question.set_collection &&
     !question.is_collection &&
-    !isEmptyValue(value) &&
-    siblings.some((value) => isEmptyValue(value)) && (
+    !isEmptyValue(value, question.widget_type) &&
+    siblings.some((value) => isEmptyValue(value, question.widget_type)) && (
       <button type="button" className="btn btn-link btn-apply-to-all" onClick={() => copyValue(question, value)}
               title={gettext('Apply this answer to all tabs where this question is empty')}
               aria-label={gettext('Apply this answer to all tabs where this question is empty')}>
