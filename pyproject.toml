@@ -199,8 +199,9 @@ strict = true
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["rdmo/*/tests"]
 pythonpath = ["testing"]
-addopts = ["-ra", "-p no:randomly", "-m", "not e2e", "--import-mode=importlib"]
+addopts = ["-ra", "-p no:randomly", "-m", "not e2e and not ci", "--import-mode=importlib"]
 markers = [
+  "ci: marks tests that run only in CI",
   "e2e: marks tests as end-to-end tests using playwright (deselect with '-m \"not e2e\"')",
   "performance: marks query-count regression tests",
 ]
