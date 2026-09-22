@@ -101,10 +101,10 @@ export default function configureStore() {
       }
 
       if (permissions.can_view_visibility) {
-        if (state.settings.multisite && currentUser.permissions.can_view_site) {
+        if (state.settings.multisite && permissions.can_view_site) {
           store.dispatch(sitesActions.fetchSites())
         }
-        if (state.settings.groups && currentUser.permissions.can_view_group) {
+        if (state.settings.groups && permissions.can_view_group) {
           store.dispatch(groupsActions.fetchGroups())
         }
         if (!isNil(project.visibility)) {
