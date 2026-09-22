@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { Link } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { navigateDashboard } from '../actions/projectActions'
+import { navigateDashboard } from '../actions/navigationActions'
 import { buildPath } from '../utils/location'
 
 const Sidebar = () => {
