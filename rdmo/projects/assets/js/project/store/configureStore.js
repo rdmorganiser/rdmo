@@ -3,9 +3,9 @@ import thunk from 'redux-thunk'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-// import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
+import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
-// import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
+import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
@@ -20,6 +20,7 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
+// import { getEffectivePermissions } from '../../common/utils/permissions'
 import * as projectActions from '../actions/projectActions'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
@@ -86,16 +87,28 @@ export default function configureStore() {
       store.dispatch(projectActions.fetchProject()),
       store.dispatch(rolesActions.fetchRoles())
     ]).then(() => {
-      const permissions = store.getState().project.project.project.permissions
+      const state = store.getState()
+      const project = state.project.project.project
+      const currentUser = state.user.currentUser
+
+      const permissions = project.permissions
+
+      // const permissions = getEffectivePermissions(
+      //   project.permissions,
+      //   currentUser.permissions
+      // )
+
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
 
       if (permissions.can_view_visibility) {
-        // TODO: enable again and guard with the new user permissions
-        // store.dispatch(sitesActions.fetchSites())
-        // store.dispatch(groupsActions.fetchGroups())
-        const project = store.getState().project.project.project
+        if (state.settings.multisite && currentUser.permissions.can_view_site) {
+          store.dispatch(sitesActions.fetchSites())
+        }
+        if (state.settings.groups && currentUser.permissions.can_view_group) {
+          store.dispatch(groupsActions.fetchGroups())
+        }
         if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }

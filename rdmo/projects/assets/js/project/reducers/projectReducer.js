@@ -183,11 +183,6 @@ export default function projectReducer(state = initialState, action) {
         ...state,
         visibility: action.visibility
       }
-    case actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS:
-      return {
-        ...state,
-        visibility: null
-      }
     case actionTypes.FETCH_PROVIDERS_SUCCESS:
       return {
         ...state,

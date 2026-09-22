@@ -477,8 +477,9 @@ class ProjectViewSet(ModelViewSet):
                 if request.user.has_perm('projects.change_visibility'):
                     data['sites'] = request.data.getlist('sites', [])
                 else:
+                    site_ids = instance.sites.values_list('id', flat=True) if instance is not None else []
                     data['sites'] = list({
-                        *[site.id for site in instance.sites.all()],
+                        *site_ids,
                         get_current_site(self.request).id
                     })
 
