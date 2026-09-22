@@ -1,4 +1,4 @@
-def compute_navigation(project, section):
+def compute_navigation(project):
     # compute navigation from answer tree
     navigation = []
     answer_tree = project.get_answer_tree(verbose=('section', 'page'))
@@ -9,15 +9,14 @@ def compute_navigation(project, section):
             for key in ['id', 'uri', 'title', 'show', 'first', 'count', 'total']
         }
 
-        if section and section.id == navigation_section['id']:
-            navigation_section['pages'] = []
+        navigation_section['pages'] = []
 
-            for page_node in section_node['elements']:
-                navigation_page = {
-                    key: page_node.get(key)
-                    for key in ['id', 'uri', 'title', 'show', 'count', 'total']
-                }
-                navigation_section['pages'].append(navigation_page)
+        for page_node in section_node['elements']:
+            navigation_page = {
+                key: page_node.get(key)
+                for key in ['id', 'uri', 'title', 'show', 'count', 'total']
+            }
+            navigation_section['pages'].append(navigation_page)
 
         navigation.append(navigation_section)
 
