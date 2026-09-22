@@ -1,5 +1,5 @@
 // combine permission sets, granting a permission when it is true in any set
-export const getEffectivePermissions = (...permissionSets) => {
+export const combinePermissions = (...permissionSets) => {
   const effectivePermissions = {}
 
   permissionSets.forEach((permissions) => {

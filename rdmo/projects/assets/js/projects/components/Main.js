@@ -9,7 +9,7 @@ import { useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { getEffectivePermissions } from '../../common/utils/permissions'
+import { combinePermissions } from '../../common/utils/permissions'
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 
@@ -268,7 +268,7 @@ const Main = () => {
     created: content => formatDateTime(content, 'long'),
     last_changed: content => formatDateTime(content, 'long'),
     actions: (_content, row) => {
-      const perms = getEffectivePermissions(row.permissions, userPerms)
+      const perms = combinePermissions(row.permissions, userPerms)
       return (
         <div className="d-flex align-items-center gap-1">
           <Link

@@ -7,7 +7,7 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 
 import { navigateDashboard } from '../../../actions/projectActions'
-import { useEffectivePermissions } from '../../../hooks'
+import { usePermissions } from '../../../hooks'
 import { buildPath } from '../../../utils/location'
 
 import SnapshotDeleteModal from './SnapshotDeleteModal'
@@ -16,7 +16,7 @@ import SnapshotRollbackModal from './SnapshotRollbackModal'
 
 const SnapshotTable = ({ snapshots, onCreate}) => {
   const dispatch = useDispatch()
-  const perms = useEffectivePermissions()
+  const perms = usePermissions()
 
   const updateModal = useModal()
   const rollbackModal = useModal()

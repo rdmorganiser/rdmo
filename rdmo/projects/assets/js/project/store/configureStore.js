@@ -20,7 +20,7 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
-import { getEffectivePermissions } from '../../common/utils/permissions'
+import { combinePermissions } from '../../common/utils/permissions'
 import * as projectActions from '../actions/projectActions'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
@@ -91,7 +91,7 @@ export default function configureStore() {
       const project = state.project.project.project
       const currentUser = state.user.currentUser
 
-      const permissions = getEffectivePermissions(
+      const permissions = combinePermissions(
         project.permissions,
         currentUser.permissions
       )

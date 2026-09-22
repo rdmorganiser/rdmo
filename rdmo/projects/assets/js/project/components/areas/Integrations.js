@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
 
-import { useEffectivePermissions } from '../../hooks'
+import { usePermissions } from '../../hooks'
 
 import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
@@ -11,7 +11,7 @@ import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
 import IntegrationModal from './integrations/IntegrationModal'
 
 const Integrations = () => {
-  const perms = useEffectivePermissions()
+  const perms = usePermissions()
   const providers = useSelector((state) => state.project.providers) ?? {}
   const integrations = useSelector((state) => state.project.integrations) ?? []
 

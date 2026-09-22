@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { getEffectivePermissions } from '../../common/utils/permissions'
+import { combinePermissions } from '../../common/utils/permissions'
 
 // return the combined model-based permissions for the current user and object-based permissions for the current project
-export const useEffectivePermissions = () => {
+export const usePermissions = () => {
   const projectPermissions = useSelector(
     (state) => state.project.project?.project?.permissions
   )
@@ -13,7 +13,7 @@ export const useEffectivePermissions = () => {
   )
 
   return useMemo(
-    () => getEffectivePermissions(projectPermissions, userPermissions),
+    () => combinePermissions(projectPermissions, userPermissions),
     [projectPermissions, userPermissions]
   )
 }

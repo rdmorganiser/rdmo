@@ -1,2 +1,2 @@
-export { useEffectivePermissions } from './useEffectivePermissions'
 export { useFieldErrors } from './useFieldErrors'
+export { usePermissions } from './usePermissions'
