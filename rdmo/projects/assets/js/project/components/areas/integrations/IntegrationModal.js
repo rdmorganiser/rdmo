@@ -10,7 +10,7 @@ import {
   createProjectIntegration,
   updateProjectIntegration
 } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 import IntegrationSecretField from './IntegrationSecretField'
 

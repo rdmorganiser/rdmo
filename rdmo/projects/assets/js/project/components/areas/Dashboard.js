@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import { navigateDashboard, updateProjectTask } from '../../actions/projectActions'
+import { usePermissions } from '../../hooks'
 import { Tile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
@@ -17,7 +18,7 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
   const settings = useSelector(state => state.settings)
-  const perms = useSelector(state => state.project.project.project.permissions) ?? {}
+  const perms = usePermissions()
 
   const allIssues = useSelector((state) => state.project.project.tasks) ?? []
   /* Show only issues that resolve */

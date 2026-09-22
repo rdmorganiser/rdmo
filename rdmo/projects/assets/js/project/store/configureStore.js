@@ -20,7 +20,7 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
-// import { getEffectivePermissions } from '../../common/utils/permissions'
+import { combinePermissions } from '../../common/utils/permissions'
 import * as projectActions from '../actions/projectActions'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
@@ -91,22 +91,20 @@ export default function configureStore() {
       const project = state.project.project.project
       const currentUser = state.user.currentUser
 
-      const permissions = project.permissions
-
-      // const permissions = getEffectivePermissions(
-      //   project.permissions,
-      //   currentUser.permissions
-      // )
+      const permissions = combinePermissions(
+        project.permissions,
+        currentUser.permissions
+      )
 
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))
       }
 
       if (permissions.can_view_visibility) {
-        if (state.settings.multisite && currentUser.permissions.can_view_site) {
+        if (state.settings.multisite && permissions.can_view_site) {
           store.dispatch(sitesActions.fetchSites())
         }
-        if (state.settings.groups && currentUser.permissions.can_view_group) {
+        if (state.settings.groups && permissions.can_view_group) {
           store.dispatch(groupsActions.fetchGroups())
         }
         if (!isNil(project.visibility)) {
