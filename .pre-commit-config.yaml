@@ -25,12 +25,12 @@ repos:
         exclude: \.dot$
       - id: debug-statements
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: e8f7d69b957a30acb2c875078d5fd012de24b64c  # frozen: v0.16.7
+    rev: 2eeb5678de71a00c0902cbda7105d328432f72cb  # frozen: v0.16.8
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 8ba198123f6fb414e19d879a1270d6d72116d89b  # frozen: v10.10.0
+    rev: 809d037d62978decc620b5a55e8ee5b8b54d8d65  # frozen: v10.11.0
     hooks:
       - id: eslint
         args: [--fix, --color]
@@ -39,7 +39,7 @@ repos:
           - eslint-plugin-react@7.37.0
           - react@18.3.1
   - repo: https://github.com/rdmorganiser/mirrors-typos
-    rev: 02801cbe232e697a7bbc0be73373f4b97dda1ece  # frozen: v1.50.1
+    rev: e90f562ac20a3a98bc6e6c6c1aa9367bb093a717  # frozen: v1.50.2
     hooks:
     - id: typos
       exclude: |
