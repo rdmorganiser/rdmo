@@ -4,7 +4,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import { projectId } from '../utils/meta'
 
-export const locationKeys = ['area', 'snapshotId', 'viewId', 'detail']
+export const locationKeys = ['area', 'snapshotId', 'viewId', 'pageId', 'detail']
 
 export const parseLocation = () => {
   let pathname = window.location.pathname
@@ -20,6 +20,7 @@ export const parseLocation = () => {
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/views\/(?<viewId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(interview))\/(?<pageId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)[/]*$/
@@ -43,13 +44,14 @@ export const updateLocation = (location) => {
   }
 }
 
-export const buildPath = ({ area, snapshotId, viewId, detail }) => {
+export const buildPath = ({ area, snapshotId, viewId, pageId, detail }) => {
   const segments = [baseUrl, 'projects', projectId]
 
   if (!isNil(area) && area != 'dashboard') {
     segments.push(area)
   }
   if (!isNil(snapshotId)) segments.push(snapshotId)
+  if (!isNil(pageId)) segments.push(pageId)
   if (!isNil(viewId)) segments.push('views', viewId)
   if (!isNil(detail)) segments.push(detail)
 

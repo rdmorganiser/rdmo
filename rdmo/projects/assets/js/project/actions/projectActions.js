@@ -525,6 +525,46 @@ export function fetchView(snapshotId, viewId) {
   }
 }
 
+// navigation
+
+export function fetchNavigation() {
+  const pendingId = 'fetchNavigation'
+
+  return (dispatch) => {
+    dispatch(addToPending(pendingId))
+    dispatch({type: actionTypes.FETCH_NAVIGATION_INIT})
+
+    return ProjectApi.fetchProjectNavigation(projectId)
+      .then((navigation) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({type: actionTypes.FETCH_NAVIGATION_SUCCESS, navigation})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({type: actionTypes.FETCH_NAVIGATION_ERROR, error})
+      })
+  }
+}
+
+// progress
+
+export function fetchProgress() {
+  return (dispatch) => {
+    dispatch(addToPending('fetchProgress'))
+    dispatch({type: actionTypes.FETCH_PROGRESS_INIT})
+
+    return ProjectApi.fetchProjectProgress(projectId)
+      .then((progress) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_SUCCESS, progress})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('fetchProgress'))
+        dispatch({type: actionTypes.FETCH_PROGRESS_ERROR, error})
+      })
+  }
+}
+
 // download
 
 export function downloadAnswers(snapshotId, format) {
