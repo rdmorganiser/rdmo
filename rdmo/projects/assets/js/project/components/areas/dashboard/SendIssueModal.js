@@ -8,7 +8,8 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchProjectFiles } from '../../../actions/projectActions'
+import { fetchProjectFiles, sendProjectIssueEmail } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks/useFieldErrors'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
 
@@ -22,7 +23,9 @@ const SendIssueModal = ({
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const sites = useSelector(state => state.sites) ?? {}
+  const isSubmitting = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const currentSite = Object.values(sites).find(site => site.id === project.site)
+  const errors = useFieldErrors()
 
   /* TODO: use templates? */
   const initialMessage = [
@@ -60,7 +63,8 @@ const SendIssueModal = ({
       current: []
     },
     attachments_snapshot: 'current',
-    attachments_format: null,
+    // as (required) format checkboxes are "hidden" in a dropdown, better set a default value
+    attachments_format: settings.export_formats?.[0]?.[0] ?? null,
 
     recipients: [],
     recipients_input: ''
@@ -101,9 +105,10 @@ const SendIssueModal = ({
     dispatch(fetchProjectFiles(snapshotId === 'current' ? undefined : snapshotId))
   }
 
-  const handleSend = (extraPayload = {}) => {
+  const getPayload = (extraPayload = {}) => {
     const attachmentsFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
-    const payload = {
+
+    return {
       subject: formData.subject,
       message: formData.message,
       attachments_answers: formData.attachments_answers,
@@ -114,18 +119,24 @@ const SendIssueModal = ({
       ...extraPayload
     }
 
-    console.log(payload)
   }
 
-  const handleSendMail = () => {
-    handleSend({
+  const handleSendMail = async () => {
+    const payload = getPayload({
       recipients: formData.recipients,
       recipients_input: formData.recipients_input
     })
+
+    try {
+      await dispatch(sendProjectIssueEmail(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
   }
 
   const handleSendIntegration = (providerKey, providerClass) => {
-    handleSend({
+    getPayload({
       provider: providerKey,
       provider_class: providerClass
     })
@@ -222,12 +233,23 @@ const SendIssueModal = ({
 
               <div className="mb-4 text-end">
                 <button
-                  disabled={!canSendMail}
+                  disabled={!canSendMail || isSubmitting}
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSendMail}
                 >
-                  {gettext('Send by mail')}
+                  {
+                    isSubmitting ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        {gettext('Sending...')}
+                      </>
+                    ) : gettext('Send by mail')
+                  }
                 </button>
               </div>
             </>
@@ -264,6 +286,13 @@ const SendIssueModal = ({
           )
         }
       </form>
+      {
+        Object.entries(errors).flatMap(([field, fieldErrors]) => (
+          fieldErrors.map((error, index) => (
+            <div key={`${field}-${index}`} className="text-danger mt-1">{error}</div>
+          ))
+        ))
+      }
     </Modal>
   )
 }
