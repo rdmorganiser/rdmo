@@ -960,10 +960,6 @@ class ProjectIssueSendSerializer(serializers.Serializer):
     attachments_format = serializers.ChoiceField(
         choices=settings.EXPORT_FORMATS, required=False, allow_null=True, default=None
     )
-    recipients = serializers.ListField(
-        child=serializers.ChoiceField(choices=settings.EMAIL_RECIPIENTS_CHOICES), required=False, default=list
-    )
-    recipients_input = serializers.CharField(required=False, allow_blank=True, default='')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -975,17 +971,6 @@ class ProjectIssueSendSerializer(serializers.Serializer):
                 value_type=VALUE_TYPE_FILE
             )
             self.fields['attachments_snapshot'].queryset = project.snapshots.all()
-
-    def validate_recipients_input(self, recipients_input):
-        if recipients_input and not settings.EMAIL_RECIPIENTS_INPUT:
-            raise serializers.ValidationError(_('This field is not available.'))
-
-        email_field = serializers.EmailField()
-        return [
-            email_field.run_validation(line.strip())
-            for line in recipients_input.splitlines()
-            if line.strip()
-        ]
 
     def validate(self, data):
         snapshot = data.get('attachments_snapshot')
@@ -1000,10 +985,51 @@ class ProjectIssueSendSerializer(serializers.Serializer):
         if (data['attachments_answers'] or data['attachments_views']) and not data.get('attachments_format'):
             raise serializers.ValidationError({'attachments_format': _('This field is required.')})
 
+        return data
+
+
+class ProjectIssueSendEmailSerializer(ProjectIssueSendSerializer):
+
+    recipients = serializers.ListField(
+        child=serializers.ChoiceField(choices=settings.EMAIL_RECIPIENTS_CHOICES), required=False, default=list
+    )
+    recipients_input = serializers.CharField(required=False, allow_blank=True, default='')
+
+    def validate_recipients_input(self, recipients_input):
+        if recipients_input and not settings.EMAIL_RECIPIENTS_INPUT:
+            raise serializers.ValidationError(_('This field is not available.'))
+
+        email_field = serializers.EmailField()
+        return [
+            email_field.run_validation(line.strip())
+            for line in recipients_input.splitlines()
+            if line.strip()
+        ]
+
+    def validate(self, data):
+        data = super().validate(data)
+
         if not data['recipients'] and not data['recipients_input']:
             raise serializers.ValidationError({'recipients': _('At least one recipient is required.')})
 
         return data
+
+
+class ProjectIssueSendIntegrationSerializer(ProjectIssueSendSerializer):
+
+    integration = serializers.PrimaryKeyRelatedField(queryset=Integration.objects.none())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        project = self.context.get('project')
+        if project:
+            self.fields['integration'].queryset = project.integrations.all()
+
+    def validate_integration(self, integration):
+        if integration.provider is None:
+            raise serializers.ValidationError(_('Select a valid choice.'))
+        return integration
 
 
 class SnapshotSerializer(serializers.ModelSerializer):

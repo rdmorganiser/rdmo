@@ -79,7 +79,8 @@ from .serializers.v1 import (
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
-    ProjectIssueSendSerializer,
+    ProjectIssueSendEmailSerializer,
+    ProjectIssueSendIntegrationSerializer,
     ProjectIssueSerializer,
     ProjectListSerializer,
     ProjectMembershipCreateSerializer,
@@ -964,32 +965,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
     def get_queryset(self):
         return Issue.objects.filter(project=self.project).prefetch_related('resources').select_related('task')
 
-    @action(
-        detail=True,
-        methods=['POST'],
-        url_path='send-email',
-        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
-    )
-    def send_email(self, request, parent_lookup_project, pk=None):
-        if not settings.PROJECT_SEND_ISSUE:
-            raise Http404
-
-        issue = self.get_object()
-        project = issue.project
-        data = request.data.copy()
-        if data.get('attachments_snapshot') == 'current':
-            data['attachments_snapshot'] = None
-
-        serializer = ProjectIssueSendSerializer(
-            data=data,
-            context={
-                **self.get_serializer_context(),
-                'project': project
-            }
-        )
-        serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
-
+    def get_send_attachments(self, request, project, data):
         snapshot = data.get('attachments_snapshot')
         attachments_format = data.get('attachments_format')
         attachments = []
@@ -1026,6 +1002,35 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
             with value.file.open('rb') as file:
                 attachments.append((value.file_name, file.read(), value.file_type))
 
+        return attachments
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='send-email',
+        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
+    )
+    def send_email(self, request, parent_lookup_project, pk=None):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        issue = self.get_object()
+        project = issue.project
+        data = request.data.copy()
+        if data.get('attachments_snapshot') == 'current':
+            data['attachments_snapshot'] = None
+
+        serializer = ProjectIssueSendEmailSerializer(
+            data=data,
+            context={
+                **self.get_serializer_context(),
+                'project': project
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        attachments = self.get_send_attachments(request, project, data)
+
         recipients = list(dict.fromkeys([
             *data['recipients'],
             *data['recipients_input']
@@ -1045,6 +1050,43 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         issue.save(update_fields=('status', ))
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='send-integration',
+        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
+    )
+    def send_integration(self, request, parent_lookup_project, pk=None):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        issue = self.get_object()
+        project = issue.project
+        data = request.data.copy()
+        if data.get('attachments_snapshot') == 'current':
+            data['attachments_snapshot'] = None
+
+        serializer = ProjectIssueSendIntegrationSerializer(
+            data=data,
+            context={
+                **self.get_serializer_context(),
+                'project': project
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        attachments = self.get_send_attachments(request, project, data)
+
+        integration = data['integration']
+        return integration.provider.send_issue(
+            request._request,
+            issue,
+            integration,
+            data['subject'],
+            data['message'],
+            attachments
+        )
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
