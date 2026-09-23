@@ -1,6 +1,7 @@
 import pytest
 
 from django.core import mail
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -46,7 +47,8 @@ change_issue_permission_map = {
 urlnames = {
     'list': 'v1-projects:project-issue-list',
     'detail': 'v1-projects:project-issue-detail',
-    'send-email': 'v1-projects:project-issue-send-email'
+    'send-email': 'v1-projects:project-issue-send-email',
+    'send-integration': 'v1-projects:project-issue-send-integration'
 }
 
 projects = [1, 2, 3, 4, 5, 12]
@@ -283,3 +285,64 @@ def test_send_email_disabled(db, client, settings):
 
     assert response.status_code == 404
     assert len(mail.outbox) == 0
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_send_integration(db, client, mocker, username, password):
+    mocked_send_issue = mocker.patch(
+        'rdmo.projects.providers.SimpleIssueProvider.send_issue',
+        return_value=HttpResponseRedirect('https://example.com/login/oauth/authorize')
+    )
+    client.login(username=username, password=password)
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-integration'], args=[issue.project_id, issue.id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'integration': 1
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    if issue.project_id in change_issue_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url == 'https://example.com/login/oauth/authorize'
+        mocked_send_issue.assert_called_once()
+    else:
+        if issue.project_id in view_issue_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        mocked_send_issue.assert_not_called()
+
+
+@pytest.mark.parametrize('data', [
+    {},
+    {'integration': 2}
+])
+def test_send_integration_error(db, client, data):
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-integration'], args=[issue.project_id, issue.id])
+    request_data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        **data
+    }
+    response = client.post(url, request_data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert 'integration' in response.json()
+
+
+def test_send_integration_disabled(db, client, settings):
+    settings.PROJECT_SEND_ISSUE = False
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-integration'], args=[issue.project_id, issue.id])
+    response = client.post(url, {}, content_type='application/json')
+
+    assert response.status_code == 404
