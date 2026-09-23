@@ -243,6 +243,25 @@ export function updateProjectTask(issueId, data) {
   }
 }
 
+// send project issue email
+
+export function sendProjectIssueEmail(issueId, data) {
+  return function (dispatch) {
+    dispatch(addToPending('sendProjectIssueEmail'))
+    dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_INIT })
+
+    return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
+      .then(() => {
+        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
+      })
+      .catch(error => {
+        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('sendProjectIssueEmail')))
+  }
+}
+
 // memberships / invites / leave
 
 export function fetchProjectInvites() {
@@ -506,7 +525,7 @@ export function fetchProjectFiles(snapshotId) {
 // answers / views
 
 export function fetchAnswers(snapshotId) {
-  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
+  const pendingId = isNil(snapshotId) ? 'fetchAnswers' : `fetchView/${snapshotId}`
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
@@ -527,7 +546,7 @@ export function fetchAnswers(snapshotId) {
 }
 
 export function fetchView(snapshotId, viewId) {
-  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}/${viewId}` : `fetchView/${viewId}`
+  const pendingId = isNil(snapshotId) ? `fetchView/${viewId}` : `fetchView/${snapshotId}/${viewId}`
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))

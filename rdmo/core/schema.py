@@ -153,7 +153,20 @@ class ProjectInviteViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, View
 
 class ProjectIssueViewSetExtension(ParentLookupIdMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectIssueViewSet'
-    actions = ['list', 'retrieve', 'update', 'partial_update']
+    actions = ['list', 'retrieve', 'update', 'partial_update', 'send_email']
+
+    def get_extend_schema_args(self, action):
+        schema_args = super().get_extend_schema_args(action)
+
+        if action == 'send_email':
+            from rdmo.projects.serializers.v1 import ProjectIssueSendSerializer
+
+            schema_args.update({
+                'request': ProjectIssueSendSerializer,
+                'responses': {204: None}
+            })
+
+        return schema_args
 
 
 class ProjectMembershipViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
