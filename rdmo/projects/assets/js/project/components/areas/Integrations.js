@@ -9,6 +9,7 @@ import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
 import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
 import IntegrationModal from './integrations/IntegrationModal'
+import IntegrationTable from './integrations/IntegrationTable'
 
 const Integrations = () => {
   const perms = usePermissions()
@@ -64,72 +65,11 @@ const Integrations = () => {
             </p>
             {
               visibleIntegrations.length > 0 && (
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '15%' }}>{gettext('Title')}</th>
-                      <th style={{ width: '45%' }}>{gettext('Description')}</th>
-                      <th style={{ width: '30%' }}>{gettext('Options')}</th>
-                      <th style={{ width: '10%' }}>
-                        <span className="visually-hidden">{gettext('Actions')}</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {
-                      visibleIntegrations.map((integration) => (
-                        <tr key={integration.id}>
-                          <td>
-                            {integration.title}
-                          </td>
-                          <td>{integration.provider.description}</td>
-                          <td>
-                            {
-                              integration.options
-                                .filter((option) => !option.secret)
-                                .map((option) => (
-                                  <div key={option.key}>
-                                    {option.title}:<br />
-                                    {option.value}
-                                  </div>
-                                ))
-                            }
-                          </td>
-                          <td>
-                            <div className="d-flex justify-content-end align-items-center gap-1">
-                              {
-                                perms.can_change_integration && (
-                                  <button
-                                    type="button"
-                                    className="link"
-                                    aria-label={gettext('Update integration')}
-                                    title={gettext('Update integration')}
-                                    onClick={() => openUpdateModal(integration)}
-                                  >
-                                    <i className="bi bi-pencil" aria-hidden="true" />
-                                  </button>
-                                )
-                              }
-                              {
-                                perms.can_delete_integration && (
-                                  <button
-                                    type="button"
-                                    className="link"
-                                    aria-label={gettext('Delete integration')}
-                                    title={gettext('Delete integration')}
-                                    onClick={() => openDeleteModal(integration)}
-                                  >
-                                    <i className="bi bi-trash" aria-hidden="true" />
-                                  </button>
-                                )
-                              }
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    }
-                  </tbody>
-                </table>
+                <IntegrationTable
+                  integrations={visibleIntegrations}
+                  onUpdate={perms.can_change_integration ? openUpdateModal : null}
+                  onDelete={perms.can_delete_integration ? openDeleteModal : null}
+                />
               )
             }
           </>
