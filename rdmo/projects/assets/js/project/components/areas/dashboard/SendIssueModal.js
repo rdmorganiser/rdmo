@@ -9,7 +9,7 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchProjectFiles, sendProjectIssueEmail } from '../../../actions/projectActions'
-import { useFieldErrors } from '../../../hooks/useFieldErrors'
+import { useFieldErrors } from '../../../hooks'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
 
