@@ -95,6 +95,22 @@ class HasProjectProgressObjectPermission(HasProjectPermission):
             return ('projects.view_project_object', )
 
 
+class HasProjectIssueSendModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_issue', )
+        return super().get_required_permissions(method, model_cls)
+
+
+class HasProjectIssueSendObjectPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_issue_object', )
+        return super().get_required_object_permissions(method, model_cls)
+
+
 class HasProjectVisibilityModelPermission(HasModelPermission):
 
     def get_required_permissions(self, method, model_cls):
