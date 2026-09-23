@@ -6,6 +6,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
+import { getDocumentParameters } from '../utils/documentoptions'
 import { locationKeys, updateLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -16,7 +17,7 @@ import * as actionTypes from './actionTypes'
 // asynchronous actions
 
 export function navigateDashboard(location) {
-  return (dispatch) => {
+  return function(dispatch, getState) {
     // update the location in the url
     updateLocation(location)
 
@@ -25,8 +26,14 @@ export function navigateDashboard(location) {
 
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
+    } else if (location.detail == 'questions') {
+      dispatch(fetchAnswers(location.snapshotId,
+        {...getDocumentParameters(getState().config), 'hide_answers': 'true' })
+      )
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId))
+      dispatch(fetchAnswers(location.snapshotId,
+        {...getDocumentParameters(getState().config), 'hide_answers': 'false' })
+      )
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }
@@ -505,14 +512,14 @@ export function fetchProjectFiles(snapshotId) {
 
 // answers / views
 
-export function fetchAnswers(snapshotId) {
+export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
 
-    return ProjectApi.fetchProjectAnswers(projectId, snapshotId)
+    return ProjectApi.fetchProjectAnswers(projectId, snapshotId, params)
       .then(view => {
         dispatch(removeFromPending(pendingId))
         dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
@@ -547,12 +554,12 @@ export function fetchView(snapshotId, viewId) {
 
 // download
 
-export function downloadAnswers(snapshotId, format) {
+export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
     dispatch(addToPending('downloadAnswers'))
     dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
 
-    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format)
+    return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, params)
       .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
       .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error }))
       .finally(() => dispatch(removeFromPending('downloadAnswers')))

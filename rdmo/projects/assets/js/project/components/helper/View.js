@@ -5,7 +5,9 @@ import { isNil } from 'lodash'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
+import { getDocumentParameters } from '../../utils/documentoptions'
 
+import DocumentOptionsDropdown from './DocumentOptionsDropdown'
 import ExportsDropdown from './ExportsDropdown'
 import SnapshotsDropdown from './SnapshotsDropdown'
 
@@ -13,7 +15,13 @@ const View = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.config)
+  const config = useSelector((state) => state.config)
   const { currentView } = useSelector((state) => state.project)
+
+  const reloadView = () => {
+    const area = snapshotId == null ? 'documents' : 'snapshots'
+    dispatch(navigateDashboard({area, snapshotId, viewId, detail}))
+  }
 
   const handleSnapshotChange = (snapshot) => {
     if (isNil(snapshot)) {
@@ -24,8 +32,10 @@ const View = () => {
   }
 
   const handleExport = (format) => {
-    if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format))
+    if (detail == 'questions') {
+      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'true'}))
+    } else if (detail == 'answers') {
+      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
@@ -45,6 +55,11 @@ const View = () => {
         <button className="link" onClick={handleBack}>
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
+        {
+          ['answers', 'questions'].includes(detail) && (
+            <DocumentOptionsDropdown onChanged={reloadView}/>
+          )
+        }
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
