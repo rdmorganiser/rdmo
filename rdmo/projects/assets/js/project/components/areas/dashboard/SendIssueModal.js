@@ -19,6 +19,7 @@ const SendIssueModal = ({
   issue,
   onClose
 }) => {
+  console.log('issue', issue.id)
   const dispatch = useDispatch()
   const project = useSelector(state => state.project.project.project)
   const currentUser = useSelector(state => state.user.currentUser) ?? {}
@@ -138,11 +139,11 @@ const SendIssueModal = ({
     }
   }
 
-  const handleSendIntegration = (integration) => {
-    getPayload({
-      provider: integration.provider_key,
-      provider_class: integration.provider
+  const handleSendIntegration = () => {
+    const payload = getPayload({
     })
+
+    console.log('payload', payload)
   }
 
   return (
