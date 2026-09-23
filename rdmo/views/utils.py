@@ -3,8 +3,6 @@ from urllib.parse import urlparse
 
 from django.utils.functional import cached_property
 
-from mptt.utils import get_cached_trees
-
 
 class ProjectWrapper:
 
@@ -57,11 +55,6 @@ class ProjectWrapper:
     @cached_property
     def children(self):
         return [ProjectWrapper(child) for child in self._project.get_children()]
-
-    @cached_property
-    def tree(self):
-        cached_trees = get_cached_trees(self._project.get_descendants())
-        return self._build_tree(cached_trees)
 
     @cached_property
     def conditions(self):
@@ -149,10 +142,3 @@ class ProjectWrapper:
                 condition.resolve(self._values, set_prefix, set_index)
 
         return self._resolved_conditions[condition.id][set_prefix][set_index]
-
-    def _build_tree(self, projects):
-        return [{
-            'id': project.id,
-            'level': project.level,
-            'children': self.build_tree(project.get_children())
-        } for project in projects]

@@ -92,7 +92,7 @@ class AttributeViewSet(ModelViewSet):
     @action(detail=True, url_path='export(?:/(?P<export_format>[a-z]+))?')
     def detail_export(self, request, pk=None, export_format='xml'):
         instance = self.get_object()
-        attributes = instance.get_descendants(include_self=True)
+        attributes = Attribute.objects.get_descendants(instance, include_self=True)
         if export_format == 'xml':
             serializer = AttributeExportSerializer(
                 attributes,
