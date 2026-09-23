@@ -11,6 +11,8 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { fetchProjectFiles, sendProjectIssueEmail } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
+import IntegrationTable from '../integrations/IntegrationTable'
+
 import SendIssueDropdowns from './SendIssueDropdowns'
 
 const SendIssueModal = ({
@@ -25,6 +27,7 @@ const SendIssueModal = ({
   const sites = useSelector(state => state.sites) ?? {}
   const isSubmitting = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const currentSite = Object.values(sites).find(site => site.id === project.site)
+  const integrations = useSelector(state => state.project.integrations) ?? []
   const errors = useFieldErrors()
 
   /* TODO: use templates? */
@@ -49,8 +52,8 @@ const SendIssueModal = ({
   const hasRecipientChoices = !isEmpty(settings.email_recipients_choices)
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
-  /* TODO: fetch attached integrations to determine boolean; setting is not enough */
-  const hasIntegrations = !isEmpty(settings.project_issue_providers)
+  const visibleIntegrations = integrations.filter((integration) => integration.provider)
+  const hasIntegrations = visibleIntegrations.length > 0
   const isConfigured = hasMail || hasIntegrations
 
   const [formData, setFormData] = useState({
@@ -135,10 +138,10 @@ const SendIssueModal = ({
     }
   }
 
-  const handleSendIntegration = (providerKey, providerClass) => {
+  const handleSendIntegration = (integration) => {
     getPayload({
-      provider: providerKey,
-      provider_class: providerClass
+      provider: integration.provider_key,
+      provider_class: integration.provider
     })
   }
 
@@ -262,25 +265,10 @@ const SendIssueModal = ({
               <h2>{gettext('Send via integration')}</h2>
 
               <div className="mb-4">
-                {
-                  /* TODO: switch to attached integrations and its structure */
-                  settings.project_issue_providers.map(([key, label, provider]) => (
-                    <div className="row align-items-center mb-3" key={key}>
-                      <div className="col">
-                        {label}
-                      </div>
-                      <div className="col text-end">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => handleSendIntegration(key, provider)}
-                        >
-                          {interpolate(gettext('Send to %s'), [label])}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                }
+                <IntegrationTable
+                  integrations={visibleIntegrations}
+                  onSend={handleSendIntegration}
+                />
               </div>
             </>
           )
