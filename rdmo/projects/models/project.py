@@ -147,7 +147,7 @@ class Project(MPTTModel, Model):
             return self.user.filter(memberships__role=role)
 
     def get_answer_tree(self, snapshot=None, verbose=None):
-        verbose = tuple(verbose or ())
+        verbose = verbose or ()
         values = self.values.filter(snapshot=snapshot).order_by(
             'attribute_id', 'set_prefix', 'set_index', 'collection_index'
         )
