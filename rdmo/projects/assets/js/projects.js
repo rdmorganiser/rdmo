@@ -1,15 +1,14 @@
 import React from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
-import configureStore from './projects/store/configureStore'
-
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-
 import Pending from '../../../core/assets/js/containers/Pending'
 
-import Main from './projects/containers/Main'
+import configureStore from './projects/store/configureStore'
+
+import Main from './projects/components/Main'
 
 const store = configureStore()
 

@@ -1,0 +1,9 @@
+{% load socialaccount %}
+{% load accounts_tags %}
+
+    <a title="{% sign_in_text provider.name %}"
+       class="btn {{ button_class|default:'btn-primary' }} {{ provider.id }}-login"
+       href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <span class="bi bi-{{ provider.id }}"></span>
+        <span>{% sign_in_text provider.name %}</span>
+    </a>

@@ -22,7 +22,14 @@ def test_projects_page(page: Page):
     expect(page.locator("thead")).to_contain_text("Name")
     expect(page.locator("tbody")).to_contain_text("Test")
 
-    # Assert bottom of page
+    # Assert "Load more" button
     page.locator("body").press("End")
-    expect(page.get_by_role("button", name="Scroll to top")).to_be_visible()
-    page.locator("body").press("Home")
+    load_more = page.get_by_role("button", name="Load more")
+    expect(load_more).to_be_visible()
+
+    with page.expect_response(re.compile(r"/projects/")):
+        load_more.click()
+
+    # Assert the "Scroll to top" button
+    page.locator("body").press("End")
+    expect(page.get_by_title("Scroll to top")).to_be_visible()

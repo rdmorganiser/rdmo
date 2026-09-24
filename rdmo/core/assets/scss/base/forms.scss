@@ -1,0 +1,20 @@
+:root {
+    --bs-border-radius: 0.25rem;
+    --bs-border-radius-sm: 0.15rem;
+    --bs-border-radius-lg: 0.375rem;
+}
+
+label {
+    font-weight: bold;
+    font-size: .875rem;
+}
+
+.btn-rounded {
+    --bs-btn-border-radius: 2rem;
+}
+
+// the search field component in projects
+.btn-reset {
+    font-size: 1.5rem;
+    line-height: 1rem;
+}

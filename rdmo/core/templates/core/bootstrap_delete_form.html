@@ -1,9 +1,0 @@
-{% load i18n %}
-
-    <form method="post" action="">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
-
-        <input type="submit" value="{{ submit }}" class="btn btn-danger" />
-        <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" />
-    </form>
