@@ -15,6 +15,8 @@ const Select = ({
   options,
   errors,
   value,
+  filterOption,
+  formatOptionLabel,
   onChange
 }) => {
   const id = uniqueId('select-')
@@ -58,6 +60,8 @@ const Select = ({
         isMulti={isMulti}
         options={options}
         value={getValue()}
+        filterOption={filterOption}
+        formatOptionLabel={formatOptionLabel}
         onChange={handleChange}
       />
 
@@ -86,6 +90,8 @@ Select.propTypes = {
   options: PropTypes.array,
   errors: PropTypes.array,
   value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
+  filterOption: PropTypes.func,
+  formatOptionLabel: PropTypes.func,
   onChange: PropTypes.func.isRequired
 }
 
