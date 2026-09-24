@@ -197,8 +197,8 @@ def test_resolve_optionset(db, client, results):
         assert response_result == result
 
 
-@pytest.mark.parametrize('text,result', [('contest', True), ('other', False)])
-def test_resolve_post_multiple_conditions(db, client, text, result):
+@pytest.mark.parametrize('text,expected_result', [('contest', True), ('other', False)])
+def test_resolve_post_multiple_conditions(db, client, text, expected_result):
     client.login(username='author', password='author')
 
     question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
@@ -217,19 +217,19 @@ def test_resolve_post_multiple_conditions(db, client, text, result):
         collection_index=0,
         defaults={'text': text},
     )
-    results = [{
+    expected = [{
         'set_prefix': '999',
         'set_index': 0,
         'element_type': 'questions',
         'element_id': question.id,
-        'result': result,
+        'result': expected_result,
     }]
-    data = [{key: value for key, value in item.items() if key != 'result'} for item in results]
+    data = [{key: value for key, value in item.items() if key != 'result'} for item in expected]
 
     response = client.post(reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json')
 
     assert response.status_code == 200, response.content
-    assert response.json() == results
+    assert response.json() == expected
 
 
 def test_resolve_post_condition_without_source_preserves_or(db, client):
@@ -272,7 +272,7 @@ def test_resolve_post_filters_value_sources(db, client, mocker):
         'set_prefix': '', 'set_index': 0,
         'element_type': 'conditions', 'element_id': condition.id,
     } for condition in conditions]
-    map_spy = mocker.spy(viewsets, 'compute_attribute_values_map')
+    map_spy = mocker.spy(viewsets, 'compute_value_maps')
 
     response = client.post(reverse(urlnames['resolve'], args=[project_id]), data, content_type='application/json')
 
