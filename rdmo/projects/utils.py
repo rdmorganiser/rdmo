@@ -33,13 +33,6 @@ def is_last_owner(project, user):
         return False
 
 
-def compute_attribute_values_map(values):
-    attribute_values_map = defaultdict(list)
-    for value in values:
-        attribute_values_map[value.attribute_id].append(value)
-    return attribute_values_map
-
-
 def compute_value_maps(values):
     attribute_values_map = defaultdict(list)
     attribute_sets_map = defaultdict(set)

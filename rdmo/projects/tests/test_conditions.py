@@ -3,7 +3,7 @@ import pytest
 from rdmo.conditions.models import Condition
 
 from ..models import Project, Value
-from ..utils import check_conditions, compute_attribute_values_map
+from ..utils import check_conditions, compute_value_maps
 
 project_id = 1
 value_id = 86
@@ -14,7 +14,7 @@ set_indexes = (0, 1)
 def test_check_conditions_matches_condition_resolve(db, condition_id):
     condition = Condition.objects.get(id=condition_id)
     values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
-    attribute_values_map = compute_attribute_values_map(values)
+    attribute_values_map, _, _ = compute_value_maps(values)
 
     assert check_conditions([condition], attribute_values_map) is True
     assert condition.resolve(values) is True
@@ -23,7 +23,7 @@ def test_check_conditions_matches_condition_resolve(db, condition_id):
 def test_check_conditions_preserves_set_prefix_fallback(db):
     condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
     values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
-    attribute_values_map = compute_attribute_values_map(values)
+    attribute_values_map, _, _ = compute_value_maps(values)
 
     assert check_conditions([condition], attribute_values_map, set_prefix='0', set_index=0) is True
     assert condition.resolve(values, set_prefix='0', set_index=0) is True
@@ -44,9 +44,10 @@ def test_check_conditions_preserves_set_context(db, set_collection, set_index, e
 
     condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
     values = Project.objects.get(id=project_id).values.filter(snapshot=None)
+    attribute_values_map, _, _ = compute_value_maps(values)
 
     assert check_conditions(
-        [condition], compute_attribute_values_map(values), set_prefix='', set_index=set_index
+        [condition], attribute_values_map, set_prefix='', set_index=set_index
     ) is expected
     assert condition.resolve(values, set_prefix='', set_index=set_index) is expected
 
@@ -57,7 +58,7 @@ def test_check_conditions_reuses_condition_result(db, mocker):
     resolved_conditions = {}
     resolve_spy = mocker.spy(condition, 'resolve')
 
-    attribute_values_map = compute_attribute_values_map(values)
+    attribute_values_map, _, _ = compute_value_maps(values)
     for _ in range(2):
         assert check_conditions(
             [condition], attribute_values_map,

@@ -85,8 +85,8 @@ from .sync import filter_tasks_or_views_for_project
 from .utils import (
     check_conditions,
     check_options,
-    compute_attribute_values_map,
     compute_set_prefix_from_set_value,
+    compute_value_maps,
     copy_project,
     get_contact_message,
     get_upload_accept,
@@ -234,7 +234,7 @@ class ProjectViewSet(ModelViewSet):
                 return Response({'result': True})
 
             if attribute_values_map is None:
-                attribute_values_map = compute_attribute_values_map(values)
+                attribute_values_map, _, _ = compute_value_maps(values)
 
             if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
                 return Response({'result': True})
@@ -291,7 +291,7 @@ class ProjectViewSet(ModelViewSet):
         }
         if source_ids:
             values = project.values.filter(snapshot=None, attribute_id__in=source_ids).order_by()
-            attribute_values_map = compute_attribute_values_map(values)
+            attribute_values_map, _, _ = compute_value_maps(values)
         else:
             attribute_values_map = {}
 
