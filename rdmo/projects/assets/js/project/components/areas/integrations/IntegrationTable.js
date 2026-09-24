@@ -1,16 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const IntegrationTable = ({ integrations, onDelete, onSend, onUpdate }) => {
-  const isSendTable = Boolean(onSend)
+const IntegrationTable = ({ integrations, externalResources, onDelete, onSend, onUpdate }) => {
 
   return (
     <table className="table">
       <thead>
         <tr>
-          <th style={{ width: '10%' }}>
-            {isSendTable ? gettext('Provider') : gettext('Title')}
-          </th>
+          <th style={{ width: '10%' }}>{gettext('Integration')}</th>
           <th style={{ width: '40%' }}>{gettext('Description')}</th>
           <th style={{ width: '40%' }}>{gettext('Options')}</th>
           <th style={{ width: '10%' }}>
@@ -22,9 +19,7 @@ const IntegrationTable = ({ integrations, onDelete, onSend, onUpdate }) => {
         {
           integrations.map((integration) => (
             <tr key={integration.id}>
-              <td>
-                {isSendTable ? integration.provider.label : integration.title}
-              </td>
+              <td>{integration.title}</td>
               <td>{integration.provider?.description}</td>
               <td>
                 {
@@ -33,6 +28,13 @@ const IntegrationTable = ({ integrations, onDelete, onSend, onUpdate }) => {
                     .map((option) => (
                       <p key={option.key}>{option.title}: {option.value}</p>
                     ))
+                }
+                {
+                  externalResources?.length > 0 && externalResources.includes(integration.id) && (
+                    <div className="text-muted">
+                      {gettext('This issue has already been send using this integration.')}
+                    </div>
+                  )
                 }
               </td>
               <td>
@@ -89,6 +91,7 @@ const IntegrationTable = ({ integrations, onDelete, onSend, onUpdate }) => {
 
 IntegrationTable.propTypes = {
   integrations: PropTypes.array.isRequired,
+  externalResources: PropTypes.array,
   onDelete: PropTypes.func,
   onSend: PropTypes.func,
   onUpdate: PropTypes.func
