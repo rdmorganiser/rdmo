@@ -38,23 +38,6 @@ def test_compute_value_maps_empty():
     assert compute_value_maps(iter(())) == ({}, {}, {})
 
 
-def test_value_queryset_compute_sets(db):
-    project = Project.objects.get(id=1)
-    values = [
-        Value.objects.create(project=project, attribute_id=3, set_prefix='', set_index=0),
-        Value.objects.create(project=project, attribute_id=3, set_prefix='', set_index=0),
-        Value.objects.create(project=project, attribute_id=3, set_prefix='0', set_index=1),
-        Value.objects.create(project=project, attribute_id=4, set_prefix='', set_index=0),
-    ]
-
-    attribute_sets = Value.objects.filter(pk__in=[value.pk for value in values]).compute_sets()
-
-    assert attribute_sets == {
-        3: {('', 0), ('0', 1)},
-        4: {('', 0)},
-    }
-
-
 GET_queries = [
     'page=2&title=project',
     'page=2',

@@ -1,4 +1,3 @@
-from collections import defaultdict
 
 from django.conf import settings
 from django.db import models
@@ -208,16 +207,6 @@ class ValueQuerySet(models.QuerySet):
             Q(set_prefix__startswith=descendants_set_prefix)
         )
 
-    def compute_sets(self):
-        attribute_sets_map = defaultdict(set)
-
-        value_keys = self.order_by().values_list("attribute_id", "set_prefix", "set_index").distinct()
-
-        for attribute_id, set_prefix, set_index in value_keys:
-            attribute_sets_map[attribute_id].add((set_prefix, set_index))
-
-        return attribute_sets_map
-
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
 
@@ -286,6 +275,3 @@ class ValueManager(CurrentSiteManagerMixin, models.Manager):
 
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)
-
-    def compute_sets(self):
-        return self.get_queryset().compute_sets()
