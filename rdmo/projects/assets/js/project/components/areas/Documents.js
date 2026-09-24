@@ -2,7 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
-import { downloadAnswers, downloadView, navigateDashboard } from '../../actions/projectActions'
+import { navigateDashboard } from '../../actions/navigationActions'
+import { downloadAnswers, downloadView } from '../../actions/projectActions'
 
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
