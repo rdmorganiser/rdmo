@@ -65,6 +65,7 @@ const Dashboard = () => {
       {
         visibleIssues.map((issue) => {
           const closed = isClosed(issue)
+          const resourceCount = issue.resources?.length ?? 0
           return (
             <Tile
               key={issue.id}
@@ -98,6 +99,20 @@ const Dashboard = () => {
                       <SendIssueButton onClick={() => setSendIssue(issue)} />
                     }
                   </div>
+                  {
+                    resourceCount > 0 && (
+                      <div className="text-muted small mt-2">
+                        <i className="bi bi-box-arrow-up-right me-1" />
+                        {
+                          interpolate(ngettext(
+                            '%s external resource',
+                            '%s external resources',
+                            resourceCount
+                          ), [resourceCount])
+                        }
+                      </div>
+                    )
+                  }
                   {
                     issue.dates?.length > 0 && (
                       <div className="text-muted small mt-2 text-end">
