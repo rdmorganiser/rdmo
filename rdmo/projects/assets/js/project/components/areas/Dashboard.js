@@ -65,6 +65,7 @@ const Dashboard = () => {
   const renderVisibleIssue = (issue) => {
     const closed = isClosed(issue)
     const disabled = !perms.can_change_issue
+    const resourceCount = issue.resources?.length ?? 0
     return (
       <div className="d-flex align-items-start gap-3">
         <div>
@@ -101,7 +102,20 @@ const Dashboard = () => {
           </div>
 
           <p className="text-secondary">{issue.task.text}</p>
-
+          {
+            resourceCount > 0 && (
+              <div className="text-muted small mt-2">
+                <i className="bi bi-box-arrow-up-right me-1" />
+                {
+                  interpolate(ngettext(
+                    '%s external resource',
+                    '%s external resources',
+                    resourceCount
+                  ), [resourceCount])
+                }
+              </div>
+            )
+          }
           {
             issue.dates?.length > 0 && (
               <div className="text-muted small mt-2 text-end">
