@@ -49,6 +49,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.DELETE_PROJECT_INTEGRATION_INIT:
     case actionTypes.FETCH_PROJECT_FILES_INIT:
     case actionTypes.SEND_PROJECT_ISSUE_EMAIL_INIT:
+    case actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
       return clearErrors(state)
     // ERROR actions - append error
@@ -78,6 +79,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.DELETE_PROJECT_INTEGRATION_ERROR:
     case actionTypes.FETCH_PROJECT_FILES_ERROR:
     case actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR:
+    case actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR:
       return appendError(state, action)
     // SUCCESS actions
     case actionTypes.FETCH_PROJECT_SUCCESS:
