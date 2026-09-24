@@ -435,20 +435,18 @@ export function copyValue(question, ...originalValues) {
             (v.set_index == set.set_index)
           )).every(v => isEmptyValue(v))) {
             // find the corresponding sibling to this original value
-            const siblingIndex = values.findIndex((v) => (
+            const sibling = values.find((v) => (
               (v.attribute == value.attribute) &&
               (v.set_prefix == set.set_prefix) &&
               (v.set_index == set.set_index) &&
               (v.collection_index == value.collection_index)
             ))
 
-            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
-
             if (isNil(sibling)) {
-              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+              return [ValueFactory.create({ ...value, set_index: set.set_index }), null]
             } else if (isEmptyValue(sibling)) {
               // the spread operator { ...sibling } does prevent an update in place
-              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+              return [ValueFactory.update({ ...sibling }, value), sibling.id || sibling.tmp_id]
             } else {
               return null
             }
@@ -460,16 +458,14 @@ export function copyValue(question, ...originalValues) {
     }, [])
 
     // dispatch storeValueInit for each of the updated values,
-    // created values have valueIndex -1 and will be skipped
-    // eslint-disable-next-line no-unused-vars
-    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+    copies.forEach(([, valueId]) => dispatch(storeValueInit(valueId)))
 
     // loop over all copies and store the values on the server
     // afterwards fetchNavigation, updateProgress and check refresh once
     return Promise.all(
-      copies.map(([value, valueIndex]) => {
+      copies.map(([value, valueId]) => {
         return ValueApi.storeValue(projectId, value)
-          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
+          .then((value) => dispatch(storeValueSuccess(value, valueId)))
       })
     ).then(() => {
       dispatch(removeFromPending(pendingId))

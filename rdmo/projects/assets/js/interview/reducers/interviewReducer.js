@@ -1,3 +1,5 @@
+import { isNil } from 'lodash'
+
 import {
   FETCH_PAGE_INIT,
   FETCH_PAGE_SUCCESS,
@@ -134,10 +136,11 @@ export default function interviewReducer(state = initialState, action) {
     case RESOLVE_CONDITIONS_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_ERROR:
-      if (action.valueIndex > -1) {
+      if (!isNil(action.valueId)) {
          return {
-          ...state, values: state.values.map((value, valueIndex) => (
-            valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
+          ...state,
+          values: state.values.map((value) => (
+            (value.id || value.tmp_id) == action.valueId ? {...value, error: action.error, pending: false} : value
           ))
         }
       } else {
