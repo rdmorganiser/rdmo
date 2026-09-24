@@ -31,6 +31,7 @@ max_queries = [
     ('progress', 42, {'pk': 1}),
 ]
 
+use_post = {'progress'}
 
 @pytest.mark.performance
 @pytest.mark.parametrize('action,max_queries,url_kwargs', max_queries)
@@ -38,11 +39,10 @@ def test_queries(db, client, django_assert_max_num_queries, action, max_queries,
     client.login(username='owner', password='owner')
     url = reverse(urlnames[action], kwargs=url_kwargs)
 
+    request_func = client.post if action in use_post else client.get
+
     with django_assert_max_num_queries(max_queries):
-        if action == 'progress':
-            response = client.post(url)
-        else:
-            response = client.get(url)
+        response = request_func(url)
 
     assert response.status_code == 200
 
