@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const IntegrationTable = ({ integrations, externalResources, onDelete, onSend, onUpdate }) => {
+const IntegrationTable = ({ integrations, externalResources, isSubmitting, onDelete, onSend, onUpdate }) => {
 
   return (
     <table className="table">
@@ -44,6 +44,7 @@ const IntegrationTable = ({ integrations, externalResources, onDelete, onSend, o
                       <button
                         type="button"
                         className="btn btn-primary btn-sm font-smaller text-nowrap"
+                        disabled={isSubmitting}
                         onClick={() => onSend(integration)}
                       >
                         {integration.provider.send_label}
@@ -92,6 +93,7 @@ const IntegrationTable = ({ integrations, externalResources, onDelete, onSend, o
 IntegrationTable.propTypes = {
   integrations: PropTypes.array.isRequired,
   externalResources: PropTypes.array,
+  isSubmitting: PropTypes.bool,
   onDelete: PropTypes.func,
   onSend: PropTypes.func,
   onUpdate: PropTypes.func

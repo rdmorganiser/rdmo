@@ -305,8 +305,10 @@ def test_send_integration(db, client, mocker, username, password):
     response = client.post(url, data, content_type='application/json')
 
     if issue.project_id in change_issue_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert response.url == 'https://example.com/login/oauth/authorize'
+        assert response.status_code == 200
+        assert response.json() == {
+            'redirect_url': 'https://example.com/login/oauth/authorize'
+        }
         mocked_send_issue.assert_called_once()
     else:
         if issue.project_id in view_issue_permission_map.get(username, []):
