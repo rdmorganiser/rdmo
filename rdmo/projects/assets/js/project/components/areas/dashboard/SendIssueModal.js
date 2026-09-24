@@ -268,6 +268,7 @@ const SendIssueModal = ({
               <div className="mb-4">
                 <IntegrationTable
                   integrations={visibleIntegrations}
+                  externalResources={issue?.resources.map(item => item.integration) ?? []}
                   onSend={handleSendIntegration}
                 />
               </div>
