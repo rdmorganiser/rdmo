@@ -243,7 +243,7 @@ export function updateProjectTask(issueId, data) {
   }
 }
 
-// send project issue email
+// send project issue
 
 export function sendProjectIssueEmail(issueId, data) {
   return function (dispatch) {
@@ -253,12 +253,37 @@ export function sendProjectIssueEmail(issueId, data) {
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
+        dispatch(fetchProject())
       })
       .catch(error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
         throw error
       })
       .finally(() => dispatch(removeFromPending('sendProjectIssueEmail')))
+  }
+}
+
+export function sendProjectIssueIntegration(issueId, data) {
+  return function (dispatch) {
+    dispatch(addToPending('sendProjectIssueIntegration'))
+    dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_INIT })
+
+    return ProjectApi.sendProjectIssueIntegration(projectId, issueId, data)
+      .then((response) => {
+        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
+        dispatch(fetchProject())
+
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
+        }
+
+        return response
+      })
+      .catch(error => {
+        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR, error })
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('sendProjectIssueIntegration')))
   }
 }
 

@@ -175,4 +175,8 @@ export default class ProjectApi extends BaseApi {
   static sendProjectIssueEmail(projectId, issueId, data) {
     return this.post(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-email/`, data)
   }
+
+  static sendProjectIssueIntegration(projectId, issueId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-integration/`, data)
+  }
 }

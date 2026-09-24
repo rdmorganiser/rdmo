@@ -8,7 +8,7 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchProjectFiles, sendProjectIssueEmail } from '../../../actions/projectActions'
+import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
 import IntegrationTable from '../integrations/IntegrationTable'
@@ -19,14 +19,15 @@ const SendIssueModal = ({
   issue,
   onClose
 }) => {
-  console.log('issue', issue.id)
   const dispatch = useDispatch()
   const project = useSelector(state => state.project.project.project)
   const currentUser = useSelector(state => state.user.currentUser) ?? {}
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const sites = useSelector(state => state.sites) ?? {}
-  const isSubmitting = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
+  const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
+  const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
+  const isSubmitting = isSendingEmail || isSendingIntegration
   const currentSite = Object.values(sites).find(site => site.id === project.site)
   const integrations = useSelector(state => state.project.integrations) ?? []
   const errors = useFieldErrors()
@@ -139,11 +140,17 @@ const SendIssueModal = ({
     }
   }
 
-  const handleSendIntegration = () => {
+  const handleSendIntegration = async (integration) => {
     const payload = getPayload({
+      integration: integration.id
     })
 
-    console.log('payload', payload)
+    try {
+      await dispatch(sendProjectIssueIntegration(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
   }
 
   return (
@@ -243,7 +250,7 @@ const SendIssueModal = ({
                   onClick={handleSendMail}
                 >
                   {
-                    isSubmitting ? (
+                    isSendingEmail ? (
                       <>
                         <span
                           className="spinner-border spinner-border-sm me-2"
@@ -269,6 +276,7 @@ const SendIssueModal = ({
                 <IntegrationTable
                   integrations={visibleIntegrations}
                   externalResources={issue?.resources.map(item => item.integration) ?? []}
+                  isSubmitting={isSubmitting}
                   onSend={handleSendIntegration}
                 />
               </div>

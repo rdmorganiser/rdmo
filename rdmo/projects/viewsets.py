@@ -1079,7 +1079,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         attachments = self.get_send_attachments(request, project, data)
 
         integration = data['integration']
-        return integration.provider.send_issue(
+        response = integration.provider.send_issue(
             request._request,
             issue,
             integration,
@@ -1087,6 +1087,11 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
             data['message'],
             attachments
         )
+
+        if isinstance(response, HttpResponseRedirect):
+            return Response({'redirect_url': response.url})
+
+        return response
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
