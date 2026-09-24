@@ -135,6 +135,8 @@ class ProjectViewSet(ModelViewSet):
             # these actions only need the project catalog and visibility before computing the answer tree.
             return queryset.select_related('catalog', 'visibility')
         elif self.action in ('resolve', 'resolve_post'):
+            # these actions fetch values, elements, and conditions explicitly, so they
+            # do not need the project prefetches or last_changed annotation.
             return queryset
 
         queryset = queryset.prefetch_related(
@@ -211,16 +213,17 @@ class ProjectViewSet(ModelViewSet):
 
         values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
         attribute_values_map = None
+        # reuse condition results across selectors within this request
         resolved_conditions = {}
 
-        for element_type, element_model in (
+        for element_key, element_model in (
             ('page', Page),
             ('questionset', QuestionSet),
             ('question', Question),
             ('optionset', OptionSet),
             ('condition', Condition),
         ):
-            element_id = request.GET.get(element_type)
+            element_id = request.GET.get(element_key)
             if not element_id:
                 continue
 
@@ -267,35 +270,36 @@ class ProjectViewSet(ModelViewSet):
                 queryset = element_model.objects.filter(id__in=element_ids[element_type]).order_by()
                 for element_id, condition_id in queryset.values_list('id', 'conditions'):
                     element_condition_ids = elements[element_type].setdefault(element_id, set())
-                    if condition_id is not None:
+                    if condition_id:
                         element_condition_ids.add(condition_id)
 
-        # gather conditions
+        # include directly requested condition ids
         if 'conditions' in element_ids:
-            # construct a similar structure for conditions
             for condition_id in element_ids['conditions']:
                 elements['conditions'][condition_id] = {condition_id}
 
-        # query conditions
+        # gather all referenced condition ids
         condition_ids = set().union(*(
-            conditions_set
+            element_condition_ids
             for element_dict in elements.values()
-            for conditions_set in element_dict.values()
+            for element_condition_ids in element_dict.values()
         ))
-        conditions = Condition.objects.in_bulk(condition_ids)
-        missing_condition_ids = condition_ids.difference(conditions)
+        condition_map = Condition.objects.in_bulk(condition_ids)
+
+        # directly requested condition ids may not exist
+        missing_condition_ids = condition_ids.difference(condition_map.keys())
 
         source_ids = {
-            condition.source_id for condition in conditions.values()
-            if condition.source_id is not None
+            condition.source_id for condition in condition_map.values()
+            if condition.source_id
         }
         if source_ids:
-            values = project.values.filter(snapshot=None, attribute_id__in=source_ids).order_by()
-            attribute_values_map, _, _ = compute_value_maps(values)
+            source_values = project.values.filter(snapshot=None, attribute_id__in=source_ids).order_by()
+            attribute_values_map, _, _ = compute_value_maps(source_values)
         else:
             attribute_values_map = {}
 
-        # second pass: resolve conditions
+        # resolve conditions
         resolved_conditions = {}
         for params in validated_data:
             set_prefix = params['set_prefix']
@@ -308,13 +312,14 @@ class ProjectViewSet(ModelViewSet):
                 params['result'] = False
                 continue
 
-            if element_condition_ids.isdisjoint(missing_condition_ids):
-                element_conditions = [conditions[condition_id] for condition_id in element_condition_ids]
-                params['result'] = check_conditions(
-                    element_conditions, attribute_values_map, set_prefix, set_index, resolved_conditions
-                )
-            else:
+            if element_condition_ids & missing_condition_ids:
                 params['result'] = False
+                continue
+
+            element_conditions = [condition_map[condition_id] for condition_id in element_condition_ids]
+            params['result'] = check_conditions(
+                element_conditions, attribute_values_map, set_prefix, set_index, resolved_conditions
+            )
 
         return Response(validated_data)
 
