@@ -15,7 +15,7 @@ import { useFieldErrors } from '../../../hooks'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
 
-const SendIssueModal2 = ({
+const SendIssueModal = ({
   issue,
   onClose
 }) => {
@@ -409,9 +409,9 @@ const SendIssueModal2 = ({
   )
 }
 
-SendIssueModal2.propTypes = {
+SendIssueModal.propTypes = {
   issue: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired
 }
 
-export default SendIssueModal2
+export default SendIssueModal
