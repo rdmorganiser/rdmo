@@ -81,8 +81,7 @@ export function fetchProject() {
 export function updateProject(data) {
   return function (dispatch, getState) {
     const state = getState()
-    const currentBundle = state.project?.project
-    const id = data?.id ?? currentBundle?.project?.id
+    const id = data?.id ?? state.project?.project?.project?.id
 
     if (!id) {
       console.warn('No project ID available for update.')
@@ -100,28 +99,16 @@ export function updateProject(data) {
         ])
       )
       .then(([project, hierarchy]) => {
-        const updatedBundle = {
-          ...currentBundle,
-          // only these two are refreshed from server:
-          project,
-          hierarchy,
-          // everything else stays untouched:
-          // snapshots: currentBundle.snapshots,
-          // projectViews: currentBundle.projectViews,
-          // projectAnswers: currentBundle.projectAnswers,
-          // tasks: currentBundle.tasks,
-          // memberships: currentBundle.memberships,
-          // catalogs: currentBundle.catalogs,
-        }
-
-        dispatch(removeFromPending('updateProject'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
+        dispatch({
+          type: actionTypes.UPDATE_PROJECT_SUCCESS,
+          project: { project, hierarchy }
+        })
       })
       .catch((error) => {
-        dispatch(removeFromPending('updateProject'))
         dispatch({ type: actionTypes.UPDATE_PROJECT_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('updateProject')))
   }
 }
 
@@ -210,36 +197,38 @@ export function deleteProjectVisibility() {
 
 // project task
 
+export function fetchProjectTasks() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectTasks'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_INIT })
+
+    return ProjectApi.fetchProjectTasks(projectId)
+      .then((tasks) => {
+        dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_SUCCESS, tasks })
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_ERROR, error })
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectTasks')))
+  }
+}
+
 export function updateProjectTask(issueId, data) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(addToPending('updateProjectTask'))
     dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_INIT })
 
     return ProjectApi.updateProjectTask(projectId, issueId, data)
+      .then(() => dispatch(fetchProjectTasks()))
       .then(() => {
-        const state = getState()
-        const currentBundle = state.project.project
-
-        return ProjectApi.fetchProjectTasks(projectId)
-          .then((tasks) => ({ currentBundle, tasks }))
-      })
-      .then(({ currentBundle, tasks }) => {
-        const updatedBundle = {
-          ...currentBundle,
-          tasks,
-        }
-
-        dispatch(removeFromPending('updateProjectTask'))
-        dispatch({
-          type: actionTypes.UPDATE_PROJECT_SUCCESS,
-          project: updatedBundle,
-        })
+        dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_SUCCESS })
       })
       .catch((error) => {
-        dispatch(removeFromPending('updateProjectTask'))
         dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('updateProjectTask')))
   }
 }
 
@@ -253,7 +242,7 @@ export function sendProjectIssueEmail(issueId, data) {
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
-        dispatch(fetchProject())
+        dispatch(fetchProjectTasks())
       })
       .catch(error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
@@ -271,7 +260,7 @@ export function sendProjectIssueIntegration(issueId, data) {
     return ProjectApi.sendProjectIssueIntegration(projectId, issueId, data)
       .then((response) => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
-        dispatch(fetchProject())
+        dispatch(fetchProjectTasks())
 
         if (response?.redirect_url) {
           window.location.href = response.redirect_url
@@ -325,7 +314,7 @@ export function createProjectMember(data) {
 }
 
 export function updateProjectMember(membershipId, data) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(addToPending('updateProjectMember'))
     dispatch({ type: actionTypes.UPDATE_PROJECT_MEMBER_INIT })
 
@@ -335,24 +324,16 @@ export function updateProjectMember(membershipId, data) {
 
         // membership updates can lead to a permission change for owner <-> last owner cases
         // project with permissions needs to be fetched
-        const state = getState()
-        const currentBundle = state.project.project
-        return ProjectApi.fetchProject(projectId).then(project => ({ project, currentBundle }))
+        return ProjectApi.fetchProject(projectId)
       })
-      .then(({ project, currentBundle }) => {
-        const updatedBundle = {
-          ...currentBundle,
-          project
-        }
-
-        dispatch(removeFromPending('updateProjectMember'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: updatedBundle })
+      .then((project) => {
+        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: { project } })
       })
       .catch(error => {
-        dispatch(removeFromPending('updateProjectMember'))
         dispatch({ type: actionTypes.UPDATE_PROJECT_MEMBER_ERROR, error })
         throw error
       })
+      .finally(() => dispatch(removeFromPending('updateProjectMember')))
   }
 }
 
