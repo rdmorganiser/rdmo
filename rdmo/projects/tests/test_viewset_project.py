@@ -57,7 +57,7 @@ urlnames = {
     'options': 'v1-projects:project-options',
     'resolve': 'v1-projects:project-resolve',
     'upload_accept': 'v1-projects:project-upload-accept',
-    'imports': 'v1-projects:project-imports'
+    'imports': 'v1-projects:project-imports',
 }
 
 projects = [1, 2, 3, 4, 5, 12]

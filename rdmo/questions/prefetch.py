@@ -105,6 +105,8 @@ def questionset_questionset_prefetch(lookup, **kwargs):
         ).prefetch_related(
             condition_prefetch('conditions'),
             question_prefetch('questionset_questions__question', **kwargs),
+            # prefetch only the first two levels of questionsets, deeper nesting may trigger additional queries
+            'questionset_questionsets',
         )
     )
 
