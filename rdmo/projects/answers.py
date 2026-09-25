@@ -6,11 +6,21 @@ from .utils import check_conditions, compute_value_maps
 
 class AnswerTree:
 
-    def __init__(self, catalog, values, verbose=None):
+    def __init__(self, catalog, verbose=None):
         self.catalog = catalog
         self.verbose = tuple(verbose or ())
 
-        # build lookup maps once for repeated answer-tree traversal.
+        self.attribute_values_map: dict
+        self.attribute_sets_map: dict
+        self.attribute_set_values_map: dict
+        self.resolved_conditions: dict
+
+    def compute(self, values):
+        # Main function of this class, which Computes the answer tree recursively.
+        # First, it computes the catalog, section, and page nodes.
+        # Then, it alternates between (value)set and questionset nodes until it reaches
+        # the question nodes, which include the corresponding values as well as how much
+        # this question counts to the count and total values for the progress.
         (
             self.attribute_values_map,
             self.attribute_sets_map,
@@ -19,12 +29,6 @@ class AnswerTree:
 
         self.resolved_conditions = {}
 
-    def compute(self):
-        # Main function of this class, which Computes the answer tree recursively.
-        # First, it computes the catalog, section, and page nodes.
-        # Then, it alternates between (value)set and questionset nodes until it reaches
-        # the question nodes, which include the corresponding values as well as how much
-        # this question counts to the count and total values for the progress.
         return self.compute_element_node(self.catalog)
 
     def compute_element_node(self, element, parent_set=None):

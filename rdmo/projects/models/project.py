@@ -156,9 +156,8 @@ class Project(MPTTModel, Model):
 
         return AnswerTree(
             self.catalog,
-            values,
             verbose=verbose
-        ).compute()
+        ).compute(values)
 
 
 @receiver(pre_delete, sender=Project)

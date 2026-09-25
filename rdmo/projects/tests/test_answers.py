@@ -4,7 +4,7 @@ from rdmo.conditions.models import Condition
 from rdmo.projects.answers import AnswerTree
 from rdmo.questions.models import Page, Question, QuestionSet
 
-from ..models import Project
+from ..models import Project, Value
 
 
 def iter_answer_tree_nodes(node):
@@ -54,7 +54,7 @@ def test_preloaded_answer_tree_needs_no_queries(db, django_assert_num_queries, v
 
     # Include construction and the first traversal; do not warm model cached properties.
     with django_assert_num_queries(0):
-        answer_tree = AnswerTree(project.catalog, values, verbose=verbose).compute()
+        answer_tree = AnswerTree(project.catalog, verbose=verbose).compute(values)
 
     assert answer_tree['id'] == project.catalog_id
     assert answer_tree['elements']
@@ -69,18 +69,32 @@ def test_answer_tree_consumes_values_once(db, mocker):
     values = mocker.MagicMock()
     values.__iter__.side_effect = lambda: iter(queryset)
 
-    answer_tree = AnswerTree(project.catalog, values).compute()
+    answer_tree = AnswerTree(project.catalog).compute(values)
 
     assert answer_tree['elements']
     assert values.__iter__.call_count == 1
 
 
-def test_answer_tree_resolves_empty_conditions(db):
+def test_answer_tree_recomputes_with_new_values(db):
+    project = Project.objects.select_related('catalog').get(pk=1)
     question = Question.objects.get(uri='http://example.com/terms/questions/catalog/individual/text/text')
-    question.conditions.clear()
-    answer_tree = AnswerTree(catalog=None, values=[])
+    condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')
+    question.conditions.set([condition])
+    project.catalog.prefetch_elements()
+    answer_tree = AnswerTree(project.catalog)
 
-    assert answer_tree.resolve_conditions(question, ('', 0)) is True
+    first_tree = answer_tree.compute([
+        Value(attribute_id=condition.source_id, text=condition.target_text),
+    ])
+    first_node = next(node for node in iter_answer_tree_nodes(first_tree)
+                      if node.get('model') == 'questions.question' and node['id'] == question.id)
+    assert first_node['show'] is True
+
+    second_tree = answer_tree.compute([])
+    second_node = next(node for node in iter_answer_tree_nodes(second_tree)
+                       if node.get('model') == 'questions.question' and node['id'] == question.id)
+    assert second_node['show'] is False
+    assert second_tree == AnswerTree(project.catalog).compute([])
 
 
 def test_answer_tree_reuses_condition_result(db, mocker):
