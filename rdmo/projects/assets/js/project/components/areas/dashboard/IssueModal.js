@@ -39,6 +39,22 @@ const IssueModal = ({
         value={issue.status}
         onChange={onStatusChange}
       />
+      {
+        issue.resources?.length > 0 && (
+          <div className="mt-3">
+            <div className="fw-bold mb-2">{gettext('External resources for this task')}</div>
+            <ul>
+              {
+                issue.resources.map((resource) => (
+                  <li key={resource.id}>
+                    <a href={resource.url} target="_blank" rel="noopener noreferrer">{resource.url}</a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        )
+      }
       <div className="row mt-3">
         <div className={issue.dates?.length > 0 ? 'col-md-8' : 'col-md-12'}>
           {/* questions */}

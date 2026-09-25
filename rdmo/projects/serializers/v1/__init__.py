@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Page, Question
@@ -938,6 +939,97 @@ class IssueSerializer(serializers.ModelSerializer):
             'dates',
             'questions'
         )
+
+
+class ProjectIssueSendSerializer(serializers.Serializer):
+
+    subject = serializers.CharField(max_length=128)
+    message = serializers.CharField()
+    attachments_answers = serializers.ListField(
+        child=serializers.ChoiceField(choices=('project_answers', )), required=False, default=list
+    )
+    attachments_views = serializers.PrimaryKeyRelatedField(
+        many=True, required=False, default=list, queryset=View.objects.none()
+    )
+    attachments_files = serializers.PrimaryKeyRelatedField(
+        many=True, required=False, default=list, queryset=Value.objects.none()
+    )
+    attachments_snapshot = serializers.PrimaryKeyRelatedField(
+        required=False, allow_null=True, default=None, queryset=Snapshot.objects.none()
+    )
+    attachments_format = serializers.ChoiceField(
+        choices=settings.EXPORT_FORMATS, required=False, allow_null=True, default=None
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        project = self.context.get('project')
+        if project:
+            self.fields['attachments_views'].child_relation.queryset = project.views.all()
+            self.fields['attachments_files'].child_relation.queryset = project.values.filter(
+                value_type=VALUE_TYPE_FILE
+            )
+            self.fields['attachments_snapshot'].queryset = project.snapshots.all()
+
+    def validate(self, data):
+        snapshot = data.get('attachments_snapshot')
+
+        snapshot_id = snapshot.id if snapshot else None
+        if any(
+            value.snapshot_id != snapshot_id
+            for value in data['attachments_files']
+        ):
+            raise serializers.ValidationError({'attachments_files': _('Select a valid choice.')})
+
+        if (data['attachments_answers'] or data['attachments_views']) and not data.get('attachments_format'):
+            raise serializers.ValidationError({'attachments_format': _('This field is required.')})
+
+        return data
+
+
+class ProjectIssueSendEmailSerializer(ProjectIssueSendSerializer):
+
+    recipients = serializers.ListField(
+        child=serializers.ChoiceField(choices=settings.EMAIL_RECIPIENTS_CHOICES), required=False, default=list
+    )
+    recipients_input = serializers.CharField(required=False, allow_blank=True, default='')
+
+    def validate_recipients_input(self, recipients_input):
+        if recipients_input and not settings.EMAIL_RECIPIENTS_INPUT:
+            raise serializers.ValidationError(_('This field is not available.'))
+
+        email_field = serializers.EmailField()
+        return [
+            email_field.run_validation(line.strip())
+            for line in recipients_input.splitlines()
+            if line.strip()
+        ]
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        if not data['recipients'] and not data['recipients_input']:
+            raise serializers.ValidationError({'recipients': _('At least one recipient is required.')})
+
+        return data
+
+
+class ProjectIssueSendIntegrationSerializer(ProjectIssueSendSerializer):
+
+    integration = serializers.PrimaryKeyRelatedField(queryset=Integration.objects.none())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        project = self.context.get('project')
+        if project:
+            self.fields['integration'].queryset = project.integrations.all()
+
+    def validate_integration(self, integration):
+        if integration.provider is None:
+            raise serializers.ValidationError(_('Select a valid choice.'))
+        return integration
 
 
 class SnapshotSerializer(serializers.ModelSerializer):

@@ -25,6 +25,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.mail import send_mail
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import human2bytes, is_truthy, render_to_format, return_file_response
@@ -49,6 +50,8 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectIssueSendModelPermission,
+    HasProjectIssueSendObjectPermission,
     HasProjectLeavePermission,
     HasProjectPagePermission,
     HasProjectPermission,
@@ -76,6 +79,8 @@ from .serializers.v1 import (
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
     ProjectInviteUpdateSerializer,
+    ProjectIssueSendEmailSerializer,
+    ProjectIssueSendIntegrationSerializer,
     ProjectIssueSerializer,
     ProjectListSerializer,
     ProjectMembershipCreateSerializer,
@@ -959,6 +964,134 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
     def get_queryset(self):
         return Issue.objects.filter(project=self.project).prefetch_related('resources').select_related('task')
+
+    def get_send_attachments(self, request, project, data):
+        snapshot = data.get('attachments_snapshot')
+        attachments_format = data.get('attachments_format')
+        attachments = []
+
+        if data['attachments_answers'] or data['attachments_views']:
+            project.catalog.prefetch_elements()
+
+        if data['attachments_answers']:
+            response = render_to_format(
+                request, attachments_format, project.title, 'projects/project_answers_export.html', {
+                    'project': project,
+                    'snapshot': snapshot,
+                    'project_wrapper': ProjectWrapper(project, snapshot)
+                }
+            )
+            attachments.append((
+                f'{project.title}.{attachments_format}', response.content, response['Content-Type']
+            ))
+
+        for view in data['attachments_views']:
+            response = render_to_format(
+                request, attachments_format, project.title, 'projects/project_view_export.html', {
+                    'project': project,
+                    'snapshot': snapshot,
+                    'html': view.render(project, snapshot),
+                    'resource_path': get_value_path(project, snapshot)
+                }
+            )
+            attachments.append((
+                f'{project.title}.{attachments_format}', response.content, response['Content-Type']
+            ))
+
+        for value in data['attachments_files']:
+            with value.file.open('rb') as file:
+                attachments.append((value.file_name, file.read(), value.file_type))
+
+        return attachments
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='send-email',
+        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
+    )
+    def send_email(self, request, parent_lookup_project, pk=None):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        issue = self.get_object()
+        project = issue.project
+        data = request.data.copy()
+        if data.get('attachments_snapshot') == 'current':
+            data['attachments_snapshot'] = None
+
+        serializer = ProjectIssueSendEmailSerializer(
+            data=data,
+            context={
+                **self.get_serializer_context(),
+                'project': project
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        attachments = self.get_send_attachments(request, project, data)
+
+        recipients = list(dict.fromkeys([
+            *data['recipients'],
+            *data['recipients_input']
+        ]))
+        sender = [request.user.email] if request.user.email else []
+
+        send_mail(
+            data['subject'],
+            data['message'],
+            to=recipients,
+            cc=sender,
+            reply_to=sender,
+            attachments=attachments
+        )
+
+        issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
+        issue.save(update_fields=('status', ))
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(
+        detail=True,
+        methods=['POST'],
+        url_path='send-integration',
+        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
+    )
+    def send_integration(self, request, parent_lookup_project, pk=None):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        issue = self.get_object()
+        project = issue.project
+        data = request.data.copy()
+        if data.get('attachments_snapshot') == 'current':
+            data['attachments_snapshot'] = None
+
+        serializer = ProjectIssueSendIntegrationSerializer(
+            data=data,
+            context={
+                **self.get_serializer_context(),
+                'project': project
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        attachments = self.get_send_attachments(request, project, data)
+
+        integration = data['integration']
+        response = integration.provider.send_issue(
+            request._request,
+            issue,
+            integration,
+            data['subject'],
+            data['message'],
+            attachments
+        )
+
+        if isinstance(response, HttpResponseRedirect):
+            return Response({'redirect_url': response.url})
+
+        return response
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):

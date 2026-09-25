@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
+import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchProjectFiles } from '../../../actions/projectActions'
+import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
 
@@ -22,7 +25,10 @@ const SendIssueModal = ({
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const sites = useSelector(state => state.sites) ?? {}
+  const isSubmitting = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const currentSite = Object.values(sites).find(site => site.id === project.site)
+  const integrations = useSelector(state => state.project.integrations) ?? []
+  const errors = useFieldErrors()
 
   /* TODO: use templates? */
   const initialMessage = [
@@ -46,9 +52,15 @@ const SendIssueModal = ({
   const hasRecipientChoices = !isEmpty(settings.email_recipients_choices)
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
-  /* TODO: fetch attached integrations to determine boolean; setting is not enough */
-  const hasIntegrations = !isEmpty(settings.project_issue_providers)
+  const visibleIntegrations = integrations.filter((integration) => integration.provider)
+  const hasIntegrations = visibleIntegrations.length > 0
   const isConfigured = hasMail || hasIntegrations
+  const externalResources = issue?.resources.map(item => item.integration) ?? []
+  const integrationOptions = visibleIntegrations.map((integration) => ({
+    value: integration.id,
+    label: integration.title,
+    integration
+  }))
 
   const [formData, setFormData] = useState({
     subject: issue.task.title || '',
@@ -60,11 +72,15 @@ const SendIssueModal = ({
       current: []
     },
     attachments_snapshot: 'current',
-    attachments_format: null,
+    // as (required) format checkboxes are "hidden" in a dropdown, better set a default value
+    attachments_format: settings.export_formats?.[0]?.[0] ?? null,
 
     recipients: [],
     recipients_input: ''
   })
+  const [sendMethod, setSendMethod] = useState(hasMail ? 'mail' : 'integration')
+  const [integration, setIntegration] = useState(null)
+  const selectedIntegration = visibleIntegrations.find((item) => item.id === integration)
 
   const canSendMail =
     formData.recipients.length > 0 ||
@@ -101,9 +117,10 @@ const SendIssueModal = ({
     dispatch(fetchProjectFiles(snapshotId === 'current' ? undefined : snapshotId))
   }
 
-  const handleSend = (extraPayload = {}) => {
+  const getPayload = (extraPayload = {}) => {
     const attachmentsFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
-    const payload = {
+
+    return {
       subject: formData.subject,
       message: formData.message,
       attachments_answers: formData.attachments_answers,
@@ -113,22 +130,79 @@ const SendIssueModal = ({
       attachments_format: formData.attachments_format,
       ...extraPayload
     }
-
-    console.log(payload)
   }
 
-  const handleSendMail = () => {
-    handleSend({
+  const handleSendMail = async () => {
+    const payload = getPayload({
       recipients: formData.recipients,
       recipients_input: formData.recipients_input
     })
+
+    try {
+      await dispatch(sendProjectIssueEmail(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
   }
 
-  const handleSendIntegration = (providerKey, providerClass) => {
-    handleSend({
-      provider: providerKey,
-      provider_class: providerClass
+  const handleSendIntegration = async (integration) => {
+    const payload = getPayload({
+      integration: integration.id
     })
+
+    try {
+      await dispatch(sendProjectIssueIntegration(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
+  }
+
+  const handleIntegrationChange = (integrationId) => {
+    setIntegration(integrationId)
+  }
+
+  const formatIntegrationOption = ({ integration }, { context }) => {
+    if (context === 'value') {
+      return integration.title
+    }
+
+    return (
+      <div className="py-1">
+        <div className="fw-semibold">{integration.title}</div>
+        <div className="text-muted font-smaller">{integration.provider.description}</div>
+        {
+          integration.options
+            .filter((option) => !option.secret)
+            .map((option) => (
+              <div className="font-smaller" key={option.key}>
+                {option.title}: {option.value}
+              </div>
+            ))
+        }
+        {
+          externalResources.includes(integration.id) && (
+            <div className="alert alert-warning py-1 px-2 mt-2 mb-0 font-smaller">
+              <i className="bi bi-exclamation-triangle me-1" aria-hidden="true" />
+              {gettext('This issue has already been sent using this integration.')}
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+
+  const filterIntegrationOption = ({ data }, inputValue) => {
+    const integration = data.integration
+    const options = integration.options.filter((option) => !option.secret)
+    const searchValue = [
+      integration.title,
+      integration.provider.description,
+      ...options.flatMap((option) => [option.title, option.value])
+    ].filter(Boolean).join(' ').toLocaleLowerCase()
+
+    return searchValue.includes(inputValue.trim().toLocaleLowerCase())
   }
 
   return (
@@ -178,12 +252,37 @@ const SendIssueModal = ({
           )
         }
         {
-          hasMail && (
+          hasMail && hasIntegrations && (
+            <ul className="nav nav-tabs mb-4" role="tablist" aria-label={gettext('Send using')}>
+              <li className="nav-item" role="presentation">
+                <button
+                  type="button"
+                  className={classNames('nav-link', { active: sendMethod === 'mail' })}
+                  role="tab"
+                  aria-selected={sendMethod === 'mail'}
+                  onClick={() => setSendMethod('mail')}
+                >
+                  {gettext('Send by mail')}
+                </button>
+              </li>
+              <li className="nav-item" role="presentation">
+                <button
+                  type="button"
+                  className={classNames('nav-link', { active: sendMethod === 'integration' })}
+                  role="tab"
+                  aria-selected={sendMethod === 'integration'}
+                  onClick={() => setSendMethod('integration')}
+                >
+                  {gettext('Send by integration')}
+                </button>
+              </li>
+            </ul>
+          )
+        }
+        {
+          hasMail && sendMethod === 'mail' && (
             <>
-              <h2>{gettext('Send by mail')}</h2>
-              <div className="fw-semibold mb-2">
-                {gettext('Recipients')}
-              </div>
+              <div className="fw-semibold mb-2">{gettext('Recipients')}</div>
               {
                 hasRecipientChoices && (
                   <div>
@@ -219,15 +318,25 @@ const SendIssueModal = ({
                   />
                 )
               }
-
-              <div className="mb-4 text-end">
+              <div className="d-flex justify-content-end mt-4 mb-4">
                 <button
-                  disabled={!canSendMail}
+                  disabled={!canSendMail || isSubmitting}
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSendMail}
                 >
-                  {gettext('Send by mail')}
+                  {
+                    isSubmitting ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        {gettext('Sending...')}
+                      </>
+                    ) : gettext('Send by mail')
+                  }
                 </button>
               </div>
             </>
@@ -235,35 +344,67 @@ const SendIssueModal = ({
         }
 
         {
-          hasIntegrations && (
+          hasIntegrations && sendMethod === 'integration' && (
             <>
-              <h2>{gettext('Send via integration')}</h2>
-
-              <div className="mb-4">
-                {
-                  /* TODO: switch to attached integrations and its structure */
-                  settings.project_issue_providers.map(([key, label, provider]) => (
-                    <div className="row align-items-center mb-3" key={key}>
-                      <div className="col">
-                        {label}
-                      </div>
-                      <div className="col text-end">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => handleSendIntegration(key, provider)}
-                        >
-                          {interpolate(gettext('Send to %s'), [label])}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
+              <Select
+                label={gettext('Integration')}
+                placeholder={gettext('Select an integration...')}
+                isDisabled={isSubmitting}
+                options={integrationOptions}
+                value={integration}
+                filterOption={filterIntegrationOption}
+                formatOptionLabel={formatIntegrationOption}
+                onChange={handleIntegrationChange}
+                isClearable
+              />
+              {
+                selectedIntegration && (
+                  <div className="border rounded p-3 mt-3">
+                    <div className="fw-semibold mb-2">{selectedIntegration.title}</div>
+                    <p>{selectedIntegration.provider.description}</p>
+                    {
+                      selectedIntegration.options
+                        .filter((option) => !option.secret)
+                        .map((option) => (
+                          <div key={option.key}>{option.title}: {option.value}</div>
+                        ))
+                    }
+                    {
+                      externalResources.includes(selectedIntegration.id) && (
+                        <div className="alert alert-warning py-2 px-3 mt-3 mb-0">
+                          <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
+                          {gettext('This issue has already been sent using this integration.')}
+                        </div>
+                      )
+                    }
+                  </div>
+                )
+              }
+              {
+                selectedIntegration && (
+                  <div className="d-flex justify-content-end mt-4 mb-4">
+                    <button
+                      disabled={isSubmitting}
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleSendIntegration}
+                    >
+                      {selectedIntegration.provider.send_label ?? gettext('Send by integration')}
+                    </button>
+                  </div>
+                )
+              }
             </>
           )
         }
       </form>
+      {
+        Object.entries(errors).flatMap(([field, fieldErrors]) => (
+          fieldErrors.map((error, index) => (
+            <div key={`${field}-${index}`} className="text-danger mt-1">{error}</div>
+          ))
+        ))
+      }
     </Modal>
   )
 }
