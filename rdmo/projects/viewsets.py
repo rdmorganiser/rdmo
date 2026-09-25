@@ -273,21 +273,18 @@ class ProjectViewSet(ModelViewSet):
                     if condition_id:
                         element_condition_ids.add(condition_id)
 
-        # include directly requested condition ids
-        if 'conditions' in element_ids:
-            for condition_id in element_ids['conditions']:
-                elements['conditions'][condition_id] = {condition_id}
+        # gather referenced and directly requested condition ids
+        condition_ids = set(element_ids.get('conditions', ()))
+        for element_dict in elements.values():
+            for element_condition_ids in element_dict.values():
+                condition_ids.update(element_condition_ids)
 
-        # gather all referenced condition ids
-        condition_ids = set().union(*(
-            element_condition_ids
-            for element_dict in elements.values()
-            for element_condition_ids in element_dict.values()
-        ))
         condition_map = Condition.objects.in_bulk(condition_ids)
-
-        # directly requested condition ids may not exist
-        missing_condition_ids = condition_ids.difference(condition_map.keys())
+        elements['conditions'] = {
+            condition_id: {condition_id}
+            for condition_id in element_ids.get('conditions', ())
+            if condition_id in condition_map
+        }
 
         source_ids = {
             condition.source_id for condition in condition_map.values()
@@ -309,10 +306,6 @@ class ProjectViewSet(ModelViewSet):
 
             element_condition_ids = elements.get(element_type, {}).get(element_id)
             if element_condition_ids is None:
-                params['result'] = False
-                continue
-
-            if element_condition_ids & missing_condition_ids:
                 params['result'] = False
                 continue
 
