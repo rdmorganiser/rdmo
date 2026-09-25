@@ -10,6 +10,10 @@ value_id = 86
 set_indexes = (0, 1)
 
 
+def test_check_conditions_without_conditions():
+    assert check_conditions([], {}) is True
+
+
 @pytest.mark.parametrize('condition_id', [1, 10])
 def test_check_conditions_matches_condition_resolve(db, condition_id):
     condition = Condition.objects.get(id=condition_id)
