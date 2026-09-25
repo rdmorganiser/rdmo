@@ -62,3 +62,16 @@ def test_project_delete(db, project_id):
             assert child.parent is None
         else:
             assert child.parent.id is project_parent_id
+
+
+@pytest.mark.parametrize('verbose', [
+    [],
+    ["catalog"],
+    ["section"],
+    ["page"],
+    ["questionset"],
+    ["question"],
+])
+def test_project_verbose_AnswersTree(db, verbose):
+    project = Project.objects.get(pk=1)
+    project.get_answer_tree(verbose=verbose)
