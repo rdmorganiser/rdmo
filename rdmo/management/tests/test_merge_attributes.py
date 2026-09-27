@@ -125,7 +125,7 @@ def test_command_merge_attributes_fails_correctly(db, settings):
     first_parent_attribute = Attribute.objects.exclude(parent=None).first().parent
     first_leaf_attribute = None
     for attribute in Attribute.objects.all():
-        if not attribute.get_descendants().exists():
+        if not Attribute.objects.get_descendants(attribute).exists():
             first_leaf_attribute = attribute
             break
 
@@ -224,7 +224,7 @@ def test_command_merge_attributes(db, settings, source_uri_prefix, save, delete,
                           'save': save, 'delete': delete, 'view': view}
         failed = False
 
-        if source_attribute.get_descendants():
+        if Attribute.objects.get_descendants(source_attribute):
             stdout, stderr = io.StringIO(), io.StringIO()
             with pytest.raises(CommandError):
                 call_command('merge_attributes',

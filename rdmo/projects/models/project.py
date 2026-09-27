@@ -8,9 +8,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from mptt.models import MPTTModel, TreeForeignKey
-
-from rdmo.core.models import Model
+from rdmo.core.models import Model, TreeModel
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -19,11 +17,11 @@ from ..answers import AnswerTree
 from ..managers import ProjectManager
 
 
-class Project(MPTTModel, Model):
+class Project(TreeModel, Model):
 
     objects = ProjectManager()
 
-    parent = TreeForeignKey(
+    parent = models.ForeignKey(
         'self', null=True, blank=True,
         on_delete=models.DO_NOTHING, related_name='children', db_index=True,
         verbose_name=_('Parent project'),
@@ -76,7 +74,7 @@ class Project(MPTTModel, Model):
     )
 
     class Meta:
-        ordering = ('tree_id', 'level', 'title')
+        ordering = ('tree_id', 'depth', 'title')
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
 
@@ -91,7 +89,7 @@ class Project(MPTTModel, Model):
 
     def save(self, *args, **kwargs):
         # ensure that the project hierarchy is not disturbed
-        if self.id and self.parent in self.get_descendants(include_self=True):
+        if self.id and self.parent in self.__class__.objects.get_descendants(self, include_self=True):
             raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
 
         super().save(*args, **kwargs)
@@ -163,7 +161,7 @@ class Project(MPTTModel, Model):
         # this caches the ancestors, different to a @cached_property, this is also done
         # in the __init__ of ProjectSerializer
         if not hasattr(self, '_cached_ancestors'):
-            self._cached_ancestors = self.get_ancestors()
+            self._cached_ancestors = self.__class__.objects.get_ancestors(self)
         return self._cached_ancestors
 
     def get_prefetched_members(self, role=None):
@@ -181,6 +179,6 @@ class Project(MPTTModel, Model):
 
 @receiver(pre_delete, sender=Project)
 def reparent_children(sender, instance, **kwargs):
-    for child in instance.get_children():
-        child.move_to(instance.parent, 'last-child')
+    for child in Project.objects.get_children(instance):
+        child.parent = instance.parent
         child.save()

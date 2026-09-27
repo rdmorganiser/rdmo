@@ -46,12 +46,10 @@ def get_serializer_context(elements, export_flags):
             ).values_list('source_id', flat=True)
         )
 
+    queryset = Attribute.objects.filter(id__in=attribute_ids)
+    for attribute in queryset:
+        queryset |= Attribute.objects.get_ancestors(attribute)
     return {
         **export_flags,
-        'attribute_map': (
-            Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
-        )
+        'attribute_map': queryset.in_bulk()
     }

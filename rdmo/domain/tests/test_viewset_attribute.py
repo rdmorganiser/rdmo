@@ -89,7 +89,7 @@ def test_export_search(db, client):
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -100,7 +100,7 @@ def test_detail(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_nested(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
@@ -111,7 +111,7 @@ def test_nested(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['list'])
@@ -128,7 +128,7 @@ def test_create(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create_condition(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         condition = instance.conditions.first()
@@ -152,7 +152,7 @@ def test_create_condition(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create_page(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         page = instance.pages.first()
@@ -176,7 +176,7 @@ def test_create_page(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create_questionset(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         questionset = instance.questionsets.first()
@@ -200,7 +200,7 @@ def test_create_questionset(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create_question(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         question = instance.questions.first()
@@ -224,7 +224,7 @@ def test_create_question(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -241,7 +241,7 @@ def test_update(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
+    instances = Attribute.objects.order_by('-depth')
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])

@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'mathfilters',
-    'mptt',
     'rules'
 ]
 

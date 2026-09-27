@@ -73,7 +73,7 @@ class AttributeSerializer(BaseAttributeSerializer):
         return [task.id for task in obj.tasks_as_start.all()] + [task.id for task in obj.tasks_as_end.all()]
 
     def get_attributes(self, obj) -> list[int]:
-        return [attribute.id for attribute in obj.get_descendants()]
+        return [attribute.id for attribute in Attribute.objects.get_descendants(obj)]
 
 
 class AttributeListSerializer(BaseAttributeSerializer):
@@ -96,7 +96,7 @@ class AttributeNestedSerializer(AttributeListSerializer):
 
     def get_elements(self, obj):
         # get the children from the cached mptt tree
-        return AttributeNestedSerializer(obj.get_children(), many=True,
+        return AttributeNestedSerializer(Attribute.objects.get_children(obj), many=True,
                                          read_only=True, context=self.context).data
 
 

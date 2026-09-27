@@ -112,7 +112,8 @@ class ProjectHierarchySerializer(serializers.ModelSerializer):
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        serializer = ProjectHierarchySerializer(obj.get_children(), many=True, read_only=True, context=self.context)
+        serializer = ProjectHierarchySerializer(
+            Project.objects.get_children(obj), many=True, read_only=True, context=self.context)
         return serializer.data
 
 

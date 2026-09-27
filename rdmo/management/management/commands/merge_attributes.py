@@ -132,7 +132,7 @@ def validate_attribute(attribute, message_name='', allow_descendants=None):
     if not isinstance(attribute, Attribute):
         raise CommandError(f"{message_name} attribute argument should be of type Attribute.")
 
-    if not allow_descendants and attribute.get_descendants().exists():
+    if not allow_descendants and Attribute.objects.get_descendants(attribute).exists():
         raise CommandError(f"{message_name} attribute '{attribute.uri}' with descendants is not supported.")
 
 

@@ -104,11 +104,11 @@ class ConditionViewSet(ModelViewSet):
         }
 
     def get_export_serializer_context(self, conditions):
+        queryset = Attribute.objects.filter(id__in=[condition.source_id for condition in conditions])
+        for attribute in queryset:
+            queryset |= Attribute.objects.get_ancestors(attribute)
         return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=[condition.source_id for condition in conditions]),
-                include_self=True
-            ).in_bulk()
+            'attribute_map': queryset.in_bulk()
         }
 
 
