@@ -25,7 +25,9 @@ const SendIssueModal = ({
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const sites = useSelector(state => state.sites) ?? {}
-  const isSubmitting = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
+  const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
+  const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
+  const isSubmitting = isSendingEmail || isSendingIntegration
   const currentSite = Object.values(sites).find(site => site.id === project.site)
   const integrations = useSelector(state => state.project.integrations) ?? []
   const errors = useFieldErrors()
@@ -81,10 +83,25 @@ const SendIssueModal = ({
   const [sendMethod, setSendMethod] = useState(hasMail ? 'mail' : 'integration')
   const [integration, setIntegration] = useState(null)
   const selectedIntegration = visibleIntegrations.find((item) => item.id === integration)
-
-  const canSendMail =
-    formData.recipients.length > 0 ||
-    formData.recipients_input.trim() !== ''
+  const formId = 'send-issue-form'
+  const showSubmitButton = sendMethod === 'mail' ? hasMail : !!selectedIntegration
+  const isSending = sendMethod === 'mail' ? isSendingEmail : isSendingIntegration
+  const submitLabel = isSending ? (
+    <>
+      <span
+        className="spinner-border spinner-border-sm me-2"
+        role="status"
+        aria-hidden="true"
+      />
+      {gettext('Sending...')}
+    </>
+  ) : (
+    sendMethod === 'mail' ? (
+      gettext('Send by mail')
+    ) : (
+      selectedIntegration?.provider.send_label ?? gettext('Send by integration')
+    )
+  )
 
   const setField = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }))
@@ -159,6 +176,16 @@ const SendIssueModal = ({
     }
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    if (sendMethod === 'mail') {
+      handleSendMail()
+    } else if (selectedIntegration) {
+      handleSendIntegration(selectedIntegration)
+    }
+  }
+
   const handleIntegrationChange = (integrationId) => {
     setIntegration(integrationId)
   }
@@ -211,9 +238,12 @@ const SendIssueModal = ({
       title={gettext('Send task')}
       onClose={onClose}
       closeLabel={gettext('Close')}
+      onSubmit={() => {}}
+      submitLabel={submitLabel}
+      submitProps={{ type: 'submit', form: formId, disabled: isSubmitting, hidden: !showSubmitButton }}
       size="modal-lg"
     >
-      <form>
+      <form id={formId} onSubmit={handleSubmit}>
         {
           !isConfigured && (
             <p className="text-muted">
@@ -318,27 +348,6 @@ const SendIssueModal = ({
                   />
                 )
               }
-              <div className="d-flex justify-content-end mt-4 mb-4">
-                <button
-                  disabled={!canSendMail || isSubmitting}
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleSendMail}
-                >
-                  {
-                    isSubmitting ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        />
-                        {gettext('Sending...')}
-                      </>
-                    ) : gettext('Send by mail')
-                  }
-                </button>
-              </div>
             </>
           )
         }
@@ -377,20 +386,6 @@ const SendIssueModal = ({
                         </div>
                       )
                     }
-                  </div>
-                )
-              }
-              {
-                selectedIntegration && (
-                  <div className="d-flex justify-content-end mt-4 mb-4">
-                    <button
-                      disabled={isSubmitting}
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleSendIntegration}
-                    >
-                      {selectedIntegration.provider.send_label ?? gettext('Send by integration')}
-                    </button>
                   </div>
                 )
               }
