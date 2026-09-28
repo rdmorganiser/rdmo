@@ -6,7 +6,7 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { updateProjectTask } from '../../actions/projectActions'
+import { clearProjectErrors, updateProjectTask } from '../../actions/projectActions'
 import { usePermissions } from '../../hooks'
 import { IssueTile } from '../helper'
 
@@ -60,6 +60,16 @@ const Dashboard = () => {
     dispatch(updateProjectTask(issueId, {
       status: currentStatus === 'closed' ? 'open' : 'closed'
     }))
+  }
+
+  const canSendIssue = (issue) => (
+    settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable
+  )
+
+  const handleSendIssue = (issue) => {
+    dispatch(clearProjectErrors())
+    setSelectedIssue(null)
+    setSendIssue(issue)
   }
 
   const renderVisibleIssue = (issue) => {
