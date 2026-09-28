@@ -7,13 +7,14 @@ import { isEmpty } from 'lodash'
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
-import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
+import SendIssueEmail from './SendIssueEmail'
+import SendIssueIntegration from './SendIssueIntegration'
 
 const SendIssueModal = ({
   issue,
@@ -65,12 +66,6 @@ const SendIssueModal = ({
   const hasIntegrations = visibleIntegrations.length > 0
   const isConfigured = hasMail || hasIntegrations
   const externalResources = issue?.resources.map(item => item.integration) ?? []
-  const integrationOptions = visibleIntegrations.map((integration) => ({
-    value: integration.id,
-    label: integration.title,
-    integration
-  }))
-
   const [formData, setFormData] = useState({
     subject: issue.task.title || '',
     message: initialMessage,
@@ -193,52 +188,6 @@ const SendIssueModal = ({
     }
   }
 
-  const handleIntegrationChange = (integrationId) => {
-    setIntegration(integrationId)
-  }
-
-  const formatIntegrationOption = ({ integration }, { context }) => {
-    if (context === 'value') {
-      return integration.title
-    }
-
-    return (
-      <div className="py-1">
-        <div className="fw-semibold">{integration.title}</div>
-        <div className="text-muted font-smaller">{integration.provider.description}</div>
-        {
-          integration.options
-            .filter((option) => !option.secret)
-            .map((option) => (
-              <div className="font-smaller" key={option.key}>
-                {option.title}: {option.value}
-              </div>
-            ))
-        }
-        {
-          externalResources.includes(integration.id) && (
-            <div className="alert alert-warning py-1 px-2 mt-2 mb-0 font-smaller">
-              <i className="bi bi-exclamation-triangle me-1" aria-hidden="true" />
-              {gettext('This issue has already been sent using this integration.')}
-            </div>
-          )
-        }
-      </div>
-    )
-  }
-
-  const filterIntegrationOption = ({ data }, inputValue) => {
-    const integration = data.integration
-    const options = integration.options.filter((option) => !option.secret)
-    const searchValue = [
-      integration.title,
-      integration.provider.description,
-      ...options.flatMap((option) => [option.title, option.value])
-    ].filter(Boolean).join(' ').toLocaleLowerCase()
-
-    return searchValue.includes(inputValue.trim().toLocaleLowerCase())
-  }
-
   return (
     <Modal
       show
@@ -320,92 +269,27 @@ const SendIssueModal = ({
         }
         {
           hasMail && sendMethod === 'mail' && (
-            <>
-              <div className="fw-semibold mb-2">{gettext('Recipients')}</div>
-              {
-                hasRecipientChoices && (
-                  <div>
-                    {
-                      settings.email_recipients_choices.map(([value, label], index) => (
-                        <div className="form-check" key={value}>
-                          <input
-                            id={`id_recipients_${index}`}
-                            name="recipients"
-                            type="checkbox"
-                            className="form-check-input"
-                            value={value}
-                            checked={formData.recipients.includes(value)}
-                            onChange={(event) => handleCheckboxChange('recipients', value, event.target.checked)}
-                          />
-                          <label className="form-check-label fw-normal" htmlFor={`id_recipients_${index}`}>
-                            {label}
-                          </label>
-                        </div>
-                      ))
-                    }
-                  </div>
-                )
-              }
-              {
-                hasRecipientInput && (
-                  <Textarea
-                    className="mb-3"
-                    rows="3"
-                    placeholder={gettext('Enter recipients line by line')}
-                    value={formData.recipients_input}
-                    onChange={(value) => setField('recipients_input', value)}
-                    errors={recipientInputErrors}
-                  />
-                )
-              }
-              {
-                recipientErrors?.map((error, index) => (
-                  <div key={index} className="text-danger mt-1">{error}</div>
-                ))
-              }
-            </>
+            <SendIssueEmail
+              formData={formData}
+              setField={setField}
+              onCheckboxChange={handleCheckboxChange}
+              recipientChoices={settings.email_recipients_choices ?? []}
+              recipientInputEnabled={hasRecipientInput}
+              errors={{ recipients: recipientErrors, recipientsInput: recipientInputErrors }}
+            />
           )
         }
 
         {
           hasIntegrations && sendMethod === 'integration' && (
-            <>
-              <Select
-                label={gettext('Integration')}
-                placeholder={gettext('Select an integration...')}
-                isDisabled={isSubmitting}
-                options={integrationOptions}
-                value={integration}
-                filterOption={filterIntegrationOption}
-                formatOptionLabel={formatIntegrationOption}
-                onChange={handleIntegrationChange}
-                isClearable
-                errors={integrationErrors}
-              />
-              {
-                selectedIntegration && (
-                  <div className="border rounded p-3 mt-3">
-                    <div className="fw-semibold mb-2">{selectedIntegration.title}</div>
-                    <p>{selectedIntegration.provider.description}</p>
-                    {
-                      selectedIntegration.options
-                        .filter((option) => !option.secret)
-                        .map((option) => (
-                          <div key={option.key}>{option.title}: {option.value}</div>
-                        ))
-                    }
-                    {
-                      externalResources.includes(selectedIntegration.id) && (
-                        <div className="alert alert-warning py-2 px-3 mt-3 mb-0">
-                          <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
-                          {gettext('This issue has already been sent using this integration.')}
-                        </div>
-                      )
-                    }
-                  </div>
-                )
-              }
-            </>
+            <SendIssueIntegration
+              integrations={visibleIntegrations}
+              externalResources={externalResources}
+              value={integration}
+              onChange={setIntegration}
+              disabled={isSubmitting}
+              errors={integrationErrors}
+            />
           )
         }
       </form>

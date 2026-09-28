@@ -240,13 +240,14 @@ export function sendProjectIssueIntegration(issueId, data) {
     return ProjectApi.sendProjectIssueIntegration(projectId, issueId, data)
       .then((response) => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
-        dispatch(fetchProjectTasks())
 
-        if (response?.redirect_url) {
-          window.location.href = response.redirect_url
-        }
+        return dispatch(fetchProjectTasks()).then(() => {
+          if (response?.redirect_url) {
+            window.location.href = response.redirect_url
+          }
 
-        return response
+          return response
+        })
       })
       .catch(error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR, error })
