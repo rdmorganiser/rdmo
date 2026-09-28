@@ -134,7 +134,7 @@ def terms_of_use_accept(request):
         )
 
     elif request.method == "GET":
-        has_consented = ConsentFieldValue.objects.filter(user=request.user).exists()
+        has_consented = ConsentFieldValue.has_accepted_terms(request.user, request.session)
         return render(
             request,
             "account/terms_of_use_accept_form.html",
