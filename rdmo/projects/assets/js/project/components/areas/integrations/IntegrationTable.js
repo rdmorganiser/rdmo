@@ -32,7 +32,7 @@ const IntegrationTable = ({ integrations, externalResources, isSubmitting, onDel
                 {
                   externalResources?.length > 0 && externalResources.includes(integration.id) && (
                     <div className="text-muted">
-                      {gettext('This issue has already been send using this integration.')}
+                      {gettext('This task has already been sent using this integration.')}
                     </div>
                   )
                 }
