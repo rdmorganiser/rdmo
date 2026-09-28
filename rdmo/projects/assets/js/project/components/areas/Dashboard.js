@@ -90,7 +90,7 @@ const Dashboard = () => {
               {issue.task.title}
             </strong>
             {
-              (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) && (
+              canSendIssue(issue) && (
                 <LinkButton
                   title={gettext('Send task')}
                   onClick={() => setSendIssue(issue)}
@@ -261,8 +261,10 @@ const Dashboard = () => {
               selectedIssue && (
                 <IssueModal
                   canChangeIssue={perms.can_change_issue}
+                  canSendIssue={canSendIssue(selectedIssue)}
                   issue={selectedIssue}
                   onClose={() => setSelectedIssue(null)}
+                  onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
                       dispatch(updateProjectTask(selectedIssue.id, { status }))
