@@ -40,7 +40,7 @@ const SendIssueIntegration = ({
           externalResources.includes(integration.id) && (
             <div className="alert alert-warning py-1 px-2 mt-2 mb-0 font-smaller">
               <i className="bi bi-exclamation-triangle me-1" aria-hidden="true" />
-              {gettext('This issue has already been sent using this integration.')}
+              {gettext('This task has already been sent using this integration.')}
             </div>
           )
         }
@@ -90,7 +90,7 @@ const SendIssueIntegration = ({
               externalResources.includes(selectedIntegration.id) && (
                 <div className="alert alert-warning py-2 px-3 mt-3 mb-0">
                   <i className="bi bi-exclamation-triangle me-2" aria-hidden="true" />
-                  {gettext('This issue has already been sent using this integration.')}
+                  {gettext('This task has already been sent using this integration.')}
                 </div>
               )
             }
