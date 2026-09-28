@@ -30,7 +30,14 @@ const SendIssueModal = ({
   const isSubmitting = isSendingEmail || isSendingIntegration
   const currentSite = Object.values(sites).find(site => site.id === project.site)
   const integrations = useSelector(state => state.project.integrations) ?? []
-  const errors = useFieldErrors()
+  const {
+    subject: subjectErrors,
+    message: messageErrors,
+    recipients: recipientErrors,
+    recipients_input: recipientInputErrors,
+    integration: integrationErrors,
+    ...remainingErrors
+  } = useFieldErrors()
 
   /* TODO: use templates? */
   const initialMessage = [
@@ -269,6 +276,7 @@ const SendIssueModal = ({
                 type="text"
                 value={formData.subject}
                 onChange={(value) => setField('subject', value)}
+                errors={subjectErrors}
               />
 
               <Textarea
@@ -277,6 +285,7 @@ const SendIssueModal = ({
                 rows="12"
                 value={formData.message}
                 onChange={(value) => setField('message', value)}
+                errors={messageErrors}
               />
             </>
           )
@@ -345,8 +354,14 @@ const SendIssueModal = ({
                     placeholder={gettext('Enter recipients line by line')}
                     value={formData.recipients_input}
                     onChange={(value) => setField('recipients_input', value)}
+                    errors={recipientInputErrors}
                   />
                 )
+              }
+              {
+                recipientErrors?.map((error, index) => (
+                  <div key={index} className="text-danger mt-1">{error}</div>
+                ))
               }
             </>
           )
@@ -365,6 +380,7 @@ const SendIssueModal = ({
                 formatOptionLabel={formatIntegrationOption}
                 onChange={handleIntegrationChange}
                 isClearable
+                errors={integrationErrors}
               />
               {
                 selectedIntegration && (
@@ -394,11 +410,12 @@ const SendIssueModal = ({
         }
       </form>
       {
-        Object.entries(errors).flatMap(([field, fieldErrors]) => (
-          fieldErrors.map((error, index) => (
-            <div key={`${field}-${index}`} className="text-danger mt-1">{error}</div>
+        Object.entries(remainingErrors)
+          .flatMap(([field, fieldErrors]) => (
+            fieldErrors.map((error, index) => (
+              <div key={`${field}-${index}`} className="text-danger mt-1">{error}</div>
+            ))
           ))
-        ))
       }
     </Modal>
   )
