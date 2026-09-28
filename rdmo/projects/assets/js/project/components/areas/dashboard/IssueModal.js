@@ -12,8 +12,10 @@ import IssueDate from '../../../../common/components/IssueDate'
 
 const IssueModal = ({
   canChangeIssue = false,
+  canSendIssue = false,
   issue,
   onClose,
+  onSend,
   onStatusChange,
 }) => {
 
@@ -30,6 +32,15 @@ const IssueModal = ({
       onClose={onClose}
       size="modal-lg"
       closeLabel={gettext('Close')}
+      onSubmit={() => {}}
+      submitLabel={gettext('Send task')}
+      submitProps={
+        {
+          className: 'btn btn-outline-primary me-auto',
+          hidden: !canSendIssue,
+          onClick: onSend
+        }
+      }
     >
       <p>{issue.task.text}</p>
       <Select
@@ -120,8 +131,10 @@ const IssueModal = ({
 
 IssueModal.propTypes = {
   canChangeIssue: PropTypes.bool,
+  canSendIssue: PropTypes.bool,
   issue: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSend: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
 }
 

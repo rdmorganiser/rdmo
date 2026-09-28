@@ -61,6 +61,15 @@ const Dashboard = () => {
     }))
   }
 
+  const canSendIssue = (issue) => (
+    settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable
+  )
+
+  const handleSendIssue = (issue) => {
+    setSelectedIssue(null)
+    setSendIssue(issue)
+  }
+
   const renderVisibleIssues = (visibleIssues) => (
     <div className="row">
       {
@@ -96,8 +105,8 @@ const Dashboard = () => {
                       {issue.task.title}
                     </div>
                     {
-                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
-                      <SendIssueButton onClick={() => setSendIssue(issue)} />
+                      canSendIssue(issue) &&
+                      <SendIssueButton onClick={() => handleSendIssue(issue)} />
                     }
                   </div>
                   {
@@ -237,8 +246,10 @@ const Dashboard = () => {
               selectedIssue && (
                 <IssueModal
                   canChangeIssue={perms.can_change_issue}
+                  canSendIssue={canSendIssue(selectedIssue)}
                   issue={selectedIssue}
                   onClose={() => setSelectedIssue(null)}
+                  onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
                       dispatch(updateProjectTask(selectedIssue.id, { status }))
