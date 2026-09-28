@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { updateProjectTask } from '../../actions/projectActions'
+import { clearProjectErrors, updateProjectTask } from '../../actions/projectActions'
 import { usePermissions } from '../../hooks'
 import { Tile } from '../helper'
 
@@ -66,6 +66,7 @@ const Dashboard = () => {
   )
 
   const handleSendIssue = (issue) => {
+    dispatch(clearProjectErrors())
     setSelectedIssue(null)
     setSendIssue(issue)
   }

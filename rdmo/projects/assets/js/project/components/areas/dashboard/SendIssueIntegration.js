@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
@@ -11,6 +11,12 @@ const SendIssueIntegration = ({
   disabled,
   errors
 }) => {
+  useEffect(() => {
+    if (integrations.length === 1 && value !== integrations[0].id) {
+      onChange(integrations[0].id)
+    }
+  }, [integrations, value, onChange])
+
   const integrationOptions = integrations.map((integration) => ({
     value: integration.id,
     label: integration.title,
@@ -62,21 +68,24 @@ const SendIssueIntegration = ({
 
   return (
     <>
-      <Select
-        label={gettext('Integration')}
-        placeholder={gettext('Select an integration...')}
-        isDisabled={disabled}
-        options={integrationOptions}
-        value={value}
-        filterOption={filterIntegrationOption}
-        formatOptionLabel={formatIntegrationOption}
-        onChange={onChange}
-        isClearable
-        errors={errors}
-      />
+      {
+        integrations.length > 1 && (
+          <Select
+            label={gettext('Integration')}
+            placeholder={gettext('Select an integration...')}
+            isDisabled={disabled}
+            options={integrationOptions}
+            value={value}
+            filterOption={filterIntegrationOption}
+            formatOptionLabel={formatIntegrationOption}
+            onChange={onChange}
+            isClearable
+          />
+        )
+      }
       {
         selectedIntegration && (
-          <div className="border rounded p-3 mt-3">
+          <div className={`border rounded p-3${integrations.length > 1 ? ' mt-3' : ''}`}>
             <div className="fw-semibold mb-2">{selectedIntegration.title}</div>
             <p>{selectedIntegration.provider.description}</p>
             {
@@ -96,6 +105,11 @@ const SendIssueIntegration = ({
             }
           </div>
         )
+      }
+      {
+        errors?.map((error, index) => (
+          <div key={index} className="text-danger mt-1">{error}</div>
+        ))
       }
     </>
   )
