@@ -74,7 +74,7 @@ Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
-  submitLabel: PropTypes.string,
+  submitLabel: PropTypes.node,
   closeLabel: PropTypes.string,
   submitProps: PropTypes.object,
   children: PropTypes.oneOfType([
