@@ -178,13 +178,13 @@ const SendIssueModal = ({
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (sendMethod === 'mail') {
-      handleSendMail()
+      await handleSendMail()
     } else if (selectedIntegration) {
-      handleSendIntegration(selectedIntegration)
+      await handleSendIntegration(selectedIntegration)
     }
   }
 

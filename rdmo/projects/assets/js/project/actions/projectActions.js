@@ -222,7 +222,7 @@ export function sendProjectIssueEmail(issueId, data) {
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
-        dispatch(fetchProjectTasks())
+        return dispatch(fetchProjectTasks())
       })
       .catch(error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
