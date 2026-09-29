@@ -152,8 +152,7 @@ def test_view_includes_help_text(db, client, include_help):
     response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.data["html"]
 
-    assert include_help == ('class="question-help"' in content)
-    assert include_help == ('class="page-help"' in content)
+    assert include_help == ('<blockquote>' in content)
 
 
 @pytest.mark.parametrize('include_help', [True, False])
@@ -169,8 +168,7 @@ def test_view_export_includes_help_text(db, client, export_format, include_help)
     response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.content.decode()
 
-    assert include_help == ('class="question-help"' in content)
-    assert include_help == ('class="page-help"' in content)
+    assert include_help == ('<blockquote>' in content)
 
 
 @pytest.mark.parametrize('snapshot_id', snapshots)
@@ -186,8 +184,7 @@ def test_view_snapshot_includes_help_text(db, client, snapshot_id, include_help)
     response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.data["html"]
 
-    assert include_help == ('class="question-help"' in content)
-    assert include_help == ('class="page-help"' in content)
+    assert include_help == ('<blockquote>' in content)
 
 
 @pytest.mark.parametrize('snapshot_id', snapshots)
@@ -204,5 +201,4 @@ def test_view_snapshot_export_includes_help_text(db, client, snapshot_id, export
     response = client.get(url, {'include_help': 'true'} if include_help else {})
     content = response.content.decode()
 
-    assert include_help == ('class="question-help"' in content)
-    assert include_help == ('class="page-help"' in content)
+    assert include_help == ('<blockquote>' in content)
