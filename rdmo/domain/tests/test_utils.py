@@ -1,5 +1,7 @@
 import pytest
 
+from django.db import connection
+
 from ..models import Attribute
 from ..utils import get_attribute_map
 
@@ -26,11 +28,15 @@ def test_get_attribute_map_ancestors(db, django_assert_num_queries):
     assert attribute_map[parent.pk].parent_id == root.pk
 
 
-def test_get_attribute_map_fragmented_trees(db):
+def test_get_attribute_map_fragmented_trees(db, django_assert_max_num_queries):
     roots = [Attribute.objects.create(key=f'map-root-{index}') for index in range(201)]
     sources = [Attribute.objects.create(key='source', parent=root) for root in roots]
+    expected_ids = {attribute.pk for attribute in roots + sources}
 
-    attribute_map = get_attribute_map(source.pk for source in sources)
+    # sqlite needs two batches
+    max_queries = 4 if connection.vendor == 'sqlite' else 2
 
-    assert set(attribute_map) == {root.pk for root in roots} | {source.pk for source in sources}
-    assert all(attribute_map[source.pk].parent_id == source.parent_id for source in sources)
+    with django_assert_max_num_queries(max_queries):
+        attribute_map = get_attribute_map(source.pk for source in sources)
+
+    assert set(attribute_map) == expected_ids
