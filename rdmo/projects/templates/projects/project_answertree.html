@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load core_tags %}
+
+<h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+
+{% for section in answertree.elements %}
+    {% if section.model == "questions.section" %}
+        {% if section.show %}
+            {% include 'projects/project_answertree_1_section.html' %}
+        {% endif %}
+    {% else %}
+        <strong>ERROR: Expected section, found {{section.model}}</strong>
+    {% endif %}
+{% endfor %}
