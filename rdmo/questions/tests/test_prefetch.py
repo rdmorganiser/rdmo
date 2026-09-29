@@ -385,3 +385,37 @@ def test_prefetch_page_query_count(db, django_assert_num_queries, question_count
         actual_questions = [question.pk for question in page.elements]
 
     assert actual_questions == expected_questions
+
+
+@pytest.mark.parametrize('through_page', [False, True])
+def test_prefetch_optionset_conditions(db, django_assert_num_queries, through_page):
+    source = Attribute.objects.create(uri_prefix=URI_PREFIX, key='optionset-condition-source')
+    option = create_element(Option, 'optionset-condition-target')
+    condition = create_element(Condition, 'optionset-condition', source=source, target_option=option, relation='eq')
+    optionset = create_element(OptionSet, 'optionset-condition-set')
+    optionset.conditions.add(condition)
+    question = create_element(Question, 'optionset-condition-question')
+    question.optionsets.add(optionset)
+    page = create_element(Page, 'optionset-condition-page')
+    PageQuestion.objects.create(page=page, question=question, order=0)
+
+    if through_page:
+        with django_assert_num_queries(7):
+            loaded = Page.objects.prefetch_elements(optionsets_conditions=True).get(pk=page.pk)
+    else:
+        with django_assert_num_queries(4):
+            loaded = Question.objects.prefetch_elements(optionsets_conditions=True).get(pk=question.pk)
+
+    with django_assert_num_queries(0):
+        if through_page:
+            association, = loaded.page_questions.all()
+            assert association.order == 0
+            loaded = association.question
+        assert loaded.pk == question.pk
+        loaded_optionset, = loaded.optionsets.all()
+        assert loaded_optionset.pk == optionset.pk
+        loaded_condition, = loaded_optionset.conditions.all()
+        assert loaded_condition.pk == condition.pk
+        assert loaded_condition.source.uri == source.uri
+        assert loaded_condition.target_option.uri == option.uri
+        assert loaded_condition.target_option.text_lang1 == option.text_lang1
