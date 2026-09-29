@@ -53,7 +53,7 @@ export function navigateDashboard(location, back = null) {
         // /documents/questions/ and /documents/answers/
         dispatch(fetchAnswers(location.snapshotId, {
           include_help: selectConfig(getState(), 'document.includeHelp', false),
-          hide_answers: location.detail == 'questions' ? 'true' : 'false'
+          include_answers: location.detail == 'answers' ? 'true' : 'false'
         }))
       } else {
         dispatch(clearCurrentView())
