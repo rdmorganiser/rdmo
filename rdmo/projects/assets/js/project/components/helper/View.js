@@ -34,12 +34,11 @@ const View = () => {
   }
 
   const handleExport = (format) => {
-    if (detail == 'questions') {
-      dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
-    } else if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
+    if (['questions', 'answers'].includes(detail)) {
+      dispatch(downloadAnswers(snapshotId, format, {
+        include_help: isTruthy(get(config, 'document.includeHelp')),
+        include_answers: detail == 'answers' ? 'true' : 'false'
+      }))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
