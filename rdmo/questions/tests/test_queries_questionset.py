@@ -10,12 +10,12 @@ max_queries = [
     # action, max_queries, url_kwargs, url_params
     ('list', 9, {}, {}),
     ('index', 3, {}, {}),
-    ('nested', 16, {'pk': 90}, {}),
-    ('export', 24, {'export_format': 'xml'}, {}),
-    ('export', 27, {'export_format': 'xml'}, {'full': '1'}),
+    ('nested', 13, {'pk': 90}, {}),
+    ('export', 15, {'export_format': 'xml'}, {}),
+    ('export', 20, {'export_format': 'xml'}, {'full': '1'}),
     ('detail', 9, {'pk': 90}, {}),
-    ('detail_export', 19, {'pk': 90, 'export_format': 'xml'}, {}),
-    ('detail_export', 21, {'pk': 90, 'export_format': 'xml'}, {'full': '1'}),
+    ('detail_export', 15, {'pk': 90, 'export_format': 'xml'}, {}),
+    ('detail_export', 18, {'pk': 90, 'export_format': 'xml'}, {'full': '1'}),
 ]
 
 
