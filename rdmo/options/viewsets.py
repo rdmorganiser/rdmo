@@ -14,7 +14,7 @@ from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.domain.models import Attribute
+from rdmo.domain.utils import get_attribute_map
 
 from .models import Option, OptionSet
 from .prefetch import optionset_options_prefetch
@@ -118,14 +118,11 @@ class OptionSetViewSet(ModelViewSet):
 
     def get_export_serializer_context(self, optionsets):
         return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in={
-                    condition.source_id
-                    for optionset in optionsets
-                    for condition in optionset.conditions.all()
-                }),
-                include_self=True
-            ).in_bulk()
+            'attribute_map': get_attribute_map(
+                condition.source_id
+                for optionset in optionsets
+                for condition in optionset.conditions.all()
+            )
         }
 
 

@@ -11,7 +11,7 @@ from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
-from rdmo.domain.models import Attribute
+from rdmo.domain.utils import get_attribute_map
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .models import Task
@@ -116,8 +116,5 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
                 attribute_ids.add(condition.source_id)
 
         return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
+            'attribute_map': get_attribute_map(attribute_ids)
         }
