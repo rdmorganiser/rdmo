@@ -70,7 +70,8 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
@@ -152,7 +153,8 @@ class SectionViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
@@ -235,7 +237,8 @@ class PageViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
@@ -321,7 +324,8 @@ class QuestionSetViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
@@ -409,7 +413,8 @@ class QuestionViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(

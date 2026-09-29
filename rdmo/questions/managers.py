@@ -112,7 +112,10 @@ class QuestionSetManager(models.Manager):
 class QuestionQuerySet(models.QuerySet):
 
     def prefetch_elements(self, **kwargs):
-        return self.prefetch_related(*get_question_prefetch_lookups(**kwargs))
+        related_fields = ('attribute', 'default_option') if kwargs.get('options') or kwargs.get('default_option') else (
+            'attribute',
+        )
+        return self.select_related(*related_fields).prefetch_related(*get_question_prefetch_lookups(**kwargs))
 
     def filter_by_catalog(self, catalog):
         ids = [descendant.id for descendant in catalog.descendants if isinstance(descendant, self.model)]
