@@ -7,13 +7,11 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Link from '../../../helper/Link'
 
 const Navigation = () => {
+  const { pageId: currentPageId } = useSelector((state) => state.config)
   const navigation = useSelector((state) => state.project.navigation)
   const templates = useSelector((state) => state.templates)
 
   const currentSection = {
-    id: 1
-  }
-  const currentPage = {
     id: 1
   }
 
@@ -36,7 +34,7 @@ const Navigation = () => {
                       section.pages.map((page, pageIndex) => (
                         <li
                           key={pageIndex} className={
-                            classNames('ps-4', {'active': page.id === currentPage?.id})
+                            classNames('ps-4', {'active': page.id === currentPageId})
                           }>
                           {
                             page.show ? (
