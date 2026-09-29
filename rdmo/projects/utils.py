@@ -13,7 +13,6 @@ from django.utils.timezone import now
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
-from rdmo.views.utils import ProjectWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -34,11 +33,12 @@ def render_attachments(request, project, data):
         project.catalog.prefetch_elements()
 
     if data['attachments_answers']:
+        ANSWERTREE_ALL_VERBOSE = ('catalog', 'section', 'page', 'set', 'questionset', 'question', 'value')
         response = render_to_format(
             request, attachments_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'project_wrapper': ProjectWrapper(project, snapshot)
+                'answertree': project.get_answer_tree(verbose=ANSWERTREE_ALL_VERBOSE),
             }
         )
         attachments.append((
