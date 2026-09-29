@@ -485,6 +485,27 @@ export function fetchProjectFiles(snapshotId) {
 
 // answers / views
 
+export function fetchQuestions(snapshotId, params = {}) {
+  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchQuestions'
+
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
+
+    return ProjectApi.fetchProjectQuestions(projectId, snapshotId, params)
+      .then(view => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
+        return view
+      })
+      .catch(error => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_ERROR, error })
+        throw error
+      })
+  }
+}
+
 export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchAnswers'
 

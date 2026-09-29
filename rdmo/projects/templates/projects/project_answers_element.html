@@ -9,7 +9,7 @@
         <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
     {% endif %}
 
-    {% if not hide_answers %}
+    {% if include_answers %}
 
         {% get_set_prefixes element.attribute project=project_wrapper as set_prefixes %}
         {% for set_prefix in set_prefixes %}

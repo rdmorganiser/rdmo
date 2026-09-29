@@ -5,8 +5,8 @@ import { isNil } from 'lodash'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { downloadAnswers, downloadView } from '../../actions/projectActions'
-import { getDocumentParameters } from '../../utils/documentoptions'
+import { downloadAnswers, downloadQuestions, downloadView } from '../../actions/projectActions'
+import { getAnswersParameters, getQuestionsParameters } from '../../utils/documentoptions'
 
 import DocumentOptionsDropdown from './DocumentOptionsDropdown'
 import ExportsDropdown from './ExportsDropdown'
@@ -34,9 +34,9 @@ const View = () => {
 
   const handleExport = (format) => {
     if (detail == 'questions') {
-      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'true'}))
+      dispatch(downloadQuestions(snapshotId, format, getQuestionsParameters(config)))
     } else if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format, {...getDocumentParameters(config), 'hide_answers': 'false'}))
+      dispatch(downloadAnswers(snapshotId, format, getAnswersParameters(config)))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
@@ -58,7 +58,7 @@ const View = () => {
         </button>
         {
           ['answers', 'questions'].includes(detail) && (
-            <DocumentOptionsDropdown onChanged={reloadView}/>
+            <DocumentOptionsDropdown onChanged={reloadView} areaTag={detail} />
           )
         }
         <SnapshotsDropdown onChange={handleSnapshotChange}/>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import DocumentOptions from './DocumentOptions'
 
-const DocumentOptionsDropdown = ({ onChanged }) => {
+const DocumentOptionsDropdown = ({ areaTag, onChanged }) => {
 
 
   return (
@@ -24,13 +24,14 @@ const DocumentOptionsDropdown = ({ onChanged }) => {
       <ul
         className="dropdown-menu" onClick={(event) => event.stopPropagation()}
       >
-        <DocumentOptions onChanged={onChanged} />
+        <DocumentOptions onChanged={onChanged} areaTag={areaTag} />
       </ul>
     </div>
   )
 }
 
 DocumentOptionsDropdown.propTypes = {
+  areaTag: PropTypes.string.isRequired,
   onChanged: PropTypes.func
 }
 

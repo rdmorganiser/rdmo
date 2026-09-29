@@ -2,11 +2,11 @@ import { isNil } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 
-import { getDocumentParameters } from '../utils/documentoptions'
+import { getAnswersParameters, getQuestionsParameters } from '../utils/documentoptions'
 import { locationKeys, updateLocation } from '../utils/location'
 
 import * as actionTypes from './actionTypes'
-import { fetchAnswers, fetchView} from './projectActions'
+import { fetchAnswers, fetchQuestions, fetchView} from './projectActions'
 
 export function navigateDashboard(location) {
   return (dispatch, getState) => {
@@ -19,13 +19,9 @@ export function navigateDashboard(location) {
     if (!isNil(location.viewId)) {
       dispatch(fetchView(location.snapshotId, location.viewId))
     } else if (location.detail == 'questions') {
-      dispatch(fetchAnswers(location.snapshotId,
-        {...getDocumentParameters(getState().config), 'hide_answers': 'true' })
-      )
+      dispatch(fetchQuestions(location.snapshotId, getQuestionsParameters(getState().config)))
     } else if (location.detail == 'answers') {
-      dispatch(fetchAnswers(location.snapshotId,
-        {...getDocumentParameters(getState().config), 'hide_answers': 'false' })
-      )
+      dispatch(fetchAnswers(location.snapshotId, getAnswersParameters(getState().config)))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }

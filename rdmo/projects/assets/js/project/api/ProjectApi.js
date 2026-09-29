@@ -106,6 +106,28 @@ export default class ProjectApi extends BaseApi {
     return this.post(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/rollback/`)
   }
 
+  static fetchProjectQuestions(projectId, snapshotId, params = {}) {
+    const query = new URLSearchParams(params).toString()
+
+    if (isNil(snapshotId)) {
+      return this.get(`/api/v1/projects/projects/${projectId}/questions/?${query}`)
+    } else {
+      return this.get(`/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/questions/?${query}`)
+    }
+  }
+
+  static downloadProjectQuestions(projectId, snapshotId, format, params = {}) {
+    const query = new URLSearchParams(params).toString()
+
+    if (isNil(snapshotId)) {
+      return this.download(`/api/v1/projects/projects/${projectId}/questions/export/${format}/?${query}`)
+    } else {
+      return this.download(
+        `/api/v1/projects/projects/${projectId}/snapshots/${snapshotId}/questions/export/${format}/?${query}`
+      )
+    }
+  }
+
   static fetchProjectAnswers(projectId, snapshotId, params = {}) {
     const query = new URLSearchParams(params).toString()
 

@@ -4,7 +4,7 @@ import { isNil } from 'lodash'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { downloadAnswers, downloadView } from '../../actions/projectActions'
-import { getDocumentParameters } from '../../utils/documentoptions'
+import { getAnswersParameters, getQuestionsParameters } from '../../utils/documentoptions'
 
 import DocumentOptions from '../helper/DocumentOptions'
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
@@ -58,15 +58,14 @@ const Documents = () => {
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
             onExport={
               (format) => {
-                dispatch(downloadAnswers(snapshotId, format,
-                  {...getDocumentParameters(config), 'hide_answers': 'true'})
+                dispatch(downloadAnswers(snapshotId, format, getQuestionsParameters(config))
                 )
               }
             }
             additionalExportItems={
               (
                 <>
-                  <DocumentOptions/>
+                  <DocumentOptions areaTag="questions"/>
                   <hr />
                 </>
               )
@@ -80,15 +79,14 @@ const Documents = () => {
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
             onExport={
               (format) => {
-                dispatch(downloadAnswers(snapshotId, format,
-                  {...getDocumentParameters(config), 'hide_answers': 'false'})
+                dispatch(downloadAnswers(snapshotId, format, getAnswersParameters(config))
                 )
               }
             }
             additionalExportItems={
               (
                 <>
-                  <DocumentOptions/>
+                  <DocumentOptions areaTag="answers"/>
                   <hr />
                 </>
               )
