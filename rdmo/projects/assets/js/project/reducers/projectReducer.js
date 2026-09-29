@@ -40,6 +40,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_INIT:
     case actionTypes.FETCH_VIEW_INIT:
     case actionTypes.FETCH_PROJECT_VISIBILITY_INIT:
+    case actionTypes.FETCH_NAVIGATION_INIT:
+    case actionTypes.FETCH_PROGRESS_INIT:
     case actionTypes.FETCH_PROVIDERS_INIT:
     case actionTypes.FETCH_PROJECT_INTEGRATIONS_INIT:
     case actionTypes.CREATE_PROJECT_INTEGRATION_INIT:
@@ -66,6 +68,8 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_ANSWERS_ERROR:
     case actionTypes.FETCH_VIEW_ERROR:
     case actionTypes.FETCH_PROJECT_VISIBILITY_ERROR:
+    case actionTypes.FETCH_NAVIGATION_ERROR:
+    case actionTypes.FETCH_PROGRESS_ERROR:
     case actionTypes.FETCH_PROVIDERS_ERROR:
     case actionTypes.FETCH_PROJECT_INTEGRATIONS_ERROR:
     case actionTypes.CREATE_PROJECT_INTEGRATION_ERROR:
@@ -73,6 +77,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.DELETE_PROJECT_INTEGRATION_ERROR:
     case actionTypes.FETCH_PROJECT_FILES_ERROR:
       return appendError(state, action)
+    // SUCCESS actions
     case actionTypes.FETCH_PROJECT_SUCCESS:
       return { ...state, project: action.project }
     case actionTypes.UPDATE_PROJECT_SUCCESS:
@@ -159,6 +164,16 @@ export default function projectReducer(state = initialState, action) {
       return {
         ...state,
         currentView: action.view
+      }
+    case actionTypes.FETCH_NAVIGATION_SUCCESS:
+      return {
+        ...state,
+        navigation: action.navigation
+      }
+    case actionTypes.FETCH_PROGRESS_SUCCESS:
+      return {
+        ...state,
+        progress: action.progress
       }
     case actionTypes.CLEAR_CURRENT_VIEW:
       return {
