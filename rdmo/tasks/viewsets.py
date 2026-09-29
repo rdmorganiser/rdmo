@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rdmo.conditions.prefetch import condition_prefetch
 from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
@@ -41,7 +42,7 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_related(
                 'catalogs',
-                'conditions',
+                condition_prefetch('conditions'),
             )
         else:
             return queryset.select_related(
@@ -107,9 +108,9 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def get_export_serializer_context(self, tasks):
         attribute_ids = set()
         for task in tasks:
-            if task.start_attribute:
+            if task.start_attribute_id:
                 attribute_ids.add(task.start_attribute_id)
-            if task.end_attribute:
+            if task.end_attribute_id:
                 attribute_ids.add(task.end_attribute_id)
             for condition in task.conditions.all():
                 attribute_ids.add(condition.source_id)
