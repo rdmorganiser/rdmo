@@ -20,7 +20,7 @@ export function navigateDashboard(location) {
       dispatch(fetchView(location.snapshotId, location.viewId))
     } else if (location.detail == 'questions') {
       dispatch(fetchAnswers(location.snapshotId,
-        {'include_help': isTruthy(get(getState().config, 'document.includeHelp')), 'hide_answers': 'true' })
+        {'include_help': isTruthy(get(getState().config, 'document.includeHelp')), 'include_answers': 'false' })
       )
     } else if (location.detail == 'answers') {
       dispatch(fetchAnswers(location.snapshotId,

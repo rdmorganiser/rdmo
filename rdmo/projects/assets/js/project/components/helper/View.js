@@ -36,7 +36,7 @@ const View = () => {
   const handleExport = (format) => {
     if (detail == 'questions') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
+        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'include_answers': 'false'}))
     } else if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format,
         {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
