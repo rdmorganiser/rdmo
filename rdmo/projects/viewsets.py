@@ -642,6 +642,82 @@ class ProjectViewSet(ModelViewSet):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.questions_export(request, pk, export_format, snapshot_id)
 
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers(self, request, pk, snapshot_id=None):
+        project: Project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        include_help = is_truthy(request.GET.get('include_help'))
+
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
+
+        serializer = ProjectAnswersSerializer({
+            'html': render_to_string('projects/project_answertree.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'include_help': include_help,
+            }),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        })
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_export(self, request, pk, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        include_help = is_truthy(request.GET.get('include_help'))
+
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answertree_export.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'include_help': include_help,
+            })
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/answers/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers_export_snapshot(self, request, pk, export_format, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.answers_export(request, pk, export_format, snapshot_id)
+
     @action(detail=True, methods=['get'], permission_classes=(HasModelPermission | HasProjectPermission, ),
             url_path=r'views')
     def views(self, request, pk):

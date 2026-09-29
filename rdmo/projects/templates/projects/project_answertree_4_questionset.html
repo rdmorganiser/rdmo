@@ -1,0 +1,14 @@
+{% load core_tags %}
+
+{% if set.count > 0 or set.total == 0 %}
+    <h4>{{ set.title | markdown }}</h4>
+    {% if include_help and "help" in set and set.help %}
+        <blockquote>
+        {% autoescape off %}
+            {{set.help}}
+        {% endautoescape %}
+        </blockquote>
+    {% endif %}
+
+    {% include 'projects/project_answertree_3_set.html' with sets=set.sets %}
+{% endif %}

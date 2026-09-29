@@ -1,0 +1,20 @@
+{% load core_tags %}
+
+{% if section.count > 0 or section.total == 0 %}
+    <h2>{{ section.title | markdown }}</h2>
+    {% if include_help and "help" in section and section.help %}
+        <blockquote>
+        {% autoescape off %}
+            {{section.help}}
+        {% endautoescape %}
+        </blockquote>
+    {% endif %}
+
+    {% for page in section.elements %}
+        {% if page.model == "questions.page" %}
+            {% if page.show %}
+                {% include 'projects/project_answertree_2_page.html' %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

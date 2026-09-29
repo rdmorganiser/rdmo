@@ -1,0 +1,13 @@
+{% load core_tags %}
+
+{% for set in sets %}
+    {% for element in set.elements %}
+        {% if element.show %}
+            {% if element.model == "questions.questionset" %}
+                {% include 'projects/project_answertree_4_questionset.html' with set=element %}
+            {% elif element.model == "questions.question" %}
+                {% include 'projects/project_answertree_5_question.html' with question=element %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}

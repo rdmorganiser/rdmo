@@ -1,0 +1,14 @@
+{% load core_tags %}
+
+{% if page.count > 0 or page.total == 0 %}
+    <h3>{{ page.title | markdown }}</h3>
+    {% if include_help and "help" in page and page.help %}
+        <blockquote>
+        {% autoescape off %}
+            {{page.help}}
+        {% endautoescape %}
+        </blockquote>
+    {% endif %}
+
+    {% include 'projects/project_answertree_3_set.html' with sets=page.sets %}
+{% endif %}
