@@ -224,6 +224,20 @@ def test_answer_tree_nested_collection_sets(db, parent_index, child_indexes, nes
     ]
 
 
+@pytest.mark.parametrize('verbose', [
+    (),
+    ('catalog',),
+    ('section',),
+    ('page',),
+    ('questionset',),
+    ('question',),
+    ('value',),
+])
+def test_answer_tree_verbose(db, verbose):
+    project = Project.objects.get(pk=1)
+    project.get_answer_tree(verbose=verbose)
+
+
 @pytest.mark.parametrize('parent_set, set_level', [
     (None, 0),
     (('0', 0), 1),
