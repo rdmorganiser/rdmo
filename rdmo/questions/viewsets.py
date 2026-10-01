@@ -70,14 +70,15 @@ class CatalogViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
                 'sites',
                 'editors',
                 'groups',
-                'catalog_sections__section',
+                'catalog_sections',
             )
 
     @action(detail=True)
@@ -152,13 +153,14 @@ class SectionViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
                 'catalogs',
                 'editors',
-                'section_pages__page',
+                'section_pages',
             )
 
     @action(detail=True)
@@ -235,15 +237,16 @@ class PageViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
                 'conditions',
                 'sections',
                 'editors',
-                'page_questionsets__questionset',
-                'page_questions__question',
+                'page_questionsets',
+                'page_questions',
             ).select_related('attribute')
 
     @action(detail=True)
@@ -321,7 +324,8 @@ class QuestionSetViewSet(ModelViewSet):
             return queryset.prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
+                default_option=True,
             )
         else:
             return queryset.prefetch_related(
@@ -329,8 +333,8 @@ class QuestionSetViewSet(ModelViewSet):
                 'pages',
                 'parents',
                 'editors',
-                'questionset_questionsets__questionset',
-                'questionset_questions__question',
+                'questionset_questionsets',
+                'questionset_questions',
             ).select_related('attribute')
 
     @action(detail=True)
@@ -406,10 +410,10 @@ class QuestionViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         elif self.action in ['export', 'detail_export']:
-            return queryset.prefetch_elements(
+            return queryset.select_related('attribute', 'default_option').prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
-                options=get_export_flags(self.request).get('options')
+                options=get_export_flags(self.request).get('options'),
             )
         else:
             return queryset.prefetch_related(

@@ -1,6 +1,6 @@
 from rdmo.conditions.models import Condition
 from rdmo.core.utils import is_truthy
-from rdmo.domain.models import Attribute
+from rdmo.domain.utils import get_attribute_map
 from rdmo.questions.models import Page, Question, QuestionSet
 
 
@@ -47,12 +47,7 @@ def get_serializer_context(elements, export_flags):
     if attribute_ids:
         return {
             **export_flags,
-            'attribute_map': (
-                Attribute.objects.get_queryset_ancestors(
-                    Attribute.objects.filter(id__in=attribute_ids),
-                    include_self=True
-                ).in_bulk()
-            )
+            'attribute_map': get_attribute_map(attribute_ids)
         }
 
     return export_flags

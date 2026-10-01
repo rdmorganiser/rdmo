@@ -20,15 +20,15 @@ urlnames = {
 
 max_queries = [
     # action, max_queries, url_kwargs
-    ('project_answers', 38, {'pk': 1}),
-    ('project_answers_export', 31, {'pk': 1, 'format': 'html'}),
-    ('navigation', 38, {'pk': 1}),
-    ('navigation', 38, {'pk': 1, 'section_id': 1}),
-    ('answers', 38, {'pk': 1}),
-    ('page_detail', 44, {'parent_lookup_project': 1, 'pk': 1}),
-    ('page_detail', 48, {'parent_lookup_project': 1, 'pk': 42}),
-    ('page_detail', 60, {'parent_lookup_project': 1, 'pk': 87}),
-    ('progress', 42, {'pk': 1}),
+    ('project_answers', 31, {'pk': 1}),
+    ('project_answers_export', 24, {'pk': 1, 'format': 'html'}),
+    ('navigation', 36, {'pk': 1}),
+    ('navigation', 36, {'pk': 1, 'section_id': 1}),
+    ('answers', 36, {'pk': 1}),
+    ('page_detail', 38, {'parent_lookup_project': 1, 'pk': 1}),
+    ('page_detail', 41, {'parent_lookup_project': 1, 'pk': 42}),
+    ('page_detail', 50, {'parent_lookup_project': 1, 'pk': 87}),
+    ('progress', 37, {'pk': 1}),
 ]
 
 use_post = {'progress'}

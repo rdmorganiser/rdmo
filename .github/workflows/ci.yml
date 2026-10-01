@@ -102,6 +102,12 @@ jobs:
         pytest -p randomly -p no:cacheprovider --cov --reuse-db --numprocesses=auto --dist=loadscope
       env:
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
+    - name: Run SQLite query regression tests
+      if: matrix.python-version == '3.10' && matrix.db-backend == 'postgres'
+      run: >-
+        pytest rdmo/*/tests/test_prefetch.py rdmo/domain/tests/test_utils.py -n 0 --nomigrations
+      env:
+        GITHUB_DB_BACKEND: sqlite
     - name: Upload coverage data to coveralls.io
       uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
       with:
