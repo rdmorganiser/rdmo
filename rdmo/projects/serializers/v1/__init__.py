@@ -946,19 +946,33 @@ class ProjectIssueSendSerializer(serializers.Serializer):
     subject = serializers.CharField(max_length=128)
     message = serializers.CharField()
     attachments_answers = serializers.ListField(
-        child=serializers.ChoiceField(choices=('project_answers', )), required=False, default=list
+        child=serializers.ChoiceField(choices=('project_answers', )),
+        required=False,
+        default=list,
     )
     attachments_views = serializers.PrimaryKeyRelatedField(
-        many=True, required=False, default=list, queryset=View.objects.none()
+        many=True,
+        required=False,
+        default=list,
+        queryset=View.objects.none(),
     )
     attachments_files = serializers.PrimaryKeyRelatedField(
-        many=True, required=False, default=list, queryset=Value.objects.none()
+        many=True,
+        required=False,
+        default=list,
+        queryset=Value.objects.none(),
     )
     attachments_snapshot = serializers.PrimaryKeyRelatedField(
-        required=False, allow_null=True, default=None, queryset=Snapshot.objects.none()
+        required=False,
+        allow_null=True,
+        default=None,
+        queryset=Snapshot.objects.none(),
     )
     attachments_format = serializers.ChoiceField(
-        choices=settings.EXPORT_FORMATS, required=False, allow_null=True, default=None
+        choices=settings.EXPORT_FORMATS,
+        required=False,
+        allow_null=True,
+        default=None,
     )
 
     def __init__(self, *args, **kwargs):
@@ -991,9 +1005,15 @@ class ProjectIssueSendSerializer(serializers.Serializer):
 class ProjectIssueSendEmailSerializer(ProjectIssueSendSerializer):
 
     recipients = serializers.ListField(
-        child=serializers.ChoiceField(choices=settings.EMAIL_RECIPIENTS_CHOICES), required=False, default=list
+        child=serializers.ChoiceField(choices=settings.EMAIL_RECIPIENTS_CHOICES),
+        required=False,
+        default=list,
     )
-    recipients_input = serializers.CharField(required=False, allow_blank=True, default='')
+    recipients_input = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        default='',
+    )
 
     def validate_recipients(self, recipients):
         recipients_input = self.initial_data.get('recipients_input')

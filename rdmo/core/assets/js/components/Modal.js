@@ -2,8 +2,18 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Modal as BootstrapModal } from 'bootstrap'
 
-const Modal = (
-  {title, show, onClose, closeLabel, onSubmit, submitLabel, submitProps, children, modalProps = {}, size = '' }) => {
+const Modal = ({
+  title,
+  show,
+  onClose,
+  closeLabel,
+  onSubmit,
+  submitLabel,
+  submitProps,
+  children,
+  modalProps = {},
+  size = ''
+}) => {
   const modalRef = useRef(null)
 
   useEffect(() => {
