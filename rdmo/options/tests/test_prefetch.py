@@ -5,7 +5,7 @@ from django.urls import reverse
 from ..models import OptionSet
 from ..prefetch import optionset_options_prefetch
 from ..viewsets import OptionSetViewSet
-from .helpers import create_options, create_optionset
+from .factories import create_options, create_optionset
 from .test_viewset_optionsets import urlnames
 
 

@@ -2,7 +2,7 @@ import pytest
 
 from ..serializers.export import TaskExportSerializer
 from ..viewsets import TaskViewSet
-from .helpers import create_tasks_with_conditions
+from .factories import create_tasks_with_conditions
 
 
 @pytest.mark.performance

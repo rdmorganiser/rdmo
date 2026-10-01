@@ -23,7 +23,7 @@ from ..models import (
 from ..serializers.export import PageExportSerializer, QuestionExportSerializer
 from ..utils import get_export_flags, get_serializer_context
 from ..viewsets import PageViewSet, QuestionViewSet
-from .helpers import URI_PREFIX, create_element, create_elements
+from .factories import URI_PREFIX, create_element, create_elements
 from .test_viewset_page import urlnames as page_urlnames
 from .test_viewset_question import urlnames as question_urlnames
 
@@ -251,7 +251,9 @@ def test_prefetch_many_question_attributes_and_defaults(db, django_assert_max_nu
 
     question_ids = [question.pk for question in questions]
     with django_assert_max_num_queries(4):
-        questions = list(Question.objects.filter(pk__in=question_ids).prefetch_elements(default_option=True))
+        questions = list(Question.objects.filter(pk__in=question_ids).select_related(
+            'attribute', 'default_option'
+        ).prefetch_elements(default_option=True))
     with django_assert_num_queries(0):
         actual_references = {
             question.pk: (question.attribute.pk, question.default_option.pk)

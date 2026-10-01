@@ -11,7 +11,7 @@ from ..prefetch import condition_prefetch
 from ..renderers import ConditionRenderer
 from ..serializers.export import ConditionExportSerializer
 from ..viewsets import ConditionViewSet
-from .helpers import URI_PREFIX, create_conditions
+from .factories import URI_PREFIX, create_conditions
 from .test_viewset_condition import urlnames
 
 
