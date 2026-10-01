@@ -25,6 +25,7 @@ const Main = () => {
   const config = useSelector(state => state.config)
   const projectsObject = useSelector(state => state.projects)
   const currentUserObject = useSelector(state => state.currentUser)
+  const isFetchingProjects = useSelector(state => state.pending.items.includes('fetchProjects'))
 
   const [selectedProject, setSelectedProject] = useState(null)
 
@@ -42,6 +43,25 @@ const Main = () => {
   const { currentUser } = currentUserObject
   const userPerms = currentUser.permissions ?? {}
   const { myProjects } = config
+
+  const hasActiveProjectFilters = Object.entries(config.params ?? {}).some(
+    ([key, value]) => (
+      !['page', 'ordering'].includes(key) &&
+    value !== undefined &&
+    value !== null &&
+    value !== ''
+    )
+  )
+
+  const emptyProjectsProps = isFetchingProjects ? {} : (
+    hasActiveProjectFilters ? {
+      emptyMessage: gettext('No projects match the current filters.')
+    } : {
+      emptyMessage: gettext('There are currently no projects.'),
+      emptyActionLabel: gettext('Create new project'),
+      onEmptyAction: openCreate
+    }
+  )
 
   const invitationsModalProps = {
     title: gettext('Pending invitations'),
@@ -376,6 +396,7 @@ const Main = () => {
             sortColumn={sortColumn}
             sortOrder={sortOrder}
             visibleColumns={visibleColumns}
+            {...emptyProjectsProps}
           />
 
           {renderLoadButtons()}
