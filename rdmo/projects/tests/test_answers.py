@@ -234,8 +234,25 @@ def test_answer_tree_nested_collection_sets(db, parent_index, child_indexes, nes
     ('value',),
 ])
 def test_answer_tree_verbose(db, verbose):
+    EXPECTED_KEYS = {
+        'catalog': {'uri', 'title', 'help'},
+        'section': {'uri', 'title'},
+        'page': {'uri', 'title', 'help'},
+        'questionset': {'uri', 'title', 'help'},
+        'question': {'uri', 'text', 'help'},
+    }
+
     project = Project.objects.get(pk=1)
-    project.get_answer_tree(verbose=verbose)
+    answer_tree = project.get_answer_tree(verbose=verbose)
+
+    for node in iter_answer_tree_nodes(answer_tree):
+        if 'model' not in node:
+            continue
+        element_type = node['model'].split('.')[1]
+        if element_type in verbose:
+            assert EXPECTED_KEYS[element_type] <= node.keys()
+        else:
+            assert EXPECTED_KEYS[element_type].isdisjoint(node.keys())
 
 
 @pytest.mark.parametrize('parent_set, set_level', [
