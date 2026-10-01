@@ -253,7 +253,7 @@ def test_prefetch_many_question_attributes_and_defaults(db, django_assert_max_nu
     with django_assert_max_num_queries(4):
         questions = list(Question.objects.filter(pk__in=question_ids).select_related(
             'attribute', 'default_option'
-        ).prefetch_elements(default_option=True))
+        ).prefetch_elements())
     with django_assert_num_queries(0):
         actual_references = {
             question.pk: (question.attribute.pk, question.default_option.pk)
@@ -261,6 +261,29 @@ def test_prefetch_many_question_attributes_and_defaults(db, django_assert_max_nu
         }
 
     assert actual_references == expected_references
+
+
+def test_prefetch_question_options_and_default(db, django_assert_num_queries):
+    attribute = Attribute.objects.create(uri_prefix=URI_PREFIX, key='question-options-attribute')
+    default_option = create_element(Option, 'question-options-default')
+    option = create_element(Option, 'question-options-member')
+    optionset = create_element(OptionSet, 'question-options-set')
+    OptionSetOption.objects.create(optionset=optionset, option=option, order=1)
+    question = create_element(
+        Question, 'question-options', attribute=attribute, default_option=default_option
+    )
+    question.optionsets.add(optionset)
+
+    question = Question.objects.prefetch_elements(options=True).get(pk=question.pk)
+
+    with django_assert_num_queries(0):
+        assert question.attribute.uri == attribute.uri
+        assert question.default_option.uri == default_option.uri
+        assert question.default_option.text_lang1 == default_option.text_lang1
+        loaded_optionset, = question.optionsets.all()
+        assert loaded_optionset.pk == optionset.pk
+        assert [(association.option.uri, association.option.text_lang1, association.order)
+                for association in loaded_optionset.optionset_options.all()] == [(option.uri, option.text_lang1, 1)]
 
 
 @pytest.mark.performance

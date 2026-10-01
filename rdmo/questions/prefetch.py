@@ -32,8 +32,7 @@ def get_questionset_prefetch_lookups(**kwargs):
     )
 
 
-def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False, options=False,
-                                  default_option=False):
+def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False, options=False):
     additional_lookups = []
     if optionsets:
         additional_lookups += [
@@ -43,12 +42,9 @@ def get_question_prefetch_lookups(optionsets=False, optionsets_conditions=False,
         additional_lookups += [
             condition_prefetch('optionsets__conditions'),
         ]
-    if options or default_option:
-        additional_lookups += [
-            'default_option',
-        ]
     if options:
         additional_lookups += [
+            'default_option',
             optionset_options_prefetch('optionsets__optionset_options'),
         ]
 
@@ -119,17 +115,17 @@ def questionset_questionset_prefetch(lookup, **kwargs):
 def page_question_prefetch(lookup, **kwargs):
     from .models import PageQuestion
 
-    return _question_through_prefetch(lookup, PageQuestion, **kwargs)
+    return question_prefetch(lookup, PageQuestion, **kwargs)
 
 
 def questionset_question_prefetch(lookup, **kwargs):
     from .models import QuestionSetQuestion
 
-    return _question_through_prefetch(lookup, QuestionSetQuestion, **kwargs)
+    return question_prefetch(lookup, QuestionSetQuestion, **kwargs)
 
 
-def _question_through_prefetch(lookup, through_model, optionsets=False, optionsets_conditions=False, options=False,
-                               default_option=False):
+def question_prefetch(lookup, through_model, optionsets=False, optionsets_conditions=False, options=False,
+                      default_option=False):
     """Prefetch a PageQuestion or QuestionSetQuestion relation and its Question."""
     additional_fields = ['question__default_option'] if options or default_option else []
     additional_lookups = []

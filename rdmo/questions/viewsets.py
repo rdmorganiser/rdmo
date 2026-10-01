@@ -410,11 +410,10 @@ class QuestionViewSet(ModelViewSet):
         if self.action in ['index']:
             return queryset
         elif self.action in ['export', 'detail_export']:
-            return queryset.prefetch_elements(
+            return queryset.select_related('attribute', 'default_option').prefetch_elements(
                 optionsets=True,
                 optionsets_conditions=get_export_flags(self.request).get('conditions'),
                 options=get_export_flags(self.request).get('options'),
-                default_option=True,
             )
         else:
             return queryset.prefetch_related(
