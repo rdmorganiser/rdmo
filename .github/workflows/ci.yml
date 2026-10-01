@@ -105,10 +105,7 @@ jobs:
     - name: Run SQLite query regression tests
       if: matrix.python-version == '3.10' && matrix.db-backend == 'postgres'
       run: >-
-        pytest rdmo/options/tests/test_prefetch.py rdmo/questions/tests/test_prefetch.py
-        rdmo/tasks/tests/test_prefetch.py rdmo/conditions/tests/test_prefetch.py
-        rdmo/domain/tests/test_utils.py
-        -n 0 --nomigrations
+        pytest rdmo/*/tests/test_prefetch.py rdmo/domain/tests/test_utils.py -n 0 --nomigrations
       env:
         GITHUB_DB_BACKEND: sqlite
     - name: Upload coverage data to coveralls.io
