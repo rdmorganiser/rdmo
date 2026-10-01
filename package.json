@@ -47,19 +47,19 @@
     "use-debounce": "^10.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
+    "@babel/core": "^8.0.6",
+    "@babel/preset-env": "^8.0.6",
+    "@babel/preset-react": "^8.0.1",
     "babel-loader": "^10.1.1",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.1",
-    "eslint": "^8.56.0",
+    "eslint": "^10.11.0",
     "eslint-plugin-react": "^7.37.2",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.10.2",
-    "sass": "^1.104.0",
+    "sass": "^1.105.0",
     "sass-loader": "^17.0.0",
-    "webpack": "^5.110.3",
+    "webpack": "^5.111.1",
     "webpack-cli": "^7.2.3",
     "webpack-merge": "6.0.1"
   }
