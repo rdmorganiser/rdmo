@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import EmptyTableRow from '../../../common/components/EmptyTableRow'
+
 const Table = ({
   cellFormatters,
   columnWidths,
@@ -11,6 +13,9 @@ const Table = ({
   sortableColumns,
   sortColumn,
   sortOrder,
+  emptyMessage,
+  emptyActionLabel,
+  onEmptyAction,
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   visibleColumns,
 }) => {
@@ -69,17 +74,28 @@ const Table = ({
     return (
       <tbody>
         {
-          data.map((row) => (
-            <tr key={row.id}>
-              {
-                visibleColumns.map((column, index) => (
-                  <td key={column} style={{ width: columnWidths[index] }}>
-                    {formatCellContent(row, column, row[column])}
-                  </td>
-                ))
-              }
-            </tr>
-          ))
+          data?.length ? (
+            data.map((row) => (
+              <tr key={row.id}>
+                {
+                  visibleColumns.map((column, index) => (
+                    <td key={column} style={{ width: columnWidths[index] }}>
+                      {formatCellContent(row, column, row[column])}
+                    </td>
+                  ))
+                }
+              </tr>
+            ))
+          ) : (
+            emptyMessage && (
+              <EmptyTableRow
+                actionLabel={emptyActionLabel}
+                colSpan={visibleColumns.length}
+                message={emptyMessage}
+                onAction={onEmptyAction}
+              />
+            )
+          )
         }
       </tbody>
     )
@@ -105,6 +121,9 @@ Table.propTypes = {
   sortColumn: PropTypes.string,
   sortOrder: PropTypes.string,
   visibleColumns: PropTypes.arrayOf(PropTypes.string),
+  emptyMessage: PropTypes.string,
+  emptyActionLabel: PropTypes.string,
+  onEmptyAction: PropTypes.func,
 }
 
 export default Table
