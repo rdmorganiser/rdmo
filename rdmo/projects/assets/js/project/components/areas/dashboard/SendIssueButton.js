@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { LinkButton } from 'rdmo/core/assets/js/components'
+
 const SendIssueButton = ({ onClick }) => (
-  <button
-    type="button"
-    className="btn btn-sm p-0 border-0 bg-transparent ms-2"
+  <LinkButton
     onClick={
       (event) => {
         event.stopPropagation()
@@ -15,7 +15,7 @@ const SendIssueButton = ({ onClick }) => (
     title={gettext('Send task')}
   >
     <i className="bi bi-send" aria-hidden="true" />
-  </button>
+  </LinkButton>
 )
 
 SendIssueButton.propTypes = {
