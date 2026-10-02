@@ -13,7 +13,6 @@ import { IssueTile } from '../helper'
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
-import SendIssueButton from './dashboard/SendIssueButton'
 import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
@@ -89,8 +88,15 @@ const Dashboard = () => {
               {issue.task.title}
             </strong>
             {
-              (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
-              <SendIssueButton onClick={() => setSendIssue(issue)} />
+              (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) && (
+                <LinkButton
+                  onClick={() => setSendIssue(issue)}
+                  aria-label={gettext('Send task')}
+                  title={gettext('Send task')}
+                >
+                  <i className="bi bi-send" aria-hidden="true" />
+                </LinkButton>
+              )
             }
           </div>
 
