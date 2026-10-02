@@ -155,7 +155,7 @@ class ProjectInviteViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, View
 
 class ProjectIssueViewSetExtension(ParentLookupIdMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectIssueViewSet'
-    actions = ['list', 'retrieve', 'update', 'partial_update', 'send_content', 'send_email', 'send_integration']
+    actions = ('list', 'retrieve', 'update', 'partial_update', 'send_content', 'send_email', 'send_integration')
 
     def get_extend_schema_args(self, action):
         schema_args = super().get_extend_schema_args(action)
