@@ -31,6 +31,30 @@ class AnswerTree:
 
         return self.compute_element_node(self.catalog)
 
+    def get_verbose_fields(self, element):
+        element_type = element._meta.model_name
+
+        # optionally, add the rendered title, help and texts
+        if element_type not in self.verbose:
+            return {}
+
+        fields = {
+            'uri': element.uri,
+        }
+
+        if element_type in ('catalog', 'questionset'):
+            fields['title'] = markdown2html(element.title)
+            fields['help'] = markdown2html(element.help)
+        elif element_type == 'section':
+            fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
+        elif element_type == 'page':
+            fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
+            fields['help'] = markdown2html(element.help)
+        elif element_type == 'question':
+            fields['text'] = markdown2html(element.text)
+            fields['help'] =  markdown2html(element.help)
+        return fields
+
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
         element_type = element._meta.model_name
@@ -39,28 +63,8 @@ class AnswerTree:
             'id': element.id,
             'model': element._meta.label_lower,
             'show': True,  # init show flag
+            **self.get_verbose_fields(element),
         }
-
-        if element_type in self.verbose:
-            # optionally, add the rendered title, help and texts
-            element_node.update({
-                'uri': element.uri
-            })
-
-            if element_type in ['catalog', 'page', 'questionset']:
-                element_node.update({
-                    'title': markdown2html(element.short_title) or markdown2html(element.title),
-                    'help': markdown2html(element.help)
-                })
-            elif element_type == 'section':
-                element_node.update({
-                    'title': markdown2html(element.short_title) or markdown2html(element.title)
-                })
-            elif element_type == 'question':
-                element_node.update({
-                    'text': markdown2html(element.text),
-                    'help': markdown2html(element.help)
-                })
 
         if element_type in ('page', 'questionset', 'question'):
             # for pages, questionsets and questions evaluate conditions
