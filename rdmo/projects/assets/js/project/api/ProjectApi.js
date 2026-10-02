@@ -22,11 +22,11 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/snapshots/`)
   }
 
-  static fetchProjectTasks(projectId) {
+  static fetchProjectIssues(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/issues/`)
   }
 
-  static updateProjectTask(projectId, issueId, data) {
+  static updateProjectIssue(projectId, issueId, data) {
     return this.put(`/api/v1/projects/projects/${projectId}/issues/${issueId}/`, data)
   }
 
