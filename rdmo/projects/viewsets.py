@@ -580,12 +580,17 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist as e:
             raise Http404 from e
 
+        include_help = is_truthy(request.GET.get('include_help'))
+        hide_answers = is_truthy(request.GET.get('hide_answers'))
+
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
                 'project_wrapper': ProjectWrapper(project, snapshot),
-                'export_formats': settings.EXPORT_FORMATS
+                'export_formats': settings.EXPORT_FORMATS,
+                'include_help': include_help,
+                'hide_answers': hide_answers,
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
@@ -616,10 +621,15 @@ class ProjectViewSet(ModelViewSet):
         except Snapshot.DoesNotExist as e:
             raise Http404 from e
 
+        include_help = is_truthy(request.GET.get('include_help'))
+        hide_answers = is_truthy(request.GET.get('hide_answers'))
+
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
             'project': project,
             'snapshot': snapshot,
-            'project_wrapper': ProjectWrapper(project, snapshot)
+            'project_wrapper': ProjectWrapper(project, snapshot),
+            'include_help': include_help,
+            'hide_answers': hide_answers,
         })
 
     @action(
