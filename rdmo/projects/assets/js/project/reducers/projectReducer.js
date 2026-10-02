@@ -46,7 +46,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.UPDATE_PROJECT_INTEGRATION_INIT:
     case actionTypes.DELETE_PROJECT_INTEGRATION_INIT:
     case actionTypes.FETCH_PROJECT_FILES_INIT:
-    case actionTypes.FETCH_PROJECT_TASKS_INIT:
+    case actionTypes.FETCH_PROJECT_ISSUES_INIT:
     case actionTypes.SEND_PROJECT_ISSUE_EMAIL_INIT:
     case actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_INIT:
     case actionTypes.CLEAR_PROJECT_ERRORS:
@@ -75,7 +75,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.UPDATE_PROJECT_INTEGRATION_ERROR:
     case actionTypes.DELETE_PROJECT_INTEGRATION_ERROR:
     case actionTypes.FETCH_PROJECT_FILES_ERROR:
-    case actionTypes.FETCH_PROJECT_TASKS_ERROR:
+    case actionTypes.FETCH_PROJECT_ISSUES_ERROR:
     case actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR:
     case actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR:
       return appendError(state, action)
@@ -185,12 +185,12 @@ export default function projectReducer(state = initialState, action) {
           files: action.files
         }
       }
-    case actionTypes.FETCH_PROJECT_TASKS_SUCCESS:
+    case actionTypes.FETCH_PROJECT_ISSUES_SUCCESS:
       return {
         ...state,
         project: {
           ...state.project,
-          tasks: action.tasks
+          issues: action.issues
         }
       }
     case actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS:

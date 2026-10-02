@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { clearProjectErrors, updateProjectTask } from '../../actions/projectActions'
+import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
 import { usePermissions } from '../../hooks'
 import { Tile } from '../helper'
 
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const settings = useSelector(state => state.settings)
   const perms = usePermissions()
 
-  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  const allIssues = useSelector((state) => state.project.project.issues) ?? []
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
   ).sort((a, b) => a.task.order - b.task.order)
 
   const toggleTaskDone = (issueId, currentStatus) => {
-    dispatch(updateProjectTask(issueId, {
+    dispatch(updateProjectIssue(issueId, {
       status: currentStatus === 'closed' ? 'open' : 'closed'
     }))
   }
@@ -168,7 +168,7 @@ const Dashboard = () => {
                                 () => {
                                   dispatch(navigateDashboard({ area: issue.task.task_area }))
                                   if (isActiveStep) {
-                                    dispatch(updateProjectTask(issue.id, { status: 'closed'}))
+                                    dispatch(updateProjectIssue(issue.id, { status: 'closed'}))
                                   }
                                 }
                               ) : undefined
@@ -253,7 +253,7 @@ const Dashboard = () => {
                   onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
-                      dispatch(updateProjectTask(selectedIssue.id, { status }))
+                      dispatch(updateProjectIssue(selectedIssue.id, { status }))
                       setSelectedIssue({
                         ...selectedIssue,
                         status,

@@ -27,21 +27,21 @@ export function fetchProject() {
       ProjectApi.fetchProjectSnapshots(projectId),
       ProjectApi.fetchProjectViews(projectId),
       ProjectApi.fetchProjectAnswers(projectId),
-      ProjectApi.fetchProjectTasks(projectId),
+      ProjectApi.fetchProjectIssues(projectId),
       ProjectApi.fetchProjectMemberships(projectId),
       ProjectApi.fetchProjectMembershipHierarchy(projectId),
       CatalogApi.fetchCatalogs(),
       ProjectApi.fetchProjectFiles(projectId)
     ])
       .then(([
-        project, hierarchy, snapshots, views, answers, tasks, memberships, membershipHierarchy, catalogs, files]) => {
+        project, hierarchy, snapshots, views, answers, issues, memberships, membershipHierarchy, catalogs, files]) => {
         const projectData = {
           project,
           hierarchy,
           snapshots,
           views,
           answers,
-          tasks,
+          issues,
           memberships: [...memberships, ...membershipHierarchy],
           catalogs,
           files
@@ -175,40 +175,40 @@ export function deleteProjectVisibility() {
   }
 }
 
-// project task
+// project issue
 
-export function fetchProjectTasks() {
+export function fetchProjectIssues() {
   return function (dispatch) {
-    dispatch(addToPending('fetchProjectTasks'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_INIT })
+    dispatch(addToPending('fetchProjectIssues'))
+    dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_INIT })
 
-    return ProjectApi.fetchProjectTasks(projectId)
-      .then((tasks) => {
-        dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_SUCCESS, tasks })
+    return ProjectApi.fetchProjectIssues(projectId)
+      .then((issues) => {
+        dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_SUCCESS, issues })
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.FETCH_PROJECT_TASKS_ERROR, error })
+        dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_ERROR, error })
         throw error
       })
-      .finally(() => dispatch(removeFromPending('fetchProjectTasks')))
+      .finally(() => dispatch(removeFromPending('fetchProjectIssues')))
   }
 }
 
-export function updateProjectTask(issueId, data) {
+export function updateProjectIssue(issueId, data) {
   return function (dispatch) {
-    dispatch(addToPending('updateProjectTask'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_INIT })
+    dispatch(addToPending('updateProjectIssue'))
+    dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_INIT })
 
-    return ProjectApi.updateProjectTask(projectId, issueId, data)
-      .then(() => dispatch(fetchProjectTasks()))
+    return ProjectApi.updateProjectIssue(projectId, issueId, data)
+      .then(() => dispatch(fetchProjectIssues()))
       .then(() => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_SUCCESS })
+        dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_SUCCESS })
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_TASK_ERROR, error })
+        dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_ERROR, error })
         throw error
       })
-      .finally(() => dispatch(removeFromPending('updateProjectTask')))
+      .finally(() => dispatch(removeFromPending('updateProjectIssue')))
   }
 }
 
@@ -223,7 +223,7 @@ export function sendProjectIssueEmail(issueId, data) {
       .then(() => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
 
-        return dispatch(fetchProjectTasks())
+        return dispatch(fetchProjectIssues())
           .catch(() => {})
       }, error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
@@ -243,15 +243,15 @@ export function sendProjectIssueIntegration(issueId, data) {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
 
         if (response?.redirect_url) {
-          // the following ensures that the project tasks are fetched again when the page is shown after a redirect
+          // the following ensures that the project issues are fetched again when the page is shown after a redirect
           window.addEventListener('pageshow', () => {
-            dispatch(fetchProjectTasks()).catch(() => {})
+            dispatch(fetchProjectIssues()).catch(() => {})
           }, { once: true })
           window.location.href = response.redirect_url
           return response
         }
 
-        return dispatch(fetchProjectTasks())
+        return dispatch(fetchProjectIssues())
           .catch(() => {})
           .then(() => response)
       }, error => {
