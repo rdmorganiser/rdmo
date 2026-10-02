@@ -243,6 +243,10 @@ export function sendProjectIssueIntegration(issueId, data) {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
 
         if (response?.redirect_url) {
+          // the following ensures that the project tasks are fetched again when the page is shown after a redirect
+          window.addEventListener('pageshow', () => {
+            dispatch(fetchProjectTasks()).catch(() => {})
+          }, { once: true })
           window.location.href = response.redirect_url
           return response
         }
