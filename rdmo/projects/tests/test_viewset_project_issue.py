@@ -47,6 +47,7 @@ change_issue_permission_map = {
 urlnames = {
     'list': 'v1-projects:project-issue-list',
     'detail': 'v1-projects:project-issue-detail',
+    'send-content': 'v1-projects:project-issue-send-content',
     'send-email': 'v1-projects:project-issue-send-email',
     'send-integration': 'v1-projects:project-issue-send-integration'
 }
@@ -159,6 +160,34 @@ def test_delete(db, client, username, password, issue_id):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_send_content(db, client, username, password):
+    client.login(username=username, password=password)
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-content'], args=[issue.project_id, issue.id])
+    response = client.get(url)
+
+    if issue.project_id in view_issue_permission_map.get(username, []):
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data['subject'].strip() == issue.task.title
+        assert f'The following task was identified in the project "{issue.project.title}"' in response_data['message']
+    else:
+        assert response.status_code == 404
+
+
+def test_send_content_disabled(db, client, settings):
+    settings.PROJECT_SEND_ISSUE = False
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-content'], args=[issue.project_id, issue.id])
+    response = client.get(url)
+
+    assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_send_email(db, client, settings, username, password):
     client.login(username=username, password=password)
     issue = Issue.objects.get(pk=1)
@@ -217,9 +246,9 @@ def test_send_email_attachments(db, client, settings, files):
 
     attachments = mail.outbox[0].attachments
     assert len(attachments) == 3
-    assert attachments[0][0] == 'Test.html'
+    assert attachments[0][0] == f'{issue.project.title}-answers.html'
     assert attachments[0][2] == 'text/html; charset=utf-8'
-    assert attachments[1][0] == 'Test.html'
+    assert attachments[1][0] == f'{issue.project.title}-{view.title}.html'
     assert attachments[1][2] == 'text/html; charset=utf-8'
     assert attachments[2][0] == 'test.txt'
     assert attachments[2][2] == 'text/plain'
@@ -273,6 +302,52 @@ def test_send_email_error(db, client, settings, data, error_field):
     assert response.status_code == 400
     assert error_field in response.json()
     assert len(mail.outbox) == 0
+
+
+def test_send_email_mail_error(db, client, mocker, settings):
+    mocker.patch('rdmo.core.mail.EmailMessage.send', side_effect=OSError('Test error'))
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-email'], args=[issue.project_id, issue.id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'recipients': [settings.EMAIL_RECIPIENTS_CHOICES[0][0]]
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert response.json() == {
+        'non_field_errors': ['Could not send e-mail: Test error']
+    }
+    assert len(mail.outbox) == 0
+    issue.refresh_from_db()
+    assert issue.status == Issue.ISSUE_STATUS_OPEN
+
+
+def test_send_email_template_error(db, client, settings):
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+    view = issue.project.views.first()
+    view.template = '{% invalid_tag %}'
+    view.save(update_fields=('template', ))
+
+    url = reverse(urlnames['send-email'], args=[issue.project_id, issue.id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'recipients': [settings.EMAIL_RECIPIENTS_CHOICES[0][0]],
+        'attachments_views': [view.id],
+        'attachments_format': 'html'
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert response.json()['non_field_errors'][0].startswith('Could not render attachment:')
+    assert len(mail.outbox) == 0
+    issue.refresh_from_db()
+    assert issue.status == Issue.ISSUE_STATUS_OPEN
 
 
 def test_send_email_disabled(db, client, settings):
@@ -360,6 +435,29 @@ def test_send_integration_provider_error(db, client, mocker):
         'integration': ['The integration could not send this task.']
     }
     mocked_send_issue.assert_called_once()
+
+
+def test_send_integration_template_error(db, client, mocker):
+    mocked_send_issue = mocker.patch('rdmo.projects.providers.SimpleIssueProvider.send_issue')
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+    view = issue.project.views.first()
+    view.template = '{% invalid_tag %}'
+    view.save(update_fields=('template', ))
+
+    url = reverse(urlnames['send-integration'], args=[issue.project_id, issue.id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'integration': 1,
+        'attachments_views': [view.id],
+        'attachments_format': 'html'
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert response.json()['non_field_errors'][0].startswith('Could not render attachment:')
+    mocked_send_issue.assert_not_called()
 
 
 def test_send_integration_disabled(db, client, settings):
