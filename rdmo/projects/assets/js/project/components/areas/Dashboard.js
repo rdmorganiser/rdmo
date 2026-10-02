@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
@@ -28,7 +29,8 @@ const Dashboard = () => {
   const { showClosedTasks, showClosedRecommendations } = config
 
   const [selectedIssue, setSelectedIssue] = useState(null)
-  const [sendIssue, setSendIssue] = useState(null)
+  const issueModal = useModal()
+  const sendIssueModal = useModal()
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -65,10 +67,16 @@ const Dashboard = () => {
     settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable
   )
 
+  const handleOpenIssue = (issue) => {
+    setSelectedIssue(issue)
+    issueModal.open()
+  }
+
   const handleSendIssue = (issue) => {
     dispatch(clearProjectErrors())
-    setSelectedIssue(null)
-    setSendIssue(issue)
+    setSelectedIssue(issue)
+    issueModal.close()
+    sendIssueModal.open()
   }
 
   const renderVisibleIssues = (visibleIssues) => (
@@ -81,7 +89,7 @@ const Dashboard = () => {
             <Tile
               key={issue.id}
               size="normal"
-              onCardClick={() => setSelectedIssue(issue)}
+              onCardClick={() => handleOpenIssue(issue)}
             >
               <div className="d-flex align-items-start">
                 <div className="me-3 mt-1">
@@ -244,12 +252,12 @@ const Dashboard = () => {
               )
             }
             {
-              selectedIssue && (
+              selectedIssue && issueModal.show && (
                 <IssueModal
                   canChangeIssue={perms.can_change_issue}
                   canSendIssue={canSendIssue(selectedIssue)}
                   issue={selectedIssue}
-                  onClose={() => setSelectedIssue(null)}
+                  onClose={issueModal.close}
                   onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
@@ -264,10 +272,10 @@ const Dashboard = () => {
               )
             }
             {
-              sendIssue && (
+              selectedIssue && sendIssueModal.show && (
                 <SendIssueModal
-                  onClose={() => setSendIssue(null)}
-                  issue={sendIssue}
+                  onClose={sendIssueModal.close}
+                  issue={selectedIssue}
                 />
               )
             }
