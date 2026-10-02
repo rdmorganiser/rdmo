@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { isNil } from 'lodash'
+import { get, isNil } from 'lodash'
+
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -8,13 +10,20 @@ import { navigateDashboard } from '../../actions/navigationActions'
 import { downloadAnswers, downloadView } from '../../actions/projectActions'
 
 import ExportsDropdown from './ExportsDropdown'
+import HelpTextToggle from './HelpTextToggle'
 import SnapshotsDropdown from './SnapshotsDropdown'
 
 const View = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.config)
+  const config = useSelector((state) => state.config)
   const { currentView } = useSelector((state) => state.project)
+
+  const reloadView = () => {
+    const area = snapshotId == null ? 'documents' : 'snapshots'
+    dispatch(navigateDashboard({area, snapshotId, viewId, detail}))
+  }
 
   const handleSnapshotChange = (snapshot) => {
     if (isNil(snapshot)) {
@@ -25,8 +34,12 @@ const View = () => {
   }
 
   const handleExport = (format) => {
-    if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format))
+    if (detail == 'questions') {
+      dispatch(downloadAnswers(snapshotId, format,
+        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
+    } else if (detail == 'answers') {
+      dispatch(downloadAnswers(snapshotId, format,
+        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
@@ -46,6 +59,11 @@ const View = () => {
         <button className="link" onClick={handleBack}>
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
+        {
+          ['answers', 'questions'].includes(detail) && (
+            <HelpTextToggle onChanged={reloadView}/>
+          )
+        }
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
