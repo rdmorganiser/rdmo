@@ -1015,12 +1015,6 @@ class ProjectIssueSendEmailSerializer(ProjectIssueSendSerializer):
         default='',
     )
 
-    def validate_recipients(self, recipients):
-        recipients_input = self.initial_data.get('recipients_input')
-        if not recipients and not (isinstance(recipients_input, str) and recipients_input.strip()):
-            raise serializers.ValidationError(_('At least one recipient is required.'))
-        return recipients
-
     def validate_recipients_input(self, recipients_input):
         if recipients_input and not settings.EMAIL_RECIPIENTS_INPUT:
             raise serializers.ValidationError(_('This field is not available.'))
@@ -1031,6 +1025,14 @@ class ProjectIssueSendEmailSerializer(ProjectIssueSendSerializer):
             for line in recipients_input.splitlines()
             if line.strip()
         ]
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        if not data['recipients'] and not data['recipients_input']:
+            raise serializers.ValidationError({'recipients': _('At least one recipient is required.')})
+
+        return data
 
 
 class ProjectIssueSendIntegrationSerializer(ProjectIssueSendSerializer):
