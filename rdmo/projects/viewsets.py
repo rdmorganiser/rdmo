@@ -113,6 +113,7 @@ from .utils import (
     get_issue_send_content,
     get_upload_accept,
     get_value_path,
+    render_attachments,
     send_contact_message,
     send_invite_email,
 )
@@ -991,45 +992,6 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
         return Response(get_issue_send_content(request._request, self.get_object()))
 
-    def get_send_attachments(self, request, project, data):
-        snapshot = data.get('attachments_snapshot')
-        attachments_format = data.get('attachments_format')
-        attachments = []
-
-        if data['attachments_answers'] or data['attachments_views']:
-            project.catalog.prefetch_elements()
-
-        if data['attachments_answers']:
-            response = render_to_format(
-                request, attachments_format, project.title, 'projects/project_answers_export.html', {
-                    'project': project,
-                    'snapshot': snapshot,
-                    'project_wrapper': ProjectWrapper(project, snapshot)
-                }
-            )
-            attachments.append((
-                f'{project.title}-answers.{attachments_format}', response.content, response['Content-Type']
-            ))
-
-        for view in data['attachments_views']:
-            response = render_to_format(
-                request, attachments_format, project.title, 'projects/project_view_export.html', {
-                    'project': project,
-                    'snapshot': snapshot,
-                    'html': view.render(project, snapshot),
-                    'resource_path': get_value_path(project, snapshot)
-                }
-            )
-            attachments.append((
-                f'{project.title}-{view.title}.{attachments_format}', response.content, response['Content-Type']
-            ))
-
-        for value in data['attachments_files']:
-            with value.file.open('rb') as file:
-                attachments.append((value.file_name, file.read(), value.file_type))
-
-        return attachments
-
     @action(
         detail=True,
         methods=['POST'],
@@ -1055,7 +1017,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         )
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        attachments = self.get_send_attachments(request, project, data)
+        attachments = render_attachments(request, project, data)
 
         recipients = list(dict.fromkeys([
             *data['recipients'],
@@ -1107,7 +1069,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         )
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        attachments = self.get_send_attachments(request, project, data)
+        attachments = render_attachments(request, project, data)
 
         integration = data['integration']
         response = integration.provider.send_issue(
