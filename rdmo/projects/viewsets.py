@@ -111,6 +111,7 @@ from .utils import (
     compute_set_prefix_from_set_value,
     copy_project,
     get_contact_message,
+    get_issue_send_content,
     get_upload_accept,
     get_value_path,
     send_contact_message,
@@ -977,6 +978,18 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
     def get_queryset(self):
         return Issue.objects.filter(project=self.project).prefetch_related('resources').select_related('task')
+
+    @action(
+        detail=True,
+        methods=['GET'],
+        url_path='send-content',
+        permission_classes=(HasProjectIssueSendModelPermission | HasProjectIssueSendObjectPermission, )
+    )
+    def send_content(self, request, parent_lookup_project, pk=None):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        return Response(get_issue_send_content(request._request, self.get_object()))
 
     def get_send_attachments(self, request, project, data):
         snapshot = data.get('attachments_snapshot')

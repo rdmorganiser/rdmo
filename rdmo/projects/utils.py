@@ -367,6 +367,23 @@ def get_contact_message(request, project):
     }
 
 
+def get_issue_send_content(request, issue):
+    project = issue.project
+    context = {
+        'issue': issue,
+        'project': project,
+        'project_url': request.build_absolute_uri(project.get_absolute_url()),
+        'site': Site.objects.get_current(),
+        'site_url': request.build_absolute_uri(reverse('home')),
+        'user': request.user
+    }
+
+    return {
+        'subject': render_to_string('projects/issue_send_subject.txt', context, request=request),
+        'message': render_to_string('projects/issue_send_message.txt', context, request=request)
+    }
+
+
 def send_contact_message(request, subject, message):
     send_mail(subject, message,
               to=settings.PROJECT_CONTACT_RECIPIENTS,
