@@ -7,6 +7,9 @@
     {% for page in section.pages %}
 
         <h3>{{ page.title|markdown }}</h3>
+        {% if include_help and page.help %}
+            <blockquote class="page-help"><p>{{ page.help|markdown }}</p></blockquote>
+        {% endif %}
 
         {% for element in page.elements %}
 
