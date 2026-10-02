@@ -7,6 +7,7 @@ from django.db import transaction
 from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
+from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
@@ -1017,7 +1018,12 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         )
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        attachments = render_attachments(request, project, data)
+        try:
+            attachments = render_attachments(request, project, data)
+        except TemplateSyntaxError as e:
+            raise serializers.ValidationError({
+                'non_field_errors': [_('Could not render attachment: %(reason)s') % {'reason': str(e)}]
+            }) from e
 
         recipients = data['recipients'] + data['recipients_input']
         sender = [request.user.email] if request.user.email else []
@@ -1066,7 +1072,12 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         )
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        attachments = render_attachments(request, project, data)
+        try:
+            attachments = render_attachments(request, project, data)
+        except TemplateSyntaxError as e:
+            raise serializers.ValidationError({
+                'non_field_errors': [_('Could not render attachment: %(reason)s') % {'reason': str(e)}]
+            }) from e
 
         integration = data['integration']
         response = integration.provider.send_issue(
