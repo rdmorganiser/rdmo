@@ -1,7 +1,7 @@
 import pytest
 
 from django.core import mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -337,6 +337,29 @@ def test_send_integration_error(db, client, data):
 
     assert response.status_code == 400
     assert 'integration' in response.json()
+
+
+def test_send_integration_provider_error(db, client, mocker):
+    mocked_send_issue = mocker.patch(
+        'rdmo.projects.providers.SimpleIssueProvider.send_issue',
+        return_value=HttpResponse('Integration error')
+    )
+    client.login(username='owner', password='owner')
+    issue = Issue.objects.get(pk=1)
+
+    url = reverse(urlnames['send-integration'], args=[issue.project_id, issue.id])
+    data = {
+        'subject': 'Subject',
+        'message': 'Message',
+        'integration': 1
+    }
+    response = client.post(url, data, content_type='application/json')
+
+    assert response.status_code == 400
+    assert response.json() == {
+        'integration': ['The integration could not send this task.']
+    }
+    mocked_send_issue.assert_called_once()
 
 
 def test_send_integration_disabled(db, client, settings):
