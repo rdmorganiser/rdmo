@@ -1019,10 +1019,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         data = serializer.validated_data
         attachments = render_attachments(request, project, data)
 
-        recipients = list(dict.fromkeys([
-            *data['recipients'],
-            *data['recipients_input']
-        ]))
+        recipients = data['recipients'] + data['recipients_input']
         sender = [request.user.email] if request.user.email else []
 
         try:
