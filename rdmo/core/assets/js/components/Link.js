@@ -5,17 +5,13 @@ import classNames from 'classnames'
 const Link = ({ href = '', title, className, disabled = false, onClick, children }) => {
   const handleClick = (event) => {
     event.preventDefault()
+    event.stopPropagation()
     if (!disabled) onClick()
   }
 
-  const classnames = classNames({
-    [className]: true,
-    disabled: disabled
-  })
-
   return (
     <a
-      href={href} title={title} className={classnames}
+      href={href} title={title} className={classNames(className, { disabled })}
       onClick={event => handleClick(event)}>
       {children}
     </a>
