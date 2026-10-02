@@ -65,7 +65,7 @@ const SendIssueModal = ({
   const visibleIntegrations = integrations.filter((integration) => integration.provider)
   const hasIntegrations = visibleIntegrations.length > 0
   const isConfigured = hasMail || hasIntegrations
-  const externalResources = issue?.resources.map(item => item.integration) ?? []
+  const externalResources = issue.resources?.map(item => item.integration) ?? []
   const [formData, setFormData] = useState({
     subject: issue.task.title || '',
     message: initialMessage,
