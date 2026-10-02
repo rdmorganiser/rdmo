@@ -4,6 +4,7 @@ import classNames from 'classnames'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
@@ -29,7 +30,8 @@ const Dashboard = () => {
   const { showClosedTasks, showClosedRecommendations } = config
 
   const [selectedIssue, setSelectedIssue] = useState(null)
-  const [sendIssue, setSendIssue] = useState(null)
+  const issueModal = useModal()
+  const sendIssueModal = useModal()
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -66,10 +68,16 @@ const Dashboard = () => {
     settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable
   )
 
+  const handleOpenIssue = (issue) => {
+    setSelectedIssue(issue)
+    issueModal.open()
+  }
+
   const handleSendIssue = (issue) => {
     dispatch(clearProjectErrors())
-    setSelectedIssue(null)
-    setSendIssue(issue)
+    setSelectedIssue(issue)
+    issueModal.close()
+    sendIssueModal.open()
   }
 
   const renderVisibleIssue = (issue) => {
@@ -199,7 +207,7 @@ const Dashboard = () => {
                         <IssueTile
                           key={issue.id}
                           className="col-lg-6 mb-4"
-                          onCardClick={() => setSelectedIssue(issue)}
+                          onCardClick={() => handleOpenIssue(issue)}
                         >
                           {renderVisibleIssue(issue)}
                         </IssueTile>
@@ -230,7 +238,7 @@ const Dashboard = () => {
                         <IssueTile
                           key={issue.id}
                           className="col-lg-6 mb-4"
-                          onCardClick={() => setSelectedIssue(issue)}
+                          onCardClick={() => handleOpenIssue(issue)}
                         >
                           {renderVisibleIssue(issue)}
                         </IssueTile>
@@ -268,12 +276,12 @@ const Dashboard = () => {
               )
             }
             {
-              selectedIssue && (
+              selectedIssue && issueModal.show && (
                 <IssueModal
                   canChangeIssue={perms.can_change_issue}
                   canSendIssue={canSendIssue(selectedIssue)}
                   issue={selectedIssue}
-                  onClose={() => setSelectedIssue(null)}
+                  onClose={issueModal.close}
                   onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
@@ -288,10 +296,10 @@ const Dashboard = () => {
               )
             }
             {
-              sendIssue && (
+              selectedIssue && sendIssueModal.show && (
                 <SendIssueModal
-                  onClose={() => setSendIssue(null)}
-                  issue={sendIssue}
+                  onClose={sendIssueModal.close}
+                  issue={selectedIssue}
                 />
               )
             }
