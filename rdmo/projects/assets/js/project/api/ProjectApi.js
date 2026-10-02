@@ -22,12 +22,16 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/${projectId}/snapshots/`)
   }
 
-  static fetchProjectTasks(projectId) {
+  static fetchProjectIssues(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/issues/`)
   }
 
-  static updateProjectTask(projectId, issueId, data) {
+  static updateProjectIssue(projectId, issueId, data) {
     return this.put(`/api/v1/projects/projects/${projectId}/issues/${issueId}/`, data)
+  }
+
+  static fetchProjectIssueSendContent(projectId, issueId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-content/`)
   }
 
   static fetchProjectMemberships(projectId) {
@@ -170,5 +174,13 @@ export default class ProjectApi extends BaseApi {
 
   static deleteProjectIntegration(projectId, integrationId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/integrations/${integrationId}/`)
+  }
+
+  static sendProjectIssueEmail(projectId, issueId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-email/`, data)
+  }
+
+  static sendProjectIssueIntegration(projectId, issueId, data) {
+    return this.post(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-integration/`, data)
   }
 }

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
 import { Modal } from 'rdmo/core/assets/js/components'
@@ -8,9 +9,14 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchProjectFiles } from '../../../actions/projectActions'
+import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
+import { useFieldErrors } from '../../../hooks'
+
+import ProjectApi from '../../../api/ProjectApi'
 
 import SendIssueDropdowns from './SendIssueDropdowns'
+import SendIssueEmail from './SendIssueEmail'
+import SendIssueIntegration from './SendIssueIntegration'
 
 const SendIssueModal = ({
   issue,
@@ -18,41 +24,31 @@ const SendIssueModal = ({
 }) => {
   const dispatch = useDispatch()
   const project = useSelector(state => state.project.project.project)
-  const currentUser = useSelector(state => state.user.currentUser) ?? {}
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
-  const sites = useSelector(state => state.sites) ?? {}
-  const currentSite = Object.values(sites).find(site => site.id === project.site)
-
-  /* TODO: use templates? */
-  const initialMessage = [
-    gettext('To whom it may concern,'),
-    '',
-    gettext('The following task was identified in the project'),
-    `"${project.title}" <${window.location.origin + `/projects/${project.id}/`}>:`,
-    '',
-    issue.task.text || '',
-    '',
-    gettext('Sincerely,'),
-    `    ${[currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || currentUser.username || ''}`,
-    '',
-    '--',
-    interpolate(
-      gettext('This message was generated using %s at %s.'),
-      [currentSite?.name || currentSite?.domain || '', window.location.origin + '/']
-    )
-  ].join('\n')
+  const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
+  const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
+  const isSubmitting = isSendingEmail || isSendingIntegration
+  const integrations = useSelector(state => state.project.integrations) ?? []
+  const {
+    subject: subjectErrors,
+    message: messageErrors,
+    recipients: recipientErrors,
+    recipients_input: recipientInputErrors,
+    integration: integrationErrors,
+    ...remainingErrors
+  } = useFieldErrors()
 
   const hasRecipientChoices = !isEmpty(settings.email_recipients_choices)
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
-  /* TODO: fetch attached integrations to determine boolean; setting is not enough */
-  const hasIntegrations = !isEmpty(settings.project_issue_providers)
+  const visibleIntegrations = integrations.filter((integration) => integration.provider)
+  const hasIntegrations = visibleIntegrations.length > 0
   const isConfigured = hasMail || hasIntegrations
-
+  const externalResources = issue.resources?.map(item => item.integration) ?? []
   const [formData, setFormData] = useState({
-    subject: issue.task.title || '',
-    message: initialMessage,
+    subject: '',
+    message: '',
 
     attachments_answers: [],
     attachments_views: [],
@@ -60,15 +56,53 @@ const SendIssueModal = ({
       current: []
     },
     attachments_snapshot: 'current',
-    attachments_format: null,
+    // as (required) format checkboxes are "hidden" in a dropdown, better set a default value
+    attachments_format: settings.export_formats?.[0]?.[0] ?? null,
 
     recipients: [],
     recipients_input: ''
   })
+  const [isContentLoading, setIsContentLoading] = useState(true)
+  const [contentError, setContentError] = useState(null)
+  const [sendMethod, setSendMethod] = useState(hasMail ? 'mail' : 'integration')
+  const [integration, setIntegration] = useState(null)
+  const selectedIntegration = visibleIntegrations.find((item) => item.id === integration)
+  const formId = 'send-issue-form'
+  const showSubmitButton = sendMethod === 'mail' ? hasMail : !!selectedIntegration
+  const isSending = sendMethod === 'mail' ? isSendingEmail : isSendingIntegration
+  const isContentUnavailable = isContentLoading || !!contentError
 
-  const canSendMail =
-    formData.recipients.length > 0 ||
-    formData.recipients_input.trim() !== ''
+  useEffect(() => {
+    setIsContentLoading(true)
+    setContentError(null)
+    ProjectApi.fetchProjectIssueSendContent(project.id, issue.id)
+      .then(({ subject, message }) => {
+        setFormData(prev => ({ ...prev, subject, message }))
+      })
+      .catch(() => {
+        setContentError(gettext('Could not load the subject and message.'))
+      })
+      .finally(() => {
+        setIsContentLoading(false)
+      })
+  }, [project.id, issue.id])
+
+  const submitLabel = isSending ? (
+    <>
+      <span
+        className="spinner-border spinner-border-sm me-2"
+        role="status"
+        aria-hidden="true"
+      />
+      {gettext('Sending...')}
+    </>
+  ) : (
+    sendMethod === 'mail' ? (
+      gettext('Send by mail')
+    ) : (
+      selectedIntegration?.provider.send_label ?? gettext('Send by integration')
+    )
+  )
 
   const setField = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }))
@@ -101,9 +135,10 @@ const SendIssueModal = ({
     dispatch(fetchProjectFiles(snapshotId === 'current' ? undefined : snapshotId))
   }
 
-  const handleSend = (extraPayload = {}) => {
+  const getPayload = (extraPayload = {}) => {
     const attachmentsFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
-    const payload = {
+
+    return {
       subject: formData.subject,
       message: formData.message,
       attachments_answers: formData.attachments_answers,
@@ -113,22 +148,43 @@ const SendIssueModal = ({
       attachments_format: formData.attachments_format,
       ...extraPayload
     }
-
-    console.log(payload)
   }
 
-  const handleSendMail = () => {
-    handleSend({
+  const handleSendMail = async () => {
+    const payload = getPayload({
       recipients: formData.recipients,
       recipients_input: formData.recipients_input
     })
+
+    try {
+      await dispatch(sendProjectIssueEmail(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
   }
 
-  const handleSendIntegration = (providerKey, providerClass) => {
-    handleSend({
-      provider: providerKey,
-      provider_class: providerClass
+  const handleSendIntegration = async (integration) => {
+    const payload = getPayload({
+      integration: integration.id
     })
+
+    try {
+      await dispatch(sendProjectIssueIntegration(issue.id, payload))
+      onClose()
+    } catch {
+      // Keep the modal open so the error can be displayed.
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    if (sendMethod === 'mail') {
+      await handleSendMail()
+    } else if (selectedIntegration) {
+      await handleSendIntegration(selectedIntegration)
+    }
   }
 
   return (
@@ -137,9 +193,19 @@ const SendIssueModal = ({
       title={gettext('Send task')}
       onClose={onClose}
       closeLabel={gettext('Close')}
+      onSubmit={() => {}}
+      submitLabel={submitLabel}
+      submitProps={
+        {
+          type: 'submit',
+          form: formId,
+          disabled: isSubmitting || isContentUnavailable,
+          hidden: !showSubmitButton
+        }
+      }
       size="modal-lg"
     >
-      <form>
+      <form id={formId} onSubmit={handleSubmit}>
         {
           !isConfigured && (
             <p className="text-muted">
@@ -159,111 +225,93 @@ const SendIssueModal = ({
                 formats={settings.export_formats ?? []}
               />
               <Html html={templates.project_issue_send_info} />
+              {
+                contentError && <div className="text-danger mb-3">{contentError}</div>
+              }
               <Input
                 className="mb-3"
                 label={gettext('Subject')}
                 type="text"
+                isDisabled={isContentUnavailable}
                 value={formData.subject}
                 onChange={(value) => setField('subject', value)}
+                errors={subjectErrors}
               />
 
               <Textarea
                 className="mb-4"
                 label={gettext('Message')}
                 rows="12"
+                isDisabled={isContentUnavailable}
                 value={formData.message}
                 onChange={(value) => setField('message', value)}
+                errors={messageErrors}
               />
             </>
           )
         }
         {
-          hasMail && (
-            <>
-              <h2>{gettext('Send by mail')}</h2>
-              <div className="fw-semibold mb-2">
-                {gettext('Recipients')}
-              </div>
-              {
-                hasRecipientChoices && (
-                  <div>
-                    {
-                      settings.email_recipients_choices.map(([value, label], index) => (
-                        <div className="form-check" key={value}>
-                          <input
-                            id={`id_recipients_${index}`}
-                            name="recipients"
-                            type="checkbox"
-                            className="form-check-input"
-                            value={value}
-                            checked={formData.recipients.includes(value)}
-                            onChange={(event) => handleCheckboxChange('recipients', value, event.target.checked)}
-                          />
-                          <label className="form-check-label fw-normal" htmlFor={`id_recipients_${index}`}>
-                            {label}
-                          </label>
-                        </div>
-                      ))
-                    }
-                  </div>
-                )
-              }
-              {
-                hasRecipientInput && (
-                  <Textarea
-                    className="mb-3"
-                    rows="3"
-                    placeholder={gettext('Enter recipients line by line')}
-                    value={formData.recipients_input}
-                    onChange={(value) => setField('recipients_input', value)}
-                  />
-                )
-              }
-
-              <div className="mb-4 text-end">
+          hasMail && hasIntegrations && (
+            <ul className="nav nav-tabs mb-4" role="tablist" aria-label={gettext('Send using')}>
+              <li className="nav-item" role="presentation">
                 <button
-                  disabled={!canSendMail}
                   type="button"
-                  className="btn btn-primary"
-                  onClick={handleSendMail}
+                  className={classNames('nav-link', { active: sendMethod === 'mail' })}
+                  role="tab"
+                  aria-selected={sendMethod === 'mail'}
+                  onClick={() => setSendMethod('mail')}
                 >
                   {gettext('Send by mail')}
                 </button>
-              </div>
-            </>
+              </li>
+              <li className="nav-item" role="presentation">
+                <button
+                  type="button"
+                  className={classNames('nav-link', { active: sendMethod === 'integration' })}
+                  role="tab"
+                  aria-selected={sendMethod === 'integration'}
+                  onClick={() => setSendMethod('integration')}
+                >
+                  {gettext('Send by integration')}
+                </button>
+              </li>
+            </ul>
+          )
+        }
+        {
+          hasMail && sendMethod === 'mail' && (
+            <SendIssueEmail
+              formData={formData}
+              setField={setField}
+              onCheckboxChange={handleCheckboxChange}
+              recipientChoices={settings.email_recipients_choices ?? []}
+              recipientInputEnabled={hasRecipientInput}
+              errors={{ recipients: recipientErrors, recipientsInput: recipientInputErrors }}
+            />
           )
         }
 
         {
-          hasIntegrations && (
-            <>
-              <h2>{gettext('Send via integration')}</h2>
-
-              <div className="mb-4">
-                {
-                  /* TODO: switch to attached integrations and its structure */
-                  settings.project_issue_providers.map(([key, label, provider]) => (
-                    <div className="row align-items-center mb-3" key={key}>
-                      <div className="col">
-                        {label}
-                      </div>
-                      <div className="col text-end">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => handleSendIntegration(key, provider)}
-                        >
-                          {interpolate(gettext('Send to %s'), [label])}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-            </>
+          hasIntegrations && sendMethod === 'integration' && (
+            <SendIssueIntegration
+              integrations={visibleIntegrations}
+              externalResources={externalResources}
+              value={integration}
+              onChange={setIntegration}
+              disabled={isSubmitting}
+              errors={integrationErrors}
+            />
           )
         }
       </form>
+      {
+        Object.entries(remainingErrors)
+          .flatMap(([field, fieldErrors]) => (
+            fieldErrors.map((error, index) => (
+              <div key={`${field}-${index}`} className="text-danger mt-1">{error}</div>
+            ))
+          ))
+      }
     </Modal>
   )
 }
