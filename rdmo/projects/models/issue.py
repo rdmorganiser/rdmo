@@ -52,9 +52,8 @@ class Issue(models.Model):
 
     @property
     def resolve(self):
-        values = self.project.values.filter(snapshot=None)
-
         if self.task.task_type == TaskTypes.TASK:
+            values = self.project.values.filter(snapshot=None)
             return any(condition.resolve(values) for condition in self.task.conditions.all())
         return True
 

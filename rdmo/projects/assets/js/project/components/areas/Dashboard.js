@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { LinkButton } from 'rdmo/core/assets/js/components'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { updateProjectTask } from '../../actions/projectActions'
 import { usePermissions } from '../../hooks'
-import { Tile } from '../helper'
+import { IssueTile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
-import SendIssueButton from './dashboard/SendIssueButton'
 import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
@@ -61,78 +62,80 @@ const Dashboard = () => {
     }))
   }
 
-  const renderVisibleIssues = (visibleIssues) => (
-    <div className="row">
-      {
-        visibleIssues.map((issue) => {
-          const closed = isClosed(issue)
-          return (
-            <Tile
-              key={issue.id}
-              size="normal"
-              onCardClick={() => setSelectedIssue(issue)}
-            >
-              <div className="d-flex align-items-start">
-                <div className="me-3 mt-1">
-                  <button
-                    type="button"
-                    className="btn p-0 border-0 bg-transparent"
-                    disabled={!perms.can_change_issue}
-                    onClick={
-                      (e) => {
-                        e.stopPropagation()
-                        toggleTaskDone(issue.id, issue.status)
-                      }
-                    }
-                    aria-label={closed ? 'Mark task as not done' : 'Mark task as done'}
-                  >
-                    <i className={`bi ${closed ? 'bi-check-circle-fill' : 'bi-circle'}`} />
-                  </button>
-                </div>
-                <div className="flex-grow-1">
-                  <div className="d-flex justify-content-between align-items-start">
-                    <div className={closed ? 'fw-semibold text-muted' : 'fw-semibold'}>
-                      {issue.task.title}
-                    </div>
-                    {
-                      (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) &&
-                      <SendIssueButton onClick={() => setSendIssue(issue)} />
-                    }
-                  </div>
-                  {
-                    issue.dates?.length > 0 && (
-                      <div className="text-muted small mt-2 text-end">
-                        <i className="bi bi-clock me-1" />
-                        <IssueDate date={issue.dates[0]} />
-                      </div>
-                    )
-                  }
-                </div>
+  const renderVisibleIssue = (issue) => {
+    const closed = isClosed(issue)
+    const disabled = !perms.can_change_issue
+    return (
+      <div className="d-flex align-items-start gap-3">
+        <div>
+          <LinkButton
+            disabled={disabled}
+            onClick={() => toggleTaskDone(issue.id, issue.status)}
+          >
+            <i className={
+              classNames('bi', {
+                'bi-check-circle-fill': closed,
+                'bi-circle': !closed,
+                'text-muted': disabled
+              })
+            } />
+          </LinkButton>
+        </div>
+
+        <div className="flex-grow-1">
+          <div className="d-flex justify-content-between align-items-start">
+            <strong className={classNames('mb-3', {closed: 'text-muted'})}>
+              {issue.task.title}
+            </strong>
+            {
+              (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) && (
+                <LinkButton
+                  onClick={() => setSendIssue(issue)}
+                  aria-label={gettext('Send task')}
+                  title={gettext('Send task')}
+                >
+                  <i className="bi bi-send" aria-hidden="true" />
+                </LinkButton>
+              )
+            }
+          </div>
+
+          <p className="text-secondary">{issue.task.text}</p>
+
+          {
+            issue.dates?.length > 0 && (
+              <div className="text-muted small mt-2 text-end">
+                <i className="bi bi-clock me-1" />
+                <IssueDate date={issue.dates[0]} />
               </div>
-            </Tile>
-          )
-        })
-      }
-    </div>
-  )
+            )
+          }
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
-      <h1>{gettext('Dashboard')}</h1>
+      <div className="d-lg-flex justify-content-between align-items-center mb-5">
+        <h1 className="mb-lg-0">{gettext('Dashboard')}</h1>
+      </div>
+
       {
         perms.can_view_issue && (
           <>
             {
               stepIssues.length > 0 && (
-                <>
+                <div className="project-dashboard-steps mb-4">
                   <h2>{gettext('Create your data management plan')}</h2>
-                  <div className="row mb-4">
+                  <div className="row">
                     {
                       stepIssues.map((issue, index) => {
                         const isActiveStep = activeStepIssue?.id === issue.id
                         return (
-                          <Tile
+                          <IssueTile
                             key={issue.id}
+                            className="col-lg-6 mb-4"
                             title={issue.task.title}
                             label={`${gettext('Step')} ${index + 1}`}
                             buttonLabel={issue.task?.task_area_display}
@@ -149,18 +152,18 @@ const Dashboard = () => {
                               ) : undefined
                             }
                           >
-                            <p>{issue.task.text}</p>
-                          </Tile>
+                            <p className="text-secondary">{issue.task.text}</p>
+                          </IssueTile>
                         )
                       })
                     }
                   </div>
-                </>
+                </div>
               )
             }
             {
               taskIssues.length > 0 && (
-                <>
+                <div className="project-dashboard-tasks mb-4">
                   <h2>{gettext('Tasks')}</h2>
                   <ShowClosedIssues
                     id="showClosedTasks"
@@ -168,13 +171,25 @@ const Dashboard = () => {
                     checked={showClosedTasks}
                     onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
                   />
-                  {renderVisibleIssues(visibleTaskIssues)}
-                </>
+                  <div className="row">
+                    {
+                      visibleTaskIssues.map((issue) => (
+                        <IssueTile
+                          key={issue.id}
+                          className="col-lg-6 mb-4"
+                          onCardClick={() => setSelectedIssue(issue)}
+                        >
+                          {renderVisibleIssue(issue)}
+                        </IssueTile>
+                      ))
+                    }
+                  </div>
+                </div>
               )
             }
             {
               recommendationIssues.length > 0 && (
-                <>
+                <div className="project-dashboard-recommendations mb-4">
                   <h2>{gettext('Recommendations')}</h2>
                   <ShowClosedIssues
                     id="showClosedRecommendations"
@@ -187,19 +202,32 @@ const Dashboard = () => {
                       ))
                     }
                   />
-                  {renderVisibleIssues(visibleRecommendationIssues)}
-                </>
+                  <div className="row">
+                    {
+                      visibleRecommendationIssues.map((issue) => (
+                        <IssueTile
+                          key={issue.id}
+                          className="col-lg-6 mb-4"
+                          onCardClick={() => setSelectedIssue(issue)}
+                        >
+                          {renderVisibleIssue(issue)}
+                        </IssueTile>
+                      ))
+                    }
+                  </div>
+                </div>
               )
             }
             {
               guidanceIssues.length > 0 && (
-                <>
+                <div className="project-dashboard-guidance mb-4">
                   <h2>{gettext('More actions')}</h2>
-                  <div className="row mb-4">
+                  <div className="row">
                     {
                       guidanceIssues.map((issue) => (
-                        <Tile
+                        <IssueTile
                           key={issue.id}
+                          className="col-lg-4 mb-4"
                           title={issue.task.title}
                           buttonLabel={issue.task.task_area_display}
                           buttonIconClassName="bi bi-arrow-right"
@@ -208,14 +236,13 @@ const Dashboard = () => {
                               () => dispatch(navigateDashboard({ area: issue.task.task_area }))
                             ) : undefined
                           }
-                          size="compact"
                         >
-                          <p>{issue.task.text}</p>
-                        </Tile>
+                          <p className="text-secondary">{issue.task.text}</p>
+                        </IssueTile>
                       ))
                     }
                   </div>
-                </>
+                </div>
               )
             }
             {
