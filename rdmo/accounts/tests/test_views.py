@@ -3,14 +3,16 @@ from datetime import datetime, timedelta
 
 import pytest
 
+from django.contrib.auth import SESSION_KEY
 from django.core import mail
 from django.db.models import ObjectDoesNotExist
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils import timezone
 
-from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed, assertURLEqual
+from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed
 
-from rdmo.accounts.models import CONSENT_SESSION_KEY, ConsentFieldValue
+from rdmo.accounts.models import CONSENT_SESSION_DATE_KEY, CONSENT_SESSION_KEY, ConsentFieldValue
 
 from .helpers import enable_terms_of_use, reload_urls  # noqa: F401
 
@@ -792,21 +794,53 @@ def test_shibboleth_login_view(db, client, settings, username, password):
 #             assert response.status_code == 404
 
 
-@pytest.mark.parametrize('shibboleth', boolean_toggle)
-@pytest.mark.parametrize('username,password', users)
-def test_shibboleth_logout_username_pattern(db, client, settings, shibboleth, username, password):
-    settings.SHIBBOLETH = shibboleth
-    settings.SHIBBOLETH_USERNAME_PATTERN = username
+@pytest.mark.parametrize('account', boolean_toggle)
+def test_shibboleth_logout(db, client, settings, account):
+    settings.SHIBBOLETH = True
+    settings.ACCOUNT = account
+    settings.SOCIALACCOUNT = False
+    settings.SHIBBOLETH_USERNAME_PATTERN = None
     reload_urls('rdmo.accounts.urls')
 
-    client.login(username=username, password=password)
-    if settings.SHIBBOLETH:
-        url = reverse('shibboleth_logout')
-        response = client.get(url)
-        if password is not None:
-            assertURLEqual(response.url, reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}')
-        else:
-            assertURLEqual(response.url, reverse('account_logout'))
+    client.login(username='user', password='user')
+    url = reverse('shibboleth_logout')
+
+    assert client.get(url).status_code == 405
+
+    response = client.post(url, follow=True)
+
+    assert response.redirect_chain == [
+        (reverse('account_logout') + f'?next={settings.SHIBBOLETH_LOGOUT_URL}', 307),
+        (settings.SHIBBOLETH_LOGOUT_URL, 302),
+    ]
+    assert SESSION_KEY not in client.session
+
+
+def test_shibboleth_logout_username_pattern_does_not_match(db, client, settings):
+    settings.SHIBBOLETH = True
+    settings.ACCOUNT = False
+    settings.SOCIALACCOUNT = False
+    settings.SHIBBOLETH_USERNAME_PATTERN = r'@example.com$'
+    reload_urls('rdmo.accounts.urls')
+
+    client.login(username='user', password='user')
+    response = client.post(reverse('shibboleth_logout'), follow=True)
+
+    assert response.redirect_chain == [
+        (reverse('account_logout'), 307),
+        (settings.LOGIN_REDIRECT_URL, 302),
+    ]
+    assert SESSION_KEY not in client.session
+
+
+def test_navigation_uses_logout_form_without_allauth(db, client, settings):
+    settings.ACCOUNT = False
+    settings.SOCIALACCOUNT = False
+
+    client.login(username='user', password='user')
+    response = client.get(reverse('about'))
+
+    assertContains(response, f'<form class="logout-form" action="{settings.LOGOUT_URL}" method="POST">')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -842,10 +876,15 @@ def test_terms_of_use_middleware_redirect_and_accept(
     # Assert POST behavior, ToU accepted
     # Consent should be stored in the session and database
     assert client.session[CONSENT_SESSION_KEY] is True
+    assert client.session[CONSENT_SESSION_DATE_KEY] is None
     assert ConsentFieldValue.objects.filter(user=user).exists()
 
     response = client.get(reverse('projects'))
     assert response.status_code == 200
+
+    response = client.get(reverse('terms_of_use_accept'))
+    assertContains(response, 'You have accepted the terms of use.')
+    assertNotContains(response, 'class="btn btn-primary terms-of-use-accept"')
 
 
 def test_terms_of_use_middleware_invalidate_terms_version(
@@ -865,29 +904,32 @@ def test_terms_of_use_middleware_invalidate_terms_version(
     client.login(username=username, password=password)
     response = client.get(reverse('projects'))
     assert response.status_code == 200
-    client.logout()
+    assert client.session[CONSENT_SESSION_KEY] is True
+    assert client.session[CONSENT_SESSION_DATE_KEY] is None
 
     # Act - change the version date setting to a distant future
     settings.ACCOUNT_TERMS_OF_USE_DATE = future_datetime
-    # Arrange - new login
-    client.login(username=username, password=password)
     response = client.get(reverse('projects'))
 
     # Assert - consent is now invalid and should redirect to terms_of_use_accept
     terms_accept_url = reverse('terms_of_use_accept')
     assertRedirects(response, terms_accept_url)
+    assert client.session[CONSENT_SESSION_KEY] is False
+    assert client.session[CONSENT_SESSION_DATE_KEY] == future_datetime
+
+    # The accept page must offer renewal rather than treating the outdated row as accepted.
+    response = client.get(terms_accept_url)
+    assertContains(response, 'class="btn btn-primary terms-of-use-accept"')
+    assertNotContains(response, 'You have accepted the terms of use.')
 
     # Act - Try to make a POST request to terms_of_use_accept
     response = client.post(terms_accept_url, {'consent': True})
     # Assert - consent was not saved because version date is in the future
     assert not ConsentFieldValue.objects.filter(user=user).exists()
     assertContains(response, 'could not be saved')
-    client.logout()
 
     # Act - change the version date setting to a past datetime
     settings.ACCOUNT_TERMS_OF_USE_DATE = past_datetime
-    # Arrange - new login without consent
-    client.login(username=username, password=password)
     response = client.get(reverse('projects'))
     assertRedirects(response, terms_accept_url)
 
@@ -896,4 +938,28 @@ def test_terms_of_use_middleware_invalidate_terms_version(
     # Assert - the consent should now be updated since the version date is valid
     assert ConsentFieldValue.objects.filter(user=user).exists()
     assert client.session[CONSENT_SESSION_KEY] is True
+    assert client.session[CONSENT_SESSION_DATE_KEY] == past_datetime
+    assertRedirects(response, reverse('projects'))
+
+
+def test_terms_of_use_accept_renews_outdated_consent(
+    db, client, settings, django_user_model, enable_terms_of_use  # noqa: F811
+    ):
+    user = django_user_model.objects.get(username='user')
+    consent = ConsentFieldValue.objects.create(user=user, consent=True)
+    ConsentFieldValue.objects.filter(pk=consent.pk).update(updated=timezone.now() - timedelta(days=1))
+    settings.ACCOUNT_TERMS_OF_USE_DATE = datetime.now().strftime(format="%Y-%m-%d")
+    client.login(username='user', password='user')
+
+    response = client.get(reverse('terms_of_use_accept'))
+
+    assertContains(response, 'class="btn btn-primary terms-of-use-accept"')
+    assertNotContains(response, 'You have accepted the terms of use.')
+
+    response = client.post(reverse('terms_of_use_accept'), {'consent': True}, follow=True)
+
+    consent.refresh_from_db()
+    assert consent.consent is True
+    assert client.session[CONSENT_SESSION_KEY] is True
+    assert client.session[CONSENT_SESSION_DATE_KEY] == settings.ACCOUNT_TERMS_OF_USE_DATE
     assertRedirects(response, reverse('projects'))

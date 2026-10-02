@@ -32,17 +32,12 @@ const Table = ({
 
   const handleHeaderClick = (column) => {
     if (sortableColumns.includes(column)) {
-      if (sortColumn === column) {
-        if (sortOrder === 'asc') {
-          configActions.updateConfig('params.ordering', `-${column}`)
-        } else if (sortOrder === 'desc') {
-          configActions.deleteConfig('params.ordering')
-        } else {
-        configActions.updateConfig('params.ordering', column)
-        }
+      if (sortColumn === column && sortOrder === 'asc') {
+        configActions.updateConfig('params.ordering', `-${column}`)
       } else {
         configActions.updateConfig('params.ordering', column)
       }
+
       projectsActions.fetchProjects()
     }
   }

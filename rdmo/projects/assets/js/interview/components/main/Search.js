@@ -11,10 +11,13 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
   // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
-  // compile a list of possible options to restrict the search, only include optionsets without provider
-  const options = isNil(question) ? []
-                                  : question.optionsets.filter(optionset => !optionset.has_provider)
-                                                       .flatMap(optionset => optionset.options.map(option => option.id))
+  // compile a list of possible options to restrict the search
+  // only for widgets with fixed options (checkbox, radio, and select) and
+  // only include optionsets without provider
+  const options = !isNil(question) && ['checkbox', 'radio', 'select'].includes(question.widget_type) ? (
+    question.optionsets.filter(optionset => !optionset.has_provider)
+                       .flatMap(optionset => optionset.options.map(option => option.id))
+  ) : []
 
   const handleLoadValues = useDebouncedCallback((search, callback) => {
     ValueApi.searchValues({

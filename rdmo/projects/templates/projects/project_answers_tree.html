@@ -6,7 +6,9 @@
 
     {% for page in section.pages %}
 
+        {% if page.elements %}
         <h3>{{ page.title|markdown }}</h3>
+        {% endif %}
 
         {% for element in page.elements %}
 

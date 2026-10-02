@@ -1,4 +1,3 @@
-from collections import defaultdict
 
 from django.conf import settings
 from django.db import models
@@ -185,9 +184,6 @@ class ValueQuerySet(models.QuerySet):
         optional_values = self.filter(attribute__in=[q.attribute for q in catalog.optional_questions])
         return self.exclude(id__in=optional_values.filter_empty().values_list('id', flat=True))
 
-    def distinct_list(self):
-        return self.order_by('attribute').values_list('attribute', 'set_prefix', 'set_index').distinct()
-
     def filter_set(self, set_value):
         # get the catalog and prefetch most elements of the catalog
         catalog = set_value.project.catalog
@@ -210,12 +206,6 @@ class ValueQuerySet(models.QuerySet):
             Q(set_prefix=set_value.set_prefix, set_index=set_value.set_index) |
             Q(set_prefix__startswith=descendants_set_prefix)
         )
-
-    def compute_sets(self):
-        sets = defaultdict(set)
-        for attribute, set_prefix, set_index in self.distinct_list():
-            sets[attribute].add((set_prefix, set_index))
-        return sets
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
@@ -285,6 +275,3 @@ class ValueManager(CurrentSiteManagerMixin, models.Manager):
 
     def filter_user(self, user):
         return self.get_queryset().filter_user(user)
-
-    def compute_sets(self):
-        return self.get_queryset().compute_sets()

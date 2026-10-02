@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil, sortBy } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -182,14 +182,31 @@ export function fetchOptionsError(error) {
   return {type: FETCH_OPTIONS_ERROR, error}
 }
 
-export function fetchValues(page) {
+export function fetchValues(page, refresh = false) {
   const pendingId = `fetchValues/${page.id}`
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
+        if (refresh) {
+          // if the values are just refreshed after a value is stored or deleted, loop
+          // over the existing values and add all temporary values which were not stored yet
+          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+
+          // extend values with all unsaved values, which are not found in values
+          const keptUnsavedValues = unsavedValues.filter(
+            (value) => isNil(values.find((v) => compareValues(v, value)))
+          )
+
+          // resort the values, to ensure the correct collection_index order
+          values = sortBy(
+            [...values, ...keptUnsavedValues],
+            ['attribute', 'set_prefix', 'set_index', 'collection_index']
+          )
+        }
+
         const sets = gatherSets(values, page)
 
         initSets(sets, page)
@@ -314,8 +331,9 @@ export function storeValue(value) {
 
           if (refresh) {
             // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues
-            dispatch(fetchValues(page))
+            // resolveConditions will be called in fetchValues. Preserve unsaved values,
+            // since they are not included in the response from the backend.
+            dispatch(fetchValues(page, true))
           } else {
             dispatch(resolveConditions(page, sets))
           }
@@ -417,20 +435,18 @@ export function copyValue(question, ...originalValues) {
             (v.set_index == set.set_index)
           )).every(v => isEmptyValue(v))) {
             // find the corresponding sibling to this original value
-            const siblingIndex = values.findIndex((v) => (
+            const sibling = values.find((v) => (
               (v.attribute == value.attribute) &&
               (v.set_prefix == set.set_prefix) &&
               (v.set_index == set.set_index) &&
               (v.collection_index == value.collection_index)
             ))
 
-            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
-
             if (isNil(sibling)) {
-              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+              return [ValueFactory.create({ ...value, set_index: set.set_index }), null]
             } else if (isEmptyValue(sibling)) {
               // the spread operator { ...sibling } does prevent an update in place
-              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+              return [ValueFactory.update({ ...sibling }, value), sibling.id || sibling.tmp_id]
             } else {
               return null
             }
@@ -442,16 +458,14 @@ export function copyValue(question, ...originalValues) {
     }, [])
 
     // dispatch storeValueInit for each of the updated values,
-    // created values have valueIndex -1 and will be skipped
-    // eslint-disable-next-line no-unused-vars
-    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+    copies.forEach(([, valueId]) => dispatch(storeValueInit(valueId)))
 
     // loop over all copies and store the values on the server
     // afterwards fetchNavigation, updateProgress and check refresh once
     return Promise.all(
-      copies.map(([value, valueIndex]) => {
+      copies.map(([value, valueId]) => {
         return ValueApi.storeValue(projectId, value)
-          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
+          .then((value) => dispatch(storeValueSuccess(value, valueId)))
       })
     ).then(() => {
       dispatch(removeFromPending(pendingId))
@@ -466,8 +480,9 @@ export function copyValue(question, ...originalValues) {
 
       if (refresh) {
         // if the refresh flag is set, reload all values for the page,
-        // resolveConditions will be called in fetchValues
-        dispatch(fetchValues(page))
+        // resolveConditions will be called in fetchValues. Preserve unsaved values,
+        // since they are not included in the response from the backend.
+        dispatch(fetchValues(page, true))
       } else {
         dispatch(resolveConditions(page, sets))
       }
@@ -491,6 +506,7 @@ export function deleteValue(value) {
       dispatch(deleteValueInit(valueId))
 
       if (isNil(value.id)) {
+        dispatch(removeFromPending(pendingId))
         return dispatch(deleteValueSuccess(valueId))
       } else {
         return ValueApi.deleteValue(projectId, value)
@@ -505,8 +521,9 @@ export function deleteValue(value) {
 
             if (refresh) {
               // if the refresh flag is set, reload all values for the page,
-              // resolveConditions will be called in fetchValues
-              dispatch(fetchValues(page))
+              // resolveConditions will be called in fetchValues. Preserve unsaved values,
+              // since they are not included in the response from the backend.
+              dispatch(fetchValues(page, true))
             } else {
               dispatch(resolveConditions(page, sets))
             }

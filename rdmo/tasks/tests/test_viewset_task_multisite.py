@@ -228,10 +228,10 @@ def test_update_task_toggle_site(db, client, username, password, add_or_remove, 
 
         url = reverse(urlnames['task-toggle-site'], kwargs={'pk': instance.pk})
 
-        response = client.put(url, {}, content_type='application/json')
-        assert response.status_code == STATUS_CODES['toggle-site'].get(instance.uri, status_map['toggle-site'])[username], (  # noqa: E501
-            response.json()
-        )
+        response = client.post(url, {}, content_type='application/json')
+        assert response.status_code == (
+            STATUS_CODES['toggle-site'].get(instance.uri, status_map['toggle-site'])[username]
+        ), response.json()
         instance.refresh_from_db()
         after_has_current_site = instance.sites.filter(id=current_site.id).exists()
         if response.status_code == 200:
