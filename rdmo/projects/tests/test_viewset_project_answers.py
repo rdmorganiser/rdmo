@@ -140,6 +140,39 @@ def test_view_snapshot_export_not_found(db, client, username, password):
         assert response.status_code == 401
 
 
+@pytest.mark.parametrize('hide_answers', [True, False])
+def test_view_hides_answers(db, client, hide_answers):
+    project_id = projects[0]
+    username, password = users[0]
+
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['answers'], args=[project_id])
+
+    response = client.get(url, {'hide_answers': 'true'} if hide_answers else {})
+    content = response.data["html"]
+
+    assert hide_answers == ('Questions for' in content)
+    assert hide_answers != ('Answers for' in content)
+
+
+@pytest.mark.parametrize('hide_answers', [True, False])
+@pytest.mark.parametrize('export_format', export_formats)
+def test_view_export_hides_answers(db, client, export_format, hide_answers):
+    project_id = projects[0]
+    username, password = users[0]
+
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['answers-export'], args=[project_id, export_format])
+
+    response = client.get(url, {'hide_answers': 'true'} if hide_answers else {})
+    content = response.content.decode()
+
+    assert hide_answers == ('Questions for' in content)
+    assert hide_answers != ('Answers for' in content)
+
+
 @pytest.mark.parametrize('include_help', [True, False])
 def test_view_includes_help_text(db, client, include_help):
     project_id = projects[0]
