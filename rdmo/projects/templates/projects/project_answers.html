@@ -1,6 +1,10 @@
 {% load i18n %}
 
-<h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+{% if hide_answers %}
+    <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
+{% else %}
+    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+{% endif %}
 <p>
     {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
 </p>
