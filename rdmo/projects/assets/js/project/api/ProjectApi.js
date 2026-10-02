@@ -30,6 +30,10 @@ export default class ProjectApi extends BaseApi {
     return this.put(`/api/v1/projects/projects/${projectId}/issues/${issueId}/`, data)
   }
 
+  static fetchProjectIssueSendContent(projectId, issueId) {
+    return this.get(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-content/`)
+  }
+
   static fetchProjectMemberships(projectId) {
     return this.get(`/api/v1/projects/projects/${projectId}/memberships/`)
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
@@ -12,6 +12,8 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
+import ProjectApi from '../../../api/ProjectApi'
+
 import SendIssueDropdowns from './SendIssueDropdowns'
 import SendIssueEmail from './SendIssueEmail'
 import SendIssueIntegration from './SendIssueIntegration'
@@ -22,14 +24,11 @@ const SendIssueModal = ({
 }) => {
   const dispatch = useDispatch()
   const project = useSelector(state => state.project.project.project)
-  const currentUser = useSelector(state => state.user.currentUser) ?? {}
   const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
-  const sites = useSelector(state => state.sites) ?? {}
   const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
   const isSubmitting = isSendingEmail || isSendingIntegration
-  const currentSite = Object.values(sites).find(site => site.id === project.site)
   const integrations = useSelector(state => state.project.integrations) ?? []
   const {
     subject: subjectErrors,
@@ -40,25 +39,6 @@ const SendIssueModal = ({
     ...remainingErrors
   } = useFieldErrors()
 
-  /* TODO: use templates? */
-  const initialMessage = [
-    gettext('To whom it may concern,'),
-    '',
-    gettext('The following task was identified in the project'),
-    `"${project.title}" <${window.location.origin + `/projects/${project.id}/`}>:`,
-    '',
-    issue.task.text || '',
-    '',
-    gettext('Sincerely,'),
-    `    ${[currentUser.first_name, currentUser.last_name].filter(Boolean).join(' ') || currentUser.username || ''}`,
-    '',
-    '--',
-    interpolate(
-      gettext('This message was generated using %s at %s.'),
-      [currentSite?.name || currentSite?.domain || '', window.location.origin + '/']
-    )
-  ].join('\n')
-
   const hasRecipientChoices = !isEmpty(settings.email_recipients_choices)
   const hasRecipientInput = settings.email_recipients_input
   const hasMail = hasRecipientChoices || hasRecipientInput
@@ -67,8 +47,8 @@ const SendIssueModal = ({
   const isConfigured = hasMail || hasIntegrations
   const externalResources = issue.resources?.map(item => item.integration) ?? []
   const [formData, setFormData] = useState({
-    subject: issue.task.title || '',
-    message: initialMessage,
+    subject: '',
+    message: '',
 
     attachments_answers: [],
     attachments_views: [],
@@ -82,12 +62,31 @@ const SendIssueModal = ({
     recipients: [],
     recipients_input: ''
   })
+  const [isContentLoading, setIsContentLoading] = useState(true)
+  const [contentError, setContentError] = useState(null)
   const [sendMethod, setSendMethod] = useState(hasMail ? 'mail' : 'integration')
   const [integration, setIntegration] = useState(null)
   const selectedIntegration = visibleIntegrations.find((item) => item.id === integration)
   const formId = 'send-issue-form'
   const showSubmitButton = sendMethod === 'mail' ? hasMail : !!selectedIntegration
   const isSending = sendMethod === 'mail' ? isSendingEmail : isSendingIntegration
+  const isContentUnavailable = isContentLoading || !!contentError
+
+  useEffect(() => {
+    setIsContentLoading(true)
+    setContentError(null)
+    ProjectApi.fetchProjectIssueSendContent(project.id, issue.id)
+      .then(({ subject, message }) => {
+        setFormData(prev => ({ ...prev, subject, message }))
+      })
+      .catch(() => {
+        setContentError(gettext('Could not load the subject and message.'))
+      })
+      .finally(() => {
+        setIsContentLoading(false)
+      })
+  }, [project.id, issue.id])
+
   const submitLabel = isSending ? (
     <>
       <span
@@ -196,7 +195,14 @@ const SendIssueModal = ({
       closeLabel={gettext('Close')}
       onSubmit={() => {}}
       submitLabel={submitLabel}
-      submitProps={{ type: 'submit', form: formId, disabled: isSubmitting, hidden: !showSubmitButton }}
+      submitProps={
+        {
+          type: 'submit',
+          form: formId,
+          disabled: isSubmitting || isContentUnavailable,
+          hidden: !showSubmitButton
+        }
+      }
       size="modal-lg"
     >
       <form id={formId} onSubmit={handleSubmit}>
@@ -219,10 +225,14 @@ const SendIssueModal = ({
                 formats={settings.export_formats ?? []}
               />
               <Html html={templates.project_issue_send_info} />
+              {
+                contentError && <div className="text-danger mb-3">{contentError}</div>
+              }
               <Input
                 className="mb-3"
                 label={gettext('Subject')}
                 type="text"
+                isDisabled={isContentUnavailable}
                 value={formData.subject}
                 onChange={(value) => setField('subject', value)}
                 errors={subjectErrors}
@@ -232,6 +242,7 @@ const SendIssueModal = ({
                 className="mb-4"
                 label={gettext('Message')}
                 rows="12"
+                isDisabled={isContentUnavailable}
                 value={formData.message}
                 onChange={(value) => setField('message', value)}
                 errors={messageErrors}
