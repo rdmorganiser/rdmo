@@ -3,6 +3,7 @@ from collections import defaultdict
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Case, F, IntegerField, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponseRedirect
@@ -25,6 +26,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.mail import send_mail
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugins
@@ -522,7 +524,12 @@ class ProjectViewSet(ModelViewSet):
                 message = request.data.get('message')
 
                 if subject and message:
-                    send_contact_message(request, subject, message)
+                    try:
+                        send_contact_message(request, subject, message)
+                    except SendMailException as e:
+                        raise ValidationError({'non_field_errors': [
+                            _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
+                        ]}) from e
                     return Response(status=status.HTTP_204_NO_CONTENT)
                 else:
                     raise ValidationError({
@@ -944,9 +951,15 @@ class ProjectInviteViewSet(ProjectNestedViewSetMixin, ProjectUserViewSetMixin, M
         return context
 
     def perform_create(self, serializer):
-        super().perform_create(serializer)
-        if settings.PROJECT_SEND_INVITE:
-            send_invite_email(self.request, serializer.instance)
+        try:
+            with transaction.atomic():
+                super().perform_create(serializer)
+                if settings.PROJECT_SEND_INVITE:
+                    send_invite_email(self.request, serializer.instance)
+        except SendMailException as e:
+            raise ValidationError({'non_field_errors': [
+                _('Could not send e-mail: %(reason)s') % {'reason': str(e)}
+            ]}) from e
 
 
 class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveModelMixin,
@@ -1037,14 +1050,19 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         ]))
         sender = [request.user.email] if request.user.email else []
 
-        send_mail(
-            data['subject'],
-            data['message'],
-            to=recipients,
-            cc=sender,
-            reply_to=sender,
-            attachments=attachments
-        )
+        try:
+            send_mail(
+                data['subject'],
+                data['message'],
+                to=recipients,
+                cc=sender,
+                reply_to=sender,
+                attachments=attachments
+            )
+        except SendMailException as e:
+            raise serializers.ValidationError({
+                'non_field_errors': [_('Could not send e-mail: %(reason)s') % {'reason': str(e)}]
+            }) from e
 
         issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
         issue.save(update_fields=('status', ))
