@@ -11,7 +11,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue, getCopyValueAttrs } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -411,7 +411,16 @@ export function updateValue(value, attrs, store = true) {
 }
 
 export function copyValue(question, ...originalValues) {
-  const firstValue = first(originalValues)
+  const valuesToCopy = sortBy(
+    originalValues.filter((value) => !isEmptyValue(value, question.widget_type)),
+    ['collection_index']
+  )
+  const firstValue = first(valuesToCopy)
+
+  if (isNil(firstValue)) {
+    return {type: NOOP}
+  }
+
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
   return (dispatch, getState) => {
@@ -419,43 +428,57 @@ export function copyValue(question, ...originalValues) {
 
     const { sets, values } = getState().interview
 
-    // create copies for each value for all it's empty siblings
-    const copies = originalValues.reduce((copies, value) => {
-      return [
-        ...copies,
-        ...sets.filter((set) => (
-          (set.set_prefix == value.set_prefix) &&
-          (set.set_index != value.set_index) &&
-          (set.element == question.parent)
-        )).map((set) => {
-          // check if every sibling is empty
-          if (values.filter((v) => (
-            (v.attribute == value.attribute) &&
-            (v.set_prefix == set.set_prefix) &&
-            (v.set_index == set.set_index)
-          )).every(v => isEmptyValue(v))) {
-            // find the corresponding sibling to this original value
-            const sibling = values.find((v) => (
-              (v.attribute == value.attribute) &&
-              (v.set_prefix == set.set_prefix) &&
-              (v.set_index == set.set_index) &&
-              (v.collection_index == value.collection_index)
-            ))
+    const targetSets = sets.filter((set) => (
+      (set.set_prefix == firstValue.set_prefix) &&
+      (set.set_index != firstValue.set_index) &&
+      (set.element == question.parent)
+    ))
 
-            if (isNil(sibling)) {
-              return [ValueFactory.create({ ...value, set_index: set.set_index }), null]
-            } else if (isEmptyValue(sibling)) {
-              // the spread operator { ...sibling } does prevent an update in place
-              return [ValueFactory.update({ ...sibling }, value), sibling.id || sibling.tmp_id]
-            } else {
-              return null
-            }
-          } else {
-            return null
-          }
-        }).filter((value) => !isNil(value))
-      ]
+    const copies = targetSets.reduce((copies, set) => {
+      const siblings = sortBy(values.filter((value) => (
+        (value.attribute == firstValue.attribute) &&
+        (value.set_prefix == set.set_prefix) &&
+        (value.set_index == set.set_index)
+      )), ['collection_index'])
+
+      // Never merge into or overwrite a partially populated collection.
+      if (!siblings.every((value) => isEmptyValue(value, question.widget_type))) {
+        return copies
+      }
+
+      const nextCollectionIndex = isEmpty(siblings)
+        ? 0 : siblings[siblings.length - 1].collection_index + 1
+
+      const setCopies = valuesToCopy.map((value, valueIndex) => {
+        const attrs = getCopyValueAttrs(question, value)
+        // Checkbox indexes correspond to option positions; other widgets reuse
+        // blank target rows in order, even when source indexes contain gaps.
+        const sibling = question.widget_type == 'checkbox'
+          ? siblings.find((sibling) => sibling.collection_index == value.collection_index)
+          : siblings[valueIndex]
+
+        if (!isNil(sibling)) {
+          return [ValueFactory.update({ ...sibling }, attrs), sibling.id || sibling.tmp_id]
+        }
+
+        return [ValueFactory.create({
+          attribute: value.attribute,
+          set_prefix: set.set_prefix,
+          set_index: set.set_index,
+          set_collection: value.set_collection,
+          collection_index: question.widget_type == 'checkbox'
+            ? value.collection_index : nextCollectionIndex + valueIndex - siblings.length,
+          ...attrs
+        }), null]
+      })
+
+      return [...copies, ...setCopies]
     }, [])
+
+    if (isEmpty(copies)) {
+      dispatch(removeFromPending(pendingId))
+      return Promise.resolve()
+    }
 
     // dispatch storeValueInit for each of the updated values,
     copies.forEach(([, valueId]) => dispatch(storeValueInit(valueId)))
@@ -464,7 +487,7 @@ export function copyValue(question, ...originalValues) {
     // afterwards fetchNavigation, updateProgress and check refresh once
     return Promise.all(
       copies.map(([value, valueId]) => {
-        return ValueApi.storeValue(projectId, value)
+        return ValueApi.storeValue(projectId, { ...value, widget_type: question.widget_type })
           .then((value) => dispatch(storeValueSuccess(value, valueId)))
       })
     ).then(() => {

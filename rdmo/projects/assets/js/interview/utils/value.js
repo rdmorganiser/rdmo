@@ -108,10 +108,50 @@ const compareValues = (a, b, widget_type = null) => {
   }
 }
 
-const isEmptyValue = (value) => {
-  return isNil(value.id) || (
-    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
-  )
+const isEmptyValue = (value, widget_type = null) => {
+  // Unsaved placeholders and defaults do not count as answers.
+  if (isNil(value.id)) {
+    return true
+  }
+
+  switch (widget_type) {
+    case 'checkbox':
+    case 'radio':
+      return isNil(value.option) && isEmpty(value.external_id)
+
+    case 'date':
+    case 'range':
+    case 'text':
+    case 'textarea':
+    case 'yesno':
+      return isEmpty(value.text)
+
+    default:
+      return isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+  }
 }
 
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue }
+const getCopyValueAttrs = (question, value) => {
+  const attrs = {
+    text: value.text,
+    option: null,
+    external_id: '',
+    file: null,
+    unit: question.unit,
+    value_type: question.value_type
+  }
+
+  switch (question.widget_type) {
+    case 'checkbox':
+    case 'radio':
+    case 'select':
+    case 'select_creatable':
+      // Preserve additional input and provider labels along with the selection.
+      return { ...attrs, option: value.option, external_id: value.external_id }
+
+    default:
+      return attrs
+  }
+}
+
+export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue, getCopyValueAttrs }
