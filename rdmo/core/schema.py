@@ -1,7 +1,9 @@
 
 
+from rest_framework import serializers
+
 from drf_spectacular.extensions import OpenApiViewExtension
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view, inline_serializer
 
 
 def filter_endpoints(endpoints):
@@ -170,7 +172,12 @@ class ProjectIssueViewSetExtension(ParentLookupIdMixin, ViewExtension):
 
             schema_args.update({
                 'request': ProjectIssueSendIntegrationSerializer,
-                'responses': {302: None}
+                'responses': {
+                    200: inline_serializer(
+                        name='ProjectIssueSendIntegrationResponse',
+                        fields={'redirect_url': serializers.URLField()}
+                    )
+                }
             })
 
         return schema_args

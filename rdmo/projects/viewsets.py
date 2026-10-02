@@ -1091,7 +1091,9 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
         if isinstance(response, HttpResponseRedirect):
             return Response({'redirect_url': response.url})
 
-        return response
+        raise serializers.ValidationError({
+            'integration': [_('The integration could not send this task.')]
+        })
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, ModelViewSet):
