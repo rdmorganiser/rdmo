@@ -995,7 +995,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
                 }
             )
             attachments.append((
-                f'{project.title}.{attachments_format}', response.content, response['Content-Type']
+                f'{project.title}-answers.{attachments_format}', response.content, response['Content-Type']
             ))
 
         for view in data['attachments_views']:
@@ -1008,7 +1008,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
                 }
             )
             attachments.append((
-                f'{project.title}.{attachments_format}', response.content, response['Content-Type']
+                f'{project.title}-{view.title}.{attachments_format}', response.content, response['Content-Type']
             ))
 
         for value in data['attachments_files']:
