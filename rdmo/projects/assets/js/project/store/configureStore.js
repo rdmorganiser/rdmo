@@ -13,10 +13,11 @@ import groupsReducer from 'rdmo/core/assets/js/reducers/groupsReducer'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
 import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
+import staleReducer from 'rdmo/core/assets/js/reducers/staleReducer'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
 import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
 import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
-import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
@@ -47,7 +48,8 @@ export default function configureStore() {
     user: userReducer,
     roles: rolesReducer,
     sites: sitesReducer,
-    groups: groupsReducer
+    groups: groupsReducer,
+    stale: staleReducer
   })
 
   const initialState = {
@@ -63,6 +65,10 @@ export default function configureStore() {
     initialState,
     applyMiddleware(...middlewares)
   )
+
+  configureStaleRefresh(store, {
+    projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())
+  })
 
   const initDashboardFromLocation = () => {
     const location = parseLocation()
