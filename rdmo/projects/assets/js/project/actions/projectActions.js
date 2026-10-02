@@ -222,9 +222,10 @@ export function sendProjectIssueEmail(issueId, data) {
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
+
         return dispatch(fetchProjectTasks())
-      })
-      .catch(error => {
+          .catch(() => {})
+      }, error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error })
         throw error
       })
@@ -241,15 +242,15 @@ export function sendProjectIssueIntegration(issueId, data) {
       .then((response) => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
 
-        return dispatch(fetchProjectTasks()).then(() => {
-          if (response?.redirect_url) {
-            window.location.href = response.redirect_url
-          }
-
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
           return response
-        })
-      })
-      .catch(error => {
+        }
+
+        return dispatch(fetchProjectTasks())
+          .catch(() => {})
+          .then(() => response)
+      }, error => {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR, error })
         throw error
       })
