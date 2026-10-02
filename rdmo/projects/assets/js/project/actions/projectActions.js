@@ -1,6 +1,7 @@
 import { isNil } from 'lodash'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { addToStale } from 'rdmo/core/assets/js/actions/staleActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
@@ -243,10 +244,7 @@ export function sendProjectIssueIntegration(issueId, data) {
         dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
 
         if (response?.redirect_url) {
-          // the following ensures that the project issues are fetched again when the page is shown after a redirect
-          window.addEventListener('pageshow', () => {
-            dispatch(fetchProjectIssues()).catch(() => {})
-          }, { once: true })
+          dispatch(addToStale('projectIssues'))
           window.location.href = response.redirect_url
           return response
         }
