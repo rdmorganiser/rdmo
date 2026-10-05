@@ -204,6 +204,27 @@ def test_create_external(db, client, username, password, project_id, value_type,
         assert response.status_code == 404
 
 
+def test_create_missing_attribute(db, client):
+    client.login(username='owner', password='owner')
+
+    project_id = 1
+    project_values_count = Value.objects.filter(project_id=project_id).count()
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'set_index': 0,
+        'collection_index': 0,
+        'text': 'text',
+        'value_type': 'text',
+        'unit': ''
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+    assert not Value.objects.filter(project=project_id, snapshot=None, **data).exists()
+    assert Value.objects.filter(project_id=project_id).count() == project_values_count
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('value_id', values)
 def test_update(db, client, username, password, value_id):
@@ -369,6 +390,32 @@ def test_copy_set_cross_project(db, client, value_id, set_values_count):
 
     assert response.status_code == 404
     assert Value.objects.count() == values_count
+
+
+@pytest.mark.parametrize('value_id, set_values_count', set_values)
+def test_copy_set_missing_attribute(db, client, value_id, set_values_count):
+    client.login(username='owner', password='owner')
+    set_value = Value.objects.get(id=value_id)
+
+    project_id = set_value.project_id
+
+    project_values_count = Value.objects.filter(project_id=project_id).count()
+
+    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
+    data = {
+        'set_prefix': set_value.set_prefix,
+        'set_index': 2,
+        'text': 'new',
+    }
+    response = client.post(url, data=json.dumps(dict(
+        **data,
+        copy_set_value=value_id,
+    )), content_type="application/json")
+
+    assert response.status_code == 400
+
+    assert not Value.objects.filter(project=project_id, snapshot=None, **data).exists()
+    assert Value.objects.filter(project_id=project_id).count() == project_values_count
 
 
 @pytest.mark.parametrize('username,password', users)
