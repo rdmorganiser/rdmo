@@ -411,7 +411,17 @@ export function updateValue(value, attrs, store = true) {
 }
 
 export function copyValue(question, ...originalValues) {
-  const firstValue = first(originalValues)
+  const valuesToCopy = sortBy(
+    originalValues.filter((value) => !isEmptyValue(value)),
+    ['collection_index']
+  )
+
+  const firstValue = first(valuesToCopy)
+
+  if (isNil(firstValue)) {
+    return {type: NOOP}
+  }
+
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
   return (dispatch, getState) => {
@@ -420,7 +430,7 @@ export function copyValue(question, ...originalValues) {
     const { sets, values } = getState().interview
 
     // create copies for each value for all it's empty siblings
-    const copies = originalValues.reduce((copies, value) => {
+    const copies = valuesToCopy.reduce((copies, value) => {
       return [
         ...copies,
         ...sets.filter((set) => (
