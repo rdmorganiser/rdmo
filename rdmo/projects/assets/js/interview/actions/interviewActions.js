@@ -473,11 +473,15 @@ export function copyValue(question, ...originalValues) {
     // loop over all copies and store the values on the server
     // afterwards fetchNavigation, updateProgress and check refresh once
     return Promise.all(
-      copies.map(([value, valueId]) => {
-        return ValueApi.storeValue(projectId, value)
-          .then((value) => dispatch(storeValueSuccess(value, valueId)))
+      copies.map(([value, valueId]) => (
+        ValueApi.storeValue(projectId, value)
+          .then((storedValue) => [storedValue, valueId])
+      ))
+    ).then((storedValues) => {
+      storedValues.forEach(([storedValue, valueId]) => {
+        dispatch(storeValueSuccess(storedValue, valueId))
       })
-    ).then(() => {
+
       dispatch(removeFromPending(pendingId))
 
       const page = getState().interview.page
