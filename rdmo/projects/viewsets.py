@@ -670,15 +670,11 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             except Value.DoesNotExist as e:
                 raise NotFound from e
         else:
-            data = request.data.copy()
-            data['project'] = parent_lookup_project
-
-            # otherwise, we want to create a new set and need to create a new set value
-            # de-serialize the posted new set value and save it, use the ValueSerializer
-            # instead of ProjectValueSerializer, since the latter does not include project
-            set_value_serializer = ValueSerializer(data=data)
+            # otherwise, we want to create a new set and need to create a new set value,
+            # for this, we de-serialize the posted new set value and save it
+            set_value_serializer = self.get_serializer(data=request.data)
             set_value_serializer.is_valid(raise_exception=True)
-            set_value = set_value_serializer.save()
+            set_value = set_value_serializer.save(project=self.project, snapshot=None)
 
             set_values = Value.objects.none()
             set_values_list = set_empty_values_list = []
