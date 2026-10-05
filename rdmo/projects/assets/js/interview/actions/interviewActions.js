@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil, sortBy } from 'lodash'
+import { first, isEmpty, isNil } from 'lodash'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -409,10 +409,7 @@ export function updateValue(value, attrs, store = true) {
 }
 
 export function copyValue(question, ...originalValues) {
-  const valuesToCopy = sortBy(
-    originalValues.filter((value) => !isEmptyValue(value)),
-    ['collection_index']
-  )
+  const valuesToCopy = originalValues.filter((v) => !isEmptyValue(v))
 
   const firstValue = first(valuesToCopy)
 
@@ -473,13 +470,9 @@ export function copyValue(question, ...originalValues) {
     return Promise.all(
       copies.map(([value, valueId]) => (
         ValueApi.storeValue(projectId, value)
-          .then((storedValue) => [storedValue, valueId])
+          .then((storedValue) => dispatch(storeValueSuccess(storedValue, valueId)))
       ))
-    ).then((storedValues) => {
-      storedValues.forEach(([storedValue, valueId]) => {
-        dispatch(storeValueSuccess(storedValue, valueId))
-      })
-
+    ).then(() => {
       // sort values in the store after the updates
       dispatch(resortValues())
 
