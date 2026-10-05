@@ -114,6 +114,8 @@ export const sortValues = (values) => {
 
 export const isEmptyValue = (value) => {
   return isNil(value.id) || (
-    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+    isEmpty(toString(value.text).trim()) &&
+    isNil(value.option) &&
+    isEmpty(toString(value.external_id).trim())
   )
 }
