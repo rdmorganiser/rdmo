@@ -11,7 +11,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue, sortValues } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -48,7 +48,8 @@ import {
   DELETE_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  COPY_SET_ERROR,
+  RESORT_VALUES
 } from './actionTypes'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -201,10 +202,7 @@ export function fetchValues(page, refresh = false) {
           )
 
           // resort the values, to ensure the correct collection_index order
-          values = sortBy(
-            [...values, ...keptUnsavedValues],
-            ['attribute', 'set_prefix', 'set_index', 'collection_index']
-          )
+          values = sortValues([...values, ...keptUnsavedValues])
         }
 
         const sets = gatherSets(values, page)
@@ -481,6 +479,9 @@ export function copyValue(question, ...originalValues) {
       storedValues.forEach(([storedValue, valueId]) => {
         dispatch(storeValueSuccess(storedValue, valueId))
       })
+
+      // sort values in the store after the updates
+      dispatch(resortValues())
 
       dispatch(removeFromPending(pendingId))
 
@@ -775,4 +776,8 @@ export function copySetSuccess(values, sets) {
 
 export function copySetError(errors) {
   return {type: COPY_SET_ERROR, errors}
+}
+
+export function resortValues() {
+  return { type: RESORT_VALUES }
 }

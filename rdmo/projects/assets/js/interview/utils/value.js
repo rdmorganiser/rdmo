@@ -1,10 +1,10 @@
-import { isNil, isEmpty, toString } from 'lodash'
+import { isNil, isEmpty, toString, sortBy } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
 import { getChildPrefix } from './set'
 
-const isDefaultValue = (question, value) => {
+export const isDefaultValue = (question, value) => {
   if (isNil(value.id)) {
     if (question.default_text) {
       return question.default_text == value.text
@@ -18,7 +18,7 @@ const isDefaultValue = (question, value) => {
   return false
 }
 
-const gatherDefaultValues = (page, values) => {
+export const gatherDefaultValues = (page, values) => {
   const defaultValues = []
 
   if (!isNil(page) && !isNil(values)) {
@@ -34,7 +34,7 @@ const gatherDefaultValues = (page, values) => {
   return defaultValues
 }
 
-const initValues = (sets, values, element, setPrefix) => {
+export const initValues = (sets, values, element, setPrefix) => {
   if (isNil(setPrefix)) {
     setPrefix = ''
   }
@@ -80,13 +80,13 @@ const initValues = (sets, values, element, setPrefix) => {
   })
 }
 
-const initRange = (question, value) => {
+export const initRange = (question, value) => {
   if (isEmpty(value.text)) {
     value.text = isNil(question.minimum) ? '0' : question.minimum
   }
 }
 
-const compareValues = (a, b, widget_type = null) => {
+export const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {
     return a.id == b.id
   }
@@ -108,10 +108,12 @@ const compareValues = (a, b, widget_type = null) => {
   }
 }
 
-const isEmptyValue = (value) => {
+export const sortValues = (values) => {
+  return sortBy(values, ['attribute', 'set_prefix', 'set_index', 'collection_index'])
+}
+
+export const isEmptyValue = (value) => {
   return isNil(value.id) || (
     isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
   )
 }
-
-export { isDefaultValue, gatherDefaultValues, initValues, initRange, compareValues, isEmptyValue }
