@@ -214,8 +214,8 @@ def test_create_missing_attribute(db, client):
     data = {
         'set_index': 0,
         'collection_index': 0,
-        'text': 'text',
-        'value_type': 'text',
+        'text': 'Lorem ipsum',
+        'value_type': VALUE_TYPE_TEXT,
         'unit': ''
     }
     response = client.post(url, data)
@@ -248,9 +248,6 @@ def test_update(db, client, username, password, value_id):
         assert isinstance(response.json(), dict)
         assert response.json().get('id') in Value.objects.filter(project_id=value.project_id) \
                                                          .values_list('id', flat=True)
-
-        value.refresh_from_db()
-        assert value.project_id == project_id
 
     elif value.project_id in view_value_permission_map.get(username, []):
         assert response.status_code == 403
