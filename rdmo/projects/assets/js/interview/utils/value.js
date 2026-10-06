@@ -4,7 +4,7 @@ import ValueFactory from '../factories/ValueFactory'
 
 import { getChildPrefix } from './set'
 
-export const isDefaultValue = (question, value) => {
+const isDefaultValue = (question, value) => {
   if (isNil(value.id)) {
     if (question.default_text) {
       return question.default_text == value.text
@@ -18,7 +18,7 @@ export const isDefaultValue = (question, value) => {
   return false
 }
 
-export const gatherDefaultValues = (page, values) => {
+const gatherDefaultValues = (page, values) => {
   const defaultValues = []
 
   if (!isNil(page) && !isNil(values)) {
@@ -34,7 +34,7 @@ export const gatherDefaultValues = (page, values) => {
   return defaultValues
 }
 
-export const initValues = (sets, values, element, setPrefix) => {
+const initValues = (sets, values, element, setPrefix) => {
   if (isNil(setPrefix)) {
     setPrefix = ''
   }
@@ -80,13 +80,13 @@ export const initValues = (sets, values, element, setPrefix) => {
   })
 }
 
-export const initRange = (question, value) => {
+const initRange = (question, value) => {
   if (isEmpty(value.text)) {
     value.text = isNil(question.minimum) ? '0' : question.minimum
   }
 }
 
-export const compareValues = (a, b, widget_type = null) => {
+const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {
     return a.id == b.id
   }
@@ -108,14 +108,18 @@ export const compareValues = (a, b, widget_type = null) => {
   }
 }
 
-export const sortValues = (values) => {
+const sortValues = (values) => {
   return sortBy(values, ['attribute', 'set_prefix', 'set_index', 'collection_index'])
 }
 
-export const isEmptyValue = (value) => {
+const isEmptyValue = (value) => {
   return isNil(value.id) || (
     isEmpty(toString(value.text).trim()) &&
     isNil(value.option) &&
     isEmpty(toString(value.external_id).trim())
   )
+}
+
+export { isDefaultValue, gatherDefaultValues,
+  initValues, initRange, compareValues, sortValues, isEmptyValue
 }
