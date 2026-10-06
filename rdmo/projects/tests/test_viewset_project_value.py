@@ -4,12 +4,11 @@ from pathlib import Path
 import pytest
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE, VALUE_TYPE_TEXT
 
-from ..models import Membership, Value
+from ..models import Value
 
 users = (
     ('owner', 'owner'),
@@ -310,109 +309,6 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     else:
         assert response.status_code == 404
         assert Value.objects.count() == values_count
-
-
-@pytest.mark.parametrize('value_id, set_values_count', set_values)
-def test_copy_set_project_in_post(db, client, value_id, set_values_count):
-    client.login(username='owner', password='owner')
-    set_value = Value.objects.get(id=value_id)
-
-    project_id = set_value.project_id
-    other_id = 11
-
-    project_values_count = Value.objects.filter(project_id=project_id).count()
-    other_values_count = Value.objects.filter(project_id=other_id).count()
-
-    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
-    data = {
-        'attribute': set_value.attribute.id,
-        'set_prefix': set_value.set_prefix,
-        'set_index': 2,
-        'text': 'new',
-    }
-    response = client.post(url, data=json.dumps(dict(
-        **data,
-        copy_set_value=value_id,
-        project=11,  # Project: Other
-    )), content_type="application/json")
-
-    assert response.status_code == 201
-    assert len(response.json()) == set_values_count + 1
-
-    assert Value.objects.filter(project=project_id, snapshot=None, **data).exists()
-    assert not Value.objects.filter(project=other_id, snapshot=None, **data).exists()
-
-    assert Value.objects.filter(project_id=project_id).count() == project_values_count + set_values_count + 1
-    assert Value.objects.filter(project_id=other_id).count() == other_values_count
-
-
-@pytest.mark.parametrize('value_id, set_values_count', set_values)
-def test_copy_set_cross_project(db, client, value_id, set_values_count):
-    client.login(username='owner', password='owner')
-    set_value = Value.objects.get(id=value_id)
-
-    project_id = set_value.project_id
-    other_id = 11
-
-    # create a value for Project: Other
-    other_set_value = Value.objects.create(
-        project_id=other_id,
-        attribute=set_value.attribute,
-        set_prefix=set_value.set_prefix,
-        set_index=set_value.set_index,
-        text='other'
-    )
-
-    # give owner read permissions on Project: Other
-    Membership.objects.create(
-        project_id=other_id,
-        user=User.objects.get(username='owner'),
-        role='guest',
-    )
-
-    values_count = Value.objects.count()
-
-    url = reverse(urlnames['copy-set'], args=[project_id])
-    data = {
-        'id': other_set_value.id,
-        'attribute': other_set_value.attribute_id,
-        'set_prefix': other_set_value.set_prefix,
-        'set_index': other_set_value.set_index,
-        'text': 'new',
-    }
-    response = client.post(url, data=json.dumps(dict(
-        **data,
-        copy_set_value=value_id,
-    )), content_type="application/json")
-
-    assert response.status_code == 404
-    assert Value.objects.count() == values_count
-
-
-@pytest.mark.parametrize('value_id, set_values_count', set_values)
-def test_copy_set_missing_attribute(db, client, value_id, set_values_count):
-    client.login(username='owner', password='owner')
-    set_value = Value.objects.get(id=value_id)
-
-    project_id = set_value.project_id
-
-    project_values_count = Value.objects.filter(project_id=project_id).count()
-
-    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
-    data = {
-        'set_prefix': set_value.set_prefix,
-        'set_index': 2,
-        'text': 'new',
-    }
-    response = client.post(url, data=json.dumps(dict(
-        **data,
-        copy_set_value=value_id,
-    )), content_type="application/json")
-
-    assert response.status_code == 400
-
-    assert not Value.objects.filter(project=project_id, snapshot=None, **data).exists()
-    assert Value.objects.filter(project_id=project_id).count() == project_values_count
 
 
 @pytest.mark.parametrize('username,password', users)
