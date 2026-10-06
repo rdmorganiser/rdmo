@@ -1,8 +1,11 @@
 import json
 
+import pytest
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question
 
@@ -78,9 +81,10 @@ def test_forbidden(db, client):
     assert Value.objects.count() == values_count
 
 
-def test_not_found(db, client):
+@pytest.mark.parametrize('missing_id', ['wrong', 10000])
+def test_not_found(db, client, missing_id):
     '''
-    A set cannot be copied when the set value does not exist.
+    A set cannot be copied when copy_set_value does not exist.
     '''
     client.login(username='user', password='user')
 
@@ -99,15 +103,16 @@ def test_not_found(db, client):
         'set_index': 0,
         'text': 'new'
     }
-    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=10000)),
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=missing_id)),
                                 content_type="application/json")
     assert response.status_code == 404
     assert Value.objects.count() == values_count
 
 
-def test_invalid(db, client):
+@pytest.mark.parametrize('invalid_id', ['', None])
+def test_invalid(db, client, invalid_id):
     '''
-    A set cannot be copied when copy_set_value is not an int.
+    A set cannot be copied when copy_set_value is empty or None.
     '''
     client.login(username='user', password='user')
 
@@ -126,9 +131,9 @@ def test_invalid(db, client):
         'set_index': 0,
         'text': 'new'
     }
-    response = client.post(url, data=json.dumps(dict(**data, copy_set_value='wrong')),
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=invalid_id)),
                                 content_type="application/json")
-    assert response.status_code == 404
+    assert response.status_code == 400
     assert Value.objects.count() == values_count
 
 
@@ -154,33 +159,6 @@ def test_missing(db, client):
         'text': 'new'
     }
     response = client.post(url, data=json.dumps(data),
-                                content_type="application/json")
-    assert response.status_code == 400
-    assert Value.objects.count() == values_count
-
-
-def test_empty(db, client):
-    '''
-    A set cannot be copied when copy_set_value is not provided.
-    '''
-    client.login(username='user', password='user')
-
-    user = User.objects.get(username='user')
-
-    set_value = Value.objects.get(id=set_value_id)
-    values_count = Value.objects.count()
-
-    # add the user only to the other project
-    Membership.objects.create(project_id=other_project_id, user=user, role='author')
-
-    url = reverse(urlnames['copy-set'], args=[other_project_id])
-    data = {
-        'attribute': set_value.attribute.id,
-        'set_prefix': set_value.set_prefix,
-        'set_index': 0,
-        'text': 'new'
-    }
-    response = client.post(url, data=json.dumps(dict(**data, copy_set_value='')),
                                 content_type="application/json")
     assert response.status_code == 400
     assert Value.objects.count() == values_count
@@ -216,9 +194,77 @@ def test_reuse(db, client):
     assert Project.objects.get(id=other_project_id).values.count() == set_values_count + 1
 
 
-def test_reuse_not_found(db, client):
+def test_reuse_preserve_values(db, client):
     '''
-    A set cannot be imported when the set value does not exist.
+    Importing a set preserves non-empty target answers instead of overwriting them,
+    but fills empty target answers.
+    '''
+    client.login(username='user', password='user')
+
+    user = User.objects.get(username='user')
+
+    copy_set_value = Value.objects.get(id=set_value_id)
+
+    values_count = Value.objects.count()
+
+    # add the user to the project with the set value as well as the other project
+    Membership.objects.create(project_id=copy_set_value.project.id, user=user, role='author')
+    Membership.objects.create(project_id=other_project_id, user=user, role='author')
+
+    # create a new set
+    set_value = Value.objects.create(
+        project_id=other_project_id,
+        attribute=copy_set_value.attribute,
+        set_prefix=copy_set_value.set_prefix,
+        set_index=copy_set_value.set_index,
+    )
+
+    non_empty_text = 'Keep this answer'
+    non_empty_attribute = Attribute.objects.get(path='set/single/text')
+    non_empty_value = Value.objects.create(
+        text=non_empty_text,
+        project_id=other_project_id,
+        attribute=non_empty_attribute,
+        set_prefix=copy_set_value.set_prefix,
+        set_index=copy_set_value.set_index,
+    )
+    empty_attribute = Attribute.objects.get(path='set/single/textarea')
+    empty_value = Value.objects.create(
+        text='',
+        project_id=other_project_id,
+        attribute=empty_attribute,
+        set_prefix=copy_set_value.set_prefix,
+        set_index=copy_set_value.set_index,
+    )
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'id': set_value.id
+    }
+
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=copy_set_value.id)),
+                                content_type="application/json")
+    assert response.status_code == 201
+    assert Value.objects.count() == values_count + set_values_count + 1  # one is the created set/id value
+    assert Project.objects.get(id=other_project_id).values.count() == set_values_count + 1
+
+    non_empty_value.refresh_from_db()
+    empty_value.refresh_from_db()
+
+    assert non_empty_value.text == non_empty_text
+    assert empty_value.text == Value.objects.get(
+        project_id=copy_set_value.project.id,
+        snapshot=None,
+        attribute=empty_attribute,
+        set_prefix=copy_set_value.set_prefix,
+        set_index=copy_set_value.set_index,
+    ).text
+
+
+@pytest.mark.parametrize('missing_id', ['wrong', 10000])
+def test_reuse_not_found(db, client, missing_id):
+    '''
+    A set cannot be imported when copy_set_value does not exist.
     '''
     client.login(username='user', password='user')
 
@@ -239,16 +285,17 @@ def test_reuse_not_found(db, client):
         'id': set_value.id
     }
 
-    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=10000)),
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=missing_id)),
                                 content_type="application/json")
     assert response.status_code == 404
     assert Value.objects.count() == values_count + 1  # one is the created set/id value
     assert Project.objects.get(id=other_project_id).values.count() == 1
 
 
-def test_reuse_invalid(db, client):
+@pytest.mark.parametrize('invalid_id', ['', None])
+def test_reuse_invalid(db, client, invalid_id):
     '''
-    A set cannot be imported when copy_set_value is not an int.
+    A set cannot be imported when copy_set_value is empty or None.
     '''
     client.login(username='user', password='user')
 
@@ -269,11 +316,39 @@ def test_reuse_invalid(db, client):
         'id': set_value.id
     }
 
-    response = client.post(url, data=json.dumps(dict(**data, copy_set_value='wrong')),
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=invalid_id)),
                                 content_type="application/json")
-    assert response.status_code == 404
+    assert response.status_code == 400
     assert Value.objects.count() == values_count + 1  # one is the created set/id value
     assert Project.objects.get(id=other_project_id).values.count() == 1
+
+
+@pytest.mark.parametrize('missing_id', ['wrong', 10000])
+def test_reuse_set_value_not_found(db, client, missing_id):
+    '''
+    A set cannot be imported when the provided set_value does not exist.
+    '''
+    client.login(username='user', password='user')
+
+    user = User.objects.get(username='user')
+
+    copy_set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user to the project with the set value as well as the other project
+    Membership.objects.create(project_id=copy_set_value.project.id, user=user, role='author')
+    Membership.objects.create(project_id=other_project_id, user=user, role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'id': missing_id
+    }
+
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value=copy_set_value.id)),
+                                content_type="application/json")
+    assert response.status_code == 404
+    assert Value.objects.count() == values_count
+    assert Project.objects.get(id=other_project_id).values.count() == 0
 
 
 def test_reuse_filter(db, client):
