@@ -77,6 +77,5 @@ def test_update_legacy_tasks(db, settings):
     _, root, imported_elements = parse_xml_and_import_elements(xml_file)
 
     assert len(root) == len(imported_elements) == n_legacy_tasks
-    print([(e['updated'], e['uri']) for e in imported_elements])
     assert all(element['created'] is False for element in imported_elements)
     assert all(element['updated'] is True for element in imported_elements)
