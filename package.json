@@ -57,9 +57,9 @@
     "eslint-plugin-react": "^7.37.2",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.10.2",
-    "sass": "^1.104.0",
+    "sass": "^1.105.0",
     "sass-loader": "^17.0.0",
-    "webpack": "^5.110.3",
+    "webpack": "^5.111.1",
     "webpack-cli": "^7.2.3",
     "webpack-merge": "6.0.1"
   }
