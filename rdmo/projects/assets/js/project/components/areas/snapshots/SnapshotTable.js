@@ -10,6 +10,8 @@ import { navigateDashboard } from '../../../actions/navigationActions'
 import { usePermissions } from '../../../hooks'
 import { buildPath } from '../../../utils/location'
 
+import EmptyTableRow from '../../../../common/components/EmptyTableRow'
+
 import SnapshotDeleteModal from './SnapshotDeleteModal'
 import SnapshotModal from './SnapshotModal'
 import SnapshotRollbackModal from './SnapshotRollbackModal'
@@ -123,29 +125,12 @@ const SnapshotTable = ({ snapshots, onCreate}) => {
                 )
               })
             ) : (
-              <tr>
-                <td colSpan={4}>
-                  <div
-                    className="d-flex flex-column align-items-center justify-content-center py-5"
-                    style={{ minHeight: '250px' }}
-                  >
-                    <p className="text-muted mb-3">
-                      {gettext('There are currently no snapshots.')}
-                    </p>
-                    {
-                      perms.can_add_snapshot && (
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => onCreate()}
-                        >
-                          {gettext('Create new snapshot')}
-                        </button>
-                      )
-                    }
-                  </div>
-                </td>
-              </tr>
+              <EmptyTableRow
+                label={perms.can_add_snapshot ? gettext('Create new snapshot') : undefined}
+                colSpan={4}
+                message={gettext('There are currently no snapshots.')}
+                onClick={perms.can_add_snapshot ? onCreate : undefined}
+              />
             )
           }
         </tbody>
