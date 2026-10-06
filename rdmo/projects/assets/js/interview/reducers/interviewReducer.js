@@ -30,8 +30,11 @@ import {
   DELETE_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  COPY_SET_ERROR,
+  RESORT_VALUES
 } from '../actions/actionTypes'
+
+import { sortValues } from '../utils/value'
 
 const initialState = {
   done: null,
@@ -151,6 +154,8 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case COPY_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+    case RESORT_VALUES:
+      return { ...state, values: sortValues(state.values) }
     default:
       return state
   }
