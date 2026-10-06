@@ -264,7 +264,7 @@ class Question(Model, TranslationMixin):
         return self.conditions.exists()
 
     @property
-    def condition_uris(self) -> list:
+    def condition_uris(self) -> list[str]:
         return [condition.uri for condition in self.conditions.all()]
 
     @property

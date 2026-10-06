@@ -1,9 +1,13 @@
+import pytest
+
 from django.conf import settings
 from django.template import RequestContext, Template
 from django.urls import reverse
+from django.utils import translation
 
 
-def test_i18n_switcher(rf):
+@pytest.mark.parametrize('active_language', [code for code, _ in settings.LANGUAGES])
+def test_i18n_switcher(rf, active_language):
     """ The language switcher is rendered correctly. """
 
     # create a fake template with a name
@@ -12,9 +16,10 @@ def test_i18n_switcher(rf):
     # render the link
     request = rf.get(reverse('home'))
     context = RequestContext(request, {})
-    rendered_template = Template(template).render(context)
-    for language in settings.LANGUAGES:
-        if language == settings.LANGUAGES[0]:
-            assert '<a href="/i18n/{}/"><u>{}</u></a>'.format(*language) in rendered_template
-        else:
-            assert '<a href="/i18n/{}/">{}</a>'.format(*language) in rendered_template
+    with translation.override(active_language):
+        rendered_template = Template(template).render(context)
+        for code, label in settings.LANGUAGES:
+            url = reverse('i18n_switcher', args=[code])
+            text = f'<u>{label}</u>' if code == active_language else str(label)
+
+            assert f'<a href="{url}">{text}</a>' in rendered_template

@@ -188,7 +188,7 @@ class QuestionSet(Model, TranslationMixin):
         return self.conditions.exists()
 
     @property
-    def condition_uris(self):
+    def condition_uris(self) -> list:
         return [condition.uri for condition in self.conditions.all()]
 
     @cached_property
