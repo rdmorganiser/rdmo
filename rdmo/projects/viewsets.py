@@ -632,21 +632,22 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # obtain the id of the set value for the set we want to copy
         try:
-            copy_value_id = int(request.data.pop('copy_set_value'))
+            copy_value_id = int(request.data['copy_set_value'])
         except KeyError as e:
             raise ValidationError({
                 'copy_set_value': [_('This field may not be blank.')]
             }) from e
-        except ValueError as e:
+        except (TypeError, ValueError) as e:
             raise NotFound from e
 
-        # look for this value in the database, using the users permissions, and
-        # collect all values for this set and all descendants
+        # look for the source value using the user's permissions
         try:
-            copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
-            copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
+            copy_value = Value.objects.filter_user(request.user).get(id=copy_value_id)
         except Value.DoesNotExist as e:
             raise NotFound from e
+
+        # when the user can see this value, collect all values for this set and its descendants
+        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
 
         # init list of values to return
         response_values = []
@@ -655,20 +656,25 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         if set_value_id:
             # if an id is given in the post request, this is an import
             try:
+                set_value_id = int(set_value_id)
+            except (TypeError, ValueError) as e:
+                raise NotFound from e
+
+            try:
                 # look for the set value for the set we want to import into
                 # this is done with get_queryset since we already checked that the user
                 # has write permissions on this project
                 set_value = self.get_queryset().get(id=set_value_id)
-
-                # collect all non-empty values for this set and all descendants and convert
-                # them to a list to compare them later to the new values
-                set_values = self.get_queryset().filter_set(set_value)
-                set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
-                set_empty_values_list = set_values.filter_empty().values_list(
-                    'attribute', 'set_prefix', 'set_index', 'collection_index'
-                )
             except Value.DoesNotExist as e:
                 raise NotFound from e
+
+            # collect all non-empty values for this set and all descendants and convert
+            # them to a list to compare them later to the new values
+            set_values = self.get_queryset().filter_set(set_value)
+            set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
+            set_empty_values_list = set_values.filter_empty().values_list(
+                'attribute', 'set_prefix', 'set_index', 'collection_index'
+            )
         else:
             # otherwise, we want to create a new set and need to create a new set value,
             # for this, we de-serialize the posted new set value and save it
@@ -680,7 +686,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             set_values_list = set_empty_values_list = []
 
             # add the new set value to response_values
-            response_values.append(set_value_serializer.data)
+            response_values.append(ValueSerializer(instance=set_value).data)
 
         # create new values for the new set
         new_values = []
@@ -694,7 +700,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             else:
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
 
-            # skip this value if value.option does not match the optionsets of it's question
+            # skip this value if value.option does not match the optionsets of its question
             if not check_options(self.project, value):
                 continue
 
