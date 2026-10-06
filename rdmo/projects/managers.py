@@ -77,7 +77,7 @@ class MembershipQuerySet(models.QuerySet):
                 projects = Project.objects.filter_user(user)
                 return self.filter(project__in=projects)
         else:
-            return self.objects.none()
+            return self.none()
 
 
 class IssueQuerySet(models.QuerySet):
@@ -87,7 +87,7 @@ class IssueQuerySet(models.QuerySet):
 
     def filter_user(self, user):
         if user.is_authenticated:
-            if user.has_perm('projects.view_integration'):
+            if user.has_perm('projects.view_issue'):
                 return self.all()
             elif is_site_manager(user):
                 return self.filter_current_site()
@@ -106,7 +106,7 @@ class IntegrationQuerySet(models.QuerySet):
 
     def filter_user(self, user):
         if user.is_authenticated:
-            if user.has_perm('projects.view_issue'):
+            if user.has_perm('projects.view_integration'):
                 return self.all()
             elif is_site_manager(user):
                 return self.filter_current_site()
