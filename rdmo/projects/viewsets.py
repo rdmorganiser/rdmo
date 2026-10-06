@@ -12,6 +12,7 @@ from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -631,20 +632,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
 
         # obtain the id of the set value for the set we want to copy
-        try:
-            copy_value_id = int(request.data['copy_set_value'])
-        except KeyError as e:
-            raise ValidationError({
-                'copy_set_value': [_('This field may not be blank.')]
-            }) from e
-        except (TypeError, ValueError) as e:
-            raise NotFound from e
+        copy_value_id = request.data.get('copy_set_value')
+        if not copy_value_id:
+            raise ValidationError({'copy_set_value': [_('This field is required.')]})
 
         # look for the source value using the user's permissions
-        try:
-            copy_value = Value.objects.filter_user(request.user).get(id=copy_value_id)
-        except Value.DoesNotExist as e:
-            raise NotFound from e
+        copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
 
         # when the user can see this value, collect all values for this set and its descendants
         copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
@@ -655,18 +648,11 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         set_value_id = request.data.get('id')
         if set_value_id:
             # if an id is given in the post request, this is an import
-            try:
-                set_value_id = int(set_value_id)
-            except (TypeError, ValueError) as e:
-                raise NotFound from e
 
-            try:
-                # look for the set value for the set we want to import into
-                # this is done with get_queryset since we already checked that the user
-                # has write permissions on this project
-                set_value = self.get_queryset().get(id=set_value_id)
-            except Value.DoesNotExist as e:
-                raise NotFound from e
+            # look for the set value for the set we want to import into
+            # this is done with get_queryset since we already checked that the user
+            # has write permissions on this project
+            set_value = get_object_or_404(self.get_queryset(), id=set_value_id)
 
             # collect all non-empty values for this set and all descendants and convert
             # them to a list to compare them later to the new values

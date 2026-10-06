@@ -159,6 +159,33 @@ def test_missing(db, client):
     assert Value.objects.count() == values_count
 
 
+def test_empty(db, client):
+    '''
+    A set cannot be copied when copy_set_value is not provided.
+    '''
+    client.login(username='user', password='user')
+
+    user = User.objects.get(username='user')
+
+    set_value = Value.objects.get(id=set_value_id)
+    values_count = Value.objects.count()
+
+    # add the user only to the other project
+    Membership.objects.create(project_id=other_project_id, user=user, role='author')
+
+    url = reverse(urlnames['copy-set'], args=[other_project_id])
+    data = {
+        'attribute': set_value.attribute.id,
+        'set_prefix': set_value.set_prefix,
+        'set_index': 0,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(dict(**data, copy_set_value='')),
+                                content_type="application/json")
+    assert response.status_code == 400
+    assert Value.objects.count() == values_count
+
+
 def test_reuse(db, client):
     '''
     A set can be copied (imported) into an already existing set.
