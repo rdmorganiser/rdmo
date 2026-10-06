@@ -77,7 +77,7 @@ class MembershipQuerySet(models.QuerySet):
                 projects = Project.objects.filter_user(user)
                 return self.filter(project__in=projects)
         else:
-            return self.objects.none()
+            return self.none()
 
 
 class IssueQuerySet(models.QuerySet):
