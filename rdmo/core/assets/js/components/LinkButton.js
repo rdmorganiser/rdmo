@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classnames from 'classnames'
+import classNames from 'classnames'
 
 
 const LinkButton = ({ title, className, disabled = false, onClick, children }) => {
@@ -15,7 +15,7 @@ const LinkButton = ({ title, className, disabled = false, onClick, children }) =
       type="button"
       title={title}
       aria-label={title}
-      className={classnames('link', className)}
+      className={classNames('link', className)}
       disabled={disabled}
       onClick={event => handleClick(event)}>
       {children}

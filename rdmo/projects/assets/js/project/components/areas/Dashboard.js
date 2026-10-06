@@ -69,6 +69,7 @@ const Dashboard = () => {
       <div className="d-flex align-items-start gap-3">
         <div>
           <LinkButton
+            title={closed ? gettext('Mark task as not done') : gettext('Mark task as done')}
             disabled={disabled}
             onClick={() => toggleTaskDone(issue.id, issue.status)}
           >
@@ -84,15 +85,14 @@ const Dashboard = () => {
 
         <div className="flex-grow-1">
           <div className="d-flex justify-content-between align-items-start">
-            <strong className={classNames('mb-3', {closed: 'text-muted'})}>
+            <strong className={classNames('mb-3', {'text-muted': closed})}>
               {issue.task.title}
             </strong>
             {
               (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) && (
                 <LinkButton
-                  onClick={() => setSendIssue(issue)}
-                  aria-label={gettext('Send task')}
                   title={gettext('Send task')}
+                  onClick={() => setSendIssue(issue)}
                 >
                   <i className="bi bi-send" aria-hidden="true" />
                 </LinkButton>
@@ -117,9 +117,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="d-lg-flex justify-content-between align-items-center mb-5">
-        <h1 className="mb-lg-0">{gettext('Dashboard')}</h1>
-      </div>
+      <h1 className="mb-5">{gettext('Dashboard')}</h1>
 
       {
         perms.can_view_issue && (

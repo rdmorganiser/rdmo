@@ -16,9 +16,8 @@ const IssueTile = ({
   return (
     <div className={classNames(className)}>
       <div
-        className="card card-tile cursor-pointer h-100"
+        className={classNames('card card-tile h-100', { 'cursor-pointer': onCardClick })}
         onClick={onCardClick}
-        style={onCardClick ? { cursor: 'pointer' } : undefined}
       >
         <div className="card-body d-flex flex-column">
           {
@@ -63,13 +62,12 @@ const IssueTile = ({
 
 IssueTile.propTypes = {
   title: PropTypes.string,
+  label: PropTypes.node,
   buttonLabel: PropTypes.node,
   buttonClassName: PropTypes.string,
   buttonIconClassName: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
-  label: PropTypes.node,
-  size: PropTypes.oneOf(['compact', 'normal', 'fullWidth']),
   onClick: PropTypes.func,
   onCardClick: PropTypes.func
 }
