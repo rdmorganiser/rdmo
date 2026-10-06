@@ -58,8 +58,6 @@ values = [
 ]
 values_visible = [456]
 
-other_project_id = 11
-
 attribute_id = 1
 option_id = 1
 
@@ -205,13 +203,35 @@ def test_create_external(db, client, username, password, project_id, value_type,
         assert response.status_code == 404
 
 
+def test_create_missing_attribute(db, client):
+    client.login(username='owner', password='owner')
+
+    project_id = 1
+    project_values_count = Value.objects.filter(project_id=project_id).count()
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'set_index': 0,
+        'collection_index': 0,
+        'text': 'Lorem ipsum',
+        'value_type': VALUE_TYPE_TEXT,
+        'unit': ''
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 400
+    assert not Value.objects.filter(project=project_id, snapshot=None, **data).exists()
+    assert Value.objects.filter(project_id=project_id).count() == project_values_count
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('value_id', values)
 def test_update(db, client, username, password, value_id):
     client.login(username=username, password=password)
     value = Value.objects.get(id=value_id)
+    project_id = value.project_id
 
-    url = reverse(urlnames['detail'], args=[value.project_id, value_id])
+    url = reverse(urlnames['detail'], args=[project_id, value_id])
     data = {
         'attribute': attribute_id,
         'set_index': 0,
@@ -227,6 +247,7 @@ def test_update(db, client, username, password, value_id):
         assert isinstance(response.json(), dict)
         assert response.json().get('id') in Value.objects.filter(project_id=value.project_id) \
                                                          .values_list('id', flat=True)
+
     elif value.project_id in view_value_permission_map.get(username, []):
         assert response.status_code == 403
     else:
@@ -272,11 +293,8 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
     if set_value.project_id in copy_value_permission_map.get(username, []):
         assert response.status_code == 201
         assert len(response.json()) == set_values_count + 1
-        assert Value.objects.get(
-            project=set_value.project_id,
-            snapshot=None,
-            **data
-        )
+        assert Value.objects.get(project=set_value.project_id, snapshot=None, **data)
+
         assert Value.objects.count() == values_count + set_values_count + 1  # one is for set/id
         for value_data in response.json():
             if value_data['set_prefix'] == data['set_prefix']:

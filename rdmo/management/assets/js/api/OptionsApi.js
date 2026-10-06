@@ -25,6 +25,10 @@ class OptionsApi extends BaseApi {
     }
   }
 
+  static patchOptionSet(optionset) {
+    return this.patch(`/api/v1/options/optionsets/${optionset.id}/`, optionset)
+  }
+
   static deleteOptionSet(optionset) {
     return this.delete(`/api/v1/options/optionsets/${optionset.id}/`)
   }
@@ -45,6 +49,10 @@ class OptionsApi extends BaseApi {
     } else {
       return this.put(`/api/v1/options/options/${option.id}/`, option)
     }
+  }
+
+  static patchOption(option) {
+    return this.patch(`/api/v1/options/options/${option.id}/`, option)
   }
 
   static deleteOption(option) {

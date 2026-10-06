@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import { checkQuestionSet } from '../../../utils/page'
 import { getChildPrefix } from '../../../utils/set'
 
@@ -29,7 +31,7 @@ const QuestionSet = ({ config, settings, templates, page, questionset, sets, val
   return checkQuestionSet(questionset, parentSet) && (
     <div className="interview-questionset col-md-12">
       <div className="interview-questionset-label">
-        <strong>{questionset.title}</strong>
+        <strong><Html html={questionset.title} /></strong>
       </div>
       <QuestionSetHelp questionset={questionset} />
       <QuestionSetHelpTemplate templates={templates} />

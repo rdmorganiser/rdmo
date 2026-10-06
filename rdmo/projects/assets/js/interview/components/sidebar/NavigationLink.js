@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 const NavigationLink = ({ element, href, onClick }) => {
 
   const label = interpolate(gettext('(%s of %s)'), [element.count, element.total])
@@ -12,7 +14,7 @@ const NavigationLink = ({ element, href, onClick }) => {
 
   return (
     <a href={href} onClick={handleClick}>
-      {element.title}
+      <Html html={element.title} />
       {
         element.count > 0 && element.count == element.total && (
           <span aria-label={gettext('Complete')}>

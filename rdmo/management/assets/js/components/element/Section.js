@@ -28,7 +28,7 @@ const Section = ({ config, section, configActions, elementActions, display='list
   const fetchEdit = () => elementActions.fetchElement('sections', section.id)
   const fetchCopy = () => elementActions.fetchElement('sections', section.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('sections', section.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('sections', {...section, locked: !section.locked })
+  const toggleLocked = () => elementActions.patchElement('sections', { id: section.id, locked: !section.locked })
   const toggleElements = () => elementActions.toggleElements(section)
 
   const createPage = () => elementActions.createElement('pages', { section })

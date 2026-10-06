@@ -65,7 +65,11 @@ const Drop = ({ element, elementActions, indent=0, mode='in', children=null }) =
   if (mode == 'in') {
     return <div className={dropClassName} ref={dropRef}>{children}</div>
   } else {
-    return <div className={dropClassName} ref={dropRef} style={{ marginLeft: 30 * indent }}></div>
+    const style = {
+      zIndex: indent,
+      marginLeft: 30 * indent
+    }
+    return <div className={dropClassName} ref={dropRef} style={style}></div>
   }
 }
 

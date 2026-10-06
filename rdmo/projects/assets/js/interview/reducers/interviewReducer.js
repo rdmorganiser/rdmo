@@ -1,3 +1,5 @@
+import { isNil } from 'lodash'
+
 import {
   FETCH_PAGE_INIT,
   FETCH_PAGE_SUCCESS,
@@ -28,8 +30,11 @@ import {
   DELETE_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  COPY_SET_ERROR,
+  RESORT_VALUES
 } from '../actions/actionTypes'
+
+import { sortValues } from '../utils/value'
 
 const initialState = {
   done: null,
@@ -134,10 +139,11 @@ export default function interviewReducer(state = initialState, action) {
     case RESOLVE_CONDITIONS_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case STORE_VALUE_ERROR:
-      if (action.valueIndex > -1) {
+      if (!isNil(action.valueId)) {
          return {
-          ...state, values: state.values.map((value, valueIndex) => (
-            valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
+          ...state,
+          values: state.values.map((value) => (
+            (value.id || value.tmp_id) == action.valueId ? {...value, error: action.error, pending: false} : value
           ))
         }
       } else {
@@ -148,6 +154,8 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case COPY_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+    case RESORT_VALUES:
+      return { ...state, values: sortValues(state.values) }
     default:
       return state
   }

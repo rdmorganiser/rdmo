@@ -21,7 +21,7 @@ const Attribute = ({ config, attribute, elementActions, display='list', indent=0
   const fetchEdit = () => elementActions.fetchElement('attributes', attribute.id)
   const fetchCopy = () => elementActions.fetchElement('attributes', attribute.id, 'copy')
   const fetchNested = () => elementActions.fetchElement('attributes', attribute.id, 'nested')
-  const toggleLocked = () => elementActions.storeElement('attributes', {...attribute, locked: !attribute.locked })
+  const toggleLocked = () => elementActions.patchElement('attributes', { id: attribute.id, locked: !attribute.locked })
 
   const createAttribute = () => elementActions.createElement('attributes', { attribute })
 

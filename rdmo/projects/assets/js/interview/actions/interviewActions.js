@@ -11,7 +11,7 @@ import { updateLocation } from '../utils/location'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, getDescendants, gatherSets, initSets } from '../utils/set'
-import { gatherDefaultValues, initValues, compareValues, isEmptyValue } from '../utils/value'
+import { gatherDefaultValues, initValues, compareValues, isEmptyValue, sortValues } from '../utils/value'
 import { projectId } from '../utils/meta'
 
 import ValueFactory from '../factories/ValueFactory'
@@ -48,7 +48,8 @@ import {
   DELETE_SET_ERROR,
   COPY_SET_INIT,
   COPY_SET_SUCCESS,
-  COPY_SET_ERROR
+  COPY_SET_ERROR,
+  RESORT_VALUES
 } from './actionTypes'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
@@ -182,14 +183,28 @@ export function fetchOptionsError(error) {
   return {type: FETCH_OPTIONS_ERROR, error}
 }
 
-export function fetchValues(page) {
+export function fetchValues(page, refresh = false) {
   const pendingId = `fetchValues/${page.id}`
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(fetchValuesInit())
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
+        if (refresh) {
+          // if the values are just refreshed after a value is stored or deleted, loop
+          // over the existing values and add all temporary values which were not stored yet
+          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+
+          // extend values with all unsaved values, which are not found in values
+          const keptUnsavedValues = unsavedValues.filter(
+            (value) => isNil(values.find((v) => compareValues(v, value)))
+          )
+
+          // resort the values, to ensure the correct collection_index order
+          values = sortValues([...values, ...keptUnsavedValues])
+        }
+
         const sets = gatherSets(values, page)
 
         initSets(sets, page)
@@ -314,8 +329,9 @@ export function storeValue(value) {
 
           if (refresh) {
             // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues
-            dispatch(fetchValues(page))
+            // resolveConditions will be called in fetchValues. Preserve unsaved values,
+            // since they are not included in the response from the backend.
+            dispatch(fetchValues(page, true))
           } else {
             dispatch(resolveConditions(page, sets))
           }
@@ -393,7 +409,14 @@ export function updateValue(value, attrs, store = true) {
 }
 
 export function copyValue(question, ...originalValues) {
-  const firstValue = first(originalValues)
+  const valuesToCopy = originalValues.filter((v) => !isEmptyValue(v))
+
+  const firstValue = first(valuesToCopy)
+
+  if (isNil(firstValue)) {
+    return {type: NOOP}
+  }
+
   const pendingId = `copyValue/${firstValue.attribute}/${firstValue.set_prefix}/${firstValue.set_index}`
 
   return (dispatch, getState) => {
@@ -402,7 +425,7 @@ export function copyValue(question, ...originalValues) {
     const { sets, values } = getState().interview
 
     // create copies for each value for all it's empty siblings
-    const copies = originalValues.reduce((copies, value) => {
+    const copies = valuesToCopy.reduce((copies, value) => {
       return [
         ...copies,
         ...sets.filter((set) => (
@@ -417,20 +440,18 @@ export function copyValue(question, ...originalValues) {
             (v.set_index == set.set_index)
           )).every(v => isEmptyValue(v))) {
             // find the corresponding sibling to this original value
-            const siblingIndex = values.findIndex((v) => (
+            const sibling = values.find((v) => (
               (v.attribute == value.attribute) &&
               (v.set_prefix == set.set_prefix) &&
               (v.set_index == set.set_index) &&
               (v.collection_index == value.collection_index)
             ))
 
-            const sibling = siblingIndex > 0 ? values[siblingIndex] : null
-
             if (isNil(sibling)) {
-              return [ValueFactory.create({ ...value, set_index: set.set_index }), siblingIndex]
+              return [ValueFactory.create({ ...value, set_index: set.set_index }), null]
             } else if (isEmptyValue(sibling)) {
               // the spread operator { ...sibling } does prevent an update in place
-              return [ValueFactory.update({ ...sibling }, value), siblingIndex]
+              return [ValueFactory.update({ ...sibling }, value), sibling.id || sibling.tmp_id]
             } else {
               return null
             }
@@ -442,18 +463,19 @@ export function copyValue(question, ...originalValues) {
     }, [])
 
     // dispatch storeValueInit for each of the updated values,
-    // created values have valueIndex -1 and will be skipped
-    // eslint-disable-next-line no-unused-vars
-    copies.forEach(([value, valueIndex]) => dispatch(storeValueInit(valueIndex)))
+    copies.forEach(([, valueId]) => dispatch(storeValueInit(valueId)))
 
     // loop over all copies and store the values on the server
     // afterwards fetchNavigation, updateProgress and check refresh once
     return Promise.all(
-      copies.map(([value, valueIndex]) => {
-        return ValueApi.storeValue(projectId, value)
-          .then((value) => dispatch(storeValueSuccess(value, valueIndex)))
-      })
+      copies.map(([value, valueId]) => (
+        ValueApi.storeValue(projectId, value)
+          .then((storedValue) => dispatch(storeValueSuccess(storedValue, valueId)))
+      ))
     ).then(() => {
+      // sort values in the store after the updates
+      dispatch(resortValues())
+
       dispatch(removeFromPending(pendingId))
 
       const page = getState().interview.page
@@ -466,8 +488,9 @@ export function copyValue(question, ...originalValues) {
 
       if (refresh) {
         // if the refresh flag is set, reload all values for the page,
-        // resolveConditions will be called in fetchValues
-        dispatch(fetchValues(page))
+        // resolveConditions will be called in fetchValues. Preserve unsaved values,
+        // since they are not included in the response from the backend.
+        dispatch(fetchValues(page, true))
       } else {
         dispatch(resolveConditions(page, sets))
       }
@@ -491,6 +514,7 @@ export function deleteValue(value) {
       dispatch(deleteValueInit(valueId))
 
       if (isNil(value.id)) {
+        dispatch(removeFromPending(pendingId))
         return dispatch(deleteValueSuccess(valueId))
       } else {
         return ValueApi.deleteValue(projectId, value)
@@ -505,8 +529,9 @@ export function deleteValue(value) {
 
             if (refresh) {
               // if the refresh flag is set, reload all values for the page,
-              // resolveConditions will be called in fetchValues
-              dispatch(fetchValues(page))
+              // resolveConditions will be called in fetchValues. Preserve unsaved values,
+              // since they are not included in the response from the backend.
+              dispatch(fetchValues(page, true))
             } else {
               dispatch(resolveConditions(page, sets))
             }
@@ -744,4 +769,8 @@ export function copySetSuccess(values, sets) {
 
 export function copySetError(errors) {
   return {type: COPY_SET_ERROR, errors}
+}
+
+export function resortValues() {
+  return { type: RESORT_VALUES }
 }

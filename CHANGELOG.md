@@ -1,5 +1,46 @@
 # Changelog 📔
 
+## [RDMO 2.5.2](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.2) (October 6, 2026)
+
+### Important ⚠️
+
+- The logout in `core/base_navigation.html` now always uses the `account/logout_form.html` POST form, also for
+Shibboleth setups (#1723). Instances which override `base_navigation.html` in their theme need to apply this change.
+
+### Main improvements ⭐
+
+- Handle errors when sending mails for tasks and show them in the form (#1670)
+- Improve drag and drop and the select dropdown in the management interface (#1678)
+- Make the projects table sort by "last changed" (descending) by default (#1706)
+- Allow optionset provider plugins to set a default via `external_id` (#1637)
+- Validate checkbox conflicts against `external_id` when no option is set (#1674)
+- Add `site` and `catalog` to the `ProjectAdmin` display and filters (#1720)
+- Optimize `AnswerTree` value and condition lookups to improve the interview performance for projects with many values (#1751)
+- Optimize the prefetching of questions, question sets, option sets and conditions (#1762)
+
+### Bug fixes 🐛
+
+- Fix the Shibboleth logout for Django 5 (#1723)
+- Fix copying values in the interview (#1791)
+- Fix copying sets in the interview (#1803)
+- Fix HTML rendering of element titles in the interview (#1692)
+- Fix the search for "Free Autocomplete" widgets and free text values when reusing answers (#1781)
+- Fix wrong tab labels in the "Reuse answer" dropdown for merged collection values (#1682)
+- Fix the "refresh" case when fetching values in the interview (#1702, #1754)
+- Fix consent acceptance button and session cache when the terms of use consent needs to be renewed (#1735)
+- Fix missing parent URI of root attributes in the attribute detail export (#1724)
+- Hide empty pages in "View answers" and exports (#1799)
+- Fix drop zones in the nested management views (#1685)
+- Fix availability, lock and toggle site actions in management interface (#1689)
+
+### Maintenance and dependencies 🔧
+
+- Use `rdmorganiser/mirrors-typos` in pre-commit and apply `pre-commit autoupdate --freeze` (#1733)
+
+**Milestones**: [2.5.2](https://github.com/rdmorganiser/rdmo/milestone/34?closed=1)
+
+**Commit history**: [2.5.1...2.5.2](https://github.com/rdmorganiser/rdmo/compare/2.5.1...2.5.2)
+
 ## [RDMO 2.5.1](https://github.com/rdmorganiser/rdmo/releases/tag/2.5.1) (July 3, 2026)
 
 ### Bug fixes 🐛

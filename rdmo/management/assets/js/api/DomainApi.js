@@ -25,6 +25,10 @@ class DomainApi extends BaseApi {
     }
   }
 
+  static patchAttribute(attribute) {
+    return this.patch(`/api/v1/domain/attributes/${attribute.id}/`, attribute)
+  }
+
   static deleteAttribute(attribute) {
     return this.delete(`/api/v1/domain/attributes/${attribute.id}/`)
   }

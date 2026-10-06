@@ -37,7 +37,7 @@ const Navigation = ({ overview, currentPage, navigation, help, fetchPage }) => {
                                     onClick={() => fetchPage(page.id)}
                                   />
                                 ) : (
-                                  <span className="text-muted">{page.title}</span>
+                                  <span className="text-muted"><Html html={page.title} /></span>
                                 )
                               }
                             </li>

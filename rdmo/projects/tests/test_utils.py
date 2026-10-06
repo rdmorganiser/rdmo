@@ -2,18 +2,41 @@ import pytest
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.http import QueryDict
 
 from rdmo.core.tests.utils import compute_checksum
 
-from ..filters import ProjectFilter
 from ..models import Invite, Project, Value
 from ..utils import (
     compute_set_prefix_from_set_value,
+    compute_value_maps,
     copy_project,
     get_invite_email_project_path,
-    set_context_querystring_with_filter_and_page,
 )
+
+
+def test_compute_value_maps():
+    first = Value(attribute_id=1, set_prefix='', set_index=0, collection_index=2)
+    second = Value(attribute_id=1, set_prefix='', set_index=0, collection_index=1)
+    nested = Value(attribute_id=1, set_prefix='0', set_index=1)
+    other = Value(attribute_id=2, set_prefix='', set_index=0)
+
+    attribute_values, attribute_sets, attribute_set_values = compute_value_maps(iter((first, nested, other, second)))
+
+    assert attribute_values == {1: [first, nested, second], 2: [other]}
+    assert attribute_sets == {
+        1: {('', 0), ('0', 1)},
+        2: {('', 0)},
+    }
+    assert attribute_set_values == {
+        (1, '', 0): [first, second],
+        (1, '0', 1): [nested],
+        (2, '', 0): [other],
+    }
+
+
+def test_compute_value_maps_empty():
+    assert compute_value_maps(iter(())) == ({}, {}, {})
+
 
 GET_queries = [
     'page=2&title=project',
@@ -33,27 +56,6 @@ SET_VALUES = [
     ({'set_prefix': '0'  , 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|1|0'),
     ({'set_prefix': '0|0', 'set_index': 1}, {'set_prefix': '0|0|0'}, '0|0|1'),
 ]
-
-@pytest.mark.parametrize('GET_query', GET_queries)
-def test_set_context_querystring_with_filter_and_page(GET_query):
-    querydict = QueryDict(GET_query)
-    filter = ProjectFilter(querydict)
-    context = {'filter': filter}
-    context = set_context_querystring_with_filter_and_page(context)
-
-    if 'page' in GET_query and 'title' in GET_query:
-        assert 'querystring' in context
-        assert context['querystring'] == 'title=project'
-        querydict_copy = querydict.copy()
-        del querydict_copy['page']
-        assert context['querystring'] == querydict_copy.urlencode()
-    elif 'page' not in GET_query and 'title' in GET_query:
-        assert 'querystring' in context
-        assert context['querystring'] == 'title=project'
-    elif 'page' in GET_query and 'title' not in GET_query:
-        assert context.get('querystring', 'not-in-context') == ''
-    else:
-        assert context.get('querystring', 'not-in-context') == 'not-in-context'
 
 
 def test_copy_project(db, files):
