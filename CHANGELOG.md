@@ -22,6 +22,7 @@ Shibboleth setups (#1723). Instances which override `base_navigation.html` in th
 
 - Fix the Shibboleth logout for Django 5 (#1723)
 - Fix copying values in the interview (#1791)
+- Fix copying sets in the interview (#1803)
 - Fix HTML rendering of element titles in the interview (#1692)
 - Fix the search for "Free Autocomplete" widgets and free text values when reusing answers (#1781)
 - Fix wrong tab labels in the "Reuse answer" dropdown for merged collection values (#1682)
