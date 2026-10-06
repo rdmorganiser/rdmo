@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
+const IntegrationTable = ({ integrations, onDelete, onUpdate, onView }) => {
 
   return (
     <table className="table">
@@ -32,6 +32,15 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
               </td>
               <td>
                 <div className="d-flex justify-content-end align-items-center gap-1">
+                  <button
+                    type="button"
+                    className="link"
+                    aria-label={gettext('View integration')}
+                    title={gettext('View integration')}
+                    onClick={() => onView(integration)}
+                  >
+                    <i className="bi bi-eye" aria-hidden="true" />
+                  </button>
                   {
                     onUpdate && (
                       <button
@@ -71,7 +80,8 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
 IntegrationTable.propTypes = {
   integrations: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
+  onView: PropTypes.func.isRequired
 }
 
 export default IntegrationTable

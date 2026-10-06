@@ -437,6 +437,7 @@ class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
 class ProjectIntegrationSerializer(serializers.ModelSerializer):
     provider = serializers.SerializerMethodField()
+    webhook = serializers.SerializerMethodField()
     options = ProjectIntegrationOptionSerializer(many=True)
 
     class Meta:
@@ -446,6 +447,7 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
             'title',
             'provider_key',
             'provider',
+            'webhook',
             'options'
         )
         validators = [
@@ -491,6 +493,13 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
             attr: getattr(obj.provider, attr, None)
             for attr in ['label', 'send_label', 'description']
         }
+
+    def get_webhook(self, obj):
+        provider = obj.provider
+        if provider is None:
+            return None
+
+        return provider.get_webhook_data(self.context.get('request'), obj)
 
 
 class ProjectInviteSerializer(serializers.ModelSerializer):

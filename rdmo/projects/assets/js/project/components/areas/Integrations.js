@@ -8,6 +8,7 @@ import { usePermissions } from '../../hooks'
 import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
 import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
+import IntegrationDetailsModal from './integrations/IntegrationDetailsModal'
 import IntegrationModal from './integrations/IntegrationModal'
 import IntegrationTable from './integrations/IntegrationTable'
 
@@ -20,6 +21,7 @@ const Integrations = () => {
   const [selectedIntegration, setSelectedIntegration] = useState(null)
 
   const createModal = useModal()
+  const detailsModal = useModal()
   const updateModal = useModal()
   const deleteModal = useModal()
 
@@ -34,6 +36,11 @@ const Integrations = () => {
   const openUpdateModal = (integration) => {
     setSelectedIntegration(integration)
     updateModal.open()
+  }
+
+  const openDetailsModal = (integration) => {
+    setSelectedIntegration(integration)
+    detailsModal.open()
   }
 
   const openDeleteModal = (integration) => {
@@ -67,6 +74,7 @@ const Integrations = () => {
               visibleIntegrations.length > 0 && (
                 <IntegrationTable
                   integrations={visibleIntegrations}
+                  onView={openDetailsModal}
                   onUpdate={perms.can_change_integration ? openUpdateModal : null}
                   onDelete={perms.can_delete_integration ? openDeleteModal : null}
                 />
@@ -85,6 +93,11 @@ const Integrations = () => {
       {
         selectedIntegration && (
           <>
+            <IntegrationDetailsModal
+              show={detailsModal.show}
+              onClose={detailsModal.close}
+              integration={selectedIntegration}
+            />
             <IntegrationModal
               show={updateModal.show}
               onClose={updateModal.close}
