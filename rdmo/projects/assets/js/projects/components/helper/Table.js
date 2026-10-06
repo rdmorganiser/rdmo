@@ -89,10 +89,10 @@ const Table = ({
           ) : (
             emptyMessage && (
               <EmptyTableRow
-                actionLabel={emptyActionLabel}
+                label={emptyActionLabel}
                 colSpan={visibleColumns.length}
                 message={emptyMessage}
-                onAction={onEmptyAction}
+                onClick={onEmptyAction}
               />
             )
           )

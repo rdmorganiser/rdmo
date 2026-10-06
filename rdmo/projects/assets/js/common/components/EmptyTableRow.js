@@ -1,20 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const EmptyTableRow = ({ actionLabel, colSpan, message, onAction }) => {
+const EmptyTableRow = ({ label, colSpan, message, onClick }) => {
   return (
     <tr>
       <td colSpan={colSpan}>
         <div className="d-flex flex-column align-items-center justify-content-center py-5">
           <p className="text-muted mb-3">{message}</p>
           {
-            actionLabel && onAction && (
+            label && onClick && (
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={onAction}
+                onClick={onClick}
               >
-                {actionLabel}
+                {label}
               </button>
             )
           }
@@ -25,10 +25,10 @@ const EmptyTableRow = ({ actionLabel, colSpan, message, onAction }) => {
 }
 
 EmptyTableRow.propTypes = {
-  actionLabel: PropTypes.string,
+  label: PropTypes.string,
   colSpan: PropTypes.number.isRequired,
   message: PropTypes.string.isRequired,
-  onAction: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 export default EmptyTableRow

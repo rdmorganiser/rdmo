@@ -126,10 +126,10 @@ const SnapshotTable = ({ snapshots, onCreate}) => {
               })
             ) : (
               <EmptyTableRow
-                actionLabel={perms.can_add_snapshot ? gettext('Create new snapshot') : undefined}
+                label={perms.can_add_snapshot ? gettext('Create new snapshot') : undefined}
                 colSpan={4}
                 message={gettext('There are currently no snapshots.')}
-                onAction={perms.can_add_snapshot ? onCreate : undefined}
+                onClick={perms.can_add_snapshot ? onCreate : undefined}
               />
             )
           }
