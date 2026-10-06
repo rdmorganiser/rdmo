@@ -110,7 +110,7 @@ class OptionSet(models.Model):
         return [element.option for element in sorted(self.optionset_options.all(), key=lambda e: e.order)]
 
     @property
-    def condition_uris(self):
+    def condition_uris(self) -> list[str]:
         return [condition.uri for condition in self.conditions.all()]
 
     @classmethod
