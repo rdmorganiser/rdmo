@@ -87,7 +87,7 @@ class IssueQuerySet(models.QuerySet):
 
     def filter_user(self, user):
         if user.is_authenticated:
-            if user.has_perm('projects.view_integration'):
+            if user.has_perm('projects.view_issue'):
                 return self.all()
             elif is_site_manager(user):
                 return self.filter_current_site()
@@ -106,7 +106,7 @@ class IntegrationQuerySet(models.QuerySet):
 
     def filter_user(self, user):
         if user.is_authenticated:
-            if user.has_perm('projects.view_issue'):
+            if user.has_perm('projects.view_integration'):
                 return self.all()
             elif is_site_manager(user):
                 return self.filter_current_site()
