@@ -111,7 +111,7 @@ const Dashboard = () => {
               canSendIssue(issue) && (
                 <LinkButton
                   title={gettext('Send task')}
-                  onClick={() => setSendIssue(issue)}
+                  onClick={() => handleSendIssue(issue)}
                 >
                   <i className="bi bi-send" aria-hidden="true" />
                 </LinkButton>
