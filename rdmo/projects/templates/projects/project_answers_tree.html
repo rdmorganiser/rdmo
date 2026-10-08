@@ -6,7 +6,13 @@
 
     {% for page in section.pages %}
 
-        <h3>{{ page.title|markdown }}</h3>
+        {% if page.elements or page.help and include_help %}
+            <h3>{{ page.title|markdown }}</h3>
+        {% endif %}
+
+        {% if include_help and page.help %}
+            <div class="page-help text-muted mb-3">{{ page.help|markdown }}</div>
+        {% endif %}
 
         {% for element in page.elements %}
 
