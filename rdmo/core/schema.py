@@ -1,7 +1,9 @@
 
 
+from rest_framework import serializers
+
 from drf_spectacular.extensions import OpenApiViewExtension
-from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view, inline_serializer
 
 
 def filter_endpoints(endpoints):
@@ -153,7 +155,44 @@ class ProjectInviteViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, View
 
 class ProjectIssueViewSetExtension(ParentLookupIdMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectIssueViewSet'
-    actions = ['list', 'retrieve', 'update', 'partial_update']
+    actions = ('list', 'retrieve', 'update', 'partial_update', 'send_content', 'send_email', 'send_integration')
+
+    def get_extend_schema_args(self, action):
+        schema_args = super().get_extend_schema_args(action)
+
+        if action == 'send_content':
+            schema_args.update({
+                'responses': {
+                    200: inline_serializer(
+                        name='ProjectIssueSendContentResponse',
+                        fields={
+                            'subject': serializers.CharField(),
+                            'message': serializers.CharField()
+                        }
+                    )
+                }
+            })
+        elif action == 'send_email':
+            from rdmo.projects.serializers.v1 import ProjectIssueSendEmailSerializer
+
+            schema_args.update({
+                'request': ProjectIssueSendEmailSerializer,
+                'responses': {204: None}
+            })
+        elif action == 'send_integration':
+            from rdmo.projects.serializers.v1 import ProjectIssueSendIntegrationSerializer
+
+            schema_args.update({
+                'request': ProjectIssueSendIntegrationSerializer,
+                'responses': {
+                    200: inline_serializer(
+                        name='ProjectIssueSendIntegrationResponse',
+                        fields={'redirect_url': serializers.URLField()}
+                    )
+                }
+            })
+
+        return schema_args
 
 
 class ProjectMembershipViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):

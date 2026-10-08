@@ -1,1 +1,1 @@
-{% load i18n %}{{ issue.task.title }}
+{% load i18n %}{{ issue.task.title|safe }}

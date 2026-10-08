@@ -4,9 +4,10 @@ import classNames from 'classnames'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { updateProjectTask } from '../../actions/projectActions'
+import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
 import { usePermissions } from '../../hooks'
 import { IssueTile } from '../helper'
 
@@ -22,14 +23,15 @@ const Dashboard = () => {
   const settings = useSelector(state => state.settings)
   const perms = usePermissions()
 
-  const allIssues = useSelector((state) => state.project.project.tasks) ?? []
+  const allIssues = useSelector((state) => state.project.project.issues) ?? []
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
 
   const { showClosedTasks, showClosedRecommendations } = config
 
   const [selectedIssue, setSelectedIssue] = useState(null)
-  const [sendIssue, setSendIssue] = useState(null)
+  const issueModal = useModal()
+  const sendIssueModal = useModal()
 
   const isClosed = (issue) => issue.status === 'closed'
   const getTaskType = (issue) => issue.task?.task_type
@@ -57,14 +59,31 @@ const Dashboard = () => {
   ).sort((a, b) => a.task.order - b.task.order)
 
   const toggleTaskDone = (issueId, currentStatus) => {
-    dispatch(updateProjectTask(issueId, {
+    dispatch(updateProjectIssue(issueId, {
       status: currentStatus === 'closed' ? 'open' : 'closed'
     }))
+  }
+
+  const canSendIssue = (issue) => (
+    settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable
+  )
+
+  const handleOpenIssue = (issue) => {
+    setSelectedIssue(issue)
+    issueModal.open()
+  }
+
+  const handleSendIssue = (issue) => {
+    dispatch(clearProjectErrors())
+    setSelectedIssue(issue)
+    issueModal.close()
+    sendIssueModal.open()
   }
 
   const renderVisibleIssue = (issue) => {
     const closed = isClosed(issue)
     const disabled = !perms.can_change_issue
+    const resourceCount = issue.resources?.length ?? 0
     return (
       <div className="d-flex align-items-start gap-3">
         <div>
@@ -89,10 +108,10 @@ const Dashboard = () => {
               {issue.task.title}
             </strong>
             {
-              (settings?.project_send_issue && perms?.can_change_issue && issue?.task?.is_sendable) && (
+              canSendIssue(issue) && (
                 <LinkButton
                   title={gettext('Send task')}
-                  onClick={() => setSendIssue(issue)}
+                  onClick={() => handleSendIssue(issue)}
                 >
                   <i className="bi bi-send" aria-hidden="true" />
                 </LinkButton>
@@ -101,7 +120,20 @@ const Dashboard = () => {
           </div>
 
           <p className="text-secondary">{issue.task.text}</p>
-
+          {
+            resourceCount > 0 && (
+              <div className="text-muted small mt-2">
+                <i className="bi bi-box-arrow-up-right me-1" />
+                {
+                  interpolate(ngettext(
+                    '%s external resource',
+                    '%s external resources',
+                    resourceCount
+                  ), [resourceCount])
+                }
+              </div>
+            )
+          }
           {
             issue.dates?.length > 0 && (
               <div className="text-muted small mt-2 text-end">
@@ -144,7 +176,7 @@ const Dashboard = () => {
                                 () => {
                                   dispatch(navigateDashboard({ area: issue.task.task_area }))
                                   if (isActiveStep) {
-                                    dispatch(updateProjectTask(issue.id, { status: 'closed'}))
+                                    dispatch(updateProjectIssue(issue.id, { status: 'closed'}))
                                   }
                                 }
                               ) : undefined
@@ -175,7 +207,7 @@ const Dashboard = () => {
                         <IssueTile
                           key={issue.id}
                           className="col-lg-6 mb-4"
-                          onCardClick={() => setSelectedIssue(issue)}
+                          onCardClick={() => handleOpenIssue(issue)}
                         >
                           {renderVisibleIssue(issue)}
                         </IssueTile>
@@ -206,7 +238,7 @@ const Dashboard = () => {
                         <IssueTile
                           key={issue.id}
                           className="col-lg-6 mb-4"
-                          onCardClick={() => setSelectedIssue(issue)}
+                          onCardClick={() => handleOpenIssue(issue)}
                         >
                           {renderVisibleIssue(issue)}
                         </IssueTile>
@@ -244,14 +276,16 @@ const Dashboard = () => {
               )
             }
             {
-              selectedIssue && (
+              selectedIssue && issueModal.show && (
                 <IssueModal
                   canChangeIssue={perms.can_change_issue}
+                  canSendIssue={canSendIssue(selectedIssue)}
                   issue={selectedIssue}
-                  onClose={() => setSelectedIssue(null)}
+                  onClose={issueModal.close}
+                  onSend={() => handleSendIssue(selectedIssue)}
                   onStatusChange={
                     (status) => {
-                      dispatch(updateProjectTask(selectedIssue.id, { status }))
+                      dispatch(updateProjectIssue(selectedIssue.id, { status }))
                       setSelectedIssue({
                         ...selectedIssue,
                         status,
@@ -262,10 +296,10 @@ const Dashboard = () => {
               )
             }
             {
-              sendIssue && (
+              selectedIssue && sendIssueModal.show && (
                 <SendIssueModal
-                  onClose={() => setSendIssue(null)}
-                  issue={sendIssue}
+                  onClose={sendIssueModal.close}
+                  issue={selectedIssue}
                 />
               )
             }

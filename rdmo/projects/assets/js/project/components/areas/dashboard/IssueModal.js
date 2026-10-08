@@ -12,8 +12,10 @@ import IssueDate from '../../../../common/components/IssueDate'
 
 const IssueModal = ({
   canChangeIssue = false,
+  canSendIssue = false,
   issue,
   onClose,
+  onSend,
   onStatusChange,
 }) => {
 
@@ -30,6 +32,15 @@ const IssueModal = ({
       onClose={onClose}
       size="modal-lg"
       closeLabel={gettext('Close')}
+      onSubmit={() => {}}
+      submitLabel={gettext('Send task')}
+      submitProps={
+        {
+          className: 'btn btn-outline-primary me-auto',
+          hidden: !canSendIssue,
+          onClick: onSend
+        }
+      }
     >
       <p>{issue.task.text}</p>
       <Select
@@ -39,6 +50,22 @@ const IssueModal = ({
         value={issue.status}
         onChange={onStatusChange}
       />
+      {
+        issue.resources?.length > 0 && (
+          <div className="mt-3">
+            <div className="fw-bold mb-2">{gettext('External resources for this task')}</div>
+            <ul>
+              {
+                issue.resources.map((resource) => (
+                  <li key={resource.id}>
+                    <a href={resource.url} target="_blank" rel="noopener noreferrer">{resource.url}</a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        )
+      }
       <div className="row mt-3">
         <div className={issue.dates?.length > 0 ? 'col-md-8' : 'col-md-12'}>
           {/* questions */}
@@ -104,8 +131,10 @@ const IssueModal = ({
 
 IssueModal.propTypes = {
   canChangeIssue: PropTypes.bool,
+  canSendIssue: PropTypes.bool,
   issue: PropTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSend: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
 }
 

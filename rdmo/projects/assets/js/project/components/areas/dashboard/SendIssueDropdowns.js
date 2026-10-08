@@ -21,12 +21,13 @@ const SendIssueDropdowns = ({
   const selectedFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
 
   return (
-    <div className="d-flex justify-content-end gap-3 mb-3">
+    <div className="d-md-flex gap-3 mb-3">
       <div className="dropdown">
         <button
           type="button"
           className="link text-nowrap"
           data-bs-toggle="dropdown"
+          data-bs-auto-close="outside"
           data-bs-popper-config='{"strategy":"fixed"}'
           aria-expanded="false"
           title={gettext('Attachments')}
@@ -158,6 +159,7 @@ const SendIssueDropdowns = ({
           type="button"
           className="link text-nowrap"
           data-bs-toggle="dropdown"
+          data-bs-auto-close="outside"
           data-bs-popper-config='{"strategy":"fixed"}'
           aria-expanded="false"
           title={gettext('Format')}

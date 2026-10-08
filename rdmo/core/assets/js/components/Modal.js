@@ -2,8 +2,18 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Modal as BootstrapModal } from 'bootstrap'
 
-const Modal = (
-  {title, show, onClose, closeLabel, onSubmit, submitLabel, submitProps, children, modalProps = {}, size = '' }) => {
+const Modal = ({
+  title,
+  show,
+  onClose,
+  closeLabel,
+  onSubmit,
+  submitLabel,
+  submitProps,
+  children,
+  modalProps = {},
+  size = ''
+}) => {
   const modalRef = useRef(null)
 
   useEffect(() => {
@@ -74,7 +84,7 @@ Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
-  submitLabel: PropTypes.string,
+  submitLabel: PropTypes.node,
   closeLabel: PropTypes.string,
   submitProps: PropTypes.object,
   children: PropTypes.oneOfType([
