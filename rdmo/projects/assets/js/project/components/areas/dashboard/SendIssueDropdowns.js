@@ -21,7 +21,7 @@ const SendIssueDropdowns = ({
   const selectedFiles = formData.attachments_files_by_snapshot[formData.attachments_snapshot] || []
 
   return (
-    <div className="d-flex justify-content-end gap-3 mb-3">
+    <div className="d-md-flex gap-3 mb-3">
       <div className="dropdown">
         <button
           type="button"
