@@ -49,7 +49,7 @@ const EditQuestionSet = ({ questionset }) => {
       dispatch(updateElement(questionset, { [key]: value }))
     }
   }
-  const storeQuestionSet = (back) => dispatch(storeElement('questionsets', questionset, elementAction, back))
+  const storeQuestionSet = (back) => dispatch(storeElement('questionsets', questionset, back))
   const deleteQuestionSet = () => dispatch(deleteElement('questionsets', questionset))
 
   const editElement = (value) => {

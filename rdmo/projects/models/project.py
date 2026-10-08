@@ -153,11 +153,17 @@ class Project(MPTTModel, Model):
         return sum([value.file.size for value in queryset])
 
     def get_answer_tree(self, snapshot=None, verbose=None):
+        verbose = verbose or ()
+        values = self.values.filter(snapshot=snapshot).order_by(
+            'attribute_id', 'set_prefix', 'set_index', 'collection_index'
+        )
+        if 'value' in verbose:
+            values = values.select_related('option')
+
         return AnswerTree(
             self.catalog,
-            self.values.filter(snapshot=snapshot).select_related('attribute', 'option'),
             verbose=verbose
-        ).compute()
+        ).compute(values)
 
     def get_cached_ancestors(self):
         # this caches the ancestors, different to a @cached_property, this is also done

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchElement, storeElement } from '../../actions/elementActions'
+import { fetchElement, patchElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -23,7 +23,7 @@ const Condition = ({ condition, filter = false, filterEditors = false }) => {
 
   const fetchEdit = () => dispatch(fetchElement('conditions', condition.id))
   const fetchCopy = () => dispatch(fetchElement('conditions', condition.id, 'copy'))
-  const toggleLocked = () => dispatch(storeElement('conditions', {...condition, locked: !condition.locked }))
+  const toggleLocked = () => dispatch(patchElement('conditions', { id: condition.id, locked: !condition.locked }))
 
   return showElement && (
     <li className="list-group-item">

@@ -58,8 +58,10 @@ export default function elementsReducer(state = initialState, action) {
     case actionTypes.FETCH_ELEMENT_ERROR:
       return {...state, errors: action.error.errors}
 
-    // store element
+    // store/patch element
     case actionTypes.STORE_ELEMENT_INIT:
+    case actionTypes.PATCH_ELEMENT_INIT:
+    case actionTypes.TOGGLE_ELEMENT_SITE_INIT:
       if (isNil(state.element)) {
         return state
       } else {
@@ -67,6 +69,8 @@ export default function elementsReducer(state = initialState, action) {
         return {...state, element: resetElement(state.element)}
       }
     case actionTypes.STORE_ELEMENT_ERROR:
+    case actionTypes.PATCH_ELEMENT_ERROR:
+    case actionTypes.TOGGLE_ELEMENT_SITE_ERROR:
       if (isNil(state.element) || state.elementAction == 'nested') {
         // create a fake element with just the id and the model and the error for updateElement works,
         // but the element won't get updated in the view
@@ -76,6 +80,8 @@ export default function elementsReducer(state = initialState, action) {
       }
       // there is not break here on purpose
     case actionTypes.STORE_ELEMENT_SUCCESS:  // eslint-disable-line no-fallthrough
+    case actionTypes.PATCH_ELEMENT_SUCCESS:
+    case actionTypes.TOGGLE_ELEMENT_SITE_SUCCESS:
       if (isNil(state.element)) {
         return {
           ...state,

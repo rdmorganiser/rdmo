@@ -7,12 +7,13 @@ from rest_framework.viewsets import ModelViewSet
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rdmo.conditions.prefetch import condition_prefetch
 from rdmo.core.exports import XMLResponse
 from rdmo.core.filters import SearchFilter
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
-from rdmo.domain.models import Attribute
+from rdmo.domain.utils import get_attribute_map
 from rdmo.management.viewsets import ElementToggleCurrentSiteViewSetMixin
 
 from .constants import TaskAreas, TaskTypes
@@ -45,7 +46,7 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
         elif self.action in ['export', 'detail_export']:
             return queryset.prefetch_related(
                 'catalogs',
-                'conditions',
+                condition_prefetch('conditions'),
             )
         else:
             return queryset.select_related(
@@ -111,18 +112,15 @@ class TaskViewSet(ElementToggleCurrentSiteViewSetMixin, ModelViewSet):
     def get_export_serializer_context(self, tasks):
         attribute_ids = set()
         for task in tasks:
-            if task.start_attribute:
+            if task.start_attribute_id:
                 attribute_ids.add(task.start_attribute_id)
-            if task.end_attribute:
+            if task.end_attribute_id:
                 attribute_ids.add(task.end_attribute_id)
             for condition in task.conditions.all():
                 attribute_ids.add(condition.source_id)
 
         return {
-            'attribute_map': Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
+            'attribute_map': get_attribute_map(attribute_ids)
         }
 
 

@@ -1,4 +1,4 @@
-import { isEmpty, isNil, toString } from 'lodash'
+import { isEmpty, isNil, sortBy, toString } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
@@ -60,7 +60,9 @@ const initValues = (sets, values, element, setPrefix) => {
             set_collection: question.set_collection,
             text: question.default_text,
             option: question.default_option,
-            external_id: question.default_external_id
+            external_id: question.default_external_id,
+            unit: question.unit,
+            value_type: question.value_type
           })
 
           if (question.widget_type === 'range') {
@@ -106,10 +108,16 @@ const compareValues = (a, b, widget_type = null) => {
   }
 }
 
+const sortValues = (values) => {
+  return sortBy(values, ['attribute', 'set_prefix', 'set_index', 'collection_index'])
+}
+
 const isEmptyValue = (value) => {
   return isNil(value.id) || (
-    isEmpty(value.text) && isNil(value.option) && isEmpty(value.external_id)
+    isEmpty(toString(value.text).trim()) &&
+    isNil(value.option) &&
+    isEmpty(toString(value.external_id).trim())
   )
 }
 
-export { compareValues, gatherDefaultValues, initRange, initValues, isDefaultValue, isEmptyValue }
+export { compareValues, gatherDefaultValues, initRange, initValues, isDefaultValue, isEmptyValue, sortValues }

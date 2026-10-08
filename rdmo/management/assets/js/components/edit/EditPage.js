@@ -49,7 +49,7 @@ const EditPage = ({ page }) => {
       dispatch(updateElement(page, { [key]: value }))
     }
   }
-  const storePage = (back) => dispatch(storeElement('pages', page, elementAction, back))
+  const storePage = (back) => dispatch(storeElement('pages', page, back))
   const deletePage = () => dispatch(deleteElement('pages', page))
 
   const editElement = (value) => {

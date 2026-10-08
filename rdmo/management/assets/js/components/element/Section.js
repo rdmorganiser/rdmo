@@ -8,7 +8,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { createElement, dropElement, fetchElement, storeElement, toggleElements } from '../../actions/elementActions'
+import { createElement, dropElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -39,7 +39,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
   const fetchEdit = () => dispatch(fetchElement('sections', section.id))
   const fetchCopy = () => dispatch(fetchElement('sections', section.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('sections', section.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('sections', { ...section, locked: !section.locked }))
+  const toggleLocked = () => dispatch(patchElement('sections', { id: section.id, locked: !section.locked }))
   const toggleShowElements = () => dispatch(toggleElements(section))
 
   const createPage = () => dispatch(createElement('pages', { section }))

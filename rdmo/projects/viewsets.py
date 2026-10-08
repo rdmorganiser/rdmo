@@ -14,6 +14,7 @@ from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -109,6 +110,7 @@ from .utils import (
     check_conditions,
     check_options,
     compute_set_prefix_from_set_value,
+    compute_value_maps,
     copy_project,
     get_contact_message,
     get_issue_send_content,
@@ -167,14 +169,21 @@ class ProjectViewSet(ModelViewSet):
         if settings.SOCIALACCOUNT:
             membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
 
-        queryset = (
-            Project.objects.filter_user(self.request.user, filter_for_user).distinct()
-                           .prefetch_related(
-                                'views',
-                                Prefetch('memberships', queryset=membership_queryset, to_attr='prefetched_memberships')
-                            )
-                           .select_related('catalog', 'visibility')
-        )
+        queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct()
+        if self.action in ('navigation', 'answers'):
+            # these actions only need the project catalog and visibility before computing the answer tree.
+            return queryset.select_related('catalog', 'visibility')
+        elif self.action in ('resolve', 'resolve_post'):
+            # these actions fetch values, elements, and conditions explicitly, so they
+            # do not need the project prefetches or last_changed annotation.
+            return queryset
+
+        queryset = queryset.prefetch_related(
+            'snapshots',
+            'views',
+            Prefetch('memberships', queryset=membership_queryset, to_attr='prefetched_memberships')
+        ).select_related('catalog', 'visibility')
+
 
         # prepare subquery for the role of the current user
         current_role_subquery = Subquery(
@@ -278,56 +287,36 @@ class ProjectViewSet(ModelViewSet):
         set_prefix = request.GET.get('set_prefix')
         set_index = request.GET.get('set_index')
 
-        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).order_by()
+        attribute_values_map = None
+        # reuse condition results across selectors within this request
+        resolved_conditions = {}
 
-        page_id = request.GET.get('page')
-        if page_id:
-            try:
-                page = Page.objects.get(id=page_id)
-                conditions = page.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Page.DoesNotExist:
-                pass
+        for element_key, element_model in (
+            ('page', Page),
+            ('questionset', QuestionSet),
+            ('question', Question),
+            ('optionset', OptionSet),
+            ('condition', Condition),
+        ):
+            element_id = request.GET.get(element_key)
+            if not element_id:
+                continue
 
-        questionset_id = request.GET.get('questionset')
-        if questionset_id:
             try:
-                questionset = QuestionSet.objects.get(id=questionset_id)
-                conditions = questionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except QuestionSet.DoesNotExist:
-                pass
+                element = element_model.objects.get(id=element_id)
+            except element_model.DoesNotExist:
+                continue
 
-        question_id = request.GET.get('question')
-        if question_id:
-            try:
-                question = Question.objects.get(id=question_id)
-                conditions = question.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Question.DoesNotExist:
-                pass
+            conditions = [element] if element_model is Condition else element.conditions.all()
+            if not conditions:
+                return Response({'result': True})
 
-        optionset_id = request.GET.get('optionset')
-        if optionset_id:
-            try:
-                optionset = OptionSet.objects.get(id=optionset_id)
-                conditions = optionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, values, set_prefix, set_index):
-                    return Response({'result': True})
-            except OptionSet.DoesNotExist:
-                pass
+            if attribute_values_map is None:
+                attribute_values_map, _, _ = compute_value_maps(values)
 
-        condition_id = request.GET.get('condition')
-        if condition_id:
-            try:
-                condition = Condition.objects.select_related('source', 'target_option').get(id=condition_id)
-                if check_conditions([condition], values, set_prefix, set_index):
-                    return Response({'result': True})
-            except Condition.DoesNotExist:
-                pass
+            if check_conditions(conditions, attribute_values_map, set_prefix, set_index, resolved_conditions):
+                return Response({'result': True})
 
         return Response({'result': False})
 
@@ -344,58 +333,62 @@ class ProjectViewSet(ModelViewSet):
         for params in validated_data:
             element_ids[params['element_type']].add(params['element_id'])
 
-        elements = defaultdict(lambda: defaultdict(set))
+        elements = defaultdict(dict)
 
-        # gather conditions for pages
-        if 'pages' in element_ids:
-            queryset = Page.conditions.through.objects.filter(page_id__in=element_ids['pages'])
-            for page_id, condition_id in queryset.values_list('page_id', 'condition_id'):
-                elements['pages'][page_id].add(condition_id)
+        # gather conditions and keep empty sets for existing elements without conditions
+        for element_type, element_model in (
+            ('pages', Page),
+            ('questionsets', QuestionSet),
+            ('questions', Question),
+            ('optionsets', OptionSet),
+        ):
+            if element_type in element_ids:
+                queryset = element_model.objects.filter(id__in=element_ids[element_type]).order_by()
+                for element_id, condition_id in queryset.values_list('id', 'conditions'):
+                    element_condition_ids = elements[element_type].setdefault(element_id, set())
+                    if condition_id:
+                        element_condition_ids.add(condition_id)
 
-        # gather conditions for questionsets
-        if 'questionsets' in element_ids:
-            queryset = QuestionSet.conditions.through.objects.filter(questionset_id__in=element_ids['questionsets'])
-            for questionset_id, condition_id in queryset.values_list('questionset_id', 'condition_id'):
-                elements['questionsets'][questionset_id].add(condition_id)
+        # gather referenced and directly requested condition ids
+        condition_ids = set(element_ids.get('conditions', ()))
+        for element_dict in elements.values():
+            for element_condition_ids in element_dict.values():
+                condition_ids.update(element_condition_ids)
 
-        # gather conditions for questions
-        if 'questions' in element_ids:
-            queryset = Question.conditions.through.objects.filter(question_id__in=element_ids['questions'])
-            for question_id, condition_id in queryset.values_list('question_id', 'condition_id'):
-                elements['questions'][question_id].add(condition_id)
+        condition_map = Condition.objects.in_bulk(condition_ids)
+        elements['conditions'] = {
+            condition_id: {condition_id}
+            for condition_id in element_ids.get('conditions', ())
+            if condition_id in condition_map
+        }
 
-        # gather conditions for optionsets
-        if 'optionsets' in element_ids:
-            queryset = OptionSet.conditions.through.objects.filter(optionset_id__in=element_ids['optionsets'])
-            for optionset_id, condition_id in queryset.values_list('optionset_id', 'condition_id'):
-                elements['optionsets'][optionset_id].add(condition_id)
+        source_ids = {
+            condition.source_id for condition in condition_map.values()
+            if condition.source_id
+        }
+        if source_ids:
+            source_values = project.values.filter(snapshot=None, attribute_id__in=source_ids).order_by()
+            attribute_values_map, _, _ = compute_value_maps(source_values)
+        else:
+            attribute_values_map = {}
 
-        # gather conditions
-        if 'conditions' in element_ids:
-            # construct a similar structure for conditions
-            for condition_id in element_ids['conditions']:
-                elements['conditions'][condition_id] = {condition_id}
-
-        # query conditions
-        condition_ids = set().union(*(
-            conditions_set
-            for element_dict in elements.values()
-            for conditions_set in element_dict.values()
-        ))
-        conditions = Condition.objects.select_related('source', 'target_option').in_bulk(condition_ids)
-
-        # get all values of the project
-        values = project.values.filter(snapshot=None).select_related('attribute', 'option')
-
-        # second pass: resolve conditions
+        # resolve conditions
+        resolved_conditions = {}
         for params in validated_data:
             set_prefix = params['set_prefix']
             set_index = params['set_index']
             element_type = params['element_type']
             element_id = params['element_id']
 
-            element_conditions = [conditions[condition_id] for condition_id in elements[element_type][element_id]]
-            params['result'] = check_conditions(element_conditions, values, set_prefix, set_index)
+            element_condition_ids = elements.get(element_type, {}).get(element_id)
+            if element_condition_ids is None:
+                params['result'] = False
+                continue
+
+            element_conditions = [condition_map[condition_id] for condition_id in element_condition_ids]
+            params['result'] = check_conditions(
+                element_conditions, attribute_values_map, set_prefix, set_index, resolved_conditions
+            )
 
         return Response(validated_data)
 
@@ -1146,22 +1139,15 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
 
         # obtain the id of the set value for the set we want to copy
-        try:
-            copy_value_id = int(request.data.pop('copy_set_value'))
-        except KeyError as e:
-            raise ValidationError({
-                'copy_set_value': [_('This field may not be blank.')]
-            }) from e
-        except ValueError as e:
-            raise NotFound from e
+        copy_value_id = request.data.get('copy_set_value')
+        if not copy_value_id:
+            raise ValidationError({'copy_set_value': [_('This field is required.')]})
 
-        # look for this value in the database, using the users permissions, and
-        # collect all values for this set and all descendants
-        try:
-            copy_value = Value.objects.filter_user(self.request.user).get(id=copy_value_id)
-            copy_values = Value.objects.filter_user(self.request.user).filter_set(copy_value)
-        except Value.DoesNotExist as e:
-            raise NotFound from e
+        # look for the source value using the user's permissions
+        copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
+
+        # when the user can see this value, collect all values for this set and its descendants
+        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
 
         # init list of values to return
         response_values = []
@@ -1169,35 +1155,31 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         set_value_id = request.data.get('id')
         if set_value_id:
             # if an id is given in the post request, this is an import
-            try:
-                # look for the set value for the set we want to import into
-                set_value = Value.objects.filter_user(self.request.user).get(id=set_value_id)
 
-                # collect all non-empty values for this set and all descendants and convert
-                # them to a list to compare them later to the new values
-                set_values = Value.objects.filter_user(self.request.user).filter_set(set_value)
-                set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
-                set_empty_values_list = set_values.filter_empty().values_list(
-                    'attribute', 'set_prefix', 'set_index', 'collection_index'
-                )
-            except Value.DoesNotExist as e:
-                raise NotFound from e
+            # look for the set value for the set we want to import into
+            # this is done with get_queryset since we already checked that the user
+            # has write permissions on this project
+            set_value = get_object_or_404(self.get_queryset(), id=set_value_id)
+
+            # collect all non-empty values for this set and all descendants and convert
+            # them to a list to compare them later to the new values
+            set_values = self.get_queryset().filter_set(set_value)
+            set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
+            set_empty_values_list = set_values.filter_empty().values_list(
+                'attribute', 'set_prefix', 'set_index', 'collection_index'
+            )
         else:
-            # otherwise, we want to create a new set and need to create a new set value
-            # de-serialize the posted new set value and save it, use the ValueSerializer
-            # instead of ProjectValueSerializer, since the latter does not include project
-            set_value_serializer = ValueSerializer(data={
-                'project': parent_lookup_project,
-                **request.data
-            })
+            # otherwise, we want to create a new set and need to create a new set value,
+            # for this, we de-serialize the posted new set value and save it
+            set_value_serializer = self.get_serializer(data=request.data)
             set_value_serializer.is_valid(raise_exception=True)
-            set_value = set_value_serializer.save()
+            set_value = set_value_serializer.save(project=self.project, snapshot=None)
 
             set_values = Value.objects.none()
             set_values_list = set_empty_values_list = []
 
             # add the new set value to response_values
-            response_values.append(set_value_serializer.data)
+            response_values.append(ValueSerializer(instance=set_value).data)
 
         # create new values for the new set
         new_values = []
@@ -1211,7 +1193,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             else:
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
 
-            # skip this value if value.option does not match the optionsets of it's question
+            # skip this value if value.option does not match the optionsets of its question
             if not check_options(self.project, value):
                 continue
 
@@ -1473,8 +1455,13 @@ class ValueViewSet(ReadOnlyModelViewSet):
         try:
             set_attribute = int(request.GET.get('set_attribute'))
             set_label_subquery = Subquery(
-                Value.objects.filter(attribute=set_attribute, set_prefix='', set_index=OuterRef('set_index'))
-                             .values('text')[:1]
+                Value.objects.filter(
+                    project_id=OuterRef('project_id'),
+                    attribute=set_attribute,
+                    set_prefix='',
+                    set_index=OuterRef('set_index')
+                )
+                .values('text')[:1]
             )
             queryset = queryset.annotate(set_label=set_label_subquery)
         except (ValueError, TypeError):

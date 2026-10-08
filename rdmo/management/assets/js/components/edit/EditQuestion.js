@@ -28,7 +28,7 @@ const EditQuestion = ({ question }) => {
   const { elementAction, parent, attributes, optionsets, options, conditions } = useSelector((state) => state.elements)
 
   const updateQuestion = (key, value) => dispatch(updateElement(question, { [key]: value }))
-  const storeQuestion = (back) => dispatch(storeElement('questions', question, elementAction, back))
+  const storeQuestion = (back) => dispatch(storeElement('questions', question, back))
   const deleteQuestion = () => dispatch(deleteElement('questions', question))
 
   const editOptionSet = (optionset) => dispatch(fetchElement('optionsets', optionset))

@@ -159,7 +159,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-STATICFILES_STORAGE = 'rdmo.core.storage.VersionedStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "rdmo.core.storage.VersionedStaticFilesStorage",
+    },
+}
 
 DATABASES = {
     'default': {

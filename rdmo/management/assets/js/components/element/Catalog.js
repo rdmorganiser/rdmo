@@ -8,7 +8,7 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { createElement, fetchElement, storeElement } from '../../actions/elementActions'
+import { createElement, fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -38,10 +38,10 @@ const Catalog = ({
   const fetchCopy = () => dispatch(fetchElement('catalogs', catalog.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('catalogs', catalog.id, 'nested'))
 
-  const toggleAvailable = () => dispatch(storeElement('catalogs', {...catalog, available: !catalog.available }))
-  const toggleLocked = () => dispatch(storeElement('catalogs', {...catalog, locked: !catalog.locked }))
+  const toggleAvailable = () => dispatch(patchElement('catalogs', { id: catalog.id, available: !catalog.available }))
+  const toggleLocked = () => dispatch(patchElement('catalogs', { id: catalog.id, locked: !catalog.locked }))
 
-  const toggleCurrentSite = () => dispatch(storeElement('catalogs', catalog, 'toggle-site'))
+  const toggleCurrentSite = () => dispatch(toggleElementSite('catalogs', catalog))
 
   const createSection = () => dispatch(createElement('sections', { catalog }))
 

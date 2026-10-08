@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { createElement, fetchElement, storeElement } from '../../actions/elementActions'
+import { createElement, fetchElement, patchElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -25,7 +25,7 @@ const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, fil
   const fetchEdit = () => dispatch(fetchElement('attributes', attribute.id))
   const fetchCopy = () => dispatch(fetchElement('attributes', attribute.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('attributes', attribute.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('attributes', {...attribute, locked: !attribute.locked }))
+  const toggleLocked = () => dispatch(patchElement('attributes', { id: attribute.id, locked: !attribute.locked }))
 
   const createAttribute = () => dispatch(createElement('attributes', { attribute }))
 

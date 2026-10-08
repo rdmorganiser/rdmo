@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { isNil, minBy } from 'lodash'
 import get from 'lodash/get'
 
+import Html from 'rdmo/core/assets/js/components/Html'
+
 import Question from '../question/Question'
 import QuestionSet from '../questionset/QuestionSet'
 
@@ -57,7 +59,7 @@ const Page = ({
 
   return (
     <div className="interview-page">
-      <h2>{page.title}</h2>
+      <h2><Html html={page.title} /></h2>
       <PageHelp page={page} />
       <PageManagement config={config} page={page} isManager={isManager} />
       <PageHead

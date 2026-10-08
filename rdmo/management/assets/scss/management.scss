@@ -1,6 +1,8 @@
 .management {
     --rdmo-management-indent: 2rem;
 
+    position: relative;
+
     .card-body {
         padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
 
@@ -185,5 +187,23 @@
                 border-radius: 0;
             }
         }
+    }
+}
+
+.truncate-option-label {
+    display: flex;
+    max-width: 100%;
+    min-width: 0;
+
+    .truncate-option-label-head {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .truncate-option-label-tail {
+        flex: 0 0 auto;
+        white-space: nowrap;
     }
 }

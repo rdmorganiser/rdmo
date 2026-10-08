@@ -3,10 +3,73 @@ import pytest
 from rdmo.conditions.models import Condition
 
 from ..models import Project, Value
+from ..utils import check_conditions, compute_value_maps
 
 project_id = 1
 value_id = 86
 set_indexes = (0, 1)
+
+
+def test_check_conditions_without_conditions():
+    assert check_conditions([], {}) is True
+
+
+@pytest.mark.parametrize('condition_id', [1, 10])
+def test_check_conditions_matches_condition_resolve(db, condition_id):
+    condition = Condition.objects.get(id=condition_id)
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
+    attribute_values_map, _, _ = compute_value_maps(values)
+
+    assert check_conditions([condition], attribute_values_map) is True
+    assert condition.resolve(values) is True
+
+
+def test_check_conditions_preserves_set_prefix_fallback(db):
+    condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
+    attribute_values_map, _, _ = compute_value_maps(values)
+
+    assert check_conditions([condition], attribute_values_map, set_prefix='0', set_index=0) is True
+    assert condition.resolve(values, set_prefix='0', set_index=0) is True
+
+
+@pytest.mark.parametrize('set_collection,set_index,expected', [
+    (False, 0, True),
+    (False, 1, True),
+    (True, 0, True),
+    (True, 1, False),
+    (None, 0, True),
+    (None, 1, False),
+])
+def test_check_conditions_preserves_set_context(db, set_collection, set_index, expected):
+    value = Value.objects.get(id=value_id)
+    value.set_collection = set_collection
+    value.save()
+
+    condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None)
+    attribute_values_map, _, _ = compute_value_maps(values)
+
+    assert check_conditions(
+        [condition], attribute_values_map, set_prefix='', set_index=set_index
+    ) is expected
+    assert condition.resolve(values, set_prefix='', set_index=set_index) is expected
+
+
+def test_check_conditions_reuses_condition_result(db, mocker):
+    condition = Condition.objects.get(uri='http://example.com/terms/conditions/text_contains_test')
+    values = Project.objects.get(id=project_id).values.filter(snapshot=None).order_by()
+    resolved_conditions = {}
+    resolve_spy = mocker.spy(condition, 'resolve')
+
+    attribute_values_map, _, _ = compute_value_maps(values)
+    for _ in range(2):
+        assert check_conditions(
+            [condition], attribute_values_map,
+            set_prefix='', set_index=0, resolved_conditions=resolved_conditions
+        ) is True
+
+    assert resolve_spy.call_count == 1
 
 
 @pytest.mark.parametrize('set_index', set_indexes)

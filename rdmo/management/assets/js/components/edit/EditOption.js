@@ -27,7 +27,7 @@ const EditOption = ({ option }) => {
   const { elementAction, parent } = useSelector((state) => state.elements)
 
   const updateOption = (key, value) => dispatch(updateElement(option, {[key]: value}))
-  const storeOption = (back) => dispatch(storeElement('options', option, elementAction, back))
+  const storeOption = (back) => dispatch(storeElement('options', option, back))
   const deleteOption = () => dispatch(deleteElement('options', option))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()

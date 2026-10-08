@@ -32,7 +32,7 @@ const Overview = ({ config, overview, help, configActions }) => {
             {gettext('Project')}: <a href={projectUrl}>{overview.title}</a>
           </li>
           <li>
-            {gettext('Catalog')}: {overview.catalog.title}
+            {gettext('Catalog')}: <Html html={overview.catalog.title} />
           </li>
         </ul>
 

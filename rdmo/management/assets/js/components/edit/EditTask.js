@@ -26,7 +26,7 @@ const EditTask = ({ task }) => {
   const { elementAction, attributes, catalogs, conditions } = useSelector((state) => state.elements)
 
   const updateTask = (key, value) => dispatch(updateElement(task, {[key]: value}))
-  const storeTask = (back) => dispatch(storeElement('tasks', task, elementAction, back))
+  const storeTask = (back) => dispatch(storeElement('tasks', task, back))
   const deleteTask = () => dispatch(deleteElement('tasks', task))
 
   const editCondition = (condition) => dispatch(fetchElement('conditions', condition))

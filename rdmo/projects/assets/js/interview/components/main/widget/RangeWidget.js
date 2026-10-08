@@ -77,7 +77,6 @@ const RangeWidget = ({
         currentSet={currentSet}
         disabled={disabled}
         createValue={handleCreateValue}
-        copyValue={copyValue}
       />
       <QuestionCopyValues
         question={question}
