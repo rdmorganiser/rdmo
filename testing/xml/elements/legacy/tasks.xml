@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/" created="2023-04-20T10:52:17.451406+02:00">
-	<task dc:uri="http://example.com/terms/tasks/null">
+	<task dc:uri="http://example.com/terms/tasks/text-is-not-test">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>null</key>
-		<dc:comment>1</dc:comment>
-		<title lang="en">null</title>
+		<key>text-is-not-test</key>
+		<dc:comment></dc:comment>
+		<title lang="en">Text is not &quot;test&quot;</title>
 		<text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
-		<title lang="de">null</title>
+		<title lang="de">Text ist nicht &quot;test&quot;</title>
 		<text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
 		<start_attribute/>
 		<end_attribute/>
@@ -19,13 +19,13 @@
 			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
 		</catalogs>
 	</task>
-	<task dc:uri="http://example.com/terms/tasks/text_equal_test">
+	<task dc:uri="http://example.com/terms/tasks/text-is-test">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_equal_test</key>
-		<dc:comment>1</dc:comment>
-		<title lang="en">text_equal_test</title>
+		<key>text-is-test</key>
+		<dc:comment></dc:comment>
+		<title lang="en">Text is &quot;test&quot;</title>
 		<text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
-		<title lang="de">text_equal_test</title>
+		<title lang="de">Text ist &quot;test&quot;</title>
 		<text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.</text>
 		<start_attribute dc:uri="http://example.com/terms/domain/set/collection/url"/>
 		<end_attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>

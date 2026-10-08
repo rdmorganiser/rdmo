@@ -17,11 +17,11 @@ users = (
 
 view_issue_permission_map = {
     'owner': [1, 2, 3, 4, 5, 10, 12],
-    'manager': [1, 3, 5, 12],
-    'author': [1, 3, 5, 12],
-    'guest': [1, 3, 5, 12],
-    'api': [1, 2, 3, 4, 5, 10, 12],
-    'site': [1, 2, 3, 4, 5, 10, 12]
+    'manager': [1, 3, 5, 7, 12],
+    'author': [1, 3, 5, 8, 12],
+    'guest': [1, 3, 5, 9, 12],
+    'api': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 }
 
 urlnames = {
@@ -31,7 +31,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 10]
 issues = [1, 2, 3, 4]
-issues_visible = [8, 9]
+issues_visible = [8, 9, 21, 33, 55, 67, 79]
 
 site_id = 1
 project_id = 1

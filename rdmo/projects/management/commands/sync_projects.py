@@ -41,11 +41,11 @@ class Command(BaseCommand):
             self.show_project_tasks_and_views()
 
     def sync_all_tasks_or_views_to_projects(self, model):
-        queryset = model.objects.filter(available=True)
+        queryset = model.objects.all()
         model_name = model._meta.verbose_name_plural
         qs_count = queryset.count()
 
-        self.stdout.write(self.style.SUCCESS(f'Starting sync for {qs_count} available {model_name}...'))
+        self.stdout.write(self.style.SUCCESS(f'Starting sync for {qs_count} {model_name}...'))
         for instance in queryset:
             self.stdout.write(f'- Syncing: {instance}')
             sync_task_or_view_to_projects(instance)

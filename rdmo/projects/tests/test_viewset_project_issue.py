@@ -47,7 +47,7 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5, 12]
 issues = [1, 2, 3, 4, 9]
-issues_visible = [8, 9]
+issues_visible = [8, 9, 21, 33, 55, 67, 79]
 
 issue_status = ('open', 'in_progress', 'closed')
 
