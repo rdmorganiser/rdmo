@@ -2,7 +2,9 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
-import Link from '../../helper/Link'
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import LocationLink from '../../helper/LocationLink'
 
 const InterviewOverview = () => {
   const { navigation } = useSelector((state) => state.project)
@@ -17,16 +19,21 @@ const InterviewOverview = () => {
             <div className="card-body d-flex flex-column">
               <div className="row">
                 <div className="col-md-8">
-                  <h2>{section.title}</h2>
+                  <h2>
+                    <Html html={section.title} />
+                  </h2>
                   {
                     !isEmpty(section.pages) && (
                       <ul className="mb-0 text-secondary">
                         {
                           section.pages.map((page) => (
                             <li key={page.id}>
-                              <Link location={{area: 'interview', pageId: page.id}}>
-                                {page.title}
-                              </Link>
+                              <LocationLink
+                                title={page.title}
+                                location={{area: 'interview', pageId: page.id}}
+                              >
+                                <Html html={page.title} />
+                              </LocationLink>
                             </li>
                           ))
                         }

@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import Link from '../../../helper/Link'
+import NavigationLink from './NavigationLink'
 
 const Navigation = () => {
   const { pageId: currentPageId } = useSelector((state) => state.config)
@@ -24,37 +24,22 @@ const Navigation = () => {
         {
           navigation.map((section, sectionIndex) => (
             <li key={sectionIndex}>
-              <Link location={{area: 'interview', pageId: section.first}}>
-                {section.title}
-              </Link>
+              <NavigationLink element={section} />
               {
                 (section.id === currentSection?.id) && (
                   <ul className="list-unstyled">
                     {
                       section.pages.map((page, pageIndex) => (
-                        <li
-                          key={pageIndex} className={
-                            classNames('ps-4', {'active': page.id === currentPageId})
-                          }>
-                          {
-                            page.show ? (
-                              <Link location={{area: 'interview', pageId: page.id}}>
-                                {page.title}
-                              </Link>
-                            ) : (
-                              <span className="text-muted">{page.title}</span>
-                            )
-                          }
+                        <li key={pageIndex} className={classNames('ps-4', {'active': page.id === currentPageId})}>
+                          <NavigationLink element={page} />
                         </li>
-                      )
-                      )
+                      ))
                     }
                   </ul>
                 )
               }
             </li>
-          )
-          )
+          ))
         }
       </ul>
     </>

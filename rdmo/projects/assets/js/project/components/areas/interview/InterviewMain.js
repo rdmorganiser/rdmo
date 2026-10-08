@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Page from './main/page/Page'
-import Back from './sidebar/Back'
+import BackLink from './sidebar/BackLink'
 import Navigation from './sidebar/Navigation'
 import Progress from './sidebar/Progress'
 
@@ -21,7 +21,7 @@ const InterviewMain = () => {
         <div className="col-md-3">
           <Navigation />
           <Progress />
-          <Back />
+          <BackLink />
         </div>
       </div>
     </div>
