@@ -18,3 +18,10 @@ label {
     font-size: 1.5rem;
     line-height: 1rem;
 }
+
+.form-check-input {
+    &:checked {
+        background-color: var(--rdmo-link-color);
+        border-color: var(--rdmo-link-color);
+    }
+}

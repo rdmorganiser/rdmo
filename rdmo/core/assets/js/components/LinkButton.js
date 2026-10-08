@@ -1,16 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+
 
 const LinkButton = ({ title, className, disabled = false, onClick, children }) => {
   const handleClick = (event) => {
     event.preventDefault()
-    onClick()
+    event.stopPropagation()
+    if (!disabled) onClick()
   }
 
   return (
     <button
-      type="button" title={title} aria-label={title}
-      className={'btn-link ' + className} disabled={disabled}
+      type="button"
+      title={title}
+      aria-label={title}
+      className={classNames('link', className)}
+      disabled={disabled}
       onClick={event => handleClick(event)}>
       {children}
     </button>
