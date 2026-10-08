@@ -1,6 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
+import { get } from 'lodash'
+
+import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+
+import { fetchProjects } from '../../actions/projectsActions'
 
 import EmptyTableRow from '../../../common/components/EmptyTableRow'
 
@@ -9,16 +15,45 @@ const Table = ({
   columnWidths,
   data,
   headerFormatters,
-  onHeaderClick,
   sortableColumns,
-  sortColumn,
-  sortOrder,
   emptyMessage,
   emptyActionLabel,
   onEmptyAction,
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   visibleColumns,
 }) => {
+  const dispatch = useDispatch()
+
+  const config = useSelector((state) => state.config)
+
+  const extractSortingParams = (params) => {
+    const { ordering } = params || {}
+
+    if (!ordering) {
+      return { sortOrder: undefined, sortColumn: undefined }
+    }
+
+    const sortOrder = ordering.startsWith('-') ? 'desc' : 'asc'
+    const sortColumn = sortOrder === 'desc' ? ordering.substring(1) : ordering
+
+    return { sortColumn, sortOrder }
+  }
+
+  const params = get(config, 'params', {})
+  const { sortColumn, sortOrder } = extractSortingParams(params)
+
+  const handleHeaderClick = (column) => {
+    if (sortableColumns.includes(column)) {
+      if (sortColumn === column && sortOrder === 'asc') {
+        dispatch(updateConfig('params.ordering', `-${column}`))
+      } else {
+        dispatch(updateConfig('params.ordering', column))
+      }
+
+      dispatch(fetchProjects())
+    }
+  }
+
   const renderSortIcon = (column) => {
     const isSortColumn = sortColumn === column
 
@@ -50,7 +85,7 @@ const Table = ({
               return (
                 <th
                   className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined}
-                  key={column} style={{ width: columnWidths[index] }} onClick={() => onHeaderClick(column)}
+                  key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}
                   aria-label={columnHeaderLabel}>
                   {columnHeaderContent}
                   {sortableColumns.includes(column) && renderSortIcon(column)}
@@ -116,10 +151,7 @@ Table.propTypes = {
   columnWidths: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   headerFormatters: PropTypes.object,
-  onHeaderClick: PropTypes.func,
   sortableColumns: PropTypes.arrayOf(PropTypes.string),
-  sortColumn: PropTypes.string,
-  sortOrder: PropTypes.string,
   visibleColumns: PropTypes.arrayOf(PropTypes.string),
   emptyMessage: PropTypes.string,
   emptyActionLabel: PropTypes.string,

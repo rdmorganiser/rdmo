@@ -4,7 +4,7 @@ import pytest
 
 from django.urls import reverse
 
-from ..models import Catalog
+from ..models import Catalog, Page, Question, QuestionSet
 
 users = (
     ('editor', 'editor'),
@@ -251,6 +251,106 @@ def test_detail_export(db, client, username, password, export_format):
         assert root.tag == 'rdmo'
         for child in root:
             assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
+
+
+def test_detail_export_attribute_uris(db, client):
+    client.login(username='editor', password='editor')
+    instance = Catalog.objects.get(pk=1)
+
+    expected_attribute_uris = {
+        descendant.uri: descendant.attribute.uri
+        for descendant in instance.descendants
+        if isinstance(descendant, (Page, QuestionSet, Question)) and descendant.attribute_id
+    }
+    assert expected_attribute_uris
+
+    url = reverse(urlnames['detail_export'], args=[instance.pk]) + 'xml/'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    exported_attribute_uris = {
+        child.attrib[r'{http://purl.org/dc/elements/1.1/}uri']: child.find('attribute').attrib.get(
+            r'{http://purl.org/dc/elements/1.1/}uri'
+        )
+        for child in root
+        if child.tag in ['page', 'questionset', 'question']
+    }
+
+    assert root.find('attribute') is None
+    assert exported_attribute_uris['http://example.com/terms/questions/catalog/set/collection-single'] == \
+        'http://example.com/terms/domain/set/id'
+    assert {
+        uri: attribute_uri
+        for uri, attribute_uri in expected_attribute_uris.items()
+        if exported_attribute_uris.get(uri) != attribute_uri
+    } == {}
+
+
+def test_detail_export_conditions(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?conditions=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    condition = next(
+        child for child in root
+        if (
+            child.tag == 'condition' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/conditions/options_empty'
+        )
+    )
+
+    assert root.find('attribute') is None
+    assert condition.find('source').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/domain/conditions/option'
+
+
+def test_detail_export_optionsets(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?optionsets=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    optionset = next(
+        child for child in root
+        if (
+            child.tag == 'optionset' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/options/condition'
+        )
+    )
+
+    assert root.find('condition') is None
+    assert optionset.find('conditions/condition').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/conditions/optionset_bool_is_true'
+
+
+def test_detail_export_optionsets_conditions(db, client):
+    client.login(username='editor', password='editor')
+
+    url = reverse(urlnames['detail_export'], args=[1]) + 'xml/?optionsets=true&conditions=true'
+    response = client.get(url)
+    assert response.status_code == status_map['detail']['editor'], response.content
+
+    root = et.fromstring(response.content)
+    condition = next(
+        child for child in root
+        if (
+            child.tag == 'condition' and
+            child.attrib[r'{http://purl.org/dc/elements/1.1/}uri'] ==
+            'http://example.com/terms/conditions/optionset_bool_is_true'
+        )
+    )
+
+    assert root.find('attribute') is None
+    assert condition.find('source').attrib[r'{http://purl.org/dc/elements/1.1/}uri'] == \
+        'http://example.com/terms/domain/conditions/optionset/bool'
 
 
 def test_detail_export_full(db, client):

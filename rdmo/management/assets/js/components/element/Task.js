@@ -8,7 +8,7 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement } from '../../actions/elementActions'
+import { fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -39,9 +39,9 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
 
   const fetchEdit = () => dispatch(fetchElement('tasks', task.id))
   const fetchCopy = () => dispatch(fetchElement('tasks', task.id, 'copy'))
-  const toggleAvailable = () => dispatch(storeElement('tasks', { ...task, available: !task.available }))
-  const toggleLocked = () => dispatch(storeElement('tasks', { ...task, locked: !task.locked }))
-  const toggleCurrentSite = () => dispatch(storeElement('tasks', task, 'toggle-site'))
+  const toggleAvailable = () => dispatch(patchElement('tasks', { id: task.id, available: !task.available }))
+  const toggleLocked = () => dispatch(patchElement('tasks', { id: task.id, locked: !task.locked }))
+  const toggleCurrentSite = () => dispatch(toggleElementSite('tasks', task))
 
   const fetchCondition = (index) => dispatch(fetchElement('conditions', task.conditions[index]))
 

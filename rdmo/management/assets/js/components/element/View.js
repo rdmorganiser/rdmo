@@ -8,7 +8,7 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement } from '../../actions/elementActions'
+import { fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -37,9 +37,9 @@ const View = ({ view, filter = false, filterSites = false, filterEditors = false
 
   const fetchEdit = () => dispatch(fetchElement('views', view.id))
   const fetchCopy = () => dispatch(fetchElement('views', view.id, 'copy'))
-  const toggleAvailable = () => dispatch(storeElement('views', { ...view, available: !view.available }))
-  const toggleLocked = () => dispatch(storeElement('views', { ...view, locked: !view.locked }))
-  const toggleCurrentSite = () => dispatch(storeElement('views', view, 'toggle-site'))
+  const toggleAvailable = () => dispatch(patchElement('views', { id: view.id, available: !view.available }))
+  const toggleLocked = () => dispatch(patchElement('views', { id: view.id, locked: !view.locked }))
+  const toggleCurrentSite = () => dispatch(toggleElementSite('views', view))
 
   const displayUriViews = isTruthy(get(config, 'display.uri.views', true))
 

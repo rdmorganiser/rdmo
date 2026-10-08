@@ -5,7 +5,7 @@ import get from 'lodash/get'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { createElement, fetchElement, storeElement } from '../../actions/elementActions'
+import { createElement, fetchElement, patchElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -30,7 +30,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const fetchEdit = () => dispatch(fetchElement('optionsets', optionset.id))
   const fetchCopy = () => dispatch(fetchElement('optionsets', optionset.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('optionsets', optionset.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('optionsets', {...optionset, locked: !optionset.locked }))
+  const toggleLocked = () => dispatch(patchElement('optionsets', { id: optionset.id, locked: !optionset.locked }))
 
   const createOption = () => dispatch(createElement('options', { optionset }))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', optionset.conditions[index]))

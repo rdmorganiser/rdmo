@@ -699,6 +699,8 @@ class ProjectSnapshotSerializer(serializers.ModelSerializer):
 
 class ProjectValueSerializer(serializers.ModelSerializer):
 
+    attribute = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
+
     class Meta:
         model = Value
         fields = (

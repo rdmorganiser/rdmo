@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { createElement, fetchElement, storeElement, toggleElements } from '../../actions/elementActions'
+import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -41,7 +41,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const fetchEdit = () => dispatch(fetchElement('pages', page.id))
   const fetchCopy = () => dispatch(fetchElement('pages', page.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('pages', page.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('pages', { ...page, locked: !page.locked }))
+  const toggleLocked = () => dispatch(patchElement('pages', { id: page.id, locked: !page.locked }))
   const toggleShowElements = () => dispatch(toggleElements(page))
 
   const createQuestionSet = () => dispatch(createElement('questionsets', { page }))
@@ -141,6 +141,10 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 </div>
               </Drop>
             )
+          }
+          {
+            !isEmpty(page.elements) &&
+            <Drop element={page.elements[0]} indent={indent + 1} mode="before" />
           }
           {
             showElements && page.elements.map((element, index) => {

@@ -26,7 +26,7 @@ const EditCatalog = ({ catalog }) => {
   const { elementAction, sections } = useSelector((state) => state.elements)
 
   const updateCatalog = (key, value) => dispatch(updateElement(catalog, {[key]: value}))
-  const storeCatalog = (back) => dispatch(storeElement('catalogs', catalog, elementAction, back))
+  const storeCatalog = (back) => dispatch(storeElement('catalogs', catalog, back))
   const deleteCatalog = () => dispatch(deleteElement('catalogs', catalog))
 
   const editSection = (value) => dispatch(fetchElement('sections', value.section))

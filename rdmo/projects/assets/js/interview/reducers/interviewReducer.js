@@ -25,11 +25,13 @@ import {
   RESOLVE_CONDITIONS_ERROR,
   RESOLVE_CONDITIONS_INIT,
   RESOLVE_CONDITIONS_SUCCESS,
+  RESORT_VALUES,
   STORE_VALUE_ERROR,
   STORE_VALUE_INIT,
   STORE_VALUE_SUCCESS,
   UPDATE_VALUE
 } from '../actions/actionTypes'
+import { sortValues } from '../utils/value'
 
 const initialState = {
   done: null,
@@ -154,6 +156,8 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case COPY_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
+    case RESORT_VALUES:
+      return { ...state, values: sortValues(state.values) }
     default:
       return state
   }

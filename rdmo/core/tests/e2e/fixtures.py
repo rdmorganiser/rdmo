@@ -10,7 +10,7 @@ from playwright.sync_api import Browser, BrowserContext, Page
 
 from rdmo.accounts.utils import set_group_permissions
 
-PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
+PLAYWRIGHT_TIMEOUT = 1_000  # timeout in ms
 
 
 @pytest.fixture(scope="session", autouse=True)

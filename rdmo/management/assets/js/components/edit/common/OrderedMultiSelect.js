@@ -19,12 +19,41 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
+const formatOptionLabel = ({ label }, { context }) => {
+  const parts = label.split('/')
+
+  if (context === 'menu') {
+    // insert <wbr> at /
+    return (
+      <span>
+        {
+          parts.map((part, index) => (
+            index === 0 ? part : [<wbr key={index} />, '/', part]
+          ))
+        }
+      </span>
+    )
+  } else if (parts.length >= 3) {
+    const head = `${parts.slice(0, -3).join('/')}`
+    const tail = `/${parts.slice(-3).join('/')}`
+    return (
+      <span className="truncate-option-label">
+        <span className="truncate-option-label-head">{head}</span>
+        <span className="truncate-option-label-tail">{tail}</span>
+      </span>
+    )
+  } else {
+    return label
+  }
+}
+
 const OrderedMultiSelectItem = ({
   index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
   handleChange, handleEdit, handleRemove, handleDrag
 }) => {
   const dragRef = useRef(null)
   const dropRef = useRef(null)
+  const firstDropRef = useRef(null)
 
   const [{}, drag] = useDrag(() => ({
     type: field,
@@ -38,13 +67,28 @@ const OrderedMultiSelectItem = ({
       isOver: monitor.isOver()
     }),
     drop: (item) => {
-      handleDrag(item.index, index)
+      handleDrag(item.index, index + 1)
+    },
+  }))
+
+  const [{ isOver: isOverFirst }, firstDrop] = useDrop(() => ({
+    accept: field,
+    collect: (monitor) => ({
+      isOver: monitor.isOver()
+    }),
+    drop: (item) => {
+      handleDrag(item.index, 0)
     },
   }))
 
   const dropClassName = classNames('drop', {
     'show': isDragging,
     'over': isOver
+  })
+
+  const firstDropClassName = classNames('drop', {
+    'show': isDragging,
+    'over': isOverFirst
   })
 
   const dragClassName = classNames('bi bi-arrows-move drag', {
@@ -54,6 +98,10 @@ const OrderedMultiSelectItem = ({
   if (!disabled) {
     drag(dragRef)
     drop(dropRef)
+
+    if (index === 0) {
+      firstDrop(firstDropRef)
+    }
   }
 
   const itemErrors = isEmpty(errors) || isEmpty(errors[index]) ? [] : (
@@ -70,30 +118,48 @@ const OrderedMultiSelectItem = ({
     })
   }
 
+  const handleMenuOpen = () => {
+    setTimeout(() => {
+      document
+        .querySelector(
+          '.react-select__menu-portal .react-select__option--is-selected'
+        )
+        ?.scrollIntoView({ block: 'nearest'})
+    }, 0)
+  }
+
   return (
-    <div className="position-relative mb-2">
-      <div className={className}>
-        <div className="flex-grow-1">
-          <ReactSelect
-            classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
-            options={selectOptions} value={selectValue}
-            onChange={option => handleChange(option, index)}
-            menuPortalTarget={document.body} isDisabled={disabled}
-            aria-labelledby={ariaLabelledBy} />
+    <>
+      {
+        index === 0 &&
+        <div ref={firstDropRef} className={firstDropClassName}></div>
+      }
+      <div className="position-relative mb-2">
+        <div className={className}>
+          <div className="flex-grow-1">
+            <ReactSelect
+              classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
+              options={selectOptions} value={selectValue}
+              formatOptionLabel={formatOptionLabel}
+              onChange={option => handleChange(option, index)}
+              menuPortalTarget={document.body} isDisabled={disabled}
+              aria-labelledby={ariaLabelledBy}
+              onMenuOpen={handleMenuOpen} />
+          </div>
+          <Link
+            className="bi bi-pencil" title={gettext('Edit')}
+            onClick={() => handleEdit(index)} />
+          <Link
+            className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
+            onClick={() => !disabled && handleRemove(index)} />
+          <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
         </div>
-        <Link
-          className="bi bi-pencil" title={gettext('Edit')}
-          onClick={() => handleEdit(index)} />
-        <Link
-          className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
-          onClick={() => !disabled && handleRemove(index)} />
-        <i className={dragClassName} ref={dragRef} aria-hidden="true"></i>
+
+        <ErrorList errors={itemErrors} />
+
+        <div ref={dropRef} className={dropClassName}></div>
       </div>
-
-      <ErrorList errors={itemErrors} />
-
-      <div ref={dropRef} className={dropClassName}></div>
-    </div>
+    </>
   )
 }
 
@@ -191,7 +257,9 @@ const OrderedMultiSelect = ({
 
     const dragValue = values[dragIndex]
     values.splice(dragIndex, 1)
-    values.splice(dropIndex, 0, dragValue)
+
+    const insertIndex = dragIndex < dropIndex ? dropIndex - 1 : dropIndex
+    values.splice(insertIndex, 0, dragValue)
 
     // re-order the array
     values.forEach((value, index) => {

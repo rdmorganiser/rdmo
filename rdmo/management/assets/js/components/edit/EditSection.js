@@ -27,7 +27,7 @@ const EditSection = ({ section }) => {
   const { elementAction, parent, pages } = useSelector((state) => state.elements)
 
   const updateSection = (key, value) => dispatch(updateElement(section, {[key]: value}))
-  const storeSection = (back) => dispatch(storeElement('sections', section, elementAction, back))
+  const storeSection = (back) => dispatch(storeElement('sections', section, back))
   const deleteSection = () => dispatch(deleteElement('sections', section))
 
   const editPage = (value) => dispatch(fetchElement('pages', value.page))

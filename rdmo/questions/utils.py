@@ -1,6 +1,6 @@
 from rdmo.conditions.models import Condition
 from rdmo.core.utils import is_truthy
-from rdmo.domain.models import Attribute
+from rdmo.domain.utils import get_attribute_map
 from rdmo.questions.models import Page, Question, QuestionSet
 
 
@@ -19,9 +19,6 @@ def get_export_flags(request):
 
 
 def get_serializer_context(elements, export_flags):
-    if not any(export_flags.get(key) for key in ('attributes', 'conditions', 'optionsets')):
-        return export_flags
-
     attribute_ids = set()
     question_ids = set()
 
@@ -30,13 +27,14 @@ def get_serializer_context(elements, export_flags):
             if isinstance(descendant, (Page, QuestionSet, Question)) and descendant.attribute_id:
                 attribute_ids.add(descendant.attribute_id)
 
-            if isinstance(descendant, Question):
+            if export_flags.get('optionsets') and isinstance(descendant, Question):
                 question_ids.add(descendant.id)
 
-            if isinstance(descendant, (Page, QuestionSet, Question)):
+            if export_flags.get('conditions') and isinstance(descendant, (Page, QuestionSet, Question)):
                 attribute_ids.update(
                     condition.source_id
                     for condition in descendant.conditions.all()
+                    if condition.source_id
                 )
 
     if export_flags.get('optionsets') and question_ids:
@@ -46,12 +44,10 @@ def get_serializer_context(elements, export_flags):
             ).values_list('source_id', flat=True)
         )
 
-    return {
-        **export_flags,
-        'attribute_map': (
-            Attribute.objects.get_queryset_ancestors(
-                Attribute.objects.filter(id__in=attribute_ids),
-                include_self=True
-            ).in_bulk()
-        )
-    }
+    if attribute_ids:
+        return {
+            **export_flags,
+            'attribute_map': get_attribute_map(attribute_ids)
+        }
+
+    return export_flags

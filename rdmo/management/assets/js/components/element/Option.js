@@ -7,7 +7,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { fetchElement, storeElement } from '../../actions/elementActions'
+import { fetchElement, patchElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -28,7 +28,7 @@ const Option = ({ option, display = 'list', indent = 0, filter = false, filterEd
 
   const fetchEdit = () => dispatch(fetchElement('options', option.id))
   const fetchCopy = () => dispatch(fetchElement('options', option.id, 'copy'))
-  const toggleLocked = () => dispatch(storeElement('options', {...option, locked: !option.locked }))
+  const toggleLocked = () => dispatch(patchElement('options', { id: option.id, locked: !option.locked }))
 
   const displayUriOptions = isTruthy(get(config, 'display.uri.options', true))
 

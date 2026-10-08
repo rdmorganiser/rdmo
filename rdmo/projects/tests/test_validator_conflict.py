@@ -224,3 +224,86 @@ def test_serializer_create_checkbox_text(db):
             'set_index': value.set_index,
             'collection_index': value.collection_index
         }, serializer)
+
+
+def test_serializer_create_checkbox_external_id(db):
+    value = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=0
+    )
+    Value.objects.create(
+        project=value.project,
+        snapshot=None,
+        attribute=value.attribute,
+        set_prefix=value.set_prefix,
+        set_index=value.set_index,
+        collection_index=10,
+        external_id='provider-value-1',
+        text='Provider value 1'
+    )
+
+    class MockedRequest:
+        data = {
+            'widget_type': 'checkbox'
+        }
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
+
+    validator = ValueConflictValidator()
+    serializer = ValueSerializer()
+    serializer.context['view'] = MockedView()
+
+    validator({
+        'attribute': value.attribute,
+        'set_prefix': value.set_prefix,
+        'set_index': value.set_index,
+        'collection_index': 11,
+        'option': None,
+        'external_id': 'provider-value-2'
+    }, serializer)
+
+
+def test_serializer_create_checkbox_external_id_error(db):
+    value = Value.objects.get(
+        project_id=project_id,
+        snapshot=None,
+        attribute__path='individual/collection/checkbox',
+        collection_index=0
+    )
+    Value.objects.create(
+        project=value.project,
+        snapshot=None,
+        attribute=value.attribute,
+        set_prefix=value.set_prefix,
+        set_index=value.set_index,
+        collection_index=10,
+        external_id='provider-value-1',
+        text='Provider value 1'
+    )
+
+    class MockedRequest:
+        data = {
+            'widget_type': 'checkbox'
+        }
+
+    class MockedView:
+        request = MockedRequest()
+        project = Project.objects.get(id=project_id)
+
+    validator = ValueConflictValidator()
+    serializer = ValueSerializer()
+    serializer.context['view'] = MockedView()
+
+    with pytest.raises(RestFrameworkValidationError):
+        validator({
+            'attribute': value.attribute,
+            'set_prefix': value.set_prefix,
+            'set_index': value.set_index,
+            'collection_index': 11,
+            'option': None,
+            'external_id': 'provider-value-1'
+        }, serializer)

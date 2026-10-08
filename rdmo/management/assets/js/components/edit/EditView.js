@@ -26,7 +26,7 @@ const EditView = ({ view }) => {
   const { elementAction, catalogs } = useSelector((state) => state.elements)
 
   const updateView = (key, value) => dispatch(updateElement(view, {[key]: value}))
-  const storeView = (back) => dispatch(storeElement('views', view, elementAction, back))
+  const storeView = (back) => dispatch(storeElement('views', view, back))
   const deleteView = () => dispatch(deleteElement('views', view))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()

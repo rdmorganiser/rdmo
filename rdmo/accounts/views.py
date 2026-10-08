@@ -4,9 +4,10 @@ import re
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from rest_framework.authtoken.models import Token
 
@@ -91,12 +92,13 @@ def shibboleth_login(request):
         return HttpResponseRedirect(login_url)
 
 
+@require_POST
 def shibboleth_logout(request):
     logout_url = reverse('account_logout')
     if settings.SHIBBOLETH_USERNAME_PATTERN is None \
             or re.search(settings.SHIBBOLETH_USERNAME_PATTERN, request.user.username):
         logout_url += f'?next={settings.SHIBBOLETH_LOGOUT_URL}'
-    return HttpResponseRedirect(logout_url)
+    return HttpResponseRedirect(logout_url, preserve_request=True)
 
 
 def terms_of_use_accept(request):
@@ -112,7 +114,18 @@ def terms_of_use_accept(request):
             if consent_saved:
                 return redirect("home")
 
-    return render(request, "account/terms_of_use_accept.html", {
-        "form": form,
-        "has_consented": ConsentFieldValue.objects.filter(user=request.user).exists()
-    })
+        # If consent was not saved, re-render the form with an error
+        return render(request,
+            "account/terms_of_use_accept_form.html",
+            {"form": form},
+        )
+
+    elif request.method == "GET":
+        has_consented = ConsentFieldValue.has_accepted_terms(request.user, request.session)
+        return render(
+            request,
+            "account/terms_of_use_accept_form.html",
+            {"has_consented": has_consented},
+        )
+
+    return HttpResponseNotAllowed(["GET", "POST"])

@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
+import { get, isEmpty } from 'lodash'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { createElement, fetchElement, storeElement, toggleElements } from '../../actions/elementActions'
+import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
 
@@ -40,7 +40,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const fetchEdit = () => dispatch(fetchElement('questionsets', questionset.id))
   const fetchCopy = () => dispatch(fetchElement('questionsets', questionset.id, 'copy'))
   const fetchNested = () => dispatch(fetchElement('questionsets', questionset.id, 'nested'))
-  const toggleLocked = () => dispatch(storeElement('questionsets', { ...questionset, locked: !questionset.locked }))
+  const toggleLocked = () => dispatch(patchElement('questionsets', { id: questionset.id, locked: !questionset.locked }))
   const toggleShowElements = () => dispatch(toggleElements(questionset))
 
   const createQuestionSet = () => dispatch(createElement('questionsets', { questionset }))
@@ -144,6 +144,10 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
                 </div>
               </Drop>
             )
+          }
+          {
+            !isEmpty(questionset.elements) &&
+            <Drop element={questionset.elements[0]} indent={indent + 1} mode="before" />
           }
           {
             showElements && questionset.elements.map((element, index) => {

@@ -26,7 +26,7 @@ const EditAttribute = ({ attribute }) => {
 
   const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
   const updateAttribute = (key, value) => dispatch(updateElement(attribute, {[key]: value}))
-  const storeAttribute = (back) => dispatch(storeElement('attributes', attribute, elementAction, back))
+  const storeAttribute = (back) => dispatch(storeElement('attributes', attribute, back))
   const deleteAttribute = () => dispatch(deleteElement('attributes', attribute))
 
   const [showDeleteModal, openDeleteModal, closeDeleteModal] = useDeleteModal()

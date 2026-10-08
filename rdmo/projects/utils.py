@@ -74,14 +74,37 @@ def is_last_owner(project, user):
         return False
 
 
-def check_conditions(conditions, values, set_prefix=None, set_index=None):
-    if conditions:
-        for condition in conditions:
-            if condition.resolve(values, set_prefix, set_index):
-                return True
-        return False
-    else:
+def compute_value_maps(values):
+    attribute_values_map = defaultdict(list)
+    attribute_sets_map = defaultdict(set)
+    attribute_set_values_map = defaultdict(list)
+
+    for value in values:
+        attribute_values_map[value.attribute_id].append(value)
+        attribute_sets_map[value.attribute_id].add((value.set_prefix, value.set_index))
+        attribute_set_values_map[(value.attribute_id, value.set_prefix, value.set_index)].append(value)
+
+    return attribute_values_map, attribute_sets_map, attribute_set_values_map
+
+
+def check_conditions(conditions, attribute_values_map, set_prefix=None, set_index=None, resolved_conditions=None):
+    if not conditions:
         return True
+
+    if resolved_conditions is None:
+        resolved_conditions = {}
+
+    for condition in conditions:
+        condition_key = (condition.id, set_prefix, set_index)
+
+        if condition_key not in resolved_conditions:
+            values = attribute_values_map.get(condition.source_id, ())
+            resolved_conditions[condition_key] = condition.resolve(values, set_prefix, set_index)
+
+        if resolved_conditions[condition_key]:
+            return True
+
+    return False
 
 
 def check_options(project, value):
@@ -311,16 +334,6 @@ def send_invite_email(request, invite):
 
     # send the email
     send_mail(subject, message, to=[invite.email])
-
-
-def set_context_querystring_with_filter_and_page(context: dict) -> dict:
-    '''prepares the filter part of the querystring for the next and previous hyperlinks in the pagination'''
-    if context["filter"].data:
-        querystring = context["filter"].data.copy()
-        if context["filter"].data.get('page'):
-            del querystring['page']
-        context['querystring'] = querystring.urlencode()
-    return context
 
 
 def get_upload_accept():

@@ -25,7 +25,7 @@ const EditCondition = ({ condition }) => {
   const { elementAction, parent, attributes, options } = useSelector((state) => state.elements)
 
   const updateCondition = (key, value) => dispatch(updateElement(condition, {[key]: value}))
-  const storeCondition = (back) => dispatch(storeElement('conditions', condition, elementAction, back))
+  const storeCondition = (back) => dispatch(storeElement('conditions', condition, back))
   const deleteCondition = () => dispatch(deleteElement('conditions', condition))
 
   const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))
