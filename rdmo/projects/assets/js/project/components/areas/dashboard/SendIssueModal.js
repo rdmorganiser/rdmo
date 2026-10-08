@@ -98,9 +98,9 @@ const SendIssueModal = ({
     </>
   ) : (
     sendMethod === 'mail' ? (
-      gettext('Send by mail')
+      gettext('Send')
     ) : (
-      selectedIntegration?.provider.send_label ?? gettext('Send by integration')
+      selectedIntegration?.provider.send_label ?? gettext('Send')
     )
   )
 
@@ -216,14 +216,43 @@ const SendIssueModal = ({
         {
           isConfigured && (
             <>
-              <SendIssueDropdowns
-                formData={formData}
-                setField={setField}
-                onCheckboxChange={handleCheckboxChange}
-                onSnapshotChange={handleSnapshotChange}
-                onFileChange={handleFileChange}
-                formats={settings.export_formats ?? []}
-              />
+              <div className={
+                classNames(
+                  'd-flex justify-content-between align-items-baseline gap-3',
+                  { 'border-bottom pb-3 mb-3': hasMail && hasIntegrations }
+                )
+              }>
+                {
+                  hasMail && hasIntegrations && (
+                    <nav className="nav nav-pills gap-2">
+                      <button
+                        type="button"
+                        className={classNames('nav-link text-nowrap', { active: sendMethod === 'mail' })}
+                        onClick={() => setSendMethod('mail')}
+                      >
+                        <i className="bi bi-send" aria-hidden="true"></i> {gettext('Mail')}
+                      </button>
+                      <button
+                        type="button"
+                        className={classNames('nav-link text-nowrap', { active: sendMethod === 'integration' })}
+                        onClick={() => setSendMethod('integration')}
+                      >
+                        <i className="bi bi-wrench" aria-hidden="true"></i> {gettext('Integration')}
+                      </button>
+                    </nav>
+                  )
+                }
+                <div className="ms-auto">
+                  <SendIssueDropdowns
+                    formData={formData}
+                    setField={setField}
+                    onCheckboxChange={handleCheckboxChange}
+                    onSnapshotChange={handleSnapshotChange}
+                    onFileChange={handleFileChange}
+                    formats={settings.export_formats ?? []}
+                  />
+                </div>
+              </div>
               <Html html={templates.project_issue_send_info} />
               {
                 contentError && <div className="text-danger mb-3">{contentError}</div>
@@ -248,34 +277,6 @@ const SendIssueModal = ({
                 errors={messageErrors}
               />
             </>
-          )
-        }
-        {
-          hasMail && hasIntegrations && (
-            <ul className="nav nav-tabs mb-4" role="tablist" aria-label={gettext('Send using')}>
-              <li className="nav-item" role="presentation">
-                <button
-                  type="button"
-                  className={classNames('nav-link', { active: sendMethod === 'mail' })}
-                  role="tab"
-                  aria-selected={sendMethod === 'mail'}
-                  onClick={() => setSendMethod('mail')}
-                >
-                  {gettext('Send by mail')}
-                </button>
-              </li>
-              <li className="nav-item" role="presentation">
-                <button
-                  type="button"
-                  className={classNames('nav-link', { active: sendMethod === 'integration' })}
-                  role="tab"
-                  aria-selected={sendMethod === 'integration'}
-                  onClick={() => setSendMethod('integration')}
-                >
-                  {gettext('Send by integration')}
-                </button>
-              </li>
-            </ul>
           )
         }
         {
