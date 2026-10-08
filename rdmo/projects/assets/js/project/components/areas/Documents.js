@@ -53,7 +53,7 @@ const Documents = () => {
             title={gettext('List all questions')}
             help={gettext('Overview of all questions. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
-            onExport={(format) => {dispatch(downloadAnswers(snapshotId, format, {'hide_answers': 'true'}))}}
+            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, {'hide_answers': 'true'}))}
           />
         </div>
         <div className="col-lg-6">
@@ -61,7 +61,7 @@ const Documents = () => {
             title={gettext('List all answers')}
             help={gettext('Overview of all questions and answers. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}
-            onExport={(format) => {dispatch(downloadAnswers(snapshotId, format, {'hide_answers': 'false'}))}}
+            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, {'hide_answers': 'false'}))}
           />
         </div>
       </div>

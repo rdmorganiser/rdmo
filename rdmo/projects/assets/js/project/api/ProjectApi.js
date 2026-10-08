@@ -115,7 +115,7 @@ export default class ProjectApi extends BaseApi {
   }
 
   static fetchProjectAnswers(projectId, snapshotId, params = {}) {
-    const query = new URLSearchParams(params).toString()
+    const query = encodeParams(params)
 
     if (isNil(snapshotId)) {
       return this.get(`/api/v1/projects/projects/${projectId}/answers/?${query}`)
@@ -125,7 +125,7 @@ export default class ProjectApi extends BaseApi {
   }
 
   static downloadProjectAnswers(projectId, snapshotId, format, params = {}) {
-    const query = new URLSearchParams(params).toString()
+    const query = encodeParams(params)
 
     if (isNil(snapshotId)) {
       return this.download(`/api/v1/projects/projects/${projectId}/answers/export/${format}/?${query}`)

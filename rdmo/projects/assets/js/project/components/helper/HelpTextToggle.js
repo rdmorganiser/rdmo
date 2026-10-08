@@ -22,7 +22,7 @@ const HelpTextToggle = ({ onChanged }) => {
 
   return (
     <Link onClick={handleClick}>
-      {isTruthy(get(config, 'document.includeHelp')) && gettext('Remove help text') || gettext('Include help text')}
+      {isTruthy(get(config, 'document.includeHelp')) && gettext('Hide help texts') || gettext('Show help texts')}
     </Link>
   )
 }

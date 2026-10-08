@@ -6,7 +6,7 @@
 
     <p><strong class="question-label">{{ element.text|markdown }}</strong></p>
     {% if include_help and element.help %}
-        <blockquote class="question-help"><p>{{ element.help|markdown }}</p></blockquote>
+        <div class="question-help text-muted mb-3">{{ element.help|markdown }}</div>
     {% endif %}
 
     {% if not hide_answers %}
@@ -53,7 +53,7 @@
 
     <h4>{{ element.title|markdown }}</h4>
     {% if include_help and element.help %}
-        <blockquote class="questionset-help"><p>{{ element.help|markdown }}</p></blockquote>
+        <div class="questionset-help text-muted mb-3">{{ element.help|markdown }}</div>
     {% endif %}
     {% for element in element.elements %}
         {% include 'projects/project_answers_element.html' %}
