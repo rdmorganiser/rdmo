@@ -84,20 +84,27 @@ const NestedQuestionSet = ({ questionset }) => {
             </button>
           </div>
         </div>
-      </div>
-      {
-        !isEmpty(questionset.elements) &&
-        <Drop element={questionset.elements[0]} indent={1} mode="before" />
-      }
-      {
-        questionset.elements.map((element, index) => {
-          if (element.model == 'questions.questionset') {
-            return <QuestionSet key={index} questionset={element} display="nested" filter="questionset" indent={1} />
-          } else {
-            return <Question key={index} question={element} display="nested" filter="questionset" indent={1} />
+
+        <div className="card-body border-top pt-0">
+          {
+            !isEmpty(questionset.elements) &&
+            <Drop element={questionset.elements[0]} indent={1} mode="before" />
           }
-        })
-      }
+          {
+            questionset.elements.map((element, index) => {
+              if (element.model == 'questions.questionset') {
+                return (
+                  <QuestionSet key={index} questionset={element} display="nested" filter="questionset" indent={1} />
+                )
+              } else {
+                return (
+                  <Question key={index} question={element} display="nested" filter="questionset" indent={1} />
+                )
+              }
+            })
+          }
+        </div>
+      </div>
     </>
   )
 }

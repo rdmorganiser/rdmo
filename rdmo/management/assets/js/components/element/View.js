@@ -47,7 +47,7 @@ const View = ({ view, filter = false, filterSites = false, filterEditors = false
     <li className="list-group-item">
       <div className="d-flex flex-column gap-2">
         <div className="d-flex align-items-center gap-2">
-          <strong>{gettext('View')}{':'}</strong>
+          <strong>{gettext('View')}</strong>
           <div className="flex-grow-1">
             <Html html={view.title} />
           </div>

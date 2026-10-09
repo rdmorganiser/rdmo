@@ -52,16 +52,18 @@ const NestedSection = ({ section }) => {
         </div>
 
         <div className="card-body">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString
-                value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
-                label={gettext('Filter sections')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix
-                value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                options={getUriPrefixes(section.elements)} />
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
+                  label={gettext('Filter sections')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  options={getUriPrefixes(section.elements)} />
+              </div>
             </div>
           </div>
           <div className="input-group input-group-sm mb-2">
@@ -98,18 +100,21 @@ const NestedSection = ({ section }) => {
             </button>
           </div>
         </div>
+
+        <div className="card-body border-top pt-0">
+          {
+            !isEmpty(section.elements) &&
+            <Drop element={section.elements[0]} indent={1} mode="before" />
+          }
+          {
+            section.elements.map((page, index) => (
+              <Page
+                key={index} config={config} page={page}
+                display="nested" filter="section" indent={1} />
+            ))
+          }
+        </div>
       </div>
-      {
-        !isEmpty(section.elements) &&
-        <Drop element={section.elements[0]} indent={1} mode="before" />
-      }
-      {
-        section.elements.map((page, index) => (
-          <Page
-            key={index} config={config} page={page}
-            display="nested" filter="section" indent={1} />
-        ))
-      }
     </>
   )
 }

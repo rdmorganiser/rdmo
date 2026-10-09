@@ -57,7 +57,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Page')}{':'}</strong>
+        <strong>{gettext('Page')}</strong>
         <div className="flex-grow-1">
           <Html html={page.title} />
         </div>

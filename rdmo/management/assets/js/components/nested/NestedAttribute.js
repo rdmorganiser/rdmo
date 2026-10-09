@@ -26,26 +26,30 @@ const NestedAttribute = ({ attribute }) => {
         </div>
 
         <div className="card-body pb-0">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString
-                value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
-                label={gettext('Filter attributes')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix
-                value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                options={getUriPrefixes(attribute.elements)} />
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
+                  label={gettext('Filter attributes')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  options={getUriPrefixes(attribute.elements)} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {
-        attribute.elements.map((attribute, index) => (
-          <Attribute key={index} attribute={attribute} display="nested" filter="attribute" indent={1} />
-        ))
-      }
+        <div className="card-body border-top pt-0">
+          {
+            attribute.elements.map((attribute, index) => (
+              <Attribute key={index} attribute={attribute} display="nested" filter="attribute" indent={1} />
+            ))
+          }
+        </div>
+      </div>
     </>
   )
 }

@@ -35,7 +35,7 @@ const Option = ({ option, display = 'list', indent = 0, filter = false, filterEd
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Option')}{':'}</strong>
+        <strong>{gettext('Option')}</strong>
         <div className="flex-grow-1">
           <Html html={option.text} />
         </div>

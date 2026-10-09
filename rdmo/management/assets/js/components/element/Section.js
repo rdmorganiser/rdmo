@@ -49,7 +49,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Section')}{':'}</strong>
+        <strong>{gettext('Section')}</strong>
         <div className="flex-grow-1">
           <Html html={section.title} />
         </div>

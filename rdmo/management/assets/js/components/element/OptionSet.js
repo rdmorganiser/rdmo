@@ -40,7 +40,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Option set')}{':'}</strong>
+        <strong>{gettext('Option set')}</strong>
         <CodeLink
           className="flex-grow-1" type="options" uri={optionset.uri} href={editUrl}
           onClick={() => fetchEdit()} />
