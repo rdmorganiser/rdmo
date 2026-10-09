@@ -27,8 +27,7 @@ const Textarea = ({ rows, className, debounce, label, placeholder, help, isDisab
 
   return (
     <div className={classNames('form-group', className)}>
-      <label className="control-label" htmlFor={id}>{label}</label>
-
+      <label htmlFor={id}>{label}</label>
       <textarea
         rows={rows}
         id={id}

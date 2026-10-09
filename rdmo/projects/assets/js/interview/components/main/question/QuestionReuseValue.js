@@ -77,7 +77,7 @@ const QuestionReuseValue = ({ page, question, value, disabled, updateValue }) =>
         title={gettext('Reuse answer')} show={show} buttons={modalButtons}
         onClose={() => setShow(false)} >
         <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
-          <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
+          <label htmlFor="interview-page-tabs-modal-form-import">
             {gettext('Answer')}
           </label>
 

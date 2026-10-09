@@ -89,7 +89,7 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
         submitProps={{className: 'btn btn-primary'}}
         onClose={() => setShow(false)} onSubmit={handleSubmit}>
         <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
-          <label className="control-label" htmlFor="interview-page-tabs-modal-form-import">
+          <label htmlFor="interview-page-tabs-modal-form-import">
             {gettext('Answer')}
           </label>
 

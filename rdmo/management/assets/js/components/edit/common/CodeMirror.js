@@ -37,7 +37,7 @@ const CodeMirror = ({ element, field, onChange }) => {
 
   return (
     <div className="mb-3">
-      <label className="control-label" htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{label}</label>
 
       <ReactCodeMirror
         className={className} id={id} value={value} extensions={extensions}

@@ -64,7 +64,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
         ) : (
           <>
             <div className={classNames({'form-group': true, 'has-error': errors.text })}>
-              <label className="control-label" htmlFor="interview-page-tabs-modal-form-title">
+              <label htmlFor="interview-page-tabs-modal-form-title">
                 {gettext('Name')}
               </label>
               <input
@@ -88,7 +88,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
             {
               reuse && (
                 <div className={classNames({'form-group': true, 'has-error': errors.value })}>
-                  <label className="control-label">
+                  <label>
                     {gettext('Reuse answers')}
                   </label>
 

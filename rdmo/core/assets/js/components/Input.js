@@ -8,7 +8,7 @@ const Input = ({ type = 'text', className, label, placeholder, help, disabled, e
 
   return (
     <div className={classNames('form-group', className)}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{label}</label>
 
       <input
         id={id}
