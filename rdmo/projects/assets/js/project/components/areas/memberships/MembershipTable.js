@@ -73,7 +73,7 @@ const MembershipTable = ({ persons, type }) => {
                   <td>
                     {
                       emailAddress && (
-                        <a href={`mailto:${emailAddress}`} className="link-success text-decoration-underline">
+                        <a href={`mailto:${emailAddress}`}>
                           {emailAddress}
                         </a>
                       )

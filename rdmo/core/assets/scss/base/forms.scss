@@ -9,6 +9,12 @@ label {
     font-size: .875rem;
 }
 
+.form-text {
+    p {
+        margin-bottom: 0.25rem;  // for the rendered markdown
+    }
+}
+
 .btn-rounded {
     --bs-btn-border-radius: 2rem;
 }

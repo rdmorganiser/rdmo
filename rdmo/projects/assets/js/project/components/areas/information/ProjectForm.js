@@ -187,9 +187,9 @@ const ProjectForm = ({
   }
 
   return (
-    <form id={formId} className="container mt-3" onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
+    <form id={formId} onSubmit={submitMode === 'submit' ? handleSubmit : undefined}>
       <Input
-        className="mb-3 form-label"
+        className="mb-3"
         label={gettext('Title')}
         help={<Html html={templates.project_view_title_help} />}
         value={formData.title || ''}
@@ -199,7 +199,7 @@ const ProjectForm = ({
       />
 
       <Textarea
-        className="mb-3 form-label"
+        className="mb-3"
         label={gettext('Description')}
         help={<Html html={templates.project_view_description_help} />}
         rows={4}
@@ -230,12 +230,11 @@ const ProjectForm = ({
       */}
 
       <div className="mb-3">
-        <label className="form-label mb-0">{gettext('Catalog')}</label>
+        <label>{gettext('Catalog')}</label>
         <div className="form-text mb-2">{gettext('The catalog used for this project.')}</div>
         {
           selectCatalog == 'select' ? (
             <Select
-              className="mt-2"
               placeholder={gettext('Select catalog')}
               isClearable={false}
               isDisabled={disabled}
@@ -265,8 +264,11 @@ const ProjectForm = ({
         }
 
         {
-          unavailableCatalog && !disabled &&
-            <Html className="form-text mb-2" html={templates.project_view_no_catalog_info} />
+          unavailableCatalog && !disabled && (
+            <div className="form-text mt-2">
+              <Html html={templates.project_view_no_catalog_info} />
+            </div>
+          )
         }
 
         {
@@ -276,10 +278,10 @@ const ProjectForm = ({
         }
       </div>
 
-      <div className="mb-3">
+      <div>
         {
           submitMode === 'auto' && (
-            < div className="form-check form-switch">
+            <div className="form-check form-switch">
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -296,18 +298,18 @@ const ProjectForm = ({
         }
         {
           submitMode == 'submit' && (
-            <label className="form-label fw-bold m-0" htmlFor="parentToggle">
+            <label className="form-label" htmlFor="parentToggle">
               {gettext('Select parent project')}
             </label>
           )
         }
-        <div className="form-text">
+        <div className="form-text mb-2">
           <Html html={templates.project_view_parent_help} />
         </div>
 
         <AsyncSelect
           classNamePrefix="react-select"
-          className="react-select mt-10"
+          className="react-select"
           placeholder={gettext('Search projects ...')}
           noOptionsMessage={() => gettext('No projects matching your search.')}
           loadingMessage={() => gettext('Loading ...')}
