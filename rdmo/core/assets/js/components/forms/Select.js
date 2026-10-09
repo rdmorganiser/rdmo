@@ -40,7 +40,9 @@ const Select = ({
 
   return (
     <div className={classNames('form-group', className)}>
-      <label className="control-label" htmlFor={id}>{label}</label>
+      {
+        label && <label htmlFor={id}>{label}</label>
+      }
 
       <ReactSelect
         classNamePrefix="react-select"
@@ -48,11 +50,6 @@ const Select = ({
           classNames('react-select', {
             'is-invalid': !isEmpty(errors)
           })
-        }
-        classNames={
-          {
-            control: () => classNames('form-control')
-          }
         }
         placeholder={placeholder}
         isClearable={isClearable}
