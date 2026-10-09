@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
-import Pending from '../../../core/assets/js/containers/Pending'
+import Pending from 'rdmo/core/assets/js/components/Pending'
 
 import configureStore from './project/store/configureStore'
 
