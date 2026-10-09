@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
+const Dropzone = ({ label, activeLabel, acceptedTypes, onDrop }) => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: acceptedTypes,
     onDropAccepted: acceptedFiles => {
       if (acceptedFiles.length > 0) {
-        onImportFile(acceptedFiles[0])
+        onDrop(acceptedFiles[0])
         setErrorMessage('')
       }
     },
@@ -25,11 +25,11 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
       {
         isDragActive ? (
           <div>
-            {gettext('Drop the file here ...')}
+            {activeLabel || gettext('Drop the file here ...')}
           </div>
         ) : (
           <div>
-            {gettext('Drag and drop a file here or click to select a file')}
+            {label || gettext('Drag and drop a file here or click to select a file')}
           </div>
         )
       }
@@ -38,9 +38,11 @@ const UploadDropZone = ({ acceptedTypes, onImportFile }) => {
   )
 }
 
-UploadDropZone.propTypes = {
+Dropzone.propTypes = {
+  label: PropTypes.object,
+  activeLabel: PropTypes.object,
   acceptedTypes: PropTypes.object,
-  onImportFile: PropTypes.func.isRequired,
+  onDrop: PropTypes.func.isRequired,
 }
 
-export default UploadDropZone
+export default Dropzone

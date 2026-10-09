@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { invert, isEmpty, isNil } from 'lodash'
 
+import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 import Link from 'rdmo/core/assets/js/components/Link'
 import Select from 'rdmo/core/assets/js/components/Select'
 
@@ -78,12 +79,6 @@ const ElementsSidebar = () => {
     a.click()
   }
 
-  const handleFileUpload = (event) => {
-    if (!isEmpty(event.target.files)) {
-      dispatch(uploadFile(event.target.files[0]))
-    }
-  }
-
   const exportOptions = [
     { value: 'xml', label: gettext('XML') }
   ]
@@ -153,9 +148,11 @@ const ElementsSidebar = () => {
       </p>
 
       <div className="text-muted px-3">
-        <input
-          className="form-control" type="file" id="fileUpload" name="uploaded_file"
-          onChange={handleFileUpload} />
+        <Dropzone
+          label={gettext('Choose a file ...')}
+          acceptedTypes="application/xml"
+          onDrop={(file) => dispatch(uploadFile(file))}
+        />
       </div>
     </div>
   )
