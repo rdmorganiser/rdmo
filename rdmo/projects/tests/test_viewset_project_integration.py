@@ -78,6 +78,12 @@ def test_detail(db, client, username, password, project_id, integration_id):
     if integration and project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 200
         assert response.json().get('id') == integration_id
+        assert response.json().get('webhook') == {
+            'description': (
+                'Use the Payload URL and the configured secret to receive updates from the external service.'
+            ),
+            'url': f'http://testserver/projects/{project_id}/integrations/{integration_id}/webhook/'
+        }
     else:
         assert response.status_code == 404
 
