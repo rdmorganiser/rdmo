@@ -12,15 +12,19 @@ from rdmo.services.providers import OauthProviderMixin
 
 class IssueProvider(Plugin):
 
-    webhook_data = {}
+    webhook_description = None
 
     def send_issue(self, request, issue, integration, subject, message, attachments):
         raise NotImplementedError
 
     def get_webhook_data(self, request, integration):
         path = reverse('integration_webhook', args=[integration.project_id, integration.id])
-        webhook_data = self.webhook_data.copy()
-        webhook_data['url'] = request.build_absolute_uri(path) if request else path
+        webhook_data = {
+            'url': request.build_absolute_uri(path) if request else path
+        }
+
+        if self.webhook_description is not None:
+            webhook_data['description'] = self.webhook_description
 
         return webhook_data
 
@@ -89,11 +93,9 @@ class SimpleIssueProvider(OauthIssueProvider):
     send_label = _('Send to Simple')
     description = _('This integration allows the creation of issues in arbitrary Simple repositories. '
                     'The upload of attachments is not supported.')
-    webhook_data = {
-        'description': _(
-            'Use the Payload URL and the configured secret to receive updates from the external service.'
-        )
-    }
+    webhook_description = _(
+        'Use the Payload URL and the configured secret to receive updates from the external service.'
+    )
 
     @property
     def fields(self):
