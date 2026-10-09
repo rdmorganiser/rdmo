@@ -855,7 +855,15 @@ export function toggleElements(element) {
 }
 
 export function toggleDescendants(element, elementType) {
-  return (dispatch) => {
-    findDescendants(element, elementType).forEach(e => dispatch(toggleElements(e)))
+  return (dispatch, getState) => {
+    const config = getState().config
+    const elements = findDescendants(element, elementType)
+    const paths = elements.map(element => `display.elements.${elementTypes[element.model]}.${element.id}`)
+
+    // check if all of the elements are open
+    const allOpen = paths.map(path => get(config, path, true)).every(Boolean)
+
+    // close all elements, if all are open, otherwise open all elements
+    paths.forEach(path => dispatch(updateConfig(path, !allOpen)))
   }
 }
