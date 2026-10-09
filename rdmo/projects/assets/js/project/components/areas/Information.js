@@ -5,7 +5,7 @@ import { usePermissions } from '../../hooks'
 
 import CopyProject from './information/CopyProject'
 import HierarchyTree from './information/HierarchyTree'
-import ProjectDelete from './information/ProjectDelete'
+import ProjectDeleteForm from './information/ProjectDeleteForm'
 import ProjectForm from './information/ProjectForm'
 import ProjectVisibilityForm from './information/ProjectVisibilityForm'
 
@@ -48,8 +48,7 @@ const Information = () => {
         perms.can_delete_project && (
           <div className="card card-tile mb-4">
             <div className="card-body">
-              <h3>{gettext('Delete project')}</h3>
-              <ProjectDelete />
+              <ProjectDeleteForm />
             </div>
           </div>
         )

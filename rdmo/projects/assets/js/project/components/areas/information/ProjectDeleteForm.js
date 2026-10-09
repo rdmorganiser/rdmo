@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import ProjectDeleteModal from './ProjectDeleteModal'
-const ProjectDelete = () => {
+
+const ProjectDeleteForm = () => {
   const { project } = useSelector((state) => state.project.project)
 
   const [showConfirm, setShowConfirm] = useState(false)
@@ -12,7 +13,9 @@ const ProjectDelete = () => {
 
   return (
     <div>
-      <p className="mb-2">
+      <h3 className="mb-2">{gettext('Delete project')}</h3>
+
+      <p className="form-text mb-3">
         {gettext('This action cannot be undone. The project will be permanently removed!')}
       </p>
 
@@ -29,4 +32,4 @@ const ProjectDelete = () => {
   )
 }
 
-export default ProjectDelete
+export default ProjectDeleteForm
