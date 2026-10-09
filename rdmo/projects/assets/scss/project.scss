@@ -1,0 +1,21 @@
+.project-hierarchy {
+    ul {
+        margin-bottom: 0;
+    }
+}
+
+.card.card-tile {
+    img {
+        height: 7.5rem;
+    }
+}
+
+li.active {
+    padding-left: 0 !important;
+}
+li.active a:before {
+    float: left;
+    width: 1.5rem;  // same as ps-4
+    text-align: right;
+    content: '\2192\0000a0'; /* right-arrow followed by a space */
+}

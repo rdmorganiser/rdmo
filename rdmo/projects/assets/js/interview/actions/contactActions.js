@@ -1,18 +1,18 @@
-import ContactApi from '../api/ContactApi'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 import { projectId } from '../utils/meta'
 
+import ContactApi from '../api/ContactApi'
+
 import {
+  CLOSE_CONTACT,
+  FETCH_CONTACT_ERROR,
   FETCH_CONTACT_INIT,
   FETCH_CONTACT_SUCCESS,
-  FETCH_CONTACT_ERROR,
-  SEND_CONTACT_INIT,
-  SEND_CONTACT_SUCCESS,
   SEND_CONTACT_ERROR,
-  CLOSE_CONTACT
+  SEND_CONTACT_INIT,
+  SEND_CONTACT_SUCCESS
 } from './actionTypes'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
 export function fetchContact({ questionset, question, values }) {
   const pendingId = 'fetchContact'

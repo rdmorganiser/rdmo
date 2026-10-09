@@ -66,4 +66,4 @@ const initQuestion = (question, questionset) => {
 
 const initPage = (page) => initQuestionSet(page)
 
-export { checkQuestionSet, checkQuestion, initPage }
+export { checkQuestion, checkQuestionSet, initPage }

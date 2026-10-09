@@ -2,6 +2,7 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.conditions.constants import RelationTypes
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Page, Question, QuestionSet
@@ -238,7 +239,7 @@ def test_resolve_post_condition_without_source_preserves_or(db, client):
     valid = Condition.objects.get(uri='http://example.com/terms/conditions/text_equal_test')
     invalid = Condition.objects.create(
         uri_prefix='http://example.com/terms', uri_path='resolve-invalid-or',
-        source=None, relation=Condition.RELATION_EQUAL, target_text='test',
+        source=None, relation=RelationTypes.RELATION_EQUAL, target_text='test',
     )
     question.conditions.set([invalid, valid])
     data = [{

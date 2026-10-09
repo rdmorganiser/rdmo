@@ -52,7 +52,8 @@ status_map = {
 
 urlnames = {
     'list': 'v1-accounts:user-list',
-    'detail': 'v1-accounts:user-detail'
+    'detail': 'v1-accounts:user-detail',
+    'current': 'v1-accounts:user-current',
 }
 
 
@@ -85,6 +86,21 @@ def test_detail(db, client, username, password):
             assert response.status_code == 404, response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_current(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['current'])
+    response = client.get(url)
+    response_data = response.json()
+
+    if password:
+        assert response.status_code == 200
+        assert response_data['permissions']
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)

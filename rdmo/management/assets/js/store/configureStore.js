@@ -1,30 +1,26 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
-import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
-
 import CoreApi from 'rdmo/core/assets/js/api/CoreApi'
 
-import ManagementApi from '../api/ManagementApi'
-import ConditionsApi from '../api/ConditionsApi'
-import OptionsApi from '../api/OptionsApi'
-import QuestionsApi from '../api/QuestionsApi'
-
-import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
-import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
-
-import { parseLocation } from '../utils/location'
-
+import * as elementActions from '../actions/elementActions'
 import elementsReducer from '../reducers/elementsReducer'
 import importsReducer from '../reducers/importsReducer'
+import { parseLocation } from '../utils/location'
 
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-
-import * as elementActions from '../actions/elementActions'
+import ConditionsApi from '../api/ConditionsApi'
+import ManagementApi from '../api/ManagementApi'
+import OptionsApi from '../api/OptionsApi'
+import QuestionsApi from '../api/QuestionsApi'
+import TasksApi from '../api/TasksApi'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -60,20 +56,24 @@ export default function configureStore() {
       OptionsApi.fetchAdditionalInputs(),
       OptionsApi.fetchProviders(),
       QuestionsApi.fetchValueTypes(),
-      QuestionsApi.fetchWidgetTypes()
+      QuestionsApi.fetchWidgetTypes(),
+      TasksApi.fetchTaskTypes(),
+      TasksApi.fetchTaskAreas(),
     ]).then(([
       relations, groups, settings, sites, meta,
-      additionalInputs, providers, valueTypes, widgetTypes]) => {
-        store.dispatch(configActions.updateConfig('relations', relations, false))
-        store.dispatch(configActions.updateConfig('groups', groups, false))
-        store.dispatch(configActions.updateConfig('settings', settings, false))
-        store.dispatch(configActions.updateConfig('sites', sites, false))
-        store.dispatch(configActions.updateConfig('meta', meta, false))
-        store.dispatch(configActions.updateConfig('additionalInputs', additionalInputs, false))
-        store.dispatch(configActions.updateConfig('providers', providers, false))
-        store.dispatch(configActions.updateConfig('valueTypes', valueTypes, false))
-        store.dispatch(configActions.updateConfig('widgetTypes', widgetTypes, false))
-      }
+      additionalInputs, providers, valueTypes, widgetTypes, taskTypes, taskAreas]) => {
+      store.dispatch(configActions.updateConfig('relations', relations, false))
+      store.dispatch(configActions.updateConfig('groups', groups, false))
+      store.dispatch(configActions.updateConfig('settings', settings, false))
+      store.dispatch(configActions.updateConfig('sites', sites, false))
+      store.dispatch(configActions.updateConfig('meta', meta, false))
+      store.dispatch(configActions.updateConfig('additionalInputs', additionalInputs, false))
+      store.dispatch(configActions.updateConfig('providers', providers, false))
+      store.dispatch(configActions.updateConfig('valueTypes', valueTypes, false))
+      store.dispatch(configActions.updateConfig('widgetTypes', widgetTypes, false))
+      store.dispatch(configActions.updateConfig('taskTypes', taskTypes, false))
+      store.dispatch(configActions.updateConfig('taskAreas', taskAreas, false))
+    }
     )
   }
 

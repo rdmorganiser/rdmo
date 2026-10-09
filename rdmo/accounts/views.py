@@ -27,14 +27,9 @@ def profile_update(request):
 
         form = ProfileForm(request.POST or None, instance=request.user)
 
-        if request.method == 'POST':
-            if 'cancel' in request.POST:
-                log.debug('User %s update cancelled', request.user.username)
-                return HttpResponseRedirect(get_next(request))
-
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(get_next(request))
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            return HttpResponseRedirect(get_next(request))
 
         return render(request, 'profile/profile_update_form.html', {
             'form': form,
@@ -46,22 +41,12 @@ def profile_update(request):
 
 @login_required()
 def remove_user(request):
-    if not settings.PROFILE_DELETE:
-        log.info('Remove user form is disabled in settings PROFILE_DELETE')
-        return render(request, 'profile/profile_remove_closed.html')
-    form = RemoveForm(request.POST or None, request=request)
-    log.debug('Remove user form initialized for "%s"', request.user.username)
+    if settings.PROFILE_DELETE:
+        log.debug('Remove user %s', request.user.username)
 
-    if request.method == 'POST':
-        if 'cancel' in request.POST:
-            log.info('User %s removal cancelled', str(request.user))
+        form = RemoveForm(request.POST or None, user=request.user)
 
-            if settings.PROFILE_UPDATE:
-                return HttpResponseRedirect('/account')
-            else:
-                return HttpResponseRedirect('/')
-
-        if form.is_valid():
+        if request.method == 'POST' and form.is_valid():
             user_is_deleted = delete_user(user=request.user,
                                           email=request.POST['email'],
                                           password=request.POST.get('password', None))
@@ -73,10 +58,12 @@ def remove_user(request):
                 log.info('Remove user, deletion failed for %s', request.user.username)
                 return render(request, 'profile/profile_remove_failed.html')
 
-    return render(request, 'profile/profile_remove_form.html', {
-        'form': form,
-        'next': get_referer_path_info(request, default='/')
-    })
+        return render(request, 'profile/profile_remove_form.html', {
+            'form': form,
+            'next': get_referer_path_info(request, default='/')
+        })
+    else:
+        return render(request, 'profile/profile_remove_closed.html')
 
 
 def terms_of_use(request):
@@ -115,13 +102,13 @@ def shibboleth_logout(request):
 
 
 def terms_of_use_accept(request):
-
     if not request.user.is_authenticated:
         return redirect("account_login")
 
+    # Use the form to handle both update and delete actions
+    form = AcceptConsentForm(request.POST or None, user=request.user)
+
     if request.method == "POST":
-        # Use the form to handle both update and delete actions
-        form = AcceptConsentForm(request.POST, user=request.user)
         if form.is_valid():
             consent_saved = form.save(request.session)  # saves the consent and sets the session key
             if consent_saved:

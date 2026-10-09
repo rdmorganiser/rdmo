@@ -3,15 +3,33 @@ import logging
 from django.conf import settings
 
 from rdmo.projects.models import Project
+from rdmo.projects.sync import filter_tasks_or_views_for_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 logger = logging.getLogger(__name__)
 
 
-def assert_other_projects_unchanged(other_projects, initial_tasks_state):
-    for other_project in other_projects:
-        assert set(other_project.tasks.values_list('id', flat=True)) == set(initial_tasks_state[other_project.id])
+def assert_other_tasks_remain_synced(project, task_ids):
+    """Check that other tasks remained unchanged (there were no unexpected effects by the sync) relative to filter."""
+    actual = set(project.tasks.exclude(pk__in=task_ids).values_list('pk', flat=True))
+    expected = set(
+        filter_tasks_or_views_for_project(Task, project).exclude(pk__in=task_ids).values_list('pk', flat=True)
+    )
+    assert actual == expected, (
+        f'Project {project.pk} other tasks: missing {sorted(expected - actual)}, unexpected {sorted(actual - expected)}'
+    )
+
+
+def assert_other_views_remain_synced(project, view_ids):
+    """Check that other views remained unchanged (there were no unexpected effects by the sync) relative to filter."""
+    actual = set(project.views.exclude(pk__in=view_ids).values_list('pk', flat=True))
+    expected = set(
+        filter_tasks_or_views_for_project(View, project).exclude(pk__in=view_ids).values_list('pk', flat=True)
+    )
+    assert actual == expected, (
+        f'Project {project.pk} other views: missing {sorted(expected - actual)}, unexpected {sorted(actual - expected)}'
+    )
 
 
 def assert_all_projects_are_synced_with_instance_m2m_field(instance: Task | View, field: str) -> None:
@@ -56,8 +74,8 @@ def assert_all_projects_are_synced_with_instance_m2m_field(instance: Task | View
             elif instance_project_field == 'groups':
                 instance_ids = set(instance_field.values_list('id', flat=True))
                 project_groups_ids = {group.id for group in getattr(project, instance_project_field)}
-                # project must have at least one group and all must be within instance_ids
-                project_should_have_instance = bool(project_groups_ids and project_groups_ids <= instance_ids)
+                # Any overlap with the project owners' groups is sufficient.
+                project_should_have_instance = bool(project_groups_ids & instance_ids)
             else:
                 raise ValueError("Project field not recognized, should be 'site', 'catalog' or 'groups'")
 

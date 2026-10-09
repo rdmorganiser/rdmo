@@ -23,18 +23,20 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
                 disabled={disabled}
                 updateValue={updateValue}
                 buttons={
-                  <div className="buttons">
-                    <QuestionSuccess value={value}/>
-                    <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
-                    <QuestionRemoveValue
-                      question={question}
-                      values={values}
-                      value={value}
-                      disabled={disabled}
-                      deleteValue={deleteValue}
-                    />
-                    <QuestionDefault question={question} value={value} />
-                  </div>
+                  (
+                    <div className="buttons">
+                      <QuestionSuccess value={value}/>
+                      <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
+                      <QuestionRemoveValue
+                        question={question}
+                        values={values}
+                        value={value}
+                        disabled={disabled}
+                        deleteValue={deleteValue}
+                      />
+                      <QuestionDefault question={question} value={value} />
+                    </div>
+                  )
                 }
               />
               <QuestionError value={value} />

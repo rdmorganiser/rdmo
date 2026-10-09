@@ -4,9 +4,11 @@ import classNames from 'classnames'
 
 const QuestionSuccess = ({ value }) => {
   return (
-    <div className={classNames('success-indicator text-success', {
-      'show': value.success
-    })}>
+    <div className={
+      classNames('success-indicator text-success', {
+        'show': value.success
+      })
+    }>
       <i className="fa fa-check fa-btn" aria-hidden="true"></i>
     </div>
   )

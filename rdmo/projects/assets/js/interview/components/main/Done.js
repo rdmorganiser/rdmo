@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { projectId }  from '../../utils/meta'
-
 import Html from 'rdmo/core/assets/js/components/Html'
+
+import { projectId }  from '../../utils/meta'
 
 const Done = ({ templates }) => {
 

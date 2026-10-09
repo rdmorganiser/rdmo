@@ -22,4 +22,4 @@ def test_i18n_switcher(rf, active_language):
             url = reverse('i18n_switcher', args=[code])
             text = f'<u>{label}</u>' if code == active_language else str(label)
 
-            assert f'<a href="{url}">{text}</a>' in rendered_template
+            assert f'href="{url}">{text}</a>' in rendered_template

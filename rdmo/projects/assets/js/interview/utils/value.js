@@ -1,4 +1,4 @@
-import { isNil, isEmpty, toString, sortBy } from 'lodash'
+import { isEmpty, isNil, sortBy, toString } from 'lodash'
 
 import ValueFactory from '../factories/ValueFactory'
 
@@ -120,6 +120,4 @@ const isEmptyValue = (value) => {
   )
 }
 
-export { isDefaultValue, gatherDefaultValues,
-  initValues, initRange, compareValues, sortValues, isEmptyValue
-}
+export { compareValues, gatherDefaultValues, initRange, initValues, isDefaultValue, isEmptyValue, sortValues }

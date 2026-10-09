@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
 import { gatherOptions } from '../../../utils/options'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 
 import QuestionCopyValues from '../question/QuestionCopyValues'
 import QuestionEraseValues from '../question/QuestionEraseValues'
@@ -12,8 +12,10 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import CheckboxInput from './CheckboxInput'
 
-const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, disabled,
-                          createValue, updateValue, deleteValue, copyValue }) => {
+const CheckboxWidget = ({
+  page, question, sets, values, siblings, currentSet, disabled,
+  createValue, updateValue, deleteValue, copyValue
+}) => {
 
   const handleCreateValue = (attrsList) => {
     attrsList.forEach(attrs => {
@@ -36,9 +38,10 @@ const CheckboxWidget = ({ page, question, sets, values, siblings, currentSet, di
       <div className="interview-widget">
         <div className="interview-input checkbox-input">
           <div className="buttons-wrapper">
-            <fieldset className="checkbox-control"
-                      aria-labelledby={getQuestionTextId(question)}
-                      aria-describedby={getQuestionHelpId(question)}>
+            <fieldset
+              className="checkbox-control"
+              aria-labelledby={getQuestionTextId(question)}
+              aria-describedby={getQuestionHelpId(question)}>
               {
                 gatherOptions(question, currentSet).map((option, optionIndex) => {
                   const value = values.find((value) => (

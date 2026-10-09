@@ -1,7 +1,7 @@
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
-import { elementTypes, elementModules } from '../constants/elements'
+import { elementModules, elementTypes } from '../constants/elements'
 
 const compareElements = (element1, element2) => {
   return element1.model == element2.model && element1.id == element2.id
@@ -79,7 +79,7 @@ function removeElement(element, dragElement) {
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => removeElement(el, dragElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
@@ -94,7 +94,7 @@ function insertBeforeElement(element, dragElement, dropElement) {
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertBeforeElement(el, dragElement, dropElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
@@ -109,7 +109,7 @@ function insertAfterElement(element, dragElement, dropElement) {
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertAfterElement(el, dragElement, dropElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
@@ -196,7 +196,7 @@ const buildUri = (element) => {
 const buildPathForAttribute = (key, parentUri) => {
   let path = key
   if (parentUri) {
-     if (parentUri.includes('/domain/')) {
+    if (parentUri.includes('/domain/')) {
       // construct the path using parentUri directly
       const parentPath = parentUri.split('/domain/')[1]
       path = parentPath ? `${parentPath}/${key}` : key
@@ -206,7 +206,14 @@ const buildPathForAttribute = (key, parentUri) => {
   return path
 }
 
-
-
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants,
-         updateWarning, buildUri, buildPathForAttribute }
+export {
+  buildPathForAttribute,
+  buildUri,
+  canMoveElement,
+  compareElements,
+  findDescendants,
+  moveElement,
+  resetElement,
+  updateElement,
+  updateWarning
+}

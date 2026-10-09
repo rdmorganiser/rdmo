@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { useDropzone } from 'react-dropzone'
+import classNames from 'classnames'
 
-import { getQuestionTextId, getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
 
 const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
   const onDrop = useCallback(acceptedFiles => {

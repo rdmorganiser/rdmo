@@ -2,6 +2,7 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.conditions.constants import RelationTypes
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
@@ -20,8 +21,6 @@ urlnames = {
 
 max_queries = [
     # action, max_queries, url_kwargs
-    ('project_answers', 31, {'pk': 1}),
-    ('project_answers_export', 24, {'pk': 1, 'format': 'html'}),
     ('navigation', 36, {'pk': 1}),
     ('navigation', 36, {'pk': 1, 'section_id': 1}),
     ('answers', 36, {'pk': 1}),
@@ -135,7 +134,7 @@ def test_resolve_without_sources_queries(db, client, django_assert_max_num_queri
     client.login(username='owner', password='owner')
     condition = Condition.objects.create(
         uri_prefix='http://example.com/terms', uri_path='resolve-without-source',
-        source=None, relation=Condition.RELATION_EMPTY,
+        source=None, relation=RelationTypes.RELATION_EMPTY,
     )
     params = [{
         'set_prefix': '', 'set_index': 0,

@@ -1,0 +1,20 @@
+.dropdown-menu {
+    --bs-dropdown-font-size: 0.85rem;
+
+    // disable the colorful active state when clicking
+    --bs-dropdown-link-active-color: var(--bs-dropdown-link-hover-color);
+    --bs-dropdown-link-active-bg: var(--bs-dropdown-link-hover-bg);
+
+    .dropdown-header {
+        font-size: var(--bs-dropdown-font-size);
+    }
+
+    .dropdown-item {
+        &button {
+            cursor: pointer;
+        }
+        p {
+            margin: 0;
+        }
+    }
+}

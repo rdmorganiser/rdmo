@@ -1,0 +1,11 @@
+.card {
+    &.card-tile {
+        --bs-card-border-radius: 0;
+        --bs-card-inner-border-radius: 0;
+
+        --bs-card-cap-bg: var(--rdmo-sidebar-bg);
+
+        box-shadow: var(--rdmo-box-shadow);
+        border: none;
+    }
+}
