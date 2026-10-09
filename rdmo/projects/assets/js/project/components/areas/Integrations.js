@@ -74,7 +74,7 @@ const Integrations = () => {
               visibleIntegrations.length > 0 && (
                 <IntegrationTable
                   integrations={visibleIntegrations}
-                  onView={openDetailsModal}
+                  onOpen={openDetailsModal}
                   onUpdate={perms.can_change_integration ? openUpdateModal : null}
                   onDelete={perms.can_delete_integration ? openDeleteModal : null}
                 />

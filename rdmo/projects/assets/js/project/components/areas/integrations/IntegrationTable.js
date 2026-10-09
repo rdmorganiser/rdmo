@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const IntegrationTable = ({ integrations, onDelete, onUpdate, onView }) => {
+const IntegrationTable = ({ integrations, onDelete, onOpen, onUpdate }) => {
 
   return (
     <table className="table">
@@ -37,7 +37,7 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate, onView }) => {
                     className="link"
                     aria-label={gettext('View integration')}
                     title={gettext('View integration')}
-                    onClick={() => onView(integration)}
+                    onClick={() => onOpen(integration)}
                   >
                     <i className="bi bi-eye" aria-hidden="true" />
                   </button>
@@ -80,8 +80,8 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate, onView }) => {
 IntegrationTable.propTypes = {
   integrations: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
-  onUpdate: PropTypes.func,
-  onView: PropTypes.func.isRequired
+  onOpen: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func
 }
 
 export default IntegrationTable

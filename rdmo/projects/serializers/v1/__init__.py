@@ -496,10 +496,8 @@ class ProjectIntegrationSerializer(serializers.ModelSerializer):
 
     def get_webhook(self, obj):
         provider = obj.provider
-        if provider is None:
-            return None
-
-        return provider.get_webhook_data(self.context.get('request'), obj)
+        if provider is not None:
+            return provider.get_webhook_data(self.context.get('request'), obj)
 
 
 class ProjectInviteSerializer(serializers.ModelSerializer):

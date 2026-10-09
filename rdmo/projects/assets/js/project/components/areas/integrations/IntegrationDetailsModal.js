@@ -14,41 +14,39 @@ const IntegrationDetailsModal = ({ show, onClose, integration }) => {
     >
       <p className="text-muted mb-4">{integration.provider.description}</p>
 
-      <div className="d-flex flex-column gap-3">
+      <dl>
         {
           integration.options.map((option) => (
             <div key={option.key}>
-              <div className="fw-semibold">{option.title}</div>
-              <div>
+              <dt>{option.title}</dt>
+              <dd>
                 {
                   option.secret ? (
                     option.configured ? gettext('Configured') : gettext('Not configured')) : option.value
                 }
-              </div>
+              </dd>
             </div>
           ))
         }
         {
           integration.webhook && (
             <div>
-              <h3 className="mb-2">{gettext('Webhook')}</h3>
-              <div className="ps-3">
-                {
-                  integration.webhook.description && (
-                    <p className="mb-3">{integration.webhook.description}</p>
-                  )
-                }
-                <div className="fw-semibold">
-                  {gettext('Payload URL')}
-                </div>
-                <div className="font-monospace text-break user-select-all">
-                  {integration.webhook.url}
-                </div>
-              </div>
+              {
+                integration.webhook.description && (
+                  <div>
+                    <dt>{gettext('Webhook information')}</dt>
+                    <dd>{integration.webhook.description}</dd>
+                  </div>
+                )
+              }
+              <dt>{gettext('Payload URL')}</dt>
+              <dd className="font-monospace text-break user-select-all">
+                {integration.webhook.url}
+              </dd>
             </div>
           )
         }
-      </div>
+      </dl>
     </Modal>
   )
 }
