@@ -14,10 +14,10 @@ const IntegrationDetailsModal = ({ show, onClose, integration }) => {
     >
       <p className="text-muted mb-4">{integration.provider.description}</p>
 
-      <dl>
+      <dl className="mb-0">
         {
           integration.options.map((option) => (
-            <div key={option.key}>
+            <React.Fragment key={option.key}>
               <dt>{option.title}</dt>
               <dd>
                 {
@@ -25,25 +25,25 @@ const IntegrationDetailsModal = ({ show, onClose, integration }) => {
                     option.configured ? gettext('Configured') : gettext('Not configured')) : option.value
                 }
               </dd>
-            </div>
+            </React.Fragment>
           ))
         }
         {
           integration.webhook && (
-            <div>
+            <>
               {
                 integration.webhook.description && (
-                  <div>
+                  <>
                     <dt>{gettext('Webhook information')}</dt>
                     <dd>{integration.webhook.description}</dd>
-                  </div>
+                  </>
                 )
               }
               <dt>{gettext('Payload URL')}</dt>
-              <dd className="font-monospace text-break user-select-all">
-                {integration.webhook.url}
+              <dd>
+                <code className="text-break user-select-all text-bg-secondary">{integration.webhook.url}</code>
               </dd>
-            </div>
+            </>
           )
         }
       </dl>
