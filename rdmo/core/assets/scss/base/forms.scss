@@ -9,6 +9,10 @@ label {
     font-size: .875rem;
 }
 
+.form-label {
+    margin-bottom: 0.25rem;  // half of the default
+}
+
 .form-text {
     p {
         margin-bottom: 0.25rem;  // for the rendered markdown

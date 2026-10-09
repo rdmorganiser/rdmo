@@ -41,7 +41,7 @@ const Select = ({
   return (
     <div className={classNames('form-group', className)}>
       {
-        label && <label htmlFor={id}>{label}</label>
+        label && <label className="form-label" htmlFor={id}>{label}</label>
       }
 
       <ReactSelect

@@ -38,7 +38,7 @@ const Input = ({
 
   return (
     <div className={classNames('form-group', className)}>
-      <label htmlFor={id}>{label}</label>
+      <label className="form-label" htmlFor={id}>{label}</label>
       <input
         id={id}
         type={type}
