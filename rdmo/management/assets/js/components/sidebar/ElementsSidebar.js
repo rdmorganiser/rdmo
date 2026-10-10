@@ -106,7 +106,7 @@ const ElementsSidebar = () => {
 
   return (
     <div className="d-flex flex-column">
-      <h2 className="px-3 mb-4">
+      <h2 className="d-none d-lg-inline px-3 mb-4">
         {gettext('Management')}
       </h2>
 
@@ -120,34 +120,34 @@ const ElementsSidebar = () => {
               onClick={() => dispatch(fetchElements(et))}>
               <div className="d-flex align-items-center gap-2">
                 <i className={`bi bi-${icons[et]}`} aria-hidden="true" />
-                {label}
+                <span className="d-none d-lg-inline">{label}</span>
               </div>
             </Link>
           ))
         }
       </nav>
 
-      <h3 className="px-3 my-2">
+      <h3 className="d-none d-lg-inline px-3 my-2">
         {gettext('Export')}
       </h3>
 
-      <p className="text-muted px-3 my-2">
+      <p className="d-none d-lg-inline text-muted px-3 my-2">
         {gettext('Export all visible elements.')}
       </p>
 
-      <div className="text-muted px-3 mb-4">
+      <div className="d-none d-lg-inline text-muted px-3 mb-4">
         <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')} />
       </div>
 
-      <h3 className="px-3 mb-2">
+      <h3 className="d-none d-lg-inline px-3 mb-2">
         {gettext('Import')}
       </h3>
 
-      <p className="text-muted px-3 mb-2">
+      <p className="d-none d-lg-inline text-muted px-3 mb-2">
         {gettext('Import an RDMO XML file.')}
       </p>
 
-      <div className="text-muted px-3">
+      <div className="d-none d-lg-inline px-3">
         <Dropzone
           label={gettext('Choose a file ...')}
           acceptedTypes="application/xml"
