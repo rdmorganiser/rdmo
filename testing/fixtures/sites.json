@@ -3,24 +3,24 @@
     "model": "sites.site",
     "pk": 1,
     "fields": {
-      "domain": "example.com",
-      "name": "example.com"
+      "domain": "rdmo.example.com",
+      "name": "RDMO"
     }
   },
   {
     "model": "sites.site",
     "pk": 2,
     "fields": {
-      "domain": "foo.com",
-      "name": "foo.com"
+      "domain": "foo.example.com",
+      "name": "FOO"
     }
   },
   {
     "model": "sites.site",
     "pk": 3,
     "fields": {
-      "domain": "bar.com",
-      "name": "bar.com"
+      "domain": "bar.example.com",
+      "name": "BAR"
     }
   }
 ]
