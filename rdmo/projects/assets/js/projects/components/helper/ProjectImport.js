@@ -29,7 +29,7 @@ const ProjectImport = ({ allowedTypes, handleImport, importUrls }) => {
       <label className="form-label">{gettext('Import from file')}</label>
       <Dropzone
         acceptedTypes={allowedTypes}
-        onImportFile={handleImport} />
+        onDrop={handleImport} />
       {importUrls.length > 0 && renderDirectImportLinks()}
     </>
   )
