@@ -827,9 +827,10 @@ def test_navigation_uses_logout_form_without_allauth(db, client, settings):
 
 
 @pytest.mark.parametrize('username,password', users)
+@pytest.mark.usefixtures('enable_terms_of_use')
 def test_terms_of_use_middleware_redirect_and_accept(
-    db, client, settings, django_user_model, username, password, enable_terms_of_use  # noqa: F811
-    ):
+    db, client, settings, django_user_model, username, password
+):
     # Arrange with enable_terms_of_use
 
     # Ensure there are no existing consent entries for the user
@@ -866,11 +867,12 @@ def test_terms_of_use_middleware_redirect_and_accept(
     assert response.status_code == 200
 
     response = client.get(reverse('terms_of_use_accept'))
-    assertContains(response, 'You have accepted the terms of use.')
-    assertNotContains(response, 'class="btn btn-primary terms-of-use-accept"')
+    assertContains(response, 'You have already accepted the terms of use.')
+    assertNotContains(response, 'name="consent"')
 
 
-def test_terms_of_use_middleware_invalidate_terms_version(db, client, settings, django_user_model, enable_terms_of_use):  # noqa: F811
+@pytest.mark.usefixtures('enable_terms_of_use')
+def test_terms_of_use_middleware_invalidate_terms_version(db, client, settings, django_user_model):
     # Arrange constants, settings and user
     past_datetime = (datetime.now() - timedelta(days=10)).strftime(format="%Y-%m-%d")
     future_datetime = (datetime.now() + timedelta(days=10)).strftime(format="%Y-%m-%d")
@@ -900,8 +902,8 @@ def test_terms_of_use_middleware_invalidate_terms_version(db, client, settings, 
 
     # The accept page must offer renewal rather than treating the outdated row as accepted.
     response = client.get(terms_accept_url)
-    assertContains(response, 'class="btn btn-primary terms-of-use-accept"')
-    assertNotContains(response, 'You have accepted the terms of use.')
+    assertContains(response, 'name="consent"')
+    assertNotContains(response, 'You have already accepted the terms of use.')
 
     # Act - Try to make a POST request to terms_of_use_accept
     response = client.post(terms_accept_url, {'consent': True})
@@ -923,9 +925,8 @@ def test_terms_of_use_middleware_invalidate_terms_version(db, client, settings, 
     assertRedirects(response, reverse('projects'))
 
 
-def test_terms_of_use_accept_renews_outdated_consent(
-    db, client, settings, django_user_model, enable_terms_of_use  # noqa: F811
-    ):
+@pytest.mark.usefixtures('enable_terms_of_use')
+def test_terms_of_use_accept_renews_outdated_consent(db, client, settings, django_user_model):
     user = django_user_model.objects.get(username='user')
     consent = ConsentFieldValue.objects.create(user=user, consent=True)
     ConsentFieldValue.objects.filter(pk=consent.pk).update(updated=timezone.now() - timedelta(days=1))
@@ -934,8 +935,8 @@ def test_terms_of_use_accept_renews_outdated_consent(
 
     response = client.get(reverse('terms_of_use_accept'))
 
-    assertContains(response, 'class="btn btn-primary terms-of-use-accept"')
-    assertNotContains(response, 'You have accepted the terms of use.')
+    assertContains(response, 'name="consent"')
+    assertNotContains(response, 'You have already accepted the terms of use.')
 
     response = client.post(reverse('terms_of_use_accept'), {'consent': True}, follow=True)
 
@@ -944,3 +945,20 @@ def test_terms_of_use_accept_renews_outdated_consent(
     assert client.session[CONSENT_SESSION_KEY] is True
     assert client.session[CONSENT_SESSION_DATE_KEY] == settings.ACCOUNT_TERMS_OF_USE_DATE
     assertRedirects(response, reverse('projects'))
+
+
+@pytest.mark.usefixtures('enable_terms_of_use')
+def test_terms_of_use_accept_requires_consent(db, client, django_user_model):
+    user = django_user_model.objects.get(username='user')
+    ConsentFieldValue.objects.filter(user=user).delete()
+    client.login(username='user', password='user')
+
+    response = client.post(reverse('terms_of_use_accept'), {})
+
+    assertTemplateUsed(response, 'account/terms_of_use_accept.html')
+    assert response.context['form'].is_bound
+    assert 'consent' in response.context['form'].errors
+    assertContains(response, 'name="consent"')
+    assertContains(response, 'You need to agree to the terms of use to proceed.')
+    assert not ConsentFieldValue.objects.filter(user=user).exists()
+    assert not client.session.get(CONSENT_SESSION_KEY, False)
