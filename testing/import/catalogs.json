@@ -5366,10 +5366,10 @@
     "sections": null
   },
   {
-    "uri": "https://foo.com/terms/questions/foo-catalog",
+    "uri": "https://foo.example.com/terms/questions/foo-catalog",
     "type": "catalogs",
     "model": "questions.catalog",
-    "uri_prefix": "https://foo.com/terms",
+    "uri_prefix": "https://foo.example.com/terms",
     "uri_path": "foo-catalog",
     "comment": null,
     "order": "1",
@@ -5380,10 +5380,10 @@
     "sections": null
   },
   {
-    "uri": "https://bar.com/terms/questions/bar-catalog",
+    "uri": "https://bar.example.com/terms/questions/bar-catalog",
     "type": "catalogs",
     "model": "questions.catalog",
-    "uri_prefix": "https://bar.com/terms",
+    "uri_prefix": "https://bar.example.com/terms",
     "uri_path": "bar-catalog",
     "comment": null,
     "order": "1",

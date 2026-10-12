@@ -203,7 +203,7 @@ def test_send_email(db, client, settings, username, password):
     if issue.project_id in change_issue_permission_map.get(username, []):
         assert response.status_code == 204
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == '[example.com] Subject'
+        assert mail.outbox[0].subject == '[RDMO] Subject'
         assert mail.outbox[0].body == 'Message'
         assert mail.outbox[0].to == ['email@example.com']
         assert mail.outbox[0].cc == [f'{username}@example.com']

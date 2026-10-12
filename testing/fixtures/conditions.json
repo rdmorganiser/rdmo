@@ -243,8 +243,8 @@
     "model": "conditions.condition",
     "pk": 17,
     "fields": {
-      "uri": "https://foo.com/terms/conditions/foo-condition",
-      "uri_prefix": "https://foo.com/terms",
+      "uri": "https://foo.example.com/terms/conditions/foo-condition",
+      "uri_prefix": "https://foo.example.com/terms",
       "uri_path": "foo-condition",
       "comment": "",
       "locked": false,
@@ -261,8 +261,8 @@
     "model": "conditions.condition",
     "pk": 18,
     "fields": {
-      "uri": "https://bar.com/terms/conditions/bar-condition",
-      "uri_prefix": "https://bar.com/terms",
+      "uri": "https://bar.example.com/terms/conditions/bar-condition",
+      "uri_prefix": "https://bar.example.com/terms",
       "uri_path": "bar-condition",
       "comment": "",
       "locked": false,

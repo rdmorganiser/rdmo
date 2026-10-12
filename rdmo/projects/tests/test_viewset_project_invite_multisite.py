@@ -49,8 +49,8 @@ membership_roles = (
 
 sites_domains = (
     'example.com',
-    'foo.com',
-    'bar.com'
+    'foo.example.com',
+    'bar.example.com'
 )
 
 

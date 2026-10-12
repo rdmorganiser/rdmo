@@ -147,7 +147,7 @@ def test_project(db, permission, username):
 @pytest.mark.parametrize('permission', permissions)
 @pytest.mark.parametrize('username', users)
 def test_visible_project(db, sites, permission, username):
-    sites.activate('foo.com')
+    sites.activate('foo.example.com')
 
     user = User.objects.get(username=username)
     project = Project.objects.get(id=12)
