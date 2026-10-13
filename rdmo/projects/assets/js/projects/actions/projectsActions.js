@@ -2,6 +2,8 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
+
 import ProjectsApi from '../api/ProjectsApi'
 
 import {
@@ -155,7 +157,7 @@ export function fetchCatalogs() {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
-    return ProjectsApi.fetchCatalogs().then(catalogs => dispatch(fetchCatalogsSuccess(catalogs)))
+    return CatalogApi.fetchCatalogs().then(catalogs => dispatch(fetchCatalogsSuccess(catalogs)))
       .catch(error => dispatch(fetchCatalogsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
