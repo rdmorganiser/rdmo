@@ -5,8 +5,13 @@ import classNames from 'classnames'
 import { Link } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
+import { uploadFileInit, uploadFileSuccess } from '../actions/importActions'
 import { navigateDashboard } from '../actions/navigationActions'
+import projectImportFixture from '../data/projectImportFixture'
+import { usePermissions } from '../hooks'
 import { buildPath } from '../utils/location'
+
+import ProjectImportSidebar from './sidebar/ProjectImportSidebar'
 
 const Sidebar = () => {
   const dispatch = useDispatch()
@@ -14,6 +19,13 @@ const Sidebar = () => {
   const { area } = useSelector((state) => state.config)
   const { project, visibility } = useSelector((state) => state.project)
   const providers = useSelector((state) => state.project.providers) ?? {}
+  const importValues = useSelector((state) => state.projectImport.values)
+  const perms = usePermissions()
+
+  const handleImport = () => {
+    dispatch(uploadFileInit({ name: 'project-import.xml' }))
+    dispatch(uploadFileSuccess(projectImportFixture))
+  }
 
   const menuItems = [
     {
@@ -39,6 +51,10 @@ const Sidebar = () => {
       ],
     },
   ]
+
+  if (importValues.length > 0) {
+    return <ProjectImportSidebar />
+  }
 
   return project && (
     <div className="d-flex flex-column h-100">
@@ -86,6 +102,26 @@ const Sidebar = () => {
           ))
         }
       </div>
+
+      {
+        perms.can_import_project && (
+          <div className="mb-3">
+            <h3 className="d-none d-lg-block font-normal px-3 my-3">{gettext('Import')}</h3>
+            <nav className="nav nav-pills nav-fill flex-column">
+              <button
+                type="button"
+                className="nav-link text-start"
+                onClick={handleImport}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <i className="bi bi-upload" aria-hidden="true" />
+                  <span className="d-none d-lg-inline">{gettext('Import project values')}</span>
+                </div>
+              </button>
+            </nav>
+          </div>
+        )
+      }
 
       <hr />
 

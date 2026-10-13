@@ -24,6 +24,7 @@ import rolesReducer from '../../common/reducers/rolesReducer'
 import { combinePermissions } from '../../common/utils/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
+import projectImportReducer from '../reducers/projectImportReducer'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
@@ -43,6 +44,7 @@ export default function configureStore() {
     config: configReducer,
     pending: pendingReducer,
     project: projectReducer,
+    projectImport: projectImportReducer,
     settings: settingsReducer,
     templates: templateReducer,
     user: userReducer,

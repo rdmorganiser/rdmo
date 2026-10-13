@@ -9,10 +9,12 @@ import Interview from './areas/Interview'
 import Memberships from './areas/Memberships'
 import Snapshots from './areas/Snapshots'
 import View from './helper/View'
+import ProjectImport from './import/ProjectImport'
 
 const Main = () => {
   const { area, snapshotId } = useSelector((state) => state.config)
   const { project, currentView } = useSelector((state) => state.project)
+  const importValues = useSelector((state) => state.projectImport.values)
 
   const renderArea = () => {
     switch (area) {
@@ -37,7 +39,9 @@ const Main = () => {
 
   return area && project && (
     <div className="container-lg gx-0">
-      {renderArea()}
+      {
+        importValues.length > 0 ? <ProjectImport /> : renderArea()
+      }
     </div>
   )
 }
