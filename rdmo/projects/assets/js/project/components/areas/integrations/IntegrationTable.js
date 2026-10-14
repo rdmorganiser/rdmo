@@ -4,6 +4,15 @@ import { isEmpty } from 'lodash'
 
 const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
 
+  const getSafeUrl = (value) => {
+    try {
+      const url = new URL(value)
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : null
+    } catch {
+      return null
+    }
+  }
+
   return (
     <table className="table">
       <thead>
@@ -31,18 +40,22 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
                       {
                         integration.options
                           .filter((option) => !option.secret)
-                          .map((option) => (
-                            <div key={option.key} className="d-flex gap-1">
-                              <dt>{option.title}:</dt>
-                              <dd className="mb-0">
-                                {
-                                  URL.canParse(option.value) ? (
-                                    <a href={option.value} target="_blank" rel="noreferrer">{option.value}</a>
-                                  ) : option.value
-                                }
-                              </dd>
-                            </div>
-                          ))
+                          .map((option) => {
+                            const url = getSafeUrl(option.value)
+
+                            return (
+                              <div key={option.key} className="d-flex gap-1">
+                                <dt>{option.title}:</dt>
+                                <dd className="mb-0">
+                                  {
+                                    url ? (
+                                      <a href={url} target="_blank" rel="noreferrer">{option.value}</a>
+                                    ) : option.value
+                                  }
+                                </dd>
+                              </div>
+                            )
+                          })
                       }
                     </dl>
                   )
