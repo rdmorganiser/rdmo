@@ -3,17 +3,18 @@ import PropTypes from 'prop-types'
 import uniqueId from 'lodash/uniqueId'
 
 const UriPath = ({ element, onChange }) => {
-  const id = uniqueId('uriPath-'),
-        value = element.uri_path ?? ''
+  const id = uniqueId('uriPath-')
+  const value = element.uri_path ?? ''
 
   return (
-    <div className="form-group mb-0">
-      <label className="control-label" htmlFor={id}>
+    <div className="mb-2">
+      <label className="form-label" htmlFor={id}>
         <small>{gettext('URI path')}</small>
       </label>
 
-      <input className="form-control input-sm" id={id} type="text"
-             value={value} onChange={event => onChange('uri_path', event.target.value)} />
+      <input
+        className="form-control input-sm" id={id} type="text"
+        value={value} onChange={event => onChange('uri_path', event.target.value)} />
     </div>
   )
 }

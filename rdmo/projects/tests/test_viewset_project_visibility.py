@@ -25,13 +25,10 @@ def test_project_visibility_get(db, client, username, password):
     url = reverse('v1-projects:project-visibility', args=[project_id])
     response = client.get(url)
 
-    if username in ['admin', 'site', 'api']:
+    if password:
         assert response.status_code == 200
     else:
-        if password:
-            assert response.status_code == 404
-        else:
-            assert response.status_code == 401
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -65,13 +62,31 @@ def test_project_visibility_post_create(db, client, username, password):
         assert response.status_code == 200
         assert Project.objects.get(pk=project_id).visibility
     else:
-        if password:
+        if username in ['owner']:
+            # owner has access to the project, but not to visibility
+            assert response.status_code == 403
+        elif password:
             assert response.status_code == 404
         else:
             assert response.status_code == 401
 
         with pytest.raises(Visibility.DoesNotExist):
             assert Project.objects.get(pk=project_id).visibility
+
+
+def test_project_visibility_post_create_site(db, client, settings):
+    settings.MULTISITE = True
+
+    client.login(username='site', password='site')
+
+    project = Project.objects.get(id=project_id)
+    project.visibility.delete()
+
+    url = reverse('v1-projects:project-visibility', args=[project_id])
+    response = client.post(url, {})
+
+    assert response.status_code == 200
+    assert list(Project.objects.get(pk=project_id).visibility.sites.values_list('id', flat=True)) == [1]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -95,7 +110,8 @@ def test_project_visibility_post_update(db, client, username, password):
         assert response.status_code == 200
     else:
         if password:
-            assert response.status_code == 404
+            # all users can access the project, but not the visibility, because it is visible
+            assert response.status_code == 403
         else:
             assert response.status_code == 401
 
@@ -126,7 +142,9 @@ def test_project_visibility_post_update_group(db, client, settings, username, pa
         assert project.visibility
         assert [group.id for group in project.visibility.groups.all()] == [2]
     else:
-        if password:
+        if username in ['owner']:
+            assert response.status_code == 403
+        elif password:
             assert response.status_code == 404
         else:
             assert response.status_code == 401
@@ -161,7 +179,9 @@ def test_project_visibility_post_update_site(db, client, settings, username, pas
         assert project.visibility
         assert {site.id for site in project.visibility.sites.all()} == {1, 3}
     else:
-        if password:
+        if username in ['owner']:
+            assert response.status_code == 403
+        elif password:
             assert response.status_code == 404
         else:
             assert response.status_code == 401
@@ -188,7 +208,8 @@ def test_project_visibility_post_delete(db, client, username, password):
             assert project.visibility
     else:
         if password:
-            assert response.status_code == 404
+            # all users can access the project, but not the visibility, because it is visible
+            assert response.status_code == 403
         else:
             assert response.status_code == 401
 
@@ -219,7 +240,8 @@ def test_project_visibility_post_delete_site(db, client, settings, username, pas
         assert {site.id for site in project.visibility.sites.all()} == {2, 3}
     else:
         if password:
-            assert response.status_code == 404
+            # all users can access the project, but not the visibility, because it is visible
+            assert response.status_code == 403
         else:
             assert response.status_code == 401
 
@@ -246,9 +268,11 @@ def test_project_visibility_post_delete_site_last(db, client, settings, username
             assert project.visibility
     else:
         if password:
-            assert response.status_code == 404
+            # all users can access the project, but not the visibility, because it is visible
+            assert response.status_code == 403
         else:
             assert response.status_code == 401
+
         assert project.visibility
 
 
@@ -276,9 +300,11 @@ def test_project_visibility_post_delete_site_empty(db, client, settings, usernam
         assert {site.id for site in project.visibility.sites.all()} == {2, 3}
     else:
         if password:
-            assert response.status_code == 404
+            # all users can access the project, but not the visibility, because it is visible
+            assert response.status_code == 403
         else:
             assert response.status_code == 401
+
         assert project.visibility
 
 
@@ -292,7 +318,9 @@ def test_project_visibility_post_delete_not_found(db, client, username, password
     url = reverse('v1-projects:project-visibility', args=[project_id])
     response = client.delete(url)
 
-    if password:
+    if username in ['owner']:
+        assert response.status_code == 403
+    elif password:
         assert response.status_code == 404
     else:
         assert response.status_code == 401

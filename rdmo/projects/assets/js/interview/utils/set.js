@@ -1,4 +1,4 @@
-import { isEmpty, isNil, toNumber, toString, last, sortBy } from 'lodash'
+import { isEmpty, isNil, last, sortBy, toNumber, toString } from 'lodash'
 
 import SetFactory from '../factories/SetFactory'
 
@@ -126,19 +126,19 @@ export const initSets = (sets, element, set_prefix) => {
   // recursively loop over the current sets the current questionsets
   currentSets.forEach((set) => {
     currentQuestionsets.forEach((questionset) => {
-        initSets(sets, questionset, getChildPrefix(set))
-      })
+      initSets(sets, questionset, getChildPrefix(set))
+    })
   })
 }
 
 export const createSetIfNotExisting = (sets, set) => {
-    if (!sets.find((s) => ((
-      (s.set_prefix === set.set_prefix) &&
+  if (!sets.find((s) => ((
+    (s.set_prefix === set.set_prefix) &&
       (s.set_index === set.set_index) &&
       (s.element === set.element)
-    )))) {
-      sets.push(SetFactory.create(set))
-    }
+  )))) {
+    sets.push(SetFactory.create(set))
+  }
 }
 
 export const copyResolvedConditions = (originalSets, sets) => {

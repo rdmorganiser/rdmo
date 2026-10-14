@@ -57,4 +57,4 @@ const getValueOption = (options, value) => {
   }
 }
 
-export { gatherOptions, updateOptions, getValueOption }
+export { gatherOptions, getValueOption, updateOptions }

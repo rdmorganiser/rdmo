@@ -12,7 +12,8 @@ from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
-from rdmo.core.utils import remove_double_newlines
+from rdmo.core.utils import remove_double_newlines, render_to_format
+from rdmo.views.utils import ProjectWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,46 @@ def get_value_path(project, snapshot=None):
         return Path('projects') / str(project.id) / 'values'
     else:
         return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
+
+
+def render_attachments(request, project, data):
+    snapshot = data.get('attachments_snapshot')
+    attachments_format = data.get('attachments_format')
+    attachments = []
+
+    if data['attachments_answers'] or data['attachments_views']:
+        project.catalog.prefetch_elements()
+
+    if data['attachments_answers']:
+        response = render_to_format(
+            request, attachments_format, project.title, 'projects/project_answers_export.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'project_wrapper': ProjectWrapper(project, snapshot)
+            }
+        )
+        attachments.append((
+            f'{project.title}-answers.{attachments_format}', response.content, response['Content-Type']
+        ))
+
+    for view in data['attachments_views']:
+        response = render_to_format(
+            request, attachments_format, project.title, 'projects/project_view_export.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'html': view.render(project, snapshot),
+                'resource_path': get_value_path(project, snapshot)
+            }
+        )
+        attachments.append((
+            f'{project.title}-{view.title}.{attachments_format}', response.content, response['Content-Type']
+        ))
+
+    for value in data['attachments_files']:
+        with value.file.open('rb') as file:
+            attachments.append((value.file_name, file.read(), value.file_type))
+
+    return attachments
 
 
 def is_last_owner(project, user):
@@ -377,6 +418,23 @@ def get_contact_message(request, project):
     return {
         'subject': subject,
         'message': remove_double_newlines(message)
+    }
+
+
+def get_issue_send_content(request, issue):
+    project = issue.project
+    context = {
+        'issue': issue,
+        'project': project,
+        'project_url': request.build_absolute_uri(project.get_absolute_url()),
+        'site': Site.objects.get_current(),
+        'site_url': request.build_absolute_uri(reverse('home')),
+        'user': request.user
+    }
+
+    return {
+        'subject': render_to_string('projects/issue_send_subject.txt', context, request=request),
+        'message': render_to_string('projects/issue_send_message.txt', context, request=request)
     }
 
 

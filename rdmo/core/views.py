@@ -68,7 +68,6 @@ def api(request):
                 'domain',
                 'management',
                 'options',
-                'overlays',
                 'projects',
                 'questions',
                 'tasks',

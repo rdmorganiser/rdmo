@@ -1,23 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
-const BackButton = () => (
-  <button className="element-button btn btn-xs btn-default" onClick={() => history.back()}>
+const BackButton = ({ className }) => (
+  <button
+    className={classNames('element-button btn btn-sm btn-light border', className)}
+    onClick={() => history.back()}>
     {gettext('Back')}
   </button>
 )
 
-const SaveButton = ({ elementAction, onClick, disabled=false, back=false }) => {
-  let text, className = 'element-button btn btn-xs'
+BackButton.propTypes = {
+  className: PropTypes.string
+}
+
+const SaveButton = ({ elementAction, onClick, disabled = false, back = false }) => {
+  let text
+  let className
+
   if (elementAction == 'create') {
     text = back ? gettext('Create') : gettext('Create and continue editing')
-    className += back ? ' btn-success' : ' btn-default'
+    className = classNames('btn btn-sm', {
+      'btn-success': back,
+      'btn-light border': !back
+    })
   } else if (elementAction == 'copy') {
     text = back ? gettext('Copy') : gettext('Copy and continue editing')
-    className += back ? ' btn-info' : ' btn-default'
+    className = classNames('btn btn-sm', {
+      'btn-info': back,
+      'btn-light border': !back
+    })
   } else {
     text = back ? gettext('Save') : gettext('Save and continue editing')
-    className += back ? ' btn-primary' : ' btn-default'
+    className = classNames('btn btn-sm', {
+      'btn-primary': back,
+      'btn-light border': !back
+    })
   }
 
   return (
@@ -35,7 +53,7 @@ SaveButton.propTypes = {
 }
 
 const NewButton = ({ onClick }) => (
-  <button className="element-button btn btn-xs btn-success" onClick={() => onClick()}>
+  <button className="element-button btn btn-sm btn-success" onClick={() => onClick()}>
     {gettext('New')}
   </button>
 )
@@ -44,8 +62,8 @@ NewButton.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-const DeleteButton = ({ onClick, disabled=false }) => (
-  <button className="element-button btn btn-xs btn-danger" onClick={() => onClick()} disabled={disabled}>
+const DeleteButton = ({ onClick, disabled = false }) => (
+  <button className="element-button btn btn-sm btn-danger" onClick={() => onClick()} disabled={disabled}>
     {gettext('Delete')}
   </button>
 )
@@ -55,4 +73,4 @@ DeleteButton.propTypes = {
   disabled: PropTypes.bool
 }
 
-export { BackButton, SaveButton, NewButton, DeleteButton }
+export { BackButton, DeleteButton, NewButton, SaveButton }

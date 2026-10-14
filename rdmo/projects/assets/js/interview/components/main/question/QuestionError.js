@@ -8,7 +8,7 @@ const getMessage = (error) => {
       return gettext('This field could not be saved, since somebody else did so while you were editing.' +
                      ' You will need to reload the page to make changes, but your input will be overwritten.')
     } else if (error.errors.quota) {
-       return gettext('You reached the file quota for this project.')
+      return gettext('You reached the file quota for this project.')
     } else if (error.errors.text) {
       return error.errors.text
     }

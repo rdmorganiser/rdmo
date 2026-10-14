@@ -1,26 +1,22 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux'
-
-import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
-import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
-
-import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
-import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
-import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
-import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
-import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
-
-import contactReducer from '../reducers/contactReducer'
-import interviewReducer from '../reducers/interviewReducer'
-import projectReducer from '../reducers/projectReducer'
+import { applyMiddleware, combineReducers, createStore } from 'redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
+import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
+import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
+import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
+import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
+import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
 
 import * as interviewActions from '../actions/interviewActions'
 import * as projectActions from '../actions/projectActions'
-
+import contactReducer from '../reducers/contactReducer'
+import interviewReducer from '../reducers/interviewReducer'
+import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
 
 export default function configureStore() {

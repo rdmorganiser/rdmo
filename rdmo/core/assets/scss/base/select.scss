@@ -1,0 +1,14 @@
+.react-select {
+    .react-select__control,
+    .react-select__control:hover {
+        border: var(--bs-border-width) solid var(--bs-border-color);
+    }
+
+    .react-select__control--is-focused,
+    .react-select__control--is-focused:hover {
+        color: red;
+        border-color: rgb(134, 182.5, 254);
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+}

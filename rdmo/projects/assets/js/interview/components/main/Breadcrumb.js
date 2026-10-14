@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Html from 'rdmo/core/assets/js/components/Html'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
+import Html from 'rdmo/core/assets/js/components/Html'
 
 const Breadcrumb = ({ overview, page, fetchPage }) => {
 

@@ -8,8 +8,8 @@ import useAdditionalInputs from '../../../hooks/useAdditionalInputs'
 import useAdjustLabel from '../../../hooks/useAdjustLabel'
 import useIdle from '../../../hooks/useIdle'
 
-import AdditionalTextInput from './common/AdditionalTextInput'
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
+import AdditionalTextInput from './common/AdditionalTextInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
@@ -28,7 +28,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
   })
 
   const handleCreate = (option, optionIndex, additionalInput) => {
-  if (option.has_provider) {
+    if (option.has_provider) {
       onCreate([{
         external_id: option.id,
         text: option.text,
@@ -103,10 +103,12 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
                 className="ml-10"
                 inputValue={getAdditionalInput(option)}
                 disabled={disabled}
-                onChange={(additionalInput) => {
-                  setAdditionalInput(option, additionalInput)
-                  handleAdditionalInputChange(value, option, additionalInput)
-                }}
+                onChange={
+                  (additionalInput) => {
+                    setAdditionalInput(option, additionalInput)
+                    handleAdditionalInputChange(value, option, additionalInput)
+                  }
+                }
               />
               <OptionHelp className="ml-10" option={option} />
             </>
@@ -119,10 +121,12 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
               <AdditionalTextareaInput
                 inputValue={getAdditionalInput(option)}
                 disabled={disabled}
-                onChange={(additionalInput) => {
-                  setAdditionalInput(option, additionalInput)
-                  handleAdditionalInputChange(value, option, additionalInput)
-                }}
+                onChange={
+                  (additionalInput) => {
+                    setAdditionalInput(option, additionalInput)
+                    handleAdditionalInputChange(value, option, additionalInput)
+                  }
+                }
               />
               <div>
                 <OptionHelp option={option} />

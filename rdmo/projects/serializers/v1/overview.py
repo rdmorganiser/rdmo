@@ -7,7 +7,7 @@ from rdmo.questions.models import Catalog
 
 class CatalogSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    markdown_fields = ('title', )
+    markdown_fields = ('title', 'help')
 
     class Meta:
         ref_name = 'ProjectCatalogSerializer'
@@ -16,6 +16,7 @@ class CatalogSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'help',
             'available'
         )
 

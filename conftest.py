@@ -21,7 +21,6 @@ def fixtures():
         'domain',
         'groups',
         'options',
-        'overlays',
         'projects',
         'questions',
         'sites',
@@ -41,6 +40,7 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Populate database with test data from fixtures directories."""
     with django_db_blocker.unblock():
         call_command('loaddata', *fixtures)
+        call_command('rebuild_mptt')
         set_group_permissions()
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
 import { isNil, minBy } from 'lodash'
+import get from 'lodash/get'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -13,9 +13,11 @@ import PageHead from './PageHead'
 import PageHelp from './PageHelp'
 import PageManagement from './PageManagement'
 
-const Page = ({ config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
-                createValue, updateValue, deleteValue, copyValue,
-                activateSet, createSet, updateSet, deleteSet, copySet }) => {
+const Page = ({
+  config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
+  createValue, updateValue, deleteValue, copyValue,
+  activateSet, createSet, updateSet, deleteSet, copySet
+}) => {
 
   const currentSetPrefix = ''
 
@@ -111,19 +113,25 @@ const Page = ({ config, settings, templates, overview, page, sets, values, fetch
                     templates={templates}
                     page={page}
                     question={element}
-                    sets={sets.filter((set) => (
-                      set.set_prefix == currentSetPrefix
-                    ))}
-                    values={values.filter((value) => (
-                      value.attribute == element.attribute &&
-                      value.set_prefix == currentSetPrefix &&
-                      value.set_index == currentSetIndex
-                    ))}
-                    siblings={values.filter((value) => (
-                      value.attribute == element.attribute &&
-                      value.set_prefix == currentSetPrefix &&
-                      value.set_index != currentSetIndex
-                    ))}
+                    sets={
+                      sets.filter((set) => (
+                        set.set_prefix == currentSetPrefix
+                      ))
+                    }
+                    values={
+                      values.filter((value) => (
+                        value.attribute == element.attribute &&
+                        value.set_prefix == currentSetPrefix &&
+                        value.set_index == currentSetIndex
+                      ))
+                    }
+                    siblings={
+                      values.filter((value) => (
+                        value.attribute == element.attribute &&
+                        value.set_prefix == currentSetPrefix &&
+                        value.set_index != currentSetIndex
+                      ))
+                    }
                     disabled={disabled}
                     isManager={isManager}
                     currentSet={currentSet}

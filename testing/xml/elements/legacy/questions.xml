@@ -2734,10 +2734,10 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than</key>
-		<path>catalog/conditions/text_lesser_than</path>
+		<key>text_less_than</key>
+		<path>catalog/conditions/text_less_than</path>
 		<dc:comment/>
 		<attribute/>
 		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
@@ -2753,26 +2753,26 @@
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<conditions>
-			<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0"/>
+			<condition dc:uri="http://example.com/terms/conditions/text_less_than_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than/text_lesser_than">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than/text_less_than">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than</key>
-		<path>catalog/conditions/text_lesser_than/text_lesser_than</path>
+		<key>text_less_than</key>
+		<path>catalog/conditions/text_less_than/text_less_than</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<order>0</order>
 		<help lang="en"/>
-		<text lang="en">text_lesser_than?</text>
+		<text lang="en">text_less_than?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">text_lesser_than?</text>
+		<text lang="de">text_less_than?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
@@ -2788,10 +2788,10 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than_equal">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than_equal</key>
-		<path>catalog/conditions/text_lesser_than_equal</path>
+		<key>text_less_than_equal</key>
+		<path>catalog/conditions/text_less_than_equal</path>
 		<dc:comment/>
 		<attribute/>
 		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
@@ -2807,26 +2807,26 @@
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>
 		<conditions>
-			<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0"/>
+			<condition dc:uri="http://example.com/terms/conditions/text_less_than_equal_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal/text_lesser_than_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than_equal/text_less_than_equal">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than_equal</key>
-		<path>catalog/conditions/text_lesser_than_equal/text_lesser_than_equal</path>
+		<key>text_less_than_equal</key>
+		<path>catalog/conditions/text_less_than_equal/text_less_than_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_lesser_than_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text_less_than_equal"/>
 		<is_collection>False</is_collection>
 		<is_optional>False</is_optional>
 		<order>0</order>
 		<help lang="en"/>
-		<text lang="en">text_lesser_than_equal?</text>
+		<text lang="en">text_less_than_equal?</text>
 		<default_text lang="en"/>
 		<verbose_name lang="en"/>
 		<verbose_name_plural lang="en"/>
 		<help lang="de"/>
-		<text lang="de">text_lesser_than_equal?</text>
+		<text lang="de">text_less_than_equal?</text>
 		<default_text lang="de"/>
 		<verbose_name lang="de"/>
 		<verbose_name_plural lang="de"/>

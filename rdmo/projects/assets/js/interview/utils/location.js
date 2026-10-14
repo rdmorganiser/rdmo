@@ -1,4 +1,5 @@
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
 import { projectId } from '../utils/meta'
 
 const parseLocation = () => {
@@ -28,4 +29,4 @@ const buildPath = (pageId) => {
   return `${baseUrl}/projects/${projectId}/interview/${pageId}/`
 }
 
-export { parseLocation, updateLocation, buildPath }
+export { buildPath, parseLocation, updateLocation }

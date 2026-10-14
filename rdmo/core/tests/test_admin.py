@@ -4,8 +4,8 @@ from django.urls import reverse
 
 sites = (
     (1, 'example.com'),
-    (2, 'foo.com'),
-    (3, 'bar.com'),
+    (2, 'foo.example.com'),
+    (3, 'bar.example.com'),
 )
 
 
