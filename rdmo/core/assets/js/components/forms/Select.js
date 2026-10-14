@@ -8,16 +8,11 @@ const Select = ({
   className,
   label,
   help,
-  placeholder,
-  isClearable,
-  isDisabled,
-  isMulti,
   options,
   errors,
   value,
-  filterOption,
-  formatOptionLabel,
-  onChange
+  onChange,
+  ...reactSelectProps
 }) => {
   const id = uniqueId('select-')
 
@@ -45,20 +40,15 @@ const Select = ({
       }
 
       <ReactSelect
+        {...reactSelectProps}
         classNamePrefix="react-select"
         className={
           classNames('react-select', {
             'is-invalid': !isEmpty(errors)
           })
         }
-        placeholder={placeholder}
-        isClearable={isClearable}
-        isDisabled={isDisabled}
-        isMulti={isMulti}
         options={options}
         value={getValue()}
-        filterOption={filterOption}
-        formatOptionLabel={formatOptionLabel}
         onChange={handleChange}
       />
 
@@ -80,15 +70,9 @@ Select.propTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
   help: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
-  placeholder: PropTypes.string,
-  isClearable: PropTypes.bool,
-  isDisabled: PropTypes.bool,
-  isMulti: PropTypes.bool,
   options: PropTypes.array,
   errors: PropTypes.array,
   value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
-  filterOption: PropTypes.func,
-  formatOptionLabel: PropTypes.func,
   onChange: PropTypes.func.isRequired
 }
 
