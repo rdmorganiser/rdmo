@@ -39,8 +39,8 @@ const Dropzone = ({ label, activeLabel, acceptedTypes, onDrop }) => {
 }
 
 Dropzone.propTypes = {
-  label: PropTypes.object,
-  activeLabel: PropTypes.object,
+  label: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
+  activeLabel: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   acceptedTypes: PropTypes.object,
   onDrop: PropTypes.func.isRequired,
 }

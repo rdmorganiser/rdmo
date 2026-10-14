@@ -150,7 +150,7 @@ const ElementsSidebar = () => {
       <div className="d-none d-lg-inline px-3">
         <Dropzone
           label={gettext('Choose a file ...')}
-          acceptedTypes="application/xml"
+          acceptedTypes={{'application/xml': ['.xml']}}
           onDrop={(file) => dispatch(uploadFile(file))}
         />
       </div>
