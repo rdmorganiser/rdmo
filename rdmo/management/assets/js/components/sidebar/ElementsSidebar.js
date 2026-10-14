@@ -127,6 +127,10 @@ const ElementsSidebar = () => {
         }
       </nav>
 
+      {
+        // for now, import and export are not shown on smaller screens
+      }
+
       <h3 className="d-none d-lg-inline px-3 my-2">
         {gettext('Export')}
       </h3>
