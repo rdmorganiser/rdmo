@@ -2,6 +2,7 @@ import { get, isNil, pick } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import { elementTypes } from '../constants/elements'
@@ -849,13 +850,21 @@ export function dropElement(dragElement, dropElement, mode) {
 export function toggleElements(element) {
   return (dispatch, getState) => {
     const path = `display.elements.${elementTypes[element.model]}.${element.id}`
-    const value = !get(getState().config, path, true)
+    const value = !isTruthy(get(getState().config, path, true))
     dispatch(updateConfig(path, value))
   }
 }
 
 export function toggleDescendants(element, elementType) {
-  return (dispatch) => {
-    findDescendants(element, elementType).forEach(e => dispatch(toggleElements(e)))
+  return (dispatch, getState) => {
+    const config = getState().config
+    const elements = findDescendants(element, elementType)
+    const paths = elements.map(element => `display.elements.${elementTypes[element.model]}.${element.id}`)
+
+    // check if all of the elements are open
+    const allOpen = paths.map(path => isTruthy(get(config, path, true))).every(Boolean)
+
+    // close all elements, if all are open, otherwise open all elements
+    paths.forEach(path => dispatch(updateConfig(path, !allOpen)))
   }
 }

@@ -29,7 +29,7 @@ const Condition = ({ condition, filter = false, filterEditors = false }) => {
     <li className="list-group-item">
       <div className="d-flex flex-column gap-2">
         <div className="d-flex align-items-center gap-2">
-          <strong>{gettext('Condition')}{':'}</strong>
+          <strong>{gettext('Condition')}</strong>
           <CodeLink
             className="flex-grow-1" type="conditions" uri={condition.uri} href={editUrl}
             onClick={() => fetchEdit()} />

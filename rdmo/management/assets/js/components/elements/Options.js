@@ -42,26 +42,28 @@ const Options = () => {
       </div>
 
       <div className="card-body">
-        <div className="row">
-          <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
-            <FilterString
-              value={get(config, 'filter.options.search', '')} onChange={updateFilterString}
-              label={gettext('Filter options')} />
+        <div className="mb-lg-2">
+          <div className="row">
+            <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
+              <FilterString
+                value={get(config, 'filter.options.search', '')} onChange={updateFilterString}
+                label={gettext('Filter options')} />
+            </div>
+            <div className="col-sm-4">
+              <FilterUriPrefix
+                value={get(config, 'filter.options.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                options={getUriPrefixes(options)} />
+            </div>
+            {
+              config.settings.multisite && (
+                <div className="col-sm-2">
+                  <FilterSite
+                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                </div>
+              )
+            }
           </div>
-          <div className="col-sm-4">
-            <FilterUriPrefix
-              value={get(config, 'filter.options.uri_prefix', '')} onChange={updateFilterUriPrefix}
-              options={getUriPrefixes(options)} />
-          </div>
-          {
-            config.settings.multisite && (
-              <div className="col-sm-2">
-                <FilterSite
-                  value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                  options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
-              </div>
-            )
-          }
         </div>
         <div className="input-group input-group-sm">
           <label className="input-group-text">{gettext('Show URIs')}</label>
@@ -73,7 +75,7 @@ const Options = () => {
 
       {
         !isEmpty(options) && (
-          <ul className="list-group list-group-flush">
+          <ul className="list-group list-group-flush border-top">
             {
               options.map((option, index) => (
                 <Option

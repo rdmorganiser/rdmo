@@ -33,7 +33,7 @@ const IntegrationSecretField = ({
       {
         configured && action === 'keep' && (
           <div className="mb-3">
-            <label className="control-label" htmlFor={`${id}-current`}>
+            <label htmlFor={`${id}-current`}>
               {field.title}{field.required ? ' *' : ''}
             </label>
             <div className="input-group">
@@ -75,7 +75,7 @@ const IntegrationSecretField = ({
       {
         inputVisible && (
           <div className="form-group mb-3">
-            <label className="control-label" htmlFor={`${id}-input`}>
+            <label htmlFor={`${id}-input`}>
               {configured ? interpolate(gettext('New %s'), [field.title]) : field.title}
               {field.required || configured ? ' *' : ''}
             </label>
@@ -126,7 +126,7 @@ const IntegrationSecretField = ({
       {
         configured && action === 'remove' && (
           <div className="mb-3">
-            <label className="control-label" htmlFor={`${id}-current`}>
+            <label htmlFor={`${id}-current`}>
               {field.title}
             </label>
             <div className="input-group">

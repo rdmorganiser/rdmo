@@ -48,16 +48,18 @@ const NestedPage = ({ page }) => {
         </div>
 
         <div className="card-body">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString
-                value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
-                label={gettext('Filter pages')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix
-                value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                options={getUriPrefixes(page.elements)} />
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
+                  label={gettext('Filter pages')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  options={getUriPrefixes(page.elements)} />
+              </div>
             </div>
           </div>
           <div className="input-group input-group-sm mb-2">
@@ -85,20 +87,23 @@ const NestedPage = ({ page }) => {
             </button>
           </div>
         </div>
-      </div>
-      {
-        !isEmpty(page.elements) &&
-        <Drop element={page.elements[0]} indent={1} mode="before" />
-      }
-      {
-        page.elements.map((element, index) => {
-          if (element.model == 'questions.questionset') {
-            return <QuestionSet key={index} questionset={element} display="nested" filter="page" indent={1} />
-          } else {
-            return <Question key={index} question={element} display="nested" filter="page" indent={1} />
+
+        <div className="card-body border-top pt-0">
+          {
+            !isEmpty(page.elements) &&
+            <Drop element={page.elements[0]} indent={1} mode="before" />
           }
-        })
-      }
+          {
+            page.elements.map((element, index) => {
+              if (element.model == 'questions.questionset') {
+                return <QuestionSet key={index} questionset={element} display="nested" filter="page" indent={1} />
+              } else {
+                return <Question key={index} question={element} display="nested" filter="page" indent={1} />
+              }
+            })
+          }
+        </div>
+      </div>
     </>
   )
 }

@@ -162,7 +162,7 @@ def test_list_multisite(db, client, settings):
     client.login(username='example-manager', password='example-manager')
 
     # create a project on site 2, which is visible on site 1
-    project = Project.objects.create(title='foo.com project', site=Site.objects.get(id=2))
+    project = Project.objects.create(title='foo.example.com project', site=Site.objects.get(id=2))
     visibility = Visibility.objects.create(project=project)
     visibility.sites.add(Site.objects.get(id=1))
 

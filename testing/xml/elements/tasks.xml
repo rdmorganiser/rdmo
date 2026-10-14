@@ -134,8 +134,8 @@
 			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
 		</catalogs>
 	</task>
-	<task dc:uri="https://bar.com/terms/tasks/bar-task">
-		<uri_prefix>https://bar.com/terms</uri_prefix>
+	<task dc:uri="https://bar.example.com/terms/tasks/bar-task">
+		<uri_prefix>https://bar.example.com/terms</uri_prefix>
 		<uri_path>bar-task</uri_path>
 		<dc:comment/>
 		<order>0</order>
@@ -151,11 +151,11 @@
 		<days_after/>
 		<conditions/>
 		<catalogs>
-			<catalog dc:uri="https://bar.com/terms/questions/bar-catalog"/>
+			<catalog dc:uri="https://bar.example.com/terms/questions/bar-catalog"/>
 		</catalogs>
 	</task>
-	<task dc:uri="https://foo.com/terms/tasks/foo-task">
-		<uri_prefix>https://foo.com/terms</uri_prefix>
+	<task dc:uri="https://foo.example.com/terms/tasks/foo-task">
+		<uri_prefix>https://foo.example.com/terms</uri_prefix>
 		<uri_path>foo-task</uri_path>
 		<dc:comment/>
 		<order>0</order>
@@ -171,7 +171,7 @@
 		<days_after/>
 		<conditions/>
 		<catalogs>
-			<catalog dc:uri="https://foo.com/terms/questions/foo-catalog"/>
+			<catalog dc:uri="https://foo.example.com/terms/questions/foo-catalog"/>
 		</catalogs>
 	</task>
 </rdmo>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { invert, isEmpty, isNil } from 'lodash'
 
+import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 import Link from 'rdmo/core/assets/js/components/Link'
 import Select from 'rdmo/core/assets/js/components/Select'
 
@@ -78,12 +79,6 @@ const ElementsSidebar = () => {
     a.click()
   }
 
-  const handleFileUpload = (event) => {
-    if (!isEmpty(event.target.files)) {
-      dispatch(uploadFile(event.target.files[0]))
-    }
-  }
-
   const exportOptions = [
     { value: 'xml', label: gettext('XML') }
   ]
@@ -111,7 +106,7 @@ const ElementsSidebar = () => {
 
   return (
     <div className="d-flex flex-column">
-      <h2 className="px-3 mb-4">
+      <h2 className="d-none d-lg-inline px-3 mb-4">
         {gettext('Management')}
       </h2>
 
@@ -125,37 +120,43 @@ const ElementsSidebar = () => {
               onClick={() => dispatch(fetchElements(et))}>
               <div className="d-flex align-items-center gap-2">
                 <i className={`bi bi-${icons[et]}`} aria-hidden="true" />
-                {label}
+                <span className="d-none d-lg-inline">{label}</span>
               </div>
             </Link>
           ))
         }
       </nav>
 
-      <h3 className="px-3 my-2">
+      {
+        // for now, import and export are not shown on smaller screens
+      }
+
+      <h3 className="d-none d-lg-inline px-3 my-2">
         {gettext('Export')}
       </h3>
 
-      <p className="text-muted px-3 my-2">
+      <p className="d-none d-lg-inline text-muted px-3 my-2">
         {gettext('Export all visible elements.')}
       </p>
 
-      <div className="text-muted px-3 mb-4">
+      <div className="d-none d-lg-inline text-muted px-3 mb-4">
         <Select options={exportOptions} onChange={handleExport} placeholder={gettext('Select format ...')} />
       </div>
 
-      <h3 className="px-3 mb-2">
+      <h3 className="d-none d-lg-inline px-3 mb-2">
         {gettext('Import')}
       </h3>
 
-      <p className="text-muted px-3 mb-2">
+      <p className="d-none d-lg-inline text-muted px-3 mb-2">
         {gettext('Import an RDMO XML file.')}
       </p>
 
-      <div className="text-muted px-3">
-        <input
-          className="form-control" type="file" id="fileUpload" name="uploaded_file"
-          onChange={handleFileUpload} />
+      <div className="d-none d-lg-inline px-3">
+        <Dropzone
+          label={gettext('Choose a file ...')}
+          acceptedTypes={{'application/xml': ['.xml']}}
+          onDrop={(file) => dispatch(uploadFile(file))}
+        />
       </div>
     </div>
   )

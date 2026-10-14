@@ -55,16 +55,18 @@ const NestedCatalog = ({ catalog }) => {
         </div>
 
         <div className="card-body">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString
-                value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
-                label={gettext('Filter catalogs')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix
-                value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                options={getUriPrefixes(catalog.elements)} />
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
+                  label={gettext('Filter catalogs')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  options={getUriPrefixes(catalog.elements)} />
+              </div>
             </div>
           </div>
           <div className="input-group input-group-sm mb-2">
@@ -108,7 +110,7 @@ const NestedCatalog = ({ catalog }) => {
           </div>
         </div>
 
-        <div className="card-body">
+        <div className="card-body border-top pt-0">
           {
             !isEmpty(catalog.elements) &&
             <Drop element={catalog.elements[0]} indent={0} mode="before" />

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const FilterString = ({ value, onChange, label }) => {
   return (
-    <div className="input-group mb-2">
+    <div className="input-group mb-lg-0 mb-2">
       <input
         type="text" className="form-control" placeholder={label} aria-label={label}
         value={value} onChange={e => onChange(e.target.value)}></input>
@@ -24,7 +24,7 @@ FilterString.propTypes = {
 
 const FilterUriPrefix = ({ value, options, onChange }) => {
   return (
-    <div className="form-group mb-2">
+    <div className="form-group mb-lg-0 mb-2">
       <select
         className="form-select" value={value} aria-label={gettext('Filter URI prefix')}
         onChange={event => onChange(event.target.value)}>
@@ -45,7 +45,7 @@ FilterUriPrefix.propTypes = {
 
 const FilterSite = ({ value, options, onChange, label = 'Filter sites', allLabel = 'All sites' }) => {
   return (
-    <div className="form-group mb-2">
+    <div className="form-group mb-lg-0 mb-2">
       <select
         className="form-select" value={value} aria-label={label}
         onChange={event => onChange(event.target.value)}>

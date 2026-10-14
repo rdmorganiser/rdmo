@@ -127,7 +127,7 @@ def test_management_navigation_filters(page_multisite: Page) -> None:
     page.get_by_role("textbox", name="Filter catalogs").fill("bar")
 
     # filter URI prefix
-    page.get_by_label("Filter URI prefix").select_option("https://bar.com/terms")
+    page.get_by_label("Filter URI prefix").select_option("https://bar.example.com/terms")
 
     # filter sites and editors, requires MULTISITE to be enabled
     page.get_by_label("Filter sites").select_option("3")

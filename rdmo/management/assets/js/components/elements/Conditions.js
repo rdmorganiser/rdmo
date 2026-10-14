@@ -59,7 +59,7 @@ const Conditions = () => {
 
       {
         !isEmpty(conditions) && (
-          <ul className="list-group list-group-flush">
+          <ul className="list-group list-group-flush border-top">
             {
               conditions.map((condition, index) => (
                 <Condition

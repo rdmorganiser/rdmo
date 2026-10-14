@@ -19,9 +19,9 @@ const InterviewOverview = () => {
             <div className="card-body d-flex flex-column">
               <div className="row">
                 <div className="col-md-8">
-                  <h2>
+                  <h3 className="mb-2">
                     <Html html={section.title} />
-                  </h2>
+                  </h3>
                   {
                     !isEmpty(section.pages) && (
                       <ul className="mb-0 text-secondary">

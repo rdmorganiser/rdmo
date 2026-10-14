@@ -35,16 +35,18 @@ const NestedOptionSet = ({ optionset }) => {
         </div>
 
         <div className="card-body">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString
-                value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
-                label={gettext('Filter option sets')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix
-                value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                options={getUriPrefixes(optionset.elements)} />
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
+                  label={gettext('Filter option sets')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  options={getUriPrefixes(optionset.elements)} />
+              </div>
             </div>
           </div>
           <div className="input-group input-group-sm">
@@ -54,13 +56,15 @@ const NestedOptionSet = ({ optionset }) => {
             </button>
           </div>
         </div>
-      </div>
 
-      {
-        optionset.elements.map((option, index) => (
-          <Option key={index} option={option} display="nested" filter="optionset" indent={1} />
-        ))
-      }
+        <div className="card-body border-top pt-0">
+          {
+            optionset.elements.map((option, index) => (
+              <Option key={index} option={option} display="nested" filter="optionset" indent={1} />
+            ))
+          }
+        </div>
+      </div>
     </>
   )
 }

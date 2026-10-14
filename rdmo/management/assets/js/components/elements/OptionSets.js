@@ -59,7 +59,7 @@ const OptionSets = () => {
 
       {
         !isEmpty(optionsets) && (
-          <ul className="list-group list-group-flush">
+          <ul className="list-group list-group-flush border-top">
             {
               optionsets.map((optionset, index) => (
                 <OptionSet

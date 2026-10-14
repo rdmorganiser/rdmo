@@ -1,14 +1,22 @@
 .management {
     --rdmo-management-indent: 2rem;
 
+    --rdmo-management-font-size: 0.9rem;
+
     position: relative;
+    font-size: var(--rdmo-management-font-size);
+
+    code {
+        font-size: var(--rdmo-font-size-smaller);
+    }
 
     .card-body {
         padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
+    }
 
-        .text-warning,
-        .text-danger {
-            font-size: 0.85em;
+    .card-header {
+        strong {
+            text-transform: uppercase;  // match the table style
         }
     }
 

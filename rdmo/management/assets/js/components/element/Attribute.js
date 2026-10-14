@@ -32,7 +32,7 @@ const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, fil
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Attribute')}{':'}</strong>
+        <strong>{gettext('Attribute')}</strong>
         <CodeLink
           className="flex-grow-1" type="domain" uri={attribute.uri} href={editUrl}
           onClick={() => fetchEdit()} />

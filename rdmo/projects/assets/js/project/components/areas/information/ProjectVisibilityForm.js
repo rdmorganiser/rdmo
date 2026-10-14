@@ -100,7 +100,10 @@ const ProjectVisibilityForm = () => {
           }
         </span>
       </div>
-      <Html html={templates?.project_view_visibility_help} />
+
+      <div className="form-text mb-3">
+        <Html html={templates?.project_view_visibility_help} />
+      </div>
 
       {
         userPerms?.can_change_visibility ? (

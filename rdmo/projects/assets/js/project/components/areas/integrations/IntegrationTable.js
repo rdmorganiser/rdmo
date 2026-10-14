@@ -1,7 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
 const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
+
+  const getSafeUrl = (value) => {
+    try {
+      const url = new URL(value)
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : null
+    } catch {
+      return null
+    }
+  }
 
   return (
     <table className="table">
@@ -19,15 +29,36 @@ const IntegrationTable = ({ integrations, onDelete, onUpdate }) => {
         {
           integrations.map((integration) => (
             <tr key={integration.id}>
-              <td>{integration.title}</td>
+              <td>
+                <strong>{integration.title}</strong>
+              </td>
               <td>{integration.provider.description}</td>
               <td>
                 {
-                  integration.options
-                    .filter((option) => !option.secret)
-                    .map((option) => (
-                      <p key={option.key}>{option.title}: {option.value}</p>
-                    ))
+                  !isEmpty(integration.options) && (
+                    <dl className="d-flex flex-wrap column-gap-3 row-gap-1 mb-0">
+                      {
+                        integration.options
+                          .filter((option) => !option.secret)
+                          .map((option) => {
+                            const url = getSafeUrl(option.value)
+
+                            return (
+                              <div key={option.key} className="d-flex gap-1">
+                                <dt>{option.title}:</dt>
+                                <dd className="mb-0">
+                                  {
+                                    url ? (
+                                      <a href={url} target="_blank" rel="noreferrer">{option.value}</a>
+                                    ) : option.value
+                                  }
+                                </dd>
+                              </div>
+                            )
+                          })
+                      }
+                    </dl>
+                  )
                 }
               </td>
               <td>

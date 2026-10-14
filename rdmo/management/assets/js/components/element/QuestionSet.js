@@ -56,7 +56,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const elementNode = (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex align-items-center gap-2">
-        <strong>{gettext('Question set')}{':'}</strong>
+        <strong>{gettext('Question set')}</strong>
         <div className="flex-grow-1">
           <Html html={questionset.title} />
         </div>

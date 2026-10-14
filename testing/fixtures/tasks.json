@@ -83,8 +83,8 @@
     "model": "tasks.task",
     "pk": 3,
     "fields": {
-      "uri": "https://foo.com/terms/tasks/foo-task",
-      "uri_prefix": "https://foo.com/terms",
+      "uri": "https://foo.example.com/terms/tasks/foo-task",
+      "uri_prefix": "https://foo.example.com/terms",
       "uri_path": "foo-task",
       "comment": "",
       "locked": false,
@@ -123,8 +123,8 @@
     "model": "tasks.task",
     "pk": 4,
     "fields": {
-      "uri": "https://bar.com/terms/tasks/bar-task",
-      "uri_prefix": "https://bar.com/terms",
+      "uri": "https://bar.example.com/terms/tasks/bar-task",
+      "uri_prefix": "https://bar.example.com/terms",
       "uri_path": "bar-task",
       "comment": "",
       "locked": false,

@@ -20,7 +20,7 @@ const Radio = ({ element, field, options, onChange }) => {
 
   return (
     <div className="mb-3">
-      <label className="control-label">{label}</label>
+      <label>{label}</label>
 
       <div className="d-flex align-items-center gap-5">
         {
