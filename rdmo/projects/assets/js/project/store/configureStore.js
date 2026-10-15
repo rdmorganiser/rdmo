@@ -1,5 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
-import thunk from 'redux-thunk'
+import { combineReducers } from 'redux'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
@@ -28,11 +27,13 @@ import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
+
 export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
 
-  const middlewares = [thunk]
+  const middlewares = []
 
   if (process.env.NODE_ENV === 'development') {
     const { logger } = require('redux-logger')
@@ -60,11 +61,11 @@ export default function configureStore() {
     }
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...middlewares)
-  )
+  const store = configureToolkitStore({
+    reducer: rootReducer,
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
+  })
 
   configureStaleRefresh(store, {
     projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())
