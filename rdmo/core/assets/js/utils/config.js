@@ -1,13 +1,13 @@
-import { set, unset } from 'lodash'
+import { cloneDeep, set, unset } from 'lodash'
 
 const updateConfig = (config, path, value) => {
-  const newConfig = {...config}
+  const newConfig = cloneDeep(config)
   set(newConfig, path, value)
   return newConfig
 }
 
 const deleteConfig = (config, path) => {
-  const newConfig = {...config}
+  const newConfig = cloneDeep(config)
   unset(newConfig, path)
   return newConfig
 }
