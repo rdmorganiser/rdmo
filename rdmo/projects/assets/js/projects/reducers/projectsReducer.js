@@ -1,3 +1,4 @@
+import { actions as projectActions } from '../../project/reducers/projectSlice'
 import {
   COPY_PROJECT_ERROR, COPY_PROJECT_INIT,
   CREATE_PROJECT_ERROR, CREATE_PROJECT_INIT,
@@ -5,8 +6,7 @@ import {
   FETCH_FILETYPES_ERROR, FETCH_FILETYPES_INIT, FETCH_FILETYPES_SUCCESS,
   FETCH_IMPORT_URLS_ERROR, FETCH_IMPORT_URLS_INIT, FETCH_IMPORT_URLS_SUCCESS,
   FETCH_INVITATIONS_ERROR, FETCH_INVITATIONS_INIT, FETCH_INVITATIONS_SUCCESS,
-  FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS,
-  UPDATE_PROJECT_ERROR, UPDATE_PROJECT_INIT
+  FETCH_PROJECTS_ERROR, FETCH_PROJECTS_INIT, FETCH_PROJECTS_SUCCESS
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -28,6 +28,8 @@ export default function projectsReducer(state = initialState, action) {
         hasNext: action.projects.next !== null
       }
     }
+    case projectActions.updateProjectError.type:
+      return { ...state, errors: action.payload.errors }
     case FETCH_PROJECTS_ERROR:
     case CREATE_PROJECT_ERROR:
     case COPY_PROJECT_ERROR:
@@ -35,7 +37,6 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_CATALOGS_ERROR:
     case FETCH_FILETYPES_ERROR:
     case FETCH_IMPORT_URLS_ERROR:
-    case UPDATE_PROJECT_ERROR:
       return { ...state, errors: action.error.errors }
     case FETCH_INVITATIONS_INIT:
     case FETCH_CATALOGS_INIT:
@@ -43,7 +44,7 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_IMPORT_URLS_INIT:
     case CREATE_PROJECT_INIT:
     case COPY_PROJECT_INIT:
-    case UPDATE_PROJECT_INIT:
+    case projectActions.updateProjectInit.type:
       return { ...state, errors: [] }
     case FETCH_INVITATIONS_SUCCESS:
       return { ...state, invites: action.invites }

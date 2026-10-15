@@ -12,8 +12,6 @@ import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
 
-import * as actionTypes from './actionTypes'
-
 // asynchronous actions
 
 // project
@@ -22,7 +20,7 @@ export function fetchProject() {
 
   return function (dispatch) {
     dispatch(addToPending('fetchProject'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_INIT })
+    dispatch(actions.fetchProjectInit())
 
     return Promise.all([
       ProjectApi.fetchProject(projectId),
@@ -51,11 +49,11 @@ export function fetchProject() {
         }
 
         dispatch(removeFromPending('fetchProject'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_SUCCESS, project: projectData })
+        dispatch(actions.fetchProjectSuccess(projectData))
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProject'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectError(serializeError(error)))
         throw error
       })
   }
@@ -72,7 +70,7 @@ export function updateProject(data) {
     }
 
     dispatch(addToPending('updateProject'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_INIT })
+    dispatch(actions.updateProjectInit())
 
     return ProjectApi.updateProject(id, data)
       .then(() =>
@@ -82,13 +80,10 @@ export function updateProject(data) {
         ])
       )
       .then(([project, hierarchy]) => {
-        dispatch({
-          type: actionTypes.UPDATE_PROJECT_SUCCESS,
-          project: { project, hierarchy }
-        })
+        dispatch(actions.updateProjectSuccess({ project, hierarchy }))
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProject')))
@@ -100,12 +95,12 @@ export function deleteProject(id) {
     const idToDelete = id ?? projectId
 
     dispatch(addToPending('deleteProject'))
-    dispatch({ type: actionTypes.DELETE_PROJECT_INIT })
+    dispatch(actions.deleteProjectInit())
 
     return ProjectApi.deleteProject(idToDelete)
       .then(() => {
         dispatch(removeFromPending('deleteProject'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_SUCCESS, projectId: idToDelete })
+        dispatch(actions.deleteProjectSuccess(idToDelete))
 
         if (!id) {
           window.location.href = `${baseUrl}/projects/`
@@ -113,7 +108,7 @@ export function deleteProject(id) {
       })
       .catch((error) => {
         dispatch(removeFromPending('deleteProject'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteProjectError(serializeError(error)))
         throw error
       })
   }
@@ -124,19 +119,19 @@ export function deleteProject(id) {
 export function fetchProjectVisibility() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectVisibility'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_INIT })
+    dispatch(actions.fetchProjectVisibilityInit())
 
     return ProjectApi.fetchProjectVisibility(projectId)
       .then(visibility => {
-        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility })
+        dispatch(actions.fetchProjectVisibilitySuccess(visibility))
       })
       .catch(error => {
         if (error?.status === 404) {
-          dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_SUCCESS, visibility: null })
+          dispatch(actions.fetchProjectVisibilitySuccess(null))
           return null
         }
 
-        dispatch({ type: actionTypes.FETCH_PROJECT_VISIBILITY_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectVisibilityError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectVisibility')))
@@ -146,14 +141,14 @@ export function fetchProjectVisibility() {
 export function updateProjectVisibility(data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectVisibility'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_INIT })
+    dispatch(actions.updateProjectVisibilityInit())
 
     return ProjectApi.updateProjectVisibility(projectId, data)
       .then((visibility) => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_SUCCESS, visibility })
+        dispatch(actions.updateProjectVisibilitySuccess(visibility))
       })
       .catch(error => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_VISIBILITY_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectVisibilityError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProjectVisibility')))
@@ -163,15 +158,15 @@ export function updateProjectVisibility(data) {
 export function deleteProjectVisibility() {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectVisibility'))
-    dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_INIT })
+    dispatch(actions.deleteProjectVisibilityInit())
 
     return ProjectApi.deleteProjectVisibility(projectId)
       .then(() => {
         dispatch(fetchProjectVisibility())
-        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_SUCCESS })
+        dispatch(actions.deleteProjectVisibilitySuccess())
       })
       .catch(error => {
-        dispatch({ type: actionTypes.DELETE_PROJECT_VISIBILITY_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteProjectVisibilityError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('deleteProjectVisibility')))
@@ -183,14 +178,14 @@ export function deleteProjectVisibility() {
 export function fetchProjectIssues() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectIssues'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_INIT })
+    dispatch(actions.fetchProjectIssuesInit())
 
     return ProjectApi.fetchProjectIssues(projectId)
       .then((issues) => {
-        dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_SUCCESS, issues })
+        dispatch(actions.fetchProjectIssuesSuccess(issues))
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.FETCH_PROJECT_ISSUES_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectIssuesError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectIssues')))
@@ -200,15 +195,15 @@ export function fetchProjectIssues() {
 export function updateProjectIssue(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectIssue'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_INIT })
+    dispatch(actions.updateProjectIssueInit())
 
     return ProjectApi.updateProjectIssue(projectId, issueId, data)
       .then(() => dispatch(fetchProjectIssues()))
       .then(() => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_SUCCESS })
+        dispatch(actions.updateProjectIssueSuccess())
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_ISSUE_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectIssueError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProjectIssue')))
@@ -220,16 +215,16 @@ export function updateProjectIssue(issueId, data) {
 export function sendProjectIssueEmail(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('sendProjectIssueEmail'))
-    dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_INIT })
+    dispatch(actions.sendProjectIssueEmailInit())
 
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
-        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_SUCCESS })
+        dispatch(actions.sendProjectIssueEmailSuccess())
 
         return dispatch(fetchProjectIssues())
           .catch(() => {})
       }, error => {
-        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_EMAIL_ERROR, error: serializeError(error) })
+        dispatch(actions.sendProjectIssueEmailError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('sendProjectIssueEmail')))
@@ -239,11 +234,11 @@ export function sendProjectIssueEmail(issueId, data) {
 export function sendProjectIssueIntegration(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('sendProjectIssueIntegration'))
-    dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_INIT })
+    dispatch(actions.sendProjectIssueIntegrationInit())
 
     return ProjectApi.sendProjectIssueIntegration(projectId, issueId, data)
       .then((response) => {
-        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_SUCCESS })
+        dispatch(actions.sendProjectIssueIntegrationSuccess())
 
         if (response?.redirect_url) {
           dispatch(addToStale('projectIssues'))
@@ -255,7 +250,7 @@ export function sendProjectIssueIntegration(issueId, data) {
           .catch(() => {})
           .then(() => response)
       }, error => {
-        dispatch({ type: actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_ERROR, error: serializeError(error) })
+        dispatch(actions.sendProjectIssueIntegrationError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('sendProjectIssueIntegration')))
@@ -267,16 +262,16 @@ export function sendProjectIssueIntegration(issueId, data) {
 export function fetchProjectInvites() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectInvites'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_INVITES_INIT })
+    dispatch(actions.fetchProjectInvitesInit())
 
     return ProjectApi.fetchProjectInvites(projectId)
       .then(invites => {
         dispatch(removeFromPending('fetchProjectInvites'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_INVITES_SUCCESS, invites })
+        dispatch(actions.fetchProjectInvitesSuccess(invites))
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProjectInvites'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_INVITES_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectInvitesError(serializeError(error)))
       })
   }
 }
@@ -284,16 +279,16 @@ export function fetchProjectInvites() {
 export function createProjectMember(data) {
   return function (dispatch) {
     dispatch(addToPending('createProjectMember'))
-    dispatch({ type: actionTypes.CREATE_PROJECT_MEMBER_INIT })
+    dispatch(actions.createProjectMemberInit())
 
     return ProjectApi.createMember(projectId, data)
       .then(member => {
         dispatch(removeFromPending('createProjectMember'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_MEMBER_SUCCESS, member })
+        dispatch(actions.createProjectMemberSuccess(member))
       })
       .catch(error => {
         dispatch(removeFromPending('createProjectMember'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_MEMBER_ERROR, error: serializeError(error) })
+        dispatch(actions.createProjectMemberError(serializeError(error)))
         throw error
       })
   }
@@ -302,21 +297,21 @@ export function createProjectMember(data) {
 export function updateProjectMember(membershipId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectMember'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_MEMBER_INIT })
+    dispatch(actions.updateProjectMemberInit())
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_MEMBER_SUCCESS, member: { ...member, id: membershipId } })
+        dispatch(actions.updateProjectMemberSuccess({ ...member, id: membershipId }))
 
         // membership updates can lead to a permission change for owner <-> last owner cases
         // project with permissions needs to be fetched
         return ProjectApi.fetchProject(projectId)
       })
       .then((project) => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_SUCCESS, project: { project } })
+        dispatch(actions.updateProjectSuccess({ project }))
       })
       .catch(error => {
-        dispatch({ type: actionTypes.UPDATE_PROJECT_MEMBER_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectMemberError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProjectMember')))
@@ -326,16 +321,16 @@ export function updateProjectMember(membershipId, data) {
 export function deleteProjectMember(membershipId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectMember'))
-    dispatch({ type: actionTypes.DELETE_PROJECT_MEMBER_INIT })
+    dispatch(actions.deleteProjectMemberInit())
 
     return ProjectApi.deleteMember(projectId, membershipId)
       .then(() => {
         dispatch(removeFromPending('deleteProjectMember'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_MEMBER_SUCCESS, membershipId })
+        dispatch(actions.deleteProjectMemberSuccess(membershipId))
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectMember'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_MEMBER_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteProjectMemberError(serializeError(error)))
         throw error
       })
   }
@@ -344,16 +339,16 @@ export function deleteProjectMember(membershipId) {
 export function sendProjectInvite(data) {
   return function (dispatch) {
     dispatch(addToPending('sendInvite'))
-    dispatch({ type: actionTypes.SEND_INVITE_INIT })
+    dispatch(actions.sendInviteInit())
 
     return ProjectApi.sendInvite(projectId, data)
       .then(invite => {
         dispatch(removeFromPending('sendInvite'))
-        dispatch({ type: actionTypes.SEND_INVITE_SUCCESS, invite })
+        dispatch(actions.sendInviteSuccess(invite))
       })
       .catch(error => {
         dispatch(removeFromPending('sendInvite'))
-        dispatch({ type: actionTypes.SEND_INVITE_ERROR, error: serializeError(error) })
+        dispatch(actions.sendInviteError(serializeError(error)))
         throw error
       })
   }
@@ -362,16 +357,16 @@ export function sendProjectInvite(data) {
 export function updateProjectInvite(inviteId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectInvite'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_INVITE_INIT })
+    dispatch(actions.updateProjectInviteInit())
 
     return ProjectApi.updateInvite(projectId, inviteId, data)
       .then(invite => {
         dispatch(removeFromPending('updateProjectInvite'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_INVITE_SUCCESS, invite: { ...invite, id: inviteId } })
+        dispatch(actions.updateProjectInviteSuccess({ ...invite, id: inviteId }))
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectInvite'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_INVITE_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectInviteError(serializeError(error)))
         throw error
       })
   }
@@ -380,16 +375,16 @@ export function updateProjectInvite(inviteId, data) {
 export function deleteProjectInvite(inviteId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectInvite'))
-    dispatch({ type: actionTypes.DELETE_PROJECT_INVITE_INIT })
+    dispatch(actions.deleteProjectInviteInit())
 
     return ProjectApi.deleteInvite(projectId, inviteId)
       .then(() => {
         dispatch(removeFromPending('deleteProjectInvite'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_INVITE_SUCCESS, inviteId })
+        dispatch(actions.deleteProjectInviteSuccess(inviteId))
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectInvite'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_INVITE_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteProjectInviteError(serializeError(error)))
         throw error
       })
   }
@@ -398,12 +393,12 @@ export function deleteProjectInvite(inviteId) {
 export function leaveProject(membershipId, { redirect = false } = {}) {
   return function (dispatch) {
     dispatch(addToPending('leaveProject'))
-    dispatch({ type: actionTypes.LEAVE_PROJECT_INIT })
+    dispatch(actions.leaveProjectInit())
 
     return ProjectApi.leaveProject(projectId)
       .then(() => {
         dispatch(removeFromPending('leaveProject'))
-        dispatch({ type: actionTypes.LEAVE_PROJECT_SUCCESS, membershipId })
+        dispatch(actions.leaveProjectSuccess(membershipId))
         if (redirect) {
           window.location.href = `${baseUrl}/projects/`
           return
@@ -411,7 +406,7 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
       })
       .catch(error => {
         dispatch(removeFromPending('leaveProject'))
-        dispatch({ type: actionTypes.LEAVE_PROJECT_ERROR, error: serializeError(error) })
+        dispatch(actions.leaveProjectError(serializeError(error)))
         throw error
       })
   }
@@ -422,16 +417,16 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
 export function createSnapshot(data) {
   return function (dispatch) {
     dispatch(addToPending('createSnapshot'))
-    dispatch({ type: actionTypes.CREATE_SNAPSHOT_INIT })
+    dispatch(actions.createSnapshotInit())
 
     return ProjectApi.createSnapshot(projectId, data)
       .then(snapshot => {
         dispatch(removeFromPending('createSnapshot'))
-        dispatch({ type: actionTypes.CREATE_SNAPSHOT_SUCCESS, snapshot })
+        dispatch(actions.createSnapshotSuccess(snapshot))
       })
       .catch(error => {
         dispatch(removeFromPending('createSnapshot'))
-        dispatch({ type: actionTypes.CREATE_SNAPSHOT_ERROR, error: serializeError(error) })
+        dispatch(actions.createSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -440,16 +435,16 @@ export function createSnapshot(data) {
 export function updateSnapshot(snapshotId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateSnapshot'))
-    dispatch({ type: actionTypes.UPDATE_SNAPSHOT_INIT })
+    dispatch(actions.updateSnapshotInit())
 
     return ProjectApi.updateSnapshot(projectId, snapshotId, data)
       .then(snapshot => {
         dispatch(removeFromPending('updateSnapshot'))
-        dispatch({ type: actionTypes.UPDATE_SNAPSHOT_SUCCESS, snapshot })
+        dispatch(actions.updateSnapshotSuccess(snapshot))
       })
       .catch(error => {
         dispatch(removeFromPending('updateSnapshot'))
-        dispatch({ type: actionTypes.UPDATE_SNAPSHOT_ERROR, error: serializeError(error) })
+        dispatch(actions.updateSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -458,16 +453,16 @@ export function updateSnapshot(snapshotId, data) {
 export function deleteSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('deleteSnapshot'))
-    dispatch({ type: actionTypes.DELETE_SNAPSHOT_INIT })
+    dispatch(actions.deleteSnapshotInit())
 
     return ProjectApi.deleteSnapshot(projectId, snapshotId)
       .then(() => {
         dispatch(removeFromPending('deleteSnapshot'))
-        dispatch({ type: actionTypes.DELETE_SNAPSHOT_SUCCESS, snapshotId })
+        dispatch(actions.deleteSnapshotSuccess(snapshotId))
       })
       .catch(error => {
         dispatch(removeFromPending('deleteSnapshot'))
-        dispatch({ type: actionTypes.DELETE_SNAPSHOT_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -476,17 +471,17 @@ export function deleteSnapshot(snapshotId) {
 export function rollbackSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('rollbackSnapshot'))
-    dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_INIT })
+    dispatch(actions.rollbackSnapshotInit())
 
     return ProjectApi.rollbackSnapshot(projectId, snapshotId)
       .then(snapshot => {
         dispatch(removeFromPending('rollbackSnapshot'))
-        dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_SUCCESS, snapshot })
+        dispatch(actions.rollbackSnapshotSuccess(snapshot))
         dispatch(fetchProject())
       })
       .catch(error => {
         dispatch(removeFromPending('rollbackSnapshot'))
-        dispatch({ type: actionTypes.ROLLBACK_SNAPSHOT_ERROR, error: serializeError(error) })
+        dispatch(actions.rollbackSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -499,16 +494,16 @@ export function fetchProjectFiles(snapshotId) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch({ type: actionTypes.FETCH_PROJECT_FILES_INIT })
+    dispatch(actions.fetchProjectFilesInit())
 
     return ProjectApi.fetchProjectFiles(projectId, snapshotId)
       .then(files => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_SUCCESS, files })
+        dispatch(actions.fetchProjectFilesSuccess(files))
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_PROJECT_FILES_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectFilesError(serializeError(error)))
         throw error
       })
   }
@@ -521,17 +516,17 @@ export function fetchAnswers(snapshotId, params = {}) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
+    dispatch(actions.fetchAnswersInit())
 
     return ProjectApi.fetchProjectAnswers(projectId, snapshotId, params)
       .then(view => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
+        dispatch(actions.fetchAnswersSuccess(view))
         return view
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_ANSWERS_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchAnswersError(serializeError(error)))
         throw error
       })
   }
@@ -542,16 +537,16 @@ export function fetchView(snapshotId, viewId) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch({ type: actionTypes.FETCH_VIEW_INIT })
+    dispatch(actions.fetchViewInit())
 
     return ProjectApi.fetchProjectView(projectId, snapshotId, viewId)
       .then(view => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_VIEW_SUCCESS, view })
+        dispatch(actions.fetchViewSuccess(view))
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch({ type: actionTypes.FETCH_VIEW_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchViewError(serializeError(error)))
       })
   }
 }
@@ -563,16 +558,16 @@ export function fetchNavigation() {
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch({type: actionTypes.FETCH_NAVIGATION_INIT})
+    dispatch(actions.fetchNavigationInit())
 
     return ProjectApi.fetchProjectNavigation(projectId)
       .then((navigation) => {
         dispatch(removeFromPending(pendingId))
-        dispatch({type: actionTypes.FETCH_NAVIGATION_SUCCESS, navigation})
+        dispatch(actions.fetchNavigationSuccess(navigation))
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
-        dispatch({type: actionTypes.FETCH_NAVIGATION_ERROR, error: serializeError(error)})
+        dispatch(actions.fetchNavigationError(serializeError(error)))
       })
   }
 }
@@ -582,16 +577,16 @@ export function fetchNavigation() {
 export function fetchProgress() {
   return (dispatch) => {
     dispatch(addToPending('fetchProgress'))
-    dispatch({type: actionTypes.FETCH_PROGRESS_INIT})
+    dispatch(actions.fetchProgressInit())
 
     return ProjectApi.fetchProjectProgress(projectId)
       .then((progress) => {
         dispatch(removeFromPending('fetchProgress'))
-        dispatch({type: actionTypes.FETCH_PROGRESS_SUCCESS, progress})
+        dispatch(actions.fetchProgressSuccess(progress))
       })
       .catch((error) => {
         dispatch(removeFromPending('fetchProgress'))
-        dispatch({type: actionTypes.FETCH_PROGRESS_ERROR, error: serializeError(error)})
+        dispatch(actions.fetchProgressError(serializeError(error)))
       })
   }
 }
@@ -618,11 +613,11 @@ export function updateProgress() {
 export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
     dispatch(addToPending('downloadAnswers'))
-    dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
+    dispatch(actions.downloadAnswersInit())
 
     return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, params)
-      .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
-      .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error: serializeError(error) }))
+      .then(() => dispatch(actions.downloadAnswersSuccess()))
+      .catch(error => dispatch(actions.downloadAnswersError(serializeError(error))))
       .finally(() => dispatch(removeFromPending('downloadAnswers')))
   }
 }
@@ -630,11 +625,11 @@ export function downloadAnswers(snapshotId, format, params = {}) {
 export function downloadView(snapshotId, viewId, format) {
   return function (dispatch) {
     dispatch(addToPending('downloadView'))
-    dispatch({ type: actionTypes.DOWNLOAD_VIEW_INIT })
+    dispatch(actions.downloadViewInit())
 
     return ProjectApi.downloadProjectView(projectId, snapshotId, viewId, format)
-      .then(() => dispatch({ type: actionTypes.DOWNLOAD_VIEW_SUCCESS }))
-      .catch(error => dispatch({ type: actionTypes.DOWNLOAD_VIEW_ERROR, error: serializeError(error) }))
+      .then(() => dispatch(actions.downloadViewSuccess()))
+      .catch(error => dispatch(actions.downloadViewError(serializeError(error))))
       .finally(() => dispatch(removeFromPending('downloadView')))
   }
 }
@@ -644,16 +639,16 @@ export function downloadView(snapshotId, viewId, format) {
 export function fetchProviders() {
   return function (dispatch) {
     dispatch(addToPending('fetchProviders'))
-    dispatch({ type: actionTypes.FETCH_PROVIDERS_INIT })
+    dispatch(actions.fetchProvidersInit())
 
     return ProjectApi.fetchProviders()
       .then(providers => {
         dispatch(removeFromPending('fetchProviders'))
-        dispatch({ type: actionTypes.FETCH_PROVIDERS_SUCCESS, providers })
+        dispatch(actions.fetchProvidersSuccess(providers))
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProviders'))
-        dispatch({ type: actionTypes.FETCH_PROVIDERS_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProvidersError(serializeError(error)))
         throw error
       })
   }
@@ -664,16 +659,16 @@ export function fetchProviders() {
 export function fetchProjectIntegrations() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectIntegrations'))
-    dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_INIT })
+    dispatch(actions.fetchProjectIntegrationsInit())
 
     return ProjectApi.fetchProjectIntegrations(projectId)
       .then(integrations => {
         dispatch(removeFromPending('fetchProjectIntegrations'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_SUCCESS, integrations })
+        dispatch(actions.fetchProjectIntegrationsSuccess(integrations))
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProjectIntegrations'))
-        dispatch({ type: actionTypes.FETCH_PROJECT_INTEGRATIONS_ERROR, error: serializeError(error) })
+        dispatch(actions.fetchProjectIntegrationsError(serializeError(error)))
         throw error
       })
   }
@@ -682,16 +677,16 @@ export function fetchProjectIntegrations() {
 export function createProjectIntegration(data) {
   return function (dispatch) {
     dispatch(addToPending('createProjectIntegration'))
-    dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_INIT })
+    dispatch(actions.createProjectIntegrationInit())
 
     return ProjectApi.createProjectIntegration(projectId, data)
       .then(integration => {
         dispatch(removeFromPending('createProjectIntegration'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_SUCCESS, integration })
+        dispatch(actions.createProjectIntegrationSuccess(integration))
       })
       .catch(error => {
         dispatch(removeFromPending('createProjectIntegration'))
-        dispatch({ type: actionTypes.CREATE_PROJECT_INTEGRATION_ERROR, error: serializeError(error) })
+        dispatch(actions.createProjectIntegrationError(serializeError(error)))
         throw error
       })
   }
@@ -700,16 +695,16 @@ export function createProjectIntegration(data) {
 export function updateProjectIntegration(integrationId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectIntegration'))
-    dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_INIT })
+    dispatch(actions.updateProjectIntegrationInit())
 
     return ProjectApi.updateProjectIntegration(projectId, integrationId, data)
       .then(integration => {
         dispatch(removeFromPending('updateProjectIntegration'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_SUCCESS, integration })
+        dispatch(actions.updateProjectIntegrationSuccess(integration))
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectIntegration'))
-        dispatch({ type: actionTypes.UPDATE_PROJECT_INTEGRATION_ERROR, error: serializeError(error) })
+        dispatch(actions.updateProjectIntegrationError(serializeError(error)))
         throw error
       })
   }
@@ -718,16 +713,16 @@ export function updateProjectIntegration(integrationId, data) {
 export function deleteProjectIntegration(integrationId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectIntegration'))
-    dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_INIT })
+    dispatch(actions.deleteProjectIntegrationInit())
 
     return ProjectApi.deleteProjectIntegration(projectId, integrationId)
       .then(() => {
         dispatch(removeFromPending('deleteProjectIntegration'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_SUCCESS, integrationId })
+        dispatch(actions.deleteProjectIntegrationSuccess(integrationId))
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectIntegration'))
-        dispatch({ type: actionTypes.DELETE_PROJECT_INTEGRATION_ERROR, error: serializeError(error) })
+        dispatch(actions.deleteProjectIntegrationError(serializeError(error)))
         throw error
       })
   }
