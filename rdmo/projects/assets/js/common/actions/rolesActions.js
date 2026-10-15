@@ -1,3 +1,5 @@
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
+
 import RoleApi from '../api/RoleApi'
 
 import { FETCH_ROLES_ERROR, FETCH_ROLES_INIT, FETCH_ROLES_SUCCESS } from './actionTypes'
@@ -27,5 +29,5 @@ export function fetchRolesSuccess(roles) {
 }
 
 export function fetchRolesError(errors) {
-  return { type: FETCH_ROLES_ERROR, errors }
+  return { type: FETCH_ROLES_ERROR, errors: serializeError(errors) }
 }

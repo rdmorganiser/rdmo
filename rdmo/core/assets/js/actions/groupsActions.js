@@ -1,3 +1,5 @@
+import { serializeError } from '../utils/errors'
+
 import CoreApi from '../api/CoreApi'
 
 import { FETCH_GROUPS_ERROR, FETCH_GROUPS_INIT, FETCH_GROUPS_SUCCESS } from './actionTypes'
@@ -11,7 +13,7 @@ export function fetchGroups() {
         dispatch({ type: FETCH_GROUPS_SUCCESS, groups })
       })
       .catch(error => {
-        dispatch({ type: FETCH_GROUPS_ERROR, error })
+        dispatch({ type: FETCH_GROUPS_ERROR, error: serializeError(error) })
         throw error
       })
   }

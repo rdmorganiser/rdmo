@@ -1,3 +1,5 @@
+import { serializeError } from '../utils/errors'
+
 import AccountsApi from '../api/AccountsApi'
 
 import { FETCH_CURRENT_USER_ERROR, FETCH_CURRENT_USER_INIT, FETCH_CURRENT_USER_SUCCESS } from './actionTypes'
@@ -21,5 +23,5 @@ export function fetchCurrentUserSuccess(currentUser) {
 }
 
 export function fetchCurrentUserError(error) {
-  return {type: FETCH_CURRENT_USER_ERROR, error}
+  return {type: FETCH_CURRENT_USER_ERROR, error: serializeError(error)}
 }

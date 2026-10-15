@@ -1,3 +1,5 @@
+import { serializeError } from '../utils/errors'
+
 import CoreApi from '../api/CoreApi'
 
 import { FETCH_SITES_ERROR, FETCH_SITES_INIT, FETCH_SITES_SUCCESS } from './actionTypes'
@@ -11,7 +13,7 @@ export function fetchSites() {
         dispatch({ type: FETCH_SITES_SUCCESS, sites })
       })
       .catch(error => {
-        dispatch({ type: FETCH_SITES_ERROR, error })
+        dispatch({ type: FETCH_SITES_ERROR, error: serializeError(error) })
         throw error
       })
   }
