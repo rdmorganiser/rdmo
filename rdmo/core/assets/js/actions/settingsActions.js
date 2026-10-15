@@ -1,3 +1,5 @@
+import { serializeError } from '../utils/errors'
+
 import CoreApi from '../api/CoreApi'
 
 import { FETCH_SETTINGS_ERROR, FETCH_SETTINGS_INIT, FETCH_SETTINGS_SUCCESS } from './actionTypes'
@@ -21,5 +23,5 @@ export function fetchSettingsSuccess(settings) {
 }
 
 export function fetchSettingsError(errors) {
-  return {type: FETCH_SETTINGS_ERROR, errors}
+  return {type: FETCH_SETTINGS_ERROR, errors: serializeError(errors)}
 }

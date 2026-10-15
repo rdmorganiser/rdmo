@@ -1,3 +1,5 @@
+import { serializeError } from '../utils/errors'
+
 import CoreApi from '../api/CoreApi'
 
 import { FETCH_TEMPLATES_ERROR, FETCH_TEMPLATES_INIT, FETCH_TEMPLATES_SUCCESS } from './actionTypes'
@@ -21,5 +23,5 @@ export function fetchTemplatesSuccess(templates) {
 }
 
 export function fetchTemplatesError(errors) {
-  return {type: FETCH_TEMPLATES_ERROR, errors}
+  return {type: FETCH_TEMPLATES_ERROR, errors: serializeError(errors)}
 }
