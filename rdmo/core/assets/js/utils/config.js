@@ -1,16 +1,16 @@
-import { cloneDeep, set, unset } from 'lodash'
+import { Immer } from 'immer'
+import { set, unset } from 'lodash'
 
-const updateConfig = (config, path, value) => {
-  const newConfig = cloneDeep(config)
-  set(newConfig, path, value)
-  return newConfig
-}
+// Keep freezing disabled locally for compatibility with the existing apps.
+const { produce } = new Immer({ autoFreeze: false })
 
-const deleteConfig = (config, path) => {
-  const newConfig = cloneDeep(config)
-  unset(newConfig, path)
-  return newConfig
-}
+const updateConfig = (config, path, value) => produce(config, draft => {
+  set(draft, path, value)
+})
+
+const deleteConfig = (config, path) => produce(config, draft => {
+  unset(draft, path)
+})
 
 const getConfigFromLocalStorage = (prefix) => {
   const ls = {...localStorage}
