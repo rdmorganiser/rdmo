@@ -5,9 +5,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { locationKeys, updateLocation } from '../utils/location'
 
-import * as actionTypes from './actionTypes'
-import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
-import { fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
+import { fetchPage } from './interviewActions'
+import { clearCurrentView, fetchAnswers, fetchView  } from './projectActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
@@ -56,18 +55,17 @@ export function navigateDashboard(location, back = null) {
       // for all other areas, the location and config are updated first
       updateLocationAndConfig(location)
 
-      if (!isNil(location.viewId)) {
-        // /documents/views/
-        dispatch(fetchView(location.snapshotId, location.viewId))
-      } else if (['questions', 'answers'].includes(location.detail)) {
-        // /documents/questions/ and /documents/answers/
-        dispatch(fetchAnswers(location.snapshotId, {
-          include_help: isTruthy(get(getState().config, 'document.includeHelp')),
-          hide_answers: location.detail == 'questions' ? 'true' : 'false'
-        }))
-      } else {
-        dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
-      }
-    })
+    if (!isNil(location.viewId)) {
+      // /documents/views/
+      dispatch(fetchView(location.snapshotId, location.viewId))
+    } else if (['questions', 'answers'].includes(location.detail)) {
+      // /documents/questions/ and /documents/answers/
+      dispatch(fetchAnswers(location.snapshotId, {
+        include_help: isTruthy(get(getState().config, 'document.includeHelp')),
+        hide_answers: location.detail == 'questions' ? 'true' : 'false'
+      }))
+    } else {
+      dispatch(clearCurrentView())
+    }
   }
 }

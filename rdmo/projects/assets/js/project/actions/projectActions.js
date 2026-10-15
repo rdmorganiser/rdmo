@@ -7,6 +7,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
+import { actions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -735,15 +736,15 @@ export function deleteProjectIntegration(integrationId) {
 // synchronous actions
 
 export function clearProjectErrors() {
-  return { type: actionTypes.CLEAR_PROJECT_ERRORS }
+  return actions.clearProjectErrors()
 }
 
 export function clearCurrentView() {
-  return { type: actionTypes.CLEAR_CURRENT_VIEW }
+  return actions.clearCurrentView()
 }
 
 export function setProjectAnswers(view) {
   return function (dispatch) {
-    dispatch({ type: actionTypes.SET_PROJECT_ANSWERS, view })
+    dispatch(actions.setProjectAnswers(view))
   }
 }

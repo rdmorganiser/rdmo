@@ -25,7 +25,7 @@ import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactReducer'
 import interviewReducer from '../reducers/interviewReducer'
-import projectReducer from '../reducers/projectReducer'
+import projectSliceReducer from '../reducers/projectSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -45,7 +45,7 @@ export default function configureStore() {
   const rootReducer = combineReducers({
     config: configReducer,
     pending: pendingReducer,
-    project: projectReducer,
+    project: projectSliceReducer,
     settings: settingsReducer,
     templates: templateReducer,
     user: userReducer,

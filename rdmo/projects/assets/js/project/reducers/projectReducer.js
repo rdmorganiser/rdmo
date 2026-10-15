@@ -1,6 +1,6 @@
 import * as actionTypes from '../actions/actionTypes'
 
-const initialState = {
+export const initialState = {
   project: null,
   invites: null,
   errors: [],
@@ -52,7 +52,6 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_PROJECT_ISSUES_INIT:
     case actionTypes.SEND_PROJECT_ISSUE_EMAIL_INIT:
     case actionTypes.SEND_PROJECT_ISSUE_INTEGRATION_INIT:
-    case actionTypes.CLEAR_PROJECT_ERRORS:
       return clearErrors(state)
     // ERROR actions - append error
     case actionTypes.FETCH_PROJECT_ERROR:
@@ -174,7 +173,6 @@ export default function projectReducer(state = initialState, action) {
     }
     case actionTypes.FETCH_ANSWERS_SUCCESS:
     case actionTypes.FETCH_VIEW_SUCCESS:
-    case actionTypes.SET_PROJECT_ANSWERS:
       return {
         ...state,
         currentView: action.view
@@ -189,11 +187,6 @@ export default function projectReducer(state = initialState, action) {
       return {
         ...state,
         progress: action.progress
-      }
-    case actionTypes.CLEAR_CURRENT_VIEW:
-      return {
-        ...state,
-        currentView: null
       }
     case actionTypes.FETCH_PROJECT_FILES_SUCCESS:
       return {
