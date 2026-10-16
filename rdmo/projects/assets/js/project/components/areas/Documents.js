@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { downloadAnswers, downloadView } from '../../actions/projectActions'
+import { downloadAnswers, downloadQuestions, downloadView } from '../../actions/projectActions'
 
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
@@ -53,7 +53,7 @@ const Documents = () => {
             title={gettext('List all questions')}
             help={gettext('Overview of all questions. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
-            onExport={(format) => dispatch(downloadAnswers(snapshotId, format, {'hide_answers': 'true'}))}
+            onExport={(format) => dispatch(downloadQuestions(snapshotId, format, {'hide_answers': 'true'}))}
           />
         </div>
         <div className="col-lg-6">

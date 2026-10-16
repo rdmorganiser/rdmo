@@ -7,7 +7,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { navigateDashboard } from '../../actions/navigationActions'
-import { downloadAnswers, downloadView } from '../../actions/projectActions'
+import { downloadAnswers, downloadQuestions, downloadView } from '../../actions/projectActions'
 
 import ExportsDropdown from './ExportsDropdown'
 import HelpTextToggle from './HelpTextToggle'
@@ -35,8 +35,8 @@ const View = () => {
 
   const handleExport = (format) => {
     if (detail == 'questions') {
-      dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
+      dispatch(downloadQuestions(snapshotId, format,
+        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'include_answers': 'false'}))
     } else if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format,
         {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))

@@ -566,10 +566,10 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=['get'],
-        url_path=r'answers',
+        url_path=r'questions',
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
-    def answers(self, request, pk, snapshot_id=None):
+    def questions(self, request, pk, snapshot_id=None):
         project = self.get_object()
         project.catalog.prefetch_elements()
 
@@ -579,7 +579,7 @@ class ProjectViewSet(ModelViewSet):
             raise Http404 from e
 
         include_help = is_truthy(request.GET.get('include_help'))
-        hide_answers = is_truthy(request.GET.get('hide_answers'))
+        include_answers = is_truthy(request.GET.get('include_answers'))
 
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
@@ -588,7 +588,83 @@ class ProjectViewSet(ModelViewSet):
                 'project_wrapper': ProjectWrapper(project, snapshot),
                 'export_formats': settings.EXPORT_FORMATS,
                 'include_help': include_help,
-                'hide_answers': hide_answers,
+                'include_answers': include_answers,
+            }),
+            'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
+        })
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/questions',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def questions_snapshot(self, request, pk, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.questions(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'questions/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def questions_export(self, request, pk, export_format, snapshot_id=None):
+        project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        include_help = is_truthy(request.GET.get('include_help'))
+        include_answers = is_truthy(request.GET.get('include_answers'))
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
+            'project': project,
+            'snapshot': snapshot,
+            'project_wrapper': ProjectWrapper(project, snapshot),
+            'include_help': include_help,
+            'include_answers': include_answers,
+        })
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'snapshots/(?P<snapshot_id>\d+)/questions/export/(?P<export_format>[a-z]+)',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def questions_export_snapshot(self, request, pk, export_format, snapshot_id):
+        # extra method since DRF does not officially support optional named parameters inside url_path
+        return self.questions_export(request, pk, export_format, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get'],
+        url_path=r'answers',
+        permission_classes=(HasModelPermission | HasProjectPermission, )
+    )
+    def answers(self, request, pk, snapshot_id=None):
+        project: Project = self.get_object()
+        project.catalog.prefetch_elements()
+
+        try:
+            snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
+        except Snapshot.DoesNotExist as e:
+            raise Http404 from e
+
+        include_help = is_truthy(request.GET.get('include_help'))
+
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
+
+        serializer = ProjectAnswersSerializer({
+            'html': render_to_string('projects/project_answertree.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'include_help': include_help,
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
@@ -620,15 +696,15 @@ class ProjectViewSet(ModelViewSet):
             raise Http404 from e
 
         include_help = is_truthy(request.GET.get('include_help'))
-        hide_answers = is_truthy(request.GET.get('hide_answers'))
 
-        return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
-            'project': project,
-            'snapshot': snapshot,
-            'project_wrapper': ProjectWrapper(project, snapshot),
-            'include_help': include_help,
-            'hide_answers': hide_answers,
-        })
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
+
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answertree_export.html', {
+                'project': project,
+                'snapshot': snapshot,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'include_help': include_help,
+            })
 
     @action(
         detail=True,

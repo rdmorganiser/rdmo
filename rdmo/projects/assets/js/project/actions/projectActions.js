@@ -514,6 +514,27 @@ export function fetchProjectFiles(snapshotId) {
 
 // answers / views
 
+export function fetchQuestions(snapshotId, params = {}) {
+  const pendingId = isNil(snapshotId) ? `fetchView/${snapshotId}` : 'fetchQuestions'
+
+  return function (dispatch) {
+    dispatch(addToPending(pendingId))
+    dispatch({ type: actionTypes.FETCH_ANSWERS_INIT })
+
+    return ProjectApi.fetchProjectQuestions(projectId, snapshotId, params)
+      .then(view => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_SUCCESS, view })
+        return view
+      })
+      .catch(error => {
+        dispatch(removeFromPending(pendingId))
+        dispatch({ type: actionTypes.FETCH_ANSWERS_ERROR, error })
+        throw error
+      })
+  }
+}
+
 export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? 'fetchAnswers' : `fetchAnswers/${snapshotId}`
 
@@ -595,6 +616,18 @@ export function fetchProgress() {
 }
 
 // download
+
+export function downloadQuestions(snapshotId, format, params = {}) {
+  return function (dispatch) {
+    dispatch(addToPending('downloadQuestions'))
+    dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_INIT })
+
+    return ProjectApi.downloadProjectQuestions(projectId, snapshotId, format, params)
+      .then(() => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_SUCCESS }))
+      .catch(error => dispatch({ type: actionTypes.DOWNLOAD_ANSWERS_ERROR, error }))
+      .finally(() => dispatch(removeFromPending('downloadAnswers')))
+  }
+}
 
 export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
