@@ -17,6 +17,8 @@ export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
     case actionTypes.FETCH_PAGE_SUCCESS:
       return { ...state, page: action.page, done: action.done }
+    case actionTypes.FETCH_CONTINUE_SUCCESS:
+      return { ...state, continuation: action.page }
     case actionTypes.FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case actionTypes.FETCH_OPTIONS_SUCCESS:
@@ -80,6 +82,7 @@ export default function interviewReducer(state = initialState, action) {
     case actionTypes.COPY_SET_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case actionTypes.FETCH_PAGE_INIT:
+    case actionTypes.FETCH_CONTINUE_INIT:
     case actionTypes.FETCH_OPTIONS_INIT:
     case actionTypes.FETCH_VALUES_INIT:
     case actionTypes.RESOLVE_CONDITIONS_INIT:
@@ -102,6 +105,7 @@ export default function interviewReducer(state = initialState, action) {
     case actionTypes.COPY_SET_INIT:
       return { ...state, errors: [] }
     case actionTypes.FETCH_PAGE_ERROR:
+    case actionTypes.FETCH_CONTINUE_ERROR:
     case actionTypes.FETCH_OPTIONS_ERROR:
     case actionTypes.FETCH_VALUES_ERROR:
     case actionTypes.RESOLVE_CONDITIONS_ERROR:

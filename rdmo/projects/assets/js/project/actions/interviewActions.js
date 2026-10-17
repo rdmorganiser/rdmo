@@ -37,8 +37,7 @@ export function fetchPage(pageId, back) {
       dispatch(removeFromPending(pendingId))
       dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, done: true })
     } else {
-      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId) : PageApi.fetchPage(projectId, pageId, back)
-      return promise
+      return PageApi.fetchPage(projectId, pageId, back)
         .then((page) => {
           initPage(page)
 
@@ -62,6 +61,20 @@ export function fetchPage(pageId, back) {
   }
 }
 
+export function fetchContinue() {
+  const pendingId = 'fetchContinue'
+
+  return (dispatch) => {
+    dispatch(addToPending(pendingId))
+    dispatch({type: actionTypes.FETCH_CONTINUE_INIT})
+
+    return PageApi.fetchContinue(projectId)
+      .then((page) => dispatch({type: actionTypes.FETCH_CONTINUE_SUCCESS, page}))
+      .catch((error) => dispatch({type: actionTypes.FETCH_CONTINUE_ERROR, error}))
+      .finally(() => dispatch(removeFromPending(pendingId)))
+  }
+}
+
 export function fetchOptionsets(page) {
   return (dispatch) => {
     page.optionsets.filter((optionset) => (optionset.has_provider && !optionset.has_search))
@@ -75,7 +88,7 @@ export function fetchOptions(page, optionset) {
   return (dispatch) => {
     dispatch(addToPending(pendingId))
     dispatch({type: actionTypes.FETCH_OPTIONS_INIT})
-    console.log(1)
+
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
         updateOptions(page, optionset, options)

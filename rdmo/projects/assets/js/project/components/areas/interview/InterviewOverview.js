@@ -7,7 +7,8 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import LocationLink from '../../helper/LocationLink'
 
 const InterviewOverview = () => {
-  const { navigation } = useSelector((state) => state.project)
+  const navigation = useSelector((state) => state.project.navigation)
+  const continuation = useSelector((state) => state.interview.continuation)
 
   return navigation && (
     <div className="project-interview-overview">
@@ -32,12 +33,22 @@ const InterviewOverview = () => {
                             <li key={page.id}>
                               {
                                 page.show ? (
-                                  <LocationLink
-                                    title={page.title}
-                                    location={{area: 'interview', pageId: page.id}}
-                                  >
-                                    <Html html={page.title} />
-                                  </LocationLink>
+                                  <>
+                                    <LocationLink
+                                      title={page.title}
+                                      location={{area: 'interview', pageId: page.id}}
+                                    >
+                                      <Html html={page.title} />
+                                    </LocationLink>
+
+                                    {
+                                      continuation && page.id == continuation.id && (
+                                        <span className="ms-2">
+                                          <i className="bi bi-arrow-left" /> {gettext('Continue here')}
+                                        </span>
+                                      )
+                                    }
+                                  </>
                                 ) : (
                                   <Html className="text-muted" html={page.title} />
                                 )
