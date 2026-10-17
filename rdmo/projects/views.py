@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, TemplateView, View
 
 from rdmo.core.views import CSRFViewMixin, ObjectPermissionMixin, RedirectViewMixin, StoreIdViewMixin
@@ -55,29 +55,6 @@ class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
             'title': _('Error'),
             'errors': [error]
         })
-
-
-class ProjectInterviewView(ObjectPermissionMixin, CSRFViewMixin, StoreIdViewMixin, DetailView):
-    model = Project
-    queryset = Project.objects.all()
-    permission_required = 'projects.view_project_object'
-    template_name = 'projects/project_interview.html'
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        if self.object.catalog is None:
-            return redirect('project_error', pk=self.object.pk)
-        else:
-            return super().get(request, *args, **kwargs)
-
-
-class ProjectErrorView(ObjectPermissionMixin, DetailView):
-    model = Project
-    queryset = Project.objects.all()
-    permission_required = 'projects.view_project_object'
-    template_name = 'projects/project_error.html'
 
 
 @method_decorator(csrf_exempt, name='dispatch')

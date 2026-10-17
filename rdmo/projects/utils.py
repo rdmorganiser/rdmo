@@ -368,7 +368,6 @@ def compute_set_prefix_from_set_value(set_value, value):
 
 def get_contact_message(request, project):
     project_url = project.get_absolute_url()
-    project_interview_url = reverse('project_interview', args=[project.id])
 
     context = {
         'user': request.user,
@@ -383,7 +382,7 @@ def get_contact_message(request, project):
         if page:
             context.update({
                 'page': page,
-                'page_url': request.build_absolute_uri(f'{project_interview_url}{page_id}/')
+                'page_url': request.build_absolute_uri(f'{project_url}interview/{page_id}/')
             })
 
     questionset_id = request.GET.get('questionset')

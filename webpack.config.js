@@ -72,10 +72,6 @@ const configList = [
         './rdmo/projects/assets/js/project.js',
         './rdmo/projects/assets/scss/project.scss'
       ],
-      interview: [
-        './rdmo/projects/assets/js/interview.js',
-        './rdmo/projects/assets/scss/interview.scss'
-      ]
     },
     output: {
       path: path.resolve(__dirname, './rdmo/projects/static/projects/'),

@@ -14,7 +14,9 @@ const Input = ({
   isDisabled,
   errors,
   value,
-  onChange
+  inputRef,
+  onChange,
+  onEnter
 }) => {
   const id = uniqueId('input-')
 
@@ -40,6 +42,7 @@ const Input = ({
     <div className={classNames('form-group', className)}>
       <label className="form-label" htmlFor={id}>{label}</label>
       <input
+        ref={inputRef}
         id={id}
         type={type}
         className={
@@ -51,6 +54,13 @@ const Input = ({
         disabled={isDisabled}
         value={inputValue}
         onChange={handleChange}
+        onKeyPress={
+          (event) => {
+            if (!isNil(onEnter) && event.key === 'Enter' && !event.nativeEvent.isComposing) {
+              onEnter(event.target.value)
+            }
+          }
+        }
       />
       {
         errors && (
@@ -76,7 +86,9 @@ Input.propTypes = {
   isDisabled: PropTypes.bool,
   errors: PropTypes.array,
   value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  inputRef: PropTypes.object,
+  onChange: PropTypes.func.isRequired,
+  onEnter: PropTypes.func
 }
 
 export default Input
