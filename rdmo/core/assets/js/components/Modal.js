@@ -99,7 +99,10 @@ Modal.propTypes = {
   ]),
   modalProps: PropTypes.object,
   size: PropTypes.string,
-  extraButtons: PropTypes.object,
+  extraButtons: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
 }
 
 export default Modal
