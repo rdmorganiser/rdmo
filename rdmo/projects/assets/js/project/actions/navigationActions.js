@@ -6,8 +6,8 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { locationKeys, updateLocation } from '../utils/location'
 
 import * as actionTypes from './actionTypes'
-import { fetchPage } from './interviewActions'
-import { fetchAnswers, fetchView } from './projectActions'
+import { fetchContinue, fetchPage } from './interviewActions'
+import { fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
@@ -22,9 +22,16 @@ export function navigateDashboard(location, back = null) {
     // for the interview, the location and config are updated after the page is fetched, since pages might be skipped
     if (location.area == 'interview') {
       // /interview/
-      return dispatch(fetchPage(location.pageId, back)).then((page) => {
-        updateLocationAndConfig({...location, pageId: page?.id ?? location.pageId})
-      })
+      if (isNil(location.pageId)) {
+        dispatch(fetchContinue())
+        dispatch(fetchNavigation())
+        dispatch(fetchProgress())
+        updateLocationAndConfig(location)
+      } else {
+        return dispatch(fetchPage(location.pageId, back)).then((page) => {
+          updateLocationAndConfig({...location, pageId: page?.id ?? location.pageId})
+        })
+      }
     }
 
     // for all other areas, the location and config are updated first
