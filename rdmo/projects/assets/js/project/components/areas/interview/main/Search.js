@@ -1,13 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
+import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
-import { isEmpty, isNil, pick, truncate } from 'lodash'
+import { isEmpty, isNil, pick, truncate, uniqueId } from 'lodash'
 
-import ProjectApi from '../../api/ProjectApi'
-import ValueApi from '../../api/ValueApi'
+import ProjectApi from '../../../../api/ProjectApi'
+import ValueApi from '../../../../api/ValueApi'
 
-const Search = ({ page, question, attribute, values, setValues, collection = false }) => {
+const Search = ({ question, attribute, values, errors, setValues, collection = false }) => {
+  const page = useSelector((state) => state.interview.page)
+
+  const checkboxId = uniqueId('project-interview-page-reuse-checkbox-')
+
   // create a key for the first AsyncSelect, to reset the loaded values when project or snapshot changes
   const key = (values.project ? values.project.id : '') + (values.snapshot ? '-all' : '')
 
@@ -64,12 +70,12 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
   }, 500)
 
   return (
-    <>
+    <div className="d-flex flex-column justify-content-between gap-2 mb-2">
       <AsyncSelect
         key={key}
         classNamePrefix="react-select"
-        className="react-select"
-        placeholder={gettext('Search for project or snapshot title, or answer text ...')}
+        className={classNames('react-select', {'is-invalid': !isEmpty(errors)})}
+        placeholder={gettext('Search for project or snapshot title, or answer ...')}
         noOptionsMessage={
           () => gettext(
             'No answers match your search.'
@@ -120,7 +126,7 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
 
       <AsyncSelect
         classNamePrefix="react-select"
-        className="react-select mt-10"
+        className={classNames('react-select', {'is-invalid': !isEmpty(errors)})}
         placeholder={gettext('Restrict the search to a particular project ...')}
         noOptionsMessage={
           () => gettext(
@@ -145,32 +151,43 @@ const Search = ({ page, question, attribute, values, setValues, collection = fal
         backspaceRemovesValue={true}
       />
 
-      <div className="checkbox">
-        <label>
-          <input
-            type="checkbox"
-            checked={values.snapshot}
-            onChange={
-              () => setValues({
-                ...values,
-                value: values.snapshot ? '' : values.value,  // reset value
-                snapshot: !values.snapshot
-              })
-            }
-          />
-          <span>{gettext('Include snapshots in the search')}</span>
+      <div className="form-check form-switch mb-0">
+        <input
+          id={checkboxId}
+          className="form-check-input"
+          type="checkbox"
+          role="switch"
+          checked={values.snapshot}
+          onChange={
+            () => setValues({
+              ...values,
+              value: values.snapshot ? '' : values.value,  // reset value
+              snapshot: !values.snapshot
+            })
+          }
+        />
+        <label className="form-check-label" htmlFor={checkboxId}>
+          {gettext('Include snapshots in the search')}
         </label>
       </div>
-    </>
+
+      {
+        errors && (
+          <div className="invalid-feedback mt-0">
+            {errors.map((error, index) => <div key={index}>{error}</div>)}
+          </div>
+        )
+      }
+    </div>
   )
 }
 
 Search.propTypes = {
-  page: PropTypes.object,
   question: PropTypes.object,
   attribute: PropTypes.number.isRequired,
   setAttribute: PropTypes.number,
   values: PropTypes.object.isRequired,
+  errors: PropTypes.array,
   setValues: PropTypes.func.isRequired,
   collection: PropTypes.bool
 }

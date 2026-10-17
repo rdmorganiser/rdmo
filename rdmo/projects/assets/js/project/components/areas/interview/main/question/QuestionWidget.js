@@ -40,9 +40,6 @@ const QuestionWidget = (props) => {
 
 QuestionWidget.propTypes = {
   question: PropTypes.object.isRequired,
-  values: PropTypes.array.isRequired,
-  updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
 }
 
 export default QuestionWidget

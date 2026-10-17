@@ -1,36 +1,6 @@
-import {
-  COPY_SET_ERROR,
-  COPY_SET_INIT,
-  COPY_SET_SUCCESS,
-  CREATE_SET,
-  CREATE_VALUE,
-  DELETE_SET_ERROR,
-  DELETE_SET_INIT,
-  DELETE_SET_SUCCESS,
-  DELETE_VALUE_ERROR,
-  DELETE_VALUE_INIT,
-  DELETE_VALUE_SUCCESS,
-  FETCH_NAVIGATION_ERROR,
-  FETCH_NAVIGATION_INIT,
-  FETCH_NAVIGATION_SUCCESS,
-  FETCH_OPTIONS_ERROR,
-  FETCH_OPTIONS_INIT,
-  FETCH_OPTIONS_SUCCESS,
-  FETCH_PAGE_ERROR,
-  FETCH_PAGE_INIT,
-  FETCH_PAGE_SUCCESS,
-  FETCH_VALUES_ERROR,
-  FETCH_VALUES_INIT,
-  FETCH_VALUES_SUCCESS,
-  RESOLVE_CONDITIONS_ERROR,
-  RESOLVE_CONDITIONS_INIT,
-  RESOLVE_CONDITIONS_SUCCESS,
-  RESORT_VALUES,
-  STORE_VALUE_ERROR,
-  STORE_VALUE_INIT,
-  STORE_VALUE_SUCCESS,
-  UPDATE_VALUE
-} from '../actions/actionTypes'
+import { isNil } from 'lodash'
+
+import * as actionTypes from '../actions/actionTypes'
 import { sortValues } from '../utils/value'
 
 const initialState = {
@@ -45,15 +15,13 @@ const initialState = {
 
 export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
-    case FETCH_PAGE_SUCCESS:
+    case actionTypes.FETCH_PAGE_SUCCESS:
       return { ...state, page: action.page, done: action.done }
-    case FETCH_NAVIGATION_SUCCESS:
-      return { ...state, navigation: action.navigation }
-    case FETCH_VALUES_SUCCESS:
+    case actionTypes.FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
-    case FETCH_OPTIONS_SUCCESS:
+    case actionTypes.FETCH_OPTIONS_SUCCESS:
       return { ...state, page: action.page }
-    case RESOLVE_CONDITIONS_SUCCESS:
+    case actionTypes.RESOLVE_CONDITIONS_SUCCESS:
       return {
         ...state, sets: state.sets.map(
           (set) => {
@@ -74,16 +42,16 @@ export default function interviewReducer(state = initialState, action) {
           }
         )
       }
-    case CREATE_VALUE:
+    case actionTypes.CREATE_VALUE:
       return { ...state, values: [...state.values, action.value] }
-    case UPDATE_VALUE:
+    case actionTypes.UPDATE_VALUE:
       return {
         ...state,
         values: state.values.map(
           (value) => value.id == action.value.id ? {...value, ...action.attrs} : value
         )
       }
-    case STORE_VALUE_SUCCESS:
+    case actionTypes.STORE_VALUE_SUCCESS:
       if (state.values.some((value) => (value.id || value.tmp_id) == action.valueId)) {
         return {
           ...state,
@@ -94,69 +62,67 @@ export default function interviewReducer(state = initialState, action) {
       } else {
         return { ...state, values: [...state.values, action.value] }
       }
-    case DELETE_VALUE_SUCCESS:
+    case actionTypes.DELETE_VALUE_SUCCESS:
       return {
         ...state,
         values: state.values.filter((value) => (
           (value.id || value.tmp_id) != action.valueId
         ))
       }
-    case CREATE_SET:
+    case actionTypes.CREATE_SET:
       return { ...state, values: action.values, sets: action.sets }
-    case DELETE_SET_SUCCESS:
+    case actionTypes.DELETE_SET_SUCCESS:
       return {
         ...state,
         values: state.values.filter((value) => !action.values.includes(value)),
         sets: state.sets.filter((set) => !action.sets.includes(set))
       }
-    case COPY_SET_SUCCESS:
+    case actionTypes.COPY_SET_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
-    case FETCH_PAGE_INIT:
-    case FETCH_NAVIGATION_INIT:
-    case FETCH_OPTIONS_INIT:
-    case FETCH_VALUES_INIT:
-    case RESOLVE_CONDITIONS_INIT:
+    case actionTypes.FETCH_PAGE_INIT:
+    case actionTypes.FETCH_OPTIONS_INIT:
+    case actionTypes.FETCH_VALUES_INIT:
+    case actionTypes.RESOLVE_CONDITIONS_INIT:
       return { ...state, errors: [] }
-    case STORE_VALUE_INIT:
+    case actionTypes.STORE_VALUE_INIT:
       return {
         ...state,
         values: state.values.map((value) => (
           (value.id || value.tmp_id) == action.valueId ? {...value, error: null, pending: true} : value
         ))
       }
-    case DELETE_VALUE_INIT:
+    case actionTypes.DELETE_VALUE_INIT:
       return {
         ...state,
         values: state.values.map((value) => (
           (value.id || value.tmp_id) == action.valueId ? {...value, pending: true} : value
         ))
       }
-    case DELETE_SET_INIT:
-    case COPY_SET_INIT:
+    case actionTypes.DELETE_SET_INIT:
+    case actionTypes.COPY_SET_INIT:
       return { ...state, errors: [] }
-    case FETCH_PAGE_ERROR:
-    case FETCH_NAVIGATION_ERROR:
-    case FETCH_OPTIONS_ERROR:
-    case FETCH_VALUES_ERROR:
-    case RESOLVE_CONDITIONS_ERROR:
+    case actionTypes.FETCH_PAGE_ERROR:
+    case actionTypes.FETCH_OPTIONS_ERROR:
+    case actionTypes.FETCH_VALUES_ERROR:
+    case actionTypes.RESOLVE_CONDITIONS_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
-    case STORE_VALUE_ERROR:
-      if (action.valueIndex > -1) {
+    case actionTypes.STORE_VALUE_ERROR:
+      if (!isNil(action.valueId)) {
         return {
           ...state,
-          values: state.values.map((value, valueIndex) => (
-            valueIndex == action.valueIndex ? {...value, error: action.error, pending: false} : value
+          values: state.values.map((value) => (
+            (value.id || value.tmp_id) == action.valueId ? {...value, error: action.error, pending: false} : value
           ))
         }
       } else {
         return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
       }
-    case DELETE_VALUE_ERROR:
-    case DELETE_SET_ERROR:
+    case actionTypes.DELETE_VALUE_ERROR:
+    case actionTypes.DELETE_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
-    case COPY_SET_ERROR:
+    case actionTypes.COPY_SET_ERROR:
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
-    case RESORT_VALUES:
+    case actionTypes.RESORT_VALUES:
       return { ...state, values: sortValues(state.values) }
     default:
       return state

@@ -5,15 +5,13 @@ import { isEmpty, isNil } from 'lodash'
 
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
 
+import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Modal from 'rdmo/core/assets/js/components/Modal'
-
-import useFocusEffect from '../../../hooks/useFocusEffect'
 
 import Search from '../Search'
 
 const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, reuse, initial, onClose, onSubmit }) => {
-
-  const ref = useRef(null)
+  const inputRef = useRef(null)
 
   const initialValues = {
     text: initial || '',
@@ -28,7 +26,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
       onSubmit()
     } else {
       if (isEmpty(values.text)) {
-        setErrors({ text: true })
+        setErrors(['This field may not be blank.'])
       } else {
         onSubmit(values.text, values.value)
       }
@@ -45,17 +43,21 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
   // remove the hasError flag if an inputValue is entered
   useEffect(() => {
     if (!isEmpty(values.text)) {
-      setErrors({ text: false })
+      setErrors([])
     }
   }, [values.text])
 
-  // focus when the modal is shown
-  useFocusEffect(ref, show)
-
   return (
     <Modal
-      title={title} show={show} submitLabel={submitLabel} submitProps={{className: `btn btn-${submitColor}`}}
-      onClose={onClose} onSubmit={handleSubmit} disableSubmit={errors}>
+      title={title}
+      show={show}
+      submitLabel={submitLabel}
+      submitProps={{className: `btn btn-${submitColor}`}}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      onShown={() => inputRef.current?.focus()}
+      disableSubmit={errors}
+    >
       {
         isNil(attribute) ? (
           <div>
@@ -63,28 +65,15 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
           </div>
         ) : (
           <>
-            <div className={classNames({'form-group': true, 'has-error': errors.text })}>
-              <label htmlFor="interview-page-tabs-modal-form-title">
-                {gettext('Name')}
-              </label>
-              <input
-                ref={ref}
-                className="form-control"
-                id="interview-page-tabs-modal-form-title"
-                type="text"
-                value={values.text}
-                onChange={(event) => setValues({ ...values, text: event.target.value })}
-                onKeyPress={
-                  (event) => {
-                    if (event.code === 'Enter') {
-                      handleSubmit()
-                    }
-                  }
-                }
-              />
-
-              <p className="help-block mb-0">{gettext('Please give the tab a meaningful name.')}</p>
-            </div>
+            <Input
+              label={gettext('Name')}
+              help={gettext('Please give the tab a meaningful name.')}
+              value={values.text}
+              inputRef={inputRef}
+              onChange={(value) => setValues({ ...values, text: value })}
+              onEnter={handleSubmit}
+              errors={errors}
+            />
             {
               reuse && (
                 <div className={classNames({'form-group': true, 'has-error': errors.value })}>

@@ -4,9 +4,9 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
-import useAdditionalInputs from '../../../hooks/useAdditionalInputs'
-import useAdjustLabel from '../../../hooks/useAdjustLabel'
-import useIdle from '../../../hooks/useIdle'
+import useAdditionalInputs from '../../../../../hooks/useAdditionalInputs'
+import useAdjustLabel from '../../../../../hooks/useAdjustLabel'
+import useIdle from '../../../../../hooks/useIdle'
 
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
 import AdditionalTextInput from './common/AdditionalTextInput'
@@ -14,7 +14,7 @@ import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
-
+  const id = `checkbox-${question.id}-${option.id}`
   const ref = useRef(null)
   const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option])
   const [idle, setIdle] = useIdle([value])
@@ -23,7 +23,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
 
   const checked = !isNil(value)
 
-  const classnames = classNames('checkbox', {
+  const classnames = classNames('d-flex flex-column gap-2 checkbox-row ', {
     'text-muted': disabled
   })
 
@@ -81,15 +81,21 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
 
   return (
     <div ref={ref} className={classnames}>
-      <label>
-        <input
-          type="checkbox"
-          checked={checked}
-          disabled={disabled}
-          aria-label={option.text}
-          onChange={() => handleChange()}
-        />
-        <OptionText option={option} />
+      <div className="d-flex align-items-top gap-2">
+        <div className="form-check">
+          <input
+            id={id}
+            type="checkbox"
+            className="form-check-input"
+            checked={checked}
+            disabled={disabled}
+            aria-label={option.text}
+            onChange={() => handleChange()}
+          />
+          <label className="form-check-label" htmlFor={id}>
+            <OptionText option={option} />
+          </label>
+        </div>
         {
           isEmpty(option.additional_input) && (
             <OptionHelp className="ml-10" option={option} />
@@ -98,7 +104,6 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
         {
           option.additional_input == 'text' && (
             <>
-              <span>:</span>
               <AdditionalTextInput
                 className="ml-10"
                 inputValue={getAdditionalInput(option)}
@@ -117,7 +122,6 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
         {
           option.additional_input == 'textarea' && (
             <>
-              <span>:</span>
               <AdditionalTextareaInput
                 inputValue={getAdditionalInput(option)}
                 disabled={disabled}
@@ -128,13 +132,11 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
                   }
                 }
               />
-              <div>
-                <OptionHelp option={option} />
-              </div>
+              <OptionHelp option={option} />
             </>
           )
         }
-      </label>
+      </div>
     </div>
   )
 }

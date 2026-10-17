@@ -1,15 +1,19 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-const PageTabsHelp = ({ templates, disabled }) => {
-  return !disabled && <Html html={templates.project_interview_page_tabs_help} />
-}
+import { usePermissions } from '../../../../../hooks'
 
-PageTabsHelp.propTypes = {
-  templates: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired
+const PageTabsHelp = () => {
+  const templates = useSelector((state) => state.templates)
+  const perms = usePermissions()
+
+  return (perms.can_add_value || perms.can_change_value || perms.can_delete_value) && (
+    <div className="form-text">
+      <Html html={templates.project_interview_page_tabs_help} />
+    </div>
+  )
 }
 
 export default PageTabsHelp

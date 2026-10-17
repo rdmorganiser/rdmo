@@ -8,14 +8,13 @@ import { isEmpty } from 'lodash'
 
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
 
-const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
-
+const DateInput = ({ question, value, buttons, disabled, onChange }) => {
   const handleChange = (date) => {
     const text = format(date, 'yyyy-MM-dd')
-    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
+    onChange(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
   const handleRawChange = useDebouncedCallback((event) => {
@@ -34,7 +33,7 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
   const getSelected = () => isEmpty(value.text) ? null : parseISO(value.text)
 
   return (
-    <div className="interview-input date-input">
+    <div className="project-interview-input date-input">
       <div className="buttons-wrapper">
         {buttons}
         <DatePicker
@@ -59,9 +58,9 @@ const DateInput = ({ question, value, disabled, updateValue, buttons }) => {
 DateInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
-  buttons: PropTypes.node.isRequired
+  buttons: PropTypes.node.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default DateInput

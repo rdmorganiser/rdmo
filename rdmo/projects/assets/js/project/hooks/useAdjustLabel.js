@@ -4,9 +4,9 @@ const useAdjustLabel = (ref) => {
   useEffect(() => {
     if (ref.current) {
       // find the .buttons node and get it's width
-      const buttonsWidth = ref.current.classList.contains('checkbox') ? (
+      const buttonsWidth = ref.current.classList.contains('checkbox-row') ? (
         // for the checkbox widget, the parent of the parent is the buttons-wrapper
-        ref.current.parentElement.parentElement.querySelector('.buttons').offsetWidth
+        ref.current.parentElement.parentElement.parentElement.querySelector('.buttons').offsetWidth
       ) : (
         ref.current.querySelector('.buttons').offsetWidth
       )

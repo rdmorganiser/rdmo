@@ -2,7 +2,7 @@ import { isNil } from 'lodash'
 
 import BaseApi from 'rdmo/core/assets/js/api/BaseApi'
 
-class ProjectsApi extends BaseApi {
+class PageApi extends BaseApi {
 
   static fetchPage(projectId, pageId, back) {
     if (isNil(back)) {
@@ -18,4 +18,4 @@ class ProjectsApi extends BaseApi {
 
 }
 
-export default ProjectsApi
+export default PageApi

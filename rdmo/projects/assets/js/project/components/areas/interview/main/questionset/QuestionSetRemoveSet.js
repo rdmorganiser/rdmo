@@ -1,27 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
+import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
 
-import Modal from 'rdmo/core/assets/js/components/Modal'
+import { deleteSet } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
 
-const QuestionRemoveSet = ({ questionset, currentSet, disabled, deleteSet }) => {
-
+const QuestionRemoveSet = ({ questionset, currentSet }) => {
+  const dispatch = useDispatch()
+  const readOnly = useReadOnly()
   const modal = useModal()
+  const title = gettext('Remove block')
 
   const handleRemoveSet = () => {
-    deleteSet(currentSet)
+    dispatch(deleteSet(currentSet))
     modal.close()
   }
 
-  return !disabled && questionset.is_collection && (
+  return !readOnly && questionset.is_collection && (
     <>
-      <button
-        type="button" className="btn btn-link btn-remove-set"
-        title={'Remove block'} aria-label={'Remove block'}
-        onClick={modal.open}>
-        <i className="fa fa-times fa-btn" aria-hidden="true"></i>
-      </button>
+      <LinkButton
+        className="btn btn-link btn-remove-set"
+        title={title}
+        aria-label={title}
+        onClick={modal.open}
+      >
+        <i className="bi bi-x-circle" aria-hidden="true"></i>
+      </LinkButton>
 
       <Modal
         title={gettext('Remove block')} show={modal.show} submitLabel={gettext('Remove')}
@@ -37,8 +44,6 @@ const QuestionRemoveSet = ({ questionset, currentSet, disabled, deleteSet }) => 
 QuestionRemoveSet.propTypes = {
   questionset: PropTypes.object.isRequired,
   currentSet: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  deleteSet: PropTypes.func.isRequired
 }
 
 export default QuestionRemoveSet

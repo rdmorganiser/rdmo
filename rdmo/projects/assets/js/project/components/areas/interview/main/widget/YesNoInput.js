@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
+const YesNoInput = ({ question, value, buttons, disabled, onChange }) => {
+  const yesId = `radio-${value.tmp_id || value.id}-yes`
+  const noId = `radio-${value.tmp_id || value.id}-no`
+
   const [inputValue, setInputValue] = useState('')
   useEffect(() => {setInputValue(value.text)}, [value.id, value.text])
 
   const handleChange = (value, text) => {
-    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
+    onChange(value, { text, unit: question.unit, value_type: question.value_type })
   }
 
   const classnames = classNames('radio-control radio yesno', {
@@ -21,16 +24,18 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input yesno-input">
+    <div className="project-interview-input yesno-input">
       <div className="buttons-wrapper">
         {buttons}
         <fieldset
           className={classnames}
           aria-labelledby={getQuestionTextId(question)}
           aria-describedby={getQuestionHelpId(question)}>
-          <label>
+          <div className="form-check form-check-inline">
             <input
+              id={yesId}
               type="radio"
+              className="form-check-input"
               value="1"
               disabled={disabled}
               checked={inputValue == '1'}
@@ -39,12 +44,17 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
                   setInputValue(event.target.value)
                   handleChange(value, event.target.value)
                 }
-              } />
-            <span>{gettext('Yes')}</span>
-          </label>
-          <label>
+              }
+            />
+            <label className="form-check-label" htmlFor={yesId}>
+              {gettext('Yes')}
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
             <input
+              id={noId}
               type="radio"
+              className="form-check-input"
               value="0"
               checked={inputValue == '0'}
               disabled={disabled}
@@ -53,9 +63,12 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
                   setInputValue(event.target.value)
                   handleChange(value, event.target.value)
                 }
-              } />
-            <span>{gettext('No')}</span>
-          </label>
+              }
+            />
+            <label className="form-check-label" htmlFor={noId}>
+              {gettext('No')}
+            </label>
+          </div>
         </fieldset>
       </div>
       <Unit question={question} />
@@ -66,9 +79,9 @@ const YesNoInput = ({ question, value, disabled, updateValue, buttons }) => {
 YesNoInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
-  buttons: PropTypes.node.isRequired
+  buttons: PropTypes.node.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default YesNoInput

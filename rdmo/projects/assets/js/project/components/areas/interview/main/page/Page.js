@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { isNil, minBy } from 'lodash'
 import get from 'lodash/get'
-
-import Html from 'rdmo/core/assets/js/components/Html'
 
 import Question from '../question/Question'
 import QuestionSet from '../questionset/QuestionSet'
@@ -13,11 +11,9 @@ import PageHead from './PageHead'
 import PageHelp from './PageHelp'
 import PageManagement from './PageManagement'
 
-const Page = ({
-  config, settings, templates, overview, page, sets, values, fetchPage, fetchContact,
-  createValue, updateValue, deleteValue, copyValue,
-  activateSet, createSet, updateSet, deleteSet, copySet
-}) => {
+const Page = () => {
+  const config = useSelector((state) => state.config)
+  const { page, sets, values } = useSelector((state) => state.interview)
 
   const currentSetPrefix = ''
 
@@ -50,128 +46,70 @@ const Page = ({
     }
   }, [page.id])
 
-  const isManager = overview.permissions?.can_view_management
-  const disabled = (
-    !overview.permissions?.can_add_value ||
-    !overview.permissions?.can_change_value ||
-    !overview.permissions?.can_delete_value
-  )
-
-  return (
-    <div className="interview-page">
-      <h2><Html html={page.title} /></h2>
-      <PageHelp page={page} />
-      <PageManagement config={config} page={page} isManager={isManager} />
+  return !isNil(page) && !isNil(sets) && !isNil(values) && (
+    <div className="project-interview-page">
+      <PageHelp />
+      <PageManagement />
       <PageHead
-        templates={templates}
-        page={page}
         sets={sets.filter((set) => (set.set_prefix == currentSetPrefix) && (set.element == page))}
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
-        disabled={disabled}
         currentSet={currentSet}
-        activateSet={activateSet}
-        createSet={createSet}
-        updateSet={updateSet}
-        deleteSet={deleteSet}
-        copySet={copySet}
       />
-      <div className="row">
-        {
-          currentSet && (
-            page.elements.map((element, elementIndex) => {
-              if (element.model == 'questions.questionset') {
-                return (
-                  <QuestionSet
-                    key={elementIndex}
-                    config={config}
-                    settings={settings}
-                    templates={templates}
-                    page={page}
-                    questionset={element}
-                    sets={sets}
-                    values={values.filter((value) => element.attributes.includes(value.attribute))}
-                    disabled={disabled}
-                    isManager={isManager}
-                    parentSet={currentSet}
-                    createSet={createSet}
-                    updateSet={updateSet}
-                    deleteSet={deleteSet}
-                    copySet={copySet}
-                    createValue={createValue}
-                    updateValue={updateValue}
-                    deleteValue={deleteValue}
-                    copyValue={copyValue}
-                    fetchContact={fetchContact}
-                  />
-                )
-              } else {
-                return (
-                  <Question
-                    key={elementIndex}
-                    config={config}
-                    settings={settings}
-                    templates={templates}
-                    page={page}
-                    question={element}
-                    sets={
-                      sets.filter((set) => (
-                        set.set_prefix == currentSetPrefix
-                      ))
+      <div className="project-interview-page-elements mt-2">
+        <div className="card card-tile mb-4">
+          <div className="card-body">
+            <div className="d-flex flex-column justify-content-between gap-4">
+              {
+                currentSet && (
+                  page.elements.map((element, elementIndex) => {
+                    if (element.model == 'questions.questionset') {
+                      return (
+                        <QuestionSet
+                          key={elementIndex}
+                          questionset={element}
+                          sets={sets}
+                          values={values.filter((value) => element.attributes.includes(value.attribute))}
+                          parentSet={currentSet}
+                        />
+                      )
+                    } else {
+                      return (
+                        <Question
+                          key={elementIndex}
+                          question={element}
+                          sets={
+                            sets.filter((set) => (
+                              set.set_prefix == currentSetPrefix
+                            ))
+                          }
+                          values={
+                            values.filter((value) => (
+                              value.attribute == element.attribute &&
+                              value.set_prefix == currentSetPrefix &&
+                              value.set_index == currentSetIndex
+                            ))
+                          }
+                          siblings={
+                            values.filter((value) => (
+                              value.attribute == element.attribute &&
+                              value.set_prefix == currentSetPrefix &&
+                              value.set_index != currentSetIndex
+                            ))
+                          }
+                          currentSet={currentSet}
+                        />
+                      )
                     }
-                    values={
-                      values.filter((value) => (
-                        value.attribute == element.attribute &&
-                        value.set_prefix == currentSetPrefix &&
-                        value.set_index == currentSetIndex
-                      ))
-                    }
-                    siblings={
-                      values.filter((value) => (
-                        value.attribute == element.attribute &&
-                        value.set_prefix == currentSetPrefix &&
-                        value.set_index != currentSetIndex
-                      ))
-                    }
-                    disabled={disabled}
-                    isManager={isManager}
-                    currentSet={currentSet}
-                    createValue={createValue}
-                    updateValue={updateValue}
-                    deleteValue={deleteValue}
-                    copyValue={copyValue}
-                    fetchContact={fetchContact}
-                  />
+                  })
                 )
               }
-            })
-          )
-        }
+            </div>
+          </div>
+        </div>
+        <PageButtons />
       </div>
-
-      <PageButtons page={page} fetchPage={fetchPage} />
     </div>
   )
-}
-
-Page.propTypes = {
-  config: PropTypes.object.isRequired,
-  settings: PropTypes.object.isRequired,
-  templates: PropTypes.object.isRequired,
-  overview: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
-  sets: PropTypes.array.isRequired,
-  values: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired,
-  fetchContact: PropTypes.func.isRequired,
-  createValue: PropTypes.func.isRequired,
-  updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired,
-  copyValue: PropTypes.func.isRequired,
-  activateSet: PropTypes.func.isRequired,
-  createSet: PropTypes.func.isRequired,
-  updateSet: PropTypes.func.isRequired,
-  deleteSet: PropTypes.func.isRequired,
-  copySet: PropTypes.func.isRequired
 }
 
 export default Page

@@ -4,10 +4,10 @@ import classNames from 'classnames'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { getQuestionHelpId } from '../../../utils/question'
+import { getQuestionHelpId } from '../../../../../utils/question'
 
 const QuestionHelp = ({ question }) => {
-  const classnames = classNames('interview-question-help', {
+  const classnames = classNames('project-interview-question-help font-small text-muted mb-3', {
     'text-muted': question.is_optional
   })
 

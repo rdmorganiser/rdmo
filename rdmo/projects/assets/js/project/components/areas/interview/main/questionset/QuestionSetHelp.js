@@ -6,7 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionSetHelp = ({ questionset }) => {
   return !isEmpty(questionset.help) && (
-    <div className="interview-questionset-help">
+    <div className="project-interview-questionset-help">
       <Html html={questionset.help} />
     </div>
   )

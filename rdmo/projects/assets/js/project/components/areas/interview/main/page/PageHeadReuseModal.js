@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
@@ -12,7 +11,8 @@ import Search from '../Search'
 const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
 
   const initialValues = {
-    value: ''
+    value: '',
+    snapshot: false
   }
 
   const [values, setValues, initValues] = useLsState('rdmo.interview.reuse', initialValues, ['value'])
@@ -20,7 +20,7 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     if (isEmpty(values.value)) {
-      setErrors({ value: true })
+      setErrors([gettext('No answer to reuse selected.')])
     } else {
       onSubmit(values.value)
     }
@@ -35,21 +35,27 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
   useEffect(() => {
     if (!isEmpty(values.value)) {
       // remove the hasError flag if an inputValue is entered
-      setErrors({ value: false })
+      setErrors([])
     }
   }, [values, values.value])
 
   return (
     <Modal
-      title={gettext('Reuse tab')} show={show} submitLabel={gettext('Reuse')}
+      title={gettext('Reuse tab')}
+      show={show}
+      submitLabel={gettext('Reuse')}
       submitProps={{className: 'btn btn-primary'}}
-      onClose={onClose} onSubmit={handleSubmit}>
-      <div className={classNames({'form-group': true, 'has-error': errors.value })}>
-        <label>
+      onClose={onClose}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label className="form-label">
           {gettext('Answers')}
         </label>
 
-        <Search attribute={attribute} values={values} setValues={setValues} />
+        <div className="d-flex flex-column justify-content-between gap-2 mb-2">
+          <Search attribute={attribute} values={values} errors={errors} setValues={setValues} />
+        </div>
 
         <p className="help-block mb-0">
           {

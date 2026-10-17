@@ -6,9 +6,10 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { locationKeys, updateLocation } from '../utils/location'
 
 import * as actionTypes from './actionTypes'
-import { fetchAnswers, fetchNavigation, fetchProgress, fetchView} from './projectActions'
+import { fetchPage } from './interviewActions'
+import { fetchAnswers, fetchView} from './projectActions'
 
-export function navigateDashboard(location) {
+export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
     // update the location in the url
     updateLocation(location)
@@ -27,8 +28,7 @@ export function navigateDashboard(location) {
         {'include_help': isTruthy(get(getState().config, 'document.includeHelp')), 'hide_answers': 'false' })
       )
     } else if (location.area == 'interview') {
-      dispatch(fetchProgress())
-      dispatch(fetchNavigation())
+      dispatch(fetchPage(location.pageId, back))
     } else {
       dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
     }

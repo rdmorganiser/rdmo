@@ -6,7 +6,7 @@ const AdditionalTextareaInput = ({ className, inputValue, disabled, onChange }) 
   return (
     <textarea
       rows={4}
-      className={classNames('form-control input-sm', className)}
+      className={classNames('form-control form-control-sm', className)}
       disabled={disabled}
       aria-label={gettext('Additional input')}
       value={inputValue}

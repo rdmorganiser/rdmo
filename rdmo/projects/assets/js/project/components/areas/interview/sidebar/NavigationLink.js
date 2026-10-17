@@ -9,7 +9,7 @@ const NavigationLink = ({ element }) => {
   const label = interpolate(gettext('(%s of %s)'), [element.count, element.total])
   const location = {area: 'interview', pageId: element?.first || element.id}
 
-  return (
+  return element.show ? (
     <LocationLink title={element.title} location={location}>
       <Html html={element.title} />
       {
@@ -27,6 +27,8 @@ const NavigationLink = ({ element }) => {
         )
       }
     </LocationLink>
+  ) : (
+    <span className="text-muted"><Html html={element.title} /></span>
   )
 }
 

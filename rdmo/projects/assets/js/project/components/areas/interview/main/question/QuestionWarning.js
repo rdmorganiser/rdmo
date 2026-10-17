@@ -1,16 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-const QuestionWarning = ({ templates, question, values }) => {
+const QuestionWarning = ({ question, values }) => {
+  const templates = useSelector((state) => state.templates)
+
   return !question.is_collection && values.length > 1 && (
     <Html html={templates.project_interview_multiple_values_warning} />
   )
 }
 
 QuestionWarning.propTypes = {
-  templates: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired
 }

@@ -8,43 +8,42 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
-import { projectId } from '../../../utils/meta'
-import { getValueOption } from '../../../utils/options'
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
+import { projectId } from '../../../../../utils/meta'
+import { getValueOption } from '../../../../../utils/options'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
 
-import ProjectApi from '../../../api/ProjectApi'
+import ProjectApi from '../../../../../api/ProjectApi'
 
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
 import SelectValueContainer from './SelectValueContainer'
 
-const SelectInput = ({ question, value, options, disabled, creatable, updateValue, buttons }) => {
-
+const SelectInput = ({ question, value, options, buttons, creatable, disabled, onChange }) => {
   const [inputValue, setInputValue] = useState('')
   const [defaultValueOption, setDefaultValueOption] = useState(null)
 
   const handleChange = (option) => {
     if (isNil(option)) {
       setInputValue('')
-      updateValue(value, {})
+      onChange(value, {})
     } else if (option.__isNew__ === true) {
-      updateValue(value, {
+      onChange(value, {
         text: option.value,
         unit: question.unit,
         value_type: question.value_type
       })
     } else {
       if (option.has_provider) {
-        updateValue(value, {
+        onChange(value, {
           external_id: option.id,
           text: option.text,
           unit: question.unit,
           value_type: question.value_type
         })
       } else {
-        updateValue(value, {
+        onChange(value, {
           option: option.id,
           unit: question.unit,
           value_type: question.value_type
@@ -127,7 +126,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
     getOptionValue: (option) => option.id,
     getOptionLabel: (option) => option.text,
     formatOptionLabel: (option) => (
-      <span className="interview-select-option">
+      <span className="project-interview-select-option">
         <OptionText option={option} />
         <OptionHelp className="ml-10" option={option} />
       </span>
@@ -136,7 +135,7 @@ const SelectInput = ({ question, value, options, disabled, creatable, updateValu
   }
 
   return (
-    <div className="interview-input select-input">
+    <div className="project-interview-input select-input">
       {
         creatable ? (
           isAsync ? (
@@ -161,10 +160,10 @@ SelectInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
-  disabled: PropTypes.bool,
+  buttons: PropTypes.node.isRequired,
   creatable: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
-  buttons: PropTypes.node.isRequired
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default SelectInput

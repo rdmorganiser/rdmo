@@ -6,7 +6,7 @@ const useFocusEffect = (ref, show) => {
     if (show && !isNil(ref.current)) {
       const timeout = setTimeout(() => {
         ref.current.focus()
-      }, 200)
+      }, 100)
 
       return () => {
         // clears timeout before running the new effect

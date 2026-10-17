@@ -1,5 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+
+import { updateValue } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionDefault from '../question/QuestionDefault'
@@ -10,47 +14,46 @@ import QuestionSuccess from '../question/QuestionSuccess'
 
 import FileInput from './FileInput'
 
-const FileWidget = ({ question, values, currentSet, disabled, createValue, updateValue, deleteValue }) => {
+const FileWidget = ({ question, values, currentSet }) => {
+  const dispatch = useDispatch()
+  const readOnly = useReadOnly()
+
   return (
-    <div className="interview-widgets">
-      {
-        values.map((value, valueIndex) => {
-          return (
-            <div key={valueIndex} className="interview-widget">
-              <FileInput
-                question={question}
-                value={value}
-                disabled={disabled}
-                updateValue={updateValue}
-                buttons={
-                  (
-                    <div className="buttons">
-                      <QuestionSuccess value={value}/>
-                      <QuestionEraseValue value={value} disabled={disabled} updateValue={updateValue}/>
-                      <QuestionRemoveValue
-                        question={question}
-                        values={values}
-                        value={value}
-                        disabled={disabled}
-                        deleteValue={deleteValue}
-                      />
-                      <QuestionDefault question={question} value={value} />
-                    </div>
-                  )
-                }
-              />
-              <QuestionError value={value} />
-            </div>
-          )
-        })
-      }
-      <QuestionAddValue
-        question={question}
-        values={values}
-        currentSet={currentSet}
-        disabled={disabled}
-        createValue={createValue}
-      />
+    <div className="project-interview-widgets">
+      <div className="d-flex flex-column justify-content-between gap-2">
+        {
+          values.map((value, valueIndex) => {
+            return (
+              <div key={valueIndex} className="project-interview-widget">
+                <FileInput
+                  question={question}
+                  value={value}
+                  disabled={readOnly}
+                  onChange={(value, attr) => dispatch(updateValue(value, attr))}
+                  buttons={
+                    (
+                      <div className="buttons">
+                        <QuestionSuccess value={value}/>
+                        <QuestionEraseValue question={question} value={value} />
+                        <QuestionRemoveValue question={question} values={values} value={value} />
+                        <QuestionDefault question={question} value={value} />
+                      </div>
+                    )
+                  }
+                />
+                <QuestionError value={value} />
+              </div>
+            )
+          })
+        }
+        <div className="buttons">
+          <QuestionAddValue
+            question={question}
+            values={values}
+            currentSet={currentSet}
+          />
+        </div>
+      </div>
     </div>
   )
 }
@@ -58,11 +61,7 @@ const FileWidget = ({ question, values, currentSet, disabled, createValue, updat
 FileWidget.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
-  disabled: PropTypes.bool,
   currentSet: PropTypes.object.isRequired,
-  createValue: PropTypes.func.isRequired,
-  updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
 }
 
 export default FileWidget

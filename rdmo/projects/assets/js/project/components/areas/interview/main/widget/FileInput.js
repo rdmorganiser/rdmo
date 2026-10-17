@@ -3,23 +3,22 @@ import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
 
-const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
+const FileInput = ({ question, value, buttons, disabled, onChange }) => {
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length == 1) {
-      updateValue(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
+      onChange(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
     }
   }, [value.file])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, disabled })
 
-  const classnames = classNames({
-    'dropzone': true,
+  const classnames = classNames('dropzone', {
     'disabled': disabled
   })
 
   return (
-    <div className="interview-input file-input">
+    <div className="project-interview-input file-input">
       <div className="buttons-wrapper">
         {buttons}
         <div className="file-control">
@@ -61,9 +60,9 @@ const FileInput = ({ question, value, disabled, updateValue, buttons }) => {
 FileInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
-  buttons: PropTypes.node.isRequired
+  buttons: PropTypes.node.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default FileInput

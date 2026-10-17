@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 const QuestionOptional = ({ question }) => {
   return question.is_optional && (
-    <div className="badge badge-optional" title={gettext('This is an optional question.')}>
-      {gettext('Optional')}
+    <div title={gettext('This is an optional question.')}>
+      <code className="code-optional">{gettext('Optional')}</code>
     </div>
   )
 }
