@@ -42,6 +42,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_PROJECT_VISIBILITY_INIT:
     case actionTypes.FETCH_NAVIGATION_INIT:
     case actionTypes.FETCH_PROGRESS_INIT:
+    case actionTypes.UPDATE_PROGRESS_INIT:
     case actionTypes.FETCH_PROVIDERS_INIT:
     case actionTypes.FETCH_PROJECT_INTEGRATIONS_INIT:
     case actionTypes.CREATE_PROJECT_INTEGRATION_INIT:
@@ -73,6 +74,7 @@ export default function projectReducer(state = initialState, action) {
     case actionTypes.FETCH_PROJECT_VISIBILITY_ERROR:
     case actionTypes.FETCH_NAVIGATION_ERROR:
     case actionTypes.FETCH_PROGRESS_ERROR:
+    case actionTypes.UPDATE_PROGRESS_ERROR:
     case actionTypes.FETCH_PROVIDERS_ERROR:
     case actionTypes.FETCH_PROJECT_INTEGRATIONS_ERROR:
     case actionTypes.CREATE_PROJECT_INTEGRATION_ERROR:
@@ -183,6 +185,7 @@ export default function projectReducer(state = initialState, action) {
         navigation: action.navigation
       }
     case actionTypes.FETCH_PROGRESS_SUCCESS:
+    case actionTypes.UPDATE_PROGRESS_SUCCESS:
       return {
         ...state,
         progress: action.progress

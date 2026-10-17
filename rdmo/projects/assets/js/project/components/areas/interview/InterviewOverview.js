@@ -11,11 +11,13 @@ const InterviewOverview = () => {
 
   return navigation && (
     <div className="project-interview-overview">
-      <h2>{gettext('Interview')}</h2>
+      <h1 className="mb-5">
+        {gettext('Interview')}
+      </h1>
 
       {
         navigation.map((section) => (
-          <div key={section.id} className="card card-tile mb-4 rounded-3">
+          <div key={section.id} className="card card-tile mb-4">
             <div className="card-body d-flex flex-column">
               <div className="row">
                 <div className="col-md-8">

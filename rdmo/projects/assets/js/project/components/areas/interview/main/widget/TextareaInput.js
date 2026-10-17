@@ -1,0 +1,62 @@
+import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import { useDebouncedCallback } from 'use-debounce'
+
+import useFocusEffect from '../../../../../hooks/useFocusEffect'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
+
+import Unit from './common/Unit'
+
+const TextareaInput = ({ question, value, buttons, disabled, onChange }) => {
+  const ref = useRef(null)
+
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {setInputValue(value.text)}, [value.text])
+  useFocusEffect(ref, value.focus)
+
+  const handleChange = useDebouncedCallback((value, text) => {
+    onChange(value, { text, unit: question.unit, value_type: question.value_type })
+  }, 500)
+
+  const classnames = classNames({
+    'form-control': true,
+    'default': isDefaultValue(question, value)
+  })
+
+  return (
+    <div className="project-interview-input textarea-input">
+      <div className="buttons-wrapper">
+        <textarea
+          ref={ref}
+          rows={6}
+          className={classnames}
+          disabled={disabled}
+          aria-labelledby={getQuestionTextId(question)}
+          aria-describedby={getQuestionHelpId(question)}
+          value={inputValue}
+          onChange={
+            (event) => {
+              setInputValue(event.target.value)
+              handleChange(value, event.target.value)
+            }
+          }
+        />
+        {buttons}
+      </div>
+      <Unit unit={question.unit} />
+    </div>
+  )
+}
+
+TextareaInput.propTypes = {
+  question: PropTypes.object.isRequired,
+  value: PropTypes.object.isRequired,
+  buttons: PropTypes.node.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+}
+
+export default TextareaInput
