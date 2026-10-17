@@ -56,7 +56,7 @@ const Input = ({
         onChange={handleChange}
         onKeyPress={
           (event) => {
-            if (!isNil(onEnter) && event.code === 'Enter') {
+            if (!isNil(onEnter) && event.key === 'Enter' && !event.nativeEvent.isComposing) {
               onEnter(event.target.value)
             }
           }
