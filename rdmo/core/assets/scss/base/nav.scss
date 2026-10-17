@@ -1,5 +1,11 @@
 @import '../breakpoints';
 
+nav.nav,
+ul.nav {
+    --bs-nav-link-color: var(--rdmo-link-color);
+    --bs-nav-link-hover-color: var(--rdmo-link-hover-color);
+}
+
 nav.navbar {
     --rdmo-nav-link-hover-bg: var(--rdmo-sidebar-bg);
 
