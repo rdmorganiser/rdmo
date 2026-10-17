@@ -3,16 +3,20 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
+import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
 
-import Modal from 'rdmo/core/assets/js/components/Modal'
+import { useReadOnly } from '../../../../../hooks'
 
 import Search from '../Search'
 
-const QuestionReuseValues = ({ page, question, values, disabled, createValues, updateValue, deleteValue }) => {
+const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete }) => {
+  const readOnly = useReadOnly()
+  const title = gettext('Reuse answers')
 
   const initialFormValues = {
     value: '',
+    snapshot: false,
     collection: true
   }
 
@@ -33,17 +37,17 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
 
   const handleSubmit = () => {
     if (isEmpty(formValues.value)) {
-      setFormErrors({ value: true })
+      setFormErrors([gettext('No answer to reuse selected.')])
     } else {
       values.forEach(value => {
         // look for the "same" value in the list of values from the search component
         const reusedValue = formValues.value.values.find(reusedValue => compareValues(value, reusedValue))
         if (isNil(reusedValue)) {
           // delete the value if it does not exist in the reused value
-          deleteValue(value)
+          onDelete(value)
         } else if (value.text != reusedValue.text) {
           // update the value if the additional text changed
-          updateValue(value, { text: reusedValue.text, option: value.option, external_id: value.external_id })
+          onUpdate(value, { text: reusedValue.text, option: value.option, external_id: value.external_id })
         }
       })
 
@@ -56,7 +60,7 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
         }
       })
 
-      createValues(newValues)
+      onCreate(newValues)
       setShow(false)
     }
   }
@@ -71,33 +75,35 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
   // remove the hasError flag if an inputValue is entered
   useEffect(() => {
     if (!isEmpty(formValues.value)) {
-      setFormErrors({ value: false })
+      setFormErrors([])
     }
   }, [formValues, formValues.value])
 
-  return !disabled && (
+  return !readOnly && (
     <>
-      <button
-        type="button" className="btn btn-link btn-reuse-value"
-        title={gettext('Reuse answers')} aria-label={gettext('Reuse answers')}
-        onClick={() => setShow(true)}>
-        <i className="fa fa-arrow-circle-down fa-btn" aria-hidden="true"></i>
-      </button>
+      <LinkButton
+        className="question-reuse-values-button"
+        title={title}
+        aria-label={title}
+        onClick={() => setShow(true)}
+      >
+        <i className="bi bi-arrow-down-circle" aria-hidden="true"></i>
+      </LinkButton>
 
       <Modal
         title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
         submitProps={{className: 'btn btn-primary'}}
         onClose={() => setShow(false)} onSubmit={handleSubmit}>
         <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
-          <label htmlFor="interview-page-tabs-modal-form-import">
+          <label htmlFor="project-interview-page-tabs-modal-form-import">
             {gettext('Answer')}
           </label>
 
           <Search
-            page={page}
             question={question}
             attribute={question.attribute}
             values={formValues}
+            errors={formErrors}
             setValues={setFormValues}
             collection={true}
           />
@@ -115,13 +121,11 @@ const QuestionReuseValues = ({ page, question, values, disabled, createValues, u
 }
 
 QuestionReuseValues.propTypes = {
-  page: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  createValues: PropTypes.func.isRequired,
-  updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 }
 
 export default QuestionReuseValues

@@ -10,12 +10,214 @@
     }
 }
 
-li.active {
-    padding-left: 0 !important;
+.project-interview-navigation {
+    li.active {
+        padding-left: 0 !important;
+    }
+    li.active a:before {
+        float: left;
+        width: 1.5rem;  // same as ps-4
+        text-align: right;
+        content: '\2192\0000a0'; /* right-arrow followed by a space */
+    }
 }
-li.active a:before {
-    float: left;
-    width: 1.5rem;  // same as ps-4
-    text-align: right;
-    content: '\2192\0000a0'; /* right-arrow followed by a space */
+
+.project-interview-page {
+    .project-interview-page-head {
+        .nav > li > a {
+            &.add-set,
+            &.add-set:hover {
+                color: var(--bs-success);
+            }
+            &.add-set:hover {
+                color: white;
+                background-color: var(--bs-success) !important;
+            }
+            &.add-set:focus {
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+.project-interview-page-elements {
+    p {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.project-interview-question,
+.project-interview-questionset {
+    margin-bottom: 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.project-interview-block {
+    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.project-interview-widgets {
+    .buttons {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .bi {
+            display: flex;
+        }
+
+        // prevent the additional gap if the buttons are not rendered
+        &:empty {
+          display: none;
+        }
+
+        .question-success {
+            opacity: 0;
+            transition: opacity 0.3s linear 2s;
+
+            &.show {
+                opacity: 1;
+                transition: opacity 0.5s ease-in-out;
+            }
+        }
+    }
+}
+
+.project-interview-input {
+    display: flex;
+    gap: 0.5rem;
+
+    .buttons-wrapper {
+        position: relative;
+        flex-grow: 1;
+
+        .buttons {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0.75rem;
+            z-index: 5;
+        }
+
+        // drop the stacking context while the modal is open.
+        // Otherwise the modal would be layered at level 5 relative to the rest of the page.
+        .buttons:has(.modal.show) {
+            z-index: auto;
+        }
+    }
+
+    .text-input {
+        // truncate the text input
+        input[type="text"] {
+            text-overflow: ellipsis;
+        }
+    }
+
+    &.radio-input,
+    &.yesno-input,
+    &.checkbox-input {
+        // match form-control style
+        padding: 0.3125rem 0.75rem;
+
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+
+        .buttons {
+            right: 0;
+        }
+    }
+
+    &.range-input {
+        // match form-control height
+        padding-top: calc(0.3125rem + 2px);
+        padding-bottom: calc(0.3125rem + 2px);
+
+        // extend range input width to the width of the widget
+        input[type='range'] {
+            flex-grow: 1;
+            max-width: 100%;
+            accent-color: var(--rdmo-link-color);
+        }
+    }
+
+    &.date-input {
+        .react-datepicker-wrapper {
+            width: 100%;
+        }
+    }
+
+    &.textarea-input {
+        .buttons {
+            // in a textarea widget, the buttons are positioned at the bottom
+            top: auto;
+            height: 2rem;
+            bottom: 0;
+        }
+    }
+
+    &.radio-input,
+    &.checkbox-input {
+        .buttons {
+            // in a radio widget, the buttons are positioned at the top
+            align-items: start;
+        }
+    }
+
+    &.radio-input,
+    &.checkbox-input {
+        .form-check {
+            padding-top: 0.3125rem;
+            padding-bottom: 0.3125rem;
+            margin-bottom: 0;
+
+            .form-check-label {
+                font-weight: normal;
+            }
+        }
+
+    }
+
+    &.select-input {
+        .react-select {
+            flex-grow: 1;
+            max-width: 100%;
+
+            .react-select__menu {
+                z-index: 10;
+            }
+
+            .react-select__option--is-selected {
+              a {
+                color: white;
+              }
+            }
+        }
+    }
+
+    .unit {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .default {
+        color: #999;
+
+        .badge,
+        input[type='radio'],
+        input[type='range'] {
+            opacity: 0.5;
+        }
+    }
+}
+
+.project-interview-management {
+    code {
+        font-size: 0.8rem;
+    }
 }

@@ -1,23 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-import { isEmptyValue } from '../../../utils/value'
+import { LinkButton } from 'rdmo/core/assets/js/components'
 
-const QuestionCopyValues = ({ question, sets, values, siblings, currentSet, copyValue }) => {
+import { copyValue } from '../../../../../actions/interviewActions'
+import { isEmptyValue } from '../../../../../utils/value'
+
+const QuestionCopyValues = ({ question, sets, values, siblings, currentSet }) => {
+  const dispatch = useDispatch()
+
   const button = question.widget_type == 'checkbox' ? (
-    <button
-      className="btn btn-link btn-apply-to-all" onClick={() => copyValue(question, ...values)}
+    <LinkButton
+      className="question-copy-values-button"
       title={gettext('Apply this answer to all tabs where this question is empty')}
-      aria-label={gettext('Apply this answer to all tabs where this question is empty')}>
-      <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i>
-    </button>
+      aria-label={gettext('Apply this answer to all tabs where this question is empty')}
+      onClick={() => dispatch(copyValue(question, ...values))}
+    >
+      <i className="bi bi-arrow-right-circle" aria-hidden="true"></i>
+    </LinkButton>
   ) : (
     <button
       type="button"
-      className="btn btn-primary btn-xs copy-value-button ml-10"
-      onClick={() => copyValue(question, ...values)}
+      className="btn btn-outline-primary btn-sm question-copy-values-button"
+      onClick={() => dispatch(copyValue(question, ...values))}
     >
-      <i className="fa fa-arrow-circle-right fa-btn" aria-hidden="true"></i> {gettext('Apply to all')}
+      <div className="d-flex align-items-center gap-2">
+        <i className="bi bi-arrow-right-circle" aria-hidden="true"></i>
+        <span>{gettext('Apply to all')}</span>
+      </div>
     </button>
   )
 
@@ -53,7 +64,6 @@ QuestionCopyValues.propTypes = {
   values: PropTypes.array.isRequired,
   siblings: PropTypes.array,
   currentSet: PropTypes.object.isRequired,
-  copyValue: PropTypes.func.isRequired
 }
 
 export default QuestionCopyValues

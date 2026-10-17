@@ -1,22 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 
-const QuestionContact = ({ settings, question, values, fetchContact }) => {
+import { LinkButton } from 'rdmo/core/assets/js/components'
+
+import { fetchContact } from '../../../../../actions/contactActions'
+
+const QuestionContact = ({ question, values }) => {
+  const dispatch = useDispatch()
+
+  const settings = useSelector((state) => state.settings)
+
   return settings.project_contact && (
-    <button
-      type="button "className="btn btn-link btn-contact"
-      title={gettext('Contact support')} aria-label={gettext('Contact support')}
-      onClick={() => fetchContact({ question, values })}>
-      <i className="fa fa-commenting-o" aria-hidden="true"></i>
-    </button>
+    <LinkButton
+      type="button"
+      title={gettext('Contact support')}
+      aria-label={gettext('Contact support')}
+      onClick={() => dispatch(fetchContact({ question, values }))}
+    >
+      <i className="bi bi-chat-dots" aria-hidden="true"></i>
+    </LinkButton>
   )
 }
 
 QuestionContact.propTypes = {
-  settings: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
-  fetchContact: PropTypes.func.isRequired,
 }
 
 export default QuestionContact

@@ -1,14 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-const QuestionSetHelpTemplate = ({ templates }) => {
-  return <Html html={templates.project_interview_questionset_help} />
-}
+const QuestionSetHelpTemplate = () => {
+  const templates = useSelector((state) => state.templates)
 
-QuestionSetHelpTemplate.propTypes = {
-  templates: PropTypes.object
+  return <Html html={templates.project_interview_questionset_help} />
 }
 
 export default QuestionSetHelpTemplate

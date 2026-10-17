@@ -1,18 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { managementHelp } from '../../../constants/management'
+import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
 
-const QuestionManagement = ({ config, question, isManager }) => {
-  return config.showManagement && isManager && (
-    <div className="panel panel-default interview-management">
-      <div className="panel-body">
-        <div className="interview-management-help" title={managementHelp}>
-          <i className="fa fa-question-circle-o" aria-hidden="true"></i>
+import { usePermissions } from '../../../../../hooks'
+
+const QuestionManagement = ({ question }) => {
+  const config = useSelector((state) => state.config)
+  const templates = useSelector((state) => state.templates)
+  const perms = usePermissions()
+
+  return config.showManagement && perms.can_view_management && (
+    <div className="project-interview-management mb-2">
+      <div className="border p-2 rounded-2">
+        <div className="float-end">
+          <Tooltip title={templates.project_interview_management_help} placement="bottom">
+            <i className="bi bi-info-circle text-muted cursor-help" tabIndex={0} />
+          </Tooltip>
         </div>
-        <ul className="list-unstyled mb-0">
+
+        <ul className="d-flex flex-column gap-1 list-unstyled mb-0">
           <li>
             <a href={`${baseUrl}/management/questions/${question.id}/`} target="_blank" rel="noreferrer">
               <code className="code-questions">{question.uri}</code>
@@ -20,7 +30,7 @@ const QuestionManagement = ({ config, question, isManager }) => {
           </li>
           <li>
             <a href={`${baseUrl}/management/attributes/${question.attribute}/`} target="_blank" rel="noreferrer">
-              <code className="code-attributes">{question.attribute_uri}</code>
+              <code className="code-domain">{question.attribute_uri}</code>
             </a>
           </li>
           {
@@ -48,9 +58,7 @@ const QuestionManagement = ({ config, question, isManager }) => {
 }
 
 QuestionManagement.propTypes = {
-  config: PropTypes.object.isRequired,
   question: PropTypes.object.isRequired,
-  isManager: PropTypes.bool.isRequired,
 }
 
 export default QuestionManagement

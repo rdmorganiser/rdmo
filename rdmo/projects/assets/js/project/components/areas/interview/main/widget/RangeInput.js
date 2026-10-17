@@ -4,13 +4,14 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isNil, toString } from 'lodash'
 
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
+const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
   const ref = useRef(null)
+
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => setInputValue(value.text), [value.text])
@@ -42,12 +43,10 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
   }, [question])
 
   const handleChange = useDebouncedCallback((value, text) => {
-    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
+    onChange(value, { text, unit: question.unit, value_type: question.value_type })
   }, 500)
 
-  const classnames = classNames({
-    'interview-input': true,
-    'range-input': true,
+  const classnames = classNames('project-interview-input range-input', {
     'default': isDefaultValue(question, value)
   })
 
@@ -79,9 +78,9 @@ const RangeInput = ({ question, value, disabled, updateValue, buttons }) => {
 RangeInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
-  buttons: PropTypes.node.isRequired
+  buttons: PropTypes.node.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default RangeInput

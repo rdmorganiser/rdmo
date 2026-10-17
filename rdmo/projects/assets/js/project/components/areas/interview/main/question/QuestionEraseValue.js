@@ -1,24 +1,41 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-const QuestionEraseValue = ({ value, disabled, updateValue }) => {
+import { LinkButton } from 'rdmo/core/assets/js/components'
+
+import { updateValue } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
+import { initRange } from '../../../../../utils/value'
+
+const QuestionEraseValue = ({ question, value }) => {
+  const dispatch = useDispatch()
+  const readOnly = useReadOnly()
+  const title = gettext('Erase input')
+
   const handleEraseValue = () => {
-    updateValue(value, {})
+    if (question.widget_type == 'range') {
+      initRange(question, {})
+    }
+
+    dispatch(updateValue(value, {}))
   }
 
-  return !disabled && (
-    <button
-      type="button" className="btn btn-link btn-erase-value" onClick={handleEraseValue}
-      title={gettext('Erase input')} aria-label={gettext('Erase input')}>
-      <i className="fa fa-eraser fa-btn" aria-hidden="true"></i>
-    </button>
+  return !readOnly && (
+    <LinkButton
+      className="question-erase-value-button"
+      title={title}
+      aria-label={title}
+      onClick={handleEraseValue}
+    >
+      <i className="bi bi-eraser" aria-hidden="true"></i>
+    </LinkButton>
   )
 }
 
 QuestionEraseValue.propTypes = {
+  question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  updateValue: PropTypes.func.isRequired
 }
 
 export default QuestionEraseValue

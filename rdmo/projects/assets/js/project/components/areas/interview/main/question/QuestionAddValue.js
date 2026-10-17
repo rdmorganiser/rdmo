@@ -1,13 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import { maxBy, upperFirst } from 'lodash'
 
-const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
+import { createValue } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
+import { initRange } from '../../../../../utils/value'
+
+const AddValue = ({ question, values, currentSet }) => {
+  const dispatch = useDispatch()
+  const readOnly = useReadOnly()
+  const title = gettext('Add answer')
+
   const handleClick = () => {
     const lastValue = maxBy(values, (v) => v.collection_index)
     const collectionIndex = lastValue ? lastValue.collection_index + 1 : 0
 
-    createValue({
+    const value = {
       attribute: question.attribute,
       set_prefix: currentSet.set_prefix,
       set_index: currentSet.set_index,
@@ -15,14 +24,27 @@ const AddValue = ({ question, values, currentSet, disabled, createValue }) => {
       collection_index: collectionIndex,
       unit: question.unit,
       value_type: question.value_type
-    })
+    }
+
+    if (question.widget_type == 'range') {
+      initRange(question, value)
+    }
+
+    dispatch(createValue(value))
   }
 
-  return !disabled && question.is_collection && (
+  return !readOnly && question.is_collection && (
     <button
-      type="button" className="btn btn-success btn-xs add-value-button" onClick={handleClick}
-      title={gettext('Add answer')} aria-label={gettext('Add answer')}>
-      <i className="fa fa-plus fa-btn" aria-hidden="true"></i> {upperFirst(question.verbose_name)}
+      type="button"
+      className="btn btn-outline-success btn-sm question-add-value-button"
+      onClick={handleClick}
+      title={title}
+      aria-label={title}
+    >
+      <div className="d-flex align-items-center gap-2">
+        <i className="bi bi-plus-circle" aria-hidden="true"></i>
+        <span>{upperFirst(question.verbose_name)}</span>
+      </div>
     </button>
   )
 }
@@ -31,8 +53,6 @@ AddValue.propTypes = {
   question: PropTypes.object.isRequired,
   values: PropTypes.array.isRequired,
   currentSet: PropTypes.object.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  createValue: PropTypes.func.isRequired
 }
 
 export default AddValue

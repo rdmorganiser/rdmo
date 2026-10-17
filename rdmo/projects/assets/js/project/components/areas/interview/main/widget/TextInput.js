@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 
-import useFocusEffect from '../../../hooks/useFocusEffect'
-import { getQuestionHelpId, getQuestionTextId } from '../../../utils/question'
-import { isDefaultValue } from '../../../utils/value'
+import useFocusEffect from '../../../../../hooks/useFocusEffect'
+import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
+const TextInput = ({ question, value, disabled, onChange, buttons }) => {
   const ref = useRef(null)
   const [inputValue, setInputValue] = useState('')
 
@@ -24,7 +24,7 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
   }, [buttons])
 
   const handleChange = useDebouncedCallback((value, text) => {
-    updateValue(value, { text, unit: question.unit, value_type: question.value_type })
+    onChange(value, { text, unit: question.unit, value_type: question.value_type })
   }, 500)
 
   const classnames = classNames({
@@ -33,7 +33,7 @@ const TextInput = ({ question, value, disabled, updateValue, buttons }) => {
   })
 
   return (
-    <div className="interview-input text-input">
+    <div className="project-interview-input text-input">
       <div className="buttons-wrapper">
         {buttons}
         <input
@@ -61,7 +61,7 @@ TextInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   buttons: PropTypes.node.isRequired
 }
 

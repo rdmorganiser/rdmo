@@ -4,8 +4,8 @@ import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { checkQuestionSet } from '../../../utils/page'
-import { getChildPrefix } from '../../../utils/set'
+import { checkQuestionSet } from '../../../../../utils/page'
+import { getChildPrefix } from '../../../../../utils/set'
 
 import Question from '../question/Question'
 
@@ -17,11 +17,7 @@ import QuestionSetHelpTemplate from './QuestionSetHelpTemplate'
 import QuestionSetManagement from './QuestionSetManagement'
 import QuestionSetRemoveSet from './QuestionSetRemoveSet'
 
-const QuestionSet = ({
-  config, settings, templates, page, questionset, sets, values, disabled, isManager,
-  parentSet, createSet, updateSet, deleteSet, copySet,
-  createValue, updateValue, deleteValue, copyValue, fetchContact
-}) => {
+const QuestionSet = ({ questionset, sets, values, parentSet }) => {
 
   const setPrefix = getChildPrefix(parentSet)
 
@@ -31,34 +27,23 @@ const QuestionSet = ({
   ))
 
   return checkQuestionSet(questionset, parentSet) && (
-    <div className="interview-questionset col-md-12">
-      <div className="interview-questionset-label">
-        <strong><Html html={questionset.title} /></strong>
-      </div>
+    <div className="project-interview-questionset col-md-12">
+      <h3>
+        <Html html={questionset.title} />
+      </h3>
       <QuestionSetHelp questionset={questionset} />
-      <QuestionSetHelpTemplate templates={templates} />
-      <QuestionSetAddSetHelp templates={templates} questionset={questionset} disabled={disabled} />
-      <QuestionSetManagement config={config} questionset={questionset} isManager={isManager} />
+      <QuestionSetHelpTemplate />
+      <QuestionSetAddSetHelp questionset={questionset} />
+      <QuestionSetManagement questionset={questionset} />
       {
-        !isEmpty(questionset.elements) && (
-          <div>
+        !isEmpty(questionset.elements) && !isEmpty(currentSets) && (
+          <div className="d-flex flex-column justify-content-between gap-2 mb-2">
             {
               currentSets.map((set, setIndex) => (
-                <div key={setIndex} className="interview-block">
-                  <div className="interview-block-options">
-                    <QuestionSetCopySet
-                      questionset={questionset}
-                      sets={sets}
-                      currentSet={set}
-                      disabled={disabled}
-                      copySet={copySet}
-                    />
-                    <QuestionSetRemoveSet
-                      questionset={questionset}
-                      currentSet={set}
-                      disabled={disabled}
-                      deleteSet={deleteSet}
-                    />
+                <div key={setIndex} className="project-interview-block">
+                  <div className="d-flex gap-1 float-end">
+                    <QuestionSetCopySet questionset={questionset} sets={sets} currentSet={set} />
+                    <QuestionSetRemoveSet questionset={questionset} currentSet={set} />
                   </div>
                   <div className="row">
                     {
@@ -68,35 +53,16 @@ const QuestionSet = ({
                             return (
                               <QuestionSet
                                 key={elementIndex}
-                                config={config}
-                                settings={settings}
-                                templates={templates}
-                                page={page}
                                 questionset={element}
                                 sets={sets}
                                 values={values.filter((value) => element.attributes.includes(value.attribute))}
-                                disabled={disabled}
-                                isManager={isManager}
                                 parentSet={set}
-                                createSet={createSet}
-                                updateSet={updateSet}
-                                deleteSet={deleteSet}
-                                copySet={copySet}
-                                createValue={createValue}
-                                updateValue={updateValue}
-                                deleteValue={deleteValue}
-                                copyValue={copyValue}
-                                fetchContact={fetchContact}
                               />
                             )
                           } else {
                             return (
                               <Question
                                 key={elementIndex}
-                                config={config}
-                                settings={settings}
-                                templates={templates}
-                                page={page}
                                 question={element}
                                 sets={
                                   sets.filter((set) => (
@@ -117,14 +83,7 @@ const QuestionSet = ({
                                     value.set_index != set.set_index
                                   ))
                                 }
-                                disabled={disabled}
-                                isManager={isManager}
                                 currentSet={set}
-                                createValue={createValue}
-                                updateValue={updateValue}
-                                deleteValue={deleteValue}
-                                copyValue={copyValue}
-                                fetchContact={fetchContact}
                               />
                             )
                           }
@@ -138,38 +97,16 @@ const QuestionSet = ({
           </div>
         )
       }
-
-      <QuestionSetAddSet
-        questionset={questionset}
-        sets={currentSets}
-        setPrefix={setPrefix}
-        disabled={disabled}
-        createSet={createSet}
-      />
+      <QuestionSetAddSet questionset={questionset} sets={currentSets} setPrefix={setPrefix} />
     </div>
   )
 }
 
 QuestionSet.propTypes = {
-  config: PropTypes.object.isRequired,
-  settings: PropTypes.object.isRequired,
-  templates: PropTypes.object.isRequired,
-  page: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
   sets: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  isManager: PropTypes.bool.isRequired,
   parentSet: PropTypes.object.isRequired,
-  createSet: PropTypes.func.isRequired,
-  updateSet: PropTypes.func.isRequired,
-  deleteSet: PropTypes.func.isRequired,
-  copySet: PropTypes.func.isRequired,
-  createValue: PropTypes.func.isRequired,
-  updateValue: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired,
-  copyValue: PropTypes.func.isRequired,
-  fetchContact: PropTypes.func.isRequired
 }
 
 export default QuestionSet

@@ -1,24 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
-const QuestionEraseValues = ({ values, disabled, deleteValue }) => {
+import { LinkButton } from 'rdmo/core/assets/js/components'
+
+import { deleteValue } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
+
+const QuestionEraseValues = ({ values }) => {
+  const dispatch = useDispatch()
+  const readOnly = useReadOnly()
+  const title = gettext('Erase input')
+
   const handleEraseValue = () => {
-    values.forEach((value) => deleteValue(value))
+    values.forEach((value) => dispatch(deleteValue(value)))
   }
 
-  return !disabled && (
-    <button
-      type="button" className="btn btn-link btn-erase-value" onClick={handleEraseValue}
-      title={gettext('Erase input')} aria-label={gettext('Erase input')}>
-      <i className="fa fa-eraser fa-btn" aria-hidden="true"></i>
-    </button>
+  return !readOnly && (
+    <LinkButton
+      className="question-erase-values-button"
+      title={title}
+      aria-label={title}
+      onClick={handleEraseValue}
+    >
+      <i className="bi bi-eraser" aria-hidden="true"></i>
+    </LinkButton>
   )
 }
 
 QuestionEraseValues.propTypes = {
   values: PropTypes.array.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  deleteValue: PropTypes.func.isRequired
 }
 
 export default QuestionEraseValues

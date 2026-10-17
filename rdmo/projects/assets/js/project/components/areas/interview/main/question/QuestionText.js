@@ -4,18 +4,17 @@ import classNames from 'classnames'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { getQuestionTextId } from '../../../utils/question'
+import { getQuestionTextId } from '../../../../../utils/question'
 
 const QuestionText = ({ question }) => {
-  const classnames = classNames({
-    'form-label': true,
+  const classnames = classNames('mb-0', {
     'text-muted': question.is_optional
   })
 
   return (
-    <div className={classnames}>
+    <h3 className={classnames}>
       <Html id={getQuestionTextId(question)} html={question.text} />
-    </div>
+    </h3>
   )
 }
 
