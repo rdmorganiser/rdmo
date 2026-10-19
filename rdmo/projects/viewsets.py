@@ -578,6 +578,7 @@ class ProjectViewSet(ModelViewSet):
             raise Http404 from e
 
         include_help = is_truthy(request.GET.get('include_help'))
+        include_answers = is_truthy(request.GET.get('include_answers'))
 
         ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
 
@@ -587,6 +588,7 @@ class ProjectViewSet(ModelViewSet):
                 'snapshot': snapshot,
                 'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
                 'include_help': include_help,
+                'include_answers': include_answers,
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })

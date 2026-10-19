@@ -18,7 +18,11 @@
         {% elif this.model == "questions.questionset" %}
             <h4>{{ this.title | markdown }}</h4>
         {% elif this.model == "questions.question" %}
-            <h5>{{ this.text | markdown }}</h5>
+            {% if prefix is None %}
+                <h5>{{ this.text | markdown }}</h5>
+            {% else %}
+                <h5>A{{prefix}} - {{ this.text | markdown }}</h5>
+            {% endif %}
         {% endif %}
 
         {% if include_help and "help" in this and this.help %}
@@ -29,7 +33,7 @@
             </div>
         {% endif %}
 
-        {% if this.model == "questions.question" %}
+        {% if include_answers and this.model == "questions.question" %}
             {% if this.values|length == 1 %}
                 {% for value in this.values %} {{ value.value | markdown }} {% endfor %}
             {% else %}
@@ -44,8 +48,19 @@
 {% endif %}
 
 {% for sub in this.elements %}
-    {% include 'projects/project_answertree.html' with this=sub%}
+    {% include 'projects/project_answertree.html' with this=sub %}
 {% endfor %}
-{% for sub in this.sets %}
-    {% include 'projects/project_answertree.html' with this=sub%}
-{% endfor %}
+
+{% if this.sets %}
+    {% if include_answers %}
+        {% for sub in this.sets %}
+            {% if this.sets|length > 1 %}
+                {% include 'projects/project_answertree.html' with this=sub prefix=sub.set_index %}
+            {% else %}
+                {% include 'projects/project_answertree.html' with this=sub %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% include 'projects/project_answertree.html' with this=this.sets|first %}
+    {% endif %}
+{% endif %}

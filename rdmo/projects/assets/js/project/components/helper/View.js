@@ -39,7 +39,7 @@ const View = () => {
         {'include_help': isTruthy(get(config, 'document.includeHelp')), 'include_answers': 'false'}))
     } else if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
+        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'include_answers': 'true'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }

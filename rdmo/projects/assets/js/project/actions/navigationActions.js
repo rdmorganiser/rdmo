@@ -24,7 +24,7 @@ export function navigateDashboard(location) {
       )
     } else if (location.detail == 'answers') {
       dispatch(fetchAnswers(location.snapshotId,
-        {'include_help': isTruthy(get(getState().config, 'document.includeHelp')), 'hide_answers': 'false' })
+        {'include_help': isTruthy(get(getState().config, 'document.includeHelp')), 'include_answers': 'true' })
       )
     } else if (location.area == 'interview') {
       dispatch(fetchProgress())
