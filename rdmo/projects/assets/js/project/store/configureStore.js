@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
@@ -40,19 +39,6 @@ export default function configureStore() {
     middlewares.push(logger)
   }
 
-  const rootReducer = combineReducers({
-    config: configReducer,
-    pending: pendingReducer,
-    project: projectSliceReducer,
-    settings: settingsReducer,
-    templates: templateReducer,
-    user: userReducer,
-    roles: rolesReducer,
-    sites: sitesReducer,
-    groups: groupsReducer,
-    stale: staleReducer
-  })
-
   const initialState = {
     config: {
       prefix: 'rdmo.project',
@@ -62,7 +48,18 @@ export default function configureStore() {
   }
 
   const store = configureToolkitStore({
-    reducer: rootReducer,
+    reducer: {
+      config: configReducer,
+      pending: pendingReducer,
+      project: projectSliceReducer,
+      settings: settingsReducer,
+      templates: templateReducer,
+      user: userReducer,
+      roles: rolesReducer,
+      sites: sitesReducer,
+      groups: groupsReducer,
+      stale: staleReducer
+    },
     preloadedState: initialState,
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
   })

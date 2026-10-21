@@ -1,5 +1,3 @@
-import { combineReducers } from 'redux'
-
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
@@ -30,16 +28,6 @@ export default function configureStore() {
     middlewares.push(logger)
   }
 
-  const rootReducer = combineReducers({
-    config: configReducer,
-    currentUser: userReducer,
-    pending: pendingReducer,
-    projects: projectsReducer,
-    settings: settingsReducer,
-    templates: templateReducer,
-    roles: rolesReducer
-  })
-
   const initialState = {
     config: {
       myProjects: true,
@@ -51,7 +39,15 @@ export default function configureStore() {
   }
 
   const store = configureToolkitStore({
-    reducer: rootReducer,
+    reducer: {
+      config: configReducer,
+      currentUser: userReducer,
+      pending: pendingReducer,
+      projects: projectsReducer,
+      settings: settingsReducer,
+      templates: templateReducer,
+      roles: rolesReducer
+    },
     preloadedState: initialState,
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
   })
