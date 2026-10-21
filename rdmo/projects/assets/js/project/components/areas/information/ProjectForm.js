@@ -27,7 +27,8 @@ const ProjectForm = ({
   submitMode = 'auto'
 }) => {
   const dispatch = useDispatch()
-  const errors = useFieldErrors()
+  const [backendErrors, setBackendErrors] = useState({})
+  const errors = useFieldErrors(backendErrors)
   const templates = useSelector((state) => state.templates)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
@@ -113,6 +114,8 @@ const ProjectForm = ({
   })
 
   const saveProject = (currentFormData) => {
+    setBackendErrors({})
+
     if (mode === 'create') {
       return dispatch(createProject(currentFormData))
     }
@@ -133,8 +136,18 @@ const ProjectForm = ({
     return dispatch(updateProject(payload))
   }
 
-  const debouncedSaveShort = useDebouncedCallback(saveProject, 500)
-  const debouncedSaveLong = useDebouncedCallback(saveProject, 1500)
+  const handleSaveError = error => {
+    setBackendErrors(error?.errors ?? {})
+  }
+
+  const debouncedSaveShort = useDebouncedCallback(
+    data => saveProject(data)?.catch(handleSaveError),
+    500
+  )
+  const debouncedSaveLong = useDebouncedCallback(
+    data => saveProject(data)?.catch(handleSaveError),
+    1500
+  )
 
   const handleChange = (key, value) => {
     const updatedFormData = { ...formData, [key]: value }
@@ -151,7 +164,10 @@ const ProjectForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    saveProject({ ...formData })?.then(() => onSave?.())
+    saveProject({ ...formData })?.then(
+      () => onSave?.(),
+      handleSaveError
+    )
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
