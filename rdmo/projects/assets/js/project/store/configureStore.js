@@ -18,7 +18,7 @@ import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/c
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
-import rolesReducer from '../../common/reducers/rolesReducer'
+import rolesReducer from '../../common/reducers/rolesSlice'
 import { combinePermissions } from '../../common/utils/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'

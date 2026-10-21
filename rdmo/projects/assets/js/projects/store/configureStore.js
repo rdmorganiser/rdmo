@@ -11,7 +11,7 @@ import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/c
 import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
-import rolesReducer from '../../common/reducers/rolesReducer'
+import rolesReducer from '../../common/reducers/rolesSlice'
 import * as projectsActions from '../actions/projectsActions'
 import projectsReducer from '../reducers/projectsSlice'
 
