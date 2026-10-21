@@ -1,9 +1,9 @@
-import { DELETE_CONFIG, UPDATE_CONFIG } from './actionTypes'
+import { actions } from '../reducers/configSlice'
 
 export function updateConfig(path, value, ls = true) {
-  return {type: UPDATE_CONFIG, path, value, ls}
+  return actions.updateConfig({ path, value, ls })
 }
 
 export function deleteConfig(path, ls = true) {
-  return {type: DELETE_CONFIG, path, ls}
+  return actions.deleteConfig({ path, ls })
 }
