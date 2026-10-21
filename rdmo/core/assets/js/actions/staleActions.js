@@ -1,9 +1,9 @@
-import { ADD_TO_STALE, REMOVE_FROM_STALE } from './actionTypes'
+import { actions } from '../reducers/staleSlice'
 
 export function addToStale(item) {
-  return {type: ADD_TO_STALE, item}
+  return actions.addToStale(item)
 }
 
 export function removeFromStale(item) {
-  return {type: REMOVE_FROM_STALE, item}
+  return actions.removeFromStale(item)
 }
