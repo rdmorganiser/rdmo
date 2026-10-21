@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
+import { combineReducers } from 'redux'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
@@ -10,16 +10,25 @@ import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateSlice'
 import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
-import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesReducer'
 import * as projectsActions from '../actions/projectsActions'
-import projectsReducer from '../reducers/projectsReducer'
+import projectsReducer from '../reducers/projectsSlice'
+
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
+
+  const middlewares = []
+
+  if (process.env.NODE_ENV === 'development') {
+    const { logger } = require('redux-logger')
+    middlewares.push(logger)
+  }
 
   const rootReducer = combineReducers({
     config: configReducer,
@@ -41,11 +50,11 @@ export default function configureStore() {
     }
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...configureMiddleware())
-  )
+  const store = configureToolkitStore({
+    reducer: rootReducer,
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
+  })
 
   window.addEventListener('load', () => {
     getConfigFromLocalStorage(initialState.config.prefix)
