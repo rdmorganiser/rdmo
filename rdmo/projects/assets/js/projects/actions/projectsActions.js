@@ -1,37 +1,13 @@
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
-import ProjectsApi from '../api/ProjectsApi'
+import { actions } from '../reducers/projectsSlice'
 
-import {
-  COPY_PROJECT_ERROR,
-  COPY_PROJECT_INIT,
-  COPY_PROJECT_SUCCESS,
-  CREATE_PROJECT_ERROR,
-  CREATE_PROJECT_INIT,
-  CREATE_PROJECT_SUCCESS,
-  FETCH_CATALOGS_ERROR,
-  FETCH_CATALOGS_INIT,
-  FETCH_CATALOGS_SUCCESS,
-  FETCH_FILETYPES_ERROR,
-  FETCH_FILETYPES_INIT,
-  FETCH_FILETYPES_SUCCESS,
-  FETCH_IMPORT_URLS_ERROR,
-  FETCH_IMPORT_URLS_INIT,
-  FETCH_IMPORT_URLS_SUCCESS,
-  FETCH_INVITATIONS_ERROR,
-  FETCH_INVITATIONS_INIT,
-  FETCH_INVITATIONS_SUCCESS,
-  FETCH_PROJECTS_ERROR,
-  FETCH_PROJECTS_INIT,
-  FETCH_PROJECTS_SUCCESS,
-  UPLOAD_PROJECT_ERROR,
-  UPLOAD_PROJECT_INIT,
-  UPLOAD_PROJECT_SUCCESS,
-} from './actionTypes'
+import ProjectsApi from '../api/ProjectsApi'
 
 export function fetchProjects(pageReset = true) {
   const pendingId = 'fetchProjects'
@@ -57,11 +33,11 @@ export function fetchProjects(pageReset = true) {
 }
 
 export function fetchProjectsInit() {
-  return { type: FETCH_PROJECTS_INIT }
+  return actions.fetchProjectsInit()
 }
 
 export function fetchProjectsSuccess(projects, shouldConcatenate) {
-  return { type: FETCH_PROJECTS_SUCCESS, projects, shouldConcatenate }
+  return actions.fetchProjectsSuccess({ projects, shouldConcatenate })
 }
 
 export function fetchProjectsError(error) {
@@ -70,7 +46,7 @@ export function fetchProjectsError(error) {
       dispatch(configActions.deleteConfig('params.catalog'))
       dispatch(fetchProjects())
     } else {
-      dispatch({ type: FETCH_PROJECTS_ERROR, error })
+      dispatch(actions.fetchProjectsError(serializeError(error)))
     }
   }
 }
@@ -78,18 +54,18 @@ export function fetchProjectsError(error) {
 export function createProject(data) {
   return function (dispatch) {
     dispatch(addToPending('createProject'))
-    dispatch({ type: CREATE_PROJECT_INIT })
+    dispatch(actions.createProjectInit())
 
     return ProjectsApi.createProject(data)
       .then(project => {
         dispatch(removeFromPending('createProject'))
-        dispatch({ type: CREATE_PROJECT_SUCCESS, project })
+        dispatch(actions.createProjectSuccess(project))
 
         window.location.href = `${baseUrl}/projects/${project.id}/`
       })
       .catch(error => {
         dispatch(removeFromPending('createProject'))
-        dispatch({ type: CREATE_PROJECT_ERROR, error })
+        dispatch(actions.createProjectError(serializeError(error)))
         throw error
       })
   }
@@ -98,18 +74,18 @@ export function createProject(data) {
 export function copyProject(id, data) {
   return function (dispatch) {
     dispatch(addToPending('copyProject'))
-    dispatch({ type: COPY_PROJECT_INIT })
+    dispatch(actions.copyProjectInit())
 
     return ProjectsApi.copyProject(id, data)
       .then(project => {
         dispatch(removeFromPending('copyProject'))
-        dispatch({ type: COPY_PROJECT_SUCCESS, project })
+        dispatch(actions.copyProjectSuccess(project))
 
         window.location.href = `${baseUrl}/projects/${project.id}/`
       })
       .catch(error => {
         dispatch(removeFromPending('copyProject'))
-        dispatch({ type: COPY_PROJECT_ERROR, error })
+        dispatch(actions.copyProjectError(serializeError(error)))
         throw error
       })
   }
@@ -164,15 +140,15 @@ export function fetchCatalogs() {
 }
 
 export function fetchCatalogsInit() {
-  return { type: FETCH_CATALOGS_INIT }
+  return actions.fetchCatalogsInit()
 }
 
 export function fetchCatalogsSuccess(catalogs) {
-  return { type: FETCH_CATALOGS_SUCCESS, catalogs }
+  return actions.fetchCatalogsSuccess(catalogs)
 }
 
 export function fetchCatalogsError(error) {
-  return { type: FETCH_CATALOGS_ERROR, error }
+  return actions.fetchCatalogsError(serializeError(error))
 }
 
 export function fetchAllowedFileTypes() {
@@ -193,15 +169,15 @@ export function fetchAllowedFileTypes() {
 }
 
 export function fetchAllowedFileTypesInit() {
-  return { type: FETCH_FILETYPES_INIT }
+  return actions.fetchAllowedFileTypesInit()
 }
 
 export function fetchAllowedFileTypesSuccess(allowedTypes) {
-  return { type: FETCH_FILETYPES_SUCCESS, allowedTypes }
+  return actions.fetchAllowedFileTypesSuccess(allowedTypes)
 }
 
 export function fetchAllowedFileTypesError(error) {
-  return { type: FETCH_FILETYPES_ERROR, error }
+  return actions.fetchAllowedFileTypesError(serializeError(error))
 }
 
 export function fetchImportUrls() {
@@ -222,15 +198,15 @@ export function fetchImportUrls() {
 }
 
 export function fetchImportUrlsInit() {
-  return { type: FETCH_IMPORT_URLS_INIT }
+  return actions.fetchImportUrlsInit()
 }
 
 export function fetchImportUrlsSuccess(importUrls) {
-  return { type: FETCH_IMPORT_URLS_SUCCESS, importUrls }
+  return actions.fetchImportUrlsSuccess(importUrls)
 }
 
 export function fetchImportUrlsError(error) {
-  return { type: FETCH_IMPORT_URLS_ERROR, error }
+  return actions.fetchImportUrlsError(serializeError(error))
 }
 
 export function fetchInvitations() {
@@ -251,15 +227,15 @@ export function fetchInvitations() {
 }
 
 export function fetchInvitationsInit() {
-  return { type: FETCH_INVITATIONS_INIT }
+  return actions.fetchInvitationsInit()
 }
 
 export function fetchInvitationsSuccess(invites) {
-  return { type: FETCH_INVITATIONS_SUCCESS, invites }
+  return actions.fetchInvitationsSuccess(invites)
 }
 
 export function fetchInvitationsError(error) {
-  return { type: FETCH_INVITATIONS_ERROR, error }
+  return actions.fetchInvitationsError(serializeError(error))
 }
 
 export function uploadProject(url, file) {
@@ -277,13 +253,13 @@ export function uploadProject(url, file) {
 }
 
 export function uploadProjectInit() {
-  return { type: UPLOAD_PROJECT_INIT }
+  return actions.uploadProjectInit()
 }
 
 export function uploadProjectSuccess(project) {
-  return { type: UPLOAD_PROJECT_SUCCESS, project }
+  return actions.uploadProjectSuccess(project)
 }
 
 export function uploadProjectError(error) {
-  return { type: UPLOAD_PROJECT_ERROR, error }
+  return actions.uploadProjectError(serializeError(error))
 }
