@@ -1,4 +1,3 @@
-import { actions as projectActions } from '../../project/reducers/projectSlice'
 import {
   COPY_PROJECT_ERROR, COPY_PROJECT_INIT,
   CREATE_PROJECT_ERROR, CREATE_PROJECT_INIT,
@@ -28,8 +27,6 @@ export default function projectsReducer(state = initialState, action) {
         hasNext: action.projects.next !== null
       }
     }
-    case projectActions.updateProjectError.type:
-      return { ...state, errors: action.payload.errors }
     case FETCH_PROJECTS_ERROR:
     case CREATE_PROJECT_ERROR:
     case COPY_PROJECT_ERROR:
@@ -44,7 +41,6 @@ export default function projectsReducer(state = initialState, action) {
     case FETCH_IMPORT_URLS_INIT:
     case CREATE_PROJECT_INIT:
     case COPY_PROJECT_INIT:
-    case projectActions.updateProjectInit.type:
       return { ...state, errors: [] }
     case FETCH_INVITATIONS_SUCCESS:
       return { ...state, invites: action.invites }
