@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 const EMPTY_ERRORS = {}
 
 export const useFieldErrors = (backendErrors) => {
-  // const rawErrors = useSelector((state) => state.project?.errors?.[0]?.errors) || EMPTY_ERRORS
   const storedErrors = useSelector((state) =>
     state.project?.errors?.[0]?.errors ||
     state.projects?.errors?.[0]?.errors ||
