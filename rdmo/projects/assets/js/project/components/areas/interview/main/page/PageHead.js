@@ -99,7 +99,7 @@ const PageHead = ({ sets, values, currentSet }) => {
   }
 
   const handleImport = (copySetValue) => {
-    copySet(currentSet, copySetValue, currentSetValue)
+    dispatch(copySet(currentSet, copySetValue, currentSetValue))
     importModal.close()
   }
 
