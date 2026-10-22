@@ -10,13 +10,26 @@ from playwright.sync_api import Browser, BrowserContext, Page
 
 from rdmo.accounts.utils import set_group_permissions
 
-PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
+PLAYWRIGHT_TIMEOUT = 1_000  # default timeout in ms
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--playwright-timeout", type=int, default=PLAYWRIGHT_TIMEOUT, metavar="MS",
+        help=f"timeout for Playwright actions and navigation in ms (default: {PLAYWRIGHT_TIMEOUT})"
+    )
 
 
 def pytest_runtest_setup(item):
     """pytest-playwright needs this setting to be enabled, before any fixture of an e2e test is set up."""
     if item.get_closest_marker("e2e"):
         os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+
+
+@pytest.fixture(scope="session")
+def playwright_timeout(pytestconfig) -> int:
+    """Return the Playwright timeout in ms, as set with --playwright-timeout."""
+    return pytestconfig.getoption("playwright_timeout")
 
 
 @pytest.fixture
@@ -63,7 +76,7 @@ def authenticated_context(
 
 
 @pytest.fixture
-def authenticated_page(authenticated_context: BrowserContext) -> Page:
+def authenticated_page(authenticated_context: BrowserContext, playwright_timeout) -> Page:
     """Create an authenticated Playwright page and collect JS errors."""
     js_errors = []
     ignored_warnings = [
@@ -83,8 +96,8 @@ def authenticated_page(authenticated_context: BrowserContext) -> Page:
         js_errors.append(f"page error: {exception}")
 
     page = authenticated_context.new_page()
-    page.set_default_timeout(PLAYWRIGHT_TIMEOUT)
-    page.set_default_navigation_timeout(PLAYWRIGHT_TIMEOUT)
+    page.set_default_timeout(playwright_timeout)
+    page.set_default_navigation_timeout(playwright_timeout)
     page.on("console", log_console_msg)
     page.on("pageerror", log_page_error)
     try:
