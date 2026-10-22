@@ -12,7 +12,7 @@ def e2e_username() -> str:
 
 
 @pytest.fixture
-def page(live_server, browser, authenticated_page: Page) -> Page:
+def page(authenticated_page: Page) -> Page:
     """Navigates the authenticated page to /projects."""
     authenticated_page.goto("/projects")  # Navigate to the projects section
     expect(authenticated_page).to_have_url("/projects/")

@@ -12,7 +12,7 @@ def e2e_username() -> str:
 
 
 @pytest.fixture
-def page_single(transactional_db, live_server, authenticated_page: Page) -> Page:
+def page_single(authenticated_page: Page) -> Page:
     """Navigates the authenticated page to /management."""
     authenticated_page.goto("/management")  # Navigate to the projects section
     expect(authenticated_page.get_by_role("heading", name="Management")).to_be_visible()
@@ -20,7 +20,7 @@ def page_single(transactional_db, live_server, authenticated_page: Page) -> Page
 
 
 @pytest.fixture
-def page_multisite(transactional_db, live_server, authenticated_page: Page, settings) -> Page:
+def page_multisite(authenticated_page: Page, settings) -> Page:
     """Enables the multisite and navigates the authenticated page to /management."""
     settings.MULTISITE = True
     authenticated_page.goto("/management")  # Navigate to the projects section
@@ -29,7 +29,7 @@ def page_multisite(transactional_db, live_server, authenticated_page: Page, sett
 
 
 @pytest.fixture
-def page(request, transactional_db) -> Page:
+def page(request) -> Page:
     """Allow specific page fixtures to be selected indirectly and default to multisite."""
     fixture_name = getattr(request, "param", "page_multisite")
     return request.getfixturevalue(fixture_name)
