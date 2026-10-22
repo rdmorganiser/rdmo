@@ -30,12 +30,18 @@ const InterviewOverview = () => {
                         {
                           section.pages.map((page) => (
                             <li key={page.id}>
-                              <LocationLink
-                                title={page.title}
-                                location={{area: 'interview', pageId: page.id}}
-                              >
-                                <Html html={page.title} />
-                              </LocationLink>
+                              {
+                                page.show ? (
+                                  <LocationLink
+                                    title={page.title}
+                                    location={{area: 'interview', pageId: page.id}}
+                                  >
+                                    <Html html={page.title} />
+                                  </LocationLink>
+                                ) : (
+                                  <Html className="text-muted" html={page.title} />
+                                )
+                              }
                             </li>
                           ))
                         }

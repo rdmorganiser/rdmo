@@ -28,7 +28,7 @@ const NavigationLink = ({ element }) => {
       }
     </LocationLink>
   ) : (
-    <span className="text-muted"><Html html={element.title} /></span>
+    <Html className="text-muted" html={element.title} />
   )
 }
 
