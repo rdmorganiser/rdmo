@@ -46,6 +46,9 @@ export function fetchPage(pageId, back) {
           dispatch(fetchOptionsets(page))
 
           dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, page })
+
+          // return the page, so that navigateDashboard can update the location accordingly
+          return page
         })
         .catch((error) => {
           if (error.errors.done) {
