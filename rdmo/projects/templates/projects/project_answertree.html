@@ -21,7 +21,7 @@
             {% if prefix is None %}
                 <h5>{{ this.text | markdown }}</h5>
             {% else %}
-                <h5>A{{prefix}} - {{ this.text | markdown }}</h5>
+                <h5>[{{prefix}}] {{ this.text | markdown }}</h5>
             {% endif %}
         {% endif %}
 
@@ -54,8 +54,8 @@
 {% if this.sets %}
     {% if include_answers %}
         {% for sub in this.sets %}
-            {% if this.sets|length > 1 %}
-                {% include 'projects/project_answertree.html' with this=sub prefix=sub.set_index %}
+            {% if sub.set_name %}
+                {% include 'projects/project_answertree.html' with this=sub prefix=sub.set_name %}
             {% else %}
                 {% include 'projects/project_answertree.html' with this=sub %}
             {% endif %}

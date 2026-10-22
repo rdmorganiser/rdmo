@@ -580,7 +580,7 @@ class ProjectViewSet(ModelViewSet):
         include_help = is_truthy(request.GET.get('include_help'))
         include_answers = is_truthy(request.GET.get('include_answers'))
 
-        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "section", "page", "set", "questionset", "question", "value")
 
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answertree.html', {
