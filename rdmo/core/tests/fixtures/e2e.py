@@ -13,13 +13,13 @@ from rdmo.accounts.utils import set_group_permissions
 PLAYWRIGHT_TIMEOUT = 10_000  # timeout in ms
 
 
-@pytest.fixture(scope="session", autouse=True)
-def _set_django_allow_async_unsafe():
-    """pytest-playwright needs this setting to be enabled."""
-    os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+def pytest_runtest_setup(item):
+    """pytest-playwright needs this setting to be enabled, before any fixture of an e2e test is set up."""
+    if item.get_closest_marker("e2e"):
+        os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def allow_live_server_host(settings, live_server):
     """Allow the pytest live server host in Django host validation."""
     hosts = {
@@ -33,8 +33,8 @@ def allow_live_server_host(settings, live_server):
 
 
 @pytest.fixture
-def django_db_setup(django_db_setup, django_db_blocker, fixtures):
-    """Set up database and populate it with fixtures for every e2e test."""
+def e2e_db(transactional_db, django_db_blocker, fixtures):
+    """Populate the database with fixtures for every e2e test, since transactional_db flushes it afterwards."""
     with django_db_blocker.unblock():
         call_command("loaddata", *fixtures, verbosity=0)
         call_command("rebuild_mptt")
@@ -42,7 +42,9 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
 
 
 @pytest.fixture
-def authenticated_context(client, login, live_server, browser: Browser, e2e_username) -> BrowserContext:
+def authenticated_context(
+    e2e_db, allow_live_server_host, client, login, live_server, browser: Browser, e2e_username
+) -> BrowserContext:
     """Create an authenticated Playwright browser context."""
     login(e2e_username)
     session_cookie = client.cookies[settings.SESSION_COOKIE_NAME]
