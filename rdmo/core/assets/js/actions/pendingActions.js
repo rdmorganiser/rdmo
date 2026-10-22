@@ -1,9 +1,9 @@
-import { ADD_TO_PENDING, REMOVE_FROM_PENDING } from './actionTypes'
+import { actions } from '../reducers/pendingSlice'
 
 export function addToPending(item) {
-  return {type: ADD_TO_PENDING, item}
+  return actions.addToPending(item)
 }
 
 export function removeFromPending(item) {
-  return {type: REMOVE_FROM_PENDING, item}
+  return actions.removeFromPending(item)
 }

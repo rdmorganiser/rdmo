@@ -1,5 +1,3 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
-import thunk from 'redux-thunk'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
@@ -8,49 +6,38 @@ import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
-import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
-import groupsReducer from 'rdmo/core/assets/js/reducers/groupsReducer'
-import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
-import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
-import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
-import staleReducer from 'rdmo/core/assets/js/reducers/staleReducer'
-import templateReducer from 'rdmo/core/assets/js/reducers/templateReducer'
-import userReducer from 'rdmo/core/assets/js/reducers/userReducer'
+import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
+import groupsReducer from 'rdmo/core/assets/js/reducers/groupsSlice'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingSlice'
+import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
+import sitesReducer from 'rdmo/core/assets/js/reducers/sitesSlice'
+import staleReducer from 'rdmo/core/assets/js/reducers/staleSlice'
+import templateReducer from 'rdmo/core/assets/js/reducers/templateSlice'
+import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
-import rolesReducer from '../../common/reducers/rolesReducer'
+import rolesReducer from '../../common/reducers/rolesSlice'
 import { combinePermissions } from '../../common/utils/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
-import projectReducer from '../reducers/projectReducer'
+import projectSliceReducer from '../reducers/projectSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
+
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
 
-  const middlewares = [thunk]
+  const middlewares = []
 
   if (process.env.NODE_ENV === 'development') {
     const { logger } = require('redux-logger')
     middlewares.push(logger)
   }
-
-  const rootReducer = combineReducers({
-    config: configReducer,
-    pending: pendingReducer,
-    project: projectReducer,
-    settings: settingsReducer,
-    templates: templateReducer,
-    user: userReducer,
-    roles: rolesReducer,
-    sites: sitesReducer,
-    groups: groupsReducer,
-    stale: staleReducer
-  })
 
   const initialState = {
     config: {
@@ -60,11 +47,22 @@ export default function configureStore() {
     }
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...middlewares)
-  )
+  const store = configureToolkitStore({
+    reducer: {
+      config: configReducer,
+      pending: pendingReducer,
+      project: projectSliceReducer,
+      settings: settingsReducer,
+      templates: templateReducer,
+      user: userReducer,
+      roles: rolesReducer,
+      sites: sitesReducer,
+      groups: groupsReducer,
+      stale: staleReducer
+    },
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
+  })
 
   configureStaleRefresh(store, {
     projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())

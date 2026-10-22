@@ -1,6 +1,7 @@
-import CoreApi from '../api/CoreApi'
+import { actions } from '../reducers/settingsSlice'
+import { serializeError } from '../utils/errors'
 
-import { FETCH_SETTINGS_ERROR, FETCH_SETTINGS_INIT, FETCH_SETTINGS_SUCCESS } from './actionTypes'
+import CoreApi from '../api/CoreApi'
 
 export function fetchSettings() {
   return function(dispatch) {
@@ -13,13 +14,13 @@ export function fetchSettings() {
 }
 
 export function fetchSettingsInit() {
-  return {type: FETCH_SETTINGS_INIT}
+  return actions.fetchSettingsInit()
 }
 
 export function fetchSettingsSuccess(settings) {
-  return {type: FETCH_SETTINGS_SUCCESS, settings}
+  return actions.fetchSettingsSuccess(settings)
 }
 
 export function fetchSettingsError(errors) {
-  return {type: FETCH_SETTINGS_ERROR, errors}
+  return actions.fetchSettingsError(serializeError(errors))
 }

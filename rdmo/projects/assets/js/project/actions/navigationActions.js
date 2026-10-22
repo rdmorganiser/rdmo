@@ -5,8 +5,7 @@ import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { locationKeys, updateLocation } from '../utils/location'
 
-import * as actionTypes from './actionTypes'
-import { fetchAnswers, fetchNavigation, fetchProgress, fetchView} from './projectActions'
+import { clearCurrentView, fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
 
 export function navigateDashboard(location) {
   return (dispatch, getState) => {
@@ -30,7 +29,7 @@ export function navigateDashboard(location) {
       dispatch(fetchProgress())
       dispatch(fetchNavigation())
     } else {
-      dispatch({ type: actionTypes.CLEAR_CURRENT_VIEW })
+      dispatch(clearCurrentView())
     }
   }
 }
