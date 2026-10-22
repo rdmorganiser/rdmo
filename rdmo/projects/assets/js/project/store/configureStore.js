@@ -83,7 +83,7 @@ export default function configureStore() {
   window.addEventListener('load', () => {
     getConfigFromLocalStorage('rdmo.project')
       .map(([path, value]) => (
-        [path, ['showClosedTasks', 'showClosedRecommendations'].includes(path) ? (
+        [path, ['showClosedTasks', 'showClosedRecommendations', 'showManagement'].includes(path) ? (
           isTruthy(value)
         ) : value]  // cast to bool
       ))
