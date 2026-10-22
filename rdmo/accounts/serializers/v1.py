@@ -141,7 +141,8 @@ class CurrentUserSerializer(UserSerializer):
             'can_change_value': obj.has_perm('projects.change_value'),
             'can_delete_value': obj.has_perm('projects.delete_value'),
             'can_view_site': obj.has_perm('sites.view_site'),
-            'can_view_group': obj.has_perm('auth.view_group')
+            'can_view_group': obj.has_perm('auth.view_group'),
+            'can_view_management': obj.has_perm('management.view_management'),
         }
 
 

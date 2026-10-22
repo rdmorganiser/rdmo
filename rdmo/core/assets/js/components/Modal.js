@@ -8,11 +8,13 @@ const Modal = ({
   onClose,
   closeLabel,
   onSubmit,
+  onShown,
   submitLabel,
   submitProps,
   children,
   modalProps = {},
-  size = ''
+  size = '',
+  extraButtons = null
 }) => {
   const modalRef = useRef(null)
 
@@ -32,6 +34,7 @@ const Modal = ({
       }
     }
 
+    modalElement.addEventListener('shown.bs.modal', onShown)
     modalElement.addEventListener('hide.bs.modal', handleHide)
 
     if (show) {
@@ -39,6 +42,7 @@ const Modal = ({
     }
 
     return () => {
+      modalElement.removeEventListener('shown.bs.modal', onShown)
       modalElement.removeEventListener('hide.bs.modal', handleHide)
       modal.hide()
     }
@@ -62,6 +66,7 @@ const Modal = ({
           }
 
           <div className="modal-footer">
+            {extraButtons}
             {
               onSubmit && (
                 <button type="button" className="btn btn-primary" onClick={onSubmit} {...submitProps}>
@@ -84,6 +89,7 @@ Modal.propTypes = {
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func,
+  onShown: PropTypes.func,
   submitLabel: PropTypes.node,
   closeLabel: PropTypes.string,
   submitProps: PropTypes.object,
@@ -92,7 +98,11 @@ Modal.propTypes = {
     PropTypes.node
   ]),
   modalProps: PropTypes.object,
-  size: PropTypes.string
+  size: PropTypes.string,
+  extraButtons: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
 }
 
 export default Modal

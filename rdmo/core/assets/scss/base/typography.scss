@@ -22,6 +22,10 @@ h3, .h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
 }
+h4, .h4 {
+    font-size: 1.0rem;
+    margin-bottom: 1rem;
+}
 
 .font-smaller {
     font-size: var(--rdmo-font-size-smaller) !important;
@@ -80,6 +84,10 @@ button.unstyled {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.cursor-help {
+    cursor: help;
 }
 
 .btn-primary {
