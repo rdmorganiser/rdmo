@@ -37,6 +37,7 @@ def django_db_setup(django_db_setup, django_db_blocker, fixtures):
     """Set up database and populate it with fixtures for every e2e test."""
     with django_db_blocker.unblock():
         call_command("loaddata", *fixtures, verbosity=0)
+        call_command("rebuild_mptt")
         set_group_permissions()
 
 
