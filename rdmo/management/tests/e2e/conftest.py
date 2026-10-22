@@ -3,7 +3,7 @@ import pytest
 from playwright.sync_api import Page, expect
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def e2e_username() -> str:
     """Fixture to specify which user should be authenticated.
     This can be overridden in individual test modules or fixtures.
