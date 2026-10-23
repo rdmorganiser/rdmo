@@ -10,6 +10,7 @@ from rdmo.core.utils import join_url
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 
+from .constants import TaskAreas, TaskTypes
 from .managers import TaskManager
 
 
@@ -65,6 +66,21 @@ class Task(TranslationMixin, models.Model):
         Group, blank=True,
         verbose_name=_('Group'),
         help_text=_('The groups for which this task is active.')
+    )
+    task_type = models.CharField(
+        blank=False,
+        choices=TaskTypes,
+        default=TaskTypes.TASK,
+        max_length=16,
+        verbose_name=_('Task type'),
+        help_text=_('Type of this task (determines how it is displayed in the dashboard).')
+    )
+    task_area = models.CharField(
+        blank=True,
+        choices=TaskAreas,
+        max_length=16,
+        verbose_name=_('Task area'),
+        help_text=_('Area in the dashboard this task belongs to (determines which button is shown).')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -177,6 +193,10 @@ class Task(TranslationMixin, models.Model):
     @property
     def is_locked(self):
         return self.locked
+
+    @property
+    def is_sendable(self):
+        return self.task_type in [TaskTypes.TASK, TaskTypes.RECOMMENDATION]
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

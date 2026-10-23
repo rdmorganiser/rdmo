@@ -1,0 +1,42 @@
+@import '../breakpoints';
+
+:root {
+    --rdmo-sidebar-width: 3.5rem;
+    --rdmo-sidebar-lg-width: 18rem;
+    --rdmo-sidebar-font-size: 0.9rem;
+}
+
+aside {
+    font-size: var(--rdmo-sidebar-font-size);
+
+    color: var(--rdmo-sidebar-color);
+    background-color: var(--rdmo-sidebar-bg);
+
+    position: fixed;
+    width: var(--rdmo-sidebar-width);
+    height: calc(100vh - 56px);
+
+    padding: 1rem 0.5rem;  // same as py-3 px-2
+
+    @media only screen and (max-width: $grid-breakpoint-lg) {
+        .nav-link {
+            --bs-nav-link-padding-x: 0.75rem;
+        }
+    }
+
+    @media only screen and (min-width: $grid-breakpoint-lg) {
+        width: var(--rdmo-sidebar-lg-width);
+        padding: 1.5rem;  // same as p-4
+        overflow-y: auto;
+    }
+}
+
+aside + main {
+    margin-left: var(--rdmo-sidebar-width);
+    padding: 1rem;  // same as py-3
+
+    @media only screen and (min-width: $grid-breakpoint-lg) {
+        margin-left: var(--rdmo-sidebar-lg-width);
+        padding: 1.5rem 3rem 1.5rem 1.5rem;  // same as py-4 ps-4 pe-5
+    }
+}

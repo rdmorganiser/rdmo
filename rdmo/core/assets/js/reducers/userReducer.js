@@ -13,6 +13,6 @@ export default function userReducer(state = initialState, action) {
     case FETCH_CURRENT_USER_ERROR:
       return {...state, errors: action.error.errors}
     default:
-       return state
+      return state
   }
 }

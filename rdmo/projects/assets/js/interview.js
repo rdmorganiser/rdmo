@@ -1,13 +1,12 @@
 import React from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
+import Pending from 'rdmo/core/assets/js/components/Pending'
+
 import configureStore from './interview/store/configureStore'
-
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-
-import Pending from '../../../core/assets/js/containers/Pending'
 
 import Main from './interview/containers/Main'
 import Sidebar from './interview/containers/Sidebar'

@@ -8,6 +8,7 @@ class TasksFactory {
       uri_prefix: config.settings.default_uri_prefix,
       sites: config.settings.multisite ? [siteId] : [],
       editors: config.settings.multisite ? [siteId] : [],
+      task_type: 'task'
     }
   }
 
