@@ -10,6 +10,35 @@
     }
 }
 
+.project-interview-overview {
+    .card-tile {
+        cursor: pointer;
+
+        // border: 1px solid transparent !important;
+        border-left: 3px solid var(--bs-border-color) !important;
+
+        &:hover {
+            border-color: var(--rdmo-link-color) !important;
+        }
+    }
+
+    li {
+        a:before,
+        span.text-muted:before {
+            float: left;
+            width: 2rem;
+            padding-right: 0.5rem;
+            text-align: right;
+            content: '\2022'; /* bullet */
+        }
+
+        &.continue a:before,
+        &.continue span.text-muted:before {
+            content: '\2192'; /* right-arrow */
+        }
+    }
+}
+
 .project-interview-navigation {
     li.active {
         padding-left: 0 !important;
