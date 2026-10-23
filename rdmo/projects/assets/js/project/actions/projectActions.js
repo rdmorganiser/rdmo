@@ -594,6 +594,23 @@ export function fetchProgress() {
   }
 }
 
+export function updateProgress() {
+  return (dispatch) => {
+    dispatch(addToPending('updateProgress'))
+    dispatch({type: actionTypes.UPDATE_PROGRESS_INIT})
+
+    return ProjectApi.updateProjectProgress(projectId)
+      .then((progress) => {
+        dispatch(removeFromPending('updateProgress'))
+        dispatch({type: actionTypes.UPDATE_PROGRESS_SUCCESS, progress})
+      })
+      .catch((error) => {
+        dispatch(removeFromPending('updateProgress'))
+        dispatch({type: actionTypes.UPDATE_PROGRESS_ERROR, error})
+      })
+  }
+}
+
 // download
 
 export function downloadAnswers(snapshotId, format, params = {}) {

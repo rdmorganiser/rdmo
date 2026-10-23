@@ -66,6 +66,10 @@ export default class ProjectApi extends BaseApi {
     return this.postFormData(`/api/v1/projects/projects/${projectId}/visibility/`, data)
   }
 
+  static updateProjectProgress(projectId) {
+    return this.post(`/api/v1/projects/projects/${projectId}/progress/`)
+  }
+
   static deleteProject(projectId) {
     return this.delete(`/api/v1/projects/projects/${projectId}/`)
   }
@@ -196,5 +200,14 @@ export default class ProjectApi extends BaseApi {
 
   static sendProjectIssueIntegration(projectId, issueId, data) {
     return this.post(`/api/v1/projects/projects/${projectId}/issues/${issueId}/send-integration/`, data)
+  }
+
+  static fetchOptions(projectId, optionsetId, searchText) {
+    const params = { optionset: optionsetId, search: searchText || '' }
+    return this.get(`/api/v1/projects/projects/${projectId}/options/?${encodeParams(params)}`)
+  }
+
+  static resolveConditions(projectId, payload) {
+    return this.post(`/api/v1/projects/projects/${projectId}/resolve/`, payload)
   }
 }

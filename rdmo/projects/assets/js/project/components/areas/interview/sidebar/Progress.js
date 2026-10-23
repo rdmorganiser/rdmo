@@ -18,7 +18,7 @@ const Progress = () => {
       <h3>{gettext('Progress')}</h3>
 
       <div className="project-interview-progress mb-3">
-        {low && <div className="interview-progress-count">{label}</div>}
+        {low && <div className="project-interview-progress-count">{label}</div>}
 
         <div className="progress">
           <div className="progress-bar" role="progressbar" style={{width: `${width}%`}}>

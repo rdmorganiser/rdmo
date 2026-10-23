@@ -11,11 +11,13 @@ const InterviewOverview = () => {
 
   return navigation && (
     <div className="project-interview-overview">
-      <h2>{gettext('Interview')}</h2>
+      <h1 className="mb-5">
+        {gettext('Interview')}
+      </h1>
 
       {
         navigation.map((section) => (
-          <div key={section.id} className="card card-tile mb-4 rounded-3">
+          <div key={section.id} className="card card-tile mb-4">
             <div className="card-body d-flex flex-column">
               <div className="row">
                 <div className="col-md-8">
@@ -28,12 +30,18 @@ const InterviewOverview = () => {
                         {
                           section.pages.map((page) => (
                             <li key={page.id}>
-                              <LocationLink
-                                title={page.title}
-                                location={{area: 'interview', pageId: page.id}}
-                              >
-                                <Html html={page.title} />
-                              </LocationLink>
+                              {
+                                page.show ? (
+                                  <LocationLink
+                                    title={page.title}
+                                    location={{area: 'interview', pageId: page.id}}
+                                  >
+                                    <Html html={page.title} />
+                                  </LocationLink>
+                                ) : (
+                                  <Html className="text-muted" html={page.title} />
+                                )
+                              }
                             </li>
                           ))
                         }

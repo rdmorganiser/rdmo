@@ -24,6 +24,8 @@ import rolesReducer from '../../common/reducers/rolesReducer'
 import { combinePermissions } from '../../common/utils/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
+import contactReducer from '../reducers/contactReducer'
+import interviewReducer from '../reducers/interviewReducer'
 import projectReducer from '../reducers/projectReducer'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
@@ -49,7 +51,9 @@ export default function configureStore() {
     roles: rolesReducer,
     sites: sitesReducer,
     groups: groupsReducer,
-    stale: staleReducer
+    stale: staleReducer,
+    interview: interviewReducer,
+    contact: contactReducer,
   })
 
   const initialState = {
@@ -79,7 +83,7 @@ export default function configureStore() {
   window.addEventListener('load', () => {
     getConfigFromLocalStorage('rdmo.project')
       .map(([path, value]) => (
-        [path, ['showClosedTasks', 'showClosedRecommendations'].includes(path) ? (
+        [path, ['showClosedTasks', 'showClosedRecommendations', 'showManagement'].includes(path) ? (
           isTruthy(value)
         ) : value]  // cast to bool
       ))

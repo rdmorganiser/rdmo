@@ -21,6 +21,7 @@ export const parseLocation = () => {
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)\/(?<detail>[a-z-]+)[/]*$/,
     /\/projects\/\d+\/(?<area>(snapshots))\/(?<snapshotId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>(interview))\/(?<pageId>\d+)[/]*$/,
+    /\/projects\/\d+\/(?<area>(interview))\/(?<pageId>done)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/views\/(?<viewId>\d+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)\/(?<detail>[a-z-]+)[/]*$/,
     /\/projects\/\d+\/(?<area>[a-z-]+)[/]*$/
