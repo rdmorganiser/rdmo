@@ -1,9 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import { Html, Tooltip } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
-
-import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
 
 import { usePermissions } from '../../../../../hooks'
 
@@ -17,7 +16,7 @@ const PageManagement = () => {
     <div className="project-interview-management mb-2">
       <div className="border p-2 rounded-2">
         <div className="float-end">
-          <Tooltip title={templates.project_interview_management_help} placement="bottom">
+          <Tooltip title={<Html html={templates.project_interview_management_help} />} placement="bottom">
             <i className="bi bi-info-circle text-muted cursor-help" tabIndex={0} />
           </Tooltip>
         </div>
