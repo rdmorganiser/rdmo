@@ -583,7 +583,7 @@ class ProjectViewSet(ModelViewSet):
         ANSWERTREE_ALL_VERBOSE = ("catalog", "section", "page", "set", "questionset", "question", "value")
 
         serializer = ProjectAnswersSerializer({
-            'html': render_to_string('projects/project_answertree.html', {
+            'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
                 'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
@@ -623,7 +623,7 @@ class ProjectViewSet(ModelViewSet):
 
         ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
 
-        return render_to_format(self.request, export_format, project.title, 'projects/project_answertree_export.html', {
+        return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
                 'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),

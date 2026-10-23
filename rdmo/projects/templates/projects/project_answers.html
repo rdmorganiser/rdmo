@@ -3,7 +3,7 @@
 
 
 {% if not this %}
-    {% include 'projects/project_answertree.html' with this=answertree %}
+    {% include 'projects/project_answers.html' with this=answertree %}
 {% endif %}
 
 {% if this.model %}
@@ -48,19 +48,19 @@
 {% endif %}
 
 {% for sub in this.elements %}
-    {% include 'projects/project_answertree.html' with this=sub %}
+    {% include 'projects/project_answers.html' with this=sub %}
 {% endfor %}
 
 {% if this.sets %}
     {% if include_answers %}
         {% for sub in this.sets %}
             {% if sub.set_name %}
-                {% include 'projects/project_answertree.html' with this=sub prefix=sub.set_name %}
+                {% include 'projects/project_answers.html' with this=sub prefix=sub.set_name %}
             {% else %}
-                {% include 'projects/project_answertree.html' with this=sub %}
+                {% include 'projects/project_answers.html' with this=sub %}
             {% endif %}
         {% endfor %}
     {% else %}
-        {% include 'projects/project_answertree.html' with this=this.sets|first %}
+        {% include 'projects/project_answers.html' with this=this.sets|first %}
     {% endif %}
 {% endif %}
