@@ -1,17 +1,66 @@
 {% load i18n %}
+{% load core_tags %}
 
-{% if hide_answers %}
-    <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
-{% else %}
-    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+
+{% if not this %}
+    {% include 'projects/project_answers.html' with this=answertree %}
 {% endif %}
 
-<p>
-    {% if not hide_answers %}
-    {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
-    {% else %}
-    {% trans 'In the following, you can find all questions from the current questionnaire for this project.' %}
-    {% endif %}
-</p>
+{% if this.model %}
+    {% if this.show %}
+        {% if this.model == "questions.catalog" %}
+            <h1>{{ this.title | markdown }}</h1>
+            <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+        {% elif this.model == "questions.section" %}
+            <h2>{{ this.title | markdown }}</h2>
+        {% elif this.model == "questions.page" %}
+            <h3>{{ this.title | markdown }}</h3>
+        {% elif this.model == "questions.questionset" %}
+            <h4>{{ this.title | markdown }}</h4>
+        {% elif this.model == "questions.question" %}
+            {% if prefix is None %}
+                <h5>{{ this.text | markdown }}</h5>
+            {% else %}
+                <h5>[{{prefix}}] {{ this.text | markdown }}</h5>
+            {% endif %}
+        {% endif %}
 
-{% include 'projects/project_answers_tree.html' %}
+        {% if include_help and "help" in this and this.help %}
+            <div class="help-text text-muted mb-3">
+            {% autoescape off %}
+                {{this.help}}
+            {% endautoescape %}
+            </div>
+        {% endif %}
+
+        {% if include_answers and this.model == "questions.question" %}
+            {% if this.values|length == 1 %}
+                {% for value in this.values %} {{ value.value | markdown }} {% endfor %}
+            {% else %}
+            <ul>
+                {% for value in this.values %}
+                <li>{{ value.value | markdown }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+{% for sub in this.elements %}
+    {% include 'projects/project_answers.html' with this=sub %}
+{% endfor %}
+
+{% if this.sets %}
+    {% if include_answers %}
+        {% for sub in this.sets %}
+            {% if sub.set_name %}
+                {% include 'projects/project_answers.html' with this=sub prefix=sub.set_name %}
+            {% else %}
+                {% include 'projects/project_answers.html' with this=sub %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% include 'projects/project_answers.html' with this=this.sets|first %}
+    {% endif %}
+{% endif %}

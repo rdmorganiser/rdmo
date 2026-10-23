@@ -137,6 +137,13 @@ class AnswerTree:
             'set_index': set_index
         }
 
+        if 'set' in self.verbose and element.is_collection:
+            key= (element.attribute_id, set_prefix, set_index)
+            if key in self.attribute_set_values_map:
+                val = self.attribute_set_values_map[key]
+                if len(val) == 1:
+                    set_node.update({'set_name': val[0].text})
+
         # compute the next level of nodes
         set_node['elements'] = [
             self.compute_element_node(child_element, element_set)

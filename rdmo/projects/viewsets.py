@@ -38,7 +38,6 @@ from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 from rdmo.questions.prefetch import get_page_prefetch_lookups
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
-from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
 from .filters import (
@@ -570,7 +569,7 @@ class ProjectViewSet(ModelViewSet):
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
     def answers(self, request, pk, snapshot_id=None):
-        project = self.get_object()
+        project: Project = self.get_object()
         project.catalog.prefetch_elements()
 
         try:
@@ -579,16 +578,17 @@ class ProjectViewSet(ModelViewSet):
             raise Http404 from e
 
         include_help = is_truthy(request.GET.get('include_help'))
-        hide_answers = is_truthy(request.GET.get('hide_answers'))
+        include_answers = is_truthy(request.GET.get('include_answers'))
+
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "section", "page", "set", "questionset", "question", "value")
 
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'project_wrapper': ProjectWrapper(project, snapshot),
-                'export_formats': settings.EXPORT_FORMATS,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
                 'include_help': include_help,
-                'hide_answers': hide_answers,
+                'include_answers': include_answers,
             }),
             'attachments': project.values.filter(snapshot=snapshot).filter(value_type=VALUE_TYPE_FILE).order_by('file')
         })
@@ -620,15 +620,15 @@ class ProjectViewSet(ModelViewSet):
             raise Http404 from e
 
         include_help = is_truthy(request.GET.get('include_help'))
-        hide_answers = is_truthy(request.GET.get('hide_answers'))
+
+        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
 
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
-            'project': project,
-            'snapshot': snapshot,
-            'project_wrapper': ProjectWrapper(project, snapshot),
-            'include_help': include_help,
-            'hide_answers': hide_answers,
-        })
+                'project': project,
+                'snapshot': snapshot,
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'include_help': include_help,
+            })
 
     @action(
         detail=True,
