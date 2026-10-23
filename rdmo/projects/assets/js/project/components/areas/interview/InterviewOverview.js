@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import Html from 'rdmo/core/assets/js/components/Html'
-import Tooltip from 'rdmo/core/assets/js/components/Tooltip'
+import { Html, LinkButton, Tooltip } from 'rdmo/core/assets/js/components'
 
 import { navigateDashboard } from '../../../actions/navigationActions'
 
@@ -20,9 +19,24 @@ const InterviewOverview = () => {
 
   return navigation && (
     <div className="project-interview-overview">
-      <h1 className="mb-5">
-        {gettext('Interview')}
-      </h1>
+      <div className="d-lg-flex justify-content-between align-items-center gap-5 mb-5">
+        <h1 className="mb-lg-0 flex-grow-1">{gettext('Interview')}</h1>
+
+        <LinkButton
+          title={gettext('Import from parent project')}
+          className="d-block"
+          onClick={() => {}}
+        >
+          <i className="bi bi-upload me-1"></i> {gettext('Import from parent project')}
+        </LinkButton>
+        <LinkButton
+          title={gettext('Import from uploaded file')}
+          className="d-block"
+          onClick={() => {}}
+        >
+          <i className="bi bi-upload me-1"></i> {gettext('Import from uploaded file')}
+        </LinkButton>
+      </div>
 
       {
         navigation.map((section, sectionIndex) => (
