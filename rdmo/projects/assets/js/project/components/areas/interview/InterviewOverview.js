@@ -55,7 +55,10 @@ const InterviewOverview = () => {
               }
             </div>
 
-            <div className="card card-tile flex-grow-1" onClick={() => handleCardClick(section)}>
+            <div
+              className="card card-tile card-tile-border cursor-pointer flex-grow-1"
+              onClick={() => handleCardClick(section)}
+            >
               <div className="card-body d-flex flex-column">
                 <div className="row">
                   <div className="col-md-8 ps-5">

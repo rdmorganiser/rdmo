@@ -12,12 +12,7 @@
 
 .project-interview-overview {
     .card-tile {
-        cursor: pointer;
-
-        // border: 1px solid transparent !important;
-        border-left: 3px solid var(--bs-border-color) !important;
-
-        &:hover {
+        &.card-tile-border:hover {
             border-color: var(--rdmo-link-color) !important;
         }
     }
