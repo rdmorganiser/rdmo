@@ -94,7 +94,7 @@ const ProjectForm = ({
           {
             catalog.help && (
               <Tooltip
-                title={catalog.help}
+                title={<Html html={catalog.help} />}
                 placement="right"
               >
                 <i
