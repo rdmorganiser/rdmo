@@ -29,7 +29,13 @@ export function navigateDashboard(location, back = null) {
         updateLocationAndConfig(location)
       } else {
         return dispatch(fetchPage(location.pageId, back)).then((page) => {
-          updateLocationAndConfig({...location, pageId: page?.id ?? location.pageId})
+          if (page) {
+            updateLocationAndConfig({...location, pageId: page.id})
+          } else if (getState().interview.done) {
+            dispatch(navigateDashboard({area: 'interview'}))
+          } else {
+            updateLocationAndConfig(location)
+          }
         })
       }
     }

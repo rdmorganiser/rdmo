@@ -44,7 +44,13 @@ export function fetchPage(pageId, back) {
         // return the page, so that navigateDashboard can update the location accordingly
         return page
       })
-      .catch((error) => dispatch({type: actionTypes.FETCH_PAGE_ERROR, error}))
+      .catch((error) => {
+        if (error?.errors?.done) {
+          dispatch(showDone())
+        } else {
+          dispatch({type: actionTypes.FETCH_PAGE_ERROR, error})
+        }
+      })
       .finally(() => dispatch(removeFromPending(pendingId)))
 
   }
@@ -584,4 +590,12 @@ export function copySet(currentSet, copySetValue, attrs) {
 
 export function resortValues() {
   return { type: actionTypes.RESORT_VALUES }
+}
+
+export function showDone() {
+  return {type: actionTypes.SHOW_DONE }
+}
+
+export function hideDone() {
+  return {type: actionTypes.HIDE_DONE }
 }

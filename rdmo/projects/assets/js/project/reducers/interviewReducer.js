@@ -4,12 +4,13 @@ import * as actionTypes from '../actions/actionTypes'
 import { sortValues } from '../utils/value'
 
 const initialState = {
+  done: false,
   page: null,
   navigation: null,
   values: null,
   attributes: [],
   sets: [],
-  errors: []
+  errors: [],
 }
 
 export default function interviewReducer(state = initialState, action) {
@@ -81,6 +82,7 @@ export default function interviewReducer(state = initialState, action) {
     case actionTypes.COPY_SET_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case actionTypes.FETCH_PAGE_INIT:
+      return { ...state, errors: [], done: false }
     case actionTypes.FETCH_CONTINUE_INIT:
     case actionTypes.FETCH_OPTIONS_INIT:
     case actionTypes.FETCH_VALUES_INIT:
@@ -127,6 +129,10 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case actionTypes.RESORT_VALUES:
       return { ...state, values: sortValues(state.values) }
+    case actionTypes.SHOW_DONE:
+      return { ...state, done: true }
+    case actionTypes.HIDE_DONE:
+      return { ...state, done: false }
     default:
       return state
   }

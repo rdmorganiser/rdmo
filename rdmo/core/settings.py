@@ -295,7 +295,6 @@ TEMPLATES_API = [
     'projects/project_issue_config_info.html',
     'projects/project_interview_management_help.html',
     'projects/project_interview_overview_count_tooltip.html',
-    'projects/project_interview_done.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
