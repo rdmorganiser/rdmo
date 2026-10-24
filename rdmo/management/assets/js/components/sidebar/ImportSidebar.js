@@ -13,7 +13,7 @@ import { useImportElements } from '../../hooks/useImportElements'
 const ImportSidebar = () => {
   const dispatch = useDispatch()
 
-  const { settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
   const { elements, success } = useSelector((state) => state.imports)
 
   const {

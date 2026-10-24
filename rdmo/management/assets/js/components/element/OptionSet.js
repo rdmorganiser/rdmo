@@ -17,6 +17,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, optionset)
 
@@ -56,7 +57,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
             locked={optionset.locked} onClick={toggleLocked} disabled={optionset.read_only} />
           <ExportLink
             title={gettext('Export option set')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
         </div>
       </div>
       {

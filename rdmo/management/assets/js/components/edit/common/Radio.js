@@ -10,7 +10,7 @@ import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
 const Radio = ({ element, field, options, onChange }) => {
-  const { meta } = useSelector((state) => state.config)
+  const meta = useSelector((state) => state.constants.meta)
 
   const label = getLabel(element, field, meta)
   const help = getHelp(element, field, meta)

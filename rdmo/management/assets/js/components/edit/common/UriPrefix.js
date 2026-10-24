@@ -12,7 +12,8 @@ import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
 const UriPrefix = ({ element, field, onChange }) => {
-  const { meta, settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const meta = useSelector((state) => state.constants.meta)
 
   const id = getId(element, field)
   const label = getLabel(element, field, meta)

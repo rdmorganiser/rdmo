@@ -20,6 +20,7 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, question)
 
@@ -79,7 +80,7 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
             locked={question.locked} onClick={toggleLocked} disabled={question.read_only} />
           <ExportLink
             title={gettext('Export question')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
           <Drag element={question} show={display == 'nested'} />
         </div>
       </div>

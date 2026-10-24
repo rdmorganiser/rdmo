@@ -17,6 +17,8 @@ const Tasks = () => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const sites = Object.values(useSelector((state) => state.sites))
   const tasks = useSelector((state) => state.elements.tasks)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.tasks.search', value))
@@ -47,7 +49,7 @@ const Tasks = () => {
       <div className="card-body">
         <div className="mb-lg-2">
           <div className="row">
-            <div className={config.settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
+            <div className={settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
               <FilterString
                 value={get(config, 'filter.tasks.search', '')} onChange={updateFilterString}
                 label={gettext('Filter tasks')} />
@@ -58,17 +60,17 @@ const Tasks = () => {
                 options={getUriPrefixes(tasks)} />
             </div>
             {
-              config.settings.multisite && (
+              settings.multisite && (
                 <>
                   <div className="col-sm-2">
                     <FilterSite
                       value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
-                      options={config.sites} />
+                      options={sites} />
                   </div>
                   <div className="col-sm-2">
                     <FilterSite
                       value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                      options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                      options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                   </div>
                 </>
               )

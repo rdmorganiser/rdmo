@@ -27,6 +27,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
   const showElements = isTruthy(get(config, `display.elements.sections.${section.id}`, true))
@@ -73,7 +74,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
           />
           <ExportLink
             title={gettext('Export section')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
           <Drag element={section} show={display == 'nested'} />
         </div>
       </div>
