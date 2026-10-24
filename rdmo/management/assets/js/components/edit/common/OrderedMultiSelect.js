@@ -169,7 +169,7 @@ const OrderedMultiSelect = ({
   addText, createText, altCreateText, onChange, onCreate, onAltCreate, onEdit
 }) => {
 
-  const { meta } = useSelector((state) => state.config)
+  const meta = useSelector((state) => state.constants.meta)
 
   const id = getId(element, field)
   const label = getLabel(element, field, meta)

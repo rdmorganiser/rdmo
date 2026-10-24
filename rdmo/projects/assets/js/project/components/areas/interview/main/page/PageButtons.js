@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { showDone } from '../../../../../actions/interviewActions'
 import { navigateDashboard } from '../../../../../actions/navigationActions'
 
 const PageButtons = () => {
@@ -34,7 +35,7 @@ const PageButtons = () => {
           ) : (
             <button
               type="button"
-              onClick={() => dispatch(navigateDashboard({ area: 'interview', pageId: 'done'}))}
+              onClick={() => dispatch(showDone())}
               className="btn btn-primary ms-auto"
             >
               {gettext('Complete questionnaire')}

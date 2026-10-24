@@ -4,19 +4,21 @@ import * as actionTypes from '../actions/actionTypes'
 import { sortValues } from '../utils/value'
 
 const initialState = {
-  done: null,
+  done: false,
   page: null,
   navigation: null,
   values: null,
   attributes: [],
   sets: [],
-  errors: []
+  errors: [],
 }
 
 export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
     case actionTypes.FETCH_PAGE_SUCCESS:
-      return { ...state, page: action.page, done: action.done }
+      return { ...state, page: action.page }
+    case actionTypes.FETCH_CONTINUE_SUCCESS:
+      return { ...state, continuation: action.page }
     case actionTypes.FETCH_VALUES_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case actionTypes.FETCH_OPTIONS_SUCCESS:
@@ -80,6 +82,8 @@ export default function interviewReducer(state = initialState, action) {
     case actionTypes.COPY_SET_SUCCESS:
       return { ...state, values: action.values, sets: action.sets }
     case actionTypes.FETCH_PAGE_INIT:
+      return { ...state, errors: [], done: false }
+    case actionTypes.FETCH_CONTINUE_INIT:
     case actionTypes.FETCH_OPTIONS_INIT:
     case actionTypes.FETCH_VALUES_INIT:
     case actionTypes.RESOLVE_CONDITIONS_INIT:
@@ -102,6 +106,7 @@ export default function interviewReducer(state = initialState, action) {
     case actionTypes.COPY_SET_INIT:
       return { ...state, errors: [] }
     case actionTypes.FETCH_PAGE_ERROR:
+    case actionTypes.FETCH_CONTINUE_ERROR:
     case actionTypes.FETCH_OPTIONS_ERROR:
     case actionTypes.FETCH_VALUES_ERROR:
     case actionTypes.RESOLVE_CONDITIONS_ERROR:
@@ -124,6 +129,10 @@ export default function interviewReducer(state = initialState, action) {
       return { ...state, errors: [...state.errors, { actionType: action.type, ...action.error }] }
     case actionTypes.RESORT_VALUES:
       return { ...state, values: sortValues(state.values) }
+    case actionTypes.SHOW_DONE:
+      return { ...state, done: true }
+    case actionTypes.HIDE_DONE:
+      return { ...state, done: false }
     default:
       return state
   }

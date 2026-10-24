@@ -47,6 +47,17 @@ h4, .h4 {
   transform: scaleX(-1);
 }
 
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  line-height: 1;
+  box-shadow: var(--rdmo-box-shadow);
+}
+
 a,
 span.link,
 button.link {
@@ -82,14 +93,6 @@ button.unstyled {
     text-overflow: ellipsis;
 }
 
-.cursor-pointer {
-    cursor: pointer;
-}
-
-.cursor-help {
-    cursor: help;
-}
-
 .btn-primary {
     --bs-btn-bg: var(--rdmo-link-color);
     --bs-btn-border-color: var(--rdmo-link-color);
@@ -106,6 +109,7 @@ button.unstyled {
     --bs-btn-active-border-color: var(--rdmo-link-hover-color);
 }
 
+.bg-primary,
 .text-bg-primary {
     background-color: var(--rdmo-link-color) !important;
 }

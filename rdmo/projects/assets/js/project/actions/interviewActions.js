@@ -32,33 +32,41 @@ export function fetchPage(pageId, back) {
     dispatch(fetchNavigation())
     dispatch({type: actionTypes.FETCH_PAGE_INIT})
 
-    if (pageId === 'done') {
-      dispatch(fetchNavigation())
-      dispatch(removeFromPending(pendingId))
-      dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, done: true })
-    } else {
-      const promise = isNil(pageId) ? PageApi.fetchContinue(projectId) : PageApi.fetchPage(projectId, pageId, back)
-      return promise
-        .then((page) => {
-          initPage(page)
+    return PageApi.fetchPage(projectId, pageId, back)
+      .then((page) => {
+        initPage(page)
 
-          dispatch(fetchValues(page))
-          dispatch(fetchOptionsets(page))
+        dispatch(fetchValues(page))
+        dispatch(fetchOptionsets(page))
 
-          dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, page })
+        dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, page })
 
-          // return the page, so that navigateDashboard can update the location accordingly
-          return page
-        })
-        .catch((error) => {
-          if (error.errors.done) {
-            dispatch(fetchPage('done'))
-          } else {
-            dispatch({type: actionTypes.FETCH_PAGE_ERROR, error})
-          }
-        })
-        .finally(() => dispatch(removeFromPending(pendingId)))
-    }
+        // return the page, so that navigateDashboard can update the location accordingly
+        return page
+      })
+      .catch((error) => {
+        if (error?.errors?.done) {
+          dispatch(showDone())
+        } else {
+          dispatch({type: actionTypes.FETCH_PAGE_ERROR, error})
+        }
+      })
+      .finally(() => dispatch(removeFromPending(pendingId)))
+
+  }
+}
+
+export function fetchContinue() {
+  const pendingId = 'fetchContinue'
+
+  return (dispatch) => {
+    dispatch(addToPending(pendingId))
+    dispatch({type: actionTypes.FETCH_CONTINUE_INIT})
+
+    return PageApi.fetchContinue(projectId)
+      .then((page) => dispatch({type: actionTypes.FETCH_CONTINUE_SUCCESS, page}))
+      .catch((error) => dispatch({type: actionTypes.FETCH_CONTINUE_ERROR, error}))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -75,7 +83,7 @@ export function fetchOptions(page, optionset) {
   return (dispatch) => {
     dispatch(addToPending(pendingId))
     dispatch({type: actionTypes.FETCH_OPTIONS_INIT})
-    console.log(1)
+
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
         updateOptions(page, optionset, options)
@@ -582,4 +590,12 @@ export function copySet(currentSet, copySetValue, attrs) {
 
 export function resortValues() {
   return { type: actionTypes.RESORT_VALUES }
+}
+
+export function showDone() {
+  return {type: actionTypes.SHOW_DONE }
+}
+
+export function hideDone() {
+  return {type: actionTypes.HIDE_DONE }
 }

@@ -14,6 +14,7 @@ const Condition = ({ condition, filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, condition)
 
@@ -43,7 +44,7 @@ const Condition = ({ condition, filter = false, filterEditors = false }) => {
               locked={condition.locked} onClick={toggleLocked} disabled={condition.read_only} />
             <ExportLink
               title={gettext('Export condition')} exportUrl={exportUrl}
-              exportFormats={config.settings.export_formats} full={true} />
+              exportFormats={settings.export_formats} full={true} />
           </div>
         </div>
         <ElementErrors element={condition} />

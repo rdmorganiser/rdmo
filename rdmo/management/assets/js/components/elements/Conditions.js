@@ -15,6 +15,8 @@ const Conditions = () => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const sites = Object.values(useSelector((state) => state.sites))
   const conditions = useSelector((state) => state.elements.conditions)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.conditions.search', value))
@@ -35,7 +37,7 @@ const Conditions = () => {
 
       <div className="card-body">
         <div className="row">
-          <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
+          <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString
               value={get(config, 'filter.conditions.search', '')} onChange={updateFilterString}
               label={gettext('Filter conditions')} />
@@ -46,11 +48,11 @@ const Conditions = () => {
               options={getUriPrefixes(conditions)} />
           </div>
           {
-            config.settings.multisite && (
+            settings.multisite && (
               <div className="col-sm-2">
                 <FilterSite
                   value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                  options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                  options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             )
           }

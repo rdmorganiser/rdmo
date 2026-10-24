@@ -12,7 +12,7 @@ import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
 const Checkbox = ({ element, field, onChange }) => {
-  const { meta } = useSelector((state) => state.config)
+  const meta = useSelector((state) => state.constants.meta)
 
   const id = getId(element, field)
   const label = getLabel(element, field, meta)

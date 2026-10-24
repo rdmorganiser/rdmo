@@ -22,7 +22,10 @@ import UriPrefix from './common/UriPrefix'
 const EditTask = ({ task }) => {
   const dispatch = useDispatch()
 
-  const { sites, groups, settings, taskTypes, taskAreas } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const groups = Object.values(useSelector((state) => state.groups))
+  const sites = Object.values(useSelector((state) => state.sites))
+  const { taskTypes, taskAreas } = useSelector((state) => state.constants)
   const { elementAction, attributes, catalogs, conditions } = useSelector((state) => state.elements)
 
   const updateTask = (key, value) => dispatch(updateElement(task, {[key]: value}))

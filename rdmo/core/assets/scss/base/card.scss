@@ -7,5 +7,17 @@
 
         box-shadow: var(--rdmo-box-shadow);
         border: none;
+
+        &.card-tile-primary {
+            border-left: 3px solid var(--rdmo-link-color) !important;
+        }
+
+        &.card-tile-danger {
+            border-left: 3px solid var(--bs-danger) !important;
+        }
+
+        &.card-tile-border {
+            border-left: 3px solid var(--bs-border-color) !important;
+        }
     }
 }

@@ -28,6 +28,7 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, task)
 
@@ -68,15 +69,15 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
               available={task.available} locked={task.locked} onClick={toggleAvailable}
               disabled={task.read_only} />
             <ToggleCurrentSiteLink
-              hasCurrentSite={config.settings.multisite ? task.sites.includes(siteId) : true}
+              hasCurrentSite={settings.multisite ? task.sites.includes(siteId) : true}
               onClick={toggleCurrentSite}
-              show={config.settings.multisite} />
+              show={settings.multisite} />
             <LockedLink
               title={task.locked ? gettext('Unlock task') : gettext('Lock task')}
               locked={task.locked} onClick={toggleLocked} disabled={task.read_only} />
             <ExportLink
               title={gettext('Export task')} exportUrl={exportUrl}
-              exportFormats={config.settings.export_formats} full={true} />
+              exportFormats={settings.export_formats} full={true} />
           </div>
         </div>
         {

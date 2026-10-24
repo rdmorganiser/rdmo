@@ -258,7 +258,8 @@ SETTINGS_API = [
     'PROJECT_CONTACT',
     'PROJECT_SEND_ISSUE',
     'EMAIL_RECIPIENTS_CHOICES',
-    'EMAIL_RECIPIENTS_INPUT'
+    'EMAIL_RECIPIENTS_INPUT',
+    'TEMPLATES_EXECUTE_SCRIPT_TAGS',
 ]
 
 TEMPLATES_API = [
@@ -292,7 +293,8 @@ TEMPLATES_API = [
     'projects/project_view_no_catalog_info.html',
     'projects/project_issue_send_info.html',
     'projects/project_issue_config_info.html',
-    'projects/project_interview_management_help.html'
+    'projects/project_interview_management_help.html',
+    'projects/project_interview_overview_count_tooltip.html',
 ]
 
 TEMPLATES_EXECUTE_SCRIPT_TAGS = False
