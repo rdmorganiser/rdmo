@@ -109,7 +109,7 @@ const InterviewOverview = () => {
                       )
                     }
                   </div>
-                  <Tooltip title={templates.project_interview_overview_count_tooltip} placement="top">
+                  <Tooltip title={<Html html={templates.project_interview_overview_count_tooltip} />} placement="top">
                     <div className="d-none d-md-block col-md-4">
                       <div className="row h-100">
                         <div className="col-md-6 border-start">
