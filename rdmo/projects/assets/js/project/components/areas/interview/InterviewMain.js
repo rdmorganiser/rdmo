@@ -1,11 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import Contact from './main/Contact'
-import Errors from './main/Errors'
 import Page from './main/page/Page'
 import BackLink from './sidebar/BackLink'
 import ManagementButton from './sidebar/ManagementButton'
@@ -13,13 +11,7 @@ import Navigation from './sidebar/Navigation'
 import Progress from './sidebar/Progress'
 
 const InterviewMain = () => {
-  const { page, errors } = useSelector((state) => state.interview)
-
-  if (!isEmpty(errors)) {
-    return (
-      <Errors errors={errors} />
-    )
-  }
+  const { page } = useSelector((state) => state.interview)
 
   return page && (
     <div className="project-interview-main">
