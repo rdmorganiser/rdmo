@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
+import InterviewDone from './interview/InterviewDone'
 import InterviewMain from './interview/InterviewMain'
 import InterviewOverview from './interview/InterviewOverview'
 
@@ -17,6 +18,7 @@ const Interview = () => {
           <InterviewMain />
         )
       }
+      <InterviewDone />
     </div>
   )
 }
