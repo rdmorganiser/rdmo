@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import uniqueId from 'lodash/uniqueId'
 
 const UriPrefix = ({ element, onChange }) => {
-  const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const id = uniqueId('uriPrefix-')
   const value = element.uri_prefix
@@ -23,7 +23,7 @@ const UriPrefix = ({ element, onChange }) => {
         <button
           type="button" className="btn btn-sm btn-light border"
           title={gettext('Insert default URI Prefix')} aria-label={gettext('Insert default URI Prefix')}
-          onClick={() => onChange('uri_prefix', config.settings.default_uri_prefix)}>
+          onClick={() => onChange('uri_prefix', settings.default_uri_prefix)}>
           <span className="bi bi-magic"></span>
         </button>
       </div>

@@ -595,7 +595,7 @@ export function createElement(elementType, parent = {}) {
     switch (elementType) {
       case 'catalogs':
         action = () => Promise.all([
-          QuestionsFactory.createCatalog(getState().config),
+          QuestionsFactory.createCatalog(getState().settings),
           QuestionsApi.fetchSections('index')
         ]).then(([element, sections]) => ({
           element, sections
@@ -604,7 +604,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'sections':
         action = () => Promise.all([
-          QuestionsFactory.createSection(getState().config, parent),
+          QuestionsFactory.createSection(getState().settings, parent),
           QuestionsApi.fetchPages('index'),
         ]).then(([element, pages]) => ({
           element, parent, pages
@@ -613,7 +613,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'pages':
         action = () => Promise.all([
-          QuestionsFactory.createPage(getState().config, parent),
+          QuestionsFactory.createPage(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
@@ -626,7 +626,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'questionsets':
         action = () => Promise.all([
-          QuestionsFactory.createQuestionSet(getState().config, parent),
+          QuestionsFactory.createQuestionSet(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
@@ -639,7 +639,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'questions':
         action = () => Promise.all([
-          QuestionsFactory.createQuestion(getState().config, parent),
+          QuestionsFactory.createQuestion(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptionSets('index'),
           OptionsApi.fetchOptions('index'),
@@ -654,7 +654,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'attributes':
         action = () => Promise.all([
-          DomainFactory.createAttribute(getState().config, parent),
+          DomainFactory.createAttribute(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
         ]).then(([element, attributes]) => ({
           element, parent, attributes
@@ -663,7 +663,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'optionsets':
         action = () => Promise.all([
-          OptionsFactory.createOptionSet(getState().config, parent),
+          OptionsFactory.createOptionSet(getState().settings, parent),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, options]) => ({
           element, parent, options
@@ -672,7 +672,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'options':
         action = () => Promise.all([
-          OptionsFactory.createOption(getState().config, parent),
+          OptionsFactory.createOption(getState().settings, parent),
           OptionsApi.fetchOptionSets('index'),
         ]).then(([element, optionsets]) => ({
           element, parent, optionsets
@@ -681,7 +681,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'conditions':
         action = () => Promise.all([
-          ConditionsFactory.createCondition(getState().config, parent),
+          ConditionsFactory.createCondition(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, attributes, options]) => ({
@@ -691,7 +691,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'tasks':
         action = () => Promise.all([
-          TasksFactory.createTask(getState().config),
+          TasksFactory.createTask(getState().settings),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchCatalogs('index')
@@ -702,7 +702,7 @@ export function createElement(elementType, parent = {}) {
 
       case 'views':
         action = () => Promise.all([
-          ViewsFactory.createView(getState().config),
+          ViewsFactory.createView(getState().settings),
           QuestionsApi.fetchCatalogs('index')
         ]).then(([element, catalogs]) => ({
           element, catalogs

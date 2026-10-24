@@ -24,7 +24,9 @@ import UriPrefix from './common/UriPrefix'
 const EditOptionSet = ({ optionset }) => {
   const dispatch = useDispatch()
 
-  const { sites, providers, settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const sites = Object.values(useSelector((state) => state.sites))
+  const { providers } = useSelector((state) => state.constants)
   const { elementAction, parent, conditions, options } = useSelector((state) => state.elements)
 
   const updateOptionSet = (key, value) => dispatch(updateElement(optionset, {[key]: value}))
