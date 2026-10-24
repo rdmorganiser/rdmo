@@ -14,7 +14,7 @@ const initialState = {
   errors: []
 }
 
-export default function interviewReducer(state = initialState, action) {
+export default function contactReducer(state = initialState, action) {
   switch(action.type) {
     case FETCH_CONTACT_INIT:
     case SEND_CONTACT_INIT:
