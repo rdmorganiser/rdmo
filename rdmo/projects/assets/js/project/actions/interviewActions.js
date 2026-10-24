@@ -32,32 +32,21 @@ export function fetchPage(pageId, back) {
     dispatch(fetchNavigation())
     dispatch({type: actionTypes.FETCH_PAGE_INIT})
 
-    if (pageId === 'done') {
-      dispatch(fetchNavigation())
-      dispatch(removeFromPending(pendingId))
-      dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, done: true })
-    } else {
-      return PageApi.fetchPage(projectId, pageId, back)
-        .then((page) => {
-          initPage(page)
+    return PageApi.fetchPage(projectId, pageId, back)
+      .then((page) => {
+        initPage(page)
 
-          dispatch(fetchValues(page))
-          dispatch(fetchOptionsets(page))
+        dispatch(fetchValues(page))
+        dispatch(fetchOptionsets(page))
 
-          dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, page })
+        dispatch({type: actionTypes.FETCH_PAGE_SUCCESS, page })
 
-          // return the page, so that navigateDashboard can update the location accordingly
-          return page
-        })
-        .catch((error) => {
-          if (error.errors.done) {
-            dispatch(fetchPage('done'))
-          } else {
-            dispatch({type: actionTypes.FETCH_PAGE_ERROR, error})
-          }
-        })
-        .finally(() => dispatch(removeFromPending(pendingId)))
-    }
+        // return the page, so that navigateDashboard can update the location accordingly
+        return page
+      })
+      .catch((error) => dispatch({type: actionTypes.FETCH_PAGE_ERROR, error}))
+      .finally(() => dispatch(removeFromPending(pendingId)))
+
   }
 }
 

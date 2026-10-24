@@ -4,7 +4,6 @@ import * as actionTypes from '../actions/actionTypes'
 import { sortValues } from '../utils/value'
 
 const initialState = {
-  done: null,
   page: null,
   navigation: null,
   values: null,
@@ -16,7 +15,7 @@ const initialState = {
 export default function interviewReducer(state = initialState, action) {
   switch(action.type) {
     case actionTypes.FETCH_PAGE_SUCCESS:
-      return { ...state, page: action.page, done: action.done }
+      return { ...state, page: action.page }
     case actionTypes.FETCH_CONTINUE_SUCCESS:
       return { ...state, continuation: action.page }
     case actionTypes.FETCH_VALUES_SUCCESS:
