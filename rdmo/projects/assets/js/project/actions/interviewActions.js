@@ -2,6 +2,7 @@ import { first, isEmpty, isNil } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { combinePermissions, isReadOnly } from '../../common/utils/permissions'
 import { actions } from '../reducers/interviewSlice'
@@ -230,10 +231,10 @@ export function storeValue(value) {
             // upload file after the value is created
             return ValueApi.storeFile(projectId, value, valueFile)
               .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
-              .catch((error) => dispatch(actions.storeValueError({ error, valueId })))
+              .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
           }
         })
-        .catch((error) => dispatch(actions.storeValueError({ error, valueId })))
+        .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
         .finally(() => dispatch(removeFromPending(pendingId)))
     }
   }
