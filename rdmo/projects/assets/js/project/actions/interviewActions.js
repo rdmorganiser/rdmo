@@ -320,7 +320,7 @@ export function copyValue(question, ...originalValues) {
         ...sets.filter((set) => (
           (set.set_prefix == value.set_prefix) &&
           (set.set_index != value.set_index) &&
-          (set.element == question.parent)
+          (set.element.elements.includes(question))
         )).map((set) => {
           // check if every sibling is empty
           if (values.filter((v) => (
