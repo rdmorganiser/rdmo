@@ -27,7 +27,7 @@ export function uploadFile(file) {
 }
 
 export function uploadFileInit(file) {
-  return actions.uploadFileInit(file)
+  return actions.uploadFileInit({ name: file.name })
 }
 
 export function uploadFileSuccess(elements) {
