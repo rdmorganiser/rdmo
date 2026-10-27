@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import { closeContact, sendContact } from '../../../../actions/contactActions'
 
 const Contact = () => {
   const dispatch = useDispatch()
   const contact = useSelector((state) => state.contact)
-  const templates = useSelector((state) => state.templates)
 
   const { showModal, values: initialValues, errors } = contact
 
@@ -33,7 +32,7 @@ const Contact = () => {
       onClose={onClose}
       size="modal-lg"
     >
-      <Html html={templates.project_interview_contact_help} />
+      <Template template="project_interview_contact_help" />
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="project-interview-question-contact-subject">Subject</label>

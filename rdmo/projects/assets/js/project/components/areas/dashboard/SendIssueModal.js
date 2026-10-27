@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
@@ -24,7 +24,6 @@ const SendIssueModal = ({
 }) => {
   const dispatch = useDispatch()
   const project = useSelector(state => state.project.project.project)
-  const templates = useSelector(state => state.templates)
   const settings = useSelector(state => state.settings)
   const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
@@ -209,7 +208,7 @@ const SendIssueModal = ({
         {
           !isConfigured && (
             <p className="text-muted">
-              <Html html={templates.project_issue_config_info} />
+              <Template template="project_issue_config_info" />
             </p>
           )
         }
@@ -217,7 +216,7 @@ const SendIssueModal = ({
           isConfigured && (
             <>
               <div className="d-md-flex justify-content-between align-items-baseline gap-3">
-                <Html html={templates.project_issue_send_info} />
+                <Template template="project_issue_send_info" />
                 <SendIssueDropdowns
                   formData={formData}
                   setField={setField}

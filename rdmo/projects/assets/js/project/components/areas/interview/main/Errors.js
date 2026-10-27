@@ -2,15 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 const Errors = () => {
-  const templates = useSelector((state) => state.templates)
   const errors = useSelector((state) => state.interview.errors)
 
   return (
     <>
-      <Html html={templates.project_interview_error} />
+      <Template template="project_interview_error" />
 
       <ul className="well list-unstyled text-danger">
         {
