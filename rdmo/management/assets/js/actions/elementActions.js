@@ -819,11 +819,12 @@ export function dropElement(dragElement, dropElement, mode) {
   return function(dispatch, getState) {
     // an element cannot be dropped on itself or on one of its descendants
     if (canMoveElement(dragElement, dropElement)) {
-      const element = {...getState().elements.element}
+      const element = getState().elements.element
 
       // dragParent is the element where the element is dragged from and dropParent where it has been dropped on
       // dropParent is empty when the element is dragged onto the same parent, i.e. dragParent == dropParent
-      const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      const { element: movedElement, dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      dispatch(updateElement(element, movedElement))
 
       const payloads = [dragParent, dropParent].filter(parent => !isNil(parent)).map(parent => {
         const elementType = elementTypes[parent.model]
