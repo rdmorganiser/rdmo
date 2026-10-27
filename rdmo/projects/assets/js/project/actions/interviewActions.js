@@ -44,7 +44,7 @@ export function fetchPage(pageId, back) {
         if (error?.errors?.done) {
           dispatch(showDone())
         } else {
-          dispatch(actions.fetchPageError(error))
+          dispatch(actions.fetchPageError(serializeError(error)))
         }
       })
       .finally(() => dispatch(removeFromPending(pendingId)))
@@ -60,7 +60,7 @@ export function fetchContinue() {
 
     return PageApi.fetchContinue(projectId)
       .then((page) => dispatch(actions.fetchContinueSuccess(page)))
-      .catch((error) => dispatch(actions.fetchContinueError(error)))
+      .catch((error) => dispatch(actions.fetchContinueError(serializeError(error))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -84,7 +84,7 @@ export function fetchOptions(page, optionset) {
         dispatch(removeFromPending(pendingId))
         dispatch(actions.fetchOptionsSuccess({ pageId: page.id, optionsetId: optionset.id, options }))
       })
-      .catch((error) => dispatch(actions.fetchOptionsError(error)))
+      .catch((error) => dispatch(actions.fetchOptionsError(serializeError(error))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -120,7 +120,7 @@ export function fetchValues(page, refresh = false) {
         dispatch(resolveConditions(page, sets))
         dispatch(actions.fetchValuesSuccess({ values, sets }))
       })
-      .catch((error) => dispatch(actions.fetchValuesError(error)))
+      .catch((error) => dispatch(actions.fetchValuesError(serializeError(error))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -166,7 +166,7 @@ export function resolveConditions(page, sets) {
 
     return ProjectApi.resolveConditions(projectId, payload)
       .then((results) => dispatch(actions.resolveConditionsSuccess(results)))
-      .catch((error) => dispatch(actions.resolveConditionsError(error)))
+      .catch((error) => dispatch(actions.resolveConditionsError(serializeError(error))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -269,7 +269,7 @@ export function storeDefaultValues() {
 
       return ValueApi.storeValue(projectId, value)
         .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
-        .catch((error) => dispatch(actions.storeValueError({ error, valueId })))
+        .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
     })).finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -431,7 +431,7 @@ export function deleteValue(value) {
 
             dispatch(actions.deleteValueSuccess(valueId))
           })
-          .catch((errors) => dispatch(actions.deleteValueError(errors)))
+          .catch((errors) => dispatch(actions.deleteValueError(serializeError(errors))))
           .finally(() => dispatch(removeFromPending(pendingId)))
       }
     }
@@ -504,7 +504,7 @@ export function deleteSet(set, setValue) {
           dispatch(updateProgress())
           dispatch(deleteSetSuccess(set))
         })
-        .catch((errors) => dispatch(actions.deleteSetError(errors)))
+        .catch((errors) => dispatch(actions.deleteSetError(serializeError(errors))))
         .finally(() => dispatch(removeFromPending(pendingId)))
     } else {
       return ValueApi.deleteSet(projectId, setValue)
@@ -526,7 +526,7 @@ export function deleteSet(set, setValue) {
 
           dispatch(deleteSetSuccess(set))
         })
-        .catch((errors) => dispatch(actions.deleteSetError(errors)))
+        .catch((errors) => dispatch(actions.deleteSetError(serializeError(errors))))
         .finally(() => dispatch(removeFromPending(pendingId)))
     }
   }
@@ -616,7 +616,7 @@ export function copySet(currentSet, copySetValue, attrs) {
         dispatch(removeFromPending(pendingId))
         copySetCallbackAction(values)
       })
-      .catch((errors) => dispatch(actions.copySetError(errors)))
+      .catch((errors) => dispatch(actions.copySetError(serializeError(errors))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
