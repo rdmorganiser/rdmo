@@ -88,7 +88,7 @@ const interviewSlice = createSlice({
     updateValue(state, action) {
       const { value, attrs } = action.payload
       state.values = state.values.map(currentValue => (
-        currentValue.id == value.id ? { ...currentValue, ...attrs } : currentValue
+        matchesValueId(currentValue, value.id || value.tmp_id) ? { ...currentValue, ...attrs } : currentValue
       ))
     },
     storeValueInit(state, action) {
