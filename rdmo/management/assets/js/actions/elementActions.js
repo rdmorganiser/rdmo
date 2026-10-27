@@ -3,9 +3,11 @@ import { get, isNil, pick } from 'lodash'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import { elementTypes } from '../constants/elements'
+import { actions } from '../reducers/elementsSlice'
 import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
 import { updateLocation } from '../utils/location'
 
@@ -21,8 +23,6 @@ import OptionsFactory from '../factories/OptionsFactory'
 import QuestionsFactory from '../factories/QuestionsFactory'
 import TasksFactory from '../factories/TasksFactory'
 import ViewsFactory from '../factories/ViewsFactory'
-
-import * as actionTypes from './actionTypes'
 
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
@@ -98,15 +98,15 @@ export function fetchElements(elementType) {
 }
 
 export function fetchElementsInit(elementType) {
-  return {type: actionTypes.FETCH_ELEMENTS_INIT, elementType}
+  return actions.fetchElementsInit(elementType)
 }
 
 export function fetchElementsSuccess(elements) {
-  return {type: actionTypes.FETCH_ELEMENTS_SUCCESS, elements}
+  return actions.fetchElementsSuccess(elements)
 }
 
 export function fetchElementsError(error) {
-  return {type: actionTypes.FETCH_ELEMENTS_ERROR, error}
+  return actions.fetchElementsError(serializeError(error))
 }
 
 // fetch element
@@ -368,15 +368,15 @@ export function fetchElement(elementType, elementId, elementAction = null) {
 }
 
 export function fetchElementInit(elementType, elementId, elementAction) {
-  return {type: actionTypes.FETCH_ELEMENT_INIT, elementType, elementId, elementAction}
+  return actions.fetchElementInit({ elementType, elementId, elementAction })
 }
 
 export function fetchElementSuccess(elements) {
-  return {type: actionTypes.FETCH_ELEMENT_SUCCESS, elements}
+  return actions.fetchElementSuccess(elements)
 }
 
 export function fetchElementError(error) {
-  return {type: actionTypes.FETCH_ELEMENT_ERROR, error}
+  return actions.fetchElementError(serializeError(error))
 }
 
 // store element
@@ -451,15 +451,15 @@ export function storeElement(elementType, element, back = false) {
 }
 
 export function storeElementInit(element) {
-  return {type: actionTypes.STORE_ELEMENT_INIT, element}
+  return actions.storeElementInit(element)
 }
 
 export function storeElementSuccess(element) {
-  return {type: actionTypes.STORE_ELEMENT_SUCCESS, element}
+  return actions.storeElementSuccess(element)
 }
 
 export function storeElementError(element, error) {
-  return {type: actionTypes.STORE_ELEMENT_ERROR, element, error}
+  return actions.storeElementError({ element, error: serializeError(error) })
 }
 
 // patch element
@@ -526,15 +526,15 @@ export function patchElement(elementType, element) {
 }
 
 export function patchElementInit(element) {
-  return {type: actionTypes.PATCH_ELEMENT_INIT, element}
+  return actions.patchElementInit(element)
 }
 
 export function patchElementSuccess(element) {
-  return {type: actionTypes.PATCH_ELEMENT_SUCCESS, element}
+  return actions.patchElementSuccess(element)
 }
 
 export function patchElementError(element, error) {
-  return {type: actionTypes.PATCH_ELEMENT_ERROR, element, error}
+  return actions.patchElementError({ element, error: serializeError(error) })
 }
 
 // toggle element site
@@ -569,15 +569,15 @@ export function toggleElementSite(elementType, element) {
 }
 
 export function toggleElementSiteInit(element) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_INIT, element}
+  return actions.toggleElementSiteInit(element)
 }
 
 export function toggleElementSiteSuccess(element) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_SUCCESS, element}
+  return actions.toggleElementSiteSuccess(element)
 }
 
 export function toggleElementSiteError(element, error) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_ERROR, element, error}
+  return actions.toggleElementSiteError({ element, error: serializeError(error) })
 }
 
 // createElement
@@ -718,15 +718,15 @@ export function createElement(elementType, parent = {}) {
 }
 
 export function createElementInit(elementType) {
-  return {type: actionTypes.CREATE_ELEMENT_INIT, elementType}
+  return actions.createElementInit(elementType)
 }
 
 export function createElementSuccess(elements) {
-  return {type: actionTypes.CREATE_ELEMENT_SUCCESS, elements}
+  return actions.createElementSuccess(elements)
 }
 
 export function createElementError(error) {
-  return {type: actionTypes.CREATE_ELEMENT_ERROR, error}
+  return actions.createElementError(serializeError(error))
 }
 
 // delete element
@@ -796,21 +796,21 @@ export function deleteElement(elementType, element) {
 }
 
 export function deleteElementInit(element) {
-  return {type: actionTypes.DELETE_ELEMENT_INIT, element}
+  return actions.deleteElementInit(element)
 }
 
 export function deleteElementSuccess(element) {
-  return {type: actionTypes.DELETE_ELEMENT_SUCCESS, element}
+  return actions.deleteElementSuccess(element)
 }
 
 export function deleteElementError(element, error) {
-  return {type: actionTypes.DELETE_ELEMENT_ERROR, element, error}
+  return actions.deleteElementError({ element, error: serializeError(error) })
 }
 
 // update elements
 
 export function updateElement(element, values) {
-  return {type: actionTypes.UPDATE_ELEMENT, element, values}
+  return actions.updateElement({ element, values })
 }
 
 // move elements

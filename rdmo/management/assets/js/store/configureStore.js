@@ -1,4 +1,3 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
@@ -13,29 +12,27 @@ import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
 import sitesReducer from 'rdmo/core/assets/js/reducers/sitesSlice'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
-import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as constantsActions from '../actions/constantsActions'
 import * as elementActions from '../actions/elementActions'
-import constantsReducer from '../reducers/constantsReducer'
-import elementsReducer from '../reducers/elementsReducer'
-import importsReducer from '../reducers/importsReducer'
+import constantsReducer from '../reducers/constantsSlice'
+import elementsReducer from '../reducers/elementsSlice'
+import importsReducer from '../reducers/importsSlice'
 import { parseLocation } from '../utils/location'
+
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
 
-  const rootReducer = combineReducers({
-    config: configReducer,
-    elements: elementsReducer,
-    constants: constantsReducer,
-    imports: importsReducer,
-    pending: pendingReducer,
-    settings: settingsReducer,
-    sites: sitesReducer,
-    groups: groupsReducer,
-  })
+  const middlewares = []
+
+  if (process.env.NODE_ENV === 'development') {
+    const { logger } = require('redux-logger')
+    middlewares.push(logger)
+  }
 
   const initialState = {
     config: {
@@ -43,11 +40,20 @@ export default function configureStore() {
     }
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...configureMiddleware())
-  )
+  const store = configureToolkitStore({
+    reducer: {
+      config: configReducer,
+      elements: elementsReducer,
+      imports: importsReducer,
+      pending: pendingReducer,
+      constants: constantsReducer,
+      settings: settingsReducer,
+      sites: sitesReducer,
+      groups: groupsReducer
+    },
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
+  })
 
   // load: fetch some of the data which does not change
   const fetchConstants = () => {
