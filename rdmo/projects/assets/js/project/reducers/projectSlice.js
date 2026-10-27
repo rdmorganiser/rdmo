@@ -22,6 +22,10 @@ const setCurrentView = (state, action) => {
   state.currentView = action.payload
 }
 
+const setProgress = (state, action) => {
+  state.progress = action.payload
+}
+
 const setVisibility = (state, action) => {
   state.visibility = action.payload
 }
@@ -147,10 +151,11 @@ const projectSlice = createSlice({
     },
     fetchNavigationError: appendError,
     fetchProgressInit: clearErrors,
-    fetchProgressSuccess(state, action) {
-      state.progress = action.payload
-    },
+    fetchProgressSuccess: setProgress,
     fetchProgressError: appendError,
+    updateProgressInit: clearErrors,
+    updateProgressSuccess: setProgress,
+    updateProgressError: appendError,
 
     fetchProjectFilesInit: clearErrors,
     fetchProjectFilesSuccess(state, action) {

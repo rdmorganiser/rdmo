@@ -594,16 +594,16 @@ export function fetchProgress() {
 export function updateProgress() {
   return (dispatch) => {
     dispatch(addToPending('updateProgress'))
-    dispatch({type: actionTypes.UPDATE_PROGRESS_INIT})
+    dispatch(actions.updateProgressInit())
 
     return ProjectApi.updateProjectProgress(projectId)
       .then((progress) => {
         dispatch(removeFromPending('updateProgress'))
-        dispatch({type: actionTypes.UPDATE_PROGRESS_SUCCESS, progress})
+        dispatch(actions.updateProgressSuccess(progress))
       })
       .catch((error) => {
         dispatch(removeFromPending('updateProgress'))
-        dispatch({type: actionTypes.UPDATE_PROGRESS_ERROR, error})
+        dispatch(actions.updateProgressError(serializeError(error)))
       })
   }
 }
