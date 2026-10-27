@@ -9,10 +9,10 @@ const gatherOptions = (question, set) => {
     if (checkOptionSet(optionset, set)) {
       return [
         ...options,
-        ...optionset.options.map((option) => {
-          option.has_provider = optionset.has_provider
-          return option
-        })
+        ...optionset.options.map((option) => ({
+          ...option,
+          has_provider: optionset.has_provider
+        }))
       ]
     } else {
       // the condition for this optionset and set resolved false
