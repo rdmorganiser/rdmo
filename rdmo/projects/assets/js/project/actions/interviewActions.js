@@ -6,7 +6,6 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 import { combinePermissions, isReadOnly } from '../../common/utils/permissions'
 import { actions } from '../reducers/interviewSlice'
 import { projectId } from '../utils/meta'
-import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
 import { compareValues, gatherDefaultValues, initValues, isEmptyValue, sortValues } from '../utils/value'
@@ -81,10 +80,8 @@ export function fetchOptions(page, optionset) {
 
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
-        updateOptions(page, optionset, options)
-
         dispatch(removeFromPending(pendingId))
-        dispatch(actions.fetchOptionsSuccess(page))
+        dispatch(actions.fetchOptionsSuccess({ pageId: page.id, optionsetId: optionset.id, options }))
       })
       .catch((error) => dispatch(actions.fetchOptionsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))

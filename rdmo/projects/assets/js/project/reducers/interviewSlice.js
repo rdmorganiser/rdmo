@@ -8,6 +8,7 @@ const initialState = {
   done: false,
   page: null,
   continuation: null,
+  providerOptions: {},
   navigation: null,
   values: null,
   attributes: [],
@@ -42,6 +43,7 @@ const interviewSlice = createSlice({
     },
     fetchPageSuccess(state, action) {
       state.page = action.payload.page
+      state.providerOptions = {}
     },
     fetchPageError: appendError,
     fetchContinueInit: clearErrors,
@@ -54,7 +56,10 @@ const interviewSlice = createSlice({
     fetchValuesError: appendError,
     fetchOptionsInit: clearErrors,
     fetchOptionsSuccess(state, action) {
-      state.page = action.payload
+      const { pageId, optionsetId, options } = action.payload
+      if (state.page?.id === pageId) {
+        state.providerOptions[optionsetId] = options
+      }
     },
     fetchOptionsError: appendError,
     resolveConditionsInit: clearErrors,

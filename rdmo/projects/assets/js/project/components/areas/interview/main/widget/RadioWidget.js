@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updateValue } from '../../../../../actions/interviewActions'
 import { useReadOnly } from '../../../../../hooks'
@@ -20,6 +20,7 @@ import RadioInput from './RadioInput'
 
 const RadioWidget = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
+  const providerOptions = useSelector((state) => state.interview.providerOptions)
   const readOnly = useReadOnly()
 
   return (
@@ -32,7 +33,7 @@ const RadioWidget = ({ question, sets, values, siblings, currentSet }) => {
                 <RadioInput
                   question={question}
                   value={value}
-                  options={gatherOptions(question, currentSet)}
+                  options={gatherOptions(question, currentSet, providerOptions)}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={
