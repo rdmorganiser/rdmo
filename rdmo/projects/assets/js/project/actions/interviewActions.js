@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil } from 'lodash'
+import { first, isEmpty, isNil, omit } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -289,7 +289,13 @@ export function createValue(attrs, store) {
 
 export function updateValue(value, attrs, store = true) {
   if (store) {
-    return storeValue(ValueFactory.update(value, attrs))
+    const valueToSave = ValueFactory.update({ ...value }, attrs)
+    const valueForState = omit(valueToSave, 'file')
+
+    return (dispatch) => {
+      dispatch(actions.updateValue({ value, attrs: valueForState }))
+      return dispatch(storeValue(valueToSave))
+    }
   } else {
     return actions.updateValue({ value, attrs })
   }
@@ -479,7 +485,7 @@ export function createSet(attrs) {
 }
 
 export function updateSet(setValue, attrs) {
-  return storeValue(ValueFactory.update(setValue, attrs))
+  return updateValue(setValue, attrs)
 }
 
 export function deleteSet(set, setValue) {
