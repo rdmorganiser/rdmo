@@ -7,6 +7,7 @@ import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
+import errorsReducer from 'rdmo/core/assets/js/reducers/errorsSlice'
 import groupsReducer from 'rdmo/core/assets/js/reducers/groupsSlice'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingSlice'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
@@ -52,6 +53,7 @@ export default function configureStore() {
   const store = configureToolkitStore({
     reducer: {
       config: configReducer,
+      errors: errorsReducer,
       pending: pendingReducer,
       project: projectSliceReducer,
       settings: settingsReducer,

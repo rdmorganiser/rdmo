@@ -6,6 +6,7 @@ import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
+import errorsReducer, { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
 import groupsReducer from 'rdmo/core/assets/js/reducers/groupsSlice'
 import pendingReducer from 'rdmo/core/assets/js/reducers/pendingSlice'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
@@ -43,6 +44,7 @@ export default function configureStore() {
   const store = configureToolkitStore({
     reducer: {
       config: configReducer,
+      errors: errorsReducer,
       elements: elementsReducer,
       imports: importsReducer,
       pending: pendingReducer,
@@ -57,6 +59,7 @@ export default function configureStore() {
 
   // load: fetch some of the data which does not change
   const fetchConstants = () => {
+    store.dispatch(errorActions.clearErrors())
     return Promise.all([
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(sitesActions.fetchSites()),

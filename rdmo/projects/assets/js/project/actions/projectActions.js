@@ -2,6 +2,7 @@ import { isNil } from 'lodash'
 
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { addToStale } from 'rdmo/core/assets/js/actions/staleActions'
+import { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
@@ -639,7 +640,7 @@ export function downloadView(snapshotId, viewId, format) {
 export function fetchProviders() {
   return function (dispatch) {
     dispatch(addToPending('fetchProviders'))
-    dispatch(actions.fetchProvidersInit())
+    dispatch(errorActions.clearError('integrationProviders'))
 
     return ProjectApi.fetchProviders()
       .then(providers => {
@@ -648,7 +649,10 @@ export function fetchProviders() {
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProviders'))
-        dispatch(actions.fetchProvidersError(serializeError(error)))
+        dispatch(errorActions.setError({
+          source: 'integrationProviders',
+          error: { ...serializeError(error), context: gettext('Integration providers') }
+        }))
         throw error
       })
   }

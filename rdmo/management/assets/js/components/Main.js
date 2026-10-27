@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { get, isEmpty, isNil } from 'lodash'
 
+import ErrorMessages from 'rdmo/core/assets/js/components/ErrorMessages'
+
 import { MainErrors } from '../components/common/Errors'
 import Edit from '../components/edit/Edit'
 import Elements from '../components/elements/Elements'
@@ -64,6 +66,7 @@ const Main = () => {
 
   return (
     <div className="container-lg gx-0">
+      <ErrorMessages />
       {render()}
     </div>
   )

@@ -10,11 +10,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    fetchCurrentUserInit: setCurrentUser,
-    fetchCurrentUserSuccess: setCurrentUser,
-    fetchCurrentUserError(state, action) {
-      state.errors = action.payload.errors
-    }
+    fetchCurrentUserSuccess: setCurrentUser
   }
 })
 

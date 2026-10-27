@@ -1,3 +1,4 @@
+import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/templateSlice'
 import { serializeError } from '../utils/errors'
 
@@ -14,7 +15,7 @@ export function fetchTemplates() {
 }
 
 export function fetchTemplatesInit() {
-  return actions.fetchTemplatesInit()
+  return errorActions.clearError('templates')
 }
 
 export function fetchTemplatesSuccess(templates) {
@@ -22,5 +23,8 @@ export function fetchTemplatesSuccess(templates) {
 }
 
 export function fetchTemplatesError(errors) {
-  return actions.fetchTemplatesError(serializeError(errors))
+  return errorActions.setError({
+    source: 'templates',
+    error: { ...serializeError(errors), context: gettext('Templates') }
+  })
 }

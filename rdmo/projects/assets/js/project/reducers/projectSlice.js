@@ -176,11 +176,9 @@ const projectSlice = createSlice({
     fetchProjectVisibilitySuccess: setVisibility,
     fetchProjectVisibilityError: appendError,
     updateProjectVisibilitySuccess: setVisibility,
-    fetchProvidersInit: clearErrors,
     fetchProvidersSuccess(state, action) {
       state.providers = action.payload
     },
-    fetchProvidersError: appendError,
     fetchProjectIntegrationsInit: clearErrors,
     fetchProjectIntegrationsSuccess(state, action) {
       state.integrations = action.payload

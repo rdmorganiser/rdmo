@@ -1,3 +1,4 @@
+import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/userSlice'
 import { serializeError } from '../utils/errors'
 
@@ -14,7 +15,7 @@ export function fetchCurrentUser() {
 }
 
 export function fetchCurrentUserInit() {
-  return actions.fetchCurrentUserInit()
+  return errorActions.clearError('currentUser')
 }
 
 export function fetchCurrentUserSuccess(currentUser) {
@@ -22,5 +23,8 @@ export function fetchCurrentUserSuccess(currentUser) {
 }
 
 export function fetchCurrentUserError(error) {
-  return actions.fetchCurrentUserError(serializeError(error))
+  return errorActions.setError({
+    source: 'currentUser',
+    error: { ...serializeError(error), context: gettext('Current user') }
+  })
 }

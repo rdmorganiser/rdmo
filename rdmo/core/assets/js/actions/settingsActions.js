@@ -1,3 +1,4 @@
+import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/settingsSlice'
 import { serializeError } from '../utils/errors'
 
@@ -14,7 +15,7 @@ export function fetchSettings() {
 }
 
 export function fetchSettingsInit() {
-  return actions.fetchSettingsInit()
+  return errorActions.clearError('settings')
 }
 
 export function fetchSettingsSuccess(settings) {
@@ -22,5 +23,8 @@ export function fetchSettingsSuccess(settings) {
 }
 
 export function fetchSettingsError(errors) {
-  return actions.fetchSettingsError(serializeError(errors))
+  return errorActions.setError({
+    source: 'settings',
+    error: { ...serializeError(errors), context: gettext('Settings') }
+  })
 }

@@ -20,3 +20,22 @@ export const serializeError = (error) => {
 
   return result
 }
+
+const collectErrorMessages = (details) => {
+  if (typeof details === 'string') return [details]
+  if (details && typeof details === 'object') {
+    return Object.values(details).flatMap(collectErrorMessages)
+  }
+  return []
+}
+
+export const getErrorMessages = (error) => {
+  if (error == null) return []
+  if (typeof error === 'string' || Array.isArray(error)) return collectErrorMessages(error)
+
+  const messages = collectErrorMessages(error.errors)
+  if (messages.length) return messages
+
+  const message = error.message || error.statusText || gettext('An unknown error occurred, please contact support')
+  return [message]
+}
