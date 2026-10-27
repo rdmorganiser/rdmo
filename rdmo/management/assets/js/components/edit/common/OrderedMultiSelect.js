@@ -178,9 +178,9 @@ const OrderedMultiSelect = ({
 
   const getValues = () => {
     if (isUndefined(values)) {
-      return isUndefined(element[field]) ? [] : [...element[field]]
+      return isUndefined(element[field]) ? [] : element[field].map(value => ({ ...value }))
     } else {
-      return values
+      return values.map(value => ({ ...value }))
     }
   }
 
