@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Select from 'rdmo/core/assets/js/components/forms/Select'
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import {
   deleteProjectVisibility,
@@ -18,7 +18,6 @@ const ProjectVisibilityForm = () => {
   const groups = useSelector((state) => state.groups)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
-  const templates = useSelector((state) => state.templates)
   const currentUser = useSelector((state) => state.user.currentUser)
   const isSubmitting = useSelector((state) => (
     state.pending.items.includes('updateProjectVisibility') ||
@@ -102,7 +101,7 @@ const ProjectVisibilityForm = () => {
       </div>
 
       <div className="form-text mb-3">
-        <Html html={templates?.project_view_visibility_help} />
+        <Template template="project_view_visibility_help" />
       </div>
 
       {

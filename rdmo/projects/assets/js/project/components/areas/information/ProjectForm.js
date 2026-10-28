@@ -9,7 +9,7 @@ import { Tooltip } from 'rdmo/core/assets/js/components'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
 import { updateProject } from '../../../actions/projectActions'
@@ -28,7 +28,6 @@ const ProjectForm = ({
 }) => {
   const dispatch = useDispatch()
   const errors = useFieldErrors()
-  const templates = useSelector((state) => state.templates)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
@@ -191,7 +190,7 @@ const ProjectForm = ({
       <Input
         className="mb-3"
         label={gettext('Title')}
-        help={<Html html={templates.project_view_title_help} />}
+        help={<Template template="project_view_title_help" />}
         value={formData.title || ''}
         onChange={(value) => handleChange('title', value)}
         errors={errors.title}
@@ -201,7 +200,7 @@ const ProjectForm = ({
       <Textarea
         className="mb-3"
         label={gettext('Description')}
-        help={<Html html={templates.project_view_description_help} />}
+        help={<Template template="project_view_description_help" />}
         rows={4}
         value={formData.description || ''}
         onChange={(value) => handleChange('description', value)}
@@ -266,7 +265,7 @@ const ProjectForm = ({
         {
           unavailableCatalog && !disabled && (
             <div className="form-text mt-2">
-              <Html html={templates.project_view_no_catalog_info} />
+              <Template template="project_view_no_catalog_info" />
             </div>
           )
         }
@@ -304,7 +303,7 @@ const ProjectForm = ({
           )
         }
         <div className="form-text mb-2">
-          <Html html={templates.project_view_parent_help} />
+          <Template template="project_view_parent_help" />
         </div>
 
         <AsyncSelect

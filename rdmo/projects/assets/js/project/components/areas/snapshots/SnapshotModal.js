@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import { clearProjectErrors, createSnapshot, updateSnapshot } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
@@ -13,7 +13,6 @@ import { useFieldErrors } from '../../../hooks'
 const initialForm = { title: '', description: '' }
 
 const SnapshotModal = ({ show, onClose, snapshot }) => {
-  const templates = useSelector((state) => state.templates)
   const dispatch = useDispatch()
   const errors = useFieldErrors()
 
@@ -75,7 +74,7 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
         <Textarea
           id="snapshot-description"
           className="mt-2"
-          help={<Html html={templates.project_view_snapshot_description_help} />}
+          help={<Template template="project_view_snapshot_description_help" />}
           label={gettext('Description')}
           name="description"
           value={formData.description}

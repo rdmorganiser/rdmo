@@ -2,19 +2,18 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames'
 
-import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import NavigationLink from './NavigationLink'
 
 const Navigation = () => {
   const { page: currentPage } = useSelector((state) => state.interview)
   const navigation = useSelector((state) => state.project.navigation)
-  const templates = useSelector((state) => state.templates)
 
   return currentPage && navigation && (
     <>
       <h3>{gettext('Navigation')}</h3>
-      <Html html={templates?.project_interview_navigation_help} />
+      <Template template="project_interview_navigation_help" />
 
       <div className="project-interview-navigation">
         <ul className="list-unstyled">

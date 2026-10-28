@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash'
 import { Modal, Tooltip } from 'rdmo/core/assets/js/components'
 
 import Html from 'rdmo/core/assets/js/components/Html'
+import Template from 'rdmo/core/assets/js/components/Template'
 
 import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
 import { useFieldErrors, usePermissions } from '../../../hooks'
@@ -55,7 +56,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
       size="modal-lg"
     >
       <form id="invite-member-form" onSubmit={handleSubmit}>
-        <Html html={templates.project_view_invite_member} />
+        <Template template="project_view_invite_member" />
         {/* User */}
         <div className="mb-3">
           <label className="form-label fw-bold" htmlFor="invite-lookup">
@@ -127,7 +128,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
           perms.can_add_membership && (
             <div>
               <label className="form-label fw-bold">{gettext('Add member silently')}</label>
-              <Html html={templates.project_view_invite_member_silently_help} />
+              <Template template="project_view_invite_member_silently_help" />
               <div className="form-check mt-1">
                 <input
                   className="form-check-input"
