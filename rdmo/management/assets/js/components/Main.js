@@ -16,6 +16,10 @@ const Main = () => {
 
   const { element, elementType, elementId, elementAction } = elements
 
+  if (!isNil(settings.errors)) {
+    return <MainErrors errors={settings.errors.api} />
+  }
+
   if (!isNil(constants.errors)) {
     return <MainErrors errors={constants.errors.api} />
   }
@@ -27,7 +31,7 @@ const Main = () => {
 
   const render = () => {
     // check if an error occurred
-    if (!isNil(elements.errors.api)) {
+    if (get(elements, 'errors.api')) {
       return <MainErrors errors={elements.errors.api} />
     } else if (get(elements, 'element.errors.api')) {
       return <MainErrors errors={get(elements, 'element.errors.api')} />
