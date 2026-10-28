@@ -29,7 +29,6 @@ const ProjectForm = ({
   const dispatch = useDispatch()
   const [backendErrors, setBackendErrors] = useState({})
   const errors = useFieldErrors(backendErrors)
-  const templates = useSelector((state) => state.templates)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
