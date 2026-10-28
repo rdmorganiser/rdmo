@@ -1,7 +1,5 @@
+import { isReadOnly } from '../../common/utils/permissions'
+
 import { usePermissions } from './usePermissions'
 
-export const useReadOnly = () => {
-  const perms = usePermissions()
-
-  return !(perms.can_add_value && perms.can_change_value && perms.can_delete_value)
-}
+export const useReadOnly = () => isReadOnly(usePermissions())

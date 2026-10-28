@@ -3,6 +3,7 @@ import { first, isEmpty, isNil } from 'lodash'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 
+import { combinePermissions, isReadOnly } from '../../common/utils/permissions'
 import { projectId } from '../utils/meta'
 import { updateOptions } from '../utils/options'
 import { initPage } from '../utils/page'
@@ -21,12 +22,7 @@ import { fetchNavigation, fetchProgress, updateProgress } from './projectActions
 export function fetchPage(pageId, back) {
   const pendingId = 'fetchPage'
 
-  return (dispatch, getState) => {
-    // store unsaved defaults on this page before loading the new page
-    gatherDefaultValues(getState().interview.page, getState().interview.values).forEach((value) => {
-      ValueApi.storeValue(projectId, value)
-    })
-
+  return (dispatch) => {
     dispatch(addToPending(pendingId))
     dispatch(fetchProgress())
     dispatch(fetchNavigation())
@@ -244,6 +240,40 @@ export function storeValue(value) {
         .catch((error) => dispatch({type: actionTypes.STORE_VALUE_ERROR, error, valueId}))
         .finally(() => dispatch(removeFromPending(pendingId)))
     }
+  }
+}
+
+export function storeDefaultValues() {
+  const pendingId = 'storeDefaultValues'
+
+  return (dispatch, getState) => {
+    const { page, values } = getState().interview
+
+    // defaults are not stored for read-only users, since they cannot edit them
+    const permissions = combinePermissions(
+      getState().project.project?.project?.permissions,
+      getState().user.currentUser?.permissions
+    )
+    if (isReadOnly(permissions)) {
+      return Promise.resolve()
+    }
+
+    const defaultValues = gatherDefaultValues(page, values).filter((value) => !value.pending)
+    if (isEmpty(defaultValues)) {
+      return Promise.resolve()
+    }
+
+    dispatch(addToPending(pendingId))
+
+    return Promise.all(defaultValues.map((value) => {
+      const valueId = value.tmp_id
+
+      dispatch({type: actionTypes.STORE_VALUE_INIT, valueId})
+
+      return ValueApi.storeValue(projectId, value)
+        .then((value) => dispatch({type: actionTypes.STORE_VALUE_SUCCESS, value, valueId}))
+        .catch((error) => dispatch({type: actionTypes.STORE_VALUE_ERROR, error, valueId}))
+    })).finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
