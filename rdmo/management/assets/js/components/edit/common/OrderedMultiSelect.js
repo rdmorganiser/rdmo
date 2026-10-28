@@ -136,7 +136,7 @@ const OrderedMultiSelectItem = ({
       }
       <div className="position-relative mb-2">
         <div className={className}>
-          <div className="flex-grow-1">
+          <div className="select-wrapper flex-grow-1">
             <ReactSelect
               classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
               options={selectOptions} value={selectValue}

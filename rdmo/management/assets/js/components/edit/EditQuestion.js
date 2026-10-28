@@ -55,8 +55,8 @@ const EditQuestion = ({ question }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {question.id ? gettext('Edit question') : gettext('Create question')}
           </strong>
           <ReadOnlyIcon title={gettext('This question is read only')} show={question.read_only} />
@@ -221,9 +221,9 @@ const EditQuestion = ({ question }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {question.id && <DeleteButton onClick={openDeleteModal} disabled={question.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeQuestion} disabled={question.read_only} back={true} />
         </div>

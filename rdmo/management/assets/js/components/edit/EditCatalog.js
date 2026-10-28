@@ -45,8 +45,8 @@ const EditCatalog = ({ catalog }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {catalog.id ? gettext('Edit catalog') : gettext('Create catalog')}
           </strong>
           <ReadOnlyIcon title={gettext('This catalog is read only')} show={catalog.read_only} />
@@ -120,9 +120,9 @@ const EditCatalog = ({ catalog }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {catalog.id && <DeleteButton onClick={openDeleteModal} disabled={catalog.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} />
           <SaveButton elementAction={elementAction} onClick={storeCatalog} disabled={catalog.read_only} back={true} />
         </div>

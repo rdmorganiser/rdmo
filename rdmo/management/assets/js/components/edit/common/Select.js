@@ -59,7 +59,7 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
       </div>
 
       <div className={className}>
-        <div className="flex-grow-1">
+        <div className="select-wrapper flex-grow-1">
           <ReactSelect
             classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
             options={selectOptions} value={selectValue} isMulti={isMulti} isClearable={true}

@@ -45,8 +45,8 @@ const EditSection = ({ section }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {section.id ? gettext('Edit section') : gettext('Create section')}
           </strong>
           <ReadOnlyIcon title={gettext('This section is read only')} show={section.read_only} />
@@ -112,9 +112,9 @@ const EditSection = ({ section }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {section.id && <DeleteButton onClick={openDeleteModal} disabled={section.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only}  />
           <SaveButton elementAction={elementAction} onClick={storeSection} disabled={section.read_only} back={true}/>
         </div>
