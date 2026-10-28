@@ -1,5 +1,5 @@
 .dropdown-menu {
-    --bs-dropdown-font-size: 0.85rem;
+    --bs-dropdown-font-size: var(--rdmo-font-size-sm);
 
     // disable the colorful active state when clicking
     --bs-dropdown-link-active-color: var(--bs-dropdown-link-hover-color);

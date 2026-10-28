@@ -1,6 +1,6 @@
 :root {
     --bs-font-sans-serif: var(--rdmo-font);
-    --bs-body-font-size: 1rem;
+    --bs-body-font-size: var(--rdmo-font-size);
 
     --bs-body-color: var(--rdmo-body-color);
     --bs-body-bg: var(--rdmo-body-bg);

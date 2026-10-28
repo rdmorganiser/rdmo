@@ -3,7 +3,7 @@
 :root {
     --rdmo-sidebar-width: 3.5rem;
     --rdmo-sidebar-lg-width: 18rem;
-    --rdmo-sidebar-font-size: 0.9rem;
+    --rdmo-sidebar-font-size: var(--rdmo-font-size-sm);
 }
 
 aside {

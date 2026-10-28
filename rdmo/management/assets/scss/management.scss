@@ -1,7 +1,7 @@
 .management {
     --rdmo-management-indent: 2rem;
 
-    --rdmo-management-font-size: 0.9rem;
+    --rdmo-management-font-size: var(--rdmo-font-size-sm);
 
     position: relative;
     font-size: var(--rdmo-management-font-size);
@@ -101,6 +101,10 @@
     padding: 0;
 
     border-radius: var(--bs-border-radius);
+
+    .cm-editor {
+        font-size: var(--rdmo-font-size-xs);
+    }
 
     .cm-editor,
     .cm-scroller,
