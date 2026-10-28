@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import Template from 'rdmo/core/assets/js/components/Template'
 
 const InterviewErrors = () => {
-  const templates = useSelector((state) => state.templates)
   const errors = useSelector((state) => state.interview.errors)
 
   return (
