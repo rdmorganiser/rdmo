@@ -350,7 +350,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     return dispatch(action)
       .then(elements => {
         if (elementAction == 'copy') {
-          const { settings } = getState().config
+          const settings = getState().settings
 
           elements.element.id = null
           elements.element.read_only = false
