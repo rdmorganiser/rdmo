@@ -16,7 +16,7 @@ import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
 const Select = ({ element, field, options, createText, isMulti, onChange, onCreate, onEdit }) => {
-  const { meta } = useSelector((state) => state.config)
+  const meta = useSelector((state) => state.constants.meta)
 
   const id = getId(element, field)
   const label = getLabel(element, field, meta)

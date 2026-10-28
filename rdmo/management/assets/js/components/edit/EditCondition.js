@@ -21,7 +21,9 @@ import UriPrefix from './common/UriPrefix'
 const EditCondition = ({ condition }) => {
   const dispatch = useDispatch()
 
-  const { sites, relations, settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const sites = Object.values(useSelector((state) => state.sites))
+  const { relations } = useSelector((state) => state.constants)
   const { elementAction, parent, attributes, options } = useSelector((state) => state.elements)
 
   const updateCondition = (key, value) => dispatch(updateElement(condition, {[key]: value}))

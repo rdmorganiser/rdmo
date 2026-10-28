@@ -9,20 +9,29 @@ import Import from '../components/import/Import'
 import Nested from '../components/nested/Nested'
 
 const Main = () => {
-  const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const constants = useSelector((state) => state.constants)
   const elements = useSelector((state) => state.elements)
   const imports = useSelector((state) => state.imports)
 
   const { element, elementType, elementId, elementAction } = elements
 
-  const render = () => {
-    // check if anything was loaded yet
-    if (isNil(config.settings) || isNil(elementType)) {
-      return null
-    }
+  if (!isNil(settings.errors)) {
+    return <MainErrors errors={settings.errors.api} />
+  }
 
+  if (!isNil(constants.errors)) {
+    return <MainErrors errors={constants.errors.api} />
+  }
+
+  // check if anything was loaded yet
+  if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
+    return null
+  }
+
+  const render = () => {
     // check if an error occurred
-    if (!isNil(elements.errors.api)) {
+    if (get(elements, 'errors.api')) {
       return <MainErrors errors={elements.errors.api} />
     } else if (get(elements, 'element.errors.api')) {
       return <MainErrors errors={get(elements, 'element.errors.api')} />

@@ -1,10 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import Template from 'rdmo/core/assets/js/components/Template'
 
-const Errors = () => {
+const InterviewErrors = () => {
+  const templates = useSelector((state) => state.templates)
   const errors = useSelector((state) => state.interview.errors)
 
   return (
@@ -30,8 +30,4 @@ const Errors = () => {
   )
 }
 
-Errors.propTypes = {
-  errors: PropTypes.array.isRequired
-}
-
-export default Errors
+export default InterviewErrors

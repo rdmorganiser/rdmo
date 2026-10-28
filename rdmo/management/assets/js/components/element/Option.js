@@ -19,6 +19,7 @@ const Option = ({ option, display = 'list', indent = 0, filter = false, filterEd
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, option)
 
@@ -49,7 +50,7 @@ const Option = ({ option, display = 'list', indent = 0, filter = false, filterEd
             locked={option.locked} onClick={toggleLocked} disabled={option.read_only} />
           <ExportLink
             title={gettext('Export option')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} />
+            exportFormats={settings.export_formats} />
         </div>
       </div>
       {

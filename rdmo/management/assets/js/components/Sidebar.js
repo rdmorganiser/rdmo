@@ -1,16 +1,16 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 
 import ElementsSidebar from '../components/sidebar/ElementsSidebar'
 import ImportSidebar from '../components/sidebar/ImportSidebar'
 
 const Sidebar = () => {
-  const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
   const imports = useSelector((state) => state.imports)
 
   // check if anything was loaded yet
-  if (isNil(config.settings)) {
+  if (isEmpty(settings)) {
     return null
   }
 

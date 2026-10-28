@@ -14,6 +14,7 @@ const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, fil
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, attribute)
 
@@ -50,7 +51,7 @@ const Attribute = ({ attribute, display = 'list', indent = 0, filter = null, fil
             locked={attribute.locked} onClick={toggleLocked} disabled={attribute.read_only} />
           <ExportLink
             title={gettext('Export attribute')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} csv={true} />
+            exportFormats={settings.export_formats} csv={true} />
         </div>
       </div>
       <ElementErrors element={attribute} />

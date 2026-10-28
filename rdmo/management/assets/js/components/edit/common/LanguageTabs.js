@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import Tabs from './Tabs'
 
 const LanguageTabs = ({ render }) => {
-  const { settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const labels = settings.languages.map(([, lang]) => lang)
   const tabs = settings.languages.map(([lang_code]) => render(lang_code))

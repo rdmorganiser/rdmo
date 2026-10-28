@@ -22,7 +22,9 @@ import UriPrefix from './common/UriPrefix'
 const EditCatalog = ({ catalog }) => {
   const dispatch = useDispatch()
 
-  const { groups, sites, settings } = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
+  const groups = Object.values(useSelector((state) => state.groups))
+  const sites = Object.values(useSelector((state) => state.sites))
   const { elementAction, sections } = useSelector((state) => state.elements)
 
   const updateCatalog = (key, value) => dispatch(updateElement(catalog, {[key]: value}))

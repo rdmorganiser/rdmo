@@ -12,7 +12,7 @@ from rdmo.accounts.serializers.v1 import UserLookupSerializer
 from rdmo.accounts.utils import get_full_name
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import MarkdownSerializerMixin, TranslationSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Page, Question
 from rdmo.services.validators import ProviderValidator
@@ -117,7 +117,7 @@ class ProjectHierarchySerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     class CatalogField(serializers.PrimaryKeyRelatedField):
 
@@ -137,6 +137,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         def get_queryset(self):
             return Project.objects.filter_user(self.context['request'].user)
+
+    markdown_fields = ('catalog_help', )
 
     catalog = CatalogField(required=True)
 

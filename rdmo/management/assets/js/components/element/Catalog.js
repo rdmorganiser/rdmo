@@ -26,6 +26,7 @@ const Catalog = ({
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
 
@@ -68,15 +69,15 @@ const Catalog = ({
             available={catalog.available} locked={catalog.locked} onClick={toggleAvailable}
             disabled={catalog.read_only} />
           <ToggleCurrentSiteLink
-            hasCurrentSite={config.settings.multisite ? catalog.sites.includes(siteId) : true}
+            hasCurrentSite={settings.multisite ? catalog.sites.includes(siteId) : true}
             onClick={toggleCurrentSite}
-            show={config.settings.multisite}/>
+            show={settings.multisite}/>
           <LockedLink
             title={catalog.locked ? gettext('Unlock catalog') : gettext('Lock catalog')}
             locked={catalog.locked} onClick={toggleLocked} disabled={catalog.read_only} />
           <ExportLink
             title={gettext('Export catalog')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
         </div>
 
         {backButton && <BackButton />}

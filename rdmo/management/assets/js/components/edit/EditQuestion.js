@@ -24,8 +24,12 @@ import UriPrefix from './common/UriPrefix'
 const EditQuestion = ({ question }) => {
   const dispatch = useDispatch()
 
-  const { sites, widgetTypes, valueTypes, settings } = useSelector((state) => state.config)
-  const { elementAction, parent, attributes, optionsets, options, conditions } = useSelector((state) => state.elements)
+  const settings = useSelector((state) => state.settings)
+  const sites = Object.values(useSelector((state) => state.sites))
+  const { widgetTypes, valueTypes } = useSelector((state) => state.constants)
+  const {
+    elementAction, parent, attributes, optionsets, options, conditions
+  } = useSelector((state) => state.elements)
 
   const updateQuestion = (key, value) => dispatch(updateElement(question, { [key]: value }))
   const storeQuestion = (back) => dispatch(storeElement('questions', question, back))

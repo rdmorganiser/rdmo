@@ -25,6 +25,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
   const showElements = isTruthy(get(config, `display.elements.questionsets.${questionset.id}`, true))
@@ -80,7 +81,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
             locked={questionset.locked} onClick={toggleLocked} disabled={questionset.read_only} />
           <ExportLink
             title={gettext('Export question set')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
           <Drag element={questionset} show={display == 'nested'} />
         </div>
       </div>

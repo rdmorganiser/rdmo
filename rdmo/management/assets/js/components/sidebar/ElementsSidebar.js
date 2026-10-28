@@ -45,6 +45,7 @@ const ElementsSidebar = () => {
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
   const { elementType, elementId, elementAction } = useSelector((state) => state.elements)
 
   const model = invert(elementTypes)[elementType]
@@ -98,8 +99,8 @@ const ElementsSidebar = () => {
     )
   }
 
-  if (config.settings.export_formats) {
-    exportOptions.push(...config.settings.export_formats.map(([key, label]) => (
+  if (settings.export_formats) {
+    exportOptions.push(...settings.export_formats.map(([key, label]) => (
       { value: key, label }
     )))
   }

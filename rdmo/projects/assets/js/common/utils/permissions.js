@@ -10,3 +10,8 @@ export const combinePermissions = (...permissionSets) => {
 
   return effectivePermissions
 }
+
+// the interview is read-only unless values can be added, changed and deleted
+export const isReadOnly = (permissions) => (
+  !(permissions.can_add_value && permissions.can_change_value && permissions.can_delete_value)
+)

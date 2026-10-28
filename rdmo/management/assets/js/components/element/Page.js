@@ -26,6 +26,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const dispatch = useDispatch()
 
   const config = useSelector((state) => state.config)
+  const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
   const showElements = isTruthy(get(config, `display.elements.pages.${page.id}`, true))
@@ -81,7 +82,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
             locked={page.locked} onClick={toggleLocked} disabled={page.read_only} />
           <ExportLink
             title={gettext('Export page')} exportUrl={exportUrl}
-            exportFormats={config.settings.export_formats} full={true} />
+            exportFormats={settings.export_formats} full={true} />
           <Drag element={page} show={display == 'nested'} />
         </div>
       </div>

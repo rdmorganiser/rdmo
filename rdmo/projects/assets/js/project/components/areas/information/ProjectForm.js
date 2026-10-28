@@ -92,10 +92,7 @@ const ProjectForm = ({
           {catalog.title}{' '}
           {
             catalog.help && (
-              <Tooltip
-                title={catalog.help}
-                placement="right"
-              >
+              <Tooltip title={<Template template={catalog.help} />} placement="right">
                 <i
                   className="bi bi-info-circle ms-2"
                   tabIndex={0}
