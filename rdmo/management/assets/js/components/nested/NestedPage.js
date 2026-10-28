@@ -62,7 +62,7 @@ const NestedPage = ({ page }) => {
               </div>
             </div>
           </div>
-          <div className="input-group input-group-sm mb-2">
+          <div className="input-group input-group-sm row-gap-1 mb-2">
             <label className="input-group-text">{gettext('Show URIs')}</label>
             <button type="button" onClick={toggleDisplayUriQuestionSets} className={btnClass(displayUriQuestionSets)}>
               {gettext('Question sets')}
@@ -80,7 +80,7 @@ const NestedPage = ({ page }) => {
               {gettext('Option sets')}
             </button>
           </div>
-          <div className="input-group input-group-sm">
+          <div className="input-group input-group-sm row-gap-1">
             <label className="input-group-text">{gettext('Toggle elements')}</label>
             <button type="button" onClick={toggleQuestionSets} className="btn btn-outline-primary border">
               {gettext('Question sets')}
