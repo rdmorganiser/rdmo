@@ -52,7 +52,7 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
   return showElement && (
     <li className="list-group-item">
       <div className="d-flex flex-column gap-2">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-1 gap-sm-2">
           <strong>{task.task_type_display}</strong>
           <div className="flex-grow-1">
             <Html html={task.title} />
