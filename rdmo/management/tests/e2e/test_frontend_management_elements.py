@@ -28,10 +28,11 @@ def test_management_navigation(page: Page, helper: ModelHelper) -> None:
     url_name = url_name.replace(" ", "")
     expect(page).to_have_url(re.compile(rf".*/{url_name}/"))
 
+    item_in_ui = page.locator(".list-group > .list-group-item").first
+    expect(item_in_ui).to_be_visible()
+
     # take a screenshot for visual inspection
     if helper.model == Catalog:
-        item_in_ui = page.locator(".list-group > .list-group-item").first
-        expect(item_in_ui).to_be_visible()
         page.screenshot(path="screenshots/management/navigation-catalog.png", full_page=True)
 
 
@@ -51,6 +52,8 @@ def test_management_has_items(page: Page, helper: ModelHelper) -> None:
 def test_management_nested_view(page: Page, helper: ModelHelper) -> None:
     """For each element type, that has a nested view, click the first example."""
     page.goto(f"/management/{helper.url}")
+    expect(page.locator(".list-group > .list-group-item").first).to_be_visible()
+
     # Open nested view for element type
     if helper.has_nested:
         page.get_by_title(f"View {helper.verbose_name} nested").first.click()
@@ -114,6 +117,9 @@ def test_management_edit_model(page: Page, helper: ModelHelper) -> None:
     url_id = int(urlparse(page.url).path.rstrip("/").split("/")[-1])
     model_obj = helper.model.objects.get(id=url_id)
     assert model_obj.comment == comment
+
+    # wait until no request is pending anymore
+    expect(page.locator(".fa-circle-o-notch.fa-spin")).to_have_count(0)
 
 
 def test_management_navigation_filters(page_multisite: Page) -> None:

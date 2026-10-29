@@ -170,7 +170,7 @@ jobs:
     - name: Run end-to-end tests
       run: |
         pytest -p randomly -p no:cacheprovider --reuse-db --numprocesses=auto --dist=loadscope \
-          -m e2e --nomigrations
+          -m e2e --nomigrations --playwright-timeout=10000
       env:
         DJANGO_DEBUG: True
         GITHUB_DB_BACKEND: ${{ matrix.db-backend }}
