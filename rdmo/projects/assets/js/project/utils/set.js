@@ -2,13 +2,13 @@ import { isEmpty, isNil, last, sortBy, toNumber, toString } from 'lodash'
 
 import SetFactory from '../factories/SetFactory'
 
-export const getParentSet = (set) => {
+export const getParentSet = (set, element) => {
   const split = set.set_prefix.split('|')
 
   return {
     set_prefix: (split.length > 1) ? split.slice(0, -1).join('|') : '',
     set_index: toNumber(last(split)),
-    element: set.element.parent
+    element: [element, ...element.questionsets].find(parent => parent.elements.includes(set.element))
   }
 }
 
@@ -93,7 +93,7 @@ export const gatherSets = (values, element) => {
 
   // ensure that every child set has a parent
   childSets.forEach((set) => {
-    createSetIfNotExisting(sets, getParentSet(set))
+    createSetIfNotExisting(sets, getParentSet(set, element))
   })
 
   // return the sorted sets

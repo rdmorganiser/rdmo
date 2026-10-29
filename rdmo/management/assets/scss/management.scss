@@ -41,6 +41,12 @@
     }
 
     .drop {
+        pointer-events: none;
+
+        &.show {
+            pointer-events: auto;
+        }
+
         position: absolute;
         height: 0.5rem; // same as mb-2
         left: 0;

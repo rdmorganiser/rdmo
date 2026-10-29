@@ -1,6 +1,8 @@
-import CoreApi from '../api/CoreApi'
+import { actions as errorActions } from '../reducers/errorsSlice'
+import { actions } from '../reducers/templateSlice'
+import { serializeError } from '../utils/errors'
 
-import { FETCH_TEMPLATES_ERROR, FETCH_TEMPLATES_INIT, FETCH_TEMPLATES_SUCCESS } from './actionTypes'
+import CoreApi from '../api/CoreApi'
 
 export function fetchTemplates() {
   return function(dispatch) {
@@ -13,13 +15,16 @@ export function fetchTemplates() {
 }
 
 export function fetchTemplatesInit() {
-  return {type: FETCH_TEMPLATES_INIT}
+  return errorActions.clearError('templates')
 }
 
 export function fetchTemplatesSuccess(templates) {
-  return {type: FETCH_TEMPLATES_SUCCESS, templates}
+  return actions.fetchTemplatesSuccess(templates)
 }
 
 export function fetchTemplatesError(errors) {
-  return {type: FETCH_TEMPLATES_ERROR, errors}
+  return errorActions.setError({
+    source: 'templates',
+    error: { ...serializeError(errors), context: gettext('Templates') }
+  })
 }

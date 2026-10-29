@@ -2,6 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { get, isEmpty, isNil } from 'lodash'
 
+import ErrorMessages from 'rdmo/core/assets/js/components/ErrorMessages'
+
 import { MainErrors } from '../components/common/Errors'
 import Edit from '../components/edit/Edit'
 import Elements from '../components/elements/Elements'
@@ -16,20 +18,12 @@ const Main = () => {
 
   const { element, elementType, elementId, elementAction } = elements
 
-  if (!isNil(settings.errors)) {
-    return <MainErrors errors={settings.errors.api} />
-  }
-
-  if (!isNil(constants.errors)) {
-    return <MainErrors errors={constants.errors.api} />
-  }
-
-  // check if anything was loaded yet
-  if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
-    return null
-  }
-
   const render = () => {
+    // check if anything was loaded yet
+    if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
+      return null
+    }
+
     // check if an error occurred
     if (get(elements, 'errors.api')) {
       return <MainErrors errors={elements.errors.api} />
@@ -64,6 +58,7 @@ const Main = () => {
 
   return (
     <div className="container-lg gx-0">
+      <ErrorMessages />
       {render()}
     </div>
   )

@@ -1,4 +1,3 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
@@ -6,36 +5,35 @@ import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
-import configReducer from 'rdmo/core/assets/js/reducers/configReducer'
-import groupsReducer from 'rdmo/core/assets/js/reducers/groupsReducer'
-import pendingReducer from 'rdmo/core/assets/js/reducers/pendingReducer'
-import settingsReducer from 'rdmo/core/assets/js/reducers/settingsReducer'
-import sitesReducer from 'rdmo/core/assets/js/reducers/sitesReducer'
+import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
+import errorsReducer, { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
+import groupsReducer from 'rdmo/core/assets/js/reducers/groupsSlice'
+import pendingReducer from 'rdmo/core/assets/js/reducers/pendingSlice'
+import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
+import sitesReducer from 'rdmo/core/assets/js/reducers/sitesSlice'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
-import { checkStoreId, configureMiddleware } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as constantsActions from '../actions/constantsActions'
 import * as elementActions from '../actions/elementActions'
-import constantsReducer from '../reducers/constantsReducer'
-import elementsReducer from '../reducers/elementsReducer'
-import importsReducer from '../reducers/importsReducer'
+import constantsReducer from '../reducers/constantsSlice'
+import elementsReducer from '../reducers/elementsSlice'
+import importsReducer from '../reducers/importsSlice'
 import { parseLocation } from '../utils/location'
+
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session
   checkStoreId()
 
-  const rootReducer = combineReducers({
-    config: configReducer,
-    elements: elementsReducer,
-    constants: constantsReducer,
-    imports: importsReducer,
-    pending: pendingReducer,
-    settings: settingsReducer,
-    sites: sitesReducer,
-    groups: groupsReducer,
-  })
+  const middlewares = []
+
+  if (process.env.NODE_ENV === 'development') {
+    const { logger } = require('redux-logger')
+    middlewares.push(logger)
+  }
 
   const initialState = {
     config: {
@@ -43,14 +41,25 @@ export default function configureStore() {
     }
   }
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    applyMiddleware(...configureMiddleware())
-  )
+  const store = configureToolkitStore({
+    reducer: {
+      config: configReducer,
+      errors: errorsReducer,
+      elements: elementsReducer,
+      imports: importsReducer,
+      pending: pendingReducer,
+      constants: constantsReducer,
+      settings: settingsReducer,
+      sites: sitesReducer,
+      groups: groupsReducer
+    },
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
+  })
 
   // load: fetch some of the data which does not change
   const fetchConstants = () => {
+    store.dispatch(errorActions.clearErrors())
     return Promise.all([
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(sitesActions.fetchSites()),

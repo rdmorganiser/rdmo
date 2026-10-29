@@ -1,17 +1,22 @@
-import CoreApi from '../api/CoreApi'
+import { actions as errorActions } from '../reducers/errorsSlice'
+import { actions } from '../reducers/sitesSlice'
+import { serializeError } from '../utils/errors'
 
-import { FETCH_SITES_ERROR, FETCH_SITES_INIT, FETCH_SITES_SUCCESS } from './actionTypes'
+import CoreApi from '../api/CoreApi'
 
 export function fetchSites() {
   return function (dispatch) {
-    dispatch({ type: FETCH_SITES_INIT })
+    dispatch(errorActions.clearError('sites'))
 
     return CoreApi.fetchSites()
       .then(sites => {
-        dispatch({ type: FETCH_SITES_SUCCESS, sites })
+        dispatch(actions.fetchSitesSuccess(sites))
       })
       .catch(error => {
-        dispatch({ type: FETCH_SITES_ERROR, error })
+        dispatch(errorActions.setError({
+          source: 'sites',
+          error: { ...serializeError(error), context: gettext('Sites') }
+        }))
         throw error
       })
   }

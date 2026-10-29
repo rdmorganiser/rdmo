@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import ErrorMessages from 'rdmo/core/assets/js/components/ErrorMessages'
+
 import Dashboard from './areas/Dashboard'
 import Documents from './areas/Documents'
 import Information from './areas/Information'
@@ -37,6 +39,7 @@ const Main = () => {
 
   return area && project && (
     <div className="container-lg gx-0">
+      <ErrorMessages />
       {renderArea()}
     </div>
   )

@@ -9,6 +9,7 @@ import { Tooltip } from 'rdmo/core/assets/js/components'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
+import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
@@ -27,7 +28,8 @@ const ProjectForm = ({
   submitMode = 'auto'
 }) => {
   const dispatch = useDispatch()
-  const errors = useFieldErrors()
+  const [backendErrors, setBackendErrors] = useState({})
+  const errors = useFieldErrors(backendErrors)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
   const storeData = useSelector((state) => state.project?.project)
 
@@ -92,7 +94,7 @@ const ProjectForm = ({
           {catalog.title}{' '}
           {
             catalog.help && (
-              <Tooltip title={<Template template={catalog.help} />} placement="right">
+              <Tooltip title={<Html html={catalog.help} />} placement="right">
                 <i
                   className="bi bi-info-circle ms-2"
                   tabIndex={0}
@@ -109,6 +111,8 @@ const ProjectForm = ({
   })
 
   const saveProject = (currentFormData) => {
+    setBackendErrors({})
+
     if (mode === 'create') {
       return dispatch(createProject(currentFormData))
     }
@@ -129,8 +133,18 @@ const ProjectForm = ({
     return dispatch(updateProject(payload))
   }
 
-  const debouncedSaveShort = useDebouncedCallback(saveProject, 500)
-  const debouncedSaveLong = useDebouncedCallback(saveProject, 1500)
+  const handleSaveError = error => {
+    setBackendErrors(error?.errors ?? {})
+  }
+
+  const debouncedSaveShort = useDebouncedCallback(
+    data => saveProject(data)?.catch(handleSaveError),
+    500
+  )
+  const debouncedSaveLong = useDebouncedCallback(
+    data => saveProject(data)?.catch(handleSaveError),
+    1500
+  )
 
   const handleChange = (key, value) => {
     const updatedFormData = { ...formData, [key]: value }
@@ -147,7 +161,10 @@ const ProjectForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    saveProject({ ...formData })?.then(() => onSave?.())
+    saveProject({ ...formData })?.then(
+      () => onSave?.(),
+      handleSaveError
+    )
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {

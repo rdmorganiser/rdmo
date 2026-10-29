@@ -37,7 +37,7 @@ const QuestionCopyValues = ({ question, sets, values, siblings, currentSet }) =>
   const hasEmptySiblingSet = sets.filter((set) => (
     (set.set_prefix == currentSet.set_prefix) &&
       (set.set_index != currentSet.set_index) &&
-      (set.element == question.parent)
+      (set.element.elements.includes(question))
   )).some((set) => {
     // loop over all other sets and filter siblings accordingly
     const setSiblings = siblings.filter((value) => (

@@ -32,7 +32,7 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
     })
   }
 
-  const values = isNil(element[field]) ? [] : element[field]
+  const values = isNil(element[field]) ? [] : [...element[field]]
 
   const selectOptions = options.map(option => ({
     value: option.id,
