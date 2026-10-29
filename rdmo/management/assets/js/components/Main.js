@@ -18,14 +18,6 @@ const Main = () => {
 
   const { element, elementType, elementId, elementAction } = elements
 
-  if (!isNil(settings.errors)) {
-    return <MainErrors errors={settings.errors.api} />
-  }
-
-  if (!isNil(constants.errors)) {
-    return <MainErrors errors={constants.errors.api} />
-  }
-
   const render = () => {
     // check if anything was loaded yet
     if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {

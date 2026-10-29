@@ -15,17 +15,64 @@ export function fetchConstants() {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch(errorActions.clearError('constants'))
 
     return Promise.all([
-      ConditionsApi.fetchRelations(),
-      ManagementApi.fetchMeta(),
-      OptionsApi.fetchAdditionalInputs(),
-      OptionsApi.fetchProviders(),
-      QuestionsApi.fetchValueTypes(),
-      QuestionsApi.fetchWidgetTypes(),
-      TasksApi.fetchTaskTypes(),
-      TasksApi.fetchTaskAreas(),
+      ConditionsApi.fetchRelations().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'relations',
+          error: { ...serializeError(error), context: gettext('Relations') }
+        }))
+        throw error
+      }),
+      ManagementApi.fetchMeta().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'meta',
+          error: { ...serializeError(error), context: gettext('Metadata') }
+        }))
+        throw error
+      }),
+      OptionsApi.fetchAdditionalInputs().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'additionalInputs',
+          error: { ...serializeError(error), context: gettext('Additional inputs') }
+        }))
+        throw error
+      }),
+      OptionsApi.fetchProviders().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'providers',
+          error: { ...serializeError(error), context: gettext('Option providers') }
+        }))
+        throw error
+      }),
+      QuestionsApi.fetchValueTypes().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'valueTypes',
+          error: { ...serializeError(error), context: gettext('Value types') }
+        }))
+        throw error
+      }),
+      QuestionsApi.fetchWidgetTypes().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'widgetTypes',
+          error: { ...serializeError(error), context: gettext('Widget types') }
+        }))
+        throw error
+      }),
+      TasksApi.fetchTaskTypes().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'taskTypes',
+          error: { ...serializeError(error), context: gettext('Task types') }
+        }))
+        throw error
+      }),
+      TasksApi.fetchTaskAreas().catch(error => {
+        dispatch(errorActions.setError({
+          source: 'taskAreas',
+          error: { ...serializeError(error), context: gettext('Task areas') }
+        }))
+        throw error
+      }),
     ])
       .then(([relations, meta, additionalInputs, providers, valueTypes, widgetTypes, taskTypes, taskAreas]) => (
         dispatch(actions.fetchConstantsSuccess({
@@ -39,10 +86,9 @@ export function fetchConstants() {
           taskAreas
         }))
       ))
-      .catch((error) => dispatch(errorActions.setError({
-        source: 'constants',
-        error: { ...serializeError(error), context: gettext('Constants') }
-      })))
+      .catch(() => {
+        // Individual request failures are already recorded in the shared errors slice.
+      })
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }

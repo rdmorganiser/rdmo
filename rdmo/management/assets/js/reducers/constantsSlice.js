@@ -8,22 +8,15 @@ const initialState = {
   valueTypes: [],
   widgetTypes: [],
   taskTypes: [],
-  taskAreas: [],
-  errors: null
+  taskAreas: []
 }
 
 const constantsSlice = createSlice({
   name: 'constants',
   initialState,
   reducers: {
-    fetchConstantsInit(state) {
-      state.errors = null
-    },
     fetchConstantsSuccess(state, action) {
       return { ...state, ...action.payload }
-    },
-    fetchConstantsError(state, action) {
-      state.errors = action.payload.errors
     }
   }
 })
