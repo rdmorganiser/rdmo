@@ -86,9 +86,6 @@ export function fetchConstants() {
           taskAreas
         }))
       ))
-      .catch(() => {
-        // Individual request failures are already recorded in the shared errors slice.
-      })
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }

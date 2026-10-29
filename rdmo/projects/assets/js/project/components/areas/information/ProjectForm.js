@@ -9,6 +9,7 @@ import { Tooltip } from 'rdmo/core/assets/js/components'
 import Input from 'rdmo/core/assets/js/components/forms/Input'
 import Select from 'rdmo/core/assets/js/components/forms/Select'
 import Textarea from 'rdmo/core/assets/js/components/forms/Textarea'
+import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
 
 import { copyProject, createProject } from '../../../../projects/actions/projectsActions'
@@ -93,7 +94,7 @@ const ProjectForm = ({
           {catalog.title}{' '}
           {
             catalog.help && (
-              <Tooltip title={<Template template={catalog.help} />} placement="right">
+              <Tooltip title={<Html html={catalog.help} />} placement="right">
                 <i
                   className="bi bi-info-circle ms-2"
                   tabIndex={0}
