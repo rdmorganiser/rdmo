@@ -1,4 +1,5 @@
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/constantsSlice'
@@ -14,7 +15,7 @@ export function fetchConstants() {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch(actions.fetchConstantsInit())
+    dispatch(errorActions.clearError('constants'))
 
     return Promise.all([
       ConditionsApi.fetchRelations(),
@@ -38,7 +39,10 @@ export function fetchConstants() {
           taskAreas
         }))
       ))
-      .catch((error) => dispatch(actions.fetchConstantsError(serializeError(error))))
+      .catch((error) => dispatch(errorActions.setError({
+        source: 'constants',
+        error: { ...serializeError(error), context: gettext('Constants') }
+      })))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }

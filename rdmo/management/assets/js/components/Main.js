@@ -26,12 +26,12 @@ const Main = () => {
     return <MainErrors errors={constants.errors.api} />
   }
 
-  // check if anything was loaded yet
-  if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
-    return null
-  }
-
   const render = () => {
+    // check if anything was loaded yet
+    if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
+      return null
+    }
+
     // check if an error occurred
     if (get(elements, 'errors.api')) {
       return <MainErrors errors={elements.errors.api} />
