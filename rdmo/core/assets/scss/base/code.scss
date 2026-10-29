@@ -4,7 +4,7 @@ code {
 
     font-size: var(--rdmo-font-size-xs);
 
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
 
     &.code-questions {
         color: rgb(16, 31, 112);

@@ -71,7 +71,7 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
 
             return (
               <div key={index} className="d-flex align-items-center gap-2 mb-2">
-                <div className="flex-grow-1">
+                <div className="select-wrapper flex-grow-1">
                   <ReactSelect
                     classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
                     options={selectOptions} value={selectValue} isDisabled={element.read_only}

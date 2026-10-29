@@ -77,7 +77,7 @@ const Tasks = () => {
             }
           </div>
         </div>
-        <div className="input-group input-group-sm">
+        <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs')}</label>
           <button type="button" onClick={updateDisplayUriTasks} className={btnClass(displayUriTasks)}>
             {gettext('Tasks')}

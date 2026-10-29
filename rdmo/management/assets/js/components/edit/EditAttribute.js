@@ -37,8 +37,8 @@ const EditAttribute = ({ attribute }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {attribute.id ? gettext('Edit attribute') : gettext('Create attribute')}
           </strong>
           <ReadOnlyIcon title={gettext('This attribute is read only')} show={attribute.read_only} />
@@ -144,9 +144,9 @@ const EditAttribute = ({ attribute }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {attribute.id && <DeleteButton onClick={openDeleteModal} disabled={attribute.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeAttribute} disabled={attribute.read_only} />
           <SaveButton
             elementAction={elementAction}

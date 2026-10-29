@@ -6,6 +6,10 @@
     position: relative;
     font-size: var(--rdmo-management-font-size);
 
+    .management-main {
+        min-width: 0;
+    }
+
     code {
         font-size: var(--rdmo-font-size-smaller);
     }
@@ -75,6 +79,10 @@
             }
         }
     }
+}
+
+.select-wrapper {
+    min-width: 0;  // allow the flex item to shrink below the width of long values
 }
 
 .react-select .form-control {
