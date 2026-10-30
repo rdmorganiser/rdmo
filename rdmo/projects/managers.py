@@ -203,7 +203,8 @@ class ValueQuerySet(models.QuerySet):
         # collect all values for this set and all descendants
         return self.filter(project=set_value.project, snapshot=set_value.snapshot, attribute__in=attributes).filter(
             Q(set_prefix=set_value.set_prefix, set_index=set_value.set_index) |
-            Q(set_prefix__startswith=descendants_set_prefix)
+            Q(set_prefix=descendants_set_prefix) |
+            Q(set_prefix__startswith=f'{descendants_set_prefix}|')
         )
 
 
