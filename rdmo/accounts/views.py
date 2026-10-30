@@ -105,10 +105,8 @@ def terms_of_use_accept(request):
     if not request.user.is_authenticated:
         return redirect("account_login")
 
-    # Use the form to handle both update and delete actions
-    form = AcceptConsentForm(request.POST or None, user=request.user)
-
     if request.method == "POST":
+        form = AcceptConsentForm(request.POST, user=request.user)
         if form.is_valid():
             consent_saved = form.save(request.session)  # saves the consent and sets the session key
             if consent_saved:
@@ -116,16 +114,17 @@ def terms_of_use_accept(request):
 
         # If consent was not saved, re-render the form with an error
         return render(request,
-            "account/terms_of_use_accept_form.html",
+            "account/terms_of_use_accept.html",
             {"form": form},
         )
 
     elif request.method == "GET":
+        form = AcceptConsentForm(user=request.user)
         has_consented = ConsentFieldValue.has_accepted_terms(request.user, request.session)
         return render(
             request,
-            "account/terms_of_use_accept_form.html",
-            {"has_consented": has_consented},
+            "account/terms_of_use_accept.html",
+            {"has_consented": has_consented, "form": form},
         )
 
     return HttpResponseNotAllowed(["GET", "POST"])
