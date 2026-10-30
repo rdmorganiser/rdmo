@@ -7,6 +7,7 @@ from django.conf import settings
 from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE, VALUE_TYPE_TEXT
+from rdmo.domain.models import Attribute
 
 from ..models import Value
 
@@ -311,6 +312,34 @@ def test_copy_set(db, client, username, password, value_id, set_values_count):
         assert Value.objects.count() == values_count
 
 
+@pytest.mark.parametrize('set_prefix', ['10', '11'])
+def test_copy_set_excludes_sibling_prefix(db, client, set_prefix):
+    # Arrange: select tab 2 (index 1) and add an answer in tab 11 or 12.
+    client.login(username='owner', password='owner')
+    set_value = Value.objects.get(id=85)
+    attribute = Attribute.objects.get(uri='http://example.com/terms/domain/blocks/a')
+    Value.objects.create(
+        project=set_value.project, attribute=attribute, set_prefix=set_prefix, text='Sibling answer',
+    )
+
+    # Act: copy tab 2 into a new tab with index 2.
+    url = reverse(urlnames['copy-set'], args=[set_value.project_id])
+    data = {
+        'copy_set_value': set_value.id,
+        'attribute': set_value.attribute_id,
+        'set_prefix': '',
+        'set_index': 2,
+        'text': 'new'
+    }
+    response = client.post(url, data=json.dumps(data), content_type='application/json')
+
+    # Assert: copying succeeds without copying the sibling's answer.
+    assert response.status_code == 201
+    assert not Value.objects.filter(
+        project=set_value.project, snapshot=None, attribute=attribute, set_prefix='2', text='Sibling answer',
+    ).exists()
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('value_id, set_values_count', set_values)
@@ -334,6 +363,25 @@ def test_delete_set(db, client, username, password, project_id, value_id, set_va
         assert response.status_code == 404
         assert Value.objects.filter(pk=value_id).exists()
         assert Value.objects.count() == values_count
+
+
+@pytest.mark.parametrize('set_prefix', ['10', '11'])
+def test_delete_set_preserves_sibling_prefix(db, client, set_prefix):
+    # Arrange: select tab 2 (index 1) and add an answer in tab 11 or 12.
+    client.login(username='owner', password='owner')
+    set_value = Value.objects.get(id=85)
+    attribute = Attribute.objects.get(uri='http://example.com/terms/domain/blocks/a')
+    sibling_value = Value.objects.create(
+        project=set_value.project, attribute=attribute, set_prefix=set_prefix, text='Sibling answer',
+    )
+
+    # Act: delete tab 2 through the set endpoint.
+    url = reverse(urlnames['delete-set'], args=[set_value.project_id, set_value.id])
+    response = client.delete(url)
+
+    # Assert: deletion succeeds and the sibling's answer remains stored.
+    assert response.status_code == 204
+    assert Value.objects.filter(id=sibling_value.id).exists()
 
 
 @pytest.mark.parametrize('username,password', users)

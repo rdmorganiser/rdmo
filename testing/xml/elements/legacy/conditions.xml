@@ -99,18 +99,18 @@
 		<target_text>0</target_text>
 		<target_option/>
 	</condition>
-	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0">
+	<condition dc:uri="http://example.com/terms/conditions/text_less_than_0">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than_0</key>
+		<key>text_less_than_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
 		<relation>lt</relation>
 		<target_text>0</target_text>
 		<target_option/>
 	</condition>
-	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0">
+	<condition dc:uri="http://example.com/terms/conditions/text_less_than_equal_0">
 		<uri_prefix>http://example.com/terms</uri_prefix>
-		<key>text_lesser_than_equal_0</key>
+		<key>text_less_than_equal_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
 		<relation>lte</relation>

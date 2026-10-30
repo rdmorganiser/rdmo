@@ -2,12 +2,13 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 class TasksFactory {
 
-  static createTask(config) {
+  static createTask(settings) {
     return {
       model: 'tasks.task',
-      uri_prefix: config.settings.default_uri_prefix,
-      sites: config.settings.multisite ? [siteId] : [],
-      editors: config.settings.multisite ? [siteId] : [],
+      uri_prefix: settings.default_uri_prefix,
+      sites: settings.multisite ? [siteId] : [],
+      editors: settings.multisite ? [siteId] : [],
+      task_type: 'task'
     }
   }
 

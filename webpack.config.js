@@ -17,9 +17,21 @@ const configList = [
   {
     name: 'core',
     entry: {
-      base: [
+      'bootstrap': [
+        './rdmo/core/assets/js/bootstrap.js',
+        './rdmo/core/assets/scss/bootstrap.scss'
+      ],
+      'base': [
         './rdmo/core/assets/js/base.js',
         './rdmo/core/assets/scss/base.scss'
+      ],
+      'home': [
+        './rdmo/core/assets/js/home.js',
+        './rdmo/core/assets/scss/home.scss'
+      ],
+      'app': [
+        './rdmo/core/assets/js/app.js',
+        './rdmo/core/assets/scss/app.scss'
       ]
     },
     output: {
@@ -30,8 +42,8 @@ const configList = [
         patterns: [
           {
             from: '**/*',
-            to: './/fonts/',
-            context: './rdmo/core/assets/fonts/'
+            to: './/img/',
+            context: './rdmo/core/assets/img/'
           }
         ]
       })
@@ -56,10 +68,10 @@ const configList = [
         './rdmo/projects/assets/js/projects.js',
         './rdmo/projects/assets/scss/projects.scss'
       ],
-      interview: [
-        './rdmo/projects/assets/js/interview.js',
-        './rdmo/projects/assets/scss/interview.scss'
-      ]
+      project: [
+        './rdmo/projects/assets/js/project.js',
+        './rdmo/projects/assets/scss/project.scss'
+      ],
     },
     output: {
       path: path.resolve(__dirname, './rdmo/projects/static/projects/'),
@@ -94,7 +106,7 @@ const baseConfig = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
-        options: { presets: ['@babel/env','@babel/preset-react'] }
+        options: { presets: ['@babel/env', '@babel/preset-react'] }
       },
       {
         test: /\.s?css$/,
