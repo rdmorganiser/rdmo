@@ -2,13 +2,15 @@ name: Check PR target branch
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize, ready_for_review]
+    types: [opened, reopened, edited]
 
 permissions: {}
 
 jobs:
   check-pr-target-branch:
     name: Check PR target branch
+    # 'edited' also fires on title/description edits; only re-check when the base branch changed
+    if: github.event.action != 'edited' || github.event.changes.base
     runs-on: ubuntu-slim
 
     steps:
