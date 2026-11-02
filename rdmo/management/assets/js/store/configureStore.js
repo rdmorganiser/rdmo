@@ -92,6 +92,8 @@ export default function configureStore() {
       if (!isEmpty(siteId) && isEmpty(store.getState().config.filter) && store.getState().settings.multisite) {
         store.dispatch(configActions.updateConfig('filter.sites', siteId))
       }
+    }).catch(() => {
+      // Stop initialization here; request errors are already displayed by ErrorMessages.
     })
   })
 
