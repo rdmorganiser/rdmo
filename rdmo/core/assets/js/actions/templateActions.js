@@ -1,8 +1,8 @@
-import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/templateSlice'
-import { serializeError } from '../utils/errors'
 
 import CoreApi from '../api/CoreApi'
+
+import * as errorActions from './errorsActions'
 
 export function fetchTemplates() {
   return function(dispatch) {
@@ -23,8 +23,5 @@ export function fetchTemplatesSuccess(templates) {
 }
 
 export function fetchTemplatesError(errors) {
-  return errorActions.setError({
-    source: 'templates',
-    error: { ...serializeError(errors), context: gettext('Templates') }
-  })
+  return errorActions.setError('templates', errors, gettext('Templates'))
 }

@@ -1,8 +1,8 @@
-import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/sitesSlice'
-import { serializeError } from '../utils/errors'
 
 import CoreApi from '../api/CoreApi'
+
+import * as errorActions from './errorsActions'
 
 export function fetchSites() {
   return function (dispatch) {
@@ -13,10 +13,7 @@ export function fetchSites() {
         dispatch(actions.fetchSitesSuccess(sites))
       })
       .catch(error => {
-        dispatch(errorActions.setError({
-          source: 'sites',
-          error: { ...serializeError(error), context: gettext('Sites') }
-        }))
+        dispatch(errorActions.setError('sites', error, gettext('Sites')))
         throw error
       })
   }

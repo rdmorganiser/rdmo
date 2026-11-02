@@ -1,8 +1,8 @@
-import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/settingsSlice'
-import { serializeError } from '../utils/errors'
 
 import CoreApi from '../api/CoreApi'
+
+import * as errorActions from './errorsActions'
 
 export function fetchSettings() {
   return function(dispatch) {
@@ -23,8 +23,5 @@ export function fetchSettingsSuccess(settings) {
 }
 
 export function fetchSettingsError(errors) {
-  return errorActions.setError({
-    source: 'settings',
-    error: { ...serializeError(errors), context: gettext('Settings') }
-  })
+  return errorActions.setError('settings', errors, gettext('Settings'))
 }

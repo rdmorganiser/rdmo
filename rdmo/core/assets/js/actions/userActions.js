@@ -1,8 +1,8 @@
-import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/userSlice'
-import { serializeError } from '../utils/errors'
 
 import AccountsApi from '../api/AccountsApi'
+
+import * as errorActions from './errorsActions'
 
 export function fetchCurrentUser() {
   return function(dispatch) {
@@ -23,8 +23,5 @@ export function fetchCurrentUserSuccess(currentUser) {
 }
 
 export function fetchCurrentUserError(error) {
-  return errorActions.setError({
-    source: 'currentUser',
-    error: { ...serializeError(error), context: gettext('Current user') }
-  })
+  return errorActions.setError('currentUser', error, gettext('Current user'))
 }

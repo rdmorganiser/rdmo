@@ -1,6 +1,5 @@
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-import { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
-import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/constantsSlice'
 
@@ -18,59 +17,35 @@ export function fetchConstants() {
 
     return Promise.all([
       ConditionsApi.fetchRelations().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'relations',
-          error: { ...serializeError(error), context: gettext('Relations') }
-        }))
+        dispatch(errorActions.setError('relations', error, gettext('Relations')))
         throw error
       }),
       ManagementApi.fetchMeta().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'meta',
-          error: { ...serializeError(error), context: gettext('Metadata') }
-        }))
+        dispatch(errorActions.setError('meta', error, gettext('Metadata')))
         throw error
       }),
       OptionsApi.fetchAdditionalInputs().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'additionalInputs',
-          error: { ...serializeError(error), context: gettext('Additional inputs') }
-        }))
+        dispatch(errorActions.setError('additionalInputs', error, gettext('Additional inputs')))
         throw error
       }),
       OptionsApi.fetchProviders().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'providers',
-          error: { ...serializeError(error), context: gettext('Option providers') }
-        }))
+        dispatch(errorActions.setError('providers', error, gettext('Option providers')))
         throw error
       }),
       QuestionsApi.fetchValueTypes().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'valueTypes',
-          error: { ...serializeError(error), context: gettext('Value types') }
-        }))
+        dispatch(errorActions.setError('valueTypes', error, gettext('Value types')))
         throw error
       }),
       QuestionsApi.fetchWidgetTypes().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'widgetTypes',
-          error: { ...serializeError(error), context: gettext('Widget types') }
-        }))
+        dispatch(errorActions.setError('widgetTypes', error, gettext('Widget types')))
         throw error
       }),
       TasksApi.fetchTaskTypes().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'taskTypes',
-          error: { ...serializeError(error), context: gettext('Task types') }
-        }))
+        dispatch(errorActions.setError('taskTypes', error, gettext('Task types')))
         throw error
       }),
       TasksApi.fetchTaskAreas().catch(error => {
-        dispatch(errorActions.setError({
-          source: 'taskAreas',
-          error: { ...serializeError(error), context: gettext('Task areas') }
-        }))
+        dispatch(errorActions.setError('taskAreas', error, gettext('Task areas')))
         throw error
       }),
     ])

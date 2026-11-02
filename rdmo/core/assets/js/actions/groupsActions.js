@@ -1,8 +1,8 @@
-import { actions as errorActions } from '../reducers/errorsSlice'
 import { actions } from '../reducers/groupsSlice'
-import { serializeError } from '../utils/errors'
 
 import CoreApi from '../api/CoreApi'
+
+import * as errorActions from './errorsActions'
 
 export function fetchGroups() {
   return function (dispatch) {
@@ -13,10 +13,7 @@ export function fetchGroups() {
         dispatch(actions.fetchGroupsSuccess(groups))
       })
       .catch(error => {
-        dispatch(errorActions.setError({
-          source: 'groups',
-          error: { ...serializeError(error), context: gettext('Groups') }
-        }))
+        dispatch(errorActions.setError('groups', error, gettext('Groups')))
         throw error
       })
   }

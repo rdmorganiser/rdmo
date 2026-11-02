@@ -1,8 +1,8 @@
 import { isNil } from 'lodash'
 
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { addToStale } from 'rdmo/core/assets/js/actions/staleActions'
-import { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
@@ -649,10 +649,7 @@ export function fetchProviders() {
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProviders'))
-        dispatch(errorActions.setError({
-          source: 'integrationProviders',
-          error: { ...serializeError(error), context: gettext('Integration providers') }
-        }))
+        dispatch(errorActions.setError('integrationProviders', error, gettext('Integration providers')))
         throw error
       })
   }

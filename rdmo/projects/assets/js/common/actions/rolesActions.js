@@ -1,5 +1,4 @@
-import { actions as errorActions } from 'rdmo/core/assets/js/reducers/errorsSlice'
-import { serializeError } from 'rdmo/core/assets/js/utils/errors'
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 
 import { actions } from '../reducers/rolesSlice'
 
@@ -30,8 +29,5 @@ export function fetchRolesSuccess(roles) {
 }
 
 export function fetchRolesError(errors) {
-  return errorActions.setError({
-    source: 'roles',
-    error: { ...serializeError(errors), context: gettext('Roles') }
-  })
+  return errorActions.setError('roles', errors, gettext('Roles'))
 }
