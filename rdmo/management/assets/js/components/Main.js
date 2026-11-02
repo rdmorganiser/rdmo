@@ -1,10 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { get, isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 import ErrorMessages from 'rdmo/core/assets/js/components/ErrorMessages'
 
-import { MainErrors } from '../components/common/Errors'
 import Edit from '../components/edit/Edit'
 import Elements from '../components/elements/Elements'
 import Import from '../components/import/Import'
@@ -15,6 +14,7 @@ const Main = () => {
   const constants = useSelector((state) => state.constants)
   const elements = useSelector((state) => state.elements)
   const imports = useSelector((state) => state.imports)
+  const errors = useSelector((state) => state.errors)
 
   const { element, elementType, elementId, elementAction } = elements
 
@@ -25,12 +25,8 @@ const Main = () => {
     }
 
     // check if an error occurred
-    if (get(elements, 'errors.api')) {
-      return <MainErrors errors={elements.errors.api} />
-    } else if (get(elements, 'element.errors.api')) {
-      return <MainErrors errors={get(elements, 'element.errors.api')} />
-    } else if (!isNil(imports.errors.file)) {
-      return <MainErrors errors={imports.errors.file} />
+    if (errors.elements || errors.imports) {
+      return null
     }
 
     if (!isEmpty(imports.elements)) {

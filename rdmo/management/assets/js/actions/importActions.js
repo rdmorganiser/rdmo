@@ -1,7 +1,7 @@
 import isNil from 'lodash/isNil'
 
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/importsSlice'
 
@@ -17,6 +17,7 @@ export function uploadFile(file) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('imports'))
     dispatch(uploadFileInit(file))
 
     return ManagementApi.uploadFile(file)
@@ -35,7 +36,7 @@ export function uploadFileSuccess(elements) {
 }
 
 export function uploadFileError(error) {
-  return actions.uploadFileError(serializeError(error))
+  return errorActions.setError('imports', error, gettext('Import'))
 }
 
 // import elements
@@ -47,6 +48,7 @@ export function importElements() {
     const elements = getState().imports.elements.filter(element => element.import)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('imports'))
     dispatch(importElementsInit())
 
     return ManagementApi.importElements(elements)
@@ -65,7 +67,7 @@ export function importElementsSuccess(elements) {
 }
 
 export function importElementsError(error) {
-  return actions.importElementsError(serializeError(error))
+  return errorActions.setError('imports', error, gettext('Import'))
 }
 
 // update elements

@@ -10,19 +10,13 @@ import { actions as elementActions } from './elementsSlice'
 
 const initialState = {
   elements: [],
-  errors: [],
   success: false,
   file: null
 }
 
 const resetImportState = (state) => {
   state.elements = []
-  state.errors = []
   state.success = false
-}
-
-const setErrors = (state, action) => {
-  state.errors = action.payload.errors
 }
 
 const keepState = state => state
@@ -45,13 +39,11 @@ const importsSlice = createSlice({
         return element
       })
     },
-    uploadFileError: setErrors,
     importElementsInit: keepState,
     importElementsSuccess(state, action) {
       state.elements = action.payload.map(element => processElementDiffs(element))
       state.success = true
     },
-    importElementsError: setErrors,
     updateElement(state, action) {
       const { element, values } = action.payload
       const index = original(state.elements).indexOf(element)

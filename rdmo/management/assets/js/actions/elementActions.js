@@ -1,6 +1,7 @@
 import { get, isNil, pick } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
@@ -31,6 +32,8 @@ export function fetchElements(elementType) {
     updateLocation(elementType)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(fetchElementsInit(elementType))
 
     let action
@@ -106,7 +109,7 @@ export function fetchElementsSuccess(elements) {
 }
 
 export function fetchElementsError(error) {
-  return actions.fetchElementsError(serializeError(error))
+  return errorActions.setError('elements', error, gettext('Elements'))
 }
 
 // fetch element
@@ -118,6 +121,8 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     updateLocation(elementType, elementId, elementAction)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(fetchElementInit(elementType, elementId, elementAction))
 
     let action
@@ -376,7 +381,7 @@ export function fetchElementSuccess(elements) {
 }
 
 export function fetchElementError(error) {
-  return actions.fetchElementError(serializeError(error))
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // store element
@@ -387,6 +392,7 @@ export function storeElement(elementType, element, back = false) {
   return function(dispatch, getState) {
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(storeElementInit(element))
 
     let action
@@ -459,6 +465,9 @@ export function storeElementSuccess(element) {
 }
 
 export function storeElementError(element, error) {
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
   return actions.storeElementError({ element, error: serializeError(error) })
 }
 
@@ -469,6 +478,7 @@ export function patchElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(patchElementInit(element))
 
     let action
@@ -534,6 +544,9 @@ export function patchElementSuccess(element) {
 }
 
 export function patchElementError(element, error) {
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
   return actions.patchElementError({ element, error: serializeError(error) })
 }
 
@@ -544,6 +557,7 @@ export function toggleElementSite(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(toggleElementSiteInit(element))
 
     let action
@@ -577,6 +591,9 @@ export function toggleElementSiteSuccess(element) {
 }
 
 export function toggleElementSiteError(element, error) {
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
   return actions.toggleElementSiteError({ element, error: serializeError(error) })
 }
 
@@ -589,6 +606,8 @@ export function createElement(elementType, parent = {}) {
     updateLocation(elementType, null, 'create')
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(createElementInit(elementType))
 
     let action
@@ -726,7 +745,7 @@ export function createElementSuccess(elements) {
 }
 
 export function createElementError(error) {
-  return actions.createElementError(serializeError(error))
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // delete element
@@ -736,6 +755,7 @@ export function deleteElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(deleteElementInit(element))
 
     let action
@@ -790,7 +810,7 @@ export function deleteElement(elementType, element) {
         dispatch(deleteElementSuccess(element))
         history.back()
       })
-      .catch(error => dispatch(deleteElementError(element, error)))
+      .catch(error => dispatch(deleteElementError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -803,8 +823,8 @@ export function deleteElementSuccess(element) {
   return actions.deleteElementSuccess(element)
 }
 
-export function deleteElementError(element, error) {
-  return actions.deleteElementError({ element, error: serializeError(error) })
+export function deleteElementError(error) {
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // update elements
