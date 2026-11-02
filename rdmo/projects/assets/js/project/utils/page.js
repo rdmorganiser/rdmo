@@ -1,11 +1,32 @@
 import { get, isNil } from 'lodash'
 
+const checkElement = (element, set) => {
+  if (element.model == 'questions.questionset') {
+    return checkQuestionSet(element, set)
+  } else {
+    return checkQuestion(element, set)
+  }
+}
+
 const checkQuestionSet = (questionset, set) => {
   return !questionset.has_conditions || get(set, `questionsets.${questionset.id}`)
 }
 
 const checkQuestion = (question, set) => {
   return !question.has_conditions || get(set, `questions.${question.id}`)
+}
+
+const groupElements = (elements, set) => {
+  return elements.filter((element) => checkElement(element, set)).reduce((cards, element, index, elements) => {
+    // start a new card for the first element, for elements without a width,
+    // and for elements following an element without a width
+    if (index == 0 || !element.width || !elements[index - 1].width) {
+      cards.push([element])
+    } else {
+      cards[cards.length - 1].push(element)
+    }
+    return cards
+  }, [])
 }
 
 const initQuestionSet = (questionset, level = 0) => {
@@ -66,4 +87,4 @@ const initQuestion = (question, questionset) => {
 
 const initPage = (page) => initQuestionSet(page)
 
-export { checkQuestion, checkQuestionSet, initPage }
+export { checkElement, checkQuestion, checkQuestionSet, groupElements, initPage }
