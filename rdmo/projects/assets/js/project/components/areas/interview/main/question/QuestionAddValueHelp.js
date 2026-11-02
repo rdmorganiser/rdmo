@@ -10,7 +10,7 @@ const QuestionAddValueHelp = ({ question }) => {
   const readOnly = useSelector(selectReadOnly)
 
   return !readOnly && question.is_collection && question.widget_type != 'checkbox' && (
-    <Template template="project_interview_add_value_help" />
+    <Template template="project_interview_add_value_help" className="font-small text-muted mb-3" />
   )
 }
 

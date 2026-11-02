@@ -6,9 +6,10 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { getQuestionHelpId } from '../../../../../utils/question'
 
-const QuestionHelp = ({ question }) => {
+const QuestionHelp = ({ question, show }) => {
   const classnames = classNames('project-interview-question-help font-small text-muted mb-3', {
-    'text-muted': question.is_optional
+    'text-muted': question.is_optional,
+    'd-none': !show
   })
 
   return (
@@ -19,7 +20,8 @@ const QuestionHelp = ({ question }) => {
 }
 
 QuestionHelp.propTypes = {
-  question: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired
 }
 
 export default QuestionHelp
