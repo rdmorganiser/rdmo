@@ -6,12 +6,12 @@ import { getErrorMessages } from '../utils/errors'
 const ErrorMessages = () => {
   const errors = useSelector(state => state.errors)
 
-  return Object.entries(errors).map(([source, error]) => {
+  return Object.entries(errors).map(([key, error]) => {
     const messages = getErrorMessages(error)
     if (!messages.length) return null
 
     return (
-      <div key={source} className="alert alert-danger" role="alert">
+      <div key={key} className="alert alert-danger" role="alert">
         <div className="fw-bold mb-1">
           {error.context || gettext('An error occurred.')}
         </div>

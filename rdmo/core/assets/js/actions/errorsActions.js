@@ -1,15 +1,15 @@
 import { actions } from '../reducers/errorsSlice'
 import { serializeError } from '../utils/errors'
 
-export function setError(source, error, context) {
+export function setError(key, error, context) {
   return actions.setError({
-    source,
+    key,
     error: { ...serializeError(error), context }
   })
 }
 
-export function clearError(source) {
-  return actions.clearError(source)
+export function clearError(key) {
+  return actions.clearError(key)
 }
 
 export function clearErrors() {

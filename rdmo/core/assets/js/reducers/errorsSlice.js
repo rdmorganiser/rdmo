@@ -5,8 +5,8 @@ const errorsSlice = createSlice({
   initialState: {},
   reducers: {
     setError(state, action) {
-      const { source, error } = action.payload
-      state[source] = error
+      const { key, error } = action.payload
+      state[key] = error
     },
     clearError(state, action) {
       delete state[action.payload]
