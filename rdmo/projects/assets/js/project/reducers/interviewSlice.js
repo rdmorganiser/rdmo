@@ -1,7 +1,7 @@
 import { createSlice, original } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
-import { sortValues } from '../utils/value'
+import { compareValueId, sortValues } from '../utils/value'
 
 const initialState = {
   done: false,
@@ -27,8 +27,6 @@ const setValues = (state, action) => {
   state.values = action.payload.values
   state.sets = action.payload.sets
 }
-
-const matchesValueId = (value, valueId) => (value.id || value.tmp_id) == valueId
 
 const keepState = state => state
 
@@ -87,19 +85,19 @@ const interviewSlice = createSlice({
     updateValue(state, action) {
       const { value, attrs } = action.payload
       state.values = state.values.map(currentValue => (
-        matchesValueId(currentValue, value.id || value.tmp_id) ? { ...currentValue, ...attrs } : currentValue
+        compareValueId(currentValue, value.id || value.tmp_id) ? { ...currentValue, ...attrs } : currentValue
       ))
     },
     storeValueInit(state, action) {
       state.values = state.values.map(value => (
-        matchesValueId(value, action.payload) ? { ...value, error: null, pending: true } : value
+        compareValueId(value, action.payload) ? { ...value, error: null, pending: true } : value
       ))
     },
     storeValueSuccess(state, action) {
       const { value, valueId } = action.payload
-      if (state.values.some(currentValue => matchesValueId(currentValue, valueId))) {
+      if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
         state.values = state.values.map(currentValue => (
-          matchesValueId(currentValue, valueId) ? value : currentValue
+          compareValueId(currentValue, valueId) ? value : currentValue
         ))
       } else {
         state.values.push(value)
@@ -109,7 +107,7 @@ const interviewSlice = createSlice({
       const { error, valueId } = action.payload
       if (!isNil(valueId)) {
         state.values = state.values.map(value => (
-          matchesValueId(value, valueId) ? { ...value, error, pending: false } : value
+          compareValueId(value, valueId) ? { ...value, error, pending: false } : value
         ))
       } else {
         appendError(state, { type: action.type, payload: error })
@@ -117,11 +115,11 @@ const interviewSlice = createSlice({
     },
     deleteValueInit(state, action) {
       state.values = state.values.map(value => (
-        matchesValueId(value, action.payload) ? { ...value, pending: true } : value
+        compareValueId(value, action.payload) ? { ...value, pending: true } : value
       ))
     },
     deleteValueSuccess(state, action) {
-      state.values = state.values.filter(value => !matchesValueId(value, action.payload))
+      state.values = state.values.filter(value => !compareValueId(value, action.payload))
     },
     deleteValueError: appendError,
     createSet: setValues,
