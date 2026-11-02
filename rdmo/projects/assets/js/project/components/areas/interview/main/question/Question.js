@@ -1,12 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { useToggle } from 'rdmo/core/assets/js/hooks'
+
 import { checkQuestion } from '../../../../../utils/page'
 
 import QuestionAddValueHelp from './QuestionAddValueHelp'
 import QuestionContact from './QuestionContact'
 import QuestionHelp from './QuestionHelp'
 import QuestionHelpTemplate from './QuestionHelpTemplate'
+import QuestionHelpToggle from './QuestionHelpToggle'
 import QuestionManagement from './QuestionManagement'
 import QuestionOptional from './QuestionOptional'
 import QuestionText from './QuestionText'
@@ -14,6 +17,8 @@ import QuestionWarning from './QuestionWarning'
 import QuestionWidget from './QuestionWidget'
 
 const Question = ({ question, sets, values, siblings, currentSet }) => {
+  const [showHelp, toggleHelp] = useToggle()
+
   return checkQuestion(question, currentSet) && (
     <div className={`project-interview-question col-md-${question.width || '12'}`}>
       <div className="project-interview-question-text">
@@ -22,9 +27,10 @@ const Question = ({ question, sets, values, siblings, currentSet }) => {
           <QuestionContact question={question} values={values} />
           <div className="ms-auto"></div>
           <QuestionOptional question={question} />
+          <QuestionHelpToggle question={question} show={showHelp} onClick={toggleHelp} />
         </div>
       </div>
-      <QuestionHelp question={question} />
+      <QuestionHelp question={question} show={showHelp} />
       <QuestionHelpTemplate />
       <QuestionAddValueHelp question={question} />
       <QuestionWarning question={question} values={values} />
