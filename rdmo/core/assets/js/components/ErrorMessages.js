@@ -13,7 +13,7 @@ const ErrorMessages = () => {
     return (
       <div key={key} className="alert alert-danger" role="alert">
         <div className="fw-bold mb-1">
-          {error.context || gettext('An error occurred.')}
+          {error.title || gettext('An error occurred.')}
         </div>
         {messages.map((message, index) => <div key={index}>{message}</div>)}
       </div>
