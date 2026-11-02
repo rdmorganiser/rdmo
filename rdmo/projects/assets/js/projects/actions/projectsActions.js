@@ -42,7 +42,7 @@ export function fetchProjectsSuccess(projects, shouldConcatenate) {
 
 export function fetchProjectsError(error) {
   return function (dispatch) {
-    if (error.constructor.name === 'BadRequestError' && error.errors.catalog) {
+    if (error.errorType === 'BadRequestError' && error.errors.catalog) {
       dispatch(configActions.deleteConfig('params.catalog'))
       dispatch(fetchProjects())
     } else {

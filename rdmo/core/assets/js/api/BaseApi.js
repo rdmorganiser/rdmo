@@ -3,7 +3,9 @@ import isUndefined from 'lodash/isUndefined'
 
 import { baseUrl } from '../utils/meta'
 
+// Explicit error types remain stable when constructor names are minified.
 function ApiError(statusText, status) {
+  this.errorType = 'ApiError'
   this.status = status
   this.statusText = statusText
   this.errors = {
@@ -12,16 +14,19 @@ function ApiError(statusText, status) {
 }
 
 function ValidationError(errors) {
+  this.errorType = 'ValidationError'
   this.errors = errors
 }
 
 function BadRequestError(statusText, status, errors) {
+  this.errorType = 'BadRequestError'
   this.status = status
   this.statusText = statusText
   this.errors = errors
 }
 
 function NotFoundError(statusText, status, errors) {
+  this.errorType = 'NotFoundError'
   this.status = status
   this.statusText = statusText
   this.errors = errors

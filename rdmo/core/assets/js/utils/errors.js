@@ -4,12 +4,8 @@ export const serializeError = (error) => {
     return error
   }
 
-  // API error fields, including JSON validation details, are enumerable.
+  // API error fields, including explicit error types and JSON validation details, are enumerable.
   const result = { ...error }
-  const errorType = error.constructor?.name
-  if (typeof errorType === 'string' && errorType !== 'Object') {
-    result.errorType = errorType
-  }
 
   // Native Error diagnostics are not enumerable and need copying explicitly.
   for (const key of ['name', 'message', 'stack']) {
