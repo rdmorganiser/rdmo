@@ -1,3 +1,4 @@
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
@@ -21,8 +22,6 @@ import constantsReducer from '../reducers/constantsSlice'
 import elementsReducer from '../reducers/elementsSlice'
 import importsReducer from '../reducers/importsSlice'
 import { parseLocation } from '../utils/location'
-
-import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session

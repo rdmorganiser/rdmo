@@ -80,7 +80,7 @@ module.exports = {
     'simple-import-sort/imports': ['error', {
       groups: [
         // external imports in the given order
-        ['^react$', '^prop-types$', '^react', '^redux', '^[a-z]', '^lodash'],
+        ['^react$', '^prop-types$', '^react', '^redux', '^@reduxjs', '^[a-z]', '^lodash'],
         // rdmo imports: lowercase first, then capitalized components
         ['^rdmo/.*\\/[a-z]'],
         ['^rdmo/.*\\/[A-Z]'],

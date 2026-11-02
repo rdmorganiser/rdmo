@@ -22,7 +22,7 @@ const EditAttribute = ({ attribute }) => {
   const dispatch = useDispatch()
 
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const { elementAction, parent, attributes } = useSelector((state) => state.elements)
 
   const editAttribute = (attribute) => dispatch(fetchElement('attributes', attribute))

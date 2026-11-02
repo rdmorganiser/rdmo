@@ -1,3 +1,4 @@
+import { createSlice, original } from '@reduxjs/toolkit'
 import isArray from 'lodash/isArray'
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
@@ -6,7 +7,6 @@ import { processElementDiffs } from '../utils/diff'
 import { buildPathForAttribute, buildUri } from '../utils/elements'
 
 import { actions as elementActions } from './elementsSlice'
-import { createSlice, original } from '@reduxjs/toolkit'
 
 const initialState = {
   elements: [],

@@ -23,8 +23,8 @@ const EditView = ({ view }) => {
   const dispatch = useDispatch()
 
   const settings = useSelector((state) => state.settings)
-  const groups = Object.values(useSelector((state) => state.groups))
-  const sites = Object.values(useSelector((state) => state.sites))
+  const groups = useSelector((state) => state.groups)
+  const sites = useSelector((state) => state.sites)
   const { elementAction, catalogs } = useSelector((state) => state.elements)
 
   const updateView = (key, value) => dispatch(updateElement(view, {[key]: value}))

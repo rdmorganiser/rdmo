@@ -24,7 +24,7 @@ const EditOption = ({ option }) => {
   const dispatch = useDispatch()
 
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const { additionalInputs } = useSelector((state) => state.constants)
   const { elementAction, parent } = useSelector((state) => state.elements)
 

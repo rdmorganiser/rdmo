@@ -18,7 +18,7 @@ const Views = () => {
 
   const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const views = useSelector((state) => state.elements.views)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.views.search', value))

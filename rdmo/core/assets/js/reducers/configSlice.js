@@ -1,8 +1,7 @@
+import { createSlice } from '@reduxjs/toolkit'
 import { set, unset } from 'lodash'
 
 import { deleteConfigInLocalStorage, setConfigInLocalStorage } from '../utils/config'
-
-import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {}
 
