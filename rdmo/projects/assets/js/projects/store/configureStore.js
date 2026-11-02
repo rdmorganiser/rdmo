@@ -1,3 +1,5 @@
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
+
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
@@ -15,8 +17,6 @@ import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
 import * as projectsActions from '../actions/projectsActions'
 import projectsReducer from '../reducers/projectsSlice'
-
-import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session

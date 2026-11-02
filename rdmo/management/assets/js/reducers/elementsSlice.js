@@ -1,8 +1,7 @@
+import { createSlice } from '@reduxjs/toolkit'
 import isNil from 'lodash/isNil'
 
 import { resetElement, updateElement } from '../utils/elements'
-
-import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   elementType: null,

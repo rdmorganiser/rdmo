@@ -1,3 +1,4 @@
+import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
@@ -28,8 +29,6 @@ import interviewReducer from '../reducers/interviewSlice'
 import projectSliceReducer from '../reducers/projectSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
-
-import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 
 export default function configureStore() {
   // empty localStorage in new session

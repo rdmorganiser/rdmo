@@ -1,8 +1,7 @@
+import { createSlice, original } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
 import { sortValues } from '../utils/value'
-
-import { createSlice, original } from '@reduxjs/toolkit'
 
 const initialState = {
   done: false,
