@@ -18,7 +18,7 @@ const Catalogs = () => {
 
   const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const catalogs = useSelector((state) => state.elements.catalogs)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.catalogs.search', value))

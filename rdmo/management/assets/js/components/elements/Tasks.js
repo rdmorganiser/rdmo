@@ -18,7 +18,7 @@ const Tasks = () => {
 
   const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const tasks = useSelector((state) => state.elements.tasks)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.tasks.search', value))

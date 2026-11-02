@@ -16,7 +16,7 @@ const OptionSets = () => {
 
   const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const optionsets = useSelector((state) => state.elements.optionsets)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.optionsets.search', value))
