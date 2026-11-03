@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { isNil, minBy } from 'lodash'
 import get from 'lodash/get'
 
-import { groupElements } from '../../../../../utils/page'
+import { getElementKey, groupElements } from '../../../../../utils/page'
 
 import Question from '../question/Question'
 import QuestionSet from '../questionset/QuestionSet'
@@ -62,16 +62,16 @@ const Page = () => {
       />
       <div className="project-interview-page-elements mt-2">
         {
-          currentSet && cards.map((elements, cardIndex) => (
-            <div key={cardIndex} className="card card-tile mb-4">
+          currentSet && cards.map(({ key, elements }) => (
+            <div key={key} className="card card-tile mb-4">
               <div className="card-body">
                 <div className="row g-4">
                   {
-                    elements.map((element, elementIndex) => {
+                    elements.map((element) => {
                       if (element.model == 'questions.questionset') {
                         return (
                           <QuestionSet
-                            key={elementIndex}
+                            key={getElementKey(element)}
                             questionset={element}
                             sets={sets}
                             values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -81,7 +81,7 @@ const Page = () => {
                       } else {
                         return (
                           <Question
-                            key={elementIndex}
+                            key={getElementKey(element)}
                             question={element}
                             sets={
                               sets.filter((set) => (

@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { checkQuestionSet } from '../../../../../utils/page'
+import { checkQuestionSet, getElementKey } from '../../../../../utils/page'
 import { getChildPrefix } from '../../../../../utils/set'
 
 import Question from '../question/Question'
@@ -48,11 +48,11 @@ const QuestionSet = ({ questionset, sets, values, parentSet }) => {
                   <div className="row">
                     {
                       currentSets && (
-                        questionset.elements.map((element, elementIndex) => {
+                        questionset.elements.map((element) => {
                           if (element.model == 'questions.questionset') {
                             return (
                               <QuestionSet
-                                key={elementIndex}
+                                key={getElementKey(element)}
                                 questionset={element}
                                 sets={sets}
                                 values={values.filter((value) => element.attributes.includes(value.attribute))}
@@ -62,7 +62,7 @@ const QuestionSet = ({ questionset, sets, values, parentSet }) => {
                           } else {
                             return (
                               <Question
-                                key={elementIndex}
+                                key={getElementKey(element)}
                                 question={element}
                                 sets={
                                   sets.filter((set) => (
