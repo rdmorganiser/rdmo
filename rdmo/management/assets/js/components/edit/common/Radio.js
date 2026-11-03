@@ -22,13 +22,13 @@ const Radio = ({ element, field, options, onChange }) => {
     <div className="mb-3">
       <label>{label}</label>
 
-      <div className="d-flex align-items-center gap-5">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2 gap-sm-5 py-2">
         {
           options.map((option, index) => {
             const radioId = uniqueId('radio-')
 
             return (
-              <div key={index} className="form-check">
+              <div key={index} className="form-check mb-0">
                 <input
                   type="radio" id={radioId} disabled={element.read_only}
                   className={classNames('form-check-input', {'is-invalid': !isEmpty(errors)})}

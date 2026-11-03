@@ -78,7 +78,7 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
 
       {
         onCreate && (
-          <div className="mt-2">
+          <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2 mt-2">
             <button
               type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>

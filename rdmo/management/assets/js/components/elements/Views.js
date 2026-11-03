@@ -37,8 +37,8 @@ const Views = () => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex align-items-center gap-2">
-          <strong className="me-auto">{gettext('Views')}</strong>
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">{gettext('Views')}</strong>
           <BackButton />
           <NewButton onClick={createView} />
         </div>

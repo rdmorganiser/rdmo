@@ -292,7 +292,7 @@ const OrderedMultiSelect = ({
         }
       </div>
 
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
         <button
           type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
           disabled={element.read_only}>

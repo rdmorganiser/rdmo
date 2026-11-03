@@ -28,8 +28,8 @@ const Conditions = () => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex align-items-center gap-2">
-          <strong className="me-auto">{gettext('Conditions')}</strong>
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">{gettext('Conditions')}</strong>
           <BackButton />
           <NewButton onClick={createCondition} />
         </div>
