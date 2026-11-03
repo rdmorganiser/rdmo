@@ -9,7 +9,7 @@ import { useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import ErrorMessages from 'rdmo/core/assets/js/components/ErrorMessages'
+import Errors from 'rdmo/core/assets/js/components/Errors'
 
 import { combinePermissions } from '../../common/utils/permissions'
 import * as projectsActions from '../actions/projectsActions'
@@ -40,7 +40,7 @@ const Main = () => {
   const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
   const { show: showCopy, open: openCopy, close: closeCopy } = useModal()
 
-  if (!projectsObject.ready) return <ErrorMessages />
+  if (!projectsObject.ready) return <Errors />
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
   const { currentUser } = currentUserObject
   const userPerms = currentUser.permissions ?? {}
@@ -339,7 +339,7 @@ const Main = () => {
   return (
     <div className="px-4 py-5">
       <div className="container gx-0">
-        <ErrorMessages />
+        <Errors />
         <div className="projects">
           <div className="d-flex align-items-center gap-3 mb-3">
             <h1 className="me-auto mb-0">{headline}</h1>

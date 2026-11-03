@@ -93,7 +93,7 @@ export default function configureStore() {
         store.dispatch(configActions.updateConfig('filter.sites', siteId))
       }
     }).catch(() => {
-      // Stop initialization here; request errors are already displayed by ErrorMessages.
+      // Stop initialization here; request errors are already displayed by Errors.
     })
   })
 
