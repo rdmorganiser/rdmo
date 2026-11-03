@@ -33,9 +33,14 @@ const formatOptionLabel = ({ label }, { context }) => {
         }
       </span>
     )
-  } else if (parts.length >= 3) {
-    const head = `${parts.slice(0, -3).join('/')}`
-    const tail = `/${parts.slice(-3).join('/')}`
+  }
+
+  // show less of the uri on small screens
+  const tailLength = window.matchMedia('(min-width: 576px)').matches ? 3 : 1
+
+  if (parts.length > tailLength) {
+    const head = `${parts.slice(0, -tailLength).join('/')}`
+    const tail = `/${parts.slice(-tailLength).join('/')}`
     return (
       <span className="truncate-option-label">
         <span className="truncate-option-label-head">{head}</span>
