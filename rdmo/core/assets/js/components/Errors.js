@@ -8,7 +8,7 @@ const Errors = () => {
 
   const messages = Object.entries(errors).flatMap(([key, error]) => (
     getErrorMessages(error).map((message, index) => (
-      <li key={`${key}/${index}`}>
+      <li key={`${key}/${index}`} className="alert alert-danger" role="alert">
         {error.title && <strong>{error.title}: </strong>}
         {message}
       </li>
@@ -18,9 +18,9 @@ const Errors = () => {
   if (!messages.length) return null
 
   return (
-    <div className="errors alert alert-danger" role="alert">
-      <h1>{gettext('Error!')}</h1>
-      <ul>{messages}</ul>
+    <div className="errors">
+      <h1 className="mb-5">{gettext('Error!')}</h1>
+      <ul className="list-unstyled">{messages}</ul>
     </div>
   )
 }
