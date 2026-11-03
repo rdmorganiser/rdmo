@@ -263,6 +263,7 @@ SETTINGS_API = [
 ]
 
 TEMPLATES_API = [
+    'core/snippets/errors_help.html',
     'projects/project_interview_add_set_help.html',
     'projects/project_interview_add_value_help.html',
     'projects/project_interview_buttons_help.html',
