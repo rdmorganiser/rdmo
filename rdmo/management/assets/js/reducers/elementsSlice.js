@@ -16,8 +16,6 @@ const initialState = {
   pages: [],
   questionsets: [],
   questions: [],
-  widgetTypes: [],
-  valueTypes: [],
   tasks: [],
   views: []
 }
