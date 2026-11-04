@@ -1,4 +1,5 @@
 import { createSlice, original } from '@reduxjs/toolkit'
+import { pick } from 'lodash'
 
 import { compareValueId, sortValues } from '../utils/value'
 
@@ -76,11 +77,14 @@ const interviewSlice = createSlice({
       ))
     },
     storeValueSuccess(state, action) {
-      const { value, valueId } = action.payload
+      const { value, valueId, pending = false } = action.payload
       if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
-        state.values = state.values.map(currentValue => (
-          compareValueId(currentValue, valueId) ? value : currentValue
-        ))
+        state.values = state.values.map(currentValue => {
+          if (!compareValueId(currentValue, valueId)) return currentValue
+          // Keep waiting edits while accepting the server ID and timestamp.
+          const attrs = pending ? pick(currentValue, ['text', 'option', 'external_id', 'unit', 'value_type']) : {}
+          return { ...value, ...attrs, tmp_id: currentValue.tmp_id, pending }
+        })
       } else {
         state.values.push(value)
       }
