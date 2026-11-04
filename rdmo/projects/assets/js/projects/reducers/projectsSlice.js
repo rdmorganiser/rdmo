@@ -20,9 +20,7 @@ const projectsSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
-    fetchProjectsInit(state, action) {
-      return { ...state, ...action.payload }
-    },
+    fetchProjectsInit: clearErrors,
     fetchProjectsSuccess(state, action) {
       const { projects, shouldConcatenate } = action.payload
       state.projects = shouldConcatenate ? [...state.projects, ...projects.results] : projects.results
