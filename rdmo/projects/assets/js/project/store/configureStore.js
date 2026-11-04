@@ -26,7 +26,7 @@ import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
 import interviewReducer from '../reducers/interviewSlice'
-import projectSliceReducer from '../reducers/projectSlice'
+import projectReducer from '../reducers/projectSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -54,7 +54,7 @@ export default function configureStore() {
       config: configReducer,
       errors: errorsReducer,
       pending: pendingReducer,
-      project: projectSliceReducer,
+      project: projectReducer,
       settings: settingsReducer,
       templates: templateReducer,
       user: userReducer,
