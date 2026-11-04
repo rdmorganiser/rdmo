@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil, omit } from 'lodash'
+import { first, isEmpty, isNil, omit, pick } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
@@ -9,7 +9,13 @@ import { actions } from '../reducers/interviewSlice'
 import { projectId } from '../utils/meta'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
-import { compareValues, gatherDefaultValues, initValues, isEmptyValue, sortValues } from '../utils/value'
+import {
+  compareValueId,
+  compareValues,
+  gatherDefaultValues,
+  initValues, isEmptyValue,
+  sortValues
+} from '../utils/value'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -18,6 +24,13 @@ import SetFactory from '../factories/SetFactory'
 import ValueFactory from '../factories/ValueFactory'
 
 import { fetchNavigation, fetchProgress, updateProgress } from './projectActions'
+
+// Keep one latest waiting save per value. Files and promises stay outside Redux.
+const valueSaveQueues = {}
+
+const getCurrentValue = (getState, value) => getState().interview.values.find(currentValue => (
+  compareValueId(currentValue, value.id || value.tmp_id)
+)) || value
 
 export function fetchPage(pageId, back) {
   const pendingId = 'fetchPage'
@@ -177,66 +190,89 @@ export function storeValue(value) {
     throw new Error('Could not determine valueId in storeValue')
   }
 
-  const pendingId = `storeValue/${valueId}`
+  return (dispatch, getState) => {
+    const currentValue = getCurrentValue(getState, value)
+    const key = currentValue.tmp_id || currentValue.id
+    const previous = valueSaveQueues[key]
 
-  if (value.pending) {
-    return actions.noop()
-  } else {
-    return (dispatch, getState) => {
-      const page = getState().interview.page
-      const sets = getState().interview.sets
-      const question = page.questions.find((question) => question.attribute === value.attribute)
-      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
-      const widget_type = question && question.widget_type
+    if (previous) {
+      previous.next = value
+      return previous.promise
+    }
+    if (currentValue.pending) return dispatch(actions.noop())
 
-      const valueText = value.text
-      const valueFile = value.file
-      const valueSuccess = value.success
+    const queue = {}
+    valueSaveQueues[key] = queue
 
-      dispatch(addToPending(pendingId))
-      dispatch(actions.storeValueInit(valueId))
+    const pendingId = `storeValue/${key}`
+    const { page, sets } = getState().interview
+    const question = page.questions.find(question => question.attribute === value.attribute)
+    const refresh = question && question.optionsets.some(optionset => optionset.has_refresh)
+    const widget_type = question && question.widget_type
+    clearTimeout(currentValue.success)
 
-      return ValueApi.storeValue(projectId, { ...value, widget_type })
+    const storeNextValue = (valueToSave) => {
+      const savedId = valueToSave.id || valueToSave.tmp_id
+      const valueText = valueToSave.text
+      const valueFile = valueToSave.file
+
+      return ValueApi.storeValue(projectId, { ...valueToSave, widget_type })
         .then((value) => {
-          dispatch(fetchNavigation())
-          dispatch(updateProgress())
-
-          if (refresh) {
-            // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues. Preserve unsaved values,
-            // since they are not included in the response from the backend.
-            dispatch(fetchValues(page, true))
-          } else {
-            dispatch(resolveConditions(page, sets))
-          }
-
-          // set the success flag and start the timeout to remove it. the flag is actually
-          // the stored timeout, so we can cancel any old timeout before starting the a new
-          // one in order to prolong the time the indicator is show with each save
-          clearTimeout(valueSuccess)
-          value.success = setTimeout(() => {
-            dispatch(updateValue(value, {success: false}, false))
-          }, 1000)
-
           // replace the text with the old text if it was trimmed by the backend
           // (but not if a new text was inserted, e.g. by an optionset provider)
           if (valueText.trim() == value.text) {
             value.text = valueText
           }
 
-          // check if there is a file or if a filename is set (when the file was just erased)
+          // upload file after the value is created, or remove an existing file
           if (isNil(valueFile) && isNil(value.file_name)) {
-            dispatch(actions.storeValueSuccess({ value, valueId }))
+            return value
           } else {
-            // upload file after the value is created
             return ValueApi.storeFile(projectId, value, valueFile)
-              .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
-              .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
           }
         })
-        .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
-        .finally(() => dispatch(removeFromPending(pendingId)))
+        .then((value) => {
+          const pending = Boolean(queue.next)
+          if (!pending) {
+            value.success = setTimeout(() => {
+              dispatch(updateValue(value, {success: false}, false))
+            }, 1000)
+          }
+
+          const result = dispatch(actions.storeValueSuccess({ value, valueId: savedId, pending }))
+          if (pending) {
+            // Reuse the server ID and timestamp when saving the waiting edit.
+            const nextValue = { ...queue.next, ...pick(value, ['id', 'updated']) }
+            queue.next = null
+            return storeNextValue(nextValue)
+          }
+
+          dispatch(fetchNavigation())
+          dispatch(updateProgress())
+
+          // Refresh only after the waiting edit has also been saved.
+          if (refresh) {
+            dispatch(fetchValues(page, true))
+          } else {
+            dispatch(resolveConditions(page, sets))
+          }
+          return result
+        })
     }
+
+    queue.promise = Promise.resolve()
+      .then(() => storeNextValue(value))
+      .catch((error) => dispatch(actions.storeValueError({
+        error: serializeError(error), valueId: getCurrentValue(getState, value).id || valueId
+      })))
+      .finally(() => {
+        delete valueSaveQueues[key]
+        dispatch(removeFromPending(pendingId))
+      })
+
+    dispatch(addToPending(pendingId))
+    dispatch(actions.storeValueInit(currentValue.id || currentValue.tmp_id))
+    return queue.promise
   }
 }
 
@@ -289,11 +325,11 @@ export function createValue(attrs, store) {
 
 export function updateValue(value, attrs, store = true) {
   if (store) {
-    const valueToSave = ValueFactory.update({ ...value }, attrs)
-    const valueForState = omit(valueToSave, 'file')
-
-    return (dispatch) => {
-      dispatch(actions.updateValue({ value, attrs: valueForState }))
+    return (dispatch, getState) => {
+      const currentValue = getCurrentValue(getState, value)
+      const valueToSave = ValueFactory.update({ ...currentValue }, attrs)
+      const valueForState = omit(valueToSave, 'file')
+      dispatch(actions.updateValue({ value: currentValue, attrs: valueForState }))
       return dispatch(storeValue(valueToSave))
     }
   } else {
