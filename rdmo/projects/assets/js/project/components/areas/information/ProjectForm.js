@@ -89,7 +89,8 @@ const ProjectForm = ({
     return {
       value: catalog.id,
       isDisabled,
-      label: (
+      label: catalog.title,
+      formattedLabel: (
         <span className={isDisabled ? 'text-muted' : ''}>
           {catalog.title}{' '}
           {
@@ -252,6 +253,7 @@ const ProjectForm = ({
               isClearable={false}
               isDisabled={disabled}
               options={catalogOptions}
+              formatOptionLabel={(option) => option.formattedLabel}
               value={formData.catalog}
               onChange={(value) => handleChange('catalog', value)}
             />
