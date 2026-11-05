@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
 
+import { isReadOnly } from '../../../../../../common/utils/permissions'
 import { updateValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 
 import Search from '../Search'
 
 const QuestionReuseValue = ({ question, value }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
 
   const initialFormValues = {
     value: '',

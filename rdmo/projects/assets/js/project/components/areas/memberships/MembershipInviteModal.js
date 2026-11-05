@@ -9,7 +9,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
 
 import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
-import { useFieldErrors, usePermissions } from '../../../hooks'
+import { useFieldErrors } from '../../../hooks'
 
 const initialForm = { lookup: '', role: 'author' }
 
@@ -17,7 +17,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
   const errors = useFieldErrors()
-  const perms = usePermissions()
+  const perms = useSelector((state) => state.combinedPermissions)
   const roleOptions = useSelector((state) => state.roles?.roles) || []
 
   const [formData, setFormData] = useState(initialForm)
