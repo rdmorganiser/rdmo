@@ -21,12 +21,12 @@ const AttributeInfo = ({ attribute }) => {
   const [extendQuestions, toggleQuestions] = useBool(false)
   const [extendTasks, toggleTasks] = useBool(false)
 
-  const attributes = elements.attributes.filter(e => attribute.attributes.includes(e.id))
-  const conditions = elements.conditions.filter(e => attribute.conditions.includes(e.id))
-  const pages = elements.pages.filter(e => attribute.pages.includes(e.id))
-  const questionsets = elements.questionsets.filter(e => attribute.questionsets.includes(e.id))
-  const questions = elements.questions.filter(e => attribute.questions.includes(e.id))
-  const tasks = elements.tasks.filter(e => attribute.tasks.includes(e.id))
+  const attributes = elements.attributes.filter(e => (attribute.attributes ?? []).includes(e.id))
+  const conditions = elements.conditions.filter(e => (attribute.conditions ?? []).includes(e.id))
+  const pages = elements.pages.filter(e => (attribute.pages ?? []).includes(e.id))
+  const questionsets = elements.questionsets.filter(e => (attribute.questionsets ?? []).includes(e.id))
+  const questions = elements.questions.filter(e => (attribute.questions ?? []).includes(e.id))
+  const tasks = elements.tasks.filter(e => (attribute.tasks ?? []).includes(e.id))
 
   const fetchAttribute = (attribute) => dispatch(fetchElement('attributes', attribute.id))
   const fetchCondition = (condition) => dispatch(fetchElement('conditions', condition.id))
