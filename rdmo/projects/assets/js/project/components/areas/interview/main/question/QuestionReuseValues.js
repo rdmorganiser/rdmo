@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
 
-import { useReadOnly } from '../../../../../hooks'
+import { isReadOnly } from '../../../../../../common/utils/permissions'
 
 import Search from '../Search'
 
 const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete }) => {
-  const readOnly = useReadOnly()
+  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
   const title = gettext('Reuse answers')
 
   const initialFormValues = {

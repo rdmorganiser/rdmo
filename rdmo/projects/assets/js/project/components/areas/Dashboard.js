@@ -8,7 +8,6 @@ import { useModal } from 'rdmo/core/assets/js/hooks'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
-import { usePermissions } from '../../hooks'
 import { IssueTile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
@@ -21,7 +20,7 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
   const settings = useSelector(state => state.settings)
-  const perms = usePermissions()
+  const perms = useSelector((state) => state.combinedPermissions)
 
   const allIssues = useSelector((state) => state.project.project.issues) ?? []
   /* Show only issues that resolve */

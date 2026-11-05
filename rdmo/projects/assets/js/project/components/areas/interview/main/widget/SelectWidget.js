@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { isReadOnly } from '../../../../../../common/utils/permissions'
 import { updateValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 import { gatherOptions } from '../../../../../utils/options'
 
 import QuestionAddValue from '../question/QuestionAddValue'
@@ -21,7 +21,7 @@ import SelectInput from './SelectInput'
 const SelectWidget = ({ question, sets, values, siblings, creatable, currentSet }) => {
   const dispatch = useDispatch()
   const providerOptions = useSelector((state) => state.interview.providerOptions)
-  const readOnly = useReadOnly()
+  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
 
   return (
     <div className="project-interview-widgets">

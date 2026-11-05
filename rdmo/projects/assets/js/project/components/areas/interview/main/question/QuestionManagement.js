@@ -5,12 +5,10 @@ import { useSelector } from 'react-redux'
 import { Html, Tooltip } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
-import { usePermissions } from '../../../../../hooks'
-
 const QuestionManagement = ({ question }) => {
   const config = useSelector((state) => state.config)
   const templates = useSelector((state) => state.templates)
-  const perms = usePermissions()
+  const perms = useSelector((state) => state.combinedPermissions)
 
   return config.showManagement && perms.can_view_management && (
     <div className="project-interview-management mb-2">
