@@ -43,12 +43,12 @@ const ProjectVisibilityForm = () => {
 
   useEffect(() => {
     if (visibility?.sites.length === 0) {
-      setSiteIds(Object.values(sites || {}).map((site) => site.id))
+      setSiteIds(sites.map((site) => site.id))
     } else {
       setSiteIds(visibility?.sites || [])
     }
     if (visibility?.groups.length === 0) {
-      setGroupIds(Object.values(groups || {}).map((group) => group.id))
+      setGroupIds(groups.map((group) => group.id))
     } else {
       setGroupIds(visibility?.groups || [])
     }
@@ -58,15 +58,15 @@ const ProjectVisibilityForm = () => {
   const canSetVisibility = !visibility && userPerms.can_add_visibility
   const canAddOwnSite = visibility ? projectPerms.can_change_visibility : projectPerms.can_add_visibility
 
-  const siteOptions = sites ? Object.values(sites).map((site) => ({
+  const siteOptions = sites.map((site) => ({
     value: site.id,
     label: site.current ? `${site.domain} (${gettext('current')})` : site.domain
-  })) : []
+  }))
 
-  const groupOptions = groups ? Object.values(groups).map((group) => ({
+  const groupOptions = groups.map((group) => ({
     value: group.id,
     label: group.name
-  })) : []
+  }))
 
   const handleSave = () => {
     const data = new FormData()

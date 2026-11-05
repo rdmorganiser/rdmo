@@ -10,7 +10,7 @@ const FileInput = ({ question, value, buttons, disabled, onChange }) => {
     if (acceptedFiles.length == 1) {
       onChange(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
     }
-  }, [value.file])
+  }, [value])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, disabled })
 
   const classnames = classNames('dropzone', {

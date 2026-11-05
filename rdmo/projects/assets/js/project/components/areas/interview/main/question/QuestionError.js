@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 
 const getMessage = (error) => {
-  if (error?.constructor.name === 'ValidationError') {
+  if (error?.errorType === 'ValidationError') {
     if (error.errors.conflict) {
       return gettext('This field could not be saved, since somebody else did so while you were editing.' +
                      ' You will need to reload the page to make changes, but your input will be overwritten.')
@@ -12,7 +12,7 @@ const getMessage = (error) => {
     } else if (error.errors.text) {
       return error.errors.text
     }
-  } else if (error?.constructor.name === 'ApiError') {
+  } else if (error?.errorType === 'ApiError') {
     if (error.status === 404) {
       return gettext('This field could not be saved, since somebody else removed it while you were editing.' +
                      ' You will need to reload the page to proceed, but your input will be lost.')

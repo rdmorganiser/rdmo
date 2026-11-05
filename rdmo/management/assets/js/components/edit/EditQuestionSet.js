@@ -26,7 +26,7 @@ const EditQuestionSet = ({ questionset }) => {
   const dispatch = useDispatch()
 
   const settings = useSelector((state) => state.settings)
-  const sites = Object.values(useSelector((state) => state.sites))
+  const sites = useSelector((state) => state.sites)
   const {
     elementAction, parent, attributes, conditions, questions, questionsets
   } = useSelector((state) => state.elements)

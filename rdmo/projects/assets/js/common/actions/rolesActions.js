@@ -1,6 +1,8 @@
-import RoleApi from '../api/RoleApi'
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 
-import { FETCH_ROLES_ERROR, FETCH_ROLES_INIT, FETCH_ROLES_SUCCESS } from './actionTypes'
+import { actions } from '../reducers/rolesSlice'
+
+import RoleApi from '../api/RoleApi'
 
 export function fetchRoles() {
   return function (dispatch) {
@@ -19,13 +21,13 @@ export function fetchRoles() {
 }
 
 export function fetchRolesInit() {
-  return { type: FETCH_ROLES_INIT }
+  return errorActions.clearError('roles')
 }
 
 export function fetchRolesSuccess(roles) {
-  return { type: FETCH_ROLES_SUCCESS, roles }
+  return actions.fetchRolesSuccess(roles)
 }
 
 export function fetchRolesError(errors) {
-  return { type: FETCH_ROLES_ERROR, errors }
+  return errorActions.setError('roles', errors, gettext('Roles'))
 }

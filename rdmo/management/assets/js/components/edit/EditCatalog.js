@@ -23,8 +23,8 @@ const EditCatalog = ({ catalog }) => {
   const dispatch = useDispatch()
 
   const settings = useSelector((state) => state.settings)
-  const groups = Object.values(useSelector((state) => state.groups))
-  const sites = Object.values(useSelector((state) => state.sites))
+  const groups = useSelector((state) => state.groups)
+  const sites = useSelector((state) => state.sites)
   const { elementAction, sections } = useSelector((state) => state.elements)
 
   const updateCatalog = (key, value) => dispatch(updateElement(catalog, {[key]: value}))

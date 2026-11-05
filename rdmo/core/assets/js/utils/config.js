@@ -1,17 +1,3 @@
-import { set, unset } from 'lodash'
-
-const updateConfig = (config, path, value) => {
-  const newConfig = {...config}
-  set(newConfig, path, value)
-  return newConfig
-}
-
-const deleteConfig = (config, path) => {
-  const newConfig = {...config}
-  unset(newConfig, path)
-  return newConfig
-}
-
 const getConfigFromLocalStorage = (prefix) => {
   const ls = {...localStorage}
 
@@ -33,10 +19,8 @@ const deleteConfigInLocalStorage = (prefix, path) => {
 const isTruthy = (value) => [true, 'true'].includes(value)
 
 export {
-  deleteConfig,
   deleteConfigInLocalStorage,
   getConfigFromLocalStorage,
   isTruthy,
-  setConfigInLocalStorage,
-  updateConfig
+  setConfigInLocalStorage
 }

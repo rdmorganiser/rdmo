@@ -1,10 +1,12 @@
 import isNil from 'lodash/isNil'
 
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+
+import { actions } from '../reducers/importsSlice'
 
 import ManagementApi from '../api/ManagementApi'
 
-import * as actionTypes from './actionTypes'
 import { fetchElement, fetchElements } from './elementActions'
 
 
@@ -15,6 +17,7 @@ export function uploadFile(file) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('imports'))
     dispatch(uploadFileInit(file))
 
     return ManagementApi.uploadFile(file)
@@ -25,15 +28,15 @@ export function uploadFile(file) {
 }
 
 export function uploadFileInit(file) {
-  return {type: actionTypes.UPLOAD_IMPORT_FILE_INIT, file: file}
+  return actions.uploadFileInit({ name: file.name })
 }
 
 export function uploadFileSuccess(elements) {
-  return {type: actionTypes.UPLOAD_IMPORT_FILE_SUCCESS, elements}
+  return actions.uploadFileSuccess(elements)
 }
 
 export function uploadFileError(error) {
-  return {type: actionTypes.UPLOAD_IMPORT_FILE_ERROR, error}
+  return errorActions.setError('imports', error, gettext('Import'))
 }
 
 // import elements
@@ -45,6 +48,7 @@ export function importElements() {
     const elements = getState().imports.elements.filter(element => element.import)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('imports'))
     dispatch(importElementsInit())
 
     return ManagementApi.importElements(elements)
@@ -55,39 +59,39 @@ export function importElements() {
 }
 
 export function importElementsInit() {
-  return {type: actionTypes.IMPORT_ELEMENTS_INIT}
+  return actions.importElementsInit()
 }
 
 export function importElementsSuccess(elements) {
-  return {type: actionTypes.IMPORT_ELEMENTS_SUCCESS, elements}
+  return actions.importElementsSuccess(elements)
 }
 
 export function importElementsError(error) {
-  return {type: actionTypes.IMPORT_ELEMENTS_ERROR, error}
+  return errorActions.setError('imports', error, gettext('Import'))
 }
 
 // update elements
 
 export function updateElement(element, values) {
-  return {type: actionTypes.UPDATE_IMPORT_ELEMENT, element, values}
+  return actions.updateElement({ element, values })
 }
 
 export function selectElements(value) {
-  return {type: actionTypes.SELECT_IMPORT_ELEMENTS, value}
+  return actions.selectElements(value)
 }
 export function selectChangedElements(value) {
-  return {type: actionTypes.SELECT_CHANGED_IMPORT_ELEMENTS, value}
+  return actions.selectChangedElements(value)
 }
 
 export function showElements(value) {
-  return {type: actionTypes.SHOW_IMPORT_ELEMENTS, value}
+  return actions.showElements(value)
 }
 export function showChangedElements(value) {
-  return {type: actionTypes.SHOW_CHANGED_IMPORT_ELEMENTS, value}
+  return actions.showChangedElements(value)
 }
 
 export function updateUriPrefix(uriPrefix) {
-  return {type: actionTypes.UPDATE_IMPORT_URI_PREFIX, uriPrefix}
+  return actions.updateUriPrefix(uriPrefix)
 }
 
 export function resetElements() {
@@ -98,6 +102,6 @@ export function resetElements() {
     } else {
       dispatch(fetchElement(elementType, elementId, elementAction))
     }
-    dispatch({type: actionTypes.RESET_IMPORT_ELEMENTS})
+    dispatch(actions.resetElements())
   }
 }

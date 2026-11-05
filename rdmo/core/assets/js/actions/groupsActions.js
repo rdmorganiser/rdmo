@@ -1,17 +1,19 @@
+import { actions } from '../reducers/groupsSlice'
+
 import CoreApi from '../api/CoreApi'
 
-import { FETCH_GROUPS_ERROR, FETCH_GROUPS_INIT, FETCH_GROUPS_SUCCESS } from './actionTypes'
+import * as errorActions from './errorsActions'
 
 export function fetchGroups() {
   return function (dispatch) {
-    dispatch({ type: FETCH_GROUPS_INIT })
+    dispatch(errorActions.clearError('groups'))
 
     return CoreApi.fetchGroups()
       .then(groups => {
-        dispatch({ type: FETCH_GROUPS_SUCCESS, groups })
+        dispatch(actions.fetchGroupsSuccess(groups))
       })
       .catch(error => {
-        dispatch({ type: FETCH_GROUPS_ERROR, error })
+        dispatch(errorActions.setError('groups', error, gettext('Groups')))
         throw error
       })
   }

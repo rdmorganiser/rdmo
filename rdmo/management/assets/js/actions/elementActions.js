@@ -1,11 +1,14 @@
 import { get, isNil, pick } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import { elementTypes } from '../constants/elements'
+import { actions } from '../reducers/elementsSlice'
 import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
 import { updateLocation } from '../utils/location'
 
@@ -22,8 +25,6 @@ import QuestionsFactory from '../factories/QuestionsFactory'
 import TasksFactory from '../factories/TasksFactory'
 import ViewsFactory from '../factories/ViewsFactory'
 
-import * as actionTypes from './actionTypes'
-
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
 
@@ -31,6 +32,8 @@ export function fetchElements(elementType) {
     updateLocation(elementType)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(fetchElementsInit(elementType))
 
     let action
@@ -98,15 +101,15 @@ export function fetchElements(elementType) {
 }
 
 export function fetchElementsInit(elementType) {
-  return {type: actionTypes.FETCH_ELEMENTS_INIT, elementType}
+  return actions.fetchElementsInit(elementType)
 }
 
 export function fetchElementsSuccess(elements) {
-  return {type: actionTypes.FETCH_ELEMENTS_SUCCESS, elements}
+  return actions.fetchElementsSuccess(elements)
 }
 
 export function fetchElementsError(error) {
-  return {type: actionTypes.FETCH_ELEMENTS_ERROR, error}
+  return errorActions.setError('elements', error, gettext('Elements'))
 }
 
 // fetch element
@@ -118,6 +121,8 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     updateLocation(elementType, elementId, elementAction)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(fetchElementInit(elementType, elementId, elementAction))
 
     let action
@@ -368,15 +373,15 @@ export function fetchElement(elementType, elementId, elementAction = null) {
 }
 
 export function fetchElementInit(elementType, elementId, elementAction) {
-  return {type: actionTypes.FETCH_ELEMENT_INIT, elementType, elementId, elementAction}
+  return actions.fetchElementInit({ elementType, elementId, elementAction })
 }
 
 export function fetchElementSuccess(elements) {
-  return {type: actionTypes.FETCH_ELEMENT_SUCCESS, elements}
+  return actions.fetchElementSuccess(elements)
 }
 
 export function fetchElementError(error) {
-  return {type: actionTypes.FETCH_ELEMENT_ERROR, error}
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // store element
@@ -387,6 +392,7 @@ export function storeElement(elementType, element, back = false) {
   return function(dispatch, getState) {
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(storeElementInit(element))
 
     let action
@@ -451,15 +457,18 @@ export function storeElement(elementType, element, back = false) {
 }
 
 export function storeElementInit(element) {
-  return {type: actionTypes.STORE_ELEMENT_INIT, element}
+  return actions.storeElementInit(element)
 }
 
 export function storeElementSuccess(element) {
-  return {type: actionTypes.STORE_ELEMENT_SUCCESS, element}
+  return actions.storeElementSuccess(element)
 }
 
 export function storeElementError(element, error) {
-  return {type: actionTypes.STORE_ELEMENT_ERROR, element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.storeElementError({ element, error: serializeError(error) })
 }
 
 // patch element
@@ -469,6 +478,7 @@ export function patchElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(patchElementInit(element))
 
     let action
@@ -526,15 +536,18 @@ export function patchElement(elementType, element) {
 }
 
 export function patchElementInit(element) {
-  return {type: actionTypes.PATCH_ELEMENT_INIT, element}
+  return actions.patchElementInit(element)
 }
 
 export function patchElementSuccess(element) {
-  return {type: actionTypes.PATCH_ELEMENT_SUCCESS, element}
+  return actions.patchElementSuccess(element)
 }
 
 export function patchElementError(element, error) {
-  return {type: actionTypes.PATCH_ELEMENT_ERROR, element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.patchElementError({ element, error: serializeError(error) })
 }
 
 // toggle element site
@@ -544,6 +557,7 @@ export function toggleElementSite(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(toggleElementSiteInit(element))
 
     let action
@@ -569,15 +583,18 @@ export function toggleElementSite(elementType, element) {
 }
 
 export function toggleElementSiteInit(element) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_INIT, element}
+  return actions.toggleElementSiteInit(element)
 }
 
 export function toggleElementSiteSuccess(element) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_SUCCESS, element}
+  return actions.toggleElementSiteSuccess(element)
 }
 
 export function toggleElementSiteError(element, error) {
-  return {type: actionTypes.TOGGLE_ELEMENT_SITE_ERROR, element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.toggleElementSiteError({ element, error: serializeError(error) })
 }
 
 // createElement
@@ -589,6 +606,8 @@ export function createElement(elementType, parent = {}) {
     updateLocation(elementType, null, 'create')
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
+    dispatch(errorActions.clearError('imports'))
     dispatch(createElementInit(elementType))
 
     let action
@@ -718,15 +737,15 @@ export function createElement(elementType, parent = {}) {
 }
 
 export function createElementInit(elementType) {
-  return {type: actionTypes.CREATE_ELEMENT_INIT, elementType}
+  return actions.createElementInit(elementType)
 }
 
 export function createElementSuccess(elements) {
-  return {type: actionTypes.CREATE_ELEMENT_SUCCESS, elements}
+  return actions.createElementSuccess(elements)
 }
 
 export function createElementError(error) {
-  return {type: actionTypes.CREATE_ELEMENT_ERROR, error}
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // delete element
@@ -736,6 +755,7 @@ export function deleteElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(deleteElementInit(element))
 
     let action
@@ -790,27 +810,27 @@ export function deleteElement(elementType, element) {
         dispatch(deleteElementSuccess(element))
         history.back()
       })
-      .catch(error => dispatch(deleteElementError(element, error)))
+      .catch(error => dispatch(deleteElementError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function deleteElementInit(element) {
-  return {type: actionTypes.DELETE_ELEMENT_INIT, element}
+  return actions.deleteElementInit(element)
 }
 
 export function deleteElementSuccess(element) {
-  return {type: actionTypes.DELETE_ELEMENT_SUCCESS, element}
+  return actions.deleteElementSuccess(element)
 }
 
-export function deleteElementError(element, error) {
-  return {type: actionTypes.DELETE_ELEMENT_ERROR, element, error}
+export function deleteElementError(error) {
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // update elements
 
 export function updateElement(element, values) {
-  return {type: actionTypes.UPDATE_ELEMENT, element, values}
+  return actions.updateElement({ element, values })
 }
 
 // move elements
@@ -819,11 +839,12 @@ export function dropElement(dragElement, dropElement, mode) {
   return function(dispatch, getState) {
     // an element cannot be dropped on itself or on one of its descendants
     if (canMoveElement(dragElement, dropElement)) {
-      const element = {...getState().elements.element}
+      const element = getState().elements.element
 
       // dragParent is the element where the element is dragged from and dropParent where it has been dropped on
       // dropParent is empty when the element is dragged onto the same parent, i.e. dragParent == dropParent
-      const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      const { element: movedElement, dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      dispatch(updateElement(element, movedElement))
 
       const payloads = [dragParent, dropParent].filter(parent => !isNil(parent)).map(parent => {
         const elementType = elementTypes[parent.model]

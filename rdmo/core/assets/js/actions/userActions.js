@@ -1,6 +1,8 @@
+import { actions } from '../reducers/userSlice'
+
 import AccountsApi from '../api/AccountsApi'
 
-import { FETCH_CURRENT_USER_ERROR, FETCH_CURRENT_USER_INIT, FETCH_CURRENT_USER_SUCCESS } from './actionTypes'
+import * as errorActions from './errorsActions'
 
 export function fetchCurrentUser() {
   return function(dispatch) {
@@ -13,13 +15,13 @@ export function fetchCurrentUser() {
 }
 
 export function fetchCurrentUserInit() {
-  return {type: FETCH_CURRENT_USER_INIT}
+  return errorActions.clearError('currentUser')
 }
 
 export function fetchCurrentUserSuccess(currentUser) {
-  return {type: FETCH_CURRENT_USER_SUCCESS, currentUser}
+  return actions.fetchCurrentUserSuccess(currentUser)
 }
 
 export function fetchCurrentUserError(error) {
-  return {type: FETCH_CURRENT_USER_ERROR, error}
+  return errorActions.setError('currentUser', error, gettext('Current user'))
 }

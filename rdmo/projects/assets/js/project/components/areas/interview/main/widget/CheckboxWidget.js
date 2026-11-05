@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { createValue, deleteValue, updateValue } from '../../../../../actions/interviewActions'
 import { useReadOnly } from '../../../../../hooks'
@@ -17,6 +17,7 @@ import CheckboxInput from './CheckboxInput'
 
 const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
+  const providerOptions = useSelector((state) => state.interview.providerOptions)
   const readOnly = useReadOnly()
 
   const handleCreate = (attrsList) => {
@@ -50,7 +51,7 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
             >
               <div className="d-flex flex-column align-items-top gap-2">
                 {
-                  gatherOptions(question, currentSet).map((option, optionIndex) => {
+                  gatherOptions(question, currentSet, providerOptions).map((option, optionIndex) => {
                     const value = values.find((value) => (
                       option.has_provider ? (value.external_id === option.id) : (value.option === option.id)
                     ))

@@ -1,17 +1,19 @@
+import { actions } from '../reducers/sitesSlice'
+
 import CoreApi from '../api/CoreApi'
 
-import { FETCH_SITES_ERROR, FETCH_SITES_INIT, FETCH_SITES_SUCCESS } from './actionTypes'
+import * as errorActions from './errorsActions'
 
 export function fetchSites() {
   return function (dispatch) {
-    dispatch({ type: FETCH_SITES_INIT })
+    dispatch(errorActions.clearError('sites'))
 
     return CoreApi.fetchSites()
       .then(sites => {
-        dispatch({ type: FETCH_SITES_SUCCESS, sites })
+        dispatch(actions.fetchSitesSuccess(sites))
       })
       .catch(error => {
-        dispatch({ type: FETCH_SITES_ERROR, error })
+        dispatch(errorActions.setError('sites', error, gettext('Sites')))
         throw error
       })
   }

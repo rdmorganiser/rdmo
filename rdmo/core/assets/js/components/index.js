@@ -1,4 +1,5 @@
 export { default as Dropzone } from './Dropzone'
+export { default as Errors } from './Errors'
 export { default as FileUploadButton } from './FileUploadButton'
 export { default as Html } from './Html'
 export { default as Link } from './Link'

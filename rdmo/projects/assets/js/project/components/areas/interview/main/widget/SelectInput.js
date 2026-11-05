@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import Select from 'react-select'
 import AsyncSelect from 'react-select/async'
 import CreatableAsyncSelect from 'react-select/async-creatable'
@@ -8,6 +9,7 @@ import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce'
 import { isEmpty, isNil } from 'lodash'
 
+import { updateValue } from '../../../../../actions/interviewActions'
 import { projectId } from '../../../../../utils/meta'
 import { getValueOption } from '../../../../../utils/options'
 import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
@@ -21,6 +23,7 @@ import OptionText from './common/OptionText'
 import SelectValueContainer from './SelectValueContainer'
 
 const SelectInput = ({ question, value, options, buttons, creatable, disabled, onChange }) => {
+  const dispatch = useDispatch()
   const [inputValue, setInputValue] = useState('')
   const [defaultValueOption, setDefaultValueOption] = useState(null)
 
@@ -89,7 +92,7 @@ const SelectInput = ({ question, value, options, buttons, creatable, disabled, o
       loadOptions(value.external_id, (loadedOptions) => {
         const option = loadedOptions.find((o) => o.id === value.external_id)
         if (pending && !isNil(option)) {
-          value.text = option.text
+          dispatch(updateValue(value, { text: option.text }, false))
           setDefaultValueOption(option)
         }
       })

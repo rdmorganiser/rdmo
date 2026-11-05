@@ -43,7 +43,9 @@ function canMoveElement(dragElement, dropElement) {
 }
 
 function moveElement(element, dragElement, dropElement, mode) {
-  const dragParent = removeElement(element, dragElement)
+  let dragParent = removeElement(element, dragElement)
+  updateElementElements(dragParent)
+  element = updateElement(element, dragParent)
 
   let dropParent
   switch (mode) {
@@ -54,18 +56,19 @@ function moveElement(element, dragElement, dropElement, mode) {
       dropParent = insertAfterElement(element, dragElement, dropElement)
       break
     default:
-      dropParent = insertInElement(dragElement, dropElement)
+      dropParent = insertInElement(element, dragElement, dropElement)
       break
   }
 
-  updateElementElements(dragParent)
+  updateElementElements(dropParent)
+  element = updateElement(element, dropParent)
+
   if (compareElements(dragParent, dropParent)) {
+    dragParent = dropParent
     dropParent = null
-  } else {
-    updateElementElements(dropParent)
   }
 
-  return { dragParent, dropParent }
+  return { element, dragParent, dropParent }
 }
 
 function removeElement(element, dragElement) {
@@ -74,8 +77,9 @@ function removeElement(element, dragElement) {
   const dragIndex = element.elements.findIndex(el => compareElements(el, dragElement))
   if (dragIndex > -1) {
     // remove the element
-    element.elements.splice(dragIndex, 1)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dragIndex, 1)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => removeElement(el, dragElement))
@@ -89,8 +93,9 @@ function insertBeforeElement(element, dragElement, dropElement) {
   const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
   if (dropIndex > -1) {
     // insert the dragElement before the dropElement
-    element.elements.splice(dropIndex, 0, dragElement)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dropIndex, 0, dragElement)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertBeforeElement(el, dragElement, dropElement))
@@ -104,8 +109,9 @@ function insertAfterElement(element, dragElement, dropElement) {
   const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
   if (dropIndex > -1) {
     // insert the dragElement after the dropElement
-    element.elements.splice(dropIndex + 1, 0, dragElement)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dropIndex + 1, 0, dragElement)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertAfterElement(el, dragElement, dropElement))
@@ -113,10 +119,14 @@ function insertAfterElement(element, dragElement, dropElement) {
   }
 }
 
-function insertInElement(dragElement, dropElement) {
-  const dropParent = dropElement
-  dropParent.elements = [dragElement, ...dropParent.elements]
-  return dropParent
+function insertInElement(element, dragElement, dropElement) {
+  if (compareElements(element, dropElement)) {
+    return { ...element, elements: [dragElement, ...element.elements] }
+  } else if (!isUndefined(element.elements)) {
+    return element.elements.map(el => insertInElement(el, dragElement, dropElement))
+      .find(el => !isNil(el))
+  }
+  return null
 }
 
 function updateElementElements(element) {

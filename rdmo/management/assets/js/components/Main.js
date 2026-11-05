@@ -1,8 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { get, isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
-import { MainErrors } from '../components/common/Errors'
+import Errors from 'rdmo/core/assets/js/components/Errors'
+
 import Edit from '../components/edit/Edit'
 import Elements from '../components/elements/Elements'
 import Import from '../components/import/Import'
@@ -13,30 +14,19 @@ const Main = () => {
   const constants = useSelector((state) => state.constants)
   const elements = useSelector((state) => state.elements)
   const imports = useSelector((state) => state.imports)
+  const errors = useSelector((state) => state.errors)
 
   const { element, elementType, elementId, elementAction } = elements
 
-  if (!isNil(settings.errors)) {
-    return <MainErrors errors={settings.errors.api} />
-  }
-
-  if (!isNil(constants.errors)) {
-    return <MainErrors errors={constants.errors.api} />
-  }
-
-  // check if anything was loaded yet
-  if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
-    return null
-  }
-
   const render = () => {
+    // check if anything was loaded yet
+    if (isEmpty(settings) || isNil(constants.meta) || isNil(elementType)) {
+      return null
+    }
+
     // check if an error occurred
-    if (get(elements, 'errors.api')) {
-      return <MainErrors errors={elements.errors.api} />
-    } else if (get(elements, 'element.errors.api')) {
-      return <MainErrors errors={get(elements, 'element.errors.api')} />
-    } else if (!isNil(imports.errors.file)) {
-      return <MainErrors errors={imports.errors.file} />
+    if (errors.elements || errors.imports) {
+      return null
     }
 
     if (!isEmpty(imports.elements)) {
@@ -64,6 +54,7 @@ const Main = () => {
 
   return (
     <div className="container-lg gx-0">
+      <Errors />
       {render()}
     </div>
   )

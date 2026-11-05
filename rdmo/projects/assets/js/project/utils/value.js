@@ -86,6 +86,8 @@ const initRange = (question, value) => {
   }
 }
 
+const compareValueId = (value, valueId) => (value.id || value.tmp_id) == valueId
+
 const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {
     return a.id == b.id
@@ -120,4 +122,6 @@ const isEmptyValue = (value) => {
   )
 }
 
-export { compareValues, gatherDefaultValues, initRange, initValues, isDefaultValue, isEmptyValue, sortValues }
+export {
+  compareValueId, compareValues, gatherDefaultValues, initRange, initValues, isDefaultValue, isEmptyValue, sortValues
+}

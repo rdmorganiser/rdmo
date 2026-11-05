@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updateValue } from '../../../../../actions/interviewActions'
 import { useReadOnly } from '../../../../../hooks'
@@ -20,6 +20,7 @@ import SelectInput from './SelectInput'
 
 const SelectWidget = ({ question, sets, values, siblings, creatable, currentSet }) => {
   const dispatch = useDispatch()
+  const providerOptions = useSelector((state) => state.interview.providerOptions)
   const readOnly = useReadOnly()
 
   return (
@@ -32,7 +33,7 @@ const SelectWidget = ({ question, sets, values, siblings, creatable, currentSet 
                 <SelectInput
                   question={question}
                   value={value}
-                  options={gatherOptions(question, currentSet)}
+                  options={gatherOptions(question, currentSet, providerOptions)}
                   creatable={creatable}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
