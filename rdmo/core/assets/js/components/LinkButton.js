@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const LinkButton = ({ title, className, disabled = false, stopPropagation = true, onClick, children }) => {
+const LinkButton = ({ className, disabled = false, stopPropagation = true, onClick, children, ...props }) => {
   const handleClick = (event) => {
     event.preventDefault()
     if (stopPropagation) event.stopPropagation()
@@ -11,9 +11,8 @@ const LinkButton = ({ title, className, disabled = false, stopPropagation = true
 
   return (
     <button
+      {...props}
       type="button"
-      title={title}
-      aria-label={title}
       className={classNames('link', className)}
       disabled={disabled}
       onClick={event => handleClick(event)}
@@ -24,7 +23,6 @@ const LinkButton = ({ title, className, disabled = false, stopPropagation = true
 }
 
 LinkButton.propTypes = {
-  title: PropTypes.string,
   className: PropTypes.string,
   disabled: PropTypes.bool,
   stopPropagation: PropTypes.bool,

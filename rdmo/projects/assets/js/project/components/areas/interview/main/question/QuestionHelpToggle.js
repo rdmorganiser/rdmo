@@ -1,0 +1,38 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
+
+import { LinkButton } from 'rdmo/core/assets/js/components'
+
+import { useReadOnly } from '../../../../../hooks'
+import { getQuestionHelpId, hasAddValueHelp } from '../../../../../utils/question'
+
+const QuestionHelpToggle = ({ question, show, onClick }) => {
+  const templates = useSelector((state) => state.templates)
+  const readOnly = useReadOnly()
+
+  return (
+    !isEmpty(question.help) ||
+    !isEmpty(templates.project_interview_question_help) ||
+    hasAddValueHelp(question, templates, readOnly)
+  ) && (
+    <LinkButton
+      className="text-muted"
+      title={show ? gettext('Hide help') : gettext('Show help')}
+      aria-expanded={show}
+      aria-controls={getQuestionHelpId(question)}
+      onClick={onClick}
+    >
+      {gettext('Help')} <i className="bi bi-info-circle"></i>
+    </LinkButton>
+  )
+}
+
+QuestionHelpToggle.propTypes = {
+  question: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
+}
+
+export default QuestionHelpToggle
