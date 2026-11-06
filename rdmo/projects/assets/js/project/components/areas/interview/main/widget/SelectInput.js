@@ -137,14 +137,23 @@ const SelectInput = ({ question, value, options, buttons, creatable, disabled, o
     components: { ValueContainer: SelectValueContainer }
   }
 
+  const creatableProps = {
+    getNewOptionData: (inputValue) => ({
+      id: inputValue,
+      value: inputValue,
+      text: interpolate(gettext('Create "%s"'), [inputValue]),
+      __isNew__: true
+    })
+  }
+
   return (
     <div className="project-interview-input select-input">
       {
         creatable ? (
           isAsync ? (
-            <CreatableAsyncSelect {...selectProps} loadOptions={handleLoadOptions} defaultOptions />
+            <CreatableAsyncSelect {...selectProps} {...creatableProps} loadOptions={handleLoadOptions} defaultOptions />
           ) : (
-            <CreatableSelect {...selectProps} />
+            <CreatableSelect {...selectProps} {...creatableProps} />
           )
         ) : (
           isAsync ? (
