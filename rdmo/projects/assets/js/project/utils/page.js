@@ -1,11 +1,55 @@
 import { get, isNil } from 'lodash'
 
+const getElementKey = (element) => {
+  if (element.model == 'questions.questionset') {
+    return `questionset-${element.id}`
+  } else {
+    return `question-${element.id}`
+  }
+}
+
+const checkElement = (element, set) => {
+  if (element.model == 'questions.questionset') {
+    return checkQuestionSet(element, set)
+  } else {
+    return checkQuestion(element, set)
+  }
+}
+
 const checkQuestionSet = (questionset, set) => {
   return !questionset.has_conditions || get(set, `questionsets.${questionset.id}`)
 }
 
 const checkQuestion = (question, set) => {
   return !question.has_conditions || get(set, `questions.${question.id}`)
+}
+
+const groupElements = (elements, set) => {
+  // first: key each element by the first element of its card in the unfiltered list
+  const keys = elements.reduce((acc, element, index) => {
+    if (index == 0 || !element.width || !elements[index - 1].width) {
+      return [...acc, getElementKey(element)]
+    } else {
+      return [...acc, acc[index - 1]]
+    }
+  }, [])
+
+  // second: group elements into cards using the list filtered by conditions
+  const cards = elements
+    .map((element, index) => ({ element, key: keys[index] }))
+    .filter(({ element }) => checkElement(element, set))
+    .reduce((acc, { element, key }, index, items) => {
+      // start a new card for the first element, for elements without a width,
+      // and for elements following an element without a width
+      if (index == 0 || !element.width || !items[index - 1].element.width) {
+        acc.push({ key, elements: [element] })
+      } else {
+        acc[acc.length - 1].elements.push(element)
+      }
+      return acc
+    }, [])
+
+  return cards
 }
 
 const initQuestionSet = (questionset, level = 0) => {
@@ -64,4 +108,4 @@ const initQuestion = (question, questionset) => {
 
 const initPage = (page) => initQuestionSet(page)
 
-export { checkQuestion, checkQuestionSet, initPage }
+export { checkElement, checkQuestion, checkQuestionSet, getElementKey, groupElements, initPage }
