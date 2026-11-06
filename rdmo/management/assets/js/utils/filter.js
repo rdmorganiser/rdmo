@@ -1,13 +1,9 @@
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isUndefined from 'lodash/isUndefined'
 import toNumber from 'lodash/toNumber'
 
-const filterElement = (config, filter, filterSites, filterEditors, element) => {
-  const strings = get(config, `filter.${filter}.search`, '').trim().split(' ')
-  const uriPrefix = get(config, `filter.${filter}.uri_prefix`, '')
-  const site = get(config, 'filter.sites', '')
-  const editor = get(config, 'filter.editors', '')
+const filterElement = ({ search, uriPrefix, site, editor }, filterSites, filterEditors, element) => {
+  const strings = search.trim().split(' ')
 
   return (
     strings.some(search => filterSearch(search, element)) &&

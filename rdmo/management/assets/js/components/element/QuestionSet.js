@@ -8,7 +8,7 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { Drag, Drop } from '../common/DragAndDrop'
@@ -24,10 +24,9 @@ import Question from './Question'
 const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, questionset)
+  const showElement = useFilterElement(filter, false, filterEditors, questionset)
   const [showElements] = useConfig(`display.elements.questionsets.${questionset.id}`, true)
 
   const editUrl = buildPath('questionsets', questionset.id)

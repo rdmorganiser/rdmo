@@ -7,7 +7,7 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -17,10 +17,9 @@ import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/
 const Option = ({ option, display = 'list', indent = 0, filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, option)
+  const showElement = useFilterElement(filter, false, filterEditors, option)
 
   const editUrl = buildPath('options', option.id)
   const copyUrl = buildPath('options', option.id, 'copy')

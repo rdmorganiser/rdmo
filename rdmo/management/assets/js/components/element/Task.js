@@ -8,7 +8,7 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -26,10 +26,9 @@ import {
 const Task = ({ task, filter = false, filterSites = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, filterSites, filterEditors, task)
+  const showElement = useFilterElement(filter, filterSites, filterEditors, task)
 
   const editUrl = buildPath('tasks', task.id)
   const copyUrl = buildPath('tasks', task.id, 'copy')
