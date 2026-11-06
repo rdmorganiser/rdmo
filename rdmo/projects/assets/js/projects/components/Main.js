@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Link, SearchField } from 'rdmo/core/assets/js/components'
-import { useConfig, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
@@ -39,7 +39,7 @@ const Main = () => {
   const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
   const { show: showCopy, open: openCopy, close: closeCopy } = useModal()
 
-  const [myProjects, setMyProjects] = useConfig('myProjects')
+  const [myProjects, toggleMyProjects] = useConfigToggle('myProjects')
   const [params] = useConfig('params', {})
   const [searchString, setSearchString] = useConfig('params.search', '')
   const [ordering, setOrdering] = useConfig('params.ordering')
@@ -148,7 +148,7 @@ const Main = () => {
   }
 
   const handleView = () => {
-    setMyProjects(!myProjects)
+    toggleMyProjects()
     dispatch(projectsActions.fetchProjects())
   }
 

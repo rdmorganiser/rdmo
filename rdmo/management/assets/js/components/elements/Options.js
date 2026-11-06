@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,9 +23,8 @@ const Options = () => {
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.options.uri_prefix', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriOptions, setDisplayUriOptions] = useConfig('display.uri.options', true)
+  const [displayUriOptions, toggleDisplayUriOptions] = useConfigToggle('display.uri.options', true)
 
-  const toggleDisplayUriOptions = () => setDisplayUriOptions(!displayUriOptions)
 
   const createOption = () => dispatch(createElement('options'))
 

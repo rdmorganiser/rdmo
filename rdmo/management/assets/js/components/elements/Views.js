@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -24,9 +24,8 @@ const Views = () => {
   const [filterSite, setFilterSite] = useConfig('filter.sites', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriViews, setDisplayUriViews] = useConfig('display.uri.views', true)
+  const [displayUriViews, toggleDisplayUriViews] = useConfigToggle('display.uri.views', true)
 
-  const updateDisplayUriViews = () => setDisplayUriViews(!displayUriViews)
 
   const createView = () => dispatch(createElement('views'))
 
@@ -75,7 +74,7 @@ const Views = () => {
         </div>
         <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs')}</label>
-          <button type="button" onClick={updateDisplayUriViews} className={btnClass(displayUriViews)}>
+          <button type="button" onClick={toggleDisplayUriViews} className={btnClass(displayUriViews)}>
             {gettext('Views')}
           </button>
         </div>

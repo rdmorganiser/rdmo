@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { getUriPrefixes } from '../../../utils/filter'
 
@@ -11,9 +11,8 @@ import { FilterString, FilterUriPrefix } from '../../common/Filter'
 const ImportFilters = ({ elements, changedElements, filteredElements, success = false }) => {
   const [filterString, setFilterString] = useConfig('filter.import.elements.search', '')
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.import.elements.uri_prefix', '')
-  const [filterChanged, setFilterChanged] = useConfig('filter.import.elements.changed', false)
+  const [filterChanged, toggleFilterChanged] = useConfigToggle('filter.import.elements.changed')
 
-  const updateFilterChanged = () => setFilterChanged(!filterChanged)
 
   const filterCheckBoxText = interpolate(
     success ? (
@@ -43,7 +42,7 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
             <div className="form-check mb-2">
               <input
                 className="form-check-input" type="checkbox" id="import-filter-changed"
-                checked={filterChanged} onChange={updateFilterChanged} />
+                checked={filterChanged} onChange={toggleFilterChanged} />
               <label className="form-check-label" htmlFor="import-filter-changed">
                 {filterCheckBoxText}
               </label>

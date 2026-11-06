@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -24,9 +24,8 @@ const Catalogs = () => {
   const [filterSite, setFilterSite] = useConfig('filter.sites', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriCatalogs, setDisplayUriCatalogs] = useConfig('display.uri.catalogs', true)
+  const [displayUriCatalogs, toggleDisplayUriCatalogs] = useConfigToggle('display.uri.catalogs', true)
 
-  const toggleDisplayUriCatalogs = () => setDisplayUriCatalogs(!displayUriCatalogs)
 
   const createCatalog = () => dispatch(createElement('catalogs'))
 

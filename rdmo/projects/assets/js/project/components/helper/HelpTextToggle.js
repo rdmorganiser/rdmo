@@ -2,13 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Link } from 'rdmo/core/assets/js/components'
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 const HelpTextToggle = ({ onChanged }) => {
-  const [includeHelp, setIncludeHelp] = useConfig('document.includeHelp', false)
+  const [includeHelp, toggleIncludeHelp] = useConfigToggle('document.includeHelp')
 
   const handleClick = () => {
-    setIncludeHelp(!includeHelp)
+    toggleIncludeHelp()
 
     if(onChanged){
       onChanged()

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { generateWarningListItems } from './WarningsListGroup'
 
@@ -17,18 +17,17 @@ const aggregateWarnings = (elements) => {
 }
 
 const WarningsAggregated = ({ elements }) => {
-  const [showWarnings, setShowWarnings] = useConfig('filter.import.warnings.show', false)
+  const [showWarnings, toggleShowWarnings] = useConfigToggle('filter.import.warnings.show')
 
-  const updateShowWarnings = () => setShowWarnings(!showWarnings)
 
   // Aggregate all warnings into a single list
   const aggregatedWarnings = aggregateWarnings(elements)
 
-  const warningsHeadingText = <strong onClick={updateShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
+  const warningsHeadingText = <strong onClick={toggleShowWarnings}>{gettext('Warnings')} ({elements.length}):</strong>
 
   return ( aggregatedWarnings.length > 0 && (
     <div className="card text-bg-warning mt-2">
-      <div className="card-header cursor-pointer" onClick={updateShowWarnings}>
+      <div className="card-header cursor-pointer" onClick={toggleShowWarnings}>
         <div className="d-flex align-items-center">
           <div className="flex-grow-1">
             {warningsHeadingText}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,9 +23,8 @@ const Sections = () => {
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.sections.uri_prefix', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriSections, setDisplayUriSections] = useConfig('display.uri.sections', true)
+  const [displayUriSections, toggleDisplayUriSections] = useConfigToggle('display.uri.sections', true)
 
-  const toggleDisplayUriSections = () => setDisplayUriSections(!displayUriSections)
 
   const createSection = () => dispatch(createElement('sections'))
 
