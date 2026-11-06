@@ -2,8 +2,6 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { get, isNil } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { navigateDashboard } from '../../actions/navigationActions'
@@ -36,10 +34,10 @@ const View = () => {
   const handleExport = (format) => {
     if (detail == 'questions') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
+        {'include_help': get(config, 'document.includeHelp', false), 'hide_answers': 'true'}))
     } else if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
+        {'include_help': get(config, 'document.includeHelp', false), 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }

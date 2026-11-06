@@ -10,7 +10,7 @@ import pendingReducer from 'rdmo/core/assets/js/reducers/pendingSlice'
 import settingsReducer from 'rdmo/core/assets/js/reducers/settingsSlice'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateSlice'
 import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
-import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
@@ -56,9 +56,6 @@ export default function configureStore() {
 
   window.addEventListener('load', () => {
     getConfigFromLocalStorage(initialState.config.prefix)
-      .map(([path, value]) => (
-        [path, (path == 'myProjects') ? isTruthy(value) : value]  // cast myProjects to bool
-      ))
       .forEach(([path, value]) => {
         store.dispatch(configActions.updateConfig(path, value))
       })

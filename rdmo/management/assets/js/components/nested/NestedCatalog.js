@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -27,14 +26,14 @@ const NestedCatalog = ({ catalog }) => {
   const togglePages = () => dispatch(toggleDescendants(catalog, 'pages'))
   const toggleQuestionSets = () => dispatch(toggleDescendants(catalog, 'questionsets'))
 
-  const displayUriCatalogs = isTruthy(get(config, 'display.uri.catalogs', true))
-  const displayUriSections = isTruthy(get(config, 'display.uri.sections', true))
-  const displayUriPages = isTruthy(get(config, 'display.uri.pages', true))
-  const displayUriQuestionSets = isTruthy(get(config, 'display.uri.questionsets', true))
-  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
-  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
+  const displayUriCatalogs = get(config, 'display.uri.catalogs', true)
+  const displayUriSections = get(config, 'display.uri.sections', true)
+  const displayUriPages = get(config, 'display.uri.pages', true)
+  const displayUriQuestionSets = get(config, 'display.uri.questionsets', true)
+  const displayUriQuestions = get(config, 'display.uri.questions', true)
+  const displayUriAttributes = get(config, 'display.uri.attributes', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
+  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
 
   const toggleDisplayUriCatalogs = () => dispatch(updateConfig('display.uri.catalogs', !displayUriCatalogs))
   const toggleDisplayUriSections = () => dispatch(updateConfig('display.uri.sections', !displayUriSections))

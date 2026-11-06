@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { generateWarningListItems } from './WarningsListGroup'
 
@@ -25,11 +24,11 @@ const WarningsAggregated = ({ elements }) => {
   const config = useSelector((state) => state.config)
 
   const updateShowWarnings = () => {
-    const currentVal = isTruthy(get(config, 'filter.import.warnings.show', false))
+    const currentVal = get(config, 'filter.import.warnings.show', false)
     dispatch(updateConfig('filter.import.warnings.show', !currentVal))
   }
 
-  const showWarnings = isTruthy(get(config, 'filter.import.warnings.show', false))
+  const showWarnings = get(config, 'filter.import.warnings.show', false)
 
   // Aggregate all warnings into a single list
   const aggregatedWarnings = aggregateWarnings(elements)

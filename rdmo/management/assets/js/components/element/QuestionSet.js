@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
@@ -28,7 +26,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
-  const showElements = isTruthy(get(config, `display.elements.questionsets.${questionset.id}`, true))
+  const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
 
   const editUrl = buildPath('questionsets', questionset.id)
   const copyUrl = buildPath('questionsets', questionset.id, 'copy')
@@ -50,9 +48,9 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const fetchAttribute = () => dispatch(fetchElement('attributes', questionset.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', questionset.conditions[index]))
 
-  const displayUriQuestionSets = isTruthy(get(config, 'display.uri.questionsets', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriQuestionSets = get(config, 'display.uri.questionsets', true)
+  const displayUriAttributes = get(config, 'display.uri.attributes', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

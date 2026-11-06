@@ -16,7 +16,7 @@ import sitesReducer from 'rdmo/core/assets/js/reducers/sitesSlice'
 import staleReducer from 'rdmo/core/assets/js/reducers/staleSlice'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateSlice'
 import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
-import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
@@ -83,11 +83,6 @@ export default function configureStore() {
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
     getConfigFromLocalStorage('rdmo.project')
-      .map(([path, value]) => (
-        [path, ['showClosedTasks', 'showClosedRecommendations', 'showManagement'].includes(path) ? (
-          isTruthy(value)
-        ) : value]  // cast to bool
-      ))
       .forEach(([path, value]) => {
         store.dispatch(configActions.updateConfig(path, value))
       })

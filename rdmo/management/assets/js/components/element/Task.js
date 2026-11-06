@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
@@ -46,8 +45,8 @@ const Task = ({ task, filter = false, filterSites = false, filterEditors = false
 
   const fetchCondition = (index) => dispatch(fetchElement('conditions', task.conditions[index]))
 
-  const displayUriTasks = isTruthy(get(config, 'display.uri.tasks', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriTasks = get(config, 'display.uri.tasks', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
 
   return showElement && (
     <li className="list-group-item">

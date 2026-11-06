@@ -17,7 +17,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const config = useSelector(state => state.config)
   const roleOptions = useSelector(state => state.roles?.roles) || []
 
-  const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
+  const showFilters = get(config, 'showFilters', false)
   const toggleFilters = () => dispatch(configActions.updateConfig('showFilters', !showFilters))
 
   const resetAllFilters = () => {

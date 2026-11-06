@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement } from '../../actions/elementActions'
@@ -40,10 +38,10 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
   const fetchCondition = (index) => dispatch(fetchElement('conditions', question.conditions[index]))
   const fetchOptionSet = (index) => dispatch(fetchElement('optionsets', question.optionsets[index]))
 
-  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
-  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
+  const displayUriQuestions = get(config, 'display.uri.questions', true)
+  const displayUriAttributes = get(config, 'display.uri.attributes', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
+  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
 
 
   const elementNode = (

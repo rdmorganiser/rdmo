@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -21,7 +20,7 @@ const NestedOptionSet = ({ optionset }) => {
   const updateFilterString = (uri) => dispatch(updateConfig('filter.optionset.search', uri))
   const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.optionset.uri_prefix', uriPrefix))
 
-  const displayUriOptions = isTruthy(get(config, 'display.uri.options', true))
+  const displayUriOptions = get(config, 'display.uri.options', true)
 
   const toggleDisplayUriOptions = () => dispatch(updateConfig('display.uri.options', !displayUriOptions))
 
