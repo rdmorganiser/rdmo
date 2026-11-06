@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -16,22 +15,18 @@ import QuestionSet from '../element/QuestionSet'
 const QuestionSets = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const questionsets = useSelector((state) => state.elements.questionsets)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.questionsets.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.questionsets.uri_prefix', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.questionsets.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questionsets.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriQuestionSets = isTruthy(get(config, 'display.uri.questionsets', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const [displayUriQuestionSets, toggleDisplayUriQuestionSets] = useConfigToggle('display.uri.questionsets', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
 
-  const toggleDisplayUriQuestionSets = () => dispatch(updateConfig('display.uri.questionsets', !displayUriQuestionSets))
-  const toggleDisplayUriAttributes = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const toggleDisplayUriConditions = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
 
   const createQuestionSet = () => dispatch(createElement('questionsets'))
 
@@ -52,19 +47,19 @@ const QuestionSets = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.questionsets.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.questionsets.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(questionsets)} />
             </div>
             {
               settings.multisite && (
                 <div className="col-sm-2">
                   <FilterSite
-                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    value={filterEditor} onChange={setFilterEditor}
                     options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               )
@@ -91,7 +86,7 @@ const QuestionSets = () => {
             {
               questionsets.map((questionset, index) => (
                 <QuestionSet
-                  key={index} config={config} questionset={questionset}
+                  key={index} questionset={questionset}
                   filter="questionsets" filterEditors={true} />
               ))
             }

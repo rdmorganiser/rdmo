@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -16,21 +15,18 @@ import Task from '../element/Task'
 const Tasks = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const tasks = useSelector((state) => state.elements.tasks)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.tasks.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.tasks.uri_prefix', value))
-  const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.tasks.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.tasks.uri_prefix', '')
+  const [filterSite, setFilterSite] = useConfig('filter.sites', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriTasks = isTruthy(get(config, 'display.uri.tasks', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const [displayUriTasks, toggleDisplayUriTasks] = useConfigToggle('display.uri.tasks', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
 
-  const updateDisplayUriTasks = () => dispatch(updateConfig('display.uri.tasks', !displayUriTasks))
-  const updateDisplayUriConditions = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
 
   const createTask = () => dispatch(createElement('tasks'))
 
@@ -51,12 +47,12 @@ const Tasks = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.tasks.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter tasks')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.tasks.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(tasks)} />
             </div>
             {
@@ -64,12 +60,12 @@ const Tasks = () => {
                 <>
                   <div className="col-sm-2">
                     <FilterSite
-                      value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                      value={filterSite} onChange={setFilterSite}
                       options={sites} />
                   </div>
                   <div className="col-sm-2">
                     <FilterSite
-                      value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                      value={filterEditor} onChange={setFilterEditor}
                       options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                   </div>
                 </>
@@ -79,10 +75,10 @@ const Tasks = () => {
         </div>
         <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs')}</label>
-          <button type="button" onClick={updateDisplayUriTasks} className={btnClass(displayUriTasks)}>
+          <button type="button" onClick={toggleDisplayUriTasks} className={btnClass(displayUriTasks)}>
             {gettext('Tasks')}
           </button>
-          <button type="button" onClick={updateDisplayUriConditions} className={btnClass(displayUriConditions)}>
+          <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
             {gettext('Conditions')}
           </button>
         </div>
@@ -94,7 +90,7 @@ const Tasks = () => {
             {
               tasks.map((task, index) => (
                 <Task
-                  key={index} config={config} task={task}
+                  key={index} task={task}
                   filter="tasks" filterSites={true} filterEditors={true} />
               ))
             }

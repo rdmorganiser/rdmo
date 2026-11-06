@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { set, unset } from 'lodash'
-
-import { deleteConfigInLocalStorage, setConfigInLocalStorage } from '../utils/config'
+import { get, set, unset } from 'lodash'
 
 const initialState = {}
 
@@ -11,17 +9,20 @@ const configSlice = createSlice({
   reducers: {
     updateConfig(state, action) {
       const { path, value } = action.payload
-      setConfigInLocalStorage(state.prefix, path, value)
       set(state, path, value)
     },
     deleteConfig(state, action) {
       const { path } = action.payload
-      deleteConfigInLocalStorage(state.prefix, path)
       unset(state, path)
     }
+  },
+  selectors: {
+    selectConfig: (state, path, defaultValue) => get(state, path, defaultValue)
   }
 })
 
 export const actions = configSlice.actions
+
+export const { selectConfig } = configSlice.selectors
 
 export default configSlice.reducer

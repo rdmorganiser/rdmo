@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { Drag, Drop } from '../common/DragAndDrop'
@@ -19,10 +19,9 @@ import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/
 const Question = ({ question, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, question)
+  const showElement = useFilterElement(filter, false, filterEditors, question)
 
   const editUrl = buildPath('questions', question.id)
   const copyUrl = buildPath('questions', question.id, 'copy')
@@ -40,11 +39,10 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
   const fetchCondition = (index) => dispatch(fetchElement('conditions', question.conditions[index]))
   const fetchOptionSet = (index) => dispatch(fetchElement('optionsets', question.optionsets[index]))
 
-  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
-  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
-
+  const [displayUriQuestions] = useConfig('display.uri.questions', true)
+  const [displayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriOptionSets] = useConfig('display.uri.optionsets', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

@@ -1,19 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
-import { get } from 'lodash'
 
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Link } from 'rdmo/core/assets/js/components'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 const HelpTextToggle = ({ onChanged }) => {
-  const dispatch = useDispatch()
-  const config = useSelector((state) => state.config)
+  const [includeHelp, toggleIncludeHelp] = useConfigToggle('document.includeHelp')
 
   const handleClick = () => {
-    const current = isTruthy(get(config, 'document.includeHelp', false))
-    dispatch(configActions.updateConfig('document.includeHelp', !current))
+    toggleIncludeHelp()
 
     if(onChanged){
       onChanged()
@@ -22,7 +17,7 @@ const HelpTextToggle = ({ onChanged }) => {
 
   return (
     <Link onClick={handleClick}>
-      {isTruthy(get(config, 'document.includeHelp')) && gettext('Hide help texts') || gettext('Show help texts')}
+      {includeHelp && gettext('Hide help texts') || gettext('Show help texts')}
     </Link>
   )
 }

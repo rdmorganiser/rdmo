@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -16,24 +15,19 @@ import Question from '../element/Question'
 const Questions = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const questions = useSelector((state) => state.elements.questions)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.questions.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.questions.uri_prefix', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.questions.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questions.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
-  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
 
-  const updateDisplayQuestionsURI = () => dispatch(updateConfig('display.uri.questions', !displayUriQuestions))
-  const updateDisplayAttributesURI = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const updateDisplayConditionsURI = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
-  const updateDisplayOptionSetURI = () => dispatch(updateConfig('display.uri.optionsets', !displayUriOptionSets))
 
   const createQuestion = () => dispatch(createElement('questions'))
 
@@ -54,19 +48,19 @@ const Questions = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.questions.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter questions')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.questions.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(questions)} />
             </div>
             {
               settings.multisite && (
                 <div className="col-sm-2">
                   <FilterSite
-                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    value={filterEditor} onChange={setFilterEditor}
                     options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               )
@@ -75,16 +69,16 @@ const Questions = () => {
         </div>
         <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs:')}</label>
-          <button type="button" onClick={updateDisplayQuestionsURI} className={btnClass(displayUriQuestions)}>
+          <button type="button" onClick={toggleDisplayUriQuestions} className={btnClass(displayUriQuestions)}>
             {gettext('Questions')}
           </button>
-          <button type="button" onClick={updateDisplayAttributesURI} className={btnClass(displayUriAttributes)}>
+          <button type="button" onClick={toggleDisplayUriAttributes} className={btnClass(displayUriAttributes)}>
             {gettext('Attributes')}
           </button>
-          <button type="button" onClick={updateDisplayConditionsURI} className={btnClass(displayUriConditions)}>
+          <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
             {gettext('Conditions')}
           </button>
-          <button type="button" onClick={updateDisplayOptionSetURI} className={btnClass(displayUriOptionSets)}>
+          <button type="button" onClick={toggleDisplayUriOptionSets} className={btnClass(displayUriOptionSets)}>
             {gettext('Option sets')}
           </button>
         </div>
@@ -95,7 +89,7 @@ const Questions = () => {
             {
               questions.map((question, index) => (
                 <Question
-                  key={index} config={config} question={question}
+                  key={index} question={question}
                   filter="questions" filterEditors={true} />
               ))
             }

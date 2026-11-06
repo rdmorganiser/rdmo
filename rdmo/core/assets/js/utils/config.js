@@ -2,25 +2,20 @@ const getConfigFromLocalStorage = (prefix) => {
   const ls = {...localStorage}
 
   return Object.entries(ls)
-    .filter(([lsPath,]) => lsPath.startsWith(prefix))
-    .map(([lsPath, lsValue]) => (
-      lsPath.startsWith(prefix) ? [lsPath.replace(`${prefix}.`, ''), lsValue] : null
-    ))
+    .filter(([lsPath,]) => lsPath.startsWith(`${prefix}.`))
+    .map(([lsPath, lsValue]) => [lsPath.replace(`${prefix}.`, ''), JSON.parse(lsValue)])
 }
 
 const setConfigInLocalStorage = (prefix, path, value) => {
-  localStorage.setItem(`${prefix}.${path}`, value)
+  localStorage.setItem(`${prefix}.${path}`, JSON.stringify(value))
 }
 
 const deleteConfigInLocalStorage = (prefix, path) => {
   localStorage.removeItem(`${prefix}.${path}`)
 }
 
-const isTruthy = (value) => [true, 'true'].includes(value)
-
 export {
   deleteConfigInLocalStorage,
   getConfigFromLocalStorage,
-  isTruthy,
   setConfigInLocalStorage
 }

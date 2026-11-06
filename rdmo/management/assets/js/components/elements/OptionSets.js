@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -14,14 +14,13 @@ import OptionSet from '../element/OptionSet'
 const OptionSets = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const optionsets = useSelector((state) => state.elements.optionsets)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.optionsets.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.optionsets.uri_prefix', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.optionsets.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.optionsets.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
   const createOptionSet = () => dispatch(createElement('optionsets'))
 
@@ -39,19 +38,19 @@ const OptionSets = () => {
         <div className="row">
           <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
             <FilterString
-              value={get(config, 'filter.optionsets.search', '')} onChange={updateFilterString}
+              value={filterString} onChange={setFilterString}
               label={gettext('Filter option sets')} />
           </div>
           <div className="col-sm-4">
             <FilterUriPrefix
-              value={get(config, 'filter.optionsets.uri_prefix', '')} onChange={updateFilterUriPrefix}
+              value={filterUriPrefix} onChange={setFilterUriPrefix}
               options={getUriPrefixes(optionsets)} />
           </div>
           {
             settings.multisite && (
               <div className="col-sm-2">
                 <FilterSite
-                  value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                  value={filterEditor} onChange={setFilterEditor}
                   options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
               </div>
             )
@@ -65,7 +64,7 @@ const OptionSets = () => {
             {
               optionsets.map((optionset, index) => (
                 <OptionSet
-                  key={index} config={config} optionset={optionset}
+                  key={index} optionset={optionset}
                   filter="optionsets" filterEditors={true} />
               ))
             }

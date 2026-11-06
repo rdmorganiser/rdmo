@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -16,19 +15,17 @@ import Catalog from '../element/Catalog'
 const Catalogs = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const catalogs = useSelector((state) => state.elements.catalogs)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.catalogs.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.catalogs.uri_prefix', value))
-  const updateFilterSite = (value) => dispatch(updateConfig('filter.sites', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.catalogs.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.catalogs.uri_prefix', '')
+  const [filterSite, setFilterSite] = useConfig('filter.sites', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriCatalogs = isTruthy(get(config, 'display.uri.catalogs', true))
+  const [displayUriCatalogs, toggleDisplayUriCatalogs] = useConfigToggle('display.uri.catalogs', true)
 
-  const toggleDisplayUriCatalogs = () => dispatch(updateConfig('display.uri.catalogs', !displayUriCatalogs))
 
   const createCatalog = () => dispatch(createElement('catalogs'))
 
@@ -49,12 +46,12 @@ const Catalogs = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-4' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.catalogs.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter catalogs')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.catalogs.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(catalogs)} />
             </div>
             {
@@ -62,12 +59,12 @@ const Catalogs = () => {
                 <>
                   <div className="col-sm-2">
                     <FilterSite
-                      value={get(config, 'filter.sites', '')} onChange={updateFilterSite}
+                      value={filterSite} onChange={setFilterSite}
                       options={sites} />
                   </div>
                   <div className="col-sm-2">
                     <FilterSite
-                      value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                      value={filterEditor} onChange={setFilterEditor}
                       options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                   </div>
                 </>
@@ -89,7 +86,7 @@ const Catalogs = () => {
             {
               catalogs.map((catalog, index) => (
                 <Catalog
-                  key={index} config={config} catalog={catalog}
+                  key={index} catalog={catalog}
                   filter="catalogs" filterSites={true} filterEditors={true} />
               ))
             }

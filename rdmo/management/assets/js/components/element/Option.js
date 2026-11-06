@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -18,10 +17,9 @@ import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/
 const Option = ({ option, display = 'list', indent = 0, filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, option)
+  const showElement = useFilterElement(filter, false, filterEditors, option)
 
   const editUrl = buildPath('options', option.id)
   const copyUrl = buildPath('options', option.id, 'copy')
@@ -31,7 +29,7 @@ const Option = ({ option, display = 'list', indent = 0, filter = false, filterEd
   const fetchCopy = () => dispatch(fetchElement('options', option.id, 'copy'))
   const toggleLocked = () => dispatch(patchElement('options', { id: option.id, locked: !option.locked }))
 
-  const displayUriOptions = isTruthy(get(config, 'display.uri.options', true))
+  const [displayUriOptions] = useConfig('display.uri.options', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">
