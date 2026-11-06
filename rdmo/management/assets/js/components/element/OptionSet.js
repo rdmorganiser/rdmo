@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { createElement, fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -18,7 +18,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, optionset)
+  const showElement = useFilterElement(filter, false, filterEditors, optionset)
 
   const editUrl = buildPath('optionsets', optionset.id)
   const copyUrl = buildPath('optionsets', optionset.id, 'copy')

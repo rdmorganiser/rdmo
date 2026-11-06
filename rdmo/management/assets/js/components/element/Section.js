@@ -8,7 +8,7 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, dropElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { Drag, Drop } from '../common/DragAndDrop'
@@ -25,10 +25,9 @@ import Page from './Page'
 const Section = ({ section, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, section)
+  const showElement = useFilterElement(filter, false, filterEditors, section)
   const [showElements] = useConfig(`display.elements.sections.${section.id}`, true)
 
   const editUrl = buildPath('sections', section.id)

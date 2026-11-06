@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -13,10 +13,9 @@ import { CodeLink, CopyLink, EditLink, ExportLink, LockedLink } from '../common/
 const Condition = ({ condition, filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, condition)
+  const showElement = useFilterElement(filter, false, filterEditors, condition)
 
   const editUrl = buildPath('conditions', condition.id)
   const copyUrl = buildPath('conditions', condition.id, 'copy')

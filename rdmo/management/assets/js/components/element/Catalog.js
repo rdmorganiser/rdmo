@@ -8,7 +8,7 @@ import { siteId } from 'rdmo/core/assets/js/utils/meta'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { BackButton } from '../common/Buttons'
@@ -24,10 +24,9 @@ const Catalog = ({
 }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
+  const showElement = useFilterElement(filter, filterSites, filterEditors, catalog)
 
   const editUrl = buildPath('catalogs', catalog.id)
   const copyUrl = buildPath('catalogs', catalog.id, 'copy')
