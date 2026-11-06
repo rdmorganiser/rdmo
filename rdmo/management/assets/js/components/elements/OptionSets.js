@@ -65,7 +65,7 @@ const OptionSets = () => {
             {
               optionsets.map((optionset, index) => (
                 <OptionSet
-                  key={index} config={config} optionset={optionset}
+                  key={index} optionset={optionset}
                   filter="optionsets" filterEditors={true} />
               ))
             }

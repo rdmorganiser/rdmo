@@ -81,7 +81,7 @@ const Options = () => {
             {
               options.map((option, index) => (
                 <Option
-                  key={index} config={config} option={option}
+                  key={index} option={option}
                   filter="options" filterEditors={true} />
               ))
             }

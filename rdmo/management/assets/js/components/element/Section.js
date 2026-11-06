@@ -122,7 +122,6 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
               return (
                 <Page
                   key={index}
-                  config={config}
                   page={page}
                   display="nested"
                   filter={filter}

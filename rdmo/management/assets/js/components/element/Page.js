@@ -154,7 +154,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return (
                   <QuestionSet
-                    key={index} config={config} questionset={element}
+                    key={index} questionset={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
                 )
               } else {
@@ -162,7 +162,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return (
                   <Question
-                    key={index} config={config} question={element}
+                    key={index} question={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
                 )
               }

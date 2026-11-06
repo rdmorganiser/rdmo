@@ -65,7 +65,7 @@ const Conditions = () => {
             {
               conditions.map((condition, index) => (
                 <Condition
-                  key={index} config={config} condition={condition}
+                  key={index} condition={condition}
                   filter="conditions" filterEditors={true} />
               ))
             }

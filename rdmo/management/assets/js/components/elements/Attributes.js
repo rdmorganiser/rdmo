@@ -66,7 +66,7 @@ const Attributes = () => {
             {
               attributes.map((attribute, index) => (
                 <Attribute
-                  key={index} config={config} attribute={attribute}
+                  key={index} attribute={attribute}
                   filter="attributes" filterEditors={true} />
               ))
             }

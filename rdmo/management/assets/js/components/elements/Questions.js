@@ -95,7 +95,7 @@ const Questions = () => {
             {
               questions.map((question, index) => (
                 <Question
-                  key={index} config={config} question={question}
+                  key={index} question={question}
                   filter="questions" filterEditors={true} />
               ))
             }
