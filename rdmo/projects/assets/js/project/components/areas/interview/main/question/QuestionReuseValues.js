@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
@@ -94,7 +93,7 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
         title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
         submitProps={{className: 'btn btn-primary'}}
         onClose={() => setShow(false)} onSubmit={handleSubmit}>
-        <div className={classNames({'form-group': true, 'has-error': formErrors.value })}>
+        <div className="form-group">
           <label htmlFor="project-interview-page-tabs-modal-form-import">
             {gettext('Answer')}
           </label>
@@ -108,7 +107,7 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
             collection={true}
           />
 
-          <p className="help-block mb-0">
+          <p className="form-text mb-0">
             {
               gettext('You can reuse an answer from a similar question in any ' +
                    'project you have access to.')

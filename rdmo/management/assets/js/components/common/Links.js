@@ -46,15 +46,15 @@ const AddLink = ({ title, altTitle, onClick, onAltClick, disabled }) => {
     return (
       <span className="dropdown">
         <button
-          type="button" className="link btn-link bi bi-plus-lg" data-toggle="dropdown"
-          title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`}>
+          type="button" className="link bi bi-plus-lg" data-bs-toggle="dropdown"
+          title={`${title}/${altTitle}`} aria-label={`${title}/${altTitle}`} disabled={disabled}>
         </button>
-        <ul className="dropdown-menu">
-          <li onClick={onClick}>
-            <Link href="" onClick={onClick}>{title}</Link>
+        <ul className="dropdown-menu dropdown-menu-end">
+          <li>
+            <button type="button" className="dropdown-item" onClick={onClick}>{title}</button>
           </li>
           <li>
-            <Link href="" onClick={onAltClick}>{altTitle}</Link>
+            <button type="button" className="dropdown-item" onClick={onAltClick}>{altTitle}</button>
           </li>
         </ul>
       </span>

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
@@ -76,14 +75,14 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
             />
             {
               reuse && (
-                <div className={classNames({'form-group': true, 'has-error': errors.value })}>
+                <div className="form-group">
                   <label>
                     {gettext('Reuse answers')}
                   </label>
 
                   <Search attribute={attribute} values={values} setValues={setValues} />
 
-                  <p className="help-block mb-0">
+                  <p className="form-text mb-0">
                     {
                       gettext(
                         'You can populate this tab with answers from a similar tab in any ' +

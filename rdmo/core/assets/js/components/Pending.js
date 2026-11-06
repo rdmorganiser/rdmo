@@ -7,7 +7,7 @@ const Pending = () => {
 
   return (
     !isEmpty(pending.items) && (
-      <i className="fa fa-circle-o-notch fa-spin fa-fw" aria-hidden="true"></i>
+      <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
     )
   )
 }
