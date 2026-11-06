@@ -11,7 +11,7 @@ import ViewTile from '../helper/ViewTile'
 const Documents = () => {
   const dispatch = useDispatch()
 
-  const { snapshotId, viewId, detail } = useSelector((state) => state.config)
+  const { snapshotId, viewId, detail } = useSelector((state) => state.location)
   const { views } = useSelector((state) => state.project.project) ?? {}
   const area = snapshotId ? 'snapshots' : 'documents'
 

@@ -85,7 +85,7 @@ export default function configureStore() {
   // this event is triggered when the page first loads
   window.addEventListener('load', () => {
     getConfigFromLocalStorage(initialState.config.prefix).forEach(([path, value]) => {
-      store.dispatch(configActions.updateConfig(path, value, false))
+      store.dispatch(configActions.updateConfig(path, value))
     })
 
     fetchConstants().then(() => fetchElementsFromLocation()).then(() => {

@@ -8,7 +8,7 @@ import InterviewMain from './interview/InterviewMain'
 import InterviewOverview from './interview/InterviewOverview'
 
 const Interview = () => {
-  const config = useSelector((state) => state.config)
+  const { pageId } = useSelector((state) => state.location)
   const errors = useSelector((state) => state.interview.errors)
 
   if (!isEmpty(errors)) {
@@ -20,7 +20,7 @@ const Interview = () => {
   return (
     <div className="project-interview">
       {
-        isNil(config.pageId) ? (
+        isNil(pageId) ? (
           <InterviewOverview />
         ) : (
           <InterviewMain />

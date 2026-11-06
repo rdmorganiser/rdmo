@@ -60,7 +60,7 @@ export default function configureStore() {
         [path, (path == 'myProjects') ? isTruthy(value) : value]  // cast myProjects to bool
       ))
       .forEach(([path, value]) => {
-        store.dispatch(configActions.updateConfig(path, value, false))
+        store.dispatch(configActions.updateConfig(path, value))
       })
 
     Promise.all([

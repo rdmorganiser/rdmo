@@ -13,7 +13,7 @@ import Snapshots from './areas/Snapshots'
 import View from './helper/View'
 
 const Main = () => {
-  const { area, snapshotId } = useSelector((state) => state.config)
+  const { area, snapshotId } = useSelector((state) => state.location)
   const { project, currentView } = useSelector((state) => state.project)
 
   const renderArea = () => {
