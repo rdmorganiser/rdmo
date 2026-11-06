@@ -2,8 +2,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import { useImportElements } from '../../hooks/useImportElements'
 import filterElements from '../../utils/importFilters'
 
@@ -31,7 +29,7 @@ const Import = () => {
 
   const searchString = get(config, 'filter.import.elements.search', '')
   const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const selectFilterChanged = isTruthy(get(config, 'filter.import.elements.changed', false))
+  const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
 
   const filteredElements = filterElements(elements, selectFilterChanged, selectedUriPrefix, searchString)
 

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
@@ -29,7 +27,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, page)
-  const showElements = isTruthy(get(config, `display.elements.pages.${page.id}`, true))
+  const showElements = get(config, `display.elements.pages.${page.id}`, true)
 
   const editUrl = buildPath('pages', page.id)
   const copyUrl = buildPath('pages', page.id, 'copy')
@@ -51,9 +49,9 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const fetchAttribute = () => dispatch(fetchElement('attributes', page.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', page.conditions[index]))
 
-  const displayUriPages = isTruthy(get(config, 'display.uri.pages', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriPages = get(config, 'display.uri.pages', true)
+  const displayUriAttributes = get(config, 'display.uri.attributes', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

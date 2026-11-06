@@ -1,7 +1,5 @@
 import { get, isNil } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { setLocation } from './locationActions'
 import { clearCurrentView, fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
@@ -52,7 +50,7 @@ export function navigateDashboard(location, back = null) {
       } else if (['questions', 'answers'].includes(location.detail)) {
         // /documents/questions/ and /documents/answers/
         dispatch(fetchAnswers(location.snapshotId, {
-          include_help: isTruthy(get(getState().config, 'document.includeHelp')),
+          include_help: get(getState().config, 'document.includeHelp', false),
           hide_answers: location.detail == 'questions' ? 'true' : 'false'
         }))
       } else {

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
-
 import { createElement, fetchElement, patchElement } from '../../actions/elementActions'
 import { filterElement } from '../../utils/filter'
 import { buildApiPath, buildPath } from '../../utils/location'
@@ -36,7 +34,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const createOption = () => dispatch(createElement('options', { optionset }))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', optionset.conditions[index]))
 
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

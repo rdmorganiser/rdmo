@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import { get } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { generateErrorMessageListItems } from './ErrorsListGroup'
 
@@ -27,11 +26,11 @@ const ErrorsAggregated = ({ elements }) => {
   const config = useSelector((state) => state.config)
 
   const updateShowErrors = () => {
-    const currentVal = isTruthy(get(config, 'filter.import.errors.show', false))
+    const currentVal = get(config, 'filter.import.errors.show', false)
     dispatch(updateConfig('filter.import.errors.show', !currentVal))
   }
 
-  const showErrors = isTruthy(get(config, 'filter.import.errors.show', false))
+  const showErrors = get(config, 'filter.import.errors.show', false)
 
   // Aggregate all unique errors into a single flat array
   const uniqueErrors = aggregateUniqueErrors(elements)

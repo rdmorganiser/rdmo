@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { getUriPrefixes } from '../../../utils/filter'
 
@@ -17,7 +16,7 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
 
   const filterString = get(config, 'filter.import.elements.search', '')
   const filterUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const filterChanged = isTruthy(get(config, 'filter.import.elements.changed', false))
+  const filterChanged = get(config, 'filter.import.elements.changed', false)
 
   const updateFilterString = (value) => dispatch(updateConfig('filter.import.elements.search', value))
   const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.import.elements.uri_prefix', value))

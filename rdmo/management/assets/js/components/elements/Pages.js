@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import { get, isEmpty } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -25,9 +24,9 @@ const Pages = () => {
   const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.pages.uri_prefix', value))
   const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
 
-  const displayUriPages = isTruthy(get(config, 'display.uri.pages', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const displayUriPages = get(config, 'display.uri.pages', true)
+  const displayUriAttributes = get(config, 'display.uri.attributes', true)
+  const displayUriConditions = get(config, 'display.uri.conditions', true)
 
   const toggleDisplayUriPages = () => dispatch(updateConfig('display.uri.pages', !displayUriPages))
   const toggleDisplayUriAttributes = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
