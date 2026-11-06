@@ -15,7 +15,7 @@ const NavigationLink = ({ element }) => {
       {
         element.count > 0 && element.count == element.total && (
           <span aria-label={gettext('Complete')}>
-            {' '}<i className="fa fa-check" aria-hidden="true"></i>
+            {' '}<i className="bi bi-check-lg" aria-hidden="true"></i>
           </span>
         )
       }

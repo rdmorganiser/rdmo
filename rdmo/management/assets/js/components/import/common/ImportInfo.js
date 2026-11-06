@@ -4,7 +4,7 @@ import {isUndefined} from 'lodash'
 
 const renderElementLengthInfo = (label, length) => (
   length > 0 && (
-    <span className="ml-5">{gettext(label)}: {length} </span>
+    <span>{gettext(label)}: {length}</span>
   )
 )
 
@@ -21,7 +21,7 @@ const ImportInfo = ({
   }
 
   return (
-    <div className="pull-right">
+    <div className="d-flex gap-2">
       {renderElementLengthInfo('Total', elementsLength)}
       {renderElementLengthInfo('Updated', updatedLength)}
       {renderElementLengthInfo('Changed', changedLength)}

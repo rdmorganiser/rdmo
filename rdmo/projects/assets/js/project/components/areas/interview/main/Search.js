@@ -97,7 +97,7 @@ const Search = ({ question, attribute, values, errors, setValues, collection = f
                 {
                   value.snapshot_label && (
                     <>
-                      <span className="mr-5 ml-5">&rarr;</span>
+                      <span className="mx-1">&rarr;</span>
                       {gettext('Snapshot')} <strong>{value.snapshot_label}</strong>
                     </>
                   )
@@ -105,12 +105,12 @@ const Search = ({ question, attribute, values, errors, setValues, collection = f
                 {
                   value.set_label && (
                     <>
-                      <span className="mr-5 ml-5">&rarr;</span>
+                      <span className="mx-1">&rarr;</span>
                       {gettext('Tab')} <strong>{value.set_label}</strong>
                     </>
                   )
                 }
-                <span className="mr-5 ml-5">&rarr;</span>
+                <span className="mx-1">&rarr;</span>
                 {
                   isNil(page) ? <>{gettext('Tab')} <strong>{truncatedLabel}</strong></> : truncatedLabel
                 }

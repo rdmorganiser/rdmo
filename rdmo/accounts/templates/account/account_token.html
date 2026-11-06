@@ -10,7 +10,7 @@
     <form method="post" action="{% url 'account_token' %}" novalidate>
         {% csrf_token %}
 
-        <button type="submit" name="regenerate" class="btn btn-default">
+        <button type="submit" name="regenerate" class="btn btn-secondary">
             {% trans 'Regenerate token' %}
         </button>
     </form>
