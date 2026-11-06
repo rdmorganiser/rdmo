@@ -6,16 +6,22 @@ import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permiss
 
 import Template from 'rdmo/core/assets/js/components/Template'
 
-const QuestionAddValueHelp = ({ question }) => {
+import { hasAddValueHelp } from '../../../../../utils/question'
+
+const QuestionAddValueHelp = ({ question, show }) => {
+  const templates = useSelector((state) => state.templates)
   const readOnly = useSelector(selectReadOnly)
 
-  return !readOnly && question.is_collection && question.widget_type != 'checkbox' && (
-    <Template template="project_interview_add_value_help" className="font-small text-muted mb-3" />
+  return show && hasAddValueHelp(question, templates, readOnly) && (
+    <div className="font-small text-muted mb-2">
+      <Template template="project_interview_add_value_help" />
+    </div>
   )
 }
 
 QuestionAddValueHelp.propTypes = {
   question: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired,
 }
 
 export default QuestionAddValueHelp

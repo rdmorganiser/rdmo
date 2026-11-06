@@ -1,12 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import { getQuestionHelpId } from '../../../../../utils/question'
+import { getQuestionHelpId, hasAddValueHelp } from '../../../../../utils/question'
 
 const QuestionHelpToggle = ({ question, show, onClick }) => {
+  const templates = useSelector((state) => state.templates)
+  const readOnly = useSelector(selectReadOnly)
+
   return (
+    !isEmpty(question.help) ||
+    !isEmpty(templates.project_interview_question_help) ||
+    hasAddValueHelp(question, templates, readOnly)
+  ) && (
     <LinkButton
       className="text-muted"
       title={show ? gettext('Hide help') : gettext('Show help')}
