@@ -1,6 +1,7 @@
 import { first, isEmpty, isNil, omit } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { clearError, setError } from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
@@ -27,6 +28,7 @@ export function fetchPage(pageId, back) {
     dispatch(fetchProgress())
     dispatch(fetchNavigation())
     dispatch(actions.fetchPageInit())
+    dispatch(clearError('page'))
 
     return PageApi.fetchPage(projectId, pageId, back)
       .then((page) => {
@@ -44,7 +46,7 @@ export function fetchPage(pageId, back) {
         if (error?.errors?.done) {
           dispatch(showDone())
         } else {
-          dispatch(actions.fetchPageError(serializeError(error)))
+          dispatch(setError('page', error, gettext('Page')))
         }
       })
       .finally(() => dispatch(removeFromPending(pendingId)))
@@ -56,11 +58,11 @@ export function fetchContinue() {
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.fetchContinueInit())
+    dispatch(clearError('continue'))
 
     return PageApi.fetchContinue(projectId)
       .then((page) => dispatch(actions.fetchContinueSuccess(page)))
-      .catch((error) => dispatch(actions.fetchContinueError(serializeError(error))))
+      .catch((error) => dispatch(setError('continue', error, gettext('Continue'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -77,14 +79,14 @@ export function fetchOptions(page, optionset) {
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.fetchOptionsInit())
+    dispatch(clearError('options'))
 
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
         dispatch(removeFromPending(pendingId))
         dispatch(actions.fetchOptionsSuccess({ pageId: page.id, optionsetId: optionset.id, options }))
       })
-      .catch((error) => dispatch(actions.fetchOptionsError(serializeError(error))))
+      .catch((error) => dispatch(setError('options', error, gettext('Options'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -94,7 +96,7 @@ export function fetchValues(page, refresh = false) {
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.fetchValuesInit())
+    dispatch(clearError('values'))
 
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
@@ -120,7 +122,7 @@ export function fetchValues(page, refresh = false) {
         dispatch(resolveConditions(page, sets))
         dispatch(actions.fetchValuesSuccess({ values, sets }))
       })
-      .catch((error) => dispatch(actions.fetchValuesError(serializeError(error))))
+      .catch((error) => dispatch(setError('values', error, gettext('Values'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -130,7 +132,7 @@ export function resolveConditions(page, sets) {
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.resolveConditionsInit())
+    dispatch(clearError('conditions'))
 
     // loop over sets to gather payload
     const payload = []
@@ -166,7 +168,7 @@ export function resolveConditions(page, sets) {
 
     return ProjectApi.resolveConditions(projectId, payload)
       .then((results) => dispatch(actions.resolveConditionsSuccess(results)))
-      .catch((error) => dispatch(actions.resolveConditionsError(serializeError(error))))
+      .catch((error) => dispatch(setError('conditions', error, gettext('Conditions'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -314,6 +316,7 @@ export function copyValue(question, ...originalValues) {
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
+    dispatch(clearError('copyValue'))
 
     const { sets, values } = getState().interview
 
@@ -369,8 +372,6 @@ export function copyValue(question, ...originalValues) {
       // sort values in the store after the updates
       dispatch(resortValues())
 
-      dispatch(removeFromPending(pendingId))
-
       const page = getState().interview.page
       const sets = getState().interview.sets
       const question = page.questions.find((question) => question.attribute === firstValue.attribute)
@@ -388,6 +389,8 @@ export function copyValue(question, ...originalValues) {
         dispatch(resolveConditions(page, sets))
       }
     })
+      .catch((error) => dispatch(setError('copyValue', error, gettext('Copy value'))))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -404,6 +407,7 @@ export function deleteValue(value) {
   } else {
     return (dispatch, getState) => {
       dispatch(addToPending(pendingId))
+      dispatch(clearError('deleteValue'))
       dispatch(actions.deleteValueInit(valueId))
 
       if (isNil(value.id)) {
@@ -431,7 +435,7 @@ export function deleteValue(value) {
 
             dispatch(actions.deleteValueSuccess(valueId))
           })
-          .catch((errors) => dispatch(actions.deleteValueError(serializeError(errors))))
+          .catch((error) => dispatch(setError('deleteValue', error, gettext('Delete value'))))
           .finally(() => dispatch(removeFromPending(pendingId)))
       }
     }
@@ -493,7 +497,7 @@ export function deleteSet(set, setValue) {
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.deleteSetInit())
+    dispatch(clearError('deleteSet'))
 
     if (isNil(setValue)) {
       // gather all values for this set and it's descendants
@@ -504,7 +508,7 @@ export function deleteSet(set, setValue) {
           dispatch(updateProgress())
           dispatch(deleteSetSuccess(set))
         })
-        .catch((errors) => dispatch(actions.deleteSetError(serializeError(errors))))
+        .catch((error) => dispatch(setError('deleteSet', error, gettext('Delete set'))))
         .finally(() => dispatch(removeFromPending(pendingId)))
     } else {
       return ValueApi.deleteSet(projectId, setValue)
@@ -526,7 +530,7 @@ export function deleteSet(set, setValue) {
 
           dispatch(deleteSetSuccess(set))
         })
-        .catch((errors) => dispatch(actions.deleteSetError(serializeError(errors))))
+        .catch((error) => dispatch(setError('deleteSet', error, gettext('Delete set'))))
         .finally(() => dispatch(removeFromPending(pendingId)))
     }
   }
@@ -546,7 +550,7 @@ export function copySet(currentSet, copySetValue, attrs) {
 
   return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
-    dispatch(actions.copySetInit())
+    dispatch(clearError('copySet'))
 
     // create a new set (create) or use the current one (import)
     const set = isNil(attrs.id) ? SetFactory.create(attrs) : currentSet
@@ -616,7 +620,7 @@ export function copySet(currentSet, copySetValue, attrs) {
         dispatch(removeFromPending(pendingId))
         copySetCallbackAction(values)
       })
-      .catch((errors) => dispatch(actions.copySetError(serializeError(errors))))
+      .catch((error) => dispatch(setError('copySet', error, gettext('Copy set'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
