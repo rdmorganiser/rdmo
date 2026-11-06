@@ -154,7 +154,7 @@ const PageHead = ({ sets, values, currentSet }) => {
                         <LinkButton
                           className="bi bi-pencil"
                           title={labels.edit}
-                          aria-label={labels.copy}
+                          aria-label={labels.edit}
                           onClick={updateModal.open}
                         />
                       )
