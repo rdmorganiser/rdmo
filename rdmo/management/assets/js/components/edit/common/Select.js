@@ -8,7 +8,7 @@ import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
-import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -59,11 +59,19 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
       </div>
 
       <div className={className}>
-        <div className="flex-grow-1">
+        <div className="select-wrapper flex-grow-1">
           <ReactSelect
-            classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
-            options={selectOptions} value={selectValue} isMulti={isMulti} isClearable={true}
-            onChange={handleChange} isDisabled={element.read_only} aria-labelledby={id} />
+            classNamePrefix="react-select"
+            className="react-select"
+            classNames={selectClassNames}
+            formatOptionLabel={formatOptionLabel}
+            options={selectOptions}
+            value={selectValue}
+            isMulti={isMulti}
+            isClearable={true}
+            onChange={handleChange}
+            isDisabled={element.read_only}
+            aria-labelledby={id} />
         </div>
         {
           onEdit && selectValue && (
@@ -78,7 +86,7 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
 
       {
         onCreate && (
-          <div className="mt-2">
+          <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2 mt-2">
             <button
               type="button" className="btn btn-success btn-sm" onClick={onCreate} disabled={isNil(element.id)}
               title={isNil(element.id) ? gettext('For this action, the element must first be created.') : undefined}>

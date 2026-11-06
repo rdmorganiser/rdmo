@@ -12,40 +12,12 @@ import isUndefined from 'lodash/isUndefined'
 import maxBy from 'lodash/maxBy'
 import toNumber from 'lodash/toNumber'
 
-import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
-
-const formatOptionLabel = ({ label }, { context }) => {
-  const parts = label.split('/')
-
-  if (context === 'menu') {
-    // insert <wbr> at /
-    return (
-      <span>
-        {
-          parts.map((part, index) => (
-            index === 0 ? part : [<wbr key={index} />, '/', part]
-          ))
-        }
-      </span>
-    )
-  } else if (parts.length >= 3) {
-    const head = `${parts.slice(0, -3).join('/')}`
-    const tail = `/${parts.slice(-3).join('/')}`
-    return (
-      <span className="truncate-option-label">
-        <span className="truncate-option-label-head">{head}</span>
-        <span className="truncate-option-label-tail">{tail}</span>
-      </span>
-    )
-  } else {
-    return label
-  }
-}
 
 const OrderedMultiSelectItem = ({
   index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
@@ -136,13 +108,17 @@ const OrderedMultiSelectItem = ({
       }
       <div className="position-relative mb-2">
         <div className={className}>
-          <div className="flex-grow-1">
+          <div className="select-wrapper flex-grow-1">
             <ReactSelect
-              classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
-              options={selectOptions} value={selectValue}
+              classNamePrefix="react-select"
+              className="react-select"
+              classNames={selectClassNames}
+              options={selectOptions}
+              value={selectValue}
               formatOptionLabel={formatOptionLabel}
               onChange={option => handleChange(option, index)}
-              menuPortalTarget={document.body} isDisabled={disabled}
+              menuPortalTarget={document.body}
+              isDisabled={disabled}
               aria-labelledby={ariaLabelledBy}
               onMenuOpen={handleMenuOpen} />
           </div>
@@ -292,7 +268,7 @@ const OrderedMultiSelect = ({
         }
       </div>
 
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
         <button
           type="button" className="btn btn-primary btn-sm" onClick={handleAdd}
           disabled={element.read_only}>

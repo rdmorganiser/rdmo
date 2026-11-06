@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
-import { getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -71,11 +71,17 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
 
             return (
               <div key={index} className="d-flex align-items-center gap-2 mb-2">
-                <div className="flex-grow-1">
+                <div className="select-wrapper flex-grow-1">
                   <ReactSelect
-                    classNamePrefix="react-select" className="react-select" classNames={selectClassNames}
-                    options={selectOptions} value={selectValue} isDisabled={element.read_only}
-                    aria-labelledby={id} onChange={option => handleChange(option, index)} />
+                    classNamePrefix="react-select"
+                    className="react-select"
+                    classNames={selectClassNames}
+                    formatOptionLabel={formatOptionLabel}
+                    options={selectOptions}
+                    value={selectValue}
+                    isDisabled={element.read_only}
+                    aria-labelledby={id}
+                    onChange={option => handleChange(option, index)} />
                 </div>
                 {
                   onEdit && (
@@ -93,7 +99,7 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
         }
       </div>
 
-      <div className="d-flex align-items-center gap-2">
+      <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
         <button
           type="button" className="btn btn-primary btn-sm" onClick={() => handleAdd()}
           disabled={element.read_only}>

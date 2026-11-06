@@ -39,8 +39,8 @@ const Tasks = () => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex align-items-center gap-2">
-          <strong className="me-auto">{gettext('Tasks')}</strong>
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">{gettext('Tasks')}</strong>
           <BackButton />
           <NewButton onClick={createTask} />
         </div>
@@ -77,7 +77,7 @@ const Tasks = () => {
             }
           </div>
         </div>
-        <div className="input-group input-group-sm">
+        <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs')}</label>
           <button type="button" onClick={updateDisplayUriTasks} className={btnClass(displayUriTasks)}>
             {gettext('Tasks')}

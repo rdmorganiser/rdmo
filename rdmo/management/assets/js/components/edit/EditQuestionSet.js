@@ -81,8 +81,8 @@ const EditQuestionSet = ({ questionset }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {questionset.id ? gettext('Edit questionset') : gettext('Create questionset')}
           </strong>
           <ReadOnlyIcon title={gettext('This question set is read only')} show={questionset.read_only} />
@@ -184,9 +184,9 @@ const EditQuestionSet = ({ questionset }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {questionset.id && <DeleteButton onClick={openDeleteModal} disabled={questionset.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeQuestionSet} disabled={questionset.read_only} />
           <SaveButton
             elementAction={elementAction}

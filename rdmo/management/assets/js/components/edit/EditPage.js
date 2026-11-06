@@ -81,8 +81,8 @@ const EditPage = ({ page }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {page.id ? gettext('Edit page') : gettext('Create page')}
           </strong>
           <ReadOnlyIcon title={gettext('This page is read only')} show={page.read_only} />
@@ -169,9 +169,9 @@ const EditPage = ({ page }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {page.id && <DeleteButton onClick={openDeleteModal} disabled={page.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} />
           <SaveButton elementAction={elementAction} onClick={storePage} disabled={page.read_only} back={true}/>
         </div>

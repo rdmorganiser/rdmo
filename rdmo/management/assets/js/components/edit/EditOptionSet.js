@@ -46,8 +46,8 @@ const EditOptionSet = ({ optionset }) => {
   return (
     <div className="card card-tile">
       <div className="card-header">
-        <div className="d-flex flex-wrap align-items-center gap-2">
-          <strong className="flex-grow-1">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">
             {optionset.id ? gettext('Edit optionset') : gettext('Create optionset')}
           </strong>
           <ReadOnlyIcon title={gettext('This option set is read only')} show={optionset.read_only} />
@@ -125,9 +125,9 @@ const EditOptionSet = ({ optionset }) => {
       </div>
 
       <div className="card-footer">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
           {optionset.id && <DeleteButton onClick={openDeleteModal} disabled={optionset.read_only} />}
-          <BackButton className="ms-auto" />
+          <BackButton className="ms-sm-auto" />
           <SaveButton elementAction={elementAction} onClick={storeOptionSet} disabled={optionset.read_only} />
           <SaveButton
             elementAction={elementAction}

@@ -69,7 +69,7 @@ const NestedCatalog = ({ catalog }) => {
               </div>
             </div>
           </div>
-          <div className="input-group input-group-sm mb-2">
+          <div className="input-group input-group-sm row-gap-1 mb-2">
             <label className="input-group-text">{gettext('Show URIs')}</label>
             <button type="button" onClick={toggleDisplayUriCatalogs} className={btnClass(displayUriCatalogs)}>
               {gettext('Catalogs')}
@@ -96,7 +96,7 @@ const NestedCatalog = ({ catalog }) => {
               {gettext('Option sets')}
             </button>
           </div>
-          <div className="input-group input-group-sm">
+          <div className="input-group input-group-sm row-gap-1">
             <label className="input-group-text">{gettext('Toggle elements')}</label>
             <button type="button" onClick={toggleSections} className="btn btn-outline-primary border">
               {gettext('Sections')}
