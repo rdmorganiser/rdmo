@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useQuestionHelp } from '../../../../../hooks'
 import { checkQuestion } from '../../../../../utils/page'
+import { getQuestionHelpId } from '../../../../../utils/question'
 
 import QuestionAddValueHelp from './QuestionAddValueHelp'
 import QuestionContact from './QuestionContact'
@@ -29,9 +30,11 @@ const Question = ({ question, sets, values, siblings, currentSet }) => {
           <QuestionHelpToggle question={question} show={showHelp} onClick={toggleHelp} />
         </div>
       </div>
-      <QuestionHelp question={question} show={showHelp} />
-      <QuestionHelpTemplate />
-      <QuestionAddValueHelp question={question} />
+      <div id={getQuestionHelpId(question)}>
+        <QuestionHelp question={question} show={showHelp} />
+        <QuestionHelpTemplate show={showHelp} />
+        <QuestionAddValueHelp question={question} show={showHelp} />
+      </div>
       <QuestionWarning question={question} values={values} />
       <QuestionManagement question={question} />
       <QuestionWidget
