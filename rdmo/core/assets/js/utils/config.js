@@ -2,7 +2,7 @@ const getConfigFromLocalStorage = (prefix) => {
   const ls = {...localStorage}
 
   return Object.entries(ls)
-    .filter(([lsPath,]) => lsPath.startsWith(prefix))
+    .filter(([lsPath,]) => lsPath.startsWith(`${prefix}.`))
     .map(([lsPath, lsValue]) => [lsPath.replace(`${prefix}.`, ''), JSON.parse(lsValue)])
 }
 
