@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import get from 'lodash/get'
+
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { useImportElements } from '../../hooks/useImportElements'
 import filterElements from '../../utils/importFilters'
@@ -15,7 +16,6 @@ import ImportSuccessElement from './ImportSuccessElement'
 
 
 const Import = () => {
-  const config = useSelector((state) => state.config)
   const { file, elements, success } = useSelector((state) => state.imports)
 
   // the elements are already processed by processElementDiffs in the importsReducer
@@ -27,9 +27,9 @@ const Import = () => {
     importErrors
   } = useImportElements(elements)
 
-  const searchString = get(config, 'filter.import.elements.search', '')
-  const selectedUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const selectFilterChanged = get(config, 'filter.import.elements.changed', false)
+  const [searchString] = useConfig('filter.import.elements.search', '')
+  const [selectedUriPrefix] = useConfig('filter.import.elements.uri_prefix', '')
+  const [selectFilterChanged] = useConfig('filter.import.elements.changed', false)
 
   const filteredElements = filterElements(elements, selectFilterChanged, selectedUriPrefix, searchString)
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
@@ -41,7 +41,7 @@ const View = ({ view, filter = false, filterSites = false, filterEditors = false
   const toggleLocked = () => dispatch(patchElement('views', { id: view.id, locked: !view.locked }))
   const toggleCurrentSite = () => dispatch(toggleElementSite('views', view))
 
-  const displayUriViews = get(config, 'display.uri.views', true)
+  const [displayUriViews] = useConfig('display.uri.views', true)
 
   return showElement && (
     <li className="list-group-item">

@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { generateErrorMessageListItems } from './ErrorsListGroup'
 
@@ -21,16 +19,9 @@ const aggregateUniqueErrors = (elements) => {
 }
 
 const ErrorsAggregated = ({ elements }) => {
-  const dispatch = useDispatch()
+  const [showErrors, setShowErrors] = useConfig('filter.import.errors.show', false)
 
-  const config = useSelector((state) => state.config)
-
-  const updateShowErrors = () => {
-    const currentVal = get(config, 'filter.import.errors.show', false)
-    dispatch(updateConfig('filter.import.errors.show', !currentVal))
-  }
-
-  const showErrors = get(config, 'filter.import.errors.show', false)
+  const updateShowErrors = () => setShowErrors(!showErrors)
 
   // Aggregate all unique errors into a single flat array
   const uniqueErrors = aggregateUniqueErrors(elements)

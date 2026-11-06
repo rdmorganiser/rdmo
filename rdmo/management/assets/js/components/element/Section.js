@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -28,7 +29,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
   const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, section)
-  const showElements = get(config, `display.elements.sections.${section.id}`, true)
+  const [showElements] = useConfig(`display.elements.sections.${section.id}`, true)
 
   const editUrl = buildPath('sections', section.id)
   const copyUrl = buildPath('sections', section.id, 'copy')
@@ -43,7 +44,7 @@ const Section = ({ section, display = 'list', indent = 0, filter = false, filter
 
   const createPage = () => dispatch(createElement('pages', { section }))
 
-  const displayUriSections = get(config, 'display.uri.sections', true)
+  const [displayUriSections] = useConfig('display.uri.sections', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

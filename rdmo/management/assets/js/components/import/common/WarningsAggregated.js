@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { generateWarningListItems } from './WarningsListGroup'
 
@@ -19,16 +17,9 @@ const aggregateWarnings = (elements) => {
 }
 
 const WarningsAggregated = ({ elements }) => {
-  const dispatch = useDispatch()
+  const [showWarnings, setShowWarnings] = useConfig('filter.import.warnings.show', false)
 
-  const config = useSelector((state) => state.config)
-
-  const updateShowWarnings = () => {
-    const currentVal = get(config, 'filter.import.warnings.show', false)
-    dispatch(updateConfig('filter.import.warnings.show', !currentVal))
-  }
-
-  const showWarnings = get(config, 'filter.import.warnings.show', false)
+  const updateShowWarnings = () => setShowWarnings(!showWarnings)
 
   // Aggregate all warnings into a single list
   const aggregatedWarnings = aggregateWarnings(elements)

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -17,24 +17,22 @@ import QuestionSet from '../element/QuestionSet'
 const NestedQuestionSet = ({ questionset }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
-
-  const updateFilterString = (uri) => dispatch(updateConfig('filter.questionset.search', uri))
-  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.questionset.uri_prefix', uriPrefix))
+  const [filterString, setFilterString] = useConfig('filter.questionset.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questionset.uri_prefix', '')
 
   const toggleQuestionSets = () => dispatch(toggleDescendants(questionset, 'questionsets'))
 
-  const displayUriQuestionSets = get(config, 'display.uri.questionsets', true)
-  const displayUriQuestions = get(config, 'display.uri.questions', true)
-  const displayUriAttributes = get(config, 'display.uri.attributes', true)
-  const displayUriConditions = get(config, 'display.uri.conditions', true)
-  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
+  const [displayUriQuestionSets, setDisplayUriQuestionSets] = useConfig('display.uri.questionsets', true)
+  const [displayUriQuestions, setDisplayUriQuestions] = useConfig('display.uri.questions', true)
+  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriOptionSets, setDisplayUriOptionSets] = useConfig('display.uri.optionsets', true)
 
-  const toggleDisplayUriQuestionSets = () => dispatch(updateConfig('display.uri.questionsets', !displayUriQuestionSets))
-  const toggleDisplayUriQuestions = () => dispatch(updateConfig('display.uri.questions', !displayUriQuestions))
-  const toggleDisplayUriAttributes = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const toggleDisplayUriConditions = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
-  const toggleDisplayUriOptionSets = () => dispatch(updateConfig('display.uri.optionsets', !displayUriOptionSets))
+  const toggleDisplayUriQuestionSets = () => setDisplayUriQuestionSets(!displayUriQuestionSets)
+  const toggleDisplayUriQuestions = () => setDisplayUriQuestions(!displayUriQuestions)
+  const toggleDisplayUriAttributes = () => setDisplayUriAttributes(!displayUriAttributes)
+  const toggleDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
+  const toggleDisplayUriOptionSets = () => setDisplayUriOptionSets(!displayUriOptionSets)
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
@@ -49,12 +47,12 @@ const NestedQuestionSet = ({ questionset }) => {
           <div className="row">
             <div className="col-sm-8">
               <FilterString
-                value={get(config, 'filter.questionset.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter question sets')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.questionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(questionset.elements)} />
             </div>
           </div>

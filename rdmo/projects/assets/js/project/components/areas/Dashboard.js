@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 
-import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
-import { useModal } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useModal } from 'rdmo/core/assets/js/hooks'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
@@ -19,7 +18,6 @@ import ShowClosedIssues from './dashboard/ShowClosedIssues'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const config = useSelector(state => state.config)
   const settings = useSelector(state => state.settings)
   const perms = usePermissions()
 
@@ -27,7 +25,8 @@ const Dashboard = () => {
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
 
-  const { showClosedTasks, showClosedRecommendations } = config
+  const [showClosedTasks, setShowClosedTasks] = useConfig('showClosedTasks', false)
+  const [showClosedRecommendations, setShowClosedRecommendations] = useConfig('showClosedRecommendations', false)
 
   const [selectedIssue, setSelectedIssue] = useState(null)
   const issueModal = useModal()
@@ -199,7 +198,7 @@ const Dashboard = () => {
                     id="showClosedTasks"
                     label={gettext('Show closed tasks')}
                     checked={showClosedTasks}
-                    onChange={() => dispatch(configActions.updateConfig('showClosedTasks', !showClosedTasks))}
+                    onChange={() => setShowClosedTasks(!showClosedTasks)}
                   />
                   <div className="row">
                     {
@@ -225,12 +224,7 @@ const Dashboard = () => {
                     id="showClosedRecommendations"
                     label={gettext('Show closed recommendations')}
                     checked={showClosedRecommendations}
-                    onChange={
-                      () => dispatch(configActions.updateConfig(
-                        'showClosedRecommendations',
-                        !showClosedRecommendations
-                      ))
-                    }
+                    onChange={() => setShowClosedRecommendations(!showClosedRecommendations)}
                   />
                   <div className="row">
                     {

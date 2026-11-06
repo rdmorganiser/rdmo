@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 import { isNil, minBy } from 'lodash'
 import get from 'lodash/get'
 
+import { useConfig } from 'rdmo/core/assets/js/hooks'
+
 import { getElementKey, groupElements } from '../../../../../utils/page'
 
 import Question from '../question/Question'
@@ -14,12 +16,13 @@ import PageHelp from './PageHelp'
 import PageManagement from './PageManagement'
 
 const Page = () => {
-  const config = useSelector((state) => state.config)
   const { page, sets, values } = useSelector((state) => state.interview)
 
   const currentSetPrefix = ''
 
-  let currentSetIndex = page.is_collection ? get(config, 'page.currentSetIndex', 0) : 0
+  const [configSetIndex] = useConfig('page.currentSetIndex', 0)
+
+  let currentSetIndex = page.is_collection ? configSetIndex : 0
 
   let currentSet = sets.find((set) => (
     (set.set_prefix == currentSetPrefix) &&

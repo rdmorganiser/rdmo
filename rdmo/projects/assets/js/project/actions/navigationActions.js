@@ -1,4 +1,6 @@
-import { get, isNil } from 'lodash'
+import { isNil } from 'lodash'
+
+import { selectConfig } from 'rdmo/core/assets/js/reducers/configSlice'
 
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { setLocation } from './locationActions'
@@ -50,7 +52,7 @@ export function navigateDashboard(location, back = null) {
       } else if (['questions', 'answers'].includes(location.detail)) {
         // /documents/questions/ and /documents/answers/
         dispatch(fetchAnswers(location.snapshotId, {
-          include_help: get(getState().config, 'document.includeHelp', false),
+          include_help: selectConfig(getState(), 'document.includeHelp', false),
           hide_answers: location.detail == 'questions' ? 'true' : 'false'
         }))
       } else {
