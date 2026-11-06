@@ -7,7 +7,9 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
 import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { buildPath } from 'rdmo/management/assets/js/utils/location'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -37,8 +39,12 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
 
   const selectOptions = options.map(option => ({
     value: option.id,
-    label: option.uri || option.text || option.name
+    label: option.uri || option.text || option.name,
+    uri: option.uri,
+    model: option.model
   }))
+
+  const getEditUrl = (option) => buildPath(elementTypes[option?.model], option?.value)
 
   const handleAdd = () => {
     values.push(selectOptions[0].value)
@@ -87,8 +93,10 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
                 {
                   onEdit && (
                     <div className="d-flex align-items-center gap-2">
-                      <CopyUriButton uri={get(options.find(option => option.id == value), 'uri')} />
-                      <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
+                      <CopyUriButton uri={selectValue?.uri} />
+                      <Link
+                        href={getEditUrl(selectValue)} className="bi bi-pencil" title={gettext('Edit')}
+                        onClick={() => handleEdit(index)} />
                       <Link
                         className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
                         disabled={element.read_only} />

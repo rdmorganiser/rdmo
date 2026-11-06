@@ -168,11 +168,14 @@ class QuestionNestedSerializer(
         )
 
 
-class QuestionIndexSerializer(serializers.ModelSerializer):
+class QuestionIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = (
             'id',
+            'model',
             'uri'
         )

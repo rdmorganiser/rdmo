@@ -82,11 +82,14 @@ class TaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class TaskIndexSerializer(serializers.ModelSerializer):
+class TaskIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = (
             'id',
+            'model',
             'uri'
         )

@@ -55,11 +55,14 @@ class ConditionSerializer(ElementModelSerializerMixin, ReadOnlyObjectPermissionS
         )
 
 
-class ConditionIndexSerializer(serializers.ModelSerializer):
+class ConditionIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
         fields = (
             'id',
+            'model',
             'uri'
         )

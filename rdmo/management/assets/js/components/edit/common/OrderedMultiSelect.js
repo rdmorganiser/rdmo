@@ -12,7 +12,9 @@ import isUndefined from 'lodash/isUndefined'
 import maxBy from 'lodash/maxBy'
 import toNumber from 'lodash/toNumber'
 
+import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
 import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { buildPath } from 'rdmo/management/assets/js/utils/location'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -21,7 +23,7 @@ import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
 const OrderedMultiSelectItem = ({
-  index, field, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
+  index, field, editUrl, selectValue, selectOptions, errors, disabled, ariaLabelledBy,
   handleChange, handleEdit, handleRemove, handleDrag
 }) => {
   const dragRef = useRef(null)
@@ -123,9 +125,9 @@ const OrderedMultiSelectItem = ({
               aria-labelledby={ariaLabelledBy}
               onMenuOpen={handleMenuOpen} />
           </div>
-          <CopyUriButton uri={get(selectValue, 'uri')} />
+          <CopyUriButton uri={selectValue?.uri} />
           <Link
-            className="bi bi-pencil" title={gettext('Edit')}
+            href={editUrl} className="bi bi-pencil" title={gettext('Edit')}
             onClick={() => handleEdit(index)} />
           <Link
             className="bi bi-x-lg" title={gettext('Remove')} disabled={disabled}
@@ -166,9 +168,12 @@ const OrderedMultiSelect = ({
     return options.map(option => ({
       value: option.value || option.id,
       label: option.label || option.uri || option.text || option.name,
-      uri: option.uri
+      uri: option.uri,
+      model: option.model
     }))
   }
+
+  const getEditUrl = (option) => isNil(option) ? '' : buildPath(elementTypes[option.model], parseValue(option)[1])
 
   const parseValue = (option) => {
     if (isNumber(option.value)) {
@@ -261,7 +266,7 @@ const OrderedMultiSelect = ({
             const selectValue = selectOptions.find(option => compareValue(option, value))
             return (
               <OrderedMultiSelectItem
-                key={index} index={index} field={field}
+                key={index} index={index} field={field} editUrl={getEditUrl(selectValue)}
                 selectValue={selectValue} selectOptions={selectOptions}
                 errors={errors} handleChange={handleChange}
                 handleEdit={handleEdit} handleRemove={handleRemove}
@@ -307,6 +312,7 @@ const OrderedMultiSelect = ({
 OrderedMultiSelectItem.propTypes = {
   index: PropTypes.number,
   field: PropTypes.string,
+  editUrl: PropTypes.string,
   selectValue: PropTypes.object,
   selectOptions: PropTypes.array,
   errors: PropTypes.object,

@@ -106,11 +106,14 @@ class OptionNestedSerializer(
         )
 
 
-class OptionIndexSerializer(serializers.ModelSerializer):
+class OptionIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
         fields = (
             'id',
+            'model',
             'uri'
         )

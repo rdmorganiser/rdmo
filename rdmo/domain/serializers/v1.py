@@ -100,11 +100,14 @@ class AttributeNestedSerializer(AttributeListSerializer):
                                          read_only=True, context=self.context).data
 
 
-class AttributeIndexSerializer(serializers.ModelSerializer):
+class AttributeIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
         fields = (
             'id',
+            'model',
             'uri'
         )

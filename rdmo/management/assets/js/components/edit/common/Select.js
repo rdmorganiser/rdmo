@@ -8,7 +8,9 @@ import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import { elementTypes } from 'rdmo/management/assets/js/constants/elements'
 import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/assets/js/utils/forms'
+import { buildPath } from 'rdmo/management/assets/js/utils/location'
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
@@ -36,12 +38,16 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
 
   const selectOptions = options.map(option => ({
     value: option.id,
-    label: option.uri || option.text || option.name
+    label: option.uri || option.text || option.name,
+    uri: option.uri,
+    model: option.model
   }))
 
   const selectValue = isArray(element[field]) ? (
     selectOptions.filter(option => (element[field].includes(option.value)))
   ) : selectOptions.find(option => (option.value == element[field]))
+
+  const getEditUrl = (option) => buildPath(elementTypes[option.model], option.value)
 
   const handleChange = (option) => {
     if (isNil(option)) {
@@ -77,9 +83,9 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
         {
           onEdit && selectValue && (
             <div className="d-flex align-items-center gap-2">
-              <CopyUriButton uri={get(options.find(option => option.id == selectValue.value), 'uri')} />
+              <CopyUriButton uri={selectValue.uri} />
               <Link
-                className="bi bi-pencil" title={gettext('Edit')}
+                href={getEditUrl(selectValue)} className="bi bi-pencil" title={gettext('Edit')}
                 onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
             </div>
           )
