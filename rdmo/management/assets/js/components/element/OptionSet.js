@@ -15,7 +15,6 @@ import { AddLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink,
 const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
   const showElement = useFilterElement(filter, false, filterEditors, optionset)
@@ -25,7 +24,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const nestedUrl = buildPath('optionsets', optionset.id, 'nested')
   const exportUrl = buildApiPath('options', 'optionsets', optionset.id, 'export')
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', optionset.conditions[index])
+  const getConditionUrl = (index) => buildPath('conditions', optionset.conditions[index])
 
   const fetchEdit = () => dispatch(fetchElement('optionsets', optionset.id))
   const fetchCopy = () => dispatch(fetchElement('optionsets', optionset.id, 'copy'))
