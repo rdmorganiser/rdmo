@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useToggle } from 'rdmo/core/assets/js/hooks'
-
+import { useQuestionHelp } from '../../../../../hooks'
 import { checkQuestion } from '../../../../../utils/page'
 
 import QuestionAddValueHelp from './QuestionAddValueHelp'
@@ -17,7 +16,7 @@ import QuestionWarning from './QuestionWarning'
 import QuestionWidget from './QuestionWidget'
 
 const Question = ({ question, sets, values, siblings, currentSet }) => {
-  const [showHelp, toggleHelp] = useToggle()
+  const [showHelp, toggleHelp] = useQuestionHelp(question)
 
   return checkQuestion(question, currentSet) && (
     <div className={`project-interview-question col-md-${question.width || '12'}`}>
