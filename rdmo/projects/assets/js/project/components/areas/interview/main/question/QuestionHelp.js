@@ -1,0 +1,25 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+
+import Html from 'rdmo/core/assets/js/components/Html'
+
+import { getQuestionHelpId } from '../../../../../utils/question'
+
+const QuestionHelp = ({ question }) => {
+  const classnames = classNames('project-interview-question-help font-small text-muted mb-3', {
+    'text-muted': question.is_optional
+  })
+
+  return (
+    <div className={classnames} >
+      <Html id={getQuestionHelpId(question)} html={question.help} />
+    </div>
+  )
+}
+
+QuestionHelp.propTypes = {
+  question: PropTypes.object.isRequired
+}
+
+export default QuestionHelp

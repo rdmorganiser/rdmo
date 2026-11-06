@@ -1,3 +1,4 @@
+from rdmo.conditions.constants import RelationTypes
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -28,7 +29,7 @@ def create_tasks_with_conditions(count, uri_path):
             uri_prefix=URI_PREFIX,
             uri_path=f'{uri_path}-condition-{index:04d}',
             source=attributes['source'],
-            relation=Condition.RELATION_EQUAL,
+            relation=RelationTypes.RELATION_EQUAL,
             target_option=option,
         )
         conditions.append(condition)

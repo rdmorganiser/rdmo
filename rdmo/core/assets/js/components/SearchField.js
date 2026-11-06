@@ -23,27 +23,24 @@ const SearchField = ({ value, onChange, onSearch, placeholder }) => {
   }
 
   return (
-    <div className="form-group mb-0">
-      <div className="input-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          aria-label={gettext('Search')}
-        />
-        <span className="input-group-btn">
-          <button type="button" className="btn btn-default" onClick={handleButtonClick}
-                  title={gettext('Reset')} aria-label={gettext('Reset')}>
-            <span className="fa fa-times"></span>
-          </button>
-          <button type="submit" className="btn btn-primary" onClick={handleSearch}>
-            {gettext('Search')}
-          </button>
-        </span>
-      </div>
+    <div className="input-group mb-0 search-field">
+      <input
+        type="text"
+        className="form-control"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        onKeyDown={handleKeyDown}
+        aria-label={gettext('Search')}
+      />
+      <button
+        type="button" className="btn btn-light btn-reset border" onClick={handleButtonClick}
+        title={gettext('Reset')} aria-label={gettext('Reset')}>
+        <span className="bi bi-x"></span>
+      </button>
+      <button type="button" className="btn btn-primary" onClick={handleSearch}>
+        {gettext('Search')}
+      </button>
     </div>
   )
 }

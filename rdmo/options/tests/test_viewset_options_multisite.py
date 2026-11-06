@@ -13,25 +13,25 @@ from .test_viewset_options import urlnames
 
 STATUS_CODES = {
     'detail': {
-        'https://foo.com/terms/options/foo-option-1': {
+        'https://foo.example.com/terms/options/foo-option-1': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://foo.com/terms/options/foo-option-2': {
+        'https://foo.example.com/terms/options/foo-option-2': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-1': {
+        'https://bar.example.com/terms/options/bar-option-1': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
             'bar-reviewer': 200, 'bar-editor': 200, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-2': {
+        'https://bar.example.com/terms/options/bar-option-2': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -39,13 +39,13 @@ STATUS_CODES = {
         },
     },
     'create-with-parent': {
-        'https://foo.com/terms/options/foo-optionset': {
+        'https://foo.example.com/terms/options/foo-optionset': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-optionset': {
+        'https://bar.example.com/terms/options/bar-optionset': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
@@ -53,25 +53,25 @@ STATUS_CODES = {
         },
     },
     'update': {
-        'https://foo.com/terms/options/foo-option-1': {
+        'https://foo.example.com/terms/options/foo-option-1': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://foo.com/terms/options/foo-option-2': {
+        'https://foo.example.com/terms/options/foo-option-2': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-1': {
+        'https://bar.example.com/terms/options/bar-option-1': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
             'bar-reviewer': 403, 'bar-editor': 200, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-2': {
+        'https://bar.example.com/terms/options/bar-option-2': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -79,25 +79,25 @@ STATUS_CODES = {
         },
     },
     'delete': {
-        'https://foo.com/terms/options/foo-option-1': {
+        'https://foo.example.com/terms/options/foo-option-1': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://foo.com/terms/options/foo-option-2': {
+        'https://foo.example.com/terms/options/foo-option-2': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-1': {
+        'https://bar.example.com/terms/options/bar-option-1': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
             'bar-reviewer': 403, 'bar-editor': 204, 'anonymous': 401,
         },
-        'https://bar.com/terms/options/bar-option-2': {
+        'https://bar.example.com/terms/options/bar-option-2': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -207,7 +207,7 @@ def test_create_optionset(db, client, username, password):
 
 
 def test_create_optionset_rejects_foreign_site_parent(db, client, sites):
-    sites.activate('bar.com')
+    sites.activate('bar.example.com')
     client.login(username='bar-editor', password='bar-editor')
 
     optionset = OptionSet.objects.get(uri_path='foo-optionset')
@@ -216,7 +216,7 @@ def test_create_optionset_rejects_foreign_site_parent(db, client, sites):
 
     url = reverse(urlnames['list'])
     data = {
-        'uri_prefix': 'https://bar.com/terms',
+        'uri_prefix': 'https://bar.example.com/terms',
         'uri_path': 'bar-option-with-foo-optionset-denied',
         'text_en': 'Bar option with foo optionset denied',
         'optionsets': [optionset.id]

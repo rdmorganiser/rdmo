@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WarningsListGroup from './WarningsListGroup'
 import isUndefined from 'lodash/isUndefined'
 
-const Warnings = ({elementWarnings, elementModel, elementURI, shouldShowURI = true}) => {
+import WarningsListGroup from './WarningsListGroup'
+
+const Warnings = ({ elementWarnings, elementModel, elementURI, shouldShowURI = true }) => {
   const show = !isUndefined(elementWarnings) && Object.keys(elementWarnings).length > 0
   const warningsHeadingText = <strong>{gettext('Warnings')}</strong>
 
   return show && (
-    <div className="panel panel-warning mt-10 mb-0">
-      <div className="panel-heading">{warningsHeadingText}</div>
+    <div className="card text-bg-warning my-2">
+      <div className="card-header">{warningsHeadingText}</div>
       <WarningsListGroup
         elementWarnings={elementWarnings}
         elementModel={elementModel}

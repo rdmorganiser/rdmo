@@ -1,0 +1,12 @@
+<div class="form-check mb-3">
+    <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}"
+           {% if field.value %}checked{% endif %}
+           class="form-check-input {% if field.errors %}is-invalid{% endif %}"
+           aria-describedby="{{ field.id_for_label }}-help">
+
+    <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+    {% for error in field.errors %}
+    <div class="invalid-feedback">{{ error }}</div>
+    {% endfor %}
+</div>

@@ -1,7 +1,8 @@
 import pytest
 
-from rdmo.projects.models import Project
+from rdmo.projects.models import Membership, Project
 from rdmo.projects.tests.helpers.sync.arrange_project_tasks import arrange_projects_groups_and_tasks
+from rdmo.projects.tests.helpers.sync.arrange_project_views import arrange_projects_groups_and_views
 from rdmo.projects.tests.helpers.sync.assert_project_views_or_tasks import (
     assert_all_projects_are_synced_with_instance_m2m_field,
 )
@@ -58,3 +59,22 @@ def test_project_tasks_sync_when_updating_task_groups(settings):
     assert set(P[2].tasks.all()) == {T[2]}
     assert set(P[3].tasks.all()) == {T[3], T[1]}  # got V1
     assert_all_projects_are_synced_with_instance_m2m_field(T[3], 'groups')
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('arrange,field', [
+    (arrange_projects_groups_and_tasks, 'tasks'),
+    (arrange_projects_groups_and_views, 'views'),
+])
+def test_project_sync_with_any_owner_group_overlap(settings, arrange, field):
+    setattr(settings, f'PROJECT_{field.upper()}_SYNC', True)
+    settings.MULTISITE = False
+    projects, instances, groups = arrange()
+    owner = Membership.objects.get(project=projects[1], role='owner').user
+    owner.groups.add(groups[2])
+
+    instances[1].groups.clear()
+    instances[1].groups.add(groups[1])
+
+    assert set(instances[1].projects.all()) == {projects[1]}
+    assert_all_projects_are_synced_with_instance_m2m_field(instances[1], 'groups')

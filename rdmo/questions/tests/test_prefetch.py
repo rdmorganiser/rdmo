@@ -3,6 +3,7 @@ import pytest
 from django.test import RequestFactory
 from django.urls import reverse
 
+from rdmo.conditions.constants import RelationTypes
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet, OptionSetOption
@@ -379,7 +380,7 @@ def test_prefetch_condition_references(db, django_assert_max_num_queries, django
     option = create_element(Option, 'query-safety-condition-option')
     condition = Condition.objects.create(
         uri_prefix=URI_PREFIX, uri_path='query-safety-condition', source=source,
-        target_option=option, relation=Condition.RELATION_EQUAL,
+        target_option=option, relation=RelationTypes.RELATION_EQUAL,
     )
     question = create_element(Question, 'query-safety-condition-question')
     question.conditions.add(condition)

@@ -1,0 +1,17 @@
+<div class="mb-3">
+    <label for="{{ field.id_for_label }}" class="mb-1 text-bold">{{ field.label }}</label>
+
+    {% if field.help_text %}
+    <p id="{{ field.id_for_label }}-help" class="form-text text-muted mt-0 mb-1">
+        {{ field.help_text }}
+    </p>
+    {% endif %}
+
+    <textarea name="{{ field.name }}" rows="4"
+              class="form-control {% if field.errors %}is-invalid{% endif %}" id="{{ field.id_for_label }}"
+              aria-describedby="{{ field.id_for_label }}-help" placeholder="{{ field.label }}"></textarea>
+
+    {% for error in field.errors %}
+    <div class="invalid-feedback">{{ error }}</div>
+    {% endfor %}
+</div>

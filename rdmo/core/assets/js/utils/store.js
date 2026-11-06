@@ -1,17 +1,7 @@
-import thunk from 'redux-thunk'
 import Cookies from 'js-cookie'
 import isEmpty from 'lodash/isEmpty'
 
-export const configureMiddleware = () => {
-  const middlewares = [thunk]
-
-  if (process.env.NODE_ENV === 'development') {
-    const { logger } = require('redux-logger')
-    middlewares.push(logger)
-  }
-
-  return middlewares
-}
+import { removeFromStale } from '../actions/staleActions'
 
 export const checkStoreId = () => {
   const currentStoreId = Cookies.get('storeid')
@@ -21,4 +11,19 @@ export const checkStoreId = () => {
     localStorage.clear()
     localStorage.setItem('rdmo.storeid', currentStoreId)
   }
+}
+
+export const configureStaleRefresh = (store, refreshers) => {
+  window.addEventListener('pageshow', () => {
+    store.getState().stale.items.forEach((item) => {
+      const refresh = refreshers[item]
+
+      if (refresh) {
+        Promise.resolve()
+          .then(refresh)
+          .then(() => store.dispatch(removeFromStale(item)))
+          .catch(() => {})
+      }
+    })
+  })
 }

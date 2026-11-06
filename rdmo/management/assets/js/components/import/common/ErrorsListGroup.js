@@ -6,10 +6,8 @@ import uniqueId from 'lodash/uniqueId'
 // Helper function to generate error messages
 export const generateErrorMessageListItems = (messages) =>
   messages.map(message => (
-    <li className="list-group-item text-danger" key={uniqueId('error-message')}>
-      <div className="text-danger">
-        {message}
-      </div>
+    <li className="list-group-item" key={uniqueId('error-message')}>
+      {message}
     </li>
   ))
 
@@ -18,7 +16,7 @@ const ErrorsListGroup = ({ elementErrors }) => {
   const uniqueErrors = [...new Set(elementErrors)]
 
   return (
-    <ul className="list-group">
+    <ul className="list-group list-group-flush">
       {generateErrorMessageListItems(uniqueErrors)}
     </ul>
   )

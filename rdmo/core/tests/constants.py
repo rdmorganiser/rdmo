@@ -48,9 +48,9 @@ multisite_status_map = {
         'anonymous': 401, 'reviewer': 403, 'editor': 204,
     },
     'toggle-site': {
-        # foo-editor is not permitted to apply own site(foo.com) in test run(example.com)
+        # foo-editor is not permitted to apply own site(foo.example.com) in test run(example.com)
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
-        # bar-editor is not permitted to apply own site(bar.com) in test run(example.com)
+        # bar-editor is not permitted to apply own site(bar.example.com) in test run(example.com)
         'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
         'user': 403, 'example-reviewer': 403, 'example-editor': 200,
         'anonymous': 401, 'reviewer': 403, 'editor': 200,

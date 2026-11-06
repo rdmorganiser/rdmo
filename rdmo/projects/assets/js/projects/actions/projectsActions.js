@@ -1,34 +1,18 @@
-import ProjectsApi from '../api/ProjectsApi'
-
-import {
-  FETCH_PROJECTS_ERROR,
-  FETCH_PROJECTS_INIT,
-  FETCH_PROJECTS_SUCCESS,
-  FETCH_INVITATIONS_ERROR,
-  FETCH_INVITATIONS_INIT,
-  FETCH_INVITATIONS_SUCCESS,
-  FETCH_CATALOGS_ERROR,
-  FETCH_CATALOGS_INIT,
-  FETCH_CATALOGS_SUCCESS,
-  FETCH_FILETYPES_ERROR,
-  FETCH_FILETYPES_INIT,
-  FETCH_FILETYPES_SUCCESS,
-  FETCH_IMPORT_URLS_ERROR,
-  FETCH_IMPORT_URLS_INIT,
-  FETCH_IMPORT_URLS_SUCCESS,
-  UPLOAD_PROJECT_ERROR,
-  UPLOAD_PROJECT_INIT,
-  UPLOAD_PROJECT_SUCCESS
-} from './actionTypes'
-
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
-
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
+import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
+
+import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
+
+import { actions } from '../reducers/projectsSlice'
+
+import ProjectsApi from '../api/ProjectsApi'
 
 export function fetchProjects(pageReset = true) {
   const pendingId = 'fetchProjects'
 
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     if (pageReset === true) {
       dispatch(configActions.updateConfig('params.page', '1'))
     }
@@ -37,8 +21,9 @@ export function fetchProjects(pageReset = true) {
     dispatch(addToPending(pendingId))
     dispatch(fetchProjectsInit())
 
-    const action = () => myProjects ? ProjectsApi.fetchUserProjects(params || {})
-                                    : ProjectsApi.fetchProjects(params || {})
+    const action = () => myProjects ? (
+      ProjectsApi.fetchUserProjects(params || {})
+    ) : ProjectsApi.fetchProjects(params || {})
 
     return dispatch(action)
       .then(projects => dispatch(fetchProjectsSuccess(projects, !pageReset)))
@@ -48,57 +33,128 @@ export function fetchProjects(pageReset = true) {
 }
 
 export function fetchProjectsInit() {
-  return {type: FETCH_PROJECTS_INIT}
+  return actions.fetchProjectsInit()
 }
 
 export function fetchProjectsSuccess(projects, shouldConcatenate) {
-  return {type: FETCH_PROJECTS_SUCCESS, projects, shouldConcatenate}
+  return actions.fetchProjectsSuccess({ projects, shouldConcatenate })
 }
 
 export function fetchProjectsError(error) {
-  return function(dispatch) {
-    if (error.constructor.name === 'BadRequestError' && error.errors.catalog) {
+  return function (dispatch) {
+    if (error.errorType === 'BadRequestError' && error.errors.catalog) {
       dispatch(configActions.deleteConfig('params.catalog'))
       dispatch(fetchProjects())
     } else {
-      dispatch({type: FETCH_PROJECTS_ERROR, error})
+      dispatch(actions.fetchProjectsError(serializeError(error)))
     }
+  }
+}
+
+export function createProject(data) {
+  return function (dispatch) {
+    dispatch(addToPending('createProject'))
+    dispatch(actions.createProjectInit())
+
+    return ProjectsApi.createProject(data)
+      .then(project => {
+        dispatch(removeFromPending('createProject'))
+        dispatch(actions.createProjectSuccess(project))
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
+      })
+      .catch(error => {
+        dispatch(removeFromPending('createProject'))
+        dispatch(actions.createProjectError(serializeError(error)))
+        throw error
+      })
+  }
+}
+
+export function copyProject(id, data) {
+  return function (dispatch) {
+    dispatch(addToPending('copyProject'))
+    dispatch(actions.copyProjectInit())
+
+    return ProjectsApi.copyProject(id, data)
+      .then(project => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch(actions.copyProjectSuccess(project))
+
+        window.location.href = `${baseUrl}/projects/${project.id}/`
+      })
+      .catch(error => {
+        dispatch(removeFromPending('copyProject'))
+        dispatch(actions.copyProjectError(serializeError(error)))
+        throw error
+      })
+  }
+}
+
+export function refetchLoadedPages() {
+  const pendingId = 'fetchProjects'
+
+  return function (dispatch, getState) {
+    const { params, myProjects } = getState().config
+    const currentPage = parseInt(params?.page ?? '1', 10)
+    const baseParams = { ...(params || {}) }
+
+    const fetchPage = (nextParams) => (
+      myProjects ? ProjectsApi.fetchUserProjects(nextParams) : ProjectsApi.fetchProjects(nextParams)
+    )
+
+    dispatch(addToPending(pendingId))
+
+    return Promise.all(
+      Array.from({ length: currentPage }, (_, index) => {
+        const page = (index + 1).toString()
+        return fetchPage({ ...baseParams, page })
+      })
+    )
+      .then(responses => {
+        const lastResponse = responses[responses.length - 1]
+
+        const mergedProjects = {
+          ...lastResponse,
+          results: responses.flatMap(response => response.results)
+        }
+
+        return dispatch(fetchProjectsSuccess(mergedProjects, false))
+      })
+      .catch(error => dispatch(fetchProjectsError(error)))
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function fetchCatalogs() {
   const pendingId = 'fetchCatalogs'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchCatalogsInit())
 
-    const action = (dispatch) => ProjectsApi.fetchCatalogs().then(catalogs => {
-      dispatch(fetchCatalogsSuccess(catalogs))
-    })
-
-    return dispatch(action)
+    return CatalogApi.fetchCatalogs().then(catalogs => dispatch(fetchCatalogsSuccess(catalogs)))
       .catch(error => dispatch(fetchCatalogsError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function fetchCatalogsInit() {
-  return {type: FETCH_CATALOGS_INIT}
+  return actions.fetchCatalogsInit()
 }
 
 export function fetchCatalogsSuccess(catalogs) {
-  return {type: FETCH_CATALOGS_SUCCESS, catalogs}
+  return actions.fetchCatalogsSuccess(catalogs)
 }
 
 export function fetchCatalogsError(error) {
-  return {type: FETCH_CATALOGS_ERROR, error}
+  return actions.fetchCatalogsError(serializeError(error))
 }
 
 export function fetchAllowedFileTypes() {
   const pendingId = 'fetchAllowedFileTypes'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchAllowedFileTypesInit())
 
@@ -113,21 +169,21 @@ export function fetchAllowedFileTypes() {
 }
 
 export function fetchAllowedFileTypesInit() {
-  return {type: FETCH_FILETYPES_INIT}
+  return actions.fetchAllowedFileTypesInit()
 }
 
 export function fetchAllowedFileTypesSuccess(allowedTypes) {
-  return {type: FETCH_FILETYPES_SUCCESS, allowedTypes}
+  return actions.fetchAllowedFileTypesSuccess(allowedTypes)
 }
 
 export function fetchAllowedFileTypesError(error) {
-  return {type: FETCH_FILETYPES_ERROR, error}
+  return actions.fetchAllowedFileTypesError(serializeError(error))
 }
 
 export function fetchImportUrls() {
   const pendingId = 'fetchImportUrls'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchImportUrlsInit())
 
@@ -142,21 +198,21 @@ export function fetchImportUrls() {
 }
 
 export function fetchImportUrlsInit() {
-  return {type: FETCH_IMPORT_URLS_INIT}
+  return actions.fetchImportUrlsInit()
 }
 
 export function fetchImportUrlsSuccess(importUrls) {
-  return {type: FETCH_IMPORT_URLS_SUCCESS, importUrls}
+  return actions.fetchImportUrlsSuccess(importUrls)
 }
 
 export function fetchImportUrlsError(error) {
-  return {type: FETCH_IMPORT_URLS_ERROR, error}
+  return actions.fetchImportUrlsError(serializeError(error))
 }
 
 export function fetchInvitations() {
-  const pendingId = 'fetchImportUrls'
+  const pendingId = 'fetchInvitations'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(fetchInvitationsInit())
 
@@ -171,21 +227,21 @@ export function fetchInvitations() {
 }
 
 export function fetchInvitationsInit() {
-  return {type: FETCH_INVITATIONS_INIT}
+  return actions.fetchInvitationsInit()
 }
 
 export function fetchInvitationsSuccess(invites) {
-  return {type: FETCH_INVITATIONS_SUCCESS, invites}
+  return actions.fetchInvitationsSuccess(invites)
 }
 
 export function fetchInvitationsError(error) {
-  return {type: FETCH_INVITATIONS_ERROR, error}
+  return actions.fetchInvitationsError(serializeError(error))
 }
 
 export function uploadProject(url, file) {
   const pendingId = 'uploadProject'
 
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(addToPending(pendingId))
     dispatch(uploadProjectInit())
 
@@ -197,13 +253,13 @@ export function uploadProject(url, file) {
 }
 
 export function uploadProjectInit() {
-  return {type: UPLOAD_PROJECT_INIT}
+  return actions.uploadProjectInit()
 }
 
 export function uploadProjectSuccess(project) {
-  return {type: UPLOAD_PROJECT_SUCCESS, project}
+  return actions.uploadProjectSuccess(project)
 }
 
 export function uploadProjectError(error) {
-  return {type: UPLOAD_PROJECT_ERROR, error}
+  return actions.uploadProjectError(serializeError(error))
 }

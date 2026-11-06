@@ -1,0 +1,12 @@
+{% load i18n %}
+
+<li>
+    <a class="dropdown-item" href="{% url 'account_email' %}">
+        {% trans 'Update e-mail' %}
+    </a>
+</li>
+<li>
+    <a class="dropdown-item" href="{% url 'account_change_password' %}">
+        {% trans 'Change password' %}
+    </a>
+</li>

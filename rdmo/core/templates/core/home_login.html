@@ -1,0 +1,15 @@
+<div class="d-flex flex-column gap-4 mt-4">
+    {% if settings.LOGIN_FORM %}
+    {% include 'account/login_form_inline.html' %}
+    {% endif %}
+
+    {% if settings.SHIBBOLETH %}
+    {% include 'account/login_shibboleth.html' %}
+    {% endif %}
+
+    {% if settings.SOCIALACCOUNT %}
+    <div class="d-flex flex-column flex-md-row flex-md-wrap align-items-md-start justify-content-center gap-2">
+        {% include "socialaccount/snippets/provider_list.html" with process="login" button_class="btn-light" %}
+    </div>
+    {% endif %}
+</div>

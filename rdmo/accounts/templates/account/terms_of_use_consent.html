@@ -1,0 +1,18 @@
+{% load i18n %}
+
+    <div class="form-check mb-3">
+        <input type="checkbox" name="{{ form.consent.name }}" id="{{ form.consent.id_for_label }}"
+               {% if form.consent.value %}checked{% endif %}
+               class="form-check-input {% if form.consent.errors %}is-invalid{% endif %}"
+               aria-describedby="{{ form.consent.id_for_label }}-help">
+
+        <label class="form-check-label" for="{{ form.consent.id_for_label }}">
+            {% trans 'I agree to the <span id="show-terms-of-use">terms of use</span>.' %}
+        </label>
+
+        {% if form.consent.errors %}
+        <div class="invalid-feedback">
+            {% trans 'You need to agree to the terms of use to proceed.' %}
+        </div>
+        {% endif %}
+    </div>

@@ -1,0 +1,23 @@
+import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
+
+const EMPTY_ERRORS = {}
+
+export const useFieldErrors = (backendErrors) => {
+  const storedErrors = useSelector((state) =>
+    state.project?.errors?.[0]?.errors ||
+    state.projects?.errors?.[0]?.errors ||
+    state.projects?.errors ||
+    EMPTY_ERRORS
+  ) || EMPTY_ERRORS
+  const rawErrors = backendErrors ?? storedErrors
+
+  return useMemo(() => (
+    Object.fromEntries(
+      Object.entries(rawErrors).map(([field, err]) => [
+        field,
+        Array.isArray(err) ? err : err != null ? [err] : []
+      ])
+    )
+  ), [rawErrors])
+}

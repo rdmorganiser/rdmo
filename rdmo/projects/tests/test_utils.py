@@ -200,7 +200,7 @@ INVITE_EMAIL_PROJECT_PATHS = [
             'PROJECT_INVITE_USE_PROJECT_SITE': False,
             'user': 'other'
         },
-        'http://foo.com/projects/join/test-token/'
+        'http://foo.example.com/projects/join/test-token/'
     ),
     (
         {

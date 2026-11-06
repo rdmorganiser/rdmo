@@ -10,3 +10,10 @@ ROLE_CHOICES = (
     (ROLE_AUTHOR, _('Author')),
     (ROLE_GUEST, _('Guest')),
 )
+
+ROLE_RANKS = {
+    ROLE_OWNER: 3,
+    ROLE_MANAGER: 2,
+    ROLE_AUTHOR: 1,
+    ROLE_GUEST: 0
+}
