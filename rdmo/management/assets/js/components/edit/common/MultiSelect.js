@@ -11,6 +11,7 @@ import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/ass
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
+import CopyUriButton from './CopyUriButton'
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
@@ -85,7 +86,8 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
                 </div>
                 {
                   onEdit && (
-                    <div className="d-flex align-items-center gap-1">
+                    <div className="d-flex align-items-center gap-2">
+                      <CopyUriButton uri={get(options.find(option => option.id == value), 'uri')} />
                       <Link className="bi bi-pencil" title={gettext('Edit')} onClick={() => handleEdit(index)} />
                       <Link
                         className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}

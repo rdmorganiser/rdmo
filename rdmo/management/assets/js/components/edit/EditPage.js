@@ -34,10 +34,12 @@ const EditPage = ({ page }) => {
   const elementValues = orderBy(page.questions.concat(page.questionsets), ['order', 'uri'])
   const elementOptions = questions.map(question => ({
     value: 'question-' + question.id,
-    label: interpolate(gettext('Question: %s'), [question.uri])
+    label: interpolate(gettext('Question: %s'), [question.uri]),
+    uri: question.uri
   })).concat(questionsets.map(questionset => ({
     value: 'questionset-' + questionset.id,
-    label: interpolate(gettext('Question set: %s'), [questionset.uri])
+    label: interpolate(gettext('Question set: %s'), [questionset.uri]),
+    uri: questionset.uri
   })))
 
   const updatePage = (key, value) => {

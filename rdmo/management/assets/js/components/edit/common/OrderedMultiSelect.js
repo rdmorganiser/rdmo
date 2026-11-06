@@ -16,6 +16,7 @@ import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/ass
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
+import CopyUriButton from './CopyUriButton'
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
@@ -122,6 +123,7 @@ const OrderedMultiSelectItem = ({
               aria-labelledby={ariaLabelledBy}
               onMenuOpen={handleMenuOpen} />
           </div>
+          <CopyUriButton uri={get(selectValue, 'uri')} />
           <Link
             className="bi bi-pencil" title={gettext('Edit')}
             onClick={() => handleEdit(index)} />
@@ -163,7 +165,8 @@ const OrderedMultiSelect = ({
   const getSelectOptions = () => {
     return options.map(option => ({
       value: option.value || option.id,
-      label: option.label || option.uri || option.text || option.name
+      label: option.label || option.uri || option.text || option.name,
+      uri: option.uri
     }))
   }
 

@@ -12,6 +12,7 @@ import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/ass
 
 import Link from 'rdmo/core/assets/js/components/Link'
 
+import CopyUriButton from './CopyUriButton'
 import ErrorList from './ErrorList'
 import HelpText from './HelpText'
 
@@ -75,7 +76,8 @@ const Select = ({ element, field, options, createText, isMulti, onChange, onCrea
         </div>
         {
           onEdit && selectValue && (
-            <div>
+            <div className="d-flex align-items-center gap-2">
+              <CopyUriButton uri={get(options.find(option => option.id == selectValue.value), 'uri')} />
               <Link
                 className="bi bi-pencil" title={gettext('Edit')}
                 onClick={() => onEdit(selectValue.value)} disabled={isNil(selectValue)} />
