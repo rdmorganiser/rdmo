@@ -269,7 +269,6 @@ TEMPLATES_API = [
     'projects/project_interview_buttons_help.html',
     'projects/project_interview_contact_help.html',
     'projects/project_interview_done.html',
-    'projects/project_interview_error.html',
     'projects/project_interview_multiple_values_warning.html',
     'projects/project_interview_navigation_help.html',
     'projects/project_interview_overview_help.html',
