@@ -2,22 +2,12 @@ import { get, isNil } from 'lodash'
 
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { actions as locationActions } from '../reducers/locationSlice'
-import { updateLocation } from '../utils/location'
-
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
+import { setLocation } from './locationActions'
 import { clearCurrentView, fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
-    const updateLocationAndStore = (location) => {
-      // update the location in the url
-      updateLocation(location)
-
-      // update the location in the location store
-      dispatch(locationActions.setLocation(location))
-    }
-
     // the store still holds the location we are navigating away from
     const currentLocation = getState().location
 
@@ -38,22 +28,23 @@ export function navigateDashboard(location, back = null) {
           dispatch(fetchContinue())
           dispatch(fetchNavigation())
           dispatch(fetchProgress())
-          updateLocationAndStore(location)
+          dispatch(setLocation(location))
+          return
         } else {
           return dispatch(fetchPage(location.pageId, back)).then((page) => {
             if (page) {
-              updateLocationAndStore({...location, pageId: page.id})
+              dispatch(setLocation({...location, pageId: page.id}))
             } else if (getState().interview.done) {
               dispatch(navigateDashboard({area: 'interview'}))
             } else {
-              updateLocationAndStore(location)
+              dispatch(setLocation(location))
             }
           })
         }
       }
 
       // for all other areas, the location and store are updated first
-      updateLocationAndStore(location)
+      dispatch(setLocation(location))
 
       if (!isNil(location.viewId)) {
         // /documents/views/
