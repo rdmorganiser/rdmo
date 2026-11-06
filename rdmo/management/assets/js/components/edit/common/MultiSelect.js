@@ -12,6 +12,7 @@ import { formatOptionLabel, getHelp, getId, getLabel } from 'rdmo/management/ass
 import { buildPath } from 'rdmo/management/assets/js/utils/location'
 
 import Link from 'rdmo/core/assets/js/components/Link'
+import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
 import CopyUriButton from './CopyUriButton'
 import ErrorList from './ErrorList'
@@ -97,7 +98,7 @@ const MultiSelect = ({ element, field, options, addText, createText, onChange, o
                       <Link
                         href={getEditUrl(selectValue)} className="bi bi-pencil" title={gettext('Edit')}
                         onClick={() => handleEdit(index)} />
-                      <Link
+                      <LinkButton
                         className="bi bi-x-lg" title={gettext('Remove')} onClick={() => handleRemove(index)}
                         disabled={element.read_only} />
                     </div>

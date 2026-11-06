@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 
-import Link from 'rdmo/core/assets/js/components/Link'
+import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
 const CopyUriButton = ({ uri }) => {
   const [copied, setCopied] = useState(false)
@@ -19,7 +19,7 @@ const CopyUriButton = ({ uri }) => {
   }
 
   return (
-    <Link
+    <LinkButton
       className={copied ? 'bi bi-clipboard-check' : 'bi bi-clipboard'}
       title={copied ? gettext('URI copied') : gettext('Copy URI')}
       disabled={isEmpty(uri)}
