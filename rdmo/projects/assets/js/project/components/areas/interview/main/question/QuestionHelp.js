@@ -6,7 +6,6 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionHelp = ({ question, show }) => {
   const classnames = classNames('project-interview-question-help font-small text-muted mb-2', {
-    'text-muted': question.is_optional,
     'd-none': !show
   })
 
