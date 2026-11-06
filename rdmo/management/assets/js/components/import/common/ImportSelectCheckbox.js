@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { uniqueId } from 'lodash'
 
-import { elementModules, verboseNames } from '../../../constants/elements'
+import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-import { CodeLink } from '../../common/Links'
+import { elementModules, verboseNames } from '../../../constants/elements'
 
 const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
   const id = uniqueId('import-checkbox-')
@@ -20,11 +20,11 @@ const ImportSelectCheckbox = ({ element, toggleImport, updateShowField }) => {
         <label className="form-check-label" htmlFor={id}>{verboseNames[element.model]}</label>
       </div>
 
-      <CodeLink
-        className="flex-grow-1"
-        type={elementModules[element.model]}
-        uri={element.uri} onClick={updateShowField}
-      />
+      <span className="flex-grow-1">
+        <LinkButton onClick={updateShowField}>
+          <code className={`code-${elementModules[element.model]}`}>{element.uri}</code>
+        </LinkButton>
+      </span>
 
       {
         (element.changed && element.updated) && (

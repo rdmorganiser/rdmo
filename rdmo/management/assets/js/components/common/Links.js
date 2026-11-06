@@ -241,7 +241,7 @@ CodeLink.propTypes = {
   className: PropTypes.string,
   type: PropTypes.string.isRequired,
   uri: PropTypes.string.isRequired,
-  href: PropTypes.string,
+  href: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   order: PropTypes.number
 }
