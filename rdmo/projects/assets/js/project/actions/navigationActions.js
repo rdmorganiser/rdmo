@@ -1,25 +1,25 @@
-import { get, isNil, pick } from 'lodash'
+import { get, isNil } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { isTruthy } from 'rdmo/core/assets/js/utils/config'
 
-import { locationKeys, updateLocation } from '../utils/location'
+import { actions as locationActions } from '../reducers/locationSlice'
+import { updateLocation } from '../utils/location'
 
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { clearCurrentView, fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
-    const updateLocationAndConfig = (location) => {
+    const updateLocationAndStore = (location) => {
       // update the location in the url
       updateLocation(location)
 
-      // update the location in the config store
-      locationKeys.forEach(key => dispatch(updateConfig(key, location[key] ?? null, false)))
+      // update the location in the location store
+      dispatch(locationActions.setLocation(location))
     }
 
-    // the config still holds the location we are navigating away from
-    const currentLocation = pick(getState().config, locationKeys)
+    // the store still holds the location we are navigating away from
+    const currentLocation = getState().location
 
     // store unsaved defaults when leaving an interview page
     const storeDefaults = () => (
@@ -31,29 +31,29 @@ export function navigateDashboard(location, back = null) {
     )
 
     return storeDefaults().then(() => {
-      // for the interview, the location and config are updated after the page is fetched, since pages might be skipped
+      // for the interview, the location and store are updated after the page is fetched, since pages might be skipped
       if (location.area == 'interview') {
         // /interview/
         if (isNil(location.pageId)) {
           dispatch(fetchContinue())
           dispatch(fetchNavigation())
           dispatch(fetchProgress())
-          updateLocationAndConfig(location)
+          updateLocationAndStore(location)
         } else {
           return dispatch(fetchPage(location.pageId, back)).then((page) => {
             if (page) {
-              updateLocationAndConfig({...location, pageId: page.id})
+              updateLocationAndStore({...location, pageId: page.id})
             } else if (getState().interview.done) {
               dispatch(navigateDashboard({area: 'interview'}))
             } else {
-              updateLocationAndConfig(location)
+              updateLocationAndStore(location)
             }
           })
         }
       }
 
-      // for all other areas, the location and config are updated first
-      updateLocationAndConfig(location)
+      // for all other areas, the location and store are updated first
+      updateLocationAndStore(location)
 
       if (!isNil(location.viewId)) {
         // /documents/views/

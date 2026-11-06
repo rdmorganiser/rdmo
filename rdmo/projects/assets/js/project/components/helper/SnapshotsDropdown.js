@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { isNil } from 'lodash'
 
 const SnapshotsDropdown = ({ onChange }) => {
-  const { snapshotId } = useSelector((state) => state.config)
+  const { snapshotId } = useSelector((state) => state.location)
   const { snapshots } = useSelector((state) => state.project?.project)
 
   const currentLabel = gettext('Current data')

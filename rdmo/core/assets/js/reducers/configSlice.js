@@ -10,17 +10,13 @@ const configSlice = createSlice({
   initialState,
   reducers: {
     updateConfig(state, action) {
-      const { path, value, ls } = action.payload
-      if (ls) {
-        setConfigInLocalStorage(state.prefix, path, value)
-      }
+      const { path, value } = action.payload
+      setConfigInLocalStorage(state.prefix, path, value)
       set(state, path, value)
     },
     deleteConfig(state, action) {
-      const { path, ls } = action.payload
-      if (ls) {
-        deleteConfigInLocalStorage(state.prefix, path)
-      }
+      const { path } = action.payload
+      deleteConfigInLocalStorage(state.prefix, path)
       unset(state, path)
     }
   }

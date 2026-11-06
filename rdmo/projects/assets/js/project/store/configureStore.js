@@ -26,6 +26,7 @@ import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
 import interviewReducer from '../reducers/interviewSlice'
+import locationReducer from '../reducers/locationSlice'
 import projectReducer from '../reducers/projectSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
@@ -52,6 +53,7 @@ export default function configureStore() {
   const store = configureToolkitStore({
     reducer: {
       config: configReducer,
+      location: locationReducer,
       errors: errorsReducer,
       pending: pendingReducer,
       project: projectReducer,
