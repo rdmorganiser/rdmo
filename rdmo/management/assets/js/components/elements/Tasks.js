@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -24,11 +24,9 @@ const Tasks = () => {
   const [filterSite, setFilterSite] = useConfig('filter.sites', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriTasks, setDisplayUriTasks] = useConfig('display.uri.tasks', true)
-  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriTasks, toggleDisplayUriTasks] = useConfigToggle('display.uri.tasks', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
 
-  const updateDisplayUriTasks = () => setDisplayUriTasks(!displayUriTasks)
-  const updateDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
 
   const createTask = () => dispatch(createElement('tasks'))
 
@@ -77,10 +75,10 @@ const Tasks = () => {
         </div>
         <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs')}</label>
-          <button type="button" onClick={updateDisplayUriTasks} className={btnClass(displayUriTasks)}>
+          <button type="button" onClick={toggleDisplayUriTasks} className={btnClass(displayUriTasks)}>
             {gettext('Tasks')}
           </button>
-          <button type="button" onClick={updateDisplayUriConditions} className={btnClass(displayUriConditions)}>
+          <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
             {gettext('Conditions')}
           </button>
         </div>

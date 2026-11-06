@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -14,9 +14,8 @@ const NestedOptionSet = ({ optionset }) => {
   const [filterString, setFilterString] = useConfig('filter.optionset.search', '')
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.optionset.uri_prefix', '')
 
-  const [displayUriOptions, setDisplayUriOptions] = useConfig('display.uri.options', true)
+  const [displayUriOptions, toggleDisplayUriOptions] = useConfigToggle('display.uri.options', true)
 
-  const toggleDisplayUriOptions = () => setDisplayUriOptions(!displayUriOptions)
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 

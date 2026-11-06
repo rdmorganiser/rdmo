@@ -6,7 +6,7 @@ import { formatISO, isValid, parseISO, set } from 'date-fns'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Select } from 'rdmo/core/assets/js/components'
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
 import * as projectsActions from '../../actions/projectsActions'
@@ -17,8 +17,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const [params] = useConfig('params', {})
   const roleOptions = useSelector(state => state.roles?.roles) || []
 
-  const [showFilters, setShowFilters] = useConfig('showFilters', false)
-  const toggleFilters = () => setShowFilters(!showFilters)
+  const [showFilters, toggleShowFilters] = useConfigToggle('showFilters')
 
   const resetAllFilters = () => {
     dispatch(configActions.deleteConfig('params.catalog'))
@@ -202,7 +201,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
         )
       }
       <div className="d-flex justify-content-between mt-2">
-        <button type="button" className="link font-small" onClick={toggleFilters}>
+        <button type="button" className="link font-small" onClick={toggleShowFilters}>
           <i className="bi bi-filter"></i> {
             showFilters ? gettext('Hide additional filters') : gettext('Show additional filters')
           }

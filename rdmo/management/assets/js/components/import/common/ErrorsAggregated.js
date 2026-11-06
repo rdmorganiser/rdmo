@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { generateErrorMessageListItems } from './ErrorsListGroup'
 
@@ -19,18 +19,17 @@ const aggregateUniqueErrors = (elements) => {
 }
 
 const ErrorsAggregated = ({ elements }) => {
-  const [showErrors, setShowErrors] = useConfig('filter.import.errors.show', false)
+  const [showErrors, toggleShowErrors] = useConfigToggle('filter.import.errors.show')
 
-  const updateShowErrors = () => setShowErrors(!showErrors)
 
   // Aggregate all unique errors into a single flat array
   const uniqueErrors = aggregateUniqueErrors(elements)
 
-  const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
+  const errorsHeadingText = <strong onClick={toggleShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
   return ( uniqueErrors.length > 0 && (
     <div className="card text-bg-danger mt-2">
-      <div className="card-header cursor-pointer" onClick={updateShowErrors}>
+      <div className="card-header cursor-pointer" onClick={toggleShowErrors}>
         <div className="d-flex align-items-center">
           <div className="flex-grow-1">
             {errorsHeadingText}

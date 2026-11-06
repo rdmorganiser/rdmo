@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,13 +23,10 @@ const Pages = () => {
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.pages.uri_prefix', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriPages, setDisplayUriPages] = useConfig('display.uri.pages', true)
-  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
-  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriPages, toggleDisplayUriPages] = useConfigToggle('display.uri.pages', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
 
-  const toggleDisplayUriPages = () => setDisplayUriPages(!displayUriPages)
-  const toggleDisplayUriAttributes = () => setDisplayUriAttributes(!displayUriAttributes)
-  const toggleDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
 
   const createPage = () => dispatch(createElement('pages'))
 

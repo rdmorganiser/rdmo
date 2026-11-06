@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,15 +23,11 @@ const Questions = () => {
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questions.uri_prefix', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriQuestions, setDisplayUriQuestions] = useConfig('display.uri.questions', true)
-  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
-  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
-  const [displayUriOptionSets, setDisplayUriOptionSets] = useConfig('display.uri.optionsets', true)
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
 
-  const updateDisplayQuestionsURI = () => setDisplayUriQuestions(!displayUriQuestions)
-  const updateDisplayAttributesURI = () => setDisplayUriAttributes(!displayUriAttributes)
-  const updateDisplayConditionsURI = () => setDisplayUriConditions(!displayUriConditions)
-  const updateDisplayOptionSetURI = () => setDisplayUriOptionSets(!displayUriOptionSets)
 
   const createQuestion = () => dispatch(createElement('questions'))
 
@@ -73,16 +69,16 @@ const Questions = () => {
         </div>
         <div className="input-group input-group-sm row-gap-1">
           <label className="input-group-text">{gettext('Show URIs:')}</label>
-          <button type="button" onClick={updateDisplayQuestionsURI} className={btnClass(displayUriQuestions)}>
+          <button type="button" onClick={toggleDisplayUriQuestions} className={btnClass(displayUriQuestions)}>
             {gettext('Questions')}
           </button>
-          <button type="button" onClick={updateDisplayAttributesURI} className={btnClass(displayUriAttributes)}>
+          <button type="button" onClick={toggleDisplayUriAttributes} className={btnClass(displayUriAttributes)}>
             {gettext('Attributes')}
           </button>
-          <button type="button" onClick={updateDisplayConditionsURI} className={btnClass(displayUriConditions)}>
+          <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
             {gettext('Conditions')}
           </button>
-          <button type="button" onClick={updateDisplayOptionSetURI} className={btnClass(displayUriOptionSets)}>
+          <button type="button" onClick={toggleDisplayUriOptionSets} className={btnClass(displayUriOptionSets)}>
             {gettext('Option sets')}
           </button>
         </div>

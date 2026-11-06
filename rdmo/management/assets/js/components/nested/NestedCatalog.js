@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -24,23 +24,15 @@ const NestedCatalog = ({ catalog }) => {
   const togglePages = () => dispatch(toggleDescendants(catalog, 'pages'))
   const toggleQuestionSets = () => dispatch(toggleDescendants(catalog, 'questionsets'))
 
-  const [displayUriCatalogs, setDisplayUriCatalogs] = useConfig('display.uri.catalogs', true)
-  const [displayUriSections, setDisplayUriSections] = useConfig('display.uri.sections', true)
-  const [displayUriPages, setDisplayUriPages] = useConfig('display.uri.pages', true)
-  const [displayUriQuestionSets, setDisplayUriQuestionSets] = useConfig('display.uri.questionsets', true)
-  const [displayUriQuestions, setDisplayUriQuestions] = useConfig('display.uri.questions', true)
-  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
-  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
-  const [displayUriOptionSets, setDisplayUriOptionSets] = useConfig('display.uri.optionsets', true)
+  const [displayUriCatalogs, toggleDisplayUriCatalogs] = useConfigToggle('display.uri.catalogs', true)
+  const [displayUriSections, toggleDisplayUriSections] = useConfigToggle('display.uri.sections', true)
+  const [displayUriPages, toggleDisplayUriPages] = useConfigToggle('display.uri.pages', true)
+  const [displayUriQuestionSets, toggleDisplayUriQuestionSets] = useConfigToggle('display.uri.questionsets', true)
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
 
-  const toggleDisplayUriCatalogs = () => setDisplayUriCatalogs(!displayUriCatalogs)
-  const toggleDisplayUriSections = () => setDisplayUriSections(!displayUriSections)
-  const toggleDisplayUriPages = () => setDisplayUriPages(!displayUriPages)
-  const toggleDisplayUriQuestionSets = () => setDisplayUriQuestionSets(!displayUriQuestionSets)
-  const toggleDisplayUriQuestions = () => setDisplayUriQuestions(!displayUriQuestions)
-  const toggleDisplayUriAttributes = () => setDisplayUriAttributes(!displayUriAttributes)
-  const toggleDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
-  const toggleDisplayUriOptionSets = () => setDisplayUriOptionSets(!displayUriOptionSets)
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 

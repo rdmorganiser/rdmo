@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { isEmpty } from 'lodash'
 
-import { useConfig } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -23,13 +23,10 @@ const QuestionSets = () => {
   const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questionsets.uri_prefix', '')
   const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const [displayUriQuestionSets, setDisplayUriQuestionSets] = useConfig('display.uri.questionsets', true)
-  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
-  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriQuestionSets, toggleDisplayUriQuestionSets] = useConfigToggle('display.uri.questionsets', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
 
-  const toggleDisplayUriQuestionSets = () => setDisplayUriQuestionSets(!displayUriQuestionSets)
-  const toggleDisplayUriAttributes = () => setDisplayUriAttributes(!displayUriAttributes)
-  const toggleDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
 
   const createQuestionSet = () => dispatch(createElement('questionsets'))
 

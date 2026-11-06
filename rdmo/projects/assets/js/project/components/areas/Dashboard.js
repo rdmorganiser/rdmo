@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
-import { useConfig, useModal } from 'rdmo/core/assets/js/hooks'
+import { useConfigToggle, useModal } from 'rdmo/core/assets/js/hooks'
 import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { navigateDashboard } from '../../actions/navigationActions'
@@ -25,8 +25,8 @@ const Dashboard = () => {
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
 
-  const [showClosedTasks, setShowClosedTasks] = useConfig('showClosedTasks', false)
-  const [showClosedRecommendations, setShowClosedRecommendations] = useConfig('showClosedRecommendations', false)
+  const [showClosedTasks, toggleShowClosedTasks] = useConfigToggle('showClosedTasks')
+  const [showClosedRecommendations, toggleShowClosedRecommendations] = useConfigToggle('showClosedRecommendations')
 
   const [selectedIssue, setSelectedIssue] = useState(null)
   const issueModal = useModal()
@@ -198,7 +198,7 @@ const Dashboard = () => {
                     id="showClosedTasks"
                     label={gettext('Show closed tasks')}
                     checked={showClosedTasks}
-                    onChange={() => setShowClosedTasks(!showClosedTasks)}
+                    onChange={toggleShowClosedTasks}
                   />
                   <div className="row">
                     {
@@ -224,7 +224,7 @@ const Dashboard = () => {
                     id="showClosedRecommendations"
                     label={gettext('Show closed recommendations')}
                     checked={showClosedRecommendations}
-                    onChange={() => setShowClosedRecommendations(!showClosedRecommendations)}
+                    onChange={toggleShowClosedRecommendations}
                   />
                   <div className="row">
                     {
