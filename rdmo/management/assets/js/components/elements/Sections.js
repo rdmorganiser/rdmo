@@ -81,7 +81,7 @@ const Sections = () => {
             {
               sections.map((section, index) => (
                 <Section
-                  key={index} config={config} section={section}
+                  key={index} section={section}
                   filter="sections" filterEditors={true} />
               ))
             }

@@ -89,7 +89,7 @@ const Catalogs = () => {
             {
               catalogs.map((catalog, index) => (
                 <Catalog
-                  key={index} config={config} catalog={catalog}
+                  key={index} catalog={catalog}
                   filter="catalogs" filterSites={true} filterEditors={true} />
               ))
             }

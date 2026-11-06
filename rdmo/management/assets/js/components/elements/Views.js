@@ -89,7 +89,7 @@ const Views = () => {
             {
               views.map((view, index) => (
                 <View
-                  key={index} config={config} view={view}
+                  key={index} view={view}
                   filter="views" filterSites={true} filterEditors={true} />
               ))
             }

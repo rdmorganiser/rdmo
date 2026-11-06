@@ -94,7 +94,7 @@ const Tasks = () => {
             {
               tasks.map((task, index) => (
                 <Task
-                  key={index} config={config} task={task}
+                  key={index} task={task}
                   filter="tasks" filterSites={true} filterEditors={true} />
               ))
             }

@@ -91,7 +91,7 @@ const QuestionSets = () => {
             {
               questionsets.map((questionset, index) => (
                 <QuestionSet
-                  key={index} config={config} questionset={questionset}
+                  key={index} questionset={questionset}
                   filter="questionsets" filterEditors={true} />
               ))
             }

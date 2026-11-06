@@ -91,7 +91,7 @@ const Pages = () => {
             {
               pages.map((page, index) => (
                 <Page
-                  key={index} config={config} page={page}
+                  key={index} page={page}
                   filter="pages" filterEditors={true} />
               ))
             }

@@ -109,7 +109,7 @@ const NestedSection = ({ section }) => {
           {
             section.elements.map((page, index) => (
               <Page
-                key={index} config={config} page={page}
+                key={index} page={page}
                 display="nested" filter="section" indent={1} />
             ))
           }
