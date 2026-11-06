@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -15,18 +15,17 @@ import Section from '../element/Section'
 const Sections = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const sections = useSelector((state) => state.elements.sections)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.sections.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.sections.uri_prefix', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.sections.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.sections.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriSections = get(config, 'display.uri.sections', true)
+  const [displayUriSections, setDisplayUriSections] = useConfig('display.uri.sections', true)
 
-  const toggleDisplayUriSections = () => dispatch(updateConfig('display.uri.sections', !displayUriSections))
+  const toggleDisplayUriSections = () => setDisplayUriSections(!displayUriSections)
 
   const createSection = () => dispatch(createElement('sections'))
 
@@ -47,19 +46,19 @@ const Sections = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.sections.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter sections')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.sections.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(sections)} />
             </div>
             {
               settings.multisite && (
                 <div className="col-sm-2">
                   <FilterSite
-                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    value={filterEditor} onChange={setFilterEditor}
                     options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               )

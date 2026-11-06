@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -17,32 +17,30 @@ import Section from '../element/Section'
 const NestedCatalog = ({ catalog }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
-
-  const updateFilterString = (value) => dispatch(updateConfig('filter.catalog.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.catalog.uri_prefix', value))
+  const [filterString, setFilterString] = useConfig('filter.catalog.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.catalog.uri_prefix', '')
 
   const toggleSections = () => dispatch(toggleDescendants(catalog, 'sections'))
   const togglePages = () => dispatch(toggleDescendants(catalog, 'pages'))
   const toggleQuestionSets = () => dispatch(toggleDescendants(catalog, 'questionsets'))
 
-  const displayUriCatalogs = get(config, 'display.uri.catalogs', true)
-  const displayUriSections = get(config, 'display.uri.sections', true)
-  const displayUriPages = get(config, 'display.uri.pages', true)
-  const displayUriQuestionSets = get(config, 'display.uri.questionsets', true)
-  const displayUriQuestions = get(config, 'display.uri.questions', true)
-  const displayUriAttributes = get(config, 'display.uri.attributes', true)
-  const displayUriConditions = get(config, 'display.uri.conditions', true)
-  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
+  const [displayUriCatalogs, setDisplayUriCatalogs] = useConfig('display.uri.catalogs', true)
+  const [displayUriSections, setDisplayUriSections] = useConfig('display.uri.sections', true)
+  const [displayUriPages, setDisplayUriPages] = useConfig('display.uri.pages', true)
+  const [displayUriQuestionSets, setDisplayUriQuestionSets] = useConfig('display.uri.questionsets', true)
+  const [displayUriQuestions, setDisplayUriQuestions] = useConfig('display.uri.questions', true)
+  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriOptionSets, setDisplayUriOptionSets] = useConfig('display.uri.optionsets', true)
 
-  const toggleDisplayUriCatalogs = () => dispatch(updateConfig('display.uri.catalogs', !displayUriCatalogs))
-  const toggleDisplayUriSections = () => dispatch(updateConfig('display.uri.sections', !displayUriSections))
-  const toggleDisplayUriPages = () => dispatch(updateConfig('display.uri.pages', !displayUriPages))
-  const toggleDisplayUriQuestionSets = () => dispatch(updateConfig('display.uri.questionsets', !displayUriQuestionSets))
-  const toggleDisplayUriQuestions = () => dispatch(updateConfig('display.uri.questions', !displayUriQuestions))
-  const toggleDisplayUriAttributes = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const toggleDisplayUriConditions = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
-  const toggleDisplayUriOptionSets = () => dispatch(updateConfig('display.uri.optionsets', !displayUriOptionSets))
+  const toggleDisplayUriCatalogs = () => setDisplayUriCatalogs(!displayUriCatalogs)
+  const toggleDisplayUriSections = () => setDisplayUriSections(!displayUriSections)
+  const toggleDisplayUriPages = () => setDisplayUriPages(!displayUriPages)
+  const toggleDisplayUriQuestionSets = () => setDisplayUriQuestionSets(!displayUriQuestionSets)
+  const toggleDisplayUriQuestions = () => setDisplayUriQuestions(!displayUriQuestions)
+  const toggleDisplayUriAttributes = () => setDisplayUriAttributes(!displayUriAttributes)
+  const toggleDisplayUriConditions = () => setDisplayUriConditions(!displayUriConditions)
+  const toggleDisplayUriOptionSets = () => setDisplayUriOptionSets(!displayUriOptionSets)
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
@@ -58,12 +56,12 @@ const NestedCatalog = ({ catalog }) => {
             <div className="row">
               <div className="col-sm-8">
                 <FilterString
-                  value={get(config, 'filter.catalog.search', '')} onChange={updateFilterString}
+                  value={filterString} onChange={setFilterString}
                   label={gettext('Filter catalogs')} />
               </div>
               <div className="col-sm-4">
                 <FilterUriPrefix
-                  value={get(config, 'filter.catalog.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  value={filterUriPrefix} onChange={setFilterUriPrefix}
                   options={getUriPrefixes(catalog.elements)} />
               </div>
             </div>

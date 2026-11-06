@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { fetchProjects } from '../../actions/projectsActions'
 
@@ -24,11 +23,9 @@ const Table = ({
 }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
+  const [ordering, setOrdering] = useConfig('params.ordering')
 
-  const extractSortingParams = (params) => {
-    const { ordering } = params || {}
-
+  const extractSortingParams = (ordering) => {
     if (!ordering) {
       return { sortOrder: undefined, sortColumn: undefined }
     }
@@ -39,15 +36,14 @@ const Table = ({
     return { sortColumn, sortOrder }
   }
 
-  const params = get(config, 'params', {})
-  const { sortColumn, sortOrder } = extractSortingParams(params)
+  const { sortColumn, sortOrder } = extractSortingParams(ordering)
 
   const handleHeaderClick = (column) => {
     if (sortableColumns.includes(column)) {
       if (sortColumn === column && sortOrder === 'asc') {
-        dispatch(updateConfig('params.ordering', `-${column}`))
+        setOrdering(`-${column}`)
       } else {
-        dispatch(updateConfig('params.ordering', column))
+        setOrdering(column)
       }
 
       dispatch(fetchProjects())

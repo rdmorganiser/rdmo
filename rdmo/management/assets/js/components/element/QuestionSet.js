@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
+
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -26,7 +28,7 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const settings = useSelector((state) => state.settings)
 
   const showElement = filterElement(config, filter, false, filterEditors, questionset)
-  const showElements = get(config, `display.elements.questionsets.${questionset.id}`, true)
+  const [showElements] = useConfig(`display.elements.questionsets.${questionset.id}`, true)
 
   const editUrl = buildPath('questionsets', questionset.id)
   const copyUrl = buildPath('questionsets', questionset.id, 'copy')
@@ -48,9 +50,9 @@ const QuestionSet = ({ questionset, display = 'list', indent = 0, filter = false
   const fetchAttribute = () => dispatch(fetchElement('attributes', questionset.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', questionset.conditions[index]))
 
-  const displayUriQuestionSets = get(config, 'display.uri.questionsets', true)
-  const displayUriAttributes = get(config, 'display.uri.attributes', true)
-  const displayUriConditions = get(config, 'display.uri.conditions', true)
+  const [displayUriQuestionSets] = useConfig('display.uri.questionsets', true)
+  const [displayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions] = useConfig('display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

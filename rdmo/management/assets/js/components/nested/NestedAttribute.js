@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -11,12 +9,9 @@ import { FilterString, FilterUriPrefix } from '../common/Filter'
 import Attribute from '../element/Attribute'
 
 const NestedAttribute = ({ attribute }) => {
-  const dispatch = useDispatch()
+  const [filterString, setFilterString] = useConfig('filter.attribute.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.attribute.uri_prefix', '')
 
-  const config = useSelector((state) => state.config)
-
-  const updateFilterString = (uri) => dispatch(updateConfig('filter.attribute.search', uri))
-  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.attribute.uri_prefix', uriPrefix))
 
   return (
     <>
@@ -30,12 +25,12 @@ const NestedAttribute = ({ attribute }) => {
             <div className="row">
               <div className="col-sm-8">
                 <FilterString
-                  value={get(config, 'filter.attribute.search', '')} onChange={updateFilterString}
+                  value={filterString} onChange={setFilterString}
                   label={gettext('Filter attributes')} />
               </div>
               <div className="col-sm-4">
                 <FilterUriPrefix
-                  value={get(config, 'filter.attribute.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  value={filterUriPrefix} onChange={setFilterUriPrefix}
                   options={getUriPrefixes(attribute.elements)} />
               </div>
             </div>

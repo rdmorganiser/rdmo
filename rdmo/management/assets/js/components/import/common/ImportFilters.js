@@ -1,26 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { getUriPrefixes } from '../../../utils/filter'
 
 import { FilterString, FilterUriPrefix } from '../../common/Filter'
 
 const ImportFilters = ({ elements, changedElements, filteredElements, success = false }) => {
-  const dispatch = useDispatch()
+  const [filterString, setFilterString] = useConfig('filter.import.elements.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.import.elements.uri_prefix', '')
+  const [filterChanged, setFilterChanged] = useConfig('filter.import.elements.changed', false)
 
-  const config = useSelector((state) => state.config)
-
-  const filterString = get(config, 'filter.import.elements.search', '')
-  const filterUriPrefix = get(config, 'filter.import.elements.uri_prefix', '')
-  const filterChanged = get(config, 'filter.import.elements.changed', false)
-
-  const updateFilterString = (value) => dispatch(updateConfig('filter.import.elements.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.import.elements.uri_prefix', value))
-  const updateFilterChanged = () => dispatch(updateConfig('filter.import.elements.changed', !filterChanged))
+  const updateFilterChanged = () => setFilterChanged(!filterChanged)
 
   const filterCheckBoxText = interpolate(
     success ? (
@@ -34,13 +27,13 @@ const ImportFilters = ({ elements, changedElements, filteredElements, success = 
       <div className="row">
         <div className={'col-sm-8'}>
           <FilterString
-            value={filterString} onChange={updateFilterString}
+            value={filterString} onChange={setFilterString}
             label={gettext('Filter URI')} />
         </div>
         <div className="col-sm-4">
           <FilterUriPrefix
             value={filterUriPrefix}
-            onChange={updateFilterUriPrefix}
+            onChange={setFilterUriPrefix}
             options={getUriPrefixes(elements)} />
         </div>
       </div>

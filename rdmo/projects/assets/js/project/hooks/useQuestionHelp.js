@@ -1,15 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { get } from 'lodash'
+import { useDispatch } from 'react-redux'
 
 import { deleteConfig, updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 export const useQuestionHelp = (question) => {
   const dispatch = useDispatch()
 
   const configPath = `display.help.question.${question.id}`
 
-  const showHelp = useSelector((state) => isTruthy(get(state.config, configPath)))
+  const [showHelp] = useConfig(configPath, false)
   const toggleHelp = () => dispatch(showHelp ? deleteConfig(configPath) : updateConfig(configPath, true))
 
   return [showHelp, toggleHelp]

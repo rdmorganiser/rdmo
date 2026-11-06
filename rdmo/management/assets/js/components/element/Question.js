@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
+
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -38,11 +40,10 @@ const Question = ({ question, display = 'list', indent = 0, filter = false, filt
   const fetchCondition = (index) => dispatch(fetchElement('conditions', question.conditions[index]))
   const fetchOptionSet = (index) => dispatch(fetchElement('optionsets', question.optionsets[index]))
 
-  const displayUriQuestions = get(config, 'display.uri.questions', true)
-  const displayUriAttributes = get(config, 'display.uri.attributes', true)
-  const displayUriConditions = get(config, 'display.uri.conditions', true)
-  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
-
+  const [displayUriQuestions] = useConfig('display.uri.questions', true)
+  const [displayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriOptionSets] = useConfig('display.uri.optionsets', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

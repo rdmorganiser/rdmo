@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -15,24 +15,23 @@ import Question from '../element/Question'
 const Questions = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)
   const questions = useSelector((state) => state.elements.questions)
 
-  const updateFilterString = (value) => dispatch(updateConfig('filter.questions.search', value))
-  const updateFilterUriPrefix = (value) => dispatch(updateConfig('filter.questions.uri_prefix', value))
-  const updateFilterEditor = (value) => dispatch(updateConfig('filter.editors', value))
+  const [filterString, setFilterString] = useConfig('filter.questions.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questions.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const displayUriQuestions = get(config, 'display.uri.questions', true)
-  const displayUriAttributes = get(config, 'display.uri.attributes', true)
-  const displayUriConditions = get(config, 'display.uri.conditions', true)
-  const displayUriOptionSets = get(config, 'display.uri.optionsets', true)
+  const [displayUriQuestions, setDisplayUriQuestions] = useConfig('display.uri.questions', true)
+  const [displayUriAttributes, setDisplayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions, setDisplayUriConditions] = useConfig('display.uri.conditions', true)
+  const [displayUriOptionSets, setDisplayUriOptionSets] = useConfig('display.uri.optionsets', true)
 
-  const updateDisplayQuestionsURI = () => dispatch(updateConfig('display.uri.questions', !displayUriQuestions))
-  const updateDisplayAttributesURI = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const updateDisplayConditionsURI = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
-  const updateDisplayOptionSetURI = () => dispatch(updateConfig('display.uri.optionsets', !displayUriOptionSets))
+  const updateDisplayQuestionsURI = () => setDisplayUriQuestions(!displayUriQuestions)
+  const updateDisplayAttributesURI = () => setDisplayUriAttributes(!displayUriAttributes)
+  const updateDisplayConditionsURI = () => setDisplayUriConditions(!displayUriConditions)
+  const updateDisplayOptionSetURI = () => setDisplayUriOptionSets(!displayUriOptionSets)
 
   const createQuestion = () => dispatch(createElement('questions'))
 
@@ -53,19 +52,19 @@ const Questions = () => {
           <div className="row">
             <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
               <FilterString
-                value={get(config, 'filter.questions.search', '')} onChange={updateFilterString}
+                value={filterString} onChange={setFilterString}
                 label={gettext('Filter questions')} />
             </div>
             <div className="col-sm-4">
               <FilterUriPrefix
-                value={get(config, 'filter.questions.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
                 options={getUriPrefixes(questions)} />
             </div>
             {
               settings.multisite && (
                 <div className="col-sm-2">
                   <FilterSite
-                    value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
+                    value={filterEditor} onChange={setFilterEditor}
                     options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
                 </div>
               )

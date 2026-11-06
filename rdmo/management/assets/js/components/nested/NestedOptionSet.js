@@ -1,10 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { getUriPrefixes } from '../../utils/filter'
 
@@ -13,16 +11,12 @@ import Option from '../element/Option'
 import OptionSet from '../element/OptionSet'
 
 const NestedOptionSet = ({ optionset }) => {
-  const dispatch = useDispatch()
+  const [filterString, setFilterString] = useConfig('filter.optionset.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.optionset.uri_prefix', '')
 
-  const config = useSelector((state) => state.config)
+  const [displayUriOptions, setDisplayUriOptions] = useConfig('display.uri.options', true)
 
-  const updateFilterString = (uri) => dispatch(updateConfig('filter.optionset.search', uri))
-  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.optionset.uri_prefix', uriPrefix))
-
-  const displayUriOptions = get(config, 'display.uri.options', true)
-
-  const toggleDisplayUriOptions = () => dispatch(updateConfig('display.uri.options', !displayUriOptions))
+  const toggleDisplayUriOptions = () => setDisplayUriOptions(!displayUriOptions)
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
@@ -38,12 +32,12 @@ const NestedOptionSet = ({ optionset }) => {
             <div className="row">
               <div className="col-sm-8">
                 <FilterString
-                  value={get(config, 'filter.optionset.search', '')} onChange={updateFilterString}
+                  value={filterString} onChange={setFilterString}
                   label={gettext('Filter option sets')} />
               </div>
               <div className="col-sm-4">
                 <FilterUriPrefix
-                  value={get(config, 'filter.optionset.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  value={filterUriPrefix} onChange={setFilterUriPrefix}
                   options={getUriPrefixes(optionset.elements)} />
               </div>
             </div>
