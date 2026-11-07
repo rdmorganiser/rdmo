@@ -86,7 +86,10 @@ const initRange = (question, value) => {
   }
 }
 
-const compareValueId = (value, valueId) => (value.id || value.tmp_id) == valueId
+// Debounced callbacks can still refer to a temporary ID after the first save.
+const compareValueId = (value, valueId) => (
+  (value.id || value.tmp_id) == valueId || (!isNil(value.tmp_id) && value.tmp_id == valueId)
+)
 
 const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {
