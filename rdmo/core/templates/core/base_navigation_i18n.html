@@ -4,7 +4,7 @@
 <li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         {% get_current_language as LANGUAGE_CODE %}
-        {{ LANGUAGE_CODE|upper }} <span class="caret">
+        {{ LANGUAGE_CODE|upper }}
     </a>
     <ul class="dropdown-menu dropdown-menu-end">
         {% i18n_switcher %}

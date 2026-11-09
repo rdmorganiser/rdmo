@@ -57,7 +57,7 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
           <Search attribute={attribute} values={values} errors={errors} setValues={setValues} />
         </div>
 
-        <p className="help-block mb-0">
+        <p className="form-text mb-0">
           {
             gettext(
               'You can populate this tab with answers from a similar tab in any ' +

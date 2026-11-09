@@ -16,7 +16,7 @@ const FileUploadButton = ({ acceptedTypes, buttonProps, buttonLabel, onImportFil
     <div {...getRootProps()}>
       <input {...getInputProps()} />
       <button className="btn" {...buttonProps}>
-        <i className="fa fa-download" aria-hidden="true"></i> {buttonLabel}
+        <i className="bi bi-download" aria-hidden="true"></i> {buttonLabel}
       </button>
     </div>
   )

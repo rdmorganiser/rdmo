@@ -32,7 +32,7 @@ const Contact = () => {
       onClose={onClose}
       size="modal-lg"
     >
-      <Template template="project_interview_contact_help" />
+      <Template className="text-muted font-small" template="project_interview_contact_help" />
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="project-interview-question-contact-subject">Subject</label>
@@ -43,7 +43,7 @@ const Contact = () => {
             value={values.subject || ''}
             onChange={event => setValues({ ...values, subject: event.target.value })}
           />
-          <ul className="help-block list-unstyled">
+          <ul className="form-text list-unstyled">
             {
               errors && errors.subject && errors.subject.map((error, errorIndex) => (
                 <li key={errorIndex} className="text-danger">{errors.subject}</li>
@@ -60,7 +60,7 @@ const Contact = () => {
             value={values.message || ''}
             onChange={event => setValues({...values, message: event.target.value })}
           />
-          <ul className="help-block list-unstyled">
+          <ul className="form-text list-unstyled">
             {
               errors && errors.message && errors.message.map((error, errorIndex) => (
                 <li key={errorIndex} className="text-danger">{errors.message}</li>
