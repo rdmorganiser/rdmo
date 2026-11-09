@@ -6,6 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
 import useBool from '../../hooks/useBool'
+import { buildPath } from '../../utils/location'
 
 import { CodeLink, ExtendLink } from '../common/Links'
 
@@ -43,7 +44,9 @@ const OptionInfo = ({ option }) => {
       {
         extendConditions && conditions.map((condition, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
+            <CodeLink
+              type="conditions" uri={condition.uri} href={buildPath('conditions', condition.id)}
+              onClick={() => fetchCondition(condition)} />
           </p>
         ))
       }

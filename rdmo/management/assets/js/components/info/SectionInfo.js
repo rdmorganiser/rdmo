@@ -6,6 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
 import useBool from '../../hooks/useBool'
+import { buildPath } from '../../utils/location'
 
 import { CodeLink, ExtendLink } from '../common/Links'
 
@@ -34,7 +35,9 @@ const SectionInfo = ({ section }) => {
       {
         showCatalogs && catalogs.map((catalog, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={catalog.uri} onClick={() => fetchCatalog(catalog)} />
+            <CodeLink
+              type="questions" uri={catalog.uri} href={buildPath('catalogs', catalog.id)}
+              onClick={() => fetchCatalog(catalog)} />
           </p>
         ))
       }

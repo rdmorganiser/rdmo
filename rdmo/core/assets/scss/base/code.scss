@@ -52,7 +52,8 @@ code {
     }
 }
 
-a:hover {
+a:hover,
+button.link:hover {
     code {
         text-decoration: underline;
     }

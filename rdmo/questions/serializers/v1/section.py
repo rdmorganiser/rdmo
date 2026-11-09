@@ -119,11 +119,14 @@ class SectionNestedSerializer(
             yield PageNestedSerializer(element, context=self.context).data
 
 
-class SectionIndexSerializer(serializers.ModelSerializer):
+class SectionIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
         fields = (
             'id',
+            'model',
             'uri'
         )

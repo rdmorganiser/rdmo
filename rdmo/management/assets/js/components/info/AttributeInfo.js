@@ -6,6 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
 import useBool from '../../hooks/useBool'
+import { buildPath } from '../../utils/location'
 
 import { CodeLink, ExtendLink } from '../common/Links'
 
@@ -58,7 +59,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendAttributes && attributes.map((attribute, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="domain" uri={attribute.uri} onClick={() => fetchAttribute(attribute)} />
+            <CodeLink
+              type="domain" uri={attribute.uri} href={buildPath('attributes', attribute.id)}
+              onClick={() => fetchAttribute(attribute)} />
           </p>
         ))
       }
@@ -74,7 +77,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendConditions && conditions.map((condition, index) => (
           <p key={index}>
-            <CodeLink type="conditions" uri={condition.uri} onClick={() => fetchCondition(condition)} />
+            <CodeLink
+              type="conditions" uri={condition.uri} href={buildPath('conditions', condition.id)}
+              onClick={() => fetchCondition(condition)} />
           </p>
         ))
       }
@@ -90,7 +95,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink
+              type="questions" uri={page.uri} href={buildPath('pages', page.id)}
+              onClick={() => fetchPage(page)} />
           </p>
         ))
       }
@@ -106,7 +113,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendQuestionSets && questionsets.map((questionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+            <CodeLink
+              type="questions" uri={questionset.uri} href={buildPath('questionsets', questionset.id)}
+              onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }
@@ -122,7 +131,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendQuestions && questions.map((question, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={question.uri} onClick={() => fetchQuestion(question)} />
+            <CodeLink
+              type="questions" uri={question.uri} href={buildPath('questions', question.id)}
+              onClick={() => fetchQuestion(question)} />
           </p>
         ))
       }
@@ -138,7 +149,9 @@ const AttributeInfo = ({ attribute }) => {
       {
         extendTasks && tasks.map((task, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="tasks" uri={task.uri} onClick={() => fetchTask(task)} />
+            <CodeLink
+              type="tasks" uri={task.uri} href={buildPath('tasks', task.id)}
+              onClick={() => fetchTask(task)} />
           </p>
         ))
       }

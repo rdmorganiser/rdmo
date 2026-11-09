@@ -6,6 +6,7 @@ import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement } from '../../actions/elementActions'
 import useBool from '../../hooks/useBool'
+import { buildPath } from '../../utils/location'
 
 import { CodeLink, ExtendLink } from '../common/Links'
 
@@ -37,7 +38,9 @@ const QuestionInfo = ({ question }) => {
       {
         extendPages && pages.map((page, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={page.uri} onClick={() => fetchPage(page)} />
+            <CodeLink
+              type="questions" uri={page.uri} href={buildPath('pages', page.id)}
+              onClick={() => fetchPage(page)} />
           </p>
         ))
       }
@@ -53,7 +56,9 @@ const QuestionInfo = ({ question }) => {
       {
         extendQuestionSet && questionsets.map((questionset, index) => (
           <p className="mb-1" key={index}>
-            <CodeLink type="questions" uri={questionset.uri} onClick={() => fetchQuestionSet(questionset)} />
+            <CodeLink
+              type="questions" uri={questionset.uri} href={buildPath('questionsets', questionset.id)}
+              onClick={() => fetchQuestionSet(questionset)} />
           </p>
         ))
       }

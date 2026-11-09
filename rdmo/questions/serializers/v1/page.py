@@ -151,11 +151,14 @@ class PageNestedSerializer(
                 yield QuestionNestedSerializer(element, context=self.context).data
 
 
-class PageIndexSerializer(serializers.ModelSerializer):
+class PageIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
         fields = (
             'id',
+            'model',
             'uri'
         )
