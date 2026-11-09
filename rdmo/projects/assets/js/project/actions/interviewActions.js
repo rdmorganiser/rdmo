@@ -28,7 +28,7 @@ export function fetchPage(pageId, back) {
     dispatch(fetchProgress())
     dispatch(fetchNavigation())
     dispatch(actions.fetchPageInit())
-    dispatch(clearError('page'))
+    dispatch(clearError('page', 'continue', 'options', 'conditions', 'copyValue', 'deleteSet', 'copySet'))
 
     return PageApi.fetchPage(projectId, pageId, back)
       .then((page) => {

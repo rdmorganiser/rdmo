@@ -8,8 +8,8 @@ export function setError(key, error, title) {
   })
 }
 
-export function clearError(key) {
-  return actions.clearError(key)
+export function clearError(...keys) {
+  return actions.clearError(keys)
 }
 
 export function clearErrors() {

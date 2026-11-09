@@ -9,7 +9,7 @@ const errorsSlice = createSlice({
       state[key] = error
     },
     clearError(state, action) {
-      delete state[action.payload]
+      action.payload.forEach(key => delete state[key])
     },
     clearErrors() {
       return {}
