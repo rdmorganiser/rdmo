@@ -30,6 +30,8 @@ const interviewSlice = createSlice({
     fetchPageSuccess(state, action) {
       state.page = action.payload.page
       state.providerOptions = {}
+      state.values = null
+      state.sets = []
     },
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
