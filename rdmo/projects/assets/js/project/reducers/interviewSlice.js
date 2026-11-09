@@ -93,11 +93,17 @@ const interviewSlice = createSlice({
     },
     deleteValueInit(state, action) {
       state.values = state.values.map(value => (
-        compareValueId(value, action.payload) ? { ...value, pending: true } : value
+        compareValueId(value, action.payload) ? { ...value, error: null, pending: true } : value
       ))
     },
     deleteValueSuccess(state, action) {
       state.values = state.values.filter(value => !compareValueId(value, action.payload))
+    },
+    deleteValueError(state, action) {
+      const { error, valueId } = action.payload
+      state.values = state.values.map(value => (
+        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+      ))
     },
     createSet: setValues,
     deleteSetSuccess(state, action) {

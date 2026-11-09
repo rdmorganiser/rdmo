@@ -407,7 +407,6 @@ export function deleteValue(value) {
   } else {
     return (dispatch, getState) => {
       dispatch(addToPending(pendingId))
-      dispatch(clearError('deleteValue'))
       dispatch(actions.deleteValueInit(valueId))
 
       if (isNil(value.id)) {
@@ -435,7 +434,7 @@ export function deleteValue(value) {
 
             dispatch(actions.deleteValueSuccess(valueId))
           })
-          .catch((error) => dispatch(setError('deleteValue', error, gettext('Delete value'))))
+          .catch((error) => dispatch(actions.deleteValueError({ error: serializeError(error), valueId })))
           .finally(() => dispatch(removeFromPending(pendingId)))
       }
     }
