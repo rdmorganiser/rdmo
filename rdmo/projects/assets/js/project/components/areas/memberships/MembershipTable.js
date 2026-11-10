@@ -4,18 +4,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
 import { updateProjectInvite, updateProjectMember } from '../../../actions/projectActions'
-import { usePermissions } from '../../../hooks'
 
 import MembershipDeleteModal from './MembershipDeleteModal'
 
 const MembershipTable = ({ persons, type }) => {
   const dispatch = useDispatch()
   const currentUser = useSelector((state) => state.user.currentUser)
-  const perms = usePermissions()
+  const perms = useSelector(selectPermissions)
   const roleOptions = useSelector((state) => state.roles?.roles) || []
   const { show: showConfirm, open: openConfirm, close: closeConfirm } = useModal()
   const [modalState, setModalState] = useState(null)

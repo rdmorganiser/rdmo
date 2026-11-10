@@ -3,14 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { Html, Tooltip } from 'rdmo/core/assets/js/components'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
-
-import { usePermissions } from '../../../../../hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 const PageManagement = () => {
   const config = useSelector((state) => state.config)
   const templates = useSelector((state) => state.templates)
   const page = useSelector((state) => state.interview.page)
-  const perms = usePermissions()
+  const perms = useSelector(selectPermissions)
 
   return config.showManagement && perms.can_view_management && (
     <div className="project-interview-management mb-2">

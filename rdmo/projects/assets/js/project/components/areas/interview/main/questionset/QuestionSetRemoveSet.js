@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { deleteSet } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 
 const QuestionRemoveSet = ({ questionset, currentSet }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
   const modal = useModal()
   const title = gettext('Remove block')
 

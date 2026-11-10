@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { usePermissions } from '../../hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import CopyProject from './information/CopyProject'
 import HierarchyTree from './information/HierarchyTree'
@@ -11,7 +11,7 @@ import ProjectVisibilityForm from './information/ProjectVisibilityForm'
 
 const Information = () => {
   const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}
-  const perms = usePermissions()
+  const perms = useSelector(selectPermissions)
 
   return (
     <div className="project-information">

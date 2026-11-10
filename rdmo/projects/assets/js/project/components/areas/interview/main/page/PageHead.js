@@ -5,11 +5,11 @@ import classNames from 'classnames'
 import { isEmpty, isNil, upperFirst } from 'lodash'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
 import { activateSet, copySet, createSet, deleteSet, updateSet } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 import { generateSetIndex } from '../../../../../utils/set'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
@@ -20,7 +20,7 @@ import PageTabsHelp from './PageTabsHelp'
 const PageHead = ({ sets, values, currentSet }) => {
   const dispatch = useDispatch()
   const page = useSelector((state) => state.interview.page)
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
 
   const currentSetValue = isNil(currentSet) ? null : (
     values.find((value) => (

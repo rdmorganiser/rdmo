@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { maxBy, upperFirst } from 'lodash'
 
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
+
 import { createSet } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 
 const QuestionSetAddSet = ({ questionset, sets, setPrefix }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
 
   const handleClick = () => {
     const lastSet = maxBy(sets, (s) => s.set_index)

@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { updateValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 
 import QuestionAddValue from '../question/QuestionAddValue'
 import QuestionCopyValue from '../question/QuestionCopyValue'
@@ -19,7 +20,7 @@ import DateInput from './DateInput'
 
 const DateWidget = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
 
   return (
     <div className="project-interview-widgets">

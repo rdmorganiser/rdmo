@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { deleteValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 
 const QuestionRemoveValue = ({ question, values, value }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
 
   return !readOnly && (question.is_collection || values.length > 1) && (
     <LinkButton

@@ -5,10 +5,10 @@ import classNames from 'classnames'
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
 import { useModal } from 'rdmo/core/assets/js/hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
-import { usePermissions } from '../../hooks'
 import { IssueTile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const dispatch = useDispatch()
   const config = useSelector(state => state.config)
   const settings = useSelector(state => state.settings)
-  const perms = usePermissions()
+  const perms = useSelector(selectPermissions)
 
   const allIssues = useSelector((state) => state.project.project.issues) ?? []
   /* Show only issues that resolve */

@@ -21,7 +21,7 @@ import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/s
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
-import { combinePermissions } from '../../common/utils/permissions'
+import { selectPermissions } from '../../common/selectors/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
@@ -99,12 +99,7 @@ export default function configureStore() {
     ]).then(() => {
       const state = store.getState()
       const project = state.project.project.project
-      const currentUser = state.user.currentUser
-
-      const permissions = combinePermissions(
-        project.permissions,
-        currentUser.permissions
-      )
+      const permissions = selectPermissions(state)
 
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))

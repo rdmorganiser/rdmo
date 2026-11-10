@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { Modal, Tooltip } from 'rdmo/core/assets/js/components'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
 
 import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
-import { useFieldErrors, usePermissions } from '../../../hooks'
+import { useFieldErrors } from '../../../hooks'
 
 const initialForm = { lookup: '', role: 'author' }
 
@@ -17,7 +18,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
   const errors = useFieldErrors()
-  const perms = usePermissions()
+  const perms = useSelector(selectPermissions)
   const roleOptions = useSelector((state) => state.roles?.roles) || []
 
   const [formData, setFormData] = useState(initialForm)

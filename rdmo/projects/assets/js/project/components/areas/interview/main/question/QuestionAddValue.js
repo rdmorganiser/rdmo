@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { maxBy, upperFirst } from 'lodash'
 
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
+
 import { createValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 import { initRange } from '../../../../../utils/value'
 
 const AddValue = ({ question, values, currentSet }) => {
   const dispatch = useDispatch()
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
   const title = gettext('Add answer')
 
   const handleClick = () => {

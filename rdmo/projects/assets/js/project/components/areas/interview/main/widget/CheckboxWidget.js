@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
+
 import { createValue, deleteValue, updateValue } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 import { gatherOptions } from '../../../../../utils/options'
 import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
 
@@ -18,7 +19,7 @@ import CheckboxInput from './CheckboxInput'
 const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
   const providerOptions = useSelector((state) => state.interview.providerOptions)
-  const readOnly = useReadOnly()
+  const readOnly = useSelector(selectReadOnly)
 
   const handleCreate = (attrsList) => {
     attrsList.forEach(attrs => {
