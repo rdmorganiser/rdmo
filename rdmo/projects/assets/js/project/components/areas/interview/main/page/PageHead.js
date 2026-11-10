@@ -122,14 +122,14 @@ const PageHead = ({ sets, values, currentSet }) => {
           </>
         ) : (
           !readOnly && (
-            <>
-              <PageAddTabHelp />
-              <div className="d-flex justify-content-center border-bottom border-2 px-3 py-2 mt-2 mb-4">
-                <LinkButton title={labels.add} onClick={createModal.open}>
-                  <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
-                </LinkButton>
+            <div className="card card-tile mb-4">
+              <div className="card-body">
+                <PageAddTabHelp />
+                <button type="button" className="btn btn-outline-success" onClick={createModal.open}>
+                  <i className="bi bi-plus-circle" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
+                </button>
               </div>
-            </>
+            </div>
           )
         )
       }
