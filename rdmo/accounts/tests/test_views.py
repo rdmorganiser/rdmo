@@ -10,7 +10,7 @@ from django.urls.exceptions import NoReverseMatch
 
 from pytest_django.asserts import assertContains, assertNotContains, assertRedirects, assertTemplateUsed
 
-from .helpers import enable_terms_of_use, reload_urls  # noqa: F401
+from .helpers import reload_urls
 
 users = (
     ('editor', 'editor'),
