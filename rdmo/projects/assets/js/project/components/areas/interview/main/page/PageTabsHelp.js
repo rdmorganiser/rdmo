@@ -9,9 +9,7 @@ const PageTabsHelp = () => {
   const perms = useSelector(selectPermissions)
 
   return (perms.can_add_value || perms.can_change_value || perms.can_delete_value) && (
-    <div className="form-text">
-      <Template template="project_interview_page_tabs_help" />
-    </div>
+    <Template template="project_interview_page_tabs_help" />
   )
 }
 

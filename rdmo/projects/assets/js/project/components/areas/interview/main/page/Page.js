@@ -63,7 +63,7 @@ const Page = () => {
         values={isNil(page.attribute) ? [] : values.filter((value) => (value.attribute == page.attribute))}
         currentSet={currentSet}
       />
-      <div className="project-interview-page-elements mt-2">
+      <div className="project-interview-page-elements">
         {
           currentSet && cards.map(({ key, elements }) => (
             <div key={key} className="card card-tile mb-4">

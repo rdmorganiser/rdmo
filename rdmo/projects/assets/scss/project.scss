@@ -1,3 +1,8 @@
+.project-main {
+    // allow main, which is a flex item, to shrink below the width of its content
+    min-width: 0;
+}
+
 .project-hierarchy {
     ul {
         margin-bottom: 0;
@@ -47,18 +52,21 @@
 }
 
 .project-interview-page {
-    .project-interview-page-head {
-        .nav > li > a {
-            &.add-set,
-            &.add-set:hover {
-                color: var(--bs-success);
-            }
-            &.add-set:hover {
-                color: white;
-                background-color: var(--bs-success) !important;
-            }
-            &.add-set:focus {
-                background-color: transparent;
+    .nav-underline {
+        --bs-nav-link-color: var(--bs-secondary-color);  // like .text-muted
+        --bs-nav-link-hover-color: var(--rdmo-link-hover-color);
+        --bs-nav-underline-link-active-color: var(--rdmo-link-color);
+        --bs-nav-underline-border-width: 2px;  // same as .border-2
+    }
+    .nav-underline .nav-link {
+        // let the underline of the active link cover the border of the nav
+        margin-bottom: calc(-1 * var(--bs-nav-underline-border-width));
+
+        &.active {
+            font-weight: normal;
+
+            &:hover {
+                color: var(--rdmo-link-hover-color);
             }
         }
     }

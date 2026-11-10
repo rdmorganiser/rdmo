@@ -14,7 +14,7 @@ aside {
 
     position: fixed;
     width: var(--rdmo-sidebar-width);
-    height: calc(100vh - 56px);
+    height: calc(100vh - var(--rdmo-navbar-height));
 
     padding: 1rem 0.5rem;  // same as py-3 px-2
 
