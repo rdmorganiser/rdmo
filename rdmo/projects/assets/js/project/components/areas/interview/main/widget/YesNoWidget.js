@@ -32,6 +32,7 @@ const YesNoWidget = ({ question, sets, values, siblings, currentSet }) => {
                 <YesNoInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={

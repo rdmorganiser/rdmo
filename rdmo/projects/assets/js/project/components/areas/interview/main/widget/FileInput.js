@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
 
-const FileInput = ({ question, value, buttons, disabled, onChange }) => {
+const FileInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length == 1) {
       onChange(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
@@ -38,8 +38,8 @@ const FileInput = ({ question, value, buttons, disabled, onChange }) => {
           <div {...getRootProps({className: classnames})}>
             <input
               {...getInputProps()}
-              aria-labelledby={getQuestionTextId(question)}
-              aria-describedby={getQuestionHelpId(question)}
+              aria-labelledby={getQuestionTextId(question, currentSet)}
+              aria-describedby={getQuestionHelpId(question, currentSet)}
             />
             <div className="text-muted">
               {
@@ -60,6 +60,7 @@ const FileInput = ({ question, value, buttons, disabled, onChange }) => {
 FileInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

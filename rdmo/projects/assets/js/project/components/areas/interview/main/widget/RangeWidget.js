@@ -32,6 +32,7 @@ const RangeWidget = ({ question, sets, values, siblings, currentSet }) => {
                 <RangeInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={

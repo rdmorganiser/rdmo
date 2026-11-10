@@ -7,7 +7,7 @@ import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const YesNoInput = ({ question, value, buttons, disabled, onChange }) => {
+const YesNoInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
   const yesId = `radio-${value.tmp_id || value.id}-yes`
   const noId = `radio-${value.tmp_id || value.id}-no`
 
@@ -29,8 +29,8 @@ const YesNoInput = ({ question, value, buttons, disabled, onChange }) => {
         {buttons}
         <fieldset
           className={classnames}
-          aria-labelledby={getQuestionTextId(question)}
-          aria-describedby={getQuestionHelpId(question)}>
+          aria-labelledby={getQuestionTextId(question, currentSet)}
+          aria-describedby={getQuestionHelpId(question, currentSet)}>
           <div className="form-check form-check-inline">
             <input
               id={yesId}
@@ -79,6 +79,7 @@ const YesNoInput = ({ question, value, buttons, disabled, onChange }) => {
 YesNoInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

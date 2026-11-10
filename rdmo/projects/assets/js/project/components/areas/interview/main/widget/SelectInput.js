@@ -12,7 +12,7 @@ import { isEmpty, isNil } from 'lodash'
 import { updateValue } from '../../../../../actions/interviewActions'
 import { projectId } from '../../../../../utils/meta'
 import { getValueOption } from '../../../../../utils/options'
-import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
+import { getQuestionTextId } from '../../../../../utils/question'
 import { isDefaultValue } from '../../../../../utils/value'
 
 import ProjectApi from '../../../../../api/ProjectApi'
@@ -22,7 +22,7 @@ import OptionText from './common/OptionText'
 
 import SelectValueContainer from './SelectValueContainer'
 
-const SelectInput = ({ question, value, options, buttons, creatable, disabled, onChange }) => {
+const SelectInput = ({ question, value, currentSet, options, buttons, creatable, disabled, onChange }) => {
   const dispatch = useDispatch()
   const [inputValue, setInputValue] = useState('')
   const [defaultValueOption, setDefaultValueOption] = useState(null)
@@ -117,8 +117,7 @@ const SelectInput = ({ question, value, options, buttons, creatable, disabled, o
     autoFocus: value.focus,
     isDisabled: disabled,
     placeholder: gettext('Select ...'),
-    'aria-label': getQuestionTextId(question),
-    'aria-description': getQuestionHelpId(question),
+    'aria-labelledby': getQuestionTextId(question, currentSet),
     noOptionsMessage: () => gettext('No options found'),
     loadingMessage: () => gettext('Loading ...'),
     options: options,
@@ -162,6 +161,7 @@ const SelectInput = ({ question, value, options, buttons, creatable, disabled, o
 SelectInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   buttons: PropTypes.node.isRequired,
   creatable: PropTypes.bool,

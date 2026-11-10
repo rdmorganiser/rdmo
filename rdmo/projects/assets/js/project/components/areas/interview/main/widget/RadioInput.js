@@ -14,7 +14,7 @@ import AdditionalTextInput from './common/AdditionalTextInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
-const RadioInput = ({ question, value, options, buttons, disabled, onChange }) => {
+const RadioInput = ({ question, value, currentSet, options, buttons, disabled, onChange }) => {
   const ref = useRef(null)
 
   const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, options)
@@ -61,8 +61,8 @@ const RadioInput = ({ question, value, options, buttons, disabled, onChange }) =
         {buttons}
         <fieldset
           className={classnames}
-          aria-labelledby={getQuestionTextId(question)}
-          aria-describedby={getQuestionHelpId(question)}>
+          aria-labelledby={getQuestionTextId(question, currentSet)}
+          aria-describedby={getQuestionHelpId(question, currentSet)}>
           {
             isEmpty(options) ? (
               <div className="text-muted">{gettext('No options are available.')}</div>
@@ -140,6 +140,7 @@ const RadioInput = ({ question, value, options, buttons, disabled, onChange }) =
 RadioInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   options: PropTypes.array.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,

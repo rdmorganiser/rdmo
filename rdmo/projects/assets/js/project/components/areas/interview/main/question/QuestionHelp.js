@@ -4,22 +4,21 @@ import classNames from 'classnames'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { getQuestionHelpId } from '../../../../../utils/question'
-
-const QuestionHelp = ({ question }) => {
-  const classnames = classNames('project-interview-question-help font-small text-muted mb-3', {
-    'text-muted': question.is_optional
+const QuestionHelp = ({ question, show }) => {
+  const classnames = classNames('project-interview-question-help font-small text-muted mb-2', {
+    'd-none': !show
   })
 
   return (
     <div className={classnames} >
-      <Html id={getQuestionHelpId(question)} html={question.help} />
+      <Html html={question.help} />
     </div>
   )
 }
 
 QuestionHelp.propTypes = {
-  question: PropTypes.object.isRequired
+  question: PropTypes.object.isRequired,
+  show: PropTypes.bool.isRequired
 }
 
 export default QuestionHelp

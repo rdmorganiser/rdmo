@@ -34,6 +34,7 @@ const SelectWidget = ({ question, sets, values, siblings, creatable, currentSet 
                 <SelectInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   options={gatherOptions(question, currentSet, providerOptions)}
                   creatable={creatable}
                   disabled={readOnly}
