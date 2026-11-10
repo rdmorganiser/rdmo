@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import { useDispatch, useSelector } from 'react-redux'
 import { formatISO, isValid, parseISO, set } from 'date-fns'
-import { get } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Select } from 'rdmo/core/assets/js/components'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/date'
 
 import * as projectsActions from '../../actions/projectsActions'
@@ -14,11 +14,10 @@ import * as projectsActions from '../../actions/projectsActions'
 const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector(state => state.config)
+  const [params] = useConfig('params', {})
   const roleOptions = useSelector(state => state.roles?.roles) || []
 
-  const showFilters = [true, 'true'].includes(get(config, 'showFilters', false))
-  const toggleFilters = () => dispatch(configActions.updateConfig('showFilters', !showFilters))
+  const [showFilters, toggleShowFilters] = useConfigToggle('showFilters')
 
   const resetAllFilters = () => {
     dispatch(configActions.deleteConfig('params.catalog'))
@@ -40,20 +39,20 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
         </span>
       ),
     }))
-  const selectedCatalog = get(config, 'params.catalog', '')
+  const [selectedCatalog, setSelectedCatalog] = useConfig('params.catalog', '')
   const handleCatalogFilterChange = (value) => {
     value ? (
-      dispatch(configActions.updateConfig('params.catalog', value))
+      setSelectedCatalog(value)
     ) : (
       dispatch(configActions.deleteConfig('params.catalog'))
     )
     dispatch(projectsActions.fetchProjects())
   }
 
-  const selectedRole = get(config, 'params.role', '')
+  const [selectedRole, setSelectedRole] = useConfig('params.role', '')
   const handleRoleFilterChange = (value) => {
     value ? (
-      dispatch(configActions.updateConfig('params.role', value))
+      setSelectedRole(value)
     ) : (
       dispatch(configActions.deleteConfig('params.role'))
     )
@@ -91,7 +90,7 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
   }
 
   const getSelected = (type) => {
-    const selected = get(config, `params.${type}`)
+    const selected = params[type]
     return selected ? parseISO(selected) : null
   }
 
@@ -202,14 +201,14 @@ const ProjectFilters = ({ catalogs, isAdminOrSiteManager }) => {
         )
       }
       <div className="d-flex justify-content-between mt-2">
-        <button type="button" className="link font-small" onClick={toggleFilters}>
+        <button type="button" className="link font-small" onClick={toggleShowFilters}>
           <i className="bi bi-filter"></i> {
             showFilters ? gettext('Hide additional filters') : gettext('Show additional filters')
           }
         </button>
         {
           showFilters && (
-            !Object.keys(config.params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
+            !Object.keys(params).every(key => ['ordering', 'page', 'search', 'user'].includes(key)) && (
               <button type="button" className="link font-small" onClick={resetAllFilters}>
                 <i className="bi bi-x-circle"></i> {gettext('Reset all filters')}
               </button>

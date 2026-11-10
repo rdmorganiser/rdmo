@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { get } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { generateErrorMessageListItems } from './ErrorsListGroup'
 
@@ -22,25 +19,17 @@ const aggregateUniqueErrors = (elements) => {
 }
 
 const ErrorsAggregated = ({ elements }) => {
-  const dispatch = useDispatch()
+  const [showErrors, toggleShowErrors] = useConfigToggle('filter.import.errors.show')
 
-  const config = useSelector((state) => state.config)
-
-  const updateShowErrors = () => {
-    const currentVal = isTruthy(get(config, 'filter.import.errors.show', false))
-    dispatch(updateConfig('filter.import.errors.show', !currentVal))
-  }
-
-  const showErrors = isTruthy(get(config, 'filter.import.errors.show', false))
 
   // Aggregate all unique errors into a single flat array
   const uniqueErrors = aggregateUniqueErrors(elements)
 
-  const errorsHeadingText = <strong onClick={updateShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
+  const errorsHeadingText = <strong onClick={toggleShowErrors}>{gettext('Errors')} ({elements.length}) :</strong>
 
   return ( uniqueErrors.length > 0 && (
     <div className="card text-bg-danger mt-2">
-      <div className="card-header cursor-pointer" onClick={updateShowErrors}>
+      <div className="card-header cursor-pointer" onClick={toggleShowErrors}>
         <div className="d-flex align-items-center">
           <div className="flex-grow-1">
             {errorsHeadingText}

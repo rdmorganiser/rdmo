@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isNil } from 'lodash'
+import { isNil } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -17,7 +17,7 @@ const View = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
-  const config = useSelector((state) => state.config)
+  const [includeHelp] = useConfig('document.includeHelp', false)
   const { currentView } = useSelector((state) => state.project)
 
   const reloadView = () => {
@@ -36,10 +36,10 @@ const View = () => {
   const handleExport = (format) => {
     if (detail == 'questions') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'true'}))
+        {'include_help': includeHelp, 'hide_answers': 'true'}))
     } else if (detail == 'answers') {
       dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': isTruthy(get(config, 'document.includeHelp')), 'hide_answers': 'false'}))
+        {'include_help': includeHelp, 'hide_answers': 'false'}))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }

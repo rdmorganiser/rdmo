@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { invert, isEmpty, isNil } from 'lodash'
 
+import { useConfig } from 'rdmo/core/assets/js/hooks'
+
 import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 import Link from 'rdmo/core/assets/js/components/Link'
 import Select from 'rdmo/core/assets/js/components/Select'
@@ -44,17 +46,15 @@ const icons = {
 const ElementsSidebar = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
   const { elementType, elementId, elementAction } = useSelector((state) => state.elements)
+  const [filter] = useConfig(`filter.${elementType}`)
 
   const model = invert(elementTypes)[elementType]
   const exportUrl = isNil(elementId) ? (
     buildApiPath(elementModules[model], elementType, 'export')
   ) : buildApiPath(elementModules[model], elementType, elementId, 'export')
-  const exportParams = (isNil(elementId) && elementAction != 'nested' && !isNil(config.filter)) ? (
-    getExportParams(config.filter[elementType])
-  ) : ''
+  const exportParams = (isNil(elementId) && elementAction != 'nested') ? getExportParams(filter) : ''
 
   const handleExport = (key) => {
 

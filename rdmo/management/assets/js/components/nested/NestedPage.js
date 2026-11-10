@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
 import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
@@ -19,24 +18,17 @@ import QuestionSet from '../element/QuestionSet'
 const NestedPage = ({ page }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
-
-  const updateFilterString = (uri) => dispatch(updateConfig('filter.page.search', uri))
-  const updateFilterUriPrefix = (uriPrefix) => dispatch(updateConfig('filter.page.uri_prefix', uriPrefix))
+  const [filterString, setFilterString] = useConfig('filter.page.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.page.uri_prefix', '')
 
   const toggleQuestionSets = () => dispatch(toggleDescendants(page, 'questionsets'))
 
-  const displayUriQuestionSets = isTruthy(get(config, 'display.uri.questionsets', true))
-  const displayUriQuestions = isTruthy(get(config, 'display.uri.questions', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
-  const displayUriOptionSets = isTruthy(get(config, 'display.uri.optionsets', true))
+  const [displayUriQuestionSets, toggleDisplayUriQuestionSets] = useConfigToggle('display.uri.questionsets', true)
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
 
-  const toggleDisplayUriQuestionSets = () => dispatch(updateConfig('display.uri.questionsets', !displayUriQuestionSets))
-  const toggleDisplayUriQuestions = () => dispatch(updateConfig('display.uri.questions', !displayUriQuestions))
-  const toggleDisplayUriAttributes = () => dispatch(updateConfig('display.uri.attributes', !displayUriAttributes))
-  const toggleDisplayUriConditions = () => dispatch(updateConfig('display.uri.conditions', !displayUriConditions))
-  const toggleDisplayUriOptionSets = () => dispatch(updateConfig('display.uri.optionsets', !displayUriOptionSets))
 
   const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
@@ -52,12 +44,12 @@ const NestedPage = ({ page }) => {
             <div className="row">
               <div className="col-sm-8">
                 <FilterString
-                  value={get(config, 'filter.page.search', '')} onChange={updateFilterString}
+                  value={filterString} onChange={setFilterString}
                   label={gettext('Filter pages')} />
               </div>
               <div className="col-sm-4">
                 <FilterUriPrefix
-                  value={get(config, 'filter.page.uri_prefix', '')} onChange={updateFilterUriPrefix}
+                  value={filterUriPrefix} onChange={setFilterUriPrefix}
                   options={getUriPrefixes(page.elements)} />
               </div>
             </div>

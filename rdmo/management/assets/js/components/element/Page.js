@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElements } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { Drag, Drop } from '../common/DragAndDrop'
@@ -25,11 +25,10 @@ import QuestionSet from './QuestionSet'
 const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditors = false, order }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, page)
-  const showElements = isTruthy(get(config, `display.elements.pages.${page.id}`, true))
+  const showElement = useFilterElement(filter, false, filterEditors, page)
+  const [showElements] = useConfig(`display.elements.pages.${page.id}`, true)
 
   const editUrl = buildPath('pages', page.id)
   const copyUrl = buildPath('pages', page.id, 'copy')
@@ -51,9 +50,9 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
   const fetchAttribute = () => dispatch(fetchElement('attributes', page.attribute))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', page.conditions[index]))
 
-  const displayUriPages = isTruthy(get(config, 'display.uri.pages', true))
-  const displayUriAttributes = isTruthy(get(config, 'display.uri.attributes', true))
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const [displayUriPages] = useConfig('display.uri.pages', true)
+  const [displayUriAttributes] = useConfig('display.uri.attributes', true)
+  const [displayUriConditions] = useConfig('display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">
@@ -154,7 +153,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 const questionSetOrder = questionSetInfo ? questionSetInfo.order : undefined
                 return (
                   <QuestionSet
-                    key={index} config={config} questionset={element}
+                    key={index} questionset={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionSetOrder} />
                 )
               } else {
@@ -162,7 +161,7 @@ const Page = ({ page, display = 'list', indent = 0, filter = false, filterEditor
                 const questionOrder = questionInfo ? questionInfo.order : undefined
                 return (
                   <Question
-                    key={index} config={config} question={element}
+                    key={index} question={element}
                     display="nested" filter={filter} indent={indent + 1} order={questionOrder} />
                 )
               }

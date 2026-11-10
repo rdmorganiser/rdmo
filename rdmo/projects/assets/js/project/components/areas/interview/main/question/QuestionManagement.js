@@ -3,15 +3,16 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import { Html, Tooltip } from 'rdmo/core/assets/js/components'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 const QuestionManagement = ({ question }) => {
-  const config = useSelector((state) => state.config)
+  const [showManagement] = useConfig('showManagement', false)
   const templates = useSelector((state) => state.templates)
   const perms = useSelector(selectPermissions)
 
-  return config.showManagement && perms.can_view_management && (
+  return showManagement && perms.can_view_management && (
     <div className="project-interview-management mb-2">
       <div className="border p-2 rounded-2">
         <div className="float-end">

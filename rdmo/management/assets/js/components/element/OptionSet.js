@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import { createElement, fetchElement, patchElement } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -16,17 +15,16 @@ import { AddLink, CodeLink, CopyLink, EditLink,          ExportLink, LockedLink,
 const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, false, filterEditors, optionset)
+  const showElement = useFilterElement(filter, false, filterEditors, optionset)
 
   const editUrl = buildPath('optionsets', optionset.id)
   const copyUrl = buildPath('optionsets', optionset.id, 'copy')
   const nestedUrl = buildPath('optionsets', optionset.id, 'nested')
   const exportUrl = buildApiPath('options', 'optionsets', optionset.id, 'export')
 
-  const getConditionUrl = (index) => buildPath(config.apiUrl, 'conditions', 'conditions', optionset.conditions[index])
+  const getConditionUrl = (index) => buildPath('conditions', optionset.conditions[index])
 
   const fetchEdit = () => dispatch(fetchElement('optionsets', optionset.id))
   const fetchCopy = () => dispatch(fetchElement('optionsets', optionset.id, 'copy'))
@@ -36,7 +34,7 @@ const OptionSet = ({ optionset, display = 'list', filter = false, filterEditors 
   const createOption = () => dispatch(createElement('options', { optionset }))
   const fetchCondition = (index) => dispatch(fetchElement('conditions', optionset.conditions[index]))
 
-  const displayUriConditions = isTruthy(get(config, 'display.uri.conditions', true))
+  const [displayUriConditions] = useConfig('display.uri.conditions', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">

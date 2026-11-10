@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Link, SearchField } from 'rdmo/core/assets/js/components'
-import { useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
+import { useConfig, useConfigToggle, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
@@ -24,7 +24,6 @@ import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './help
 const Main = () => {
   const dispatch = useDispatch()
 
-  const config = useSelector(state => state.config)
   const projectsObject = useSelector(state => state.projects)
   const currentUserObject = useSelector(state => state.currentUser)
   const isFetchingProjects = useSelector(state => state.pending.items.includes('fetchProjects'))
@@ -40,13 +39,18 @@ const Main = () => {
   const { show: showDelete, open: openDelete, close: closeDelete } = useModal()
   const { show: showCopy, open: openCopy, close: closeCopy } = useModal()
 
+  const [myProjects, toggleMyProjects] = useConfigToggle('myProjects')
+  const [params] = useConfig('params', {})
+  const [searchString, setSearchString] = useConfig('params.search', '')
+  const [ordering, setOrdering] = useConfig('params.ordering')
+  const [page, setPage] = useConfig('params.page', 1)
+
   if (!projectsObject.ready) return <Errors />
   const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
   const { currentUser } = currentUserObject
   const userPerms = currentUser.permissions ?? {}
-  const { myProjects } = config
 
-  const hasActiveProjectFilters = Object.entries(config.params ?? {}).some(
+  const hasActiveProjectFilters = Object.entries(params).some(
     ([key, value]) => (
       !['page', 'ordering'].includes(key) &&
     value !== undefined &&
@@ -129,10 +133,8 @@ const Main = () => {
 
   const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
 
-  const searchString = get(config, 'params.search', '')
   const updateSearchString = (value) => {
-    value ? (dispatch(configActions.updateConfig('params.search', value))
-    ) : dispatch(configActions.deleteConfig('params.search'))
+    value ? setSearchString(value) : dispatch(configActions.deleteConfig('params.search'))
   }
 
   const viewLinkText = myProjects ? gettext('View all projects') : gettext('View my projects')
@@ -146,7 +148,7 @@ const Main = () => {
   }
 
   const handleView = () => {
-    dispatch(configActions.updateConfig('myProjects', !myProjects))
+    toggleMyProjects()
     dispatch(projectsActions.fetchProjects())
   }
 
@@ -188,8 +190,7 @@ const Main = () => {
   }
 
   const loadMore = () => {
-    const page = get(config, 'params.page') ?? 1
-    dispatch(configActions.updateConfig('params.page', (parseInt(page) + 1).toString()))
+    setPage((parseInt(page) + 1).toString())
     dispatch(projectsActions.fetchProjects(false))
   }
 
@@ -218,21 +219,20 @@ const Main = () => {
     )
   }
 
-  const ordering = get(config, 'params.ordering')
   const sortOrder = ordering ? (ordering.startsWith('-') ? 'desc' : 'asc') : undefined
   const sortColumn = ordering ? (ordering.startsWith('-') ? ordering.substring(1) : ordering) : undefined
 
   const handleHeaderClick = (column) => {
     if (sortColumn === column) {
       if (sortOrder === 'asc') {
-        dispatch(configActions.updateConfig('params.ordering', `-${column}`))
+        setOrdering(`-${column}`)
       } else if (sortOrder === 'desc') {
         dispatch(configActions.deleteConfig('params.ordering'))
       } else {
-        dispatch(configActions.updateConfig('params.ordering', column))
+        setOrdering(column)
       }
     } else {
-      dispatch(configActions.updateConfig('params.ordering', column))
+      setOrdering(column)
     }
     dispatch(projectsActions.fetchProjects())
   }

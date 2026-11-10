@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { ElementErrors } from '../common/Errors'
@@ -27,10 +26,9 @@ import {
 const View = ({ view, filter = false, filterSites = false, filterEditors = false }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, filterSites, filterEditors, view)
+  const showElement = useFilterElement(filter, filterSites, filterEditors, view)
 
   const editUrl = buildPath('views', view.id)
   const copyUrl = buildPath('views', view.id, 'copy')
@@ -42,7 +40,7 @@ const View = ({ view, filter = false, filterSites = false, filterEditors = false
   const toggleLocked = () => dispatch(patchElement('views', { id: view.id, locked: !view.locked }))
   const toggleCurrentSite = () => dispatch(toggleElementSite('views', view))
 
-  const displayUriViews = isTruthy(get(config, 'display.uri.views', true))
+  const [displayUriViews] = useConfig('display.uri.views', true)
 
   return showElement && (
     <li className="list-group-item">

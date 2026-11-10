@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import get from 'lodash/get'
 
-import { isTruthy } from 'rdmo/core/assets/js/utils/config'
+import { useConfig } from 'rdmo/core/assets/js/hooks'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
 import { createElement, fetchElement, patchElement, toggleElementSite } from '../../actions/elementActions'
-import { filterElement } from '../../utils/filter'
+import useFilterElement from '../../hooks/useFilterElement'
 import { buildApiPath, buildPath } from '../../utils/location'
 
 import { BackButton } from '../common/Buttons'
@@ -25,10 +24,9 @@ const Catalog = ({
 }) => {
   const dispatch = useDispatch()
 
-  const config = useSelector((state) => state.config)
   const settings = useSelector((state) => state.settings)
 
-  const showElement = filterElement(config, filter, filterSites, filterEditors, catalog)
+  const showElement = useFilterElement(filter, filterSites, filterEditors, catalog)
 
   const editUrl = buildPath('catalogs', catalog.id)
   const copyUrl = buildPath('catalogs', catalog.id, 'copy')
@@ -46,7 +44,7 @@ const Catalog = ({
 
   const createSection = () => dispatch(createElement('sections', { catalog }))
 
-  const displayUriCatalogs = isTruthy(get(config, 'display.uri.catalogs', true))
+  const [displayUriCatalogs] = useConfig('display.uri.catalogs', true)
 
   const elementNode = (
     <div className="d-flex flex-column gap-2">
