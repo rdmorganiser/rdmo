@@ -60,6 +60,10 @@
         &.active {
             font-weight: normal;
             color: var(--rdmo-link-color);
+
+            &:hover {
+                color: var(--rdmo-link-hover-color);
+            }
         }
     }
 }
