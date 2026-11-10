@@ -29,6 +29,7 @@ const FileWidget = ({ question, values, currentSet }) => {
                 <FileInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={

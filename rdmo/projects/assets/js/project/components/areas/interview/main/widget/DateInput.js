@@ -11,7 +11,7 @@ import { getDateFormat, getLocale, parseDate } from 'rdmo/core/assets/js/utils/d
 import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
 import { isDefaultValue } from '../../../../../utils/value'
 
-const DateInput = ({ question, value, buttons, disabled, onChange }) => {
+const DateInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
   const handleChange = (date) => {
     const text = format(date, 'yyyy-MM-dd')
     onChange(value, { text, unit: question.unit, value_type: question.value_type })
@@ -47,8 +47,8 @@ const DateInput = ({ question, value, buttons, disabled, onChange }) => {
           disabled={disabled}
           popperPlacement="bottom-start"
           showPopperArrow={false}
-          ariaLabelledBy={getQuestionTextId(question)}
-          ariaDescribedBy={getQuestionHelpId(question)}
+          ariaLabelledBy={getQuestionTextId(question, currentSet)}
+          ariaDescribedBy={getQuestionHelpId(question, currentSet)}
         />
       </div>
     </div>
@@ -58,6 +58,7 @@ const DateInput = ({ question, value, buttons, disabled, onChange }) => {
 DateInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

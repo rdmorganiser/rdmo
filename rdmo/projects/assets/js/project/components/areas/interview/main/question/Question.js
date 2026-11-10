@@ -23,14 +23,14 @@ const Question = ({ question, sets, values, siblings, currentSet }) => {
     <div className={`project-interview-question col-md-${question.width || '12'}`}>
       <div className="project-interview-question-text">
         <div className="d-flex gap-2 mb-3">
-          <QuestionText question={question} />
+          <QuestionText question={question} currentSet={currentSet} />
           <QuestionContact question={question} values={values} />
           <div className="ms-auto"></div>
           <QuestionOptional question={question} />
-          <QuestionHelpToggle question={question} show={showHelp} onClick={toggleHelp} />
+          <QuestionHelpToggle question={question} currentSet={currentSet} show={showHelp} onClick={toggleHelp} />
         </div>
       </div>
-      <div id={getQuestionHelpId(question)}>
+      <div id={getQuestionHelpId(question, currentSet)}>
         <QuestionHelp question={question} show={showHelp} />
         <QuestionHelpTemplate show={showHelp} />
         <QuestionAddValueHelp question={question} show={showHelp} />

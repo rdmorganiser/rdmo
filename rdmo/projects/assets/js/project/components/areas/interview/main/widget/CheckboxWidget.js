@@ -47,8 +47,8 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
         <div className="project-interview-input checkbox-input">
           <div className="buttons-wrapper">
             <fieldset
-              aria-labelledby={getQuestionTextId(question)}
-              aria-describedby={getQuestionHelpId(question)}
+              aria-labelledby={getQuestionTextId(question, currentSet)}
+              aria-describedby={getQuestionHelpId(question, currentSet)}
             >
               <div className="d-flex flex-column align-items-top gap-2">
                 {
@@ -62,6 +62,7 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
                         <CheckboxInput
                           question={question}
                           value={value}
+                          currentSet={currentSet}
                           option={option}
                           optionIndex={optionIndex}
                           disabled={readOnly}

@@ -9,7 +9,7 @@ import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const TextareaInput = ({ question, value, buttons, disabled, onChange }) => {
+const TextareaInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
   const ref = useRef(null)
 
   const [inputValue, setInputValue] = useState('')
@@ -34,8 +34,8 @@ const TextareaInput = ({ question, value, buttons, disabled, onChange }) => {
           rows={6}
           className={classnames}
           disabled={disabled}
-          aria-labelledby={getQuestionTextId(question)}
-          aria-describedby={getQuestionHelpId(question)}
+          aria-labelledby={getQuestionTextId(question, currentSet)}
+          aria-describedby={getQuestionHelpId(question, currentSet)}
           value={inputValue}
           onChange={
             (event) => {
@@ -54,6 +54,7 @@ const TextareaInput = ({ question, value, buttons, disabled, onChange }) => {
 TextareaInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

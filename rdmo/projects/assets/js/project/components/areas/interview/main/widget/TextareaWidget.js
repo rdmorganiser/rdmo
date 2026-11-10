@@ -31,6 +31,7 @@ const TextareaWidget = ({ question, sets, values, siblings, currentSet }) => {
                 <TextareaInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={

@@ -16,6 +16,11 @@ export const getChildPrefix = (set) => {
   return isEmpty(set.set_prefix) ? toString(set.set_index) : `${set.set_prefix}|${set.set_index}`
 }
 
+export const getSetId = (set) => {
+  const prefix = getChildPrefix(set).replaceAll('|', '-')
+  return set.element.model == 'questions.questionset' ? `${prefix}-${set.element.id}` : prefix
+}
+
 export const getSetPrefixLength = (value) => (
   isEmpty(value.set_prefix) ? 0 : value.set_prefix.split('|').length
 )

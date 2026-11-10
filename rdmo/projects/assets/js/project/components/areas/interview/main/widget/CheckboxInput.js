@@ -7,14 +7,17 @@ import { isEmpty, isNil } from 'lodash'
 import useAdditionalInputs from '../../../../../hooks/useAdditionalInputs'
 import useAdjustLabel from '../../../../../hooks/useAdjustLabel'
 import useIdle from '../../../../../hooks/useIdle'
+import { getQuestionCheckboxId } from '../../../../../utils/question'
 
 import AdditionalTextareaInput from './common/AdditionalTextareaInput'
 import AdditionalTextInput from './common/AdditionalTextInput'
 import OptionHelp from './common/OptionHelp'
 import OptionText from './common/OptionText'
 
-const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
-  const id = `checkbox-${question.id}-${option.id}`
+const CheckboxInput = ({
+  question, value, currentSet, option, optionIndex, disabled, onCreate, onUpdate, onDelete
+}) => {
+  const id = getQuestionCheckboxId(question, currentSet, option)
   const ref = useRef(null)
   const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option])
   const [idle, setIdle] = useIdle([value])
@@ -144,6 +147,7 @@ const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreat
 CheckboxInput.propTypes = {
   question: PropTypes.object,
   value: PropTypes.object,
+  currentSet: PropTypes.object.isRequired,
   option: PropTypes.object,
   optionIndex: PropTypes.number,
   disabled: PropTypes.bool,

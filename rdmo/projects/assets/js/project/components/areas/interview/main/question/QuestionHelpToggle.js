@@ -8,7 +8,7 @@ import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permiss
 
 import { getQuestionHelpId, hasAddValueHelp } from '../../../../../utils/question'
 
-const QuestionHelpToggle = ({ question, show, onClick }) => {
+const QuestionHelpToggle = ({ question, currentSet, show, onClick }) => {
   const templates = useSelector((state) => state.templates)
   const readOnly = useSelector(selectReadOnly)
 
@@ -21,7 +21,7 @@ const QuestionHelpToggle = ({ question, show, onClick }) => {
       className="text-muted"
       title={show ? gettext('Hide help') : gettext('Show help')}
       aria-expanded={show}
-      aria-controls={getQuestionHelpId(question)}
+      aria-controls={getQuestionHelpId(question, currentSet)}
       onClick={onClick}
     >
       {gettext('Help')} <i className="bi bi-info-circle"></i>
@@ -31,6 +31,7 @@ const QuestionHelpToggle = ({ question, show, onClick }) => {
 
 QuestionHelpToggle.propTypes = {
   question: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired
 }

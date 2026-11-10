@@ -9,7 +9,7 @@ import { isDefaultValue } from '../../../../../utils/value'
 
 import Unit from './common/Unit'
 
-const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
+const RangeInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
   const ref = useRef(null)
 
   const [inputValue, setInputValue] = useState('')
@@ -58,8 +58,8 @@ const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
         min={isNil(question.minimum) ? '0' : question.minimum}
         max={isNil(question.maximum) ? '100' : question.maximum}
         step={isNil(question.step) ? '1' : question.step}
-        aria-labelledby={getQuestionTextId(question)}
-        aria-describedby={getQuestionHelpId(question)}
+        aria-labelledby={getQuestionTextId(question, currentSet)}
+        aria-describedby={getQuestionHelpId(question, currentSet)}
         disabled={disabled}
         value={inputValue}
         onChange={
@@ -78,6 +78,7 @@ const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
 RangeInput.propTypes = {
   question: PropTypes.object.isRequired,
   value: PropTypes.object.isRequired,
+  currentSet: PropTypes.object.isRequired,
   buttons: PropTypes.node.isRequired,
   disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,

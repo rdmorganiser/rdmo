@@ -34,6 +34,7 @@ const RadioWidget = ({ question, sets, values, siblings, currentSet }) => {
                 <RadioInput
                   question={question}
                   value={value}
+                  currentSet={currentSet}
                   options={gatherOptions(question, currentSet, providerOptions)}
                   disabled={readOnly}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
