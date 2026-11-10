@@ -103,18 +103,16 @@ const PageHead = ({ sets, values, currentSet }) => {
               <PageHeadTabs sets={sets} values={values} currentSet={currentSet} />
               {
                 !readOnly && (
-                  <div>
-                    <div className="d-flex gap-2 ms-3 pe-3">
-                      <LinkButton className="bi bi-plus-lg" title={labels.add} onClick={createModal.open} />
-                      {
-                        page.attribute && (
-                          <LinkButton className="bi bi-pencil" title={labels.edit} onClick={updateModal.open} />
-                        )
-                      }
-                      <LinkButton className="bi bi-copy" title={labels.copy} onClick={copyModal.open} />
-                      <LinkButton className="bi bi-arrow-down-circle" title={labels.reuse} onClick={importModal.open} />
-                      <LinkButton className="bi bi-trash" title={labels.remove} onClick={deleteModal.open} />
-                    </div>
+                  <div className="d-flex gap-2 ms-3 pe-3">
+                    <LinkButton className="bi bi-plus-lg" title={labels.add} onClick={createModal.open} />
+                    {
+                      page.attribute && (
+                        <LinkButton className="bi bi-pencil" title={labels.edit} onClick={updateModal.open} />
+                      )
+                    }
+                    <LinkButton className="bi bi-copy" title={labels.copy} onClick={copyModal.open} />
+                    <LinkButton className="bi bi-arrow-down-circle" title={labels.reuse} onClick={importModal.open} />
+                    <LinkButton className="bi bi-trash" title={labels.remove} onClick={deleteModal.open} />
                   </div>
                 )
               }
@@ -144,7 +142,6 @@ const PageHead = ({ sets, values, currentSet }) => {
               show={createModal.show}
               attribute={page.attribute}
               reuse={true}
-              help={isNil(currentSet) && <PageAddTabHelp />}
               onClose={createModal.close}
               onSubmit={handleCreate}
             />
