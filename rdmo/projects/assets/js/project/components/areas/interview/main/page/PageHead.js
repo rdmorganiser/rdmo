@@ -99,141 +99,141 @@ const PageHead = ({ sets, values, currentSet }) => {
   }
 
   return page.is_collection && (
-    <div className="project-interview-page-head">
-      <div className="d-flex flex-column justify-content-between gap-2">
-        <PageTabsHelp />
-        {
-          currentSet ? (
-            <div className="d-flex align-items-center border-bottom border-2 mb-4">
-              <ul className="nav nav-underline align-self-end gap-4">
-                {
-                  sets.map((set, setIndex) => {
-                    const setValue = values.find((value) => (
-                      value.set_prefix == set.set_prefix && value.set_index == set.set_index
-                    ))
-                    const setLabel = isNil(setValue) ? `#${set.set_index + 1}` : setValue.text
-                    return (
-                      <li key={setIndex} className="nav-item">
-                        <a
-                          href=""
-                          title={setLabel}
-                          className={classNames('nav-link', {active: set.set_index == currentSet.set_index})}
-                          onClick={(event) => handleActivate(event, set)}
-                        >
-                          {setLabel}
-                        </a>
-                      </li>
+    <>
+      <PageTabsHelp />
+      {
+        currentSet ? (
+          <div className="sticky-top bg-body d-flex align-items-center border-bottom border-2 px-3 mt-2 mb-4">
+            <ul className="nav nav-underline align-self-end gap-3">
+              {
+                sets.map((set, setIndex) => {
+                  const setValue = values.find((value) => (
+                    value.set_prefix == set.set_prefix && value.set_index == set.set_index
+                  ))
+                  const setLabel = isNil(setValue) ? `#${set.set_index + 1}` : setValue.text
+                  return (
+                    <li key={setIndex} className="nav-item">
+                      <a
+                        href=""
+                        title={setLabel}
+                        className={classNames('nav-link', {active: set.set_index == currentSet.set_index})}
+                        onClick={(event) => handleActivate(event, set)}
+                      >
+                        {setLabel}
+                      </a>
+                    </li>
+                  )
+                })
+              }
+            </ul>
+            {
+              !readOnly && (
+                <div className="d-flex gap-1 ms-auto">
+                  <LinkButton
+                    className="bi bi-plus-lg"
+                    title={labels.add}
+                    aria-label={labels.add}
+                    onClick={createModal.open}
+                  />
+                  {
+                    page.attribute && (
+                      <LinkButton
+                        className="bi bi-pencil"
+                        title={labels.edit}
+                        aria-label={labels.edit}
+                        onClick={updateModal.open}
+                      />
                     )
-                  })
-                }
-              </ul>
-              {
-                !readOnly && (
-                  <div className="d-flex gap-1 ms-auto">
-                    <LinkButton
-                      className="bi bi-plus-lg"
-                      title={labels.add}
-                      aria-label={labels.add}
-                      onClick={createModal.open}
-                    />
-                    {
-                      page.attribute && (
-                        <LinkButton
-                          className="bi bi-pencil"
-                          title={labels.edit}
-                          aria-label={labels.edit}
-                          onClick={updateModal.open}
-                        />
-                      )
-                    }
-                    <LinkButton
-                      className="bi bi-copy"
-                      title={labels.copy}
-                      aria-label={labels.copy}
-                      onClick={copyModal.open}
-                    />
-                    <LinkButton
-                      className="bi bi-arrow-down-circle"
-                      title={labels.reuse}
-                      aria-label={labels.reuse}
-                      onClick={importModal.open}
-                    />
-                    <LinkButton
-                      className="bi bi-trash"
-                      title={labels.remove}
-                      aria-label={labels.remove}
-                      onClick={deleteModal.open}
-                    />
-                  </div>
-                )
-              }
-            </div>
-          ) : (
-            !readOnly && (
-              <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
-                <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
-              </button>
-            )
-          )
-        }
-
-        {
+                  }
+                  <LinkButton
+                    className="bi bi-copy"
+                    title={labels.copy}
+                    aria-label={labels.copy}
+                    onClick={copyModal.open}
+                  />
+                  <LinkButton
+                    className="bi bi-arrow-down-circle"
+                    title={labels.reuse}
+                    aria-label={labels.reuse}
+                    onClick={importModal.open}
+                  />
+                  <LinkButton
+                    className="bi bi-trash"
+                    title={labels.remove}
+                    aria-label={labels.remove}
+                    onClick={deleteModal.open}
+                  />
+                </div>
+              )
+            }
+          </div>
+        ) : (
           !readOnly && (
-            <>
-              <PageHeadFormModal
-                title={gettext('Create tab')}
-                submitLabel={gettext('Create')}
-                submitColor="success"
-                show={createModal.show}
-                attribute={page.attribute}
-                reuse={true}
-                onClose={createModal.close}
-                onSubmit={handleCreate}
-              />
-              <PageHeadFormModal
-                title={gettext('Copy tab')}
-                submitLabel={gettext('Copy')}
-                submitColor="info"
-                show={copyModal.show}
-                attribute={page.attribute}
-                onClose={copyModal.close}
-                onSubmit={handleCopy}
-              />
-              {
-                currentSetValue && (
-                  <PageHeadFormModal
-                    title={gettext('Update tab')}
-                    submitLabel={gettext('Update')}
-                    submitColor="primary"
-                    show={updateModal.show}
-                    attribute={page.attribute}
-                    initial={currentSetValue.text}
-                    onClose={updateModal.close}
-                    onSubmit={handleUpdate}
-                  />
-                )
-              }
-              {
-                currentSetValue && (
-                  <PageHeadReuseModal
-                    show={importModal.show}
-                    attribute={page.attribute}
-                    onClose={importModal.close}
-                    onSubmit={handleImport}
-                  />
-                )
-              }
-              <PageHeadDeleteModal
-                name={currentSetValue ? currentSetValue.text : null}
-                show={deleteModal.show}
-                onClose={deleteModal.close}
-                onSubmit={handleDelete}
-              />
-            </>
+            <div className="d-flex justify-content-center border-bottom border-2 px-3 py-2 mt-2 mb-4">
+              <LinkButton title={labels.add} onClick={createModal.open}>
+                <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
+              </LinkButton>
+            </div>
           )
-        }
-      </div>
-    </div>
+        )
+      }
+
+      {
+        !readOnly && (
+          <>
+            <PageHeadFormModal
+              title={gettext('Create tab')}
+              submitLabel={gettext('Create')}
+              submitColor="success"
+              show={createModal.show}
+              attribute={page.attribute}
+              reuse={true}
+              onClose={createModal.close}
+              onSubmit={handleCreate}
+            />
+            <PageHeadFormModal
+              title={gettext('Copy tab')}
+              submitLabel={gettext('Copy')}
+              submitColor="info"
+              show={copyModal.show}
+              attribute={page.attribute}
+              onClose={copyModal.close}
+              onSubmit={handleCopy}
+            />
+            {
+              currentSetValue && (
+                <PageHeadFormModal
+                  title={gettext('Update tab')}
+                  submitLabel={gettext('Update')}
+                  submitColor="primary"
+                  show={updateModal.show}
+                  attribute={page.attribute}
+                  initial={currentSetValue.text}
+                  onClose={updateModal.close}
+                  onSubmit={handleUpdate}
+                />
+              )
+            }
+            {
+              currentSetValue && (
+                <PageHeadReuseModal
+                  show={importModal.show}
+                  attribute={page.attribute}
+                  onClose={importModal.close}
+                  onSubmit={handleImport}
+                />
+              )
+            }
+            <PageHeadDeleteModal
+              name={currentSetValue ? currentSetValue.text : null}
+              show={deleteModal.show}
+              onClose={deleteModal.close}
+              onSubmit={handleDelete}
+            />
+          </>
+        )
+      }
+    </>
   )
 }
 

@@ -8,7 +8,7 @@ html, body {
     display: flex;
     flex-direction: column;
 
-    padding-top: 56px;
+    padding-top: var(--rdmo-navbar-height);
     height: 100vh;
 }
 
