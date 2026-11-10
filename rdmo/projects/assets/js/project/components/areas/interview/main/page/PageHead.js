@@ -9,7 +9,6 @@ import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permiss
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
 import { copySet, createSet, deleteSet, updateSet } from '../../../../../actions/interviewActions'
-import { useReadOnly } from '../../../../../hooks'
 import { generateSetIndex } from '../../../../../utils/set'
 
 import PageAddTabHelp from './PageAddTabHelp'
