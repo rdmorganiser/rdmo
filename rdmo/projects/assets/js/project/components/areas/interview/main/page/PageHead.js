@@ -12,6 +12,7 @@ import { copySet, createSet, deleteSet, updateSet } from '../../../../../actions
 import { useReadOnly } from '../../../../../hooks'
 import { generateSetIndex } from '../../../../../utils/set'
 
+import PageAddTabHelp from './PageAddTabHelp'
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
 import PageHeadReuseModal from './PageHeadReuseModal'
@@ -94,36 +95,41 @@ const PageHead = ({ sets, values, currentSet }) => {
 
   return page.is_collection && (
     <>
-      <PageTabsHelp />
       {
         currentSet ? (
-          <div className="sticky-top bg-body d-flex align-items-center border-bottom border-2 mt-2 mb-4">
-            <PageHeadTabs sets={sets} values={values} currentSet={currentSet} />
-            {
-              !readOnly && (
-                <div>
-                  <div className="d-flex gap-2 ms-3 pe-3">
-                    <LinkButton className="bi bi-plus-lg" title={labels.add} onClick={createModal.open} />
-                    {
-                      page.attribute && (
-                        <LinkButton className="bi bi-pencil" title={labels.edit} onClick={updateModal.open} />
-                      )
-                    }
-                    <LinkButton className="bi bi-copy" title={labels.copy} onClick={copyModal.open} />
-                    <LinkButton className="bi bi-arrow-down-circle" title={labels.reuse} onClick={importModal.open} />
-                    <LinkButton className="bi bi-trash" title={labels.remove} onClick={deleteModal.open} />
+          <>
+            <PageTabsHelp />
+            <div className="sticky-top bg-body d-flex align-items-center border-bottom border-2 mt-2 mb-4">
+              <PageHeadTabs sets={sets} values={values} currentSet={currentSet} />
+              {
+                !readOnly && (
+                  <div>
+                    <div className="d-flex gap-2 ms-3 pe-3">
+                      <LinkButton className="bi bi-plus-lg" title={labels.add} onClick={createModal.open} />
+                      {
+                        page.attribute && (
+                          <LinkButton className="bi bi-pencil" title={labels.edit} onClick={updateModal.open} />
+                        )
+                      }
+                      <LinkButton className="bi bi-copy" title={labels.copy} onClick={copyModal.open} />
+                      <LinkButton className="bi bi-arrow-down-circle" title={labels.reuse} onClick={importModal.open} />
+                      <LinkButton className="bi bi-trash" title={labels.remove} onClick={deleteModal.open} />
+                    </div>
                   </div>
-                </div>
-              )
-            }
-          </div>
+                )
+              }
+            </div>
+          </>
         ) : (
           !readOnly && (
-            <div className="d-flex justify-content-center border-bottom border-2 px-3 py-2 mt-2 mb-4">
-              <LinkButton title={labels.add} onClick={createModal.open}>
-                <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
-              </LinkButton>
-            </div>
+            <>
+              <PageAddTabHelp />
+              <div className="d-flex justify-content-center border-bottom border-2 px-3 py-2 mt-2 mb-4">
+                <LinkButton title={labels.add} onClick={createModal.open}>
+                  <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
+                </LinkButton>
+              </div>
+            </>
           )
         )
       }
@@ -138,6 +144,7 @@ const PageHead = ({ sets, values, currentSet }) => {
               show={createModal.show}
               attribute={page.attribute}
               reuse={true}
+              help={isNil(currentSet) && <PageAddTabHelp />}
               onClose={createModal.close}
               onSubmit={handleCreate}
             />

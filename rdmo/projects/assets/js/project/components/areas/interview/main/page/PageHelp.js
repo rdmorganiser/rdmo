@@ -8,7 +8,7 @@ const PageHelp = () => {
   const page = useSelector((state) => state.interview.page)
 
   return !isEmpty(page.help) && (
-    <div className="project-interview-page-help" >
+    <div className="project-interview-page-help font-small text-muted mb-3" >
       <Html html={page.help} />
     </div>
   )

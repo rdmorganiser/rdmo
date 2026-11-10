@@ -9,7 +9,9 @@ import Modal from 'rdmo/core/assets/js/components/Modal'
 
 import Search from '../Search'
 
-const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, reuse, initial, onClose, onSubmit }) => {
+const PageHeadFormModal = ({
+  title, submitLabel, submitColor, show, attribute, reuse, initial, help, onClose, onSubmit
+}) => {
   const inputRef = useRef(null)
 
   const initialValues = {
@@ -56,6 +58,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
       onSubmit={handleSubmit}
       onShown={() => inputRef.current?.focus()}
       disableSubmit={errors}
+      size="modal-lg"
     >
       {
         isNil(attribute) ? (
@@ -64,6 +67,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
           </div>
         ) : (
           <>
+            {help}
             <Input
               label={gettext('Name')}
               help={gettext('Please give the tab a meaningful name.')}
@@ -75,7 +79,7 @@ const PageHeadFormModal = ({ title, submitLabel, submitColor, show, attribute, r
             />
             {
               reuse && (
-                <div className="form-group">
+                <div className="form-group mt-3">
                   <label>
                     {gettext('Reuse answers')}
                   </label>
@@ -108,6 +112,7 @@ PageHeadFormModal.propTypes = {
   attribute: PropTypes.number,
   reuse: PropTypes.bool,
   initial: PropTypes.string,
+  help: PropTypes.node,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired
 }
