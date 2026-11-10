@@ -129,10 +129,15 @@ const SelectInput = ({ question, value, options, buttons, creatable, disabled, o
     getOptionValue: (option) => option.id,
     getOptionLabel: (option) => option.text,
     formatOptionLabel: (option) => (
-      <span className="project-interview-select-option">
-        <OptionText option={option} />
-        <OptionHelp className="ml-10" option={option} />
-      </span>
+      (option.__isNew__ || isNil(option.id)) ? (
+        // options created by the user (new or stored in value.text) are rendered as plain text
+        <span className="project-interview-select-option">{option.text}</span>
+      ) : (
+        <span className="project-interview-select-option">
+          <OptionText option={option} />
+          <OptionHelp className="ml-10" option={option} />
+        </span>
+      )
     ),
     components: { ValueContainer: SelectValueContainer }
   }
