@@ -32,8 +32,7 @@ export function fetchElements(elementType) {
     updateLocation(elementType)
 
     dispatch(addToPending(pendingId))
-    dispatch(errorActions.clearError('elements'))
-    dispatch(errorActions.clearError('imports'))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(fetchElementsInit(elementType))
 
     let action
@@ -121,8 +120,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     updateLocation(elementType, elementId, elementAction)
 
     dispatch(addToPending(pendingId))
-    dispatch(errorActions.clearError('elements'))
-    dispatch(errorActions.clearError('imports'))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(fetchElementInit(elementType, elementId, elementAction))
 
     let action
@@ -606,8 +604,7 @@ export function createElement(elementType, parent = {}) {
     updateLocation(elementType, null, 'create')
 
     dispatch(addToPending(pendingId))
-    dispatch(errorActions.clearError('elements'))
-    dispatch(errorActions.clearError('imports'))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(createElementInit(elementType))
 
     let action

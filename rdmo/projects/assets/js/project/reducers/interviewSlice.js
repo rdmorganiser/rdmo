@@ -1,5 +1,4 @@
 import { createSlice, original } from '@reduxjs/toolkit'
-import { isNil } from 'lodash'
 
 import { compareValueId, sortValues } from '../utils/value'
 
@@ -11,16 +10,7 @@ const initialState = {
   navigation: null,
   values: null,
   attributes: [],
-  sets: [],
-  errors: []
-}
-
-const clearErrors = state => {
-  state.errors = []
-}
-
-const appendError = (state, action) => {
-  state.errors.push({ actionType: action.type, ...action.payload })
+  sets: []
 }
 
 const setValues = (state, action) => {
@@ -35,31 +25,24 @@ const interviewSlice = createSlice({
   initialState,
   reducers: {
     fetchPageInit(state) {
-      clearErrors(state)
       state.done = false
     },
     fetchPageSuccess(state, action) {
       state.page = action.payload.page
       state.providerOptions = {}
+      state.values = null
+      state.sets = []
     },
-    fetchPageError: appendError,
-    fetchContinueInit: clearErrors,
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
     },
-    fetchContinueError: appendError,
-    fetchValuesInit: clearErrors,
     fetchValuesSuccess: setValues,
-    fetchValuesError: appendError,
-    fetchOptionsInit: clearErrors,
     fetchOptionsSuccess(state, action) {
       const { pageId, optionsetId, options } = action.payload
       if (state.page?.id === pageId) {
         state.providerOptions[optionsetId] = options
       }
     },
-    fetchOptionsError: appendError,
-    resolveConditionsInit: clearErrors,
     resolveConditionsSuccess(state, action) {
       state.sets = state.sets.map(set => {
         // filter all results for the current set
@@ -78,7 +61,6 @@ const interviewSlice = createSlice({
         }), set)
       })
     },
-    resolveConditionsError: appendError,
     createValue(state, action) {
       state.values.push(action.payload)
     },
@@ -105,34 +87,31 @@ const interviewSlice = createSlice({
     },
     storeValueError(state, action) {
       const { error, valueId } = action.payload
-      if (!isNil(valueId)) {
-        state.values = state.values.map(value => (
-          compareValueId(value, valueId) ? { ...value, error, pending: false } : value
-        ))
-      } else {
-        appendError(state, { type: action.type, payload: error })
-      }
+      state.values = state.values.map(value => (
+        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+      ))
     },
     deleteValueInit(state, action) {
       state.values = state.values.map(value => (
-        compareValueId(value, action.payload) ? { ...value, pending: true } : value
+        compareValueId(value, action.payload) ? { ...value, error: null, pending: true } : value
       ))
     },
     deleteValueSuccess(state, action) {
       state.values = state.values.filter(value => !compareValueId(value, action.payload))
     },
-    deleteValueError: appendError,
+    deleteValueError(state, action) {
+      const { error, valueId } = action.payload
+      state.values = state.values.map(value => (
+        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+      ))
+    },
     createSet: setValues,
-    deleteSetInit: clearErrors,
     deleteSetSuccess(state, action) {
       const { values, sets } = action.payload
       state.values = original(state.values).filter(value => !values.includes(value))
       state.sets = original(state.sets).filter(set => !sets.includes(set))
     },
-    deleteSetError: appendError,
-    copySetInit: clearErrors,
     copySetSuccess: setValues,
-    copySetError: appendError,
     resortValues(state) {
       state.values = sortValues(state.values)
     },

@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isNil } from 'lodash'
 
+import { getErrorMessages } from 'rdmo/core/assets/js/utils/errors'
+
 const getMessage = (error) => {
   if (error?.errorType === 'ValidationError') {
     if (error.errors.conflict) {
@@ -9,8 +11,8 @@ const getMessage = (error) => {
                      ' You will need to reload the page to make changes, but your input will be overwritten.')
     } else if (error.errors.quota) {
       return gettext('You reached the file quota for this project.')
-    } else if (error.errors.text) {
-      return error.errors.text
+    } else {
+      return getErrorMessages(error).join(' ')
     }
   } else if (error?.errorType === 'ApiError') {
     if (error.status === 404) {
