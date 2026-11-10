@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 const ManagementButton = () => {
   const dispatch = useDispatch()
   const config = useSelector((state) => state.config)
-  const perms = useSelector((state) => state.combinedPermissions)
+  const perms = useSelector(selectPermissions)
   const text = config.showManagement ? gettext('Hide management panels') : gettext('Show management panels')
 
   const toggleManagement = () => {

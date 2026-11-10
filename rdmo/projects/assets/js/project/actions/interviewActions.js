@@ -5,7 +5,7 @@ import { clearError, setError } from 'rdmo/core/assets/js/actions/errorsActions'
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
-import { isReadOnly } from '../../common/utils/permissions'
+import { selectReadOnly } from '../../common/selectors/permissions'
 import { actions } from '../reducers/interviewSlice'
 import { projectId } from '../utils/meta'
 import { initPage } from '../utils/page'
@@ -249,7 +249,7 @@ export function storeDefaultValues() {
     const { page, values } = getState().interview
 
     // defaults are not stored for read-only users, since they cannot edit them
-    if (isReadOnly(getState().combinedPermissions)) {
+    if (selectReadOnly(getState())) {
       return Promise.resolve()
     }
 

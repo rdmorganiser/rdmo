@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { Modal, Tooltip } from 'rdmo/core/assets/js/components'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
@@ -17,7 +18,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
   const errors = useFieldErrors()
-  const perms = useSelector((state) => state.combinedPermissions)
+  const perms = useSelector(selectPermissions)
   const roleOptions = useSelector((state) => state.roles?.roles) || []
 
   const [formData, setFormData] = useState(initialForm)

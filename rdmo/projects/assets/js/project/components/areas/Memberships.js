@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import MembershipInviteModal from './memberships/MembershipInviteModal'
 import MembershipTable from './memberships/MembershipTable'
@@ -12,7 +13,7 @@ const Memberships = () => {
 
   const { memberships } = useSelector((state) => state.project.project) ?? {}
   const { invites } = useSelector((state) => state.project)
-  const perms = useSelector((state) => state.combinedPermissions)
+  const perms = useSelector(selectPermissions)
 
   return (
     <>

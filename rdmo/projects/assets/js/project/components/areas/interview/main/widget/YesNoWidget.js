@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { isReadOnly } from '../../../../../../common/utils/permissions'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
+
 import { updateValue } from '../../../../../actions/interviewActions'
 
 import QuestionAddValue from '../question/QuestionAddValue'
@@ -19,7 +20,7 @@ import YesNoInput from './YesNoInput'
 
 const YesNoWidget = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
-  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
+  const readOnly = useSelector(selectReadOnly)
 
   return (
     <div className="project-interview-widgets">

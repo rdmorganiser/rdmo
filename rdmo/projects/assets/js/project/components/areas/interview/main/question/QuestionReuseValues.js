@@ -5,13 +5,12 @@ import { isEmpty, isNil } from 'lodash'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useLsState from 'rdmo/core/assets/js/hooks/useLsState'
-
-import { isReadOnly } from '../../../../../../common/utils/permissions'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import Search from '../Search'
 
 const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete }) => {
-  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
+  const readOnly = useSelector(selectReadOnly)
   const title = gettext('Reuse answers')
 
   const initialFormValues = {

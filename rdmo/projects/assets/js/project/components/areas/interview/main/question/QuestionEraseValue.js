@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import { isReadOnly } from '../../../../../../common/utils/permissions'
 import { updateValue } from '../../../../../actions/interviewActions'
 import { initRange } from '../../../../../utils/value'
 
 const QuestionEraseValue = ({ question, value }) => {
   const dispatch = useDispatch()
-  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
+  const readOnly = useSelector(selectReadOnly)
   const title = gettext('Erase input')
 
   const handleEraseValue = () => {

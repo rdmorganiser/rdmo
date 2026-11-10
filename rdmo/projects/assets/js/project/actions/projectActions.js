@@ -8,7 +8,6 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
-import { updateCombinedPermissions } from '../../common/actions/combinedPermissionsActions'
 import { actions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
@@ -297,7 +296,7 @@ export function createProjectMember(data) {
 }
 
 export function updateProjectMember(membershipId, data) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(addToPending('updateProjectMember'))
     dispatch(actions.updateProjectMemberInit())
 
@@ -310,10 +309,7 @@ export function updateProjectMember(membershipId, data) {
         return ProjectApi.fetchProject(projectId)
       })
       .then((project) => {
-        const currentUser = getState().user.currentUser
-
         dispatch(actions.updateProjectSuccess({ project }))
-        dispatch(updateCombinedPermissions(project.permissions, currentUser.permissions))
       })
       .catch(error => {
         dispatch(actions.updateProjectMemberError(serializeError(error)))

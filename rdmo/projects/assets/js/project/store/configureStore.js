@@ -19,10 +19,9 @@ import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage, isTruthy } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
-import * as combinedPermissionsActions from '../../common/actions/combinedPermissionsActions'
 import * as rolesActions from '../../common/actions/rolesActions'
-import combinedPermissionsReducer from '../../common/reducers/combinedPermissionsSlice'
 import rolesReducer from '../../common/reducers/rolesSlice'
+import { selectPermissions } from '../../common/selectors/permissions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
@@ -52,7 +51,6 @@ export default function configureStore() {
 
   const store = configureToolkitStore({
     reducer: {
-      combinedPermissions: combinedPermissionsReducer,
       config: configReducer,
       errors: errorsReducer,
       pending: pendingReducer,
@@ -101,10 +99,7 @@ export default function configureStore() {
     ]).then(() => {
       const state = store.getState()
       const project = state.project.project.project
-      const currentUser = state.user.currentUser
-
-      store.dispatch(combinedPermissionsActions.updateCombinedPermissions(project.permissions, currentUser.permissions))
-      const permissions = store.getState().combinedPermissions
+      const permissions = selectPermissions(state)
 
       if (permissions.can_view_invite) {
         store.dispatch(projectActions.fetchProjectInvites(projectId))

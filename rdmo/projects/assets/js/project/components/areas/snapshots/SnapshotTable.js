@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'rdmo/core/assets/js/components'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { navigateDashboard } from '../../../actions/navigationActions'
 import { buildPath } from '../../../utils/location'
@@ -17,7 +18,7 @@ import SnapshotRollbackModal from './SnapshotRollbackModal'
 
 const SnapshotTable = ({ snapshots, onCreate}) => {
   const dispatch = useDispatch()
-  const perms = useSelector((state) => state.combinedPermissions)
+  const perms = useSelector(selectPermissions)
 
   const updateModal = useModal()
   const rollbackModal = useModal()

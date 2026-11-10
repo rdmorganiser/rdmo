@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import { isReadOnly } from '../../../../../../common/utils/permissions'
 import { deleteValue } from '../../../../../actions/interviewActions'
 
 const QuestionRemoveValue = ({ question, values, value }) => {
   const dispatch = useDispatch()
-  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
+  const readOnly = useSelector(selectReadOnly)
 
   return !readOnly && (question.is_collection || values.length > 1) && (
     <LinkButton

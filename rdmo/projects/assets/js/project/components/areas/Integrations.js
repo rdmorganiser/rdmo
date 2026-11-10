@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useModal } from 'rdmo/core/assets/js/hooks'
+import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import IntegrationsDropdown from '../helper/IntegrationsDropdown'
 
@@ -11,7 +12,7 @@ import IntegrationModal from './integrations/IntegrationModal'
 import IntegrationTable from './integrations/IntegrationTable'
 
 const Integrations = () => {
-  const perms = useSelector((state) => state.combinedPermissions)
+  const perms = useSelector(selectPermissions)
   const providers = useSelector((state) => state.project.providers) ?? {}
   const integrations = useSelector((state) => state.project.integrations) ?? []
 

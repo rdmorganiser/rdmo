@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton, Modal } from 'rdmo/core/assets/js/components'
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import { isReadOnly } from '../../../../../../common/utils/permissions'
 import { deleteSet } from '../../../../../actions/interviewActions'
 
 const QuestionRemoveSet = ({ questionset, currentSet }) => {
   const dispatch = useDispatch()
-  const readOnly = useSelector((state) => isReadOnly(state.combinedPermissions))
+  const readOnly = useSelector(selectReadOnly)
   const modal = useModal()
   const title = gettext('Remove block')
 
