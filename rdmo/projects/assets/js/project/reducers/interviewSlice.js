@@ -10,6 +10,7 @@ const initialState = {
   providerOptions: {},
   navigation: null,
   values: null,
+  valuesRequestId: null,
   attributes: [],
   sets: []
 }
@@ -36,6 +37,9 @@ const interviewSlice = createSlice({
     },
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
+    },
+    fetchValuesInit(state, action) {
+      state.valuesRequestId = action.payload
     },
     fetchValuesSuccess: setValues,
     fetchOptionsSuccess(state, action) {
@@ -66,9 +70,14 @@ const interviewSlice = createSlice({
       state.values.push(action.payload)
     },
     updateValue(state, action) {
-      const { value, attrs } = action.payload
+      const { value, attrs, store = false } = action.payload
       state.values = state.values.map(currentValue => (
-        compareValueId(currentValue, value.id || value.tmp_id) ? { ...currentValue, ...attrs } : currentValue
+        compareValueId(currentValue, value.id || value.tmp_id) ? {
+          ...currentValue,
+          ...attrs,
+          revision: (currentValue.revision || 0) + (store ? 1 : 0),
+          success: store ? false : (attrs.success ?? currentValue.success)
+        } : currentValue
       ))
     },
     storeValueInit(state, action) {
@@ -76,14 +85,23 @@ const interviewSlice = createSlice({
         compareValueId(value, action.payload) ? { ...value, error: null, pending: true } : value
       ))
     },
+    storeValueMetadata(state, action) {
+      const { value, valueId } = action.payload
+      state.values = state.values.map(currentValue => (
+        compareValueId(currentValue, valueId) ? {
+          ...currentValue, ...pick(value, ['id', 'created', 'updated'])
+        } : currentValue
+      ))
+    },
     storeValueSuccess(state, action) {
-      const { value, valueId, pending = false } = action.payload
+      const { value, valueId, revision = 0 } = action.payload
       if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
         state.values = state.values.map(currentValue => {
           if (!compareValueId(currentValue, valueId)) return currentValue
-          // Keep waiting edits while accepting the server ID and timestamp.
-          const attrs = pending ? pick(currentValue, ['text', 'option', 'external_id', 'unit', 'value_type']) : {}
-          return { ...value, ...attrs, tmp_id: currentValue.tmp_id, pending }
+          const pending = (currentValue.revision || 0) !== revision
+          // An older response acknowledges the save without replacing newer input.
+          const attrs = pending ? pick(value, ['id', 'created', 'updated', 'file_name', 'file_url']) : value
+          return { ...currentValue, ...attrs, savedRevision: revision, error: null, pending }
         })
       } else {
         state.values.push(value)

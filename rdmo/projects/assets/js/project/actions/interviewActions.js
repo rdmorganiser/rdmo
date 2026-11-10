@@ -1,4 +1,4 @@
-import { first, isEmpty, isNil, omit, pick } from 'lodash'
+import { first, isEmpty, isNil, omit, uniqueId } from 'lodash'
 
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
 import { clearError, setError } from 'rdmo/core/assets/js/actions/errorsActions'
@@ -14,7 +14,8 @@ import {
   compareValueId,
   compareValues,
   gatherDefaultValues,
-  initValues, isEmptyValue,
+  initValues,
+  isEmptyValue,
   sortValues
 } from '../utils/value'
 
@@ -26,12 +27,12 @@ import ValueFactory from '../factories/ValueFactory'
 
 import { fetchNavigation, fetchProgress, updateProgress } from './projectActions'
 
-// Keep one latest waiting save per value. Files and promises stay outside Redux.
-const valueSaveQueues = {}
+// Only requests and Files live here; the latest value content stays in Redux.
+const valueSaveRequests = {}
 
-const getCurrentValue = (getState, value) => getState().interview.values.find(currentValue => (
-  compareValueId(currentValue, value.id || value.tmp_id)
-)) || value
+const getCurrentValue = (getState, value) => getState().interview.values?.find(currentValue => (
+  compareValueId(currentValue, value.tmp_id || value.id)
+))
 
 export function fetchPage(pageId, back) {
   const pendingId = 'fetchPage'
@@ -46,6 +47,9 @@ export function fetchPage(pageId, back) {
     return PageApi.fetchPage(projectId, pageId, back)
       .then((page) => {
         initPage(page)
+        Object.entries(valueSaveRequests).forEach(([key, request]) => {
+          if (!request.promise) delete valueSaveRequests[key]
+        })
 
         dispatch(fetchValues(page))
         dispatch(fetchOptionsets(page))
@@ -105,45 +109,71 @@ export function fetchOptions(page, optionset) {
 }
 
 export function fetchValues(page, refresh = false) {
-  const pendingId = `fetchValues/${page.id}`
+  const requestId = uniqueId('fetchValues_')
+  const pendingId = `fetchValues/${page.id}/${requestId}`
 
   return (dispatch, getState) => {
+    const originalValues = getState().interview.values || []
     dispatch(addToPending(pendingId))
     dispatch(clearError('values'))
+    dispatch(actions.fetchValuesInit(requestId))
 
     return ValueApi.fetchValues(projectId, { attribute: page.attributes })
       .then((values) => {
+        const state = getState().interview
+        if (state.page !== page || state.valuesRequestId !== requestId) return
+
         if (refresh) {
-          // if the values are just refreshed after a value is stored or deleted, loop
-          // over the existing values and add all temporary values which were not stored yet
-          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+          const currentValues = state.values
+          values = values.flatMap(value => {
+            const originalValue = originalValues.find(currentValue => compareValues(currentValue, value))
+            const currentValue = currentValues.find(currentValue => compareValues(currentValue, value))
+            // Do not restore an answer removed while the refresh was running.
+            if (originalValue && !currentValue) return []
+            if (!currentValue) return [value]
 
-          // extend values with all unsaved values, which are not found in values
-          const keptUnsavedValues = unsavedValues.filter(
-            (value) => isNil(values.find((v) => compareValues(v, value)))
-          )
+            const changed = !originalValue ||
+              currentValue.revision !== originalValue.revision || currentValue.updated !== originalValue.updated
+            const unsaved = (currentValue.revision || 0) !== (currentValue.savedRevision || 0)
+            if (changed || unsaved || currentValue.pending || currentValue.error) return [currentValue]
 
-          // resort the values, to ensure the correct collection_index order
-          values = sortValues([...values, ...keptUnsavedValues])
+            // Server/plugin changes apply to clean values, retaining their local identity and indicators.
+            return [{ ...currentValue, ...value }]
+          })
+
+          const keptValues = currentValues.filter(value => (
+            (isNil(value.id) || value.pending || value.error ||
+              (value.revision || 0) !== (value.savedRevision || 0) ||
+              !originalValues.some(originalValue => (
+                compareValues(originalValue, value) && originalValue.revision === value.revision &&
+                originalValue.updated === value.updated
+              ))) && !values.some(currentValue => compareValues(currentValue, value))
+          ))
+          values = sortValues([...values, ...keptValues])
         }
 
         const sets = gatherSets(values, page)
-
         initSets(sets, page)
         initValues(sets, values, page)
+        if (refresh) copyResolvedConditions(state.sets, sets)
 
-        dispatch(resolveConditions(page, sets))
         dispatch(actions.fetchValuesSuccess({ values, sets }))
+        return dispatch(resolveConditions(page, sets))
       })
-      .catch((error) => dispatch(setError('values', error, gettext('Values'))))
+      .catch((error) => {
+        const state = getState().interview
+        if (state.page === page && state.valuesRequestId === requestId) {
+          dispatch(setError('values', error, gettext('Values')))
+        }
+      })
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function resolveConditions(page, sets) {
-  const pendingId = 'resolveConditions'
+  const pendingId = uniqueId('resolveConditions/')
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(addToPending(pendingId))
     dispatch(clearError('conditions'))
 
@@ -180,101 +210,119 @@ export function resolveConditions(page, sets) {
     })
 
     return ProjectApi.resolveConditions(projectId, payload)
-      .then((results) => dispatch(actions.resolveConditionsSuccess(results)))
-      .catch((error) => dispatch(setError('conditions', error, gettext('Conditions'))))
+      .then((results) => {
+        const state = getState().interview
+        if (state.page === page && state.sets === sets) dispatch(actions.resolveConditionsSuccess(results))
+      })
+      .catch((error) => {
+        if (getState().interview.page === page) {
+          dispatch(setError('conditions', error, gettext('Conditions')))
+        }
+      })
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
-export function storeValue(value) {
-  const valueId = value.id || value.tmp_id
+export function storeValue(value, updatePage = true) {
+  const valueId = value.tmp_id || value.id
   if (isNil(valueId)) {
     throw new Error('Could not determine valueId in storeValue')
   }
 
   return (dispatch, getState) => {
-    const currentValue = getCurrentValue(getState, value)
-    const key = currentValue.tmp_id || currentValue.id
-    const previous = valueSaveQueues[key]
+    const { page } = getState().interview
+    const existingValue = getCurrentValue(getState, value)
+    const key = `${page.id}/${existingValue?.tmp_id || existingValue?.id || valueId}`
+    const previous = valueSaveRequests[key]
+    const request = previous?.page === page ? previous : { page }
+    // A pending delete must not start an overlapping save.
+    if (existingValue?.pending && !request.promise) return Promise.resolve(dispatch(actions.noop()))
+    valueSaveRequests[key] = request
+    request.updatePage = request.updatePage || updatePage
+    if ('file' in value) request.file = value.file
+    if (request.promise) return request.promise
 
-    if (previous) {
-      previous.next = value
-      return previous.promise
-    }
-    if (currentValue.pending) return dispatch(actions.noop())
-
-    const queue = {}
-    valueSaveQueues[key] = queue
-
-    const pendingId = `storeValue/${key}`
-    const { page, sets } = getState().interview
+    const pendingId = uniqueId(`storeValue/${key}/`)
     const question = page.questions.find(question => question.attribute === value.attribute)
     const refresh = question && question.optionsets.some(optionset => optionset.has_refresh)
     const widget_type = question && question.widget_type
-    clearTimeout(currentValue.success)
+    let succeeded = false
 
-    const storeNextValue = (valueToSave) => {
-      const savedId = valueToSave.id || valueToSave.tmp_id
-      const valueText = valueToSave.text
-      const valueFile = valueToSave.file
+    const storeNextValue = async () => {
+      let currentValue = getCurrentValue(getState, value) || value
+      while (currentValue && getState().interview.page === page) {
+        const revision = currentValue.revision || 0
+        const valueText = currentValue.text
+        const valueFile = request.file
+        clearTimeout(currentValue.success)
+        dispatch(actions.storeValueInit(currentValue.id || currentValue.tmp_id))
 
-      return ValueApi.storeValue(projectId, { ...valueToSave, widget_type })
-        .then((value) => {
-          // replace the text with the old text if it was trimmed by the backend
-          // (but not if a new text was inserted, e.g. by an optionset provider)
-          if (valueText.trim() == value.text) {
-            value.text = valueText
+        let storedValue = await ValueApi.storeValue(projectId, { ...currentValue, widget_type })
+        // Finish the upload even if navigation has already changed the visible page.
+        // Keep the server identity even if the subsequent upload fails.
+        if (getState().interview.page === page) {
+          if (getCurrentValue(getState, value)) {
+            dispatch(actions.storeValueMetadata({ value: storedValue, valueId }))
+          } else if (!existingValue && isNil(currentValue.id)) {
+            // New answers become visible after creation, with their temporary identity retained.
+            dispatch(actions.createValue({ ...omit(value, 'file'), ...storedValue, pending: true }))
           }
+        }
+        if (!isNil(valueFile) || !isNil(storedValue.file_name)) {
+          storedValue = await ValueApi.storeFile(projectId, storedValue, valueFile)
+        }
+        if (getState().interview.page !== page || !getCurrentValue(getState, value)) return
 
-          // upload file after the value is created, or remove an existing file
-          if (isNil(valueFile) && isNil(value.file_name)) {
-            return value
-          } else {
-            return ValueApi.storeFile(projectId, value, valueFile)
-          }
-        })
-        .then((value) => {
-          const pending = Boolean(queue.next)
-          if (!pending) {
-            value.success = setTimeout(() => {
-              dispatch(updateValue(value, {success: false}, false))
-            }, 1000)
-          }
-
-          const result = dispatch(actions.storeValueSuccess({ value, valueId: savedId, pending }))
-          if (pending) {
-            // Reuse the server ID and timestamp when saving the waiting edit.
-            const nextValue = { ...queue.next, ...pick(value, ['id', 'updated']) }
-            queue.next = null
-            return storeNextValue(nextValue)
-          }
-
-          dispatch(fetchNavigation())
-          dispatch(updateProgress())
-
-          // Refresh only after the waiting edit has also been saved.
-          if (refresh) {
-            dispatch(fetchValues(page, true))
-          } else {
-            dispatch(resolveConditions(page, sets))
-          }
-          return result
-        })
+        // Preserve whitespace trimmed by the backend, but accept provider-generated text.
+        if (valueText.trim() == storedValue.text) storedValue.text = valueText
+        currentValue = getCurrentValue(getState, value)
+        const pending = (currentValue.revision || 0) !== revision
+        if (!pending && request.updatePage) {
+          storedValue.success = setTimeout(() => {
+            if (getState().interview.page === page) {
+              dispatch(updateValue(storedValue, { success: false }, false))
+            }
+          }, 1000)
+        }
+        dispatch(actions.storeValueSuccess({ value: storedValue, valueId, revision }))
+        if (!pending) {
+          succeeded = true
+          return
+        }
+        currentValue = getCurrentValue(getState, value)
+      }
     }
 
-    queue.promise = Promise.resolve()
-      .then(() => storeNextValue(value))
-      .catch((error) => dispatch(actions.storeValueError({
-        error: serializeError(error), valueId: getCurrentValue(getState, value).id || valueId
-      })))
+    request.promise = Promise.resolve()
+      .then(storeNextValue)
+      .catch((error) => {
+        if (getState().interview.page === page) {
+          dispatch(actions.storeValueError({ error: serializeError(error), valueId }))
+        }
+      })
       .finally(() => {
-        delete valueSaveQueues[key]
+        request.promise = null
+        // Retain a failed upload's latest File for the next save attempt, outside Redux.
+        if (valueSaveRequests[key] === request &&
+            (succeeded || isNil(request.file) || getState().interview.page !== page)) {
+          delete valueSaveRequests[key]
+        }
         dispatch(removeFromPending(pendingId))
+      })
+      .then(() => {
+        if (!succeeded || !request.updatePage || getState().interview.page !== page) return
+        dispatch(fetchNavigation())
+        dispatch(updateProgress())
+        if (refresh) {
+          return dispatch(fetchValues(page, true))
+        } else {
+          return dispatch(resolveConditions(page, getState().interview.sets))
+        }
       })
 
     dispatch(addToPending(pendingId))
-    dispatch(actions.storeValueInit(currentValue.id || currentValue.tmp_id))
-    return queue.promise
+    dispatch(actions.storeValueInit(existingValue?.id || valueId))
+    return request.promise
   }
 }
 
@@ -289,22 +337,19 @@ export function storeDefaultValues() {
       return Promise.resolve()
     }
 
+    const pendingSaves = Object.values(valueSaveRequests)
+      .filter(request => request.page === page && request.promise)
+      .map(request => request.promise)
     const defaultValues = gatherDefaultValues(page, values).filter((value) => !value.pending)
-    if (isEmpty(defaultValues)) {
+    if (isEmpty(defaultValues) && isEmpty(pendingSaves)) {
       return Promise.resolve()
     }
 
     dispatch(addToPending(pendingId))
 
-    return Promise.all(defaultValues.map((value) => {
-      const valueId = value.tmp_id
-
-      dispatch(actions.storeValueInit(valueId))
-
-      return ValueApi.storeValue(projectId, value)
-        .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
-        .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
-    })).finally(() => dispatch(removeFromPending(pendingId)))
+    // Navigation must also wait for edits already being saved, including their waiting revisions.
+    return Promise.all([...pendingSaves, ...defaultValues.map(value => dispatch(storeValue(value, false)))])
+      .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
@@ -315,7 +360,7 @@ export function createValue(attrs, store) {
   value.focus = true
 
   if (isNil(store)) {
-    return actions.createValue(value)
+    return actions.createValue(omit(value, 'file'))
   } else {
     return storeValue(value)
   }
@@ -325,9 +370,14 @@ export function updateValue(value, attrs, store = true) {
   if (store) {
     return (dispatch, getState) => {
       const currentValue = getCurrentValue(getState, value)
+      // A delayed callback must not recreate an answer removed or left behind by navigation.
+      if (!currentValue || !getState().interview.page.attributes.includes(currentValue.attribute)) {
+        return dispatch(actions.noop())
+      }
+      clearTimeout(currentValue.success)
       const valueToSave = ValueFactory.update({ ...currentValue }, attrs)
       const valueForState = omit(valueToSave, 'file')
-      dispatch(actions.updateValue({ value: currentValue, attrs: valueForState }))
+      dispatch(actions.updateValue({ value: currentValue, attrs: valueForState, store: true }))
       return dispatch(storeValue(valueToSave))
     }
   } else {
@@ -350,7 +400,7 @@ export function copyValue(question, ...originalValues) {
     dispatch(addToPending(pendingId))
     dispatch(clearError('copyValue'))
 
-    const { sets, values } = getState().interview
+    const { page, sets, values } = getState().interview
 
     // create copies for each value for all it's empty siblings
     const copies = valuesToCopy.reduce((copies, value) => {
@@ -390,21 +440,17 @@ export function copyValue(question, ...originalValues) {
       ]
     }, [])
 
-    // dispatch storeValueInit for each of the updated values,
-    copies.forEach(([, valueId]) => dispatch(actions.storeValueInit(valueId)))
-
-    // loop over all copies and store the values on the server
-    // afterwards fetchNavigation, updateProgress and check refresh once
-    return Promise.all(
-      copies.map(([value, valueId]) => (
-        ValueApi.storeValue(projectId, value)
-          .then((storedValue) => dispatch(actions.storeValueSuccess({ value: storedValue, valueId })))
-      ))
-    ).then(() => {
+    // Use the same save handling as edits, then refresh the page once for all copies.
+    return Promise.all(copies.map(([value, valueId]) => {
+      if (!isNil(valueId)) {
+        dispatch(actions.updateValue({ value, attrs: omit(value, 'file'), store: true }))
+      }
+      return dispatch(storeValue(value, false))
+    })).then(() => {
+      if (getState().interview.page !== page) return
       // sort values in the store after the updates
       dispatch(resortValues())
 
-      const page = getState().interview.page
       const sets = getState().interview.sets
       const question = page.questions.find((question) => question.attribute === firstValue.attribute)
       const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
@@ -416,9 +462,9 @@ export function copyValue(question, ...originalValues) {
         // if the refresh flag is set, reload all values for the page,
         // resolveConditions will be called in fetchValues. Preserve unsaved values,
         // since they are not included in the response from the backend.
-        dispatch(fetchValues(page, true))
+        return dispatch(fetchValues(page, true))
       } else {
-        dispatch(resolveConditions(page, sets))
+        return dispatch(resolveConditions(page, sets))
       }
     })
       .catch((error) => dispatch(setError('copyValue', error, gettext('Copy value'))))
@@ -483,6 +529,7 @@ export function activateSet(set) {
 
 export function createSet(attrs) {
   return (dispatch, getState) => {
+    const page = getState().interview.page
     // create a new set
     const set = SetFactory.create(attrs)
 
@@ -495,8 +542,12 @@ export function createSet(attrs) {
 
       const state = getState().interview
       const page = state.page
-      const sets = [...state.sets, set]
-      const values = isNil(value) ? [...state.values] : [...state.values, value]
+      const sets = [...state.sets]
+      if (!sets.some(currentSet => (
+        currentSet.element === set.element && currentSet.set_prefix === set.set_prefix &&
+        currentSet.set_index === set.set_index
+      ))) sets.push(set)
+      const values = isNil(value) || state.values.includes(value) ? [...state.values] : [...state.values, value]
 
       initSets(sets, page)
       initValues(sets, values, page)
@@ -510,8 +561,9 @@ export function createSet(attrs) {
       return createSetCallback()
     } else {
       return dispatch(storeValue(value)).then(() => {
+        if (getState().interview.page !== page) return
         const storedValue = getState().interview.values.find((v) => compareValues(v, value))
-        if (!isNil(storedValue)) {
+        if (!isNil(storedValue?.id) && !storedValue.error) {
           createSetCallback(storedValue)
         }
       })

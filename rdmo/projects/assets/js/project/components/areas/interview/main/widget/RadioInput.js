@@ -17,7 +17,9 @@ import OptionText from './common/OptionText'
 const RadioInput = ({ question, value, options, buttons, disabled, onChange }) => {
   const ref = useRef(null)
 
-  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, options)
+  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, options, () => (
+    handleAdditionalInputChange.isPending()
+  ))
 
   useAdjustLabel(ref)
 

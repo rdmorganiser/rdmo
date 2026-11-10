@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import classNames from 'classnames'
@@ -12,6 +12,7 @@ import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/quest
 import { isDefaultValue } from '../../../../../utils/value'
 
 const DateInput = ({ question, value, buttons, disabled, onChange }) => {
+  const selected = useRef(null)
   const handleChange = (date) => {
     const text = format(date, 'yyyy-MM-dd')
     onChange(value, { text, unit: question.unit, value_type: question.value_type })
@@ -30,7 +31,10 @@ const DateInput = ({ question, value, buttons, disabled, onChange }) => {
     'default': isDefaultValue(question, value)
   })
 
-  const getSelected = () => isEmpty(value.text) ? null : parseISO(value.text)
+  const getSelected = () => {
+    if (!handleRawChange.isPending()) selected.current = isEmpty(value.text) ? null : parseISO(value.text)
+    return selected.current
+  }
 
   return (
     <div className="project-interview-input date-input">

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { get, isNil } from 'lodash'
 
-const useAdditionalInputs = (value, options) => {
+const useAdditionalInputs = (value, options, isPending) => {
   const [additionalInputs, setAdditionalInputs] = useState({})
 
   useEffect(() => {
+    if (isPending?.()) return
     if (isNil(value)) {
       setAdditionalInputs({})
     } else {

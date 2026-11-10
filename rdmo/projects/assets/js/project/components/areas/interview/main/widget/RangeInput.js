@@ -14,8 +14,6 @@ const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
 
   const [inputValue, setInputValue] = useState('')
 
-  useEffect(() => setInputValue(value.text), [value.text])
-
   useLayoutEffect(() => {
     if (ref.current) {
       const unitElement = ref.current.nextElementSibling
@@ -45,6 +43,10 @@ const RangeInput = ({ question, value, buttons, disabled, onChange }) => {
   const handleChange = useDebouncedCallback((value, text) => {
     onChange(value, { text, unit: question.unit, value_type: question.value_type })
   }, 500)
+
+  useEffect(() => {
+    if (!handleChange.isPending()) setInputValue(value.text)
+  }, [value.text, handleChange])
 
   const classnames = classNames('project-interview-input range-input', {
     'default': isDefaultValue(question, value)

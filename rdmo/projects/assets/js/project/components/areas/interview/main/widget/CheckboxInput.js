@@ -16,7 +16,9 @@ import OptionText from './common/OptionText'
 const CheckboxInput = ({ question, value, option, optionIndex, disabled, onCreate, onUpdate, onDelete }) => {
   const id = `checkbox-${question.id}-${option.id}`
   const ref = useRef(null)
-  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option])
+  const [getAdditionalInput, setAdditionalInput] = useAdditionalInputs(value, [option], () => (
+    handleAdditionalInputChange.isPending()
+  ))
   const [idle, setIdle] = useIdle([value])
 
   useAdjustLabel(ref)
