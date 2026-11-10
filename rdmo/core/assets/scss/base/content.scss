@@ -79,3 +79,7 @@ header {
 main {
     flex-grow: 1;
 }
+
+.sticky-top {
+    top: var(--rdmo-navbar-height);  // below the fixed navbar
+}

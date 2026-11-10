@@ -52,11 +52,11 @@
 }
 
 .project-interview-page {
-    .sticky-top {
-        top: var(--rdmo-navbar-height);  // below the fixed navbar
-    }
     .nav-underline {
-        --bs-nav-link-color: var(--bs-secondary-color);
+        --bs-nav-link-color: var(--bs-secondary-color);  // like .text-muted
+        --bs-nav-link-hover-color: var(--rdmo-link-hover-color);
+        --bs-nav-underline-link-active-color: var(--rdmo-link-color);
+        --bs-nav-underline-border-width: 2px;  // same as .border-2
     }
     .nav-underline .nav-link {
         // let the underline of the active link cover the border of the nav
@@ -64,7 +64,6 @@
 
         &.active {
             font-weight: normal;
-            color: var(--rdmo-link-color);
 
             &:hover {
                 color: var(--rdmo-link-hover-color);
