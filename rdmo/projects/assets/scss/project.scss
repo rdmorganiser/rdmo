@@ -48,17 +48,16 @@
 
 .project-interview-page {
     .project-interview-page-head {
-        .nav > li > a {
-            &.add-set,
-            &.add-set:hover {
-                color: var(--bs-success);
-            }
-            &.add-set:hover {
-                color: white;
-                background-color: var(--bs-success) !important;
-            }
-            &.add-set:focus {
-                background-color: transparent;
+        .nav-underline {
+            --bs-nav-link-color: var(--bs-secondary-color);
+        }
+        .nav-underline .nav-link {
+            // let the underline of the active link cover the border of the nav
+            margin-bottom: calc(-1 * var(--bs-nav-underline-border-width));
+
+            &.active {
+                font-weight: normal;
+                color: var(--rdmo-link-color);
             }
         }
     }

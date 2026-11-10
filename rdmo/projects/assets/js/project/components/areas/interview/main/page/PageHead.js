@@ -50,11 +50,6 @@ const PageHead = ({ sets, values, currentSet }) => {
     }
   }
 
-  const handleOpenCreateModal = (event) => {
-    event.preventDefault()
-    createModal.open()
-  }
-
   const handleCreate = (text, copySetValue) => {
     if (isEmpty(copySetValue)) {
       dispatch(createSet({
@@ -109,8 +104,8 @@ const PageHead = ({ sets, values, currentSet }) => {
         <PageTabsHelp />
         {
           currentSet ? (
-            <>
-              <ul className="nav nav-tabs">
+            <div className="d-flex align-items-center border-bottom border-2 mb-4">
+              <ul className="nav nav-underline align-self-end gap-4">
                 {
                   sets.map((set, setIndex) => {
                     const setValue = values.find((value) => (
@@ -131,24 +126,16 @@ const PageHead = ({ sets, values, currentSet }) => {
                     )
                   })
                 }
-                {
-                  !readOnly && (
-                    <li>
-                      <a
-                        href=""
-                        title={labels.add}
-                        className="nav-link add-set"
-                        onClick={handleOpenCreateModal}
-                      >
-                        <i className="bi bi-plus" aria-hidden="true"></i> {upperFirst(page.verbose_name)}
-                      </a>
-                    </li>
-                  )
-                }
               </ul>
               {
                 !readOnly && (
-                  <div className="d-flex justify-content-end gap-1">
+                  <div className="d-flex gap-1 ms-auto">
+                    <LinkButton
+                      className="bi bi-plus-lg"
+                      title={labels.add}
+                      aria-label={labels.add}
+                      onClick={createModal.open}
+                    />
                     {
                       page.attribute && (
                         <LinkButton
@@ -180,7 +167,7 @@ const PageHead = ({ sets, values, currentSet }) => {
                   </div>
                 )
               }
-            </>
+            </div>
           ) : (
             !readOnly && (
               <button role="button" className="btn btn-success" title={labels.add} onClick={createModal.open}>
