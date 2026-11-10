@@ -16,7 +16,7 @@ import SnapshotsDropdown from './SnapshotsDropdown'
 const View = () => {
   const dispatch = useDispatch()
 
-  const { snapshotId, viewId, detail } = useSelector((state) => state.config)
+  const { snapshotId, viewId, detail } = useSelector((state) => state.location)
   const config = useSelector((state) => state.config)
   const { currentView } = useSelector((state) => state.project)
 
