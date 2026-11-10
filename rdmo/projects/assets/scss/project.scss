@@ -1,3 +1,8 @@
+.project-main {
+    // allow main, which is a flex item, to shrink below the width of its content
+    min-width: 0;
+}
+
 .project-hierarchy {
     ul {
         margin-bottom: 0;

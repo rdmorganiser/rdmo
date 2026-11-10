@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import classNames from 'classnames'
 import { isEmpty, isNil, upperFirst } from 'lodash'
 
 import useModal from 'rdmo/core/assets/js/hooks/useModal'
@@ -9,12 +8,14 @@ import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permiss
 
 import LinkButton from 'rdmo/core/assets/js/components/LinkButton'
 
-import { activateSet, copySet, createSet, deleteSet, updateSet } from '../../../../../actions/interviewActions'
+import { copySet, createSet, deleteSet, updateSet } from '../../../../../actions/interviewActions'
+import { useReadOnly } from '../../../../../hooks'
 import { generateSetIndex } from '../../../../../utils/set'
 
 import PageHeadDeleteModal from './PageHeadDeleteModal'
 import PageHeadFormModal from './PageHeadFormModal'
 import PageHeadReuseModal from './PageHeadReuseModal'
+import PageHeadTabs from './PageHeadTabs'
 import PageTabsHelp from './PageTabsHelp'
 
 const PageHead = ({ sets, values, currentSet }) => {
@@ -41,13 +42,6 @@ const PageHead = ({ sets, values, currentSet }) => {
     edit: gettext('Edit tab'),
     reuse: gettext('Reuse answers'),
     remove: gettext('Remove tab')
-  }
-
-  const handleActivate = (event, set) => {
-    event.preventDefault()
-    if (set.set_index != currentSet.set_index) {
-      dispatch(activateSet(set))
-    }
   }
 
   const handleCreate = (text, copySetValue) => {
@@ -103,66 +97,22 @@ const PageHead = ({ sets, values, currentSet }) => {
       <PageTabsHelp />
       {
         currentSet ? (
-          <div className="sticky-top bg-body d-flex align-items-center border-bottom border-2 px-3 mt-2 mb-4">
-            <ul className="nav nav-underline align-self-end gap-3">
-              {
-                sets.map((set, setIndex) => {
-                  const setValue = values.find((value) => (
-                    value.set_prefix == set.set_prefix && value.set_index == set.set_index
-                  ))
-                  const setLabel = isNil(setValue) ? `#${set.set_index + 1}` : setValue.text
-                  return (
-                    <li key={setIndex} className="nav-item">
-                      <a
-                        href=""
-                        title={setLabel}
-                        className={classNames('nav-link', {active: set.set_index == currentSet.set_index})}
-                        onClick={(event) => handleActivate(event, set)}
-                      >
-                        {setLabel}
-                      </a>
-                    </li>
-                  )
-                })
-              }
-            </ul>
+          <div className="sticky-top bg-body d-flex align-items-center border-bottom border-2 mt-2 mb-4">
+            <PageHeadTabs sets={sets} values={values} currentSet={currentSet} />
             {
               !readOnly && (
-                <div className="d-flex gap-1 ms-auto">
-                  <LinkButton
-                    className="bi bi-plus-lg"
-                    title={labels.add}
-                    aria-label={labels.add}
-                    onClick={createModal.open}
-                  />
-                  {
-                    page.attribute && (
-                      <LinkButton
-                        className="bi bi-pencil"
-                        title={labels.edit}
-                        aria-label={labels.edit}
-                        onClick={updateModal.open}
-                      />
-                    )
-                  }
-                  <LinkButton
-                    className="bi bi-copy"
-                    title={labels.copy}
-                    aria-label={labels.copy}
-                    onClick={copyModal.open}
-                  />
-                  <LinkButton
-                    className="bi bi-arrow-down-circle"
-                    title={labels.reuse}
-                    aria-label={labels.reuse}
-                    onClick={importModal.open}
-                  />
-                  <LinkButton
-                    className="bi bi-trash"
-                    title={labels.remove}
-                    aria-label={labels.remove}
-                    onClick={deleteModal.open}
-                  />
+                <div>
+                  <div className="d-flex gap-2 ms-3 pe-3">
+                    <LinkButton className="bi bi-plus-lg" title={labels.add} onClick={createModal.open} />
+                    {
+                      page.attribute && (
+                        <LinkButton className="bi bi-pencil" title={labels.edit} onClick={updateModal.open} />
+                      )
+                    }
+                    <LinkButton className="bi bi-copy" title={labels.copy} onClick={copyModal.open} />
+                    <LinkButton className="bi bi-arrow-down-circle" title={labels.reuse} onClick={importModal.open} />
+                    <LinkButton className="bi bi-trash" title={labels.remove} onClick={deleteModal.open} />
+                  </div>
                 </div>
               )
             }
