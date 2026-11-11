@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
-from rdmo.questions.models import Question
+from rdmo.questions.models import Catalog, Question
 
 from ..models import Membership, Project, Value
 
@@ -162,6 +162,22 @@ def test_missing(db, client):
                                 content_type="application/json")
     assert response.status_code == 400
     assert Value.objects.count() == values_count
+
+
+def test_copy_set_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    value = project.values.filter(snapshot=None).first()
+    original_ids = set(project.values.values_list('id', flat=True))
+    client.login(username='owner', password='owner')
+    response = client.post(reverse(urlnames['copy-set'], args=[project.pk]), {
+        'copy_set_value': value.pk,
+    })
+    assert response.status_code == 400
+    assert 'catalog' in response.json()
+    assert set(project.values.values_list('id', flat=True)) == original_ids
 
 
 def test_reuse(db, client):
@@ -516,6 +532,24 @@ def test_cross_project(db, client):
 
     assert response.status_code == 404
     assert Value.objects.count() == values_count
+
+
+def test_copy_set_from_project_without_catalog(db, client):
+    source = Project.objects.get(pk=1)
+    source.catalog.delete()
+    source.refresh_from_db()
+    target = Project.objects.get(pk=2)
+    target.catalog = Catalog.objects.create(uri_path='target', title_lang1='Target catalog')
+    target.save()
+    value = source.values.filter(snapshot=None).first()
+    original_ids = set(target.values.values_list('id', flat=True))
+    client.login(username='owner', password='owner')
+    response = client.post(reverse(urlnames['copy-set'], args=[target.pk]), {
+        'copy_set_value': value.pk,
+    })
+    assert response.status_code == 400
+    assert 'copy_set_value' in response.json()
+    assert set(target.values.values_list('id', flat=True)) == original_ids
 
 
 def test_missing_attribute(db, client):

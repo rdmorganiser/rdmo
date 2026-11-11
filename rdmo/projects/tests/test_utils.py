@@ -11,6 +11,7 @@ from ..utils import (
     compute_value_maps,
     copy_project,
     get_invite_email_project_path,
+    render_attachments,
 )
 
 
@@ -267,3 +268,19 @@ def test_get_invite_email_project_path(rf, db, settings, config, expected):
     invite.token = 'test-token'
 
     assert get_invite_email_project_path(request, invite) == expected
+
+
+def test_render_attachments_without_catalog(db, rf):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    attachments = render_attachments(rf.get('/'), project, {
+        'attachments_snapshot': None,
+        'attachments_format': 'html',
+        'attachments_answers': True,
+        'attachments_views': [],
+        'attachments_files': [],
+    })
+    assert len(attachments) == 1
+    assert b'This project has no catalog.' in attachments[0][1]

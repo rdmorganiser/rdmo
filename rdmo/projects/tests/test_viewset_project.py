@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -53,6 +54,8 @@ urlnames = {
     'list': 'v1-projects:project-list',
     'user': 'v1-projects:project-user',
     'detail': 'v1-projects:project-detail',
+    'files': 'v1-projects:project-files',
+    'hierarchy': 'v1-projects:project-hierarchy',
     'copy': 'v1-projects:project-copy',
     'overview': 'v1-projects:project-overview',
     'navigation': 'v1-projects:project-navigation',
@@ -237,6 +240,19 @@ def test_detail(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_detail_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['detail'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -625,6 +641,34 @@ def test_update(db, client, username, password, project_id):
         assert Project.objects.get(id=project_id).description == project.description
 
 
+def test_update_replacement_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    catalog = Catalog.objects.create(uri_path='replacement', title_lang1='Replacement catalog')
+    catalog.sites.add(Site.objects.get_current())
+    original_ids = set(project.values.values_list('id', flat=True))
+    client.login(username='owner', password='owner')
+    response = client.patch(
+        reverse(urlnames['detail'], args=[project.pk]),
+        {'catalog': catalog.pk},
+        content_type='application/json',
+    )
+    assert response.status_code == 200
+    project.refresh_from_db()
+    assert project.catalog_id == catalog.pk
+    assert set(project.values.values_list('id', flat=True)) == original_ids
+
+    response = client.get(reverse('v1-projects:project-answers', args=[project.pk]))
+    assert response.status_code == 200
+    assert 'This project has no catalog.' not in response.json()['html']
+
+    response = client.post(reverse('v1-projects:project-progress', args=[project.pk]))
+    assert response.status_code == 200
+    assert response.json() == {'count': 0, 'total': 0, 'ratio': 0}
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_update_parent(db, client, username, password, project_id):
@@ -853,6 +897,20 @@ def test_options(db, client, username, password):
             assert response.status_code == 401
 
 
+def test_options_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['options'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json()['code'] == 'catalog_missing'
+    assert 'done' not in response.json()
+
+
 def test_options_text_and_help(db, client, mocker):
     mocker.patch('rdmo.options.providers.SimpleProvider.get_options', return_value=[
         {
@@ -921,3 +979,29 @@ def test_providers(db, client, username, password):
         assert response.json()['simple']['description']
     else:
         assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_hierarchy_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['hierarchy'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_files_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['files'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
