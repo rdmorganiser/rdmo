@@ -72,7 +72,7 @@ class ProjectWrapper:
 
     @cached_property
     def catalog(self):
-        return self._catalog.to_dict()
+        return self._catalog.to_dict() if self._catalog is not None else None
 
     @cached_property
     def questions(self):
@@ -85,7 +85,7 @@ class ProjectWrapper:
                     questions += walk(element.get('elements'))
             return questions
 
-        return walk(self.catalog['elements'])
+        return walk(self.catalog['elements']) if self.catalog is not None else []
 
     @cached_property
     def _values(self):

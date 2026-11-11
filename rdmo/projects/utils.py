@@ -31,7 +31,7 @@ def render_attachments(request, project, data):
     attachments = []
 
     if data['attachments_answers'] or data['attachments_views']:
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
     if data['attachments_answers']:
         response = render_to_format(
@@ -376,8 +376,9 @@ def get_contact_message(request, project):
         'project_url': request.build_absolute_uri(project_url)
     }
 
+    page = None
     page_id = request.GET.get('page')
-    if page_id:
+    if page_id and project.catalog is not None:
         page = project.catalog.get_page(page_id)
         if page:
             context.update({
@@ -386,11 +387,11 @@ def get_contact_message(request, project):
             })
 
     questionset_id = request.GET.get('questionset')
-    if questionset_id:
+    if questionset_id and project.catalog is not None:
         context['questionset'] = project.catalog.get_questionset(questionset_id)
 
     question_id = request.GET.get('question')
-    if question_id:
+    if question_id and project.catalog is not None:
         context['question'] = project.catalog.get_question(question_id)
 
     value_ids = request.GET.getlist('values')
