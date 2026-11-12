@@ -10,10 +10,10 @@ const SendIssueDropdowns = ({
   onFileChange,
   formats
 }) => {
-  const answers = useSelector((state) => state.project.project.answers) ?? {}
-  const views = useSelector((state) => state.project.project.views) ?? []
-  const files = useSelector((state) => state.project.project.files) ?? []
-  const snapshots = useSelector((state) => state.project.project.snapshots) ?? []
+  const answers = useSelector((state) => state.project.answers) ?? {}
+  const views = useSelector((state) => state.project.views) ?? []
+  const files = useSelector((state) => state.project.files) ?? []
+  const snapshots = useSelector((state) => state.project.snapshots) ?? []
   const snapshotOptions = [
     { id: 'current', title: gettext('Current') },
     ...snapshots

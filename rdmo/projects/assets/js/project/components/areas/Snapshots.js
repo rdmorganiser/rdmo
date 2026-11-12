@@ -10,7 +10,7 @@ import SnapshotTable from './snapshots/SnapshotTable'
 const Snapshots = () => {
   const { show: showSnapshot, open: openSnapshot, close: closeSnapshot } = useModal()
 
-  const { snapshots } = useSelector((state) => state.project.project) ?? {}
+  const { snapshots } = useSelector((state) => state.project) ?? {}
   const perms = useSelector(selectPermissions)
 
   return (

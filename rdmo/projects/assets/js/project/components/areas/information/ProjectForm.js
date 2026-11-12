@@ -31,7 +31,7 @@ const ProjectForm = ({
   const [backendErrors, setBackendErrors] = useState({})
   const errors = useFieldErrors(backendErrors)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
-  const storeData = useSelector((state) => state.project?.project)
+  const storeData = useSelector((state) => state.project)
 
   const project = mode === 'create' ? {} : currentProject ?? storeData?.project
   const catalogs = catalogsProp ?? storeData?.catalogs

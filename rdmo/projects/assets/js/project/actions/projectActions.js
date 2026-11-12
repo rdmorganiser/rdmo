@@ -18,52 +18,63 @@ import ProjectApi from '../api/ProjectApi'
 // project
 
 export function fetchProject() {
-
   return function (dispatch) {
     dispatch(addToPending('fetchProject'))
     dispatch(actions.fetchProjectInit())
 
-    return Promise.all([
-      ProjectApi.fetchProject(projectId),
-      ProjectApi.fetchProjectHierarchy(projectId),
-      ProjectApi.fetchProjectSnapshots(projectId),
-      ProjectApi.fetchProjectViews(projectId),
-      ProjectApi.fetchProjectAnswers(projectId),
-      ProjectApi.fetchProjectIssues(projectId),
-      ProjectApi.fetchProjectMemberships(projectId),
-      ProjectApi.fetchProjectMembershipHierarchy(projectId),
-      CatalogApi.fetchCatalogs(),
-      ProjectApi.fetchProjectFiles(projectId)
-    ])
-      .then(([
-        project, hierarchy, snapshots, views, answers, issues, memberships, membershipHierarchy, catalogs, files]) => {
-        const projectData = {
-          project,
-          hierarchy,
-          snapshots,
-          views,
-          answers,
-          issues,
-          memberships: [...memberships, ...membershipHierarchy],
-          catalogs,
-          files
-        }
-
-        dispatch(removeFromPending('fetchProject'))
-        dispatch(actions.fetchProjectSuccess(projectData))
+    return ProjectApi.fetchProject(projectId)
+      .then(project => {
+        dispatch(actions.fetchProjectSuccess(project))
+        return project
       })
       .catch(error => {
-        dispatch(removeFromPending('fetchProject'))
         dispatch(actions.fetchProjectError(serializeError(error)))
         throw error
       })
+      .finally(() => dispatch(removeFromPending('fetchProject')))
+  }
+}
+
+export function fetchProjectHierarchy() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectHierarchy'))
+    dispatch(actions.fetchProjectHierarchyInit())
+
+    return ProjectApi.fetchProjectHierarchy(projectId)
+      .then(hierarchy => {
+        dispatch(actions.fetchProjectHierarchySuccess(hierarchy))
+        return hierarchy
+      })
+      .catch(error => {
+        dispatch(actions.fetchProjectHierarchyError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectHierarchy')))
+  }
+}
+
+export function fetchCatalogs() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchCatalogs'))
+    dispatch(actions.fetchCatalogsInit())
+
+    return CatalogApi.fetchCatalogs()
+      .then(catalogs => {
+        dispatch(actions.fetchCatalogsSuccess(catalogs))
+        return catalogs
+      })
+      .catch(error => {
+        dispatch(actions.fetchCatalogsError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchCatalogs')))
   }
 }
 
 export function updateProject(data) {
   return function (dispatch, getState) {
     const state = getState()
-    const id = data?.id ?? state.project?.project?.project?.id
+    const id = data?.id ?? state.project?.project?.id
 
     if (!id) {
       console.warn('No project ID available for update.')
@@ -260,6 +271,28 @@ export function sendProjectIssueIntegration(issueId, data) {
 
 // memberships / invites / leave
 
+export function fetchProjectMemberships() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectMemberships'))
+    dispatch(actions.fetchProjectMembershipsInit())
+
+    return Promise.all([
+      ProjectApi.fetchProjectMemberships(projectId),
+      ProjectApi.fetchProjectMembershipHierarchy(projectId)
+    ])
+      .then(([memberships, membershipHierarchy]) => {
+        const allMemberships = [...memberships, ...membershipHierarchy]
+        dispatch(actions.fetchProjectMembershipsSuccess(allMemberships))
+        return allMemberships
+      })
+      .catch(error => {
+        dispatch(actions.fetchProjectMembershipsError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectMemberships')))
+  }
+}
+
 export function fetchProjectInvites() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectInvites'))
@@ -302,14 +335,15 @@ export function updateProjectMember(membershipId, data) {
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
-        dispatch(actions.updateProjectMemberSuccess({ ...member, id: membershipId }))
-
         // membership updates can lead to a permission change for owner <-> last owner cases
         // project with permissions needs to be fetched
         return ProjectApi.fetchProject(projectId)
-      })
-      .then((project) => {
-        dispatch(actions.updateProjectSuccess({ project }))
+          .then(project => {
+            dispatch(actions.updateProjectMemberSuccess({
+              membership: { ...member, id: membershipId },
+              project
+            }))
+          })
       })
       .catch(error => {
         dispatch(actions.updateProjectMemberError(serializeError(error)))
@@ -415,6 +449,24 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
 
 // snapshots
 
+export function fetchProjectSnapshots() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectSnapshots'))
+    dispatch(actions.fetchProjectSnapshotsInit())
+
+    return ProjectApi.fetchProjectSnapshots(projectId)
+      .then(snapshots => {
+        dispatch(actions.fetchProjectSnapshotsSuccess(snapshots))
+        return snapshots
+      })
+      .catch(error => {
+        dispatch(actions.fetchProjectSnapshotsError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectSnapshots')))
+  }
+}
+
 export function createSnapshot(data) {
   return function (dispatch) {
     dispatch(addToPending('createSnapshot'))
@@ -475,16 +527,20 @@ export function rollbackSnapshot(snapshotId) {
     dispatch(actions.rollbackSnapshotInit())
 
     return ProjectApi.rollbackSnapshot(projectId, snapshotId)
-      .then(snapshot => {
-        dispatch(removeFromPending('rollbackSnapshot'))
-        dispatch(actions.rollbackSnapshotSuccess(snapshot))
-        dispatch(fetchProject())
+      .then(() =>
+        Promise.all([
+          ProjectApi.fetchProject(projectId),
+          ProjectApi.fetchProjectSnapshots(projectId)
+        ])
+      )
+      .then(([project, snapshots]) => {
+        dispatch(actions.rollbackSnapshotSuccess({ project, snapshots }))
       })
       .catch(error => {
-        dispatch(removeFromPending('rollbackSnapshot'))
         dispatch(actions.rollbackSnapshotError(serializeError(error)))
         throw error
       })
+      .finally(() => dispatch(removeFromPending('rollbackSnapshot')))
   }
 }
 
@@ -511,6 +567,42 @@ export function fetchProjectFiles(snapshotId) {
 }
 
 // answers / views
+
+export function fetchProjectViews() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectViews'))
+    dispatch(actions.fetchProjectViewsInit())
+
+    return ProjectApi.fetchProjectViews(projectId)
+      .then(views => {
+        dispatch(actions.fetchProjectViewsSuccess(views))
+        return views
+      })
+      .catch(error => {
+        dispatch(actions.fetchProjectViewsError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectViews')))
+  }
+}
+
+export function fetchProjectAnswers() {
+  return function (dispatch) {
+    dispatch(addToPending('fetchProjectAnswers'))
+    dispatch(actions.fetchProjectAnswersInit())
+
+    return ProjectApi.fetchProjectAnswers(projectId)
+      .then(answers => {
+        dispatch(actions.fetchProjectAnswersSuccess(answers))
+        return answers
+      })
+      .catch(error => {
+        dispatch(actions.fetchProjectAnswersError(serializeError(error)))
+        throw error
+      })
+      .finally(() => dispatch(removeFromPending('fetchProjectAnswers')))
+  }
+}
 
 export function fetchAnswers(snapshotId, params = {}) {
   const pendingId = isNil(snapshotId) ? 'fetchAnswers' : `fetchAnswers/${snapshotId}`

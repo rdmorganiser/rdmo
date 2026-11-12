@@ -12,7 +12,7 @@ const Documents = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
-  const { views } = useSelector((state) => state.project.project) ?? {}
+  const views = useSelector((state) => state.project.views) ?? []
   const area = snapshotId ? 'snapshots' : 'documents'
 
   const handleSnapshotChange = (snapshot) => {

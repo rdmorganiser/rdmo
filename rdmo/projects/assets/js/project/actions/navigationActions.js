@@ -4,7 +4,19 @@ import { selectConfig } from 'rdmo/core/assets/js/reducers/configSlice'
 
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { setLocation } from './locationActions'
-import { clearCurrentView, fetchAnswers, fetchNavigation, fetchProgress, fetchView } from './projectActions'
+import {
+  clearCurrentView,
+  fetchAnswers,
+  fetchCatalogs,
+  fetchNavigation,
+  fetchProgress,
+  fetchProjectHierarchy,
+  fetchProjectIssues,
+  fetchProjectMemberships,
+  fetchProjectSnapshots,
+  fetchProjectViews,
+  fetchView
+} from './projectActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {
@@ -45,6 +57,29 @@ export function navigateDashboard(location, back = null) {
 
       // for all other areas, the location and store are updated first
       dispatch(setLocation(location))
+
+      switch (location.area) {
+        case 'dashboard':
+          dispatch(fetchProjectIssues())
+          break
+        case 'information':
+          dispatch(fetchProjectHierarchy())
+          dispatch(fetchCatalogs())
+          break
+        case 'memberships':
+          dispatch(fetchProjectMemberships())
+          break
+        case 'documents':
+          dispatch(fetchProjectSnapshots())
+          dispatch(fetchProjectViews())
+          break
+        case 'snapshots':
+          dispatch(fetchProjectSnapshots())
+          if (!isNil(location.snapshotId)) {
+            dispatch(fetchProjectViews())
+          }
+          break
+      }
 
       if (!isNil(location.viewId)) {
         // /documents/views/

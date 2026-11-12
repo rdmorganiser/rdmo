@@ -95,7 +95,7 @@ export default function configureStore() {
       store.dispatch(rolesActions.fetchRoles())
     ]).then(() => {
       const state = store.getState()
-      const project = state.project.project.project
+      const project = state.project.project
       const permissions = selectPermissions(state)
 
       if (permissions.can_view_invite) {

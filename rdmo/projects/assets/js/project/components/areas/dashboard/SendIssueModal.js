@@ -23,7 +23,7 @@ const SendIssueModal = ({
   onClose
 }) => {
   const dispatch = useDispatch()
-  const project = useSelector(state => state.project.project.project)
+  const project = useSelector(state => state.project.project)
   const settings = useSelector(state => state.settings)
   const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))

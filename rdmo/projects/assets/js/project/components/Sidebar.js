@@ -44,8 +44,8 @@ const Sidebar = () => {
     <div className="d-flex flex-column h-100">
       <div className="d-none d-lg-block card w-100 mb-3">
         <div className="card-body py-2">
-          <h2 className="font-large mb-2">{project.project.title}</h2>
-          <p className="font-normal text-muted m-0">{project.project.catalog_title}</p>
+          <h2 className="font-large mb-2">{project.title}</h2>
+          <p className="font-normal text-muted m-0">{project.catalog_title}</p>
           {
             visibility?.help_display && (
               <p className="font-normal text-muted m-0 mt-2">{visibility?.help_display}</p>

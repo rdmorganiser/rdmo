@@ -13,7 +13,7 @@ const MembershipDeleteModal = ({
   isCurrentUser = false
 }) => {
   const dispatch = useDispatch()
-  const { project } = useSelector((state) => state.project.project) ?? {}
+  const { project } = useSelector((state) => state.project) ?? {}
   const errors = useFieldErrors()
 
   const name = person.user?.full_name || person.email || ''

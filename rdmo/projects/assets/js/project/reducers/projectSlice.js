@@ -2,6 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   project: null,
+  hierarchy: null,
+  snapshots: null,
+  views: null,
+  answers: null,
+  issues: null,
+  memberships: null,
+  catalogs: null,
+  files: null,
   invites: null,
   errors: [],
   currentView: null,
@@ -31,10 +39,7 @@ const setVisibility = (state, action) => {
 }
 
 const removeMembership = (state, action) => {
-  state.project = {
-    ...state.project,
-    memberships: state.project.memberships?.filter(m => m.id !== action.payload)
-  }
+  state.memberships = state.memberships?.filter(m => m.id !== action.payload)
 }
 
 const keepState = state => state
@@ -54,9 +59,39 @@ const projectSlice = createSlice({
       state.project = action.payload
     },
     fetchProjectError: appendError,
+    fetchProjectHierarchyInit: clearErrors,
+    fetchProjectHierarchySuccess(state, action) {
+      state.hierarchy = action.payload
+    },
+    fetchProjectHierarchyError: appendError,
+    fetchProjectSnapshotsInit: clearErrors,
+    fetchProjectSnapshotsSuccess(state, action) {
+      state.snapshots = action.payload
+    },
+    fetchProjectSnapshotsError: appendError,
+    fetchProjectViewsInit: clearErrors,
+    fetchProjectViewsSuccess(state, action) {
+      state.views = action.payload
+    },
+    fetchProjectViewsError: appendError,
+    fetchProjectAnswersInit: clearErrors,
+    fetchProjectAnswersSuccess(state, action) {
+      state.answers = action.payload
+    },
+    fetchProjectAnswersError: appendError,
+    fetchProjectMembershipsInit: clearErrors,
+    fetchProjectMembershipsSuccess(state, action) {
+      state.memberships = action.payload
+    },
+    fetchProjectMembershipsError: appendError,
+    fetchCatalogsInit: clearErrors,
+    fetchCatalogsSuccess(state, action) {
+      state.catalogs = action.payload
+    },
+    fetchCatalogsError: appendError,
     updateProjectInit: clearErrors,
     updateProjectSuccess(state, action) {
-      state.project = { ...state.project, ...action.payload }
+      return { ...state, ...action.payload }
     },
     updateProjectError: appendError,
     deleteProjectInit: clearErrors,
@@ -72,20 +107,16 @@ const projectSlice = createSlice({
     fetchProjectInvitesError: appendError,
     createProjectMemberInit: clearErrors,
     createProjectMemberSuccess(state, action) {
-      state.project = {
-        ...state.project,
-        memberships: [...(state.project?.memberships || []), action.payload]
-      }
+      state.memberships = [...(state.memberships || []), action.payload]
     },
     createProjectMemberError: appendError,
     updateProjectMemberInit: clearErrors,
     updateProjectMemberSuccess(state, action) {
-      state.project = {
-        ...state.project,
-        memberships: state.project?.memberships.map(m => (
-          m.id == action.payload.id ? { ...m, role: action.payload.role } : m
-        ))
-      }
+      const { membership, project } = action.payload
+      state.memberships = state.memberships?.map(m => (
+        m.id == membership.id ? { ...m, role: membership.role } : m
+      ))
+      state.project = project
     },
     updateProjectMemberError: appendError,
     deleteProjectMemberInit: clearErrors,
@@ -114,30 +145,24 @@ const projectSlice = createSlice({
 
     createSnapshotInit: clearErrors,
     createSnapshotSuccess(state, action) {
-      state.project = {
-        ...state.project,
-        snapshots: [action.payload, ...(state.project?.snapshots || [])]
-      }
+      state.snapshots = [action.payload, ...(state.snapshots || [])]
     },
     createSnapshotError: appendError,
     updateSnapshotInit: clearErrors,
     updateSnapshotSuccess(state, action) {
-      state.project = {
-        ...state.project,
-        snapshots: state.project?.snapshots.map(s => (
-          s.id === action.payload.id ? { ...s, ...action.payload } : s
-        ))
-      }
+      state.snapshots = state.snapshots?.map(s => (
+        s.id === action.payload.id ? { ...s, ...action.payload } : s
+      ))
     },
     updateSnapshotError: appendError,
     deleteSnapshotInit: clearErrors,
     deleteSnapshotSuccess(state, action) {
-      state.project = {
-        ...state.project,
-        snapshots: state.project?.snapshots.filter(s => s.id !== action.payload)
-      }
+      state.snapshots = state.snapshots?.filter(s => s.id !== action.payload)
     },
     deleteSnapshotError: appendError,
+    rollbackSnapshotSuccess(state, action) {
+      return { ...state, ...action.payload }
+    },
 
     fetchAnswersInit: clearErrors,
     fetchAnswersSuccess: setCurrentView,
@@ -159,12 +184,12 @@ const projectSlice = createSlice({
 
     fetchProjectFilesInit: clearErrors,
     fetchProjectFilesSuccess(state, action) {
-      state.project = { ...state.project, files: action.payload }
+      state.files = action.payload
     },
     fetchProjectFilesError: appendError,
     fetchProjectIssuesInit: clearErrors,
     fetchProjectIssuesSuccess(state, action) {
-      state.project = { ...state.project, issues: action.payload }
+      state.issues = action.payload
     },
     fetchProjectIssuesError: appendError,
     sendProjectIssueEmailInit: clearErrors,
@@ -213,7 +238,6 @@ const projectSlice = createSlice({
     sendProjectIssueEmailSuccess: keepState,
     sendProjectIssueIntegrationSuccess: keepState,
     rollbackSnapshotInit: keepState,
-    rollbackSnapshotSuccess: keepState,
     rollbackSnapshotError: keepState,
     downloadAnswersInit: keepState,
     downloadAnswersSuccess: keepState,
