@@ -10,7 +10,9 @@ import { actions } from '../reducers/interviewSlice'
 import { projectId } from '../utils/meta'
 import { initPage } from '../utils/page'
 import { copyResolvedConditions, gatherSets, getDescendants, initSets } from '../utils/set'
-import { compareValues, gatherDefaultValues, initValues, isEmptyValue, sortValues } from '../utils/value'
+import {
+  compareValueId, compareValues, gatherDefaultValues, initValues, isEmptyValue, sortValues
+} from '../utils/value'
 
 import PageApi from '../api/PageApi'
 import ProjectApi from '../api/ProjectApi'
@@ -200,6 +202,15 @@ export function storeValue(value) {
 
       return ValueApi.storeValue(projectId, { ...value, widget_type })
         .then((value) => {
+          // if the value was updated while the request was running, store it again
+          // (with the id from the response, so that a new value is not created twice)
+          const currentValue = getState().interview.values.find((v) => compareValueId(v, valueId))
+          if (currentValue && currentValue.dirty) {
+            const { id, updated } = value
+            dispatch(actions.updateValue({ value: currentValue, attrs: { id, updated, dirty: false, pending: false } }))
+            return dispatch(storeValue({ ...currentValue, id, updated, dirty: false, pending: false }))
+          }
+
           dispatch(fetchNavigation())
           dispatch(updateProgress())
 
@@ -287,11 +298,15 @@ export function createValue(attrs, store) {
 
 export function updateValue(value, attrs, store = true) {
   if (store) {
-    const valueToSave = ValueFactory.update({ ...value }, attrs)
-    const valueForState = omit(valueToSave, 'file')
+    return (dispatch, getState) => {
+      // the value passed from the component might be outdated (e.g. from a debounced input),
+      // so the current value is taken from the store and only the attrs are used
+      const currentValue = getState().interview.values.find((v) => compareValueId(v, value.id || value.tmp_id)) || value
 
-    return (dispatch) => {
-      dispatch(actions.updateValue({ value, attrs: valueForState }))
+      const valueToSave = ValueFactory.update({ ...currentValue }, attrs)
+      const valueForState = { ...omit(valueToSave, 'file'), dirty: currentValue.pending }
+
+      dispatch(actions.updateValue({ value: currentValue, attrs: valueForState }))
       return dispatch(storeValue(valueToSave))
     }
   } else {

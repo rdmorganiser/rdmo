@@ -79,7 +79,10 @@ const interviewSlice = createSlice({
       const { value, valueId } = action.payload
       if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
         state.values = state.values.map(currentValue => (
-          compareValueId(currentValue, valueId) ? value : currentValue
+          // keep the tmp_id, so that outdated copies of the value (e.g. in debounced inputs) can still be matched
+          compareValueId(currentValue, valueId) ? (
+            { ...value, tmp_id: currentValue.tmp_id, pending: false }
+          ) : currentValue
         ))
       } else {
         state.values.push(value)
