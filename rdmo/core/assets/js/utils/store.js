@@ -32,3 +32,12 @@ export const configureStaleRefresh = (store, refreshers) => {
     })
   })
 }
+
+export const configureLeaveWarning = (store, shouldWarn) => {
+  window.addEventListener('beforeunload', (event) => {
+    if (shouldWarn(store.getState())) {
+      event.preventDefault()
+      event.returnValue = ''  // needed for older browsers
+    }
+  })
+}
