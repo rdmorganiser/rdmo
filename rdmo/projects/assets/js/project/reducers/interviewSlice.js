@@ -8,9 +8,10 @@ const initialState = {
   continuation: null,
   providerOptions: {},
   navigation: null,
-  values: null,
+  values: [],
   attributes: [],
-  sets: []
+  sets: [],
+  ready: false
 }
 
 const setValues = (state, action) => {
@@ -30,8 +31,9 @@ const interviewSlice = createSlice({
     fetchPageSuccess(state, action) {
       state.page = action.payload.page
       state.providerOptions = {}
-      state.values = null
+      state.values = []
       state.sets = []
+      state.ready = false
     },
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
@@ -41,6 +43,9 @@ const interviewSlice = createSlice({
 
       if (state.page?.id === pageId) {
         setValues(state, action)
+
+        // page, sets and values are set, the page can be shown
+        state.ready = true
       }
     },
     fetchOptionsSuccess(state, action) {
@@ -90,7 +95,7 @@ const interviewSlice = createSlice({
     storeValueSuccess(state, action) {
       const { value, valueId, pageId } = action.payload
 
-      if (state.page?.id !== pageId || state.values === null) {
+      if (state.page?.id !== pageId) {
         return
       }
 
