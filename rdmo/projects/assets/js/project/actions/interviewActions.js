@@ -495,13 +495,18 @@ export function deleteSet(set, setValue) {
   const pendingId = `deleteSet/${set.set_prefix}/${set.set_index}`
 
   return (dispatch, getState) => {
+    // gather all values for this set and it's descendants
+    const { values } = getDescendants(getState().interview.values, getState().interview.sets, set)
+
+    // do not delete the set while one of its values is stored, since it would be created again
+    if (setValue?.pending || values.some((value) => value.pending)) {
+      return dispatch(actions.noop())
+    }
+
     dispatch(addToPending(pendingId))
     dispatch(clearError('deleteSet'))
 
     if (isNil(setValue)) {
-      // gather all values for this set and it's descendants
-      const { values } = getDescendants(getState().interview.values, getState().interview.sets, set)
-
       return Promise.all(values.map((value) => ValueApi.deleteValue(projectId, value)))
         .then(() => {
           dispatch(updateProgress())
