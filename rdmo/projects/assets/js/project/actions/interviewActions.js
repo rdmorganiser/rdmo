@@ -130,7 +130,7 @@ export function fetchValues(page, refresh = false) {
         if (refresh) {
           // if the values are just refreshed after a value is stored or deleted, loop
           // over the existing values and add all temporary values which were not stored yet
-          const unsavedValues = (getState().interview.values || []).filter((value) => isNil(value.id))
+          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
 
           // extend values with all unsaved values, which are not found in values
           const keptUnsavedValues = unsavedValues.filter(

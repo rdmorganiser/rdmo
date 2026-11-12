@@ -21,7 +21,7 @@ const isDefaultValue = (question, value) => {
 const gatherDefaultValues = (page, values) => {
   const defaultValues = []
 
-  if (!isNil(page) && !isNil(values)) {
+  if (!isNil(page)) {
     page.questions.forEach((question) => {
       values.filter((value) => (isNil(value.id) && (question.attribute === value.attribute))).forEach((value) => {
         if (isDefaultValue(question, value)) {

@@ -16,7 +16,7 @@ import PageHelp from './PageHelp'
 import PageManagement from './PageManagement'
 
 const Page = () => {
-  const { page, sets, values } = useSelector((state) => state.interview)
+  const { page, sets, values, ready } = useSelector((state) => state.interview)
 
   const currentSetPrefix = ''
 
@@ -54,7 +54,7 @@ const Page = () => {
     }
   }, [page.id])
 
-  return !isNil(page) && !isNil(sets) && !isNil(values) && (
+  return ready && (
     <div className="project-interview-page">
       <PageHelp />
       <PageManagement />

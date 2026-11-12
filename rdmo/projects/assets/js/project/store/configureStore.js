@@ -84,7 +84,7 @@ export default function configureStore() {
   })
 
   configureLeaveWarning(store, (state) => (
-    (state.interview.values || []).some((value) => value.pending || value.dirty)
+    state.interview.values.some((value) => value.pending || value.dirty)
   ))
 
   configureStaleRefresh(store, {
