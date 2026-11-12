@@ -456,14 +456,15 @@ export function createSet(attrs) {
     // create a value for the text if the page has an attribute
     const value = isNil(attrs.attribute) ? null : ValueFactory.create(attrs)
 
-    // create a callback function to be called immediately or after saving the value
-    const createSetCallback = (value) => {
+    // create a callback function to be called immediately or after saving the value,
+    // the stored value was already added to the store by storeValueSuccess
+    const createSetCallback = () => {
       dispatch(activateSet(set))
 
       const state = getState().interview
       const page = state.page
       const sets = [...state.sets, set]
-      const values = isNil(value) ? [...state.values] : [...state.values, value]
+      const values = [...state.values]
 
       initSets(sets, page)
       initValues(sets, values, page)
@@ -479,7 +480,7 @@ export function createSet(attrs) {
       return dispatch(storeValue(value)).then(() => {
         const storedValue = getState().interview.values.find((v) => compareValues(v, value))
         if (!isNil(storedValue)) {
-          createSetCallback(storedValue)
+          createSetCallback()
         }
       })
     }
