@@ -105,7 +105,7 @@ export function fetchValues(page, refresh = false) {
         if (refresh) {
           // if the values are just refreshed after a value is stored or deleted, loop
           // over the existing values and add all temporary values which were not stored yet
-          const unsavedValues = getState().interview.values.filter((value) => isNil(value.id))
+          const unsavedValues = (getState().interview.values || []).filter((value) => isNil(value.id))
 
           // extend values with all unsaved values, which are not found in values
           const keptUnsavedValues = unsavedValues.filter(
@@ -122,7 +122,7 @@ export function fetchValues(page, refresh = false) {
         initValues(sets, values, page)
 
         dispatch(resolveConditions(page, sets))
-        dispatch(actions.fetchValuesSuccess({ values, sets }))
+        dispatch(actions.fetchValuesSuccess({ values, sets, pageId: page.id }))
       })
       .catch((error) => dispatch(setError('values', error, gettext('Values'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
@@ -169,7 +169,7 @@ export function resolveConditions(page, sets) {
     })
 
     return ProjectApi.resolveConditions(projectId, payload)
-      .then((results) => dispatch(actions.resolveConditionsSuccess(results)))
+      .then((results) => dispatch(actions.resolveConditionsSuccess({ results, pageId: page.id })))
       .catch((error) => dispatch(setError('conditions', error, gettext('Conditions'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
@@ -239,7 +239,7 @@ export function storeValue(value) {
 
           // check if there is a file or if a filename is set (when the file was just erased)
           if (isNil(valueFile) && isNil(value.file_name)) {
-            dispatch(actions.storeValueSuccess({ value, valueId }))
+            dispatch(actions.storeValueSuccess({ value, valueId, pageId: page.id }))
           } else {
             // keep the id from the response in the store, so that the value is not created
             // twice when it is stored again after the file upload failed
@@ -249,7 +249,7 @@ export function storeValue(value) {
 
             // upload file after the value is created
             return ValueApi.storeFile(projectId, value, valueFile)
-              .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
+              .then((value) => dispatch(actions.storeValueSuccess({ value, valueId, pageId: page.id })))
               .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
           }
         })
@@ -283,7 +283,7 @@ export function storeDefaultValues() {
       dispatch(actions.storeValueInit(valueId))
 
       return ValueApi.storeValue(projectId, value)
-        .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
+        .then((value) => dispatch(actions.storeValueSuccess({ value, valueId, pageId: page.id })))
         .catch((error) => dispatch(actions.storeValueError({ error: serializeError(error), valueId })))
     })).finally(() => dispatch(removeFromPending(pendingId)))
   }
@@ -335,7 +335,7 @@ export function copyValue(question, ...originalValues) {
     dispatch(addToPending(pendingId))
     dispatch(clearError('copyValue'))
 
-    const { sets, values } = getState().interview
+    const { page, sets, values } = getState().interview
 
     // create copies for each value for all it's empty siblings
     const copies = valuesToCopy.reduce((copies, value) => {
@@ -383,13 +383,12 @@ export function copyValue(question, ...originalValues) {
     return Promise.all(
       copies.map(([value, valueId]) => (
         ValueApi.storeValue(projectId, value)
-          .then((storedValue) => dispatch(actions.storeValueSuccess({ value: storedValue, valueId })))
+          .then((storedValue) => dispatch(actions.storeValueSuccess({ value: storedValue, valueId, pageId: page.id })))
       ))
     ).then(() => {
       // sort values in the store after the updates
       dispatch(resortValues())
 
-      const page = getState().interview.page
       const sets = getState().interview.sets
       const question = page.questions.find((question) => question.attribute === firstValue.attribute)
       const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)

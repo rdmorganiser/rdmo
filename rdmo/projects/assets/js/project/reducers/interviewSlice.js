@@ -36,7 +36,13 @@ const interviewSlice = createSlice({
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
     },
-    fetchValuesSuccess: setValues,
+    fetchValuesSuccess(state, action) {
+      const { pageId } = action.payload
+
+      if (state.page?.id === pageId) {
+        setValues(state, action)
+      }
+    },
     fetchOptionsSuccess(state, action) {
       const { pageId, optionsetId, options } = action.payload
       if (state.page?.id === pageId) {
@@ -44,9 +50,15 @@ const interviewSlice = createSlice({
       }
     },
     resolveConditionsSuccess(state, action) {
+      const { pageId } = action.payload
+
+      if (state.page?.id !== pageId) {
+        return
+      }
+
       state.sets = state.sets.map(set => {
         // filter all results for the current set
-        const results = action.payload.filter(result => (
+        const results = action.payload.results.filter(result => (
           result.set_prefix === set.set_prefix &&
           result.set_index === set.set_index
         ))
@@ -76,7 +88,12 @@ const interviewSlice = createSlice({
       ))
     },
     storeValueSuccess(state, action) {
-      const { value, valueId } = action.payload
+      const { value, valueId, pageId } = action.payload
+
+      if (state.page?.id !== pageId || state.values === null) {
+        return
+      }
+
       if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
         state.values = state.values.map(currentValue => (
           // keep the tmp_id, so that outdated copies of the value (e.g. in debounced inputs) can still be matched
