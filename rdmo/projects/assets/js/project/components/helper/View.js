@@ -17,8 +17,8 @@ const View = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
-  const [includeHelp] = useConfig('document.includeHelp', false)
   const { currentView } = useSelector((state) => state.project)
+  const [ includeHelp ] = useConfig('document.includeHelp', false)
 
   const reloadView = () => {
     const area = snapshotId == null ? 'documents' : 'snapshots'
@@ -34,12 +34,11 @@ const View = () => {
   }
 
   const handleExport = (format) => {
-    if (detail == 'questions') {
-      dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': includeHelp, 'hide_answers': 'true'}))
-    } else if (detail == 'answers') {
-      dispatch(downloadAnswers(snapshotId, format,
-        {'include_help': includeHelp, 'hide_answers': 'false'}))
+    if (['questions', 'answers'].includes(detail)) {
+      dispatch(downloadAnswers(snapshotId, format, {
+        include_help: includeHelp,
+        include_answers: detail == 'answers' ? 'true' : 'false'
+      }))
     } else if (!isNil(viewId)) {
       dispatch(downloadView(snapshotId, viewId, format))
     }
