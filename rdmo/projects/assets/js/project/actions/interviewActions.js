@@ -55,6 +55,31 @@ export function fetchPage(pageId, back) {
   }
 }
 
+export function refreshPage(values = []) {
+  return (dispatch, getState) => {
+    const page = getState().interview.page
+    const sets = getState().interview.sets
+
+    // check if one of the questions for the given values has an optionset with the refresh flag
+    const attributes = values.map((value) => value.attribute)
+    const refetchValues = page.questions
+      .filter((question) => attributes.includes(question.attribute))
+      .some((question) => question.optionsets.some((optionset) => optionset.has_refresh))
+
+    dispatch(fetchNavigation())
+    dispatch(updateProgress())
+
+    if (refetchValues) {
+      // if the refresh flag is set on one of the optionsets, reload all values for the page,
+      // resolveConditions will be called in fetchValues. Preserve unsaved values,
+      // since they are not included in the response from the backend.
+      dispatch(fetchValues(page, true))
+    } else {
+      dispatch(resolveConditions(page, sets))
+    }
+  }
+}
+
 export function fetchContinue() {
   const pendingId = 'fetchContinue'
 
@@ -175,7 +200,7 @@ export function resolveConditions(page, sets) {
   }
 }
 
-export function storeValue(value) {
+export function storeValue(value, refresh = true) {
   const valueId = value.id || value.tmp_id
   if (isNil(valueId)) {
     throw new Error('Could not determine valueId in storeValue')
@@ -188,9 +213,7 @@ export function storeValue(value) {
   } else {
     return (dispatch, getState) => {
       const page = getState().interview.page
-      const sets = getState().interview.sets
       const question = page.questions.find((question) => question.attribute === value.attribute)
-      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
       const widget_type = question && question.widget_type
 
       const valueText = value.text
@@ -211,16 +234,8 @@ export function storeValue(value) {
             return dispatch(storeValue({ ...currentValue, id, updated, dirty: false, pending: false }))
           }
 
-          dispatch(fetchNavigation())
-          dispatch(updateProgress())
-
           if (refresh) {
-            // if the refresh flag is set, reload all values for the page,
-            // resolveConditions will be called in fetchValues. Preserve unsaved values,
-            // since they are not included in the response from the backend.
-            dispatch(fetchValues(page, true))
-          } else {
-            dispatch(resolveConditions(page, sets))
+            dispatch(refreshPage([value]))
           }
 
           // set the success flag and start the timeout to remove it. the flag is actually
@@ -335,7 +350,7 @@ export function copyValue(question, ...originalValues) {
     dispatch(addToPending(pendingId))
     dispatch(clearError('copyValue'))
 
-    const { page, sets, values } = getState().interview
+    const { sets, values } = getState().interview
 
     // create copies for each value for all it's empty siblings
     const copies = valuesToCopy.reduce((copies, value) => {
@@ -375,36 +390,20 @@ export function copyValue(question, ...originalValues) {
       ]
     }, [])
 
-    // dispatch storeValueInit for each of the updated values,
-    copies.forEach(([, valueId]) => dispatch(actions.storeValueInit(valueId)))
-
-    // loop over all copies and store the values on the server
-    // afterwards fetchNavigation, updateProgress and check refresh once
-    return Promise.all(
-      copies.map(([value, valueId]) => (
-        ValueApi.storeValue(projectId, value)
-          .then((storedValue) => dispatch(actions.storeValueSuccess({ value: storedValue, valueId, pageId: page.id })))
-      ))
-    ).then(() => {
-      // sort values in the store after the updates
-      dispatch(resortValues())
-
-      const sets = getState().interview.sets
-      const question = page.questions.find((question) => question.attribute === firstValue.attribute)
-      const refresh = question && question.optionsets.some((optionset) => optionset.has_refresh)
-
-      dispatch(fetchNavigation())
-      dispatch(updateProgress())
-
-      if (refresh) {
-        // if the refresh flag is set, reload all values for the page,
-        // resolveConditions will be called in fetchValues. Preserve unsaved values,
-        // since they are not included in the response from the backend.
-        dispatch(fetchValues(page, true))
+    // update the store right away, siblings which are currently stored are marked as dirty
+    copies.forEach(([value, valueId]) => {
+      if (isNil(valueId)) {
+        dispatch(actions.createValue(value))
       } else {
-        dispatch(resolveConditions(page, sets))
+        dispatch(actions.updateValue({ value, attrs: { ...value, dirty: value.pending } }))
       }
     })
+
+    // sort values in the store after the updates
+    dispatch(resortValues())
+
+    return Promise.all(copies.map(([value]) => dispatch(storeValue(value, false))))
+      .then(() => dispatch(refreshPage(copies.map(([value]) => value))))
       .catch((error) => dispatch(setError('copyValue', error, gettext('Copy value'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
@@ -421,7 +420,7 @@ export function deleteValue(value) {
   if (value.pending) {
     return actions.noop()
   } else {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch(addToPending(pendingId))
       dispatch(actions.deleteValueInit(valueId))
 
@@ -431,23 +430,7 @@ export function deleteValue(value) {
       } else {
         return ValueApi.deleteValue(projectId, value)
           .then(() => {
-            const page = getState().interview.page
-            const sets = getState().interview.sets
-            const question = page.questions.find((question) => question.attribute === value.attribute)
-            const refresh = question.optionsets.some((optionset) => optionset.has_refresh)
-
-            dispatch(fetchNavigation())
-            dispatch(updateProgress())
-
-            if (refresh) {
-              // if the refresh flag is set, reload all values for the page,
-              // resolveConditions will be called in fetchValues. Preserve unsaved values,
-              // since they are not included in the response from the backend.
-              dispatch(fetchValues(page, true))
-            } else {
-              dispatch(resolveConditions(page, sets))
-            }
-
+            dispatch(refreshPage([value]))
             dispatch(actions.deleteValueSuccess(valueId))
           })
           .catch((error) => dispatch(actions.deleteValueError({ error: serializeError(error), valueId })))
