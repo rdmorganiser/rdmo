@@ -14,7 +14,8 @@ import View from './helper/View'
 
 const Main = () => {
   const { area, snapshotId } = useSelector((state) => state.location)
-  const { project, currentView } = useSelector((state) => state.project)
+  const { project } = useSelector((state) => state.project)
+  const { currentView } = useSelector((state) => state.document)
 
   const renderArea = () => {
     switch (area) {

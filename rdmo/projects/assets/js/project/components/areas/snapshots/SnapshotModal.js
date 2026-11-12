@@ -7,7 +7,8 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Template from 'rdmo/core/assets/js/components/Template'
 
-import { clearProjectErrors, createSnapshot, updateSnapshot } from '../../../actions/projectActions'
+import { clearProjectErrors } from '../../../actions/projectActions'
+import { createSnapshot, updateSnapshot } from '../../../actions/snapshotActions'
 import { useFieldErrors } from '../../../hooks'
 
 const initialForm = { title: '', description: '' }

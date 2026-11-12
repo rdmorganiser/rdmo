@@ -12,7 +12,7 @@ import LocationLink from '../../helper/LocationLink'
 const InterviewOverview = () => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
-  const navigation = useSelector((state) => state.project.navigation)
+  const navigation = useSelector((state) => state.interview.navigation)
   const catalogHelp = useSelector((state) => state.project.project.catalog_help)
   const continuation = useSelector((state) => state.interview.continuation)
 

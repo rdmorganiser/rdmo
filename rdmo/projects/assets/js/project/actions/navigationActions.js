@@ -2,21 +2,14 @@ import { isNil } from 'lodash'
 
 import { selectConfig } from 'rdmo/core/assets/js/reducers/configSlice'
 
+import { clearCurrentView, fetchAnswers, fetchProjectViews, fetchView } from './documentActions'
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
+import { fetchNavigation, fetchProgress } from './interviewNavigationActions'
+import { fetchProjectIssues } from './issueActions'
 import { setLocation } from './locationActions'
-import {
-  clearCurrentView,
-  fetchAnswers,
-  fetchCatalogs,
-  fetchNavigation,
-  fetchProgress,
-  fetchProjectHierarchy,
-  fetchProjectIssues,
-  fetchProjectMemberships,
-  fetchProjectSnapshots,
-  fetchProjectViews,
-  fetchView
-} from './projectActions'
+import { fetchProjectMemberships } from './membershipActions'
+import { fetchCatalogs, fetchProjectHierarchy } from './projectActions'
+import { fetchProjectSnapshots } from './snapshotActions'
 
 export function navigateDashboard(location, back = null) {
   return (dispatch, getState) => {

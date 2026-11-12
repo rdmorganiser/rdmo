@@ -18,7 +18,7 @@ import ValueApi from '../api/ValueApi'
 import SetFactory from '../factories/SetFactory'
 import ValueFactory from '../factories/ValueFactory'
 
-import { fetchNavigation, fetchProgress, updateProgress } from './projectActions'
+import { fetchNavigation, fetchProgress, updateProgress } from './interviewNavigationActions'
 
 export function fetchPage(pageId, back) {
   const pendingId = 'fetchPage'

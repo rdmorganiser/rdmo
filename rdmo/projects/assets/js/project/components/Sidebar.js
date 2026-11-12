@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const { area } = useSelector((state) => state.location)
   const { project, visibility } = useSelector((state) => state.project)
-  const providers = useSelector((state) => state.project.providers) ?? {}
+  const providers = useSelector((state) => state.integration.providers) ?? {}
 
   const menuItems = [
     {

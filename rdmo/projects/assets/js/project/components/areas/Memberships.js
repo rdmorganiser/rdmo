@@ -11,8 +11,8 @@ import MembershipTable from './memberships/MembershipTable'
 const Memberships = () => {
   const { show: showInvite, open: openInvite, close: closeInvite } = useModal()
 
-  const { memberships } = useSelector((state) => state.project) ?? {}
-  const { invites } = useSelector((state) => state.project)
+  const { memberships } = useSelector((state) => state.membership) ?? {}
+  const { invites } = useSelector((state) => state.membership)
   const perms = useSelector(selectPermissions)
 
   return (

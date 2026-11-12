@@ -9,7 +9,8 @@ import { Input, Textarea } from 'rdmo/core/assets/js/components/forms'
 
 import Template from 'rdmo/core/assets/js/components/Template'
 
-import { fetchProjectFiles, sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/projectActions'
+import { fetchProjectFiles } from '../../../actions/documentActions'
+import { sendProjectIssueEmail, sendProjectIssueIntegration } from '../../../actions/issueActions'
 import { useFieldErrors } from '../../../hooks'
 
 import ProjectApi from '../../../api/ProjectApi'
@@ -28,7 +29,7 @@ const SendIssueModal = ({
   const isSendingEmail = useSelector(state => state.pending.items.includes('sendProjectIssueEmail'))
   const isSendingIntegration = useSelector(state => state.pending.items.includes('sendProjectIssueIntegration'))
   const isSubmitting = isSendingEmail || isSendingIntegration
-  const integrations = useSelector(state => state.project.integrations) ?? []
+  const integrations = useSelector(state => state.integration.integrations) ?? []
   const {
     subject: subjectErrors,
     message: messageErrors,

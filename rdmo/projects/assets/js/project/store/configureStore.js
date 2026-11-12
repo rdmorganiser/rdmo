@@ -22,12 +22,20 @@ import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/s
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
 import { selectPermissions } from '../../common/selectors/permissions'
+import * as integrationActions from '../actions/integrationActions'
+import * as issueActions from '../actions/issueActions'
+import * as membershipActions from '../actions/membershipActions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
+import documentReducer from '../reducers/documentSlice'
+import integrationReducer from '../reducers/integrationSlice'
 import interviewReducer from '../reducers/interviewSlice'
+import issueReducer from '../reducers/issueSlice'
 import locationReducer from '../reducers/locationSlice'
+import membershipReducer from '../reducers/membershipSlice'
 import projectReducer from '../reducers/projectSlice'
+import snapshotReducer from '../reducers/snapshotSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -57,6 +65,11 @@ export default function configureStore() {
       errors: errorsReducer,
       pending: pendingReducer,
       project: projectReducer,
+      membership: membershipReducer,
+      snapshot: snapshotReducer,
+      document: documentReducer,
+      issue: issueReducer,
+      integration: integrationReducer,
       settings: settingsReducer,
       templates: templateReducer,
       user: userReducer,
@@ -72,7 +85,7 @@ export default function configureStore() {
   })
 
   configureStaleRefresh(store, {
-    projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())
+    projectIssues: () => store.dispatch(issueActions.fetchProjectIssues())
   })
 
   const initDashboardFromLocation = () => {
@@ -99,7 +112,7 @@ export default function configureStore() {
       const permissions = selectPermissions(state)
 
       if (permissions.can_view_invite) {
-        store.dispatch(projectActions.fetchProjectInvites(projectId))
+        store.dispatch(membershipActions.fetchProjectInvites(projectId))
       }
 
       if (permissions.can_view_visibility) {
@@ -114,10 +127,10 @@ export default function configureStore() {
         }
       }
       if (permissions.can_add_integration || permissions.can_change_integration) {
-        store.dispatch(projectActions.fetchProviders())
+        store.dispatch(integrationActions.fetchProviders())
       }
       if (permissions.can_view_integration) {
-        store.dispatch(projectActions.fetchProjectIntegrations(projectId))
+        store.dispatch(integrationActions.fetchProjectIntegrations(projectId))
       }
       initDashboardFromLocation()
     })

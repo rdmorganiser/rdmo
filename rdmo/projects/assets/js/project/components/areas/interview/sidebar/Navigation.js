@@ -8,7 +8,7 @@ import NavigationLink from './NavigationLink'
 
 const Navigation = () => {
   const { page: currentPage } = useSelector((state) => state.interview)
-  const navigation = useSelector((state) => state.project.navigation)
+  const navigation = useSelector((state) => state.interview.navigation)
 
   return currentPage && navigation && (
     <>

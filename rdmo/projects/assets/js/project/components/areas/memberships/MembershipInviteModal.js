@@ -9,7 +9,8 @@ import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/perm
 import Html from 'rdmo/core/assets/js/components/Html'
 import Template from 'rdmo/core/assets/js/components/Template'
 
-import { clearProjectErrors, createProjectMember, sendProjectInvite } from '../../../actions/projectActions'
+import { createProjectMember, sendProjectInvite } from '../../../actions/membershipActions'
+import { clearProjectErrors } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
 const initialForm = { lookup: '', role: 'author' }

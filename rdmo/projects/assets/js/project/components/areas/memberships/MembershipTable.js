@@ -8,7 +8,7 @@ import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/perm
 
 import Select from 'rdmo/core/assets/js/components/Select'
 
-import { updateProjectInvite, updateProjectMember } from '../../../actions/projectActions'
+import { updateProjectInvite, updateProjectMember } from '../../../actions/membershipActions'
 
 import MembershipDeleteModal from './MembershipDeleteModal'
 
