@@ -521,9 +521,10 @@ export function deleteSet(set, setValue) {
     // gather all values for this set and it's descendants
     const { values } = getDescendants(getState().interview.values, getState().interview.sets, set)
 
-    // do not delete the set while one of its values is stored, since it would be created again
+    // do not delete the set while one of its values is stored, since it would be created again,
+    // return null, so that the component can check if the set is deleted (e.g. to keep a modal open)
     if (setValue?.pending || values.some((value) => value.pending)) {
-      return dispatchOnPage(actions.noop())
+      return null
     }
 
     dispatch(addToPending(pendingId))
@@ -577,6 +578,15 @@ export function copySet(currentSet, copySetValue, attrs) {
 
   return (dispatch, getState) => {
     const dispatchOnPage = getDispatchOnPage(dispatch, getState, getState().interview.page)
+
+    // do not copy the set while one of its values is stored, since the copy would miss the changes,
+    // return null, so that the component can check if the set is copied (e.g. to keep a modal open)
+    const { values: descendantValues } = isNil(currentSet) ? { values: [] } : (
+      getDescendants(getState().interview.values, getState().interview.sets, currentSet)
+    )
+    if (copySetValue?.pending || descendantValues.some((value) => value.pending)) {
+      return null
+    }
 
     dispatch(addToPending(pendingId))
     dispatchOnPage(clearError('copySet'))
