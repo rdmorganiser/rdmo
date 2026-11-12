@@ -205,8 +205,8 @@ export function storeValue(value) {
           // if the value was updated while the request was running, store it again
           // (with the id from the response, so that a new value is not created twice)
           const currentValue = getState().interview.values.find((v) => compareValueId(v, valueId))
+          const { id, updated } = value
           if (currentValue && currentValue.dirty) {
-            const { id, updated } = value
             dispatch(actions.updateValue({ value: currentValue, attrs: { id, updated, dirty: false, pending: false } }))
             return dispatch(storeValue({ ...currentValue, id, updated, dirty: false, pending: false }))
           }
@@ -241,6 +241,12 @@ export function storeValue(value) {
           if (isNil(valueFile) && isNil(value.file_name)) {
             dispatch(actions.storeValueSuccess({ value, valueId }))
           } else {
+            // keep the id from the response in the store, so that the value is not created
+            // twice when it is stored again after the file upload failed
+            if (currentValue) {
+              dispatch(actions.updateValue({ value: currentValue, attrs: { id, updated } }))
+            }
+
             // upload file after the value is created
             return ValueApi.storeFile(projectId, value, valueFile)
               .then((value) => dispatch(actions.storeValueSuccess({ value, valueId })))
