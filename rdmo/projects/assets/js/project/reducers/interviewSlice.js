@@ -112,7 +112,7 @@ const interviewSlice = createSlice({
     storeValueError(state, action) {
       const { error, valueId } = action.payload
       state.values = state.values.map(value => (
-        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+        compareValueId(value, valueId) ? { ...value, error, pending: false, dirty: false } : value
       ))
     },
     deleteValueInit(state, action) {
@@ -126,7 +126,7 @@ const interviewSlice = createSlice({
     deleteValueError(state, action) {
       const { error, valueId } = action.payload
       state.values = state.values.map(value => (
-        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+        compareValueId(value, valueId) ? { ...value, error, pending: false, dirty: false } : value
       ))
     },
     createSet: setValues,
