@@ -17,7 +17,7 @@ import staleReducer from 'rdmo/core/assets/js/reducers/staleSlice'
 import templateReducer from 'rdmo/core/assets/js/reducers/templateSlice'
 import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
-import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
+import { checkStoreId, configureLeaveWarning, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
@@ -70,6 +70,10 @@ export default function configureStore() {
     preloadedState: initialState,
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(middlewares)
   })
+
+  configureLeaveWarning(store, (state) => (
+    (state.interview.values || []).some((value) => value.pending || value.dirty)
+  ))
 
   configureStaleRefresh(store, {
     projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())
