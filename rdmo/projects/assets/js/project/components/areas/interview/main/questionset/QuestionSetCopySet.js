@@ -16,12 +16,13 @@ const QuestionCopySet = ({ questionset, sets, currentSet }) => {
   const title = gettext('Copy block')
 
   const handleCopySet = () => {
-    dispatch(copySet(currentSet, null, {
+    if (dispatch(copySet(currentSet, null, {
       set_prefix: currentSet.set_prefix,
       set_index: generateSetIndex(sets, currentSet),
       element: questionset
-    }))
-    modal.close()
+    }))) {
+      modal.close()
+    }
   }
 
   return !readOnly && questionset.is_collection && (

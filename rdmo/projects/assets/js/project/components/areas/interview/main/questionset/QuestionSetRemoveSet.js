@@ -15,8 +15,9 @@ const QuestionRemoveSet = ({ questionset, currentSet }) => {
   const title = gettext('Remove block')
 
   const handleRemoveSet = () => {
-    dispatch(deleteSet(currentSet))
-    modal.close()
+    if (dispatch(deleteSet(currentSet))) {
+      modal.close()
+    }
   }
 
   return !readOnly && questionset.is_collection && (
