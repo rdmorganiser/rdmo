@@ -54,7 +54,7 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
         </label>
 
         <div className="d-flex flex-column justify-content-between gap-2 mb-2">
-          <Search attribute={attribute} values={values} errors={errors} setValues={setValues} />
+          {show && <Search attribute={attribute} values={values} errors={errors} setValues={setValues} />}
         </div>
 
         <p className="form-text mb-0">

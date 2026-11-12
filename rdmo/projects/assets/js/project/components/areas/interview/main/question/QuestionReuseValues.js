@@ -98,14 +98,18 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
             {gettext('Answer')}
           </label>
 
-          <Search
-            question={question}
-            attribute={question.attribute}
-            values={formValues}
-            errors={formErrors}
-            setValues={setFormValues}
-            collection={true}
-          />
+          {
+            show && (
+              <Search
+                question={question}
+                attribute={question.attribute}
+                values={formValues}
+                errors={formErrors}
+                setValues={setFormValues}
+                collection={true}
+              />
+            )
+          }
 
           <p className="form-text mb-0">
             {
