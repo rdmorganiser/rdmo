@@ -86,7 +86,7 @@ const initRange = (question, value) => {
   }
 }
 
-const compareValueId = (value, valueId) => (value.id || value.tmp_id) == valueId
+const compareValueId = (value, valueId) => !isNil(valueId) && (value.id == valueId || value.tmp_id == valueId)
 
 const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {
