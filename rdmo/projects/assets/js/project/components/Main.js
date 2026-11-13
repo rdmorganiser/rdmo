@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { isNil } from 'lodash'
 
 import Errors from 'rdmo/core/assets/js/components/Errors'
 
@@ -13,9 +14,9 @@ import Snapshots from './areas/Snapshots'
 import View from './helper/View'
 
 const Main = () => {
-  const { area, snapshotId } = useSelector((state) => state.location)
+  const { area, snapshotId, viewId, detail } = useSelector((state) => state.location)
   const { project } = useSelector((state) => state.project)
-  const { currentView } = useSelector((state) => state.document)
+  const showView = !isNil(viewId) || ['questions', 'answers'].includes(detail)
 
   const renderArea = () => {
     switch (area) {
@@ -24,9 +25,9 @@ const Main = () => {
       case 'interview':
         return <Interview />
       case 'documents':
-        return currentView ? <View /> : <Documents />
+        return showView ? <View /> : <Documents />
       case 'snapshots':
-        return currentView ? <View /> : (snapshotId ? <Documents /> : <Snapshots />)
+        return showView ? <View /> : (snapshotId ? <Documents /> : <Snapshots />)
       case 'information':
         return <Information />
       case 'memberships':
