@@ -9,12 +9,12 @@ def set_integration_titles(apps, schema_editor):
     Integration = apps.get_model('projects', 'Integration')
 
     for integration in Integration.objects.all():
-        provider = get_plugin('PROJECT_ISSUE_PROVIDERS', integration.provider_key)
-
         try:
-            label = str(provider.label)
-        except (AttributeError, TypeError):
-            label = integration.provider_key
+            provider = get_plugin('PROJECT_ISSUE_PROVIDERS', integration.provider_key)
+        except (ImportError, AttributeError):
+            provider = None
+
+        label = str(provider.label) if provider else integration.provider_key
 
         integration.title = f'{label} {integration.pk}'
         integration.save(update_fields=('title',))
