@@ -62,6 +62,34 @@ def test_progress_get(db, client, username, password, project_id):
             assert response.status_code == 401
 
 
+def test_progress_get_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    Project.objects.filter(pk=project.pk).update(progress_count=37, progress_total=50)
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['progress'], args=[project.pk]))
+    assert response.status_code == 200
+    assert response.json() == {'count': None, 'total': None, 'ratio': None}
+
+
+@pytest.mark.parametrize('username,password', [('user', 'user'), ('anonymous', None)])
+def test_progress_get_without_catalog_forbidden(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['progress'], args=[project.pk])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 def test_progress_post(db, client, username, password, project_id):
@@ -92,6 +120,18 @@ def test_progress_post(db, client, username, password, project_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_progress_post_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    Project.objects.filter(pk=project.pk).update(progress_count=37, progress_total=50)
+    client.login(username='owner', password='owner')
+    response = client.post(reverse(urlnames['progress'], args=[project.pk]))
+    assert response.status_code == 200
+    assert response.json() == {'count': None, 'total': None, 'ratio': None}
 
 
 def test_progress_post_changed(db, client):

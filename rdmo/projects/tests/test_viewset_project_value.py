@@ -9,7 +9,7 @@ from django.urls import reverse
 from rdmo.core.constants import VALUE_TYPE_FILE, VALUE_TYPE_TEXT
 from rdmo.domain.models import Attribute
 
-from ..models import Value
+from ..models import Project, Value
 
 users = (
     ('owner', 'owner'),
@@ -363,6 +363,20 @@ def test_delete_set(db, client, username, password, project_id, value_id, set_va
         assert response.status_code == 404
         assert Value.objects.filter(pk=value_id).exists()
         assert Value.objects.count() == values_count
+
+
+def test_delete_set_without_catalog_preserves_values(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    value = project.values.filter(snapshot=None).first()
+    original_ids = set(project.values.values_list('id', flat=True))
+    client.login(username='owner', password='owner')
+    response = client.delete(reverse(urlnames['delete-set'], args=[project.pk, value.pk]))
+    assert response.status_code == 400
+    assert 'catalog' in response.json()
+    assert set(project.values.values_list('id', flat=True)) == original_ids
 
 
 @pytest.mark.parametrize('set_prefix', ['10', '11'])

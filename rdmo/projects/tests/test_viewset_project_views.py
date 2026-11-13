@@ -1,6 +1,7 @@
 import pytest
 
 from django.urls import reverse
+from django.utils.html import escape
 
 from ..models import Project, Snapshot
 
@@ -65,6 +66,19 @@ def test_views(db, client, username, password, project_id):
             assert response.status_code == 401
 
 
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_views_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['views'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('view_id', views)
@@ -84,6 +98,24 @@ def test_view(db, client, username, password, project_id, view_id):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+def test_view_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    view = project.views.first()
+    assert view is not None
+    view.template = (
+        '{{ project.title }}: {{ project.catalog.title }}'
+        '{% for question in project.questions %}{{ question.text }}{% endfor %}'
+    )
+    view.save()
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['view'], args=[project.pk, view.pk]))
+    assert response.status_code == 200
+    assert response.json()['html'] == f'{escape(project.title)}: '
 
 
 @pytest.mark.parametrize('username,password', users)

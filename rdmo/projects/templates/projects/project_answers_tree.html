@@ -1,4 +1,10 @@
-{% load core_tags %}
+{% load core_tags i18n %}
+
+{% if not project.catalog %}
+    <p class="text-warning">
+        {% trans "This project has no catalog. Questionnaire content is unavailable until a catalog is selected." %}
+    </p>
+{% endif %}
 
 {% for section in project_wrapper.catalog.sections %}
 

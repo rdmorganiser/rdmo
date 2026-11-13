@@ -53,6 +53,23 @@ def test_get_values_uri(context, values):
     assertListEqual(get_values(context, uri), values.filter(attribute__uri=uri))
 
 
+def test_get_values_without_catalog(db):
+    project = Project.objects.get(pk=project_pk)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    project_wrapper = ProjectWrapper(project)
+    assert project_wrapper.catalog is None
+    assert project_wrapper.questions == []
+
+    context = Context({'project': project_wrapper})
+    value = project.values.filter(snapshot=None, attribute__isnull=False).first()
+    assert value is not None
+    assertListEqual(get_values(context, value.attribute.uri), project.values.filter(
+        snapshot=None, attribute=value.attribute,
+    ))
+
+
 def test_get_values(context, values):
     path = 'individual/collection/text'
     assertListEqual(get_values(context, path), values.filter(attribute__path=path))

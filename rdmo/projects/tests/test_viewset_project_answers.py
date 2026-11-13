@@ -2,7 +2,9 @@ import pytest
 
 from django.urls import reverse
 
-from ..models import Snapshot
+from rdmo.core.constants import VALUE_TYPE_FILE
+
+from ..models import Project, Snapshot
 
 users = (
     ('owner', 'owner'),
@@ -58,6 +60,35 @@ def test_view(db, client, username, password, project_id):
             assert response.status_code == 401
 
 
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_view_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['answers'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+@pytest.mark.parametrize('username,password', [('user', 'user'), ('anonymous', None)])
+def test_view_without_catalog_forbidden(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['answers'], args=[project.pk])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('snapshot_id', snapshots)
 def test_view_snapshot(db, client, username, password, snapshot_id):
@@ -77,6 +108,43 @@ def test_view_snapshot(db, client, username, password, snapshot_id):
             assert response.status_code == 401
 
 
+@pytest.mark.parametrize('snapshot_id', [None, 1])
+def test_view_without_catalog_attachments(db, client, snapshot_id):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    urlname = 'answers-snapshot' if snapshot_id is not None else 'answers'
+    args = [project.pk, snapshot_id] if snapshot_id is not None else [project.pk]
+
+    response = client.get(reverse(urlnames[urlname], args=args))
+    assert response.status_code == 200
+    data = response.json()
+    assert 'This project has no catalog.' in data['html']
+    assert {attachment['id'] for attachment in data['attachments']} == set(
+        project.values.filter(snapshot_id=snapshot_id, value_type=VALUE_TYPE_FILE).values_list('id', flat=True)
+    )
+
+
+@pytest.mark.parametrize('unavailable_on_site', [False, True])
+def test_view_unavailable_catalog(db, client, unavailable_on_site, settings):
+    project = Project.objects.get(pk=1)
+    catalog = project.catalog
+    if unavailable_on_site:
+        settings.MULTISITE = True
+        catalog.sites.clear()
+    else:
+        catalog.available = False
+        catalog.save()
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['answers'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert 'This project has no catalog.' not in response.json()['html']
+
+
 @pytest.mark.parametrize('username,password', users)
 def test_view_snapshot_not_found(db, client, username, password):
     client.login(username=username, password=password)
@@ -88,6 +156,16 @@ def test_view_snapshot_not_found(db, client, username, password):
         assert response.status_code == 404
     else:
         assert response.status_code == 401
+
+
+def test_view_snapshot_not_found_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['answers-snapshot'], args=[project.pk, 999999]))
+    assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -106,6 +184,23 @@ def test_view_export(db, client, username, password, project_id, export_format):
             assert response.status_code == 404
         else:
             assert response.status_code == 401
+
+
+@pytest.mark.parametrize('snapshot_id', [None, 1])
+def test_view_export_without_catalog(db, client, snapshot_id):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    if snapshot_id is None:
+        url = reverse(urlnames['answers-export'], args=[project.pk, 'html'])
+    else:
+        url = reverse(urlnames['answers-export-snapshot'], args=[project.pk, snapshot_id, 'html'])
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert 'This project has no catalog.' in response.content.decode()
 
 
 @pytest.mark.parametrize('username,password', users)
