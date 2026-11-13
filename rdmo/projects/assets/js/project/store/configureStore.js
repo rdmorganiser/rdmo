@@ -2,9 +2,7 @@ import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
-import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
@@ -19,12 +17,10 @@ import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
-import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
 import { selectPermissions } from '../../common/selectors/permissions'
 import * as integrationActions from '../actions/integrationActions'
 import * as issueActions from '../actions/issueActions'
-import * as membershipActions from '../actions/membershipActions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
@@ -104,31 +100,23 @@ export default function configureStore() {
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
-      store.dispatch(projectActions.fetchProject()),
-      store.dispatch(rolesActions.fetchRoles())
+      store.dispatch(projectActions.fetchProject())
     ]).then(() => {
       const state = store.getState()
       const project = state.project.project
       const permissions = selectPermissions(state)
 
-      if (permissions.can_view_invite) {
-        store.dispatch(membershipActions.fetchProjectInvites(projectId))
-      }
-
+      // visibility is rendered in sidebar
       if (permissions.can_view_visibility) {
-        if (state.settings.multisite && permissions.can_view_site) {
-          store.dispatch(sitesActions.fetchSites())
-        }
-        if (state.settings.groups && permissions.can_view_group) {
-          store.dispatch(groupsActions.fetchGroups())
-        }
         if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }
       }
+      // conditional rendering of Integrations link in sidebar depends on available providers
       if (permissions.can_add_integration || permissions.can_change_integration) {
         store.dispatch(integrationActions.fetchProviders())
       }
+      // integrations are used in the Integrations area and the Send task modal
       if (permissions.can_view_integration) {
         store.dispatch(integrationActions.fetchProjectIntegrations(projectId))
       }
