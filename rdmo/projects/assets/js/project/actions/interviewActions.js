@@ -248,7 +248,7 @@ export function storeValue(value, refresh = true) {
           }
 
           if (refresh) {
-            dispatch(refreshPage([value]))
+            dispatchOnPage(refreshPage([value]))
           }
 
           // set the success flag and start the timeout to remove it. the flag is actually
@@ -419,7 +419,7 @@ export function copyValue(question, ...originalValues) {
     dispatchOnPage(resortValues())
 
     return Promise.all(copies.map(([value]) => dispatchOnPage(storeValue(value, false))))
-      .then(() => dispatch(refreshPage(copies.map(([value]) => value))))
+      .then(() => dispatchOnPage(refreshPage(copies.map(([value]) => value))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
@@ -447,7 +447,7 @@ export function deleteValue(value) {
       } else {
         return ValueApi.deleteValue(projectId, value)
           .then(() => {
-            dispatch(refreshPage([value]))
+            dispatchOnPage(refreshPage([value]))
             dispatchOnPage(actions.deleteValueSuccess(valueId))
           })
           .catch((error) => dispatchOnPage(actions.deleteValueError({ error: serializeError(error), valueId })))
