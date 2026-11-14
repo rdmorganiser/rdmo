@@ -1,8 +1,16 @@
 import { get, isNil, pick } from 'lodash'
 
-import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { updateConfig } from 'rdmo/core/assets/js/actions/configActions'
+import * as errorActions from 'rdmo/core/assets/js/actions/errorsActions'
+import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
+import { selectConfig } from 'rdmo/core/assets/js/reducers/configSlice'
+import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 import { siteId } from 'rdmo/core/assets/js/utils/meta'
+
+import { elementTypes } from '../constants/elements'
+import { actions } from '../reducers/elementsSlice'
+import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
+import { updateLocation } from '../utils/location'
 
 import ConditionsApi from '../api/ConditionsApi'
 import DomainApi from '../api/DomainApi'
@@ -10,17 +18,12 @@ import OptionsApi from '../api/OptionsApi'
 import QuestionsApi from '../api/QuestionsApi'
 import TasksApi from '../api/TasksApi'
 import ViewsApi from '../api/ViewsApi'
-
 import ConditionsFactory from '../factories/ConditionsFactory'
 import DomainFactory from '../factories/DomainFactory'
 import OptionsFactory from '../factories/OptionsFactory'
 import QuestionsFactory from '../factories/QuestionsFactory'
 import TasksFactory from '../factories/TasksFactory'
 import ViewsFactory from '../factories/ViewsFactory'
-
-import { elementTypes } from '../constants/elements'
-import { updateLocation } from '../utils/location'
-import { canMoveElement, findDescendants, moveElement, updateWarning } from '../utils/elements'
 
 export function fetchElements(elementType) {
   const pendingId = `fetchElements/${elementType}`
@@ -29,6 +32,7 @@ export function fetchElements(elementType) {
     updateLocation(elementType)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(fetchElementsInit(elementType))
 
     let action
@@ -96,15 +100,15 @@ export function fetchElements(elementType) {
 }
 
 export function fetchElementsInit(elementType) {
-  return {type: 'elements/fetchElementsInit', elementType}
+  return actions.fetchElementsInit(elementType)
 }
 
 export function fetchElementsSuccess(elements) {
-  return {type: 'elements/fetchElementsSuccess', elements}
+  return actions.fetchElementsSuccess(elements)
 }
 
 export function fetchElementsError(error) {
-  return {type: 'elements/fetchElementsError', error}
+  return errorActions.setError('elements', error, gettext('Elements'))
 }
 
 // fetch element
@@ -116,6 +120,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     updateLocation(elementType, elementId, elementAction)
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(fetchElementInit(elementType, elementId, elementAction))
 
     let action
@@ -167,7 +172,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, sections,
-                    questionsets, questions]) => {
+            questionsets, questions]) => {
             if (elementAction == 'copy') {
               delete element.sections
             }
@@ -192,14 +197,14 @@ export function fetchElement(elementType, elementId, elementAction = null) {
             QuestionsApi.fetchQuestionSets('index'),
             QuestionsApi.fetchQuestions('index')
           ]).then(([element, attributes, conditions, pages,
-                    questionsets, questions]) => {
+            questionsets, questions]) => {
             if (elementAction == 'copy') {
               delete element.pages
               delete element.parents
             }
 
             return {
-             element, attributes, conditions, pages, questionsets, questions
+              element, attributes, conditions, pages, questionsets, questions
             }
           })
         }
@@ -219,7 +224,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
             QuestionsApi.fetchPages('index'),
             QuestionsApi.fetchQuestionSets('index')
           ]).then(([element, attributes, optionsets, options, conditions,
-                    pages, questionsets]) => {
+            pages, questionsets]) => {
             if (elementAction == 'copy') {
               delete element.pages
               delete element.questionsets
@@ -246,17 +251,17 @@ export function fetchElement(elementType, elementId, elementAction = null) {
             QuestionsApi.fetchQuestions('index'),
             TasksApi.fetchTasks('index'),
           ]).then(([element, attributes, conditions, pages, questionsets,
-                    questions, tasks]) => {
-              if (elementAction == 'copy') {
-                delete element.conditions
-                delete element.pages
-                delete element.questionsets
-                delete element.questions
-                delete element.tasks
-              }
+            questions, tasks]) => {
+            if (elementAction == 'copy') {
+              delete element.conditions
+              delete element.pages
+              delete element.questionsets
+              delete element.questions
+              delete element.tasks
+            }
 
             return {
-            element, attributes, conditions, pages, questionsets, questions, tasks
+              element, attributes, conditions, pages, questionsets, questions, tasks
             }
           })
         }
@@ -310,17 +315,17 @@ export function fetchElement(elementType, elementId, elementAction = null) {
           QuestionsApi.fetchQuestions('index'),
           TasksApi.fetchTasks('index'),
         ]).then(([element, attributes, optionsets, options,
-                  pages, questionsets, questions, tasks]) => {
-           if (elementAction == 'copy') {
+          pages, questionsets, questions, tasks]) => {
+          if (elementAction == 'copy') {
             delete element.optionsets
             delete element.pages
             delete element.questionsets
             delete element.questions
             delete element.tasks
           }
-           return {
-             element, attributes, optionsets, options, pages, questionsets, questions, tasks
-           }
+          return {
+            element, attributes, optionsets, options, pages, questionsets, questions, tasks
+          }
         })
         break
 
@@ -348,7 +353,7 @@ export function fetchElement(elementType, elementId, elementAction = null) {
     return dispatch(action)
       .then(elements => {
         if (elementAction == 'copy') {
-          const { settings } = getState().config
+          const settings = getState().settings
 
           elements.element.id = null
           elements.element.read_only = false
@@ -366,15 +371,15 @@ export function fetchElement(elementType, elementId, elementAction = null) {
 }
 
 export function fetchElementInit(elementType, elementId, elementAction) {
-  return {type: 'elements/fetchElementInit', elementType, elementId, elementAction}
+  return actions.fetchElementInit({ elementType, elementId, elementAction })
 }
 
 export function fetchElementSuccess(elements) {
-  return {type: 'elements/fetchElementSuccess', elements}
+  return actions.fetchElementSuccess(elements)
 }
 
 export function fetchElementError(error) {
-  return {type: 'elements/fetchElementError', error}
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // store element
@@ -385,6 +390,7 @@ export function storeElement(elementType, element, back = false) {
   return function(dispatch, getState) {
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(storeElementInit(element))
 
     let action
@@ -449,15 +455,18 @@ export function storeElement(elementType, element, back = false) {
 }
 
 export function storeElementInit(element) {
-  return {type: 'elements/storeElementInit', element}
+  return actions.storeElementInit(element)
 }
 
 export function storeElementSuccess(element) {
-  return {type: 'elements/storeElementSuccess', element}
+  return actions.storeElementSuccess(element)
 }
 
 export function storeElementError(element, error) {
-  return {type: 'elements/storeElementError', element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.storeElementError({ element, error: serializeError(error) })
 }
 
 // patch element
@@ -467,6 +476,7 @@ export function patchElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(patchElementInit(element))
 
     let action
@@ -524,15 +534,18 @@ export function patchElement(elementType, element) {
 }
 
 export function patchElementInit(element) {
-  return {type: 'elements/patchElementInit', element}
+  return actions.patchElementInit(element)
 }
 
 export function patchElementSuccess(element) {
-  return {type: 'elements/patchElementSuccess', element}
+  return actions.patchElementSuccess(element)
 }
 
 export function patchElementError(element, error) {
-  return {type: 'elements/patchElementError', element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.patchElementError({ element, error: serializeError(error) })
 }
 
 // toggle element site
@@ -542,6 +555,7 @@ export function toggleElementSite(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(toggleElementSiteInit(element))
 
     let action
@@ -567,33 +581,37 @@ export function toggleElementSite(elementType, element) {
 }
 
 export function toggleElementSiteInit(element) {
-  return {type: 'elements/toggleElementSiteInit', element}
+  return actions.toggleElementSiteInit(element)
 }
 
 export function toggleElementSiteSuccess(element) {
-  return {type: 'elements/toggleElementSiteSuccess', element}
+  return actions.toggleElementSiteSuccess(element)
 }
 
 export function toggleElementSiteError(element, error) {
-  return {type: 'elements/toggleElementSiteError', element, error}
+  if (get(error, 'errors.api') || isNil(get(error, 'errors'))) {
+    return errorActions.setError('elements', error, gettext('Element'))
+  }
+  return actions.toggleElementSiteError({ element, error: serializeError(error) })
 }
 
 // createElement
 
-export function createElement(elementType, parent={}) {
+export function createElement(elementType, parent = {}) {
   const pendingId = `createElement/${elementType}`
 
   return function(dispatch, getState) {
     updateLocation(elementType, null, 'create')
 
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements', 'imports'))
     dispatch(createElementInit(elementType))
 
     let action
     switch (elementType) {
       case 'catalogs':
         action = () => Promise.all([
-          QuestionsFactory.createCatalog(getState().config),
+          QuestionsFactory.createCatalog(getState().settings),
           QuestionsApi.fetchSections('index')
         ]).then(([element, sections]) => ({
           element, sections
@@ -602,7 +620,7 @@ export function createElement(elementType, parent={}) {
 
       case 'sections':
         action = () => Promise.all([
-          QuestionsFactory.createSection(getState().config, parent),
+          QuestionsFactory.createSection(getState().settings, parent),
           QuestionsApi.fetchPages('index'),
         ]).then(([element, pages]) => ({
           element, parent, pages
@@ -611,33 +629,33 @@ export function createElement(elementType, parent={}) {
 
       case 'pages':
         action = () => Promise.all([
-          QuestionsFactory.createPage(getState().config, parent),
+          QuestionsFactory.createPage(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
-                  questionsets, questions]) => ({
+          questionsets, questions]) => ({
           element, parent, attributes, conditions, questionsets, questions
         }))
         break
 
       case 'questionsets':
         action = () => Promise.all([
-          QuestionsFactory.createQuestionSet(getState().config, parent),
+          QuestionsFactory.createQuestionSet(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchQuestionSets('index'),
           QuestionsApi.fetchQuestions('index')
         ]).then(([element, attributes, conditions,
-                  questionsets, questions]) => ({
+          questionsets, questions]) => ({
           element, parent, attributes, conditions, questionsets, questions
         }))
         break
 
       case 'questions':
         action = () => Promise.all([
-          QuestionsFactory.createQuestion(getState().config, parent),
+          QuestionsFactory.createQuestion(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptionSets('index'),
           OptionsApi.fetchOptions('index'),
@@ -645,62 +663,62 @@ export function createElement(elementType, parent={}) {
           QuestionsApi.fetchWidgetTypes(),
           QuestionsApi.fetchValueTypes()
         ]).then(([element, attributes, optionsets,
-                  options, conditions]) => ({
-            element, parent, attributes, optionsets, options, conditions
-          }))
+          options, conditions]) => ({
+          element, parent, attributes, optionsets, options, conditions
+        }))
         break
 
       case 'attributes':
         action = () => Promise.all([
-          DomainFactory.createAttribute(getState().config, parent),
+          DomainFactory.createAttribute(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
         ]).then(([element, attributes]) => ({
-            element, parent, attributes
-          }))
+          element, parent, attributes
+        }))
         break
 
       case 'optionsets':
         action = () => Promise.all([
-          OptionsFactory.createOptionSet(getState().config, parent),
+          OptionsFactory.createOptionSet(getState().settings, parent),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, options]) => ({
-            element, parent, options
-          }))
+          element, parent, options
+        }))
         break
 
       case 'options':
         action = () => Promise.all([
-          OptionsFactory.createOption(getState().config, parent),
+          OptionsFactory.createOption(getState().settings, parent),
           OptionsApi.fetchOptionSets('index'),
         ]).then(([element, optionsets]) => ({
-            element, parent, optionsets
-          }))
+          element, parent, optionsets
+        }))
         break
 
       case 'conditions':
         action = () => Promise.all([
-          ConditionsFactory.createCondition(getState().config, parent),
+          ConditionsFactory.createCondition(getState().settings, parent),
           DomainApi.fetchAttributes('index'),
           OptionsApi.fetchOptions('index'),
         ]).then(([element, attributes, options]) => ({
-            element, parent, attributes, options
-          }))
+          element, parent, attributes, options
+        }))
         break
 
       case 'tasks':
         action = () => Promise.all([
-          TasksFactory.createTask(getState().config),
+          TasksFactory.createTask(getState().settings),
           DomainApi.fetchAttributes('index'),
           ConditionsApi.fetchConditions('index'),
           QuestionsApi.fetchCatalogs('index')
         ]).then(([element, attributes, conditions, catalogs]) => ({
-            element, attributes, conditions, catalogs
-          }))
+          element, attributes, conditions, catalogs
+        }))
         break
 
       case 'views':
         action = () => Promise.all([
-          ViewsFactory.createView(getState().config),
+          ViewsFactory.createView(getState().settings),
           QuestionsApi.fetchCatalogs('index')
         ]).then(([element, catalogs]) => ({
           element, catalogs
@@ -716,15 +734,15 @@ export function createElement(elementType, parent={}) {
 }
 
 export function createElementInit(elementType) {
-  return {type: 'elements/createElementInit', elementType}
+  return actions.createElementInit(elementType)
 }
 
 export function createElementSuccess(elements) {
-  return {type: 'elements/createElementSuccess', elements}
+  return actions.createElementSuccess(elements)
 }
 
 export function createElementError(error) {
-  return {type: 'elements/createElementError', error}
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // delete element
@@ -734,6 +752,7 @@ export function deleteElement(elementType, element) {
 
   return function(dispatch) {
     dispatch(addToPending(pendingId))
+    dispatch(errorActions.clearError('elements'))
     dispatch(deleteElementInit(element))
 
     let action
@@ -788,27 +807,27 @@ export function deleteElement(elementType, element) {
         dispatch(deleteElementSuccess(element))
         history.back()
       })
-      .catch(error => dispatch(deleteElementError(element, error)))
+      .catch(error => dispatch(deleteElementError(error)))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
 
 export function deleteElementInit(element) {
-  return {type: 'elements/deleteElementInit', element}
+  return actions.deleteElementInit(element)
 }
 
 export function deleteElementSuccess(element) {
-  return {type: 'elements/deleteElementSuccess', element}
+  return actions.deleteElementSuccess(element)
 }
 
-export function deleteElementError(element, error) {
-  return {type: 'elements/deleteElementError', element, error}
+export function deleteElementError(error) {
+  return errorActions.setError('elements', error, gettext('Element'))
 }
 
 // update elements
 
 export function updateElement(element, values) {
-  return {type: 'elements/updateElement', element, values}
+  return actions.updateElement({ element, values })
 }
 
 // move elements
@@ -817,11 +836,12 @@ export function dropElement(dragElement, dropElement, mode) {
   return function(dispatch, getState) {
     // an element cannot be dropped on itself or on one of its descendants
     if (canMoveElement(dragElement, dropElement)) {
-      const element = {...getState().elements.element}
+      const element = getState().elements.element
 
       // dragParent is the element where the element is dragged from and dropParent where it has been dropped on
       // dropParent is empty when the element is dragged onto the same parent, i.e. dragParent == dropParent
-      const { dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      const { element: movedElement, dragParent, dropParent } = moveElement(element, dragElement, dropElement, mode)
+      dispatch(updateElement(element, movedElement))
 
       const payloads = [dragParent, dropParent].filter(parent => !isNil(parent)).map(parent => {
         const elementType = elementTypes[parent.model]
@@ -848,13 +868,20 @@ export function dropElement(dragElement, dropElement, mode) {
 export function toggleElements(element) {
   return (dispatch, getState) => {
     const path = `display.elements.${elementTypes[element.model]}.${element.id}`
-    const value = !get(getState().config, path, true)
+    const value = !selectConfig(getState(), path, true)
     dispatch(updateConfig(path, value))
   }
 }
 
 export function toggleDescendants(element, elementType) {
-  return (dispatch) => {
-    findDescendants(element, elementType).forEach(e => dispatch(toggleElements(e)))
+  return (dispatch, getState) => {
+    const elements = findDescendants(element, elementType)
+    const paths = elements.map(element => `display.elements.${elementTypes[element.model]}.${element.id}`)
+
+    // check if all of the elements are open
+    const allOpen = paths.every(path => selectConfig(getState(), path, true))
+
+    // close all elements, if all are open, otherwise open all elements
+    paths.forEach(path => dispatch(updateConfig(path, !allOpen)))
   }
 }

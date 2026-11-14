@@ -1551,8 +1551,8 @@
     "model": "domain.attribute",
     "pk": 122,
     "fields": {
-      "uri": "https://foo.com/terms/domain/foo-attribute",
-      "uri_prefix": "https://foo.com/terms",
+      "uri": "https://foo.example.com/terms/domain/foo-attribute",
+      "uri_prefix": "https://foo.example.com/terms",
       "key": "foo-attribute",
       "path": "foo-attribute",
       "comment": "",
@@ -1571,8 +1571,8 @@
     "model": "domain.attribute",
     "pk": 123,
     "fields": {
-      "uri": "https://bar.com/terms/domain/bar-attribute",
-      "uri_prefix": "https://bar.com/terms",
+      "uri": "https://bar.example.com/terms/domain/bar-attribute",
+      "uri_prefix": "https://bar.example.com/terms",
       "key": "bar-attribute",
       "path": "bar-attribute",
       "comment": "",

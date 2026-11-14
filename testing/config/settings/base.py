@@ -86,6 +86,7 @@ PROJECT_SNAPSHOT_EXPORTS = [
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
 ]
+
 EMAIL_RECIPIENTS_INPUT = True
 
 OPTIONSET_PROVIDERS = [

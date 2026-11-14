@@ -6,7 +6,6 @@ from rdmo.core.views import i18n_switcher
 urlpatterns = [
     path('account/', include('rdmo.accounts.urls')),
     path('management/', include('rdmo.management.urls')),
-    path('overlays/', include('rdmo.overlays.urls')),
     path('projects/', include('rdmo.projects.urls')),
     path('services/', include('rdmo.services.urls')),
 

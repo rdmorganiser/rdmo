@@ -1,24 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash'
+import { useDispatch } from 'react-redux'
+import classNames from 'classnames'
+
+import { useConfig } from 'rdmo/core/assets/js/hooks'
+
+import { fetchProjects } from '../../actions/projectsActions'
+
+import EmptyTableRow from '../../../common/components/EmptyTableRow'
 
 const Table = ({
   cellFormatters,
   columnWidths,
-  config,
-  configActions,
   data,
   headerFormatters,
-  projectsActions,
   sortableColumns,
+  emptyMessage,
+  emptyActionLabel,
+  onEmptyAction,
   /* order of elements in 'visibleColumns' corresponds to order of columns in table */
   visibleColumns,
 }) => {
-  const extractSortingParams = (params) => {
-    const { ordering } = params || {}
+  const dispatch = useDispatch()
 
+  const [ordering, setOrdering] = useConfig('params.ordering')
+
+  const extractSortingParams = (ordering) => {
     if (!ordering) {
-        return { sortOrder: undefined, sortColumn: undefined }
+      return { sortOrder: undefined, sortColumn: undefined }
     }
 
     const sortOrder = ordering.startsWith('-') ? 'desc' : 'asc'
@@ -27,50 +36,59 @@ const Table = ({
     return { sortColumn, sortOrder }
   }
 
-  const params = get(config, 'params', {})
-  const { sortColumn, sortOrder } = extractSortingParams(params)
+  const { sortColumn, sortOrder } = extractSortingParams(ordering)
 
   const handleHeaderClick = (column) => {
     if (sortableColumns.includes(column)) {
       if (sortColumn === column && sortOrder === 'asc') {
-        configActions.updateConfig('params.ordering', `-${column}`)
+        setOrdering(`-${column}`)
       } else {
-        configActions.updateConfig('params.ordering', column)
+        setOrdering(column)
       }
 
-      projectsActions.fetchProjects()
+      dispatch(fetchProjects())
     }
   }
 
   const renderSortIcon = (column) => {
     const isSortColumn = sortColumn === column
-    const isAsc = sortOrder === 'asc'
+
+    let icon = 'bi-caret-down'
+    if (isSortColumn && sortOrder === 'asc') icon = 'bi-caret-down-fill'
+    if (isSortColumn && sortOrder === 'desc') icon = 'bi-caret-up-fill'
 
     return (
-      <span className="ml-5 sort-icon">
-        <i className={`fa fa-sort${isSortColumn ? isAsc ? '-asc' : '-desc' : ''} ${isSortColumn ? '' : 'text-muted'}`}
-           aria-hidden="true"/>
+      <span className="ms-1 sort-icon">
+        <i className={classNames('bi font-smaller', icon)} aria-hidden="true" />
       </span>
     )
   }
 
   const renderHeaders = () => {
     return (
-      <thead className="thead-dark">
+      <thead>
         <tr>
-          {visibleColumns.map((column, index) => {
-            const headerFormatter = headerFormatters[column]
-            const columnHeaderContent = headerFormatter && headerFormatter.render ? headerFormatter.render(column) : column
-            const columnHeaderLabel = headerFormatter && headerFormatter.label ? headerFormatter.label(column) : columnHeaderContent
+          {
+            visibleColumns.map((column, index) => {
+              const headerFormatter = headerFormatters[column]
+              const columnHeaderContent = headerFormatter && headerFormatter.render ? (
+                headerFormatter.render(column)
+              ) : column
+              const columnHeaderLabel = headerFormatter && headerFormatter.label ? (
+                headerFormatter.label(column)
+              ) : columnHeaderContent
 
-            return (
-              <th key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}
+              return (
+                <th
+                  className={sortableColumns.includes(column) ? 'cursor-pointer' : undefined}
+                  key={column} style={{ width: columnWidths[index] }} onClick={() => handleHeaderClick(column)}
                   aria-label={columnHeaderLabel}>
-                {columnHeaderContent}
-                {sortableColumns.includes(column) && renderSortIcon(column)}
-              </th>
-            )
-          })}
+                  {columnHeaderContent}
+                  {sortableColumns.includes(column) && renderSortIcon(column)}
+                </th>
+              )
+            })
+          }
         </tr>
       </thead>
     )
@@ -86,22 +104,37 @@ const Table = ({
   const renderRows = () => {
     return (
       <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
-            {visibleColumns.map((column, index) => (
-              <td key={column} style={{ width: columnWidths[index] }}>
-                {formatCellContent(row, column, row[column])}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {
+          data?.length ? (
+            data.map((row) => (
+              <tr key={row.id}>
+                {
+                  visibleColumns.map((column, index) => (
+                    <td key={column} style={{ width: columnWidths[index] }}>
+                      {formatCellContent(row, column, row[column])}
+                    </td>
+                  ))
+                }
+              </tr>
+            ))
+          ) : (
+            emptyMessage && (
+              <EmptyTableRow
+                label={emptyActionLabel}
+                colSpan={visibleColumns.length}
+                message={emptyMessage}
+                onClick={onEmptyAction}
+              />
+            )
+          )
+        }
       </tbody>
     )
   }
 
   return (
     <div id="projects-table" className="table-container">
-      <table className="table table-borderless">
+      <table className="table">
         {renderHeaders()}
         {renderRows()}
       </table>
@@ -112,13 +145,13 @@ const Table = ({
 Table.propTypes = {
   cellFormatters: PropTypes.object,
   columnWidths: PropTypes.arrayOf(PropTypes.string),
-  config: PropTypes.object,
-  configActions: PropTypes.object,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   headerFormatters: PropTypes.object,
-  projectsActions: PropTypes.object,
   sortableColumns: PropTypes.arrayOf(PropTypes.string),
   visibleColumns: PropTypes.arrayOf(PropTypes.string),
+  emptyMessage: PropTypes.string,
+  emptyActionLabel: PropTypes.string,
+  onEmptyAction: PropTypes.func,
 }
 
 export default Table

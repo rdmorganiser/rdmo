@@ -165,11 +165,14 @@ class QuestionSetNestedSerializer(
                 yield QuestionNestedSerializer(element, context=self.context).data
 
 
-class QuestionSetIndexSerializer(serializers.ModelSerializer):
+class QuestionSetIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
         fields = (
             'id',
+            'model',
             'uri'
         )

@@ -2,6 +2,7 @@ import pytest
 
 from rdmo.projects.models import Value
 
+from ..constants import RelationTypes
 from ..models import Condition
 
 
@@ -18,9 +19,9 @@ def test_condition_clean(db):
 
 
 @pytest.mark.parametrize('relation,values', [
-    (Condition.RELATION_EMPTY, []),
-    (Condition.RELATION_NOT_EQUAL, []),
-    (Condition.RELATION_EQUAL, [Value(attribute=None, text='test')]),
+    (RelationTypes.RELATION_EMPTY, []),
+    (RelationTypes.RELATION_NOT_EQUAL, []),
+    (RelationTypes.RELATION_EQUAL, [Value(attribute=None, text='test')]),
 ])
 def test_condition_without_source_resolves_false(relation, values):
     condition = Condition(source=None, relation=relation, target_text='test')

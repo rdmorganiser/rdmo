@@ -24,6 +24,18 @@
     {% endif %}
 
     <p>
+        <strong>{% trans 'Task type' %}:</strong> {{ task.task_type }}
+    </p>
+
+    {% if task.task_area %}
+
+    <p>
+        <strong>{% trans 'Task area' %}:</strong> {{ task.task_area }}
+    </p>
+
+    {% endif %}
+
+    <p>
         <strong>{% trans 'Title' %}:</strong> {{ task.title }}
     </p>
 

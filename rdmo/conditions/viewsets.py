@@ -12,6 +12,7 @@ from rdmo.core.utils import is_truthy, render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.domain.utils import get_attribute_map
 
+from .constants import RelationTypes
 from .models import Condition
 from .renderers import ConditionRenderer
 from .serializers.export import ConditionExportSerializer
@@ -110,4 +111,4 @@ class ConditionViewSet(ModelViewSet):
 
 class RelationViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Condition.RELATION_CHOICES
+    queryset = RelationTypes.choices

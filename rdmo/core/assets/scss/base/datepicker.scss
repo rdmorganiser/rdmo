@@ -1,0 +1,14 @@
+@import "react-datepicker/dist/react-datepicker.css";
+
+.react-datepicker {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--rdmo-font);
+        font-weight: normal;
+    }
+}
+
+.react-datepicker__close-icon::after {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    font-size: 1.5em;
+}

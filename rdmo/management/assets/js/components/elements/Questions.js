@@ -1,86 +1,103 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import get from 'lodash/get'
+import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
+
+import { createElement } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix, FilterSite } from '../common/Filter'
-import { Checkbox } from '../common/Checkboxes'
 import { BackButton, NewButton } from '../common/Buttons'
-
+import { FilterSite, FilterString, FilterUriPrefix } from '../common/Filter'
 import Question from '../element/Question'
 
-const Questions = ({ config, questions, configActions, elementActions }) => {
+const Questions = () => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (value) => configActions.updateConfig('filter.questions.search', value)
-  const updateFilterUriPrefix = (value) => configActions.updateConfig('filter.questions.uri_prefix', value)
-  const updateFilterEditor = (value) => configActions.updateConfig('filter.editors', value)
+  const settings = useSelector((state) => state.settings)
+  const sites = useSelector((state) => state.sites)
+  const questions = useSelector((state) => state.elements.questions)
 
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const [filterString, setFilterString] = useConfig('filter.questions.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.questions.uri_prefix', '')
+  const [filterEditor, setFilterEditor] = useConfig('filter.editors', '')
 
-  const createQuestion = () => elementActions.createElement('questions')
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
+
+
+  const createQuestion = () => dispatch(createElement('questions'))
+
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
-    <div className="panel panel-default">
-      <div className="panel-heading">
-        <div className="pull-right">
+    <div className="card card-tile">
+      <div className="card-header">
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
+          <strong className="flex-grow-1 text-center text-sm-start">{gettext('Questions')}</strong>
           <BackButton />
           <NewButton onClick={createQuestion} />
         </div>
-        <strong>{gettext('Questions')}</strong>
       </div>
 
-      <div className="panel-body">
-        <div className="row">
-          <div className={config.settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
-            <FilterString value={get(config, 'filter.questions.search', '')} onChange={updateFilterString}
-                          label={gettext('Filter questions')} />
-          </div>
-          <div className="col-sm-4">
-            <FilterUriPrefix value={get(config, 'filter.questions.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                             options={getUriPrefixes(questions)} />
-          </div>
-          {
-            config.settings.multisite && <div className="col-sm-2">
-              <FilterSite value={get(config, 'filter.editors', '')} onChange={updateFilterEditor}
-                          options={config.sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+      <div className="card-body">
+        <div className="mb-lg-2">
+          <div className="row">
+            <div className={settings.multisite ? 'col-sm-6' : 'col-sm-8'}>
+              <FilterString
+                value={filterString} onChange={setFilterString}
+                label={gettext('Filter questions')} />
             </div>
-          }
+            <div className="col-sm-4">
+              <FilterUriPrefix
+                value={filterUriPrefix} onChange={setFilterUriPrefix}
+                options={getUriPrefixes(questions)} />
+            </div>
+            {
+              settings.multisite && (
+                <div className="col-sm-2">
+                  <FilterSite
+                    value={filterEditor} onChange={setFilterEditor}
+                    options={sites} label={gettext('Filter editors')} allLabel={gettext('All editors')} />
+                </div>
+              )
+            }
+          </div>
         </div>
-        <div className="checkboxes">
-          <span className="mr-10">{gettext('Show URIs:')}</span>
-          <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
-                    value={get(config, 'display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
-          <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                    value={get(config, 'display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
-          <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                    value={get(config, 'display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
-          <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                    value={get(config, 'display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
+        <div className="input-group input-group-sm row-gap-1">
+          <label className="input-group-text">{gettext('Show URIs:')}</label>
+          <button type="button" onClick={toggleDisplayUriQuestions} className={btnClass(displayUriQuestions)}>
+            {gettext('Questions')}
+          </button>
+          <button type="button" onClick={toggleDisplayUriAttributes} className={btnClass(displayUriAttributes)}>
+            {gettext('Attributes')}
+          </button>
+          <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
+            {gettext('Conditions')}
+          </button>
+          <button type="button" onClick={toggleDisplayUriOptionSets} className={btnClass(displayUriOptionSets)}>
+            {gettext('Option sets')}
+          </button>
         </div>
       </div>
-
-      <ul className="list-group">
       {
-        questions.map((question, index) => (
-          <Question key={index} config={config} question={question}
-                    configActions={configActions} elementActions={elementActions}
-                    filter="questions" filterEditors={true} />
-        ))
+        !isEmpty(questions) && (
+          <ul className="list-group list-group-flush border-top">
+            {
+              questions.map((question, index) => (
+                <Question
+                  key={index} question={question}
+                  filter="questions" filterEditors={true} />
+              ))
+            }
+          </ul>
+        )
       }
-      </ul>
     </div>
   )
-}
-
-Questions.propTypes = {
-  config: PropTypes.object.isRequired,
-  questions: PropTypes.array.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
 }
 
 export default Questions
