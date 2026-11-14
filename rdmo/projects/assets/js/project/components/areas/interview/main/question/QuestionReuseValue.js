@@ -94,13 +94,17 @@ const QuestionReuseValue = ({ question, value }) => {
             {gettext('Answer')}
           </label>
 
-          <Search
-            question={question}
-            attribute={value.attribute}
-            values={formValues}
-            errors={formErrors}
-            setValues={setFormValues}
-          />
+          {
+            show && (
+              <Search
+                question={question}
+                attribute={value.attribute}
+                values={formValues}
+                errors={formErrors}
+                setValues={setFormValues}
+              />
+            )
+          }
 
           <p className="form-text mb-0">
             {

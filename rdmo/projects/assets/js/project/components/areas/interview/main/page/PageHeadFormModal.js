@@ -83,7 +83,7 @@ const PageHeadFormModal = ({
                     {gettext('Reuse answers')}
                   </label>
 
-                  <Search attribute={attribute} values={values} setValues={setValues} />
+                  {show && <Search attribute={attribute} values={values} setValues={setValues} />}
 
                   <p className="form-text mb-0">
                     {
