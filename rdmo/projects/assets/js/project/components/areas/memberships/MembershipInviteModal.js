@@ -52,9 +52,8 @@ const MembershipInviteModal = ({ show, onClose }) => {
       title={gettext('Invite member to project')}
       show={show}
       onClose={onClose}
-      onSubmit={() => { }} // render the Modal's submit button
       submitLabel={gettext('Invite member')}
-      submitProps={{ type: 'submit', form: 'invite-member-form' }}
+      formId="invite-member-form"
     >
       <form id="invite-member-form" onSubmit={handleSubmit}>
         <Template template="project_view_invite_member" />

@@ -96,7 +96,6 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
 
       <Modal
         title={gettext('Reuse answer')} show={show} submitLabel={gettext('Replace')}
-        submitProps={{className: 'btn btn-primary'}}
         onClose={() => setShow(false)} onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="project-interview-page-tabs-modal-form-import">

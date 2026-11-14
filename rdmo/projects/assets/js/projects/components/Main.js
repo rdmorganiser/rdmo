@@ -85,12 +85,8 @@ const Main = () => {
     title: gettext('Create new project'),
     show: showCreate,
     onClose: closeCreate,
-    onSubmit: () => { },
     submitLabel: gettext('Create project'),
-    submitProps: {
-      type: 'submit',
-      form: 'project-create-form'
-    }
+    formId: 'project-create-form'
   }
 
   const handleCloseCopy = () => {
@@ -107,12 +103,8 @@ const Main = () => {
     title: gettext('Update project'),
     show: showEdit,
     onClose: handleCloseEdit,
-    onSubmit: () => { },
     submitLabel: gettext('Update project'),
-    submitProps: {
-      type: 'submit',
-      form: 'project-edit-form'
-    }
+    formId: 'project-edit-form'
   }
 
   const handleCloseDelete = () => {

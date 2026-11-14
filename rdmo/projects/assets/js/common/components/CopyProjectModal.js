@@ -15,12 +15,8 @@ const CopyProjectModal = ({
     title: gettext('Copy project'),
     show,
     onClose,
-    onSubmit: () => {},
     submitLabel: gettext('Copy project'),
-    submitProps: {
-      type: 'submit',
-      form: 'project-copy-form'
-    }
+    formId: 'project-copy-form'
   }
 
   return (

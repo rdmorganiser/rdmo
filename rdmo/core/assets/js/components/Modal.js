@@ -13,6 +13,7 @@ const Modal = ({
   closeLabel,
   submitLabel,
   submitProps,
+  formId,
   onShown,
   onClose,
   onSubmit
@@ -83,6 +84,13 @@ const Modal = ({
                 </button>
               )
             }
+            {
+              formId && (
+                <button type="submit" form={formId} className="btn btn-primary" {...submitProps}>
+                  {submitLabel ?? gettext('Submit')}
+                </button>
+              )
+            }
           </div>
         </div>
       </div>
@@ -106,6 +114,7 @@ Modal.propTypes = {
   closeLabel: PropTypes.node,
   submitLabel: PropTypes.node,
   submitProps: PropTypes.object,
+  formId: PropTypes.string,
   onShown: PropTypes.func,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func

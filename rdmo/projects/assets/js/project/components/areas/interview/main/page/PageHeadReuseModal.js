@@ -44,7 +44,6 @@ const PageHeadReuseModal = ({ show, attribute, onClose, onSubmit }) => {
       title={gettext('Reuse tab')}
       show={show}
       submitLabel={gettext('Reuse')}
-      submitProps={{className: 'btn btn-primary'}}
       onClose={onClose}
       onSubmit={handleSubmit}
     >
