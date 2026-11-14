@@ -65,7 +65,7 @@ const CheckboxWidget = ({ question, sets, values, siblings, currentSet }) => {
                           currentSet={currentSet}
                           option={option}
                           optionIndex={optionIndex}
-                          disabled={readOnly}
+                          disabled={readOnly || Boolean(value?.read_only)}
                           onCreate={handleCreate}
                           onUpdate={handleUpdate}
                           onDelete={handleDelete}

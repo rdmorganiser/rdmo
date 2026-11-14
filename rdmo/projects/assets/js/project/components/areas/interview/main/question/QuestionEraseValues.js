@@ -16,7 +16,7 @@ const QuestionEraseValues = ({ values }) => {
     values.forEach((value) => dispatch(deleteValue(value)))
   }
 
-  return !readOnly && (
+  return !readOnly && !values.some((value) => value.read_only) && (
     <LinkButton
       className="question-erase-values-button"
       title={title}

@@ -30,7 +30,7 @@ const FileWidget = ({ question, values, currentSet }) => {
                   question={question}
                   value={value}
                   currentSet={currentSet}
-                  disabled={readOnly}
+                  disabled={readOnly || value.read_only}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={
                     (

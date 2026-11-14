@@ -15,7 +15,8 @@ class ValueFactory {
       set_prefix: isNil(set_prefix) ? '' : set_prefix,
       set_index: isNil(set_index) ? 0 : toNumber(set_index),
       collection_index: isNil(collection_index) ? 0 : toNumber(collection_index),
-      set_collection: isNil(set_collection) ? false : set_collection
+      set_collection: isNil(set_collection) ? false : set_collection,
+      read_only: false
     }
 
     return this.update(value, { text, option, file, external_id, unit, value_type })
