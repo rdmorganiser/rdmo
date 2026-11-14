@@ -22,7 +22,7 @@ const SendIssueDropdowns = ({
 
   return (
     <div className="d-md-flex gap-3 mb-3">
-      <div className="dropdown">
+      <div className="dropdown dropdown-menu-end">
         <button
           type="button"
           className="link text-nowrap dropdown-toggle"
@@ -154,7 +154,7 @@ const SendIssueDropdowns = ({
           </div>
         </div>
       </div>
-      <div className="dropdown">
+      <div className="dropdown dropdown-menu-end">
         <button
           type="button"
           className="link text-nowrap dropdown-toggle"
