@@ -23,14 +23,16 @@ const FileInput = ({ question, value, currentSet, buttons, disabled, onChange })
         <div className="file-control">
           {
             value.file_name ? (
-              <div>
-                <span className={classNames({'text-muted': disabled})}>{gettext('Current file:')}</span>
+              <div className="mb-1">
+                <span className={classNames('me-1', {'text-muted': disabled})}>{gettext('Current file:')}</span>
                 <a href={value.file_url} onClick={(event) => event.stopPropagation()}>
                   {value.file_name}
                 </a>
               </div>
             ) : (
-              <div>{gettext('No file stored.')}</div>
+              <div className="mb-1">
+                {gettext('No file stored.')}
+              </div>
             )
           }
 
