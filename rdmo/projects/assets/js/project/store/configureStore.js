@@ -2,9 +2,7 @@ import { configureStore as configureToolkitStore } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
-import * as groupsActions from 'rdmo/core/assets/js/actions/groupsActions'
 import * as settingsActions from 'rdmo/core/assets/js/actions/settingsActions'
-import * as sitesActions from 'rdmo/core/assets/js/actions/sitesActions'
 import * as templateActions from 'rdmo/core/assets/js/actions/templateActions'
 import * as userActions from 'rdmo/core/assets/js/actions/userActions'
 import configReducer from 'rdmo/core/assets/js/reducers/configSlice'
@@ -19,15 +17,21 @@ import userReducer from 'rdmo/core/assets/js/reducers/userSlice'
 import { getConfigFromLocalStorage } from 'rdmo/core/assets/js/utils/config'
 import { checkStoreId, configureStaleRefresh } from 'rdmo/core/assets/js/utils/store'
 
-import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
 import { selectPermissions } from '../../common/selectors/permissions'
+import * as integrationActions from '../actions/integrationActions'
+import * as issueActions from '../actions/issueActions'
 import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
+import documentReducer from '../reducers/documentSlice'
+import integrationReducer from '../reducers/integrationSlice'
 import interviewReducer from '../reducers/interviewSlice'
+import issueReducer from '../reducers/issueSlice'
 import locationReducer from '../reducers/locationSlice'
+import membershipReducer from '../reducers/membershipSlice'
 import projectReducer from '../reducers/projectSlice'
+import snapshotReducer from '../reducers/snapshotSlice'
 import { parseLocation } from '../utils/location'
 import { projectId } from '../utils/meta'
 
@@ -57,6 +61,11 @@ export default function configureStore() {
       errors: errorsReducer,
       pending: pendingReducer,
       project: projectReducer,
+      membership: membershipReducer,
+      snapshot: snapshotReducer,
+      document: documentReducer,
+      issue: issueReducer,
+      integration: integrationReducer,
       settings: settingsReducer,
       templates: templateReducer,
       user: userReducer,
@@ -72,7 +81,7 @@ export default function configureStore() {
   })
 
   configureStaleRefresh(store, {
-    projectIssues: () => store.dispatch(projectActions.fetchProjectIssues())
+    projectIssues: () => store.dispatch(issueActions.fetchProjectIssues())
   })
 
   const initDashboardFromLocation = () => {
@@ -91,33 +100,25 @@ export default function configureStore() {
       store.dispatch(settingsActions.fetchSettings()),
       store.dispatch(templateActions.fetchTemplates()),
       store.dispatch(userActions.fetchCurrentUser()),
-      store.dispatch(projectActions.fetchProject()),
-      store.dispatch(rolesActions.fetchRoles())
+      store.dispatch(projectActions.fetchProject())
     ]).then(() => {
       const state = store.getState()
-      const project = state.project.project.project
+      const project = state.project.project
       const permissions = selectPermissions(state)
 
-      if (permissions.can_view_invite) {
-        store.dispatch(projectActions.fetchProjectInvites(projectId))
-      }
-
+      // visibility is rendered in sidebar
       if (permissions.can_view_visibility) {
-        if (state.settings.multisite && permissions.can_view_site) {
-          store.dispatch(sitesActions.fetchSites())
-        }
-        if (state.settings.groups && permissions.can_view_group) {
-          store.dispatch(groupsActions.fetchGroups())
-        }
         if (!isNil(project.visibility)) {
           store.dispatch(projectActions.fetchProjectVisibility(projectId))
         }
       }
+      // conditional rendering of Integrations link in sidebar depends on available providers
       if (permissions.can_add_integration || permissions.can_change_integration) {
-        store.dispatch(projectActions.fetchProviders())
+        store.dispatch(integrationActions.fetchProviders())
       }
+      // integrations are used in the Integrations area and the Send task modal
       if (permissions.can_view_integration) {
-        store.dispatch(projectActions.fetchProjectIntegrations(projectId))
+        store.dispatch(integrationActions.fetchProjectIntegrations(projectId))
       }
       initDashboardFromLocation()
     })

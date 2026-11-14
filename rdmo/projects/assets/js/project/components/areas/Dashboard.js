@@ -6,8 +6,11 @@ import { LinkButton } from 'rdmo/core/assets/js/components'
 import { useConfigToggle, useModal } from 'rdmo/core/assets/js/hooks'
 import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
+import { fetchProjectAnswers, fetchProjectFiles, fetchProjectViews } from '../../actions/documentActions'
+import { updateProjectIssue } from '../../actions/issueActions'
 import { navigateDashboard } from '../../actions/navigationActions'
-import { clearProjectErrors, updateProjectIssue } from '../../actions/projectActions'
+import { clearProjectErrors } from '../../actions/projectActions'
+import { fetchProjectSnapshots } from '../../actions/snapshotActions'
 import { IssueTile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
@@ -21,7 +24,7 @@ const Dashboard = () => {
   const settings = useSelector(state => state.settings)
   const perms = useSelector(selectPermissions)
 
-  const allIssues = useSelector((state) => state.project.project.issues) ?? []
+  const allIssues = useSelector((state) => state.issue.issues) ?? []
   /* Show only issues that resolve */
   const issues = allIssues.filter((issue) => issue.resolve === true)
 
@@ -74,6 +77,10 @@ const Dashboard = () => {
 
   const handleSendIssue = (issue) => {
     dispatch(clearProjectErrors())
+    dispatch(fetchProjectAnswers())
+    dispatch(fetchProjectViews())
+    dispatch(fetchProjectSnapshots())
+    dispatch(fetchProjectFiles())
     setSelectedIssue(issue)
     issueModal.close()
     sendIssueModal.open()

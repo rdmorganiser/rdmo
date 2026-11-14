@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import ProjectDeleteModal from './ProjectDeleteModal'
 
 const ProjectDeleteForm = () => {
-  const { project } = useSelector((state) => state.project.project)
+  const { project } = useSelector((state) => state.project)
 
   const [showConfirm, setShowConfirm] = useState(false)
 

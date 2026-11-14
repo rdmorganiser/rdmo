@@ -6,7 +6,8 @@ import { Modal } from 'rdmo/core/assets/js/components'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { clearProjectErrors, deleteProjectIntegration } from '../../../actions/projectActions'
+import { deleteProjectIntegration } from '../../../actions/integrationActions'
+import { clearProjectErrors } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
 const IntegrationDeleteModal = ({ show, onClose, integration }) => {

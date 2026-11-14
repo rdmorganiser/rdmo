@@ -12,8 +12,8 @@ import LocationLink from '../../helper/LocationLink'
 const InterviewOverview = () => {
   const dispatch = useDispatch()
   const templates = useSelector((state) => state.templates)
-  const navigation = useSelector((state) => state.project.navigation)
-  const catalogHelp = useSelector((state) => state.project.project.project.catalog_help)
+  const navigation = useSelector((state) => state.interview.navigation)
+  const catalogHelp = useSelector((state) => state.project.project.catalog_help)
   const continuation = useSelector((state) => state.interview.continuation)
 
   const handleCardClick = (section) => dispatch(navigateDashboard({area: 'interview', pageId: section.first}))

@@ -7,7 +7,7 @@ import { isNil } from 'lodash'
 
 const SnapshotsDropdown = ({ onChange }) => {
   const { snapshotId } = useSelector((state) => state.location)
-  const { snapshots } = useSelector((state) => state.project?.project)
+  const snapshots = useSelector((state) => state.snapshot.snapshots) ?? []
 
   const currentLabel = gettext('Current data')
   const currentSnapshot = snapshots.find(snapshot => snapshot.id == snapshotId)

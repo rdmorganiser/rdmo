@@ -10,10 +10,10 @@ import ProjectForm from './information/ProjectForm'
 import ProjectVisibilityForm from './information/ProjectVisibilityForm'
 
 const Information = () => {
-  const { hierarchy, project } = useSelector((state) => state.project.project) ?? {}
+  const { hierarchy, project, catalogs } = useSelector((state) => state.project) ?? {}
   const perms = useSelector(selectPermissions)
 
-  return (
+  return catalogs && hierarchy && (
     <div className="project-information">
       <div className="d-lg-flex justify-content-between align-items-center mb-5">
         <h1 className="mb-lg-0">{gettext('Project information')}</h1>

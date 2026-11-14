@@ -5,18 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'rdmo/core/assets/js/components'
 import { Input } from 'rdmo/core/assets/js/components/forms'
 
-import {
-  clearProjectErrors,
-  createProjectIntegration,
-  updateProjectIntegration
-} from '../../../actions/projectActions'
+import { createProjectIntegration, updateProjectIntegration } from '../../../actions/integrationActions'
+import { clearProjectErrors } from '../../../actions/projectActions'
 import { useFieldErrors } from '../../../hooks'
 
 import IntegrationSecretField from './IntegrationSecretField'
 
 const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
   const dispatch = useDispatch()
-  const providers = useSelector((state) => state.project.providers) ?? {}
+  const providers = useSelector((state) => state.integration.providers) ?? {}
   const errors = useFieldErrors()
 
   const [title, setTitle] = useState('')
