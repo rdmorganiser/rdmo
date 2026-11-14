@@ -30,7 +30,6 @@ const Contact = () => {
       submitLabel={gettext('Send message')}
       onSubmit={onSubmit}
       onClose={onClose}
-      size="modal-lg"
     >
       <Template className="help-text" template="project_interview_contact_help" />
       <form onSubmit={onSubmit}>

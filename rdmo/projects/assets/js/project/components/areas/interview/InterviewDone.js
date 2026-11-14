@@ -31,7 +31,6 @@ const InterviewDone = () => {
       submitLabel={submitLabel}
       onSubmit={onSubmit}
       onClose={onClose}
-      size="modal-lg"
     >
       <Html html={templates.project_interview_done} />
     </Modal>

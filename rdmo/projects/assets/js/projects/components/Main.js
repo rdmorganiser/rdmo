@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Modal } from 'rdmo/core/assets/js/components'
-import { Link, SearchField } from 'rdmo/core/assets/js/components'
+import { LinkButton, SearchField } from 'rdmo/core/assets/js/components'
 import { useConfig, useConfigToggle, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
@@ -83,7 +83,6 @@ const Main = () => {
 
   const createModalProps = {
     title: gettext('Create new project'),
-    size: 'modal-lg',
     show: showCreate,
     onClose: closeCreate,
     onSubmit: () => { },
@@ -106,7 +105,6 @@ const Main = () => {
 
   const editModalProps = {
     title: gettext('Update project'),
-    size: 'modal-lg',
     show: showEdit,
     onClose: handleCloseEdit,
     onSubmit: () => { },
@@ -292,8 +290,8 @@ const Main = () => {
     actions: (_content, row) => {
       const perms = combinePermissions(row.permissions, userPerms)
       return (
-        <div className="d-flex align-items-center gap-1">
-          <Link
+        <div className="d-flex align-items-center gap-2">
+          <LinkButton
             className="bi bi-copy"
             title={labels.copy}
             onClick={
@@ -305,7 +303,7 @@ const Main = () => {
           />
           {
             perms.can_change_project && (
-              <Link
+              <LinkButton
                 className="bi bi-pencil"
                 title={labels.update}
                 onClick={
@@ -319,7 +317,7 @@ const Main = () => {
           }
           {
             perms.can_delete_project && (
-              <Link
+              <LinkButton
                 className="bi bi-trash"
                 title={labels.delete}
                 onClick={

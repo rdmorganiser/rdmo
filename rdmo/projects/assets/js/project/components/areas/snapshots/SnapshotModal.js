@@ -62,7 +62,6 @@ const SnapshotModal = ({ show, onClose, snapshot }) => {
       onSubmit={() => { }} // render the Modal's submit button
       submitLabel={isEdit ? gettext('Update snapshot') : gettext('Create snapshot')}
       submitProps={{ type: 'submit', form: formId }}
-      size="modal-lg"
     >
       <form id={formId} onSubmit={handleSubmit}>
         <Input

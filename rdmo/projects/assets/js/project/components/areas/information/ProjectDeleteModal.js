@@ -27,6 +27,7 @@ const ProjectDeleteModal = ({
 
   return (
     <Modal
+      size="md"
       title={gettext('Delete project')}
       show={show}
       onClose={onClose}

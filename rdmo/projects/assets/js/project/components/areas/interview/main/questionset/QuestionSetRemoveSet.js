@@ -32,6 +32,7 @@ const QuestionRemoveSet = ({ questionset, currentSet }) => {
       </LinkButton>
 
       <Modal
+        size="md"
         title={gettext('Remove block')} show={modal.show} submitLabel={gettext('Remove')}
         submitProps={{className: 'btn btn-danger'}}
         onClose={modal.close} onSubmit={handleRemoveSet}>

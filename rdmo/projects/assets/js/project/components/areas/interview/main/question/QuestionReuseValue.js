@@ -57,7 +57,7 @@ const QuestionReuseValue = ({ question, value }) => {
 
   const title = gettext('Reuse answer')
 
-  const extraButtons = (
+  const footerChildren = (
     <>
       {
         ['text', 'textarea'].includes(question.widget_type) && (
@@ -86,7 +86,7 @@ const QuestionReuseValue = ({ question, value }) => {
       <Modal
         title={gettext('Reuse answer')}
         show={show}
-        extraButtons={extraButtons}
+        footerChildren={footerChildren}
         onClose={() => setShow(false)}
       >
         <div className="form-group">

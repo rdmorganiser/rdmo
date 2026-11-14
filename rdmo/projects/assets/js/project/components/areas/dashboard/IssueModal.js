@@ -30,7 +30,6 @@ const IssueModal = ({
       show
       title={issue.task.title}
       onClose={onClose}
-      size="modal-lg"
       closeLabel={gettext('Close')}
       onSubmit={() => {}}
       submitLabel={gettext('Send task')}

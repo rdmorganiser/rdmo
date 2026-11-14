@@ -203,7 +203,6 @@ const SendIssueModal = ({
           hidden: !showSubmitButton
         }
       }
-      size="modal-lg"
     >
       <form id={formId} onSubmit={handleSubmit}>
         {

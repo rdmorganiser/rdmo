@@ -13,7 +13,6 @@ const CopyProjectModal = ({
 }) => {
   const modalProps = {
     title: gettext('Copy project'),
-    size: 'modal-lg',
     show,
     onClose,
     onSubmit: () => {},
