@@ -25,14 +25,14 @@ const SendIssueDropdowns = ({
       <div className="dropdown">
         <button
           type="button"
-          className="link text-nowrap"
+          className="link text-nowrap dropdown-toggle"
           data-bs-toggle="dropdown"
           data-bs-auto-close="outside"
           data-bs-popper-config='{"strategy":"fixed"}'
           aria-expanded="false"
           title={gettext('Attachments')}
         >
-          {gettext('Attachments')} <i className="bi bi-caret-down-fill ms-1" />
+          {gettext('Attachments')}
         </button>
 
         <div className="dropdown-menu p-3" style={{ minWidth: '280px' }}>
@@ -157,14 +157,14 @@ const SendIssueDropdowns = ({
       <div className="dropdown">
         <button
           type="button"
-          className="link text-nowrap"
+          className="link text-nowrap dropdown-toggle"
           data-bs-toggle="dropdown"
           data-bs-auto-close="outside"
           data-bs-popper-config='{"strategy":"fixed"}'
           aria-expanded="false"
           title={gettext('Format')}
         >
-          {gettext('Format')} <i className="bi bi-caret-down-fill ms-1" />
+          {gettext('Format')}
         </button>
 
         <div className="dropdown-menu p-3" style={{ minWidth: '220px' }}>

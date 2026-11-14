@@ -27,7 +27,7 @@ const SnapshotsDropdown = ({ onChange }) => {
     <div className="dropdown dropdown-menu-end">
       <button
         type="button"
-        className="link text-nowrap"
+        className="link text-nowrap dropdown-toggle"
         data-bs-toggle="dropdown"
         data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
@@ -35,7 +35,6 @@ const SnapshotsDropdown = ({ onChange }) => {
         title={gettext('Snapshots')}
       >
         <span>{currentSnapshot ? currentSnapshot?.title : currentLabel}</span>
-        <i className="bi bi-caret-down-fill ms-1" />
       </button>
 
       <ul className="dropdown-menu">
