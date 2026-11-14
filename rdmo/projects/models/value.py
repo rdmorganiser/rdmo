@@ -94,6 +94,11 @@ class Value(Model):
         verbose_name=_('External id'),
         help_text=_('External id for this value.')
     )
+    read_only = models.BooleanField(
+        default=False,
+        verbose_name=_('Read only'),
+        help_text=_('Designates whether this value can be changed by users.')
+    )
 
     class Meta:
         ordering = ('project', 'snapshot', 'attribute', 'set_prefix', 'set_index', 'collection_index')
