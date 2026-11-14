@@ -365,7 +365,6 @@ export function copyValue(question, ...originalValues) {
     const dispatchOnPage = getDispatchOnPage(dispatch, getState, getState().interview.page)
 
     dispatch(addToPending(pendingId))
-    dispatchOnPage(clearError('copyValue'))
 
     const { sets, values } = getState().interview
 
@@ -421,7 +420,6 @@ export function copyValue(question, ...originalValues) {
 
     return Promise.all(copies.map(([value]) => dispatchOnPage(storeValue(value, false))))
       .then(() => dispatch(refreshPage(copies.map(([value]) => value))))
-      .catch((error) => dispatchOnPage(setError('copyValue', error, gettext('Copy value'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }
