@@ -224,6 +224,10 @@ class RDMOXMLImport(Import):
         if external_id_node is not None:
             value.external_id = external_id_node.text or ''
 
+        read_only_node = value_node.find('read_only')
+        if read_only_node is not None:
+            value.read_only = read_only_node.text == 'True'
+
         value.created = value_node.find('created').text
         value.updated = value_node.find('updated').text
 

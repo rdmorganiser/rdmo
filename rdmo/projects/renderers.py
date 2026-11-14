@@ -70,6 +70,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'value_type', {}, value['value_type'])
         self.render_text_element(xml, 'unit', {}, value['unit'])
         self.render_text_element(xml, 'external_id', {}, value['external_id'])
+        self.render_text_element(xml, 'read_only', {}, value['read_only'])
         self.render_text_element(xml, 'created', {}, value['created'])
         self.render_text_element(xml, 'updated', {}, value['updated'])
         xml.endElement('value')
