@@ -15,7 +15,7 @@ const ProjectDeleteForm = () => {
     <div>
       <h3 className="mb-2">{gettext('Delete project')}</h3>
 
-      <p className="form-text mb-3">
+      <p className="help-text mb-3">
         {gettext('This action cannot be undone. The project will be permanently removed!')}
       </p>
 

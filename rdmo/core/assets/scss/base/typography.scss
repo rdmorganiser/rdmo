@@ -43,6 +43,12 @@ h4, .h4 {
     font-size: var(--rdmo-font-size-larger) !important;
 }
 
+.help-text {
+    // same as .font-small and .text-muted or .form-text without margins
+    font-size: var(--rdmo-font-size-small);
+    color: var(--bs-secondary-color);
+}
+
 .flip {
   transform: scaleX(-1);
 }

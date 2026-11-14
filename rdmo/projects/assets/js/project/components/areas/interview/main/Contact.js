@@ -32,7 +32,7 @@ const Contact = () => {
       onClose={onClose}
       size="modal-lg"
     >
-      <Template className="text-muted font-small" template="project_interview_contact_help" />
+      <Template className="help-text" template="project_interview_contact_help" />
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="project-interview-question-contact-subject">Subject</label>

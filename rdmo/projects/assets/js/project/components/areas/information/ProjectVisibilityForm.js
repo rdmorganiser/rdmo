@@ -100,7 +100,7 @@ const ProjectVisibilityForm = () => {
         </span>
       </div>
 
-      <div className="form-text mb-3">
+      <div className="help-text mb-3">
         <Template template="project_view_visibility_help" />
       </div>
 
