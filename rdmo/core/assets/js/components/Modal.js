@@ -25,7 +25,7 @@ const Modal = ({
     if (!modalElement) return
 
     const modal = BootstrapModal.getOrCreateInstance(modalElement, {
-      backdrop: 'static',
+      backdrop: true,
       keyboard: true,
       ...modalProps
     })
