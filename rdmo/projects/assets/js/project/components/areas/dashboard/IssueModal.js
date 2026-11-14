@@ -30,15 +30,12 @@ const IssueModal = ({
       show
       title={issue.task.title}
       onClose={onClose}
-      closeLabel={gettext('Close')}
-      onSubmit={() => {}}
-      submitLabel={gettext('Send task')}
-      submitProps={
-        {
-          className: 'btn btn-outline-primary me-auto',
-          hidden: !canSendIssue,
-          onClick: onSend
-        }
+      footerChildren={
+        canSendIssue && (
+          <button type="button" className="btn btn-outline-primary me-auto" onClick={onSend}>
+            {gettext('Send task')}
+          </button>
+        )
       }
     >
       <p>{issue.task.text}</p>
