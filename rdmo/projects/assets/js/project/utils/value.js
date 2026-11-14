@@ -21,7 +21,7 @@ const isDefaultValue = (question, value) => {
 const gatherDefaultValues = (page, values) => {
   const defaultValues = []
 
-  if (!isNil(page) && !isNil(values)) {
+  if (!isNil(page)) {
     page.questions.forEach((question) => {
       values.filter((value) => (isNil(value.id) && (question.attribute === value.attribute))).forEach((value) => {
         if (isDefaultValue(question, value)) {
@@ -86,7 +86,7 @@ const initRange = (question, value) => {
   }
 }
 
-const compareValueId = (value, valueId) => (value.id || value.tmp_id) == valueId
+const compareValueId = (value, valueId) => !isNil(valueId) && (value.id == valueId || value.tmp_id == valueId)
 
 const compareValues = (a, b, widget_type = null) => {
   if (!isNil(a.id) && !isNil(b.id)) {

@@ -8,9 +8,10 @@ const initialState = {
   continuation: null,
   providerOptions: {},
   navigation: null,
-  values: null,
+  values: [],
   attributes: [],
-  sets: []
+  sets: [],
+  ready: false
 }
 
 const setValues = (state, action) => {
@@ -30,18 +31,22 @@ const interviewSlice = createSlice({
     fetchPageSuccess(state, action) {
       state.page = action.payload.page
       state.providerOptions = {}
-      state.values = null
+      state.values = []
       state.sets = []
+      state.ready = false
     },
     fetchContinueSuccess(state, action) {
       state.continuation = action.payload
     },
-    fetchValuesSuccess: setValues,
+    fetchValuesSuccess(state, action) {
+      setValues(state, action)
+
+      // page, sets and values are set, the page can be shown
+      state.ready = true
+    },
     fetchOptionsSuccess(state, action) {
-      const { pageId, optionsetId, options } = action.payload
-      if (state.page?.id === pageId) {
-        state.providerOptions[optionsetId] = options
-      }
+      const { optionsetId, options } = action.payload
+      state.providerOptions[optionsetId] = options
     },
     resolveConditionsSuccess(state, action) {
       state.sets = state.sets.map(set => {
@@ -79,7 +84,10 @@ const interviewSlice = createSlice({
       const { value, valueId } = action.payload
       if (state.values.some(currentValue => compareValueId(currentValue, valueId))) {
         state.values = state.values.map(currentValue => (
-          compareValueId(currentValue, valueId) ? value : currentValue
+          // keep the tmp_id, so that outdated copies of the value (e.g. in debounced inputs) can still be matched
+          compareValueId(currentValue, valueId) ? (
+            { ...value, tmp_id: currentValue.tmp_id, pending: false }
+          ) : currentValue
         ))
       } else {
         state.values.push(value)
@@ -88,7 +96,7 @@ const interviewSlice = createSlice({
     storeValueError(state, action) {
       const { error, valueId } = action.payload
       state.values = state.values.map(value => (
-        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+        compareValueId(value, valueId) ? { ...value, error, pending: false, dirty: false } : value
       ))
     },
     deleteValueInit(state, action) {
@@ -102,7 +110,7 @@ const interviewSlice = createSlice({
     deleteValueError(state, action) {
       const { error, valueId } = action.payload
       state.values = state.values.map(value => (
-        compareValueId(value, valueId) ? { ...value, error, pending: false } : value
+        compareValueId(value, valueId) ? { ...value, error, pending: false, dirty: false } : value
       ))
     },
     createSet: setValues,
