@@ -109,16 +109,18 @@ export function fetchOptionsets(page) {
 export function fetchOptions(page, optionset) {
   const pendingId = `fetchOptions/${page.id}/${optionset.id}`
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const dispatchOnPage = getDispatchOnPage(dispatch, getState, page)
+
     dispatch(addToPending(pendingId))
-    dispatch(clearError('options'))
+    dispatchOnPage(clearError('options'))
 
     return ProjectApi.fetchOptions(projectId, optionset.id)
       .then((options) => {
         dispatch(removeFromPending(pendingId))
-        dispatch(actions.fetchOptionsSuccess({ pageId: page.id, optionsetId: optionset.id, options }))
+        dispatchOnPage(actions.fetchOptionsSuccess({ optionsetId: optionset.id, options }))
       })
-      .catch((error) => dispatch(setError('options', error, gettext('Options'))))
+      .catch((error) => dispatchOnPage(setError('options', error, gettext('Options'))))
       .finally(() => dispatch(removeFromPending(pendingId)))
   }
 }

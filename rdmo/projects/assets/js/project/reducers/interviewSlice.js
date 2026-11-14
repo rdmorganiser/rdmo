@@ -45,10 +45,8 @@ const interviewSlice = createSlice({
       state.ready = true
     },
     fetchOptionsSuccess(state, action) {
-      const { pageId, optionsetId, options } = action.payload
-      if (state.page?.id === pageId) {
-        state.providerOptions[optionsetId] = options
-      }
+      const { optionsetId, options } = action.payload
+      state.providerOptions[optionsetId] = options
     },
     resolveConditionsSuccess(state, action) {
       state.sets = state.sets.map(set => {
