@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 
 import * as configActions from 'rdmo/core/assets/js/actions/configActions'
 import { Modal } from 'rdmo/core/assets/js/components'
-import { LinkButton, SearchField } from 'rdmo/core/assets/js/components'
+import { LinkButton } from 'rdmo/core/assets/js/components'
 import { useConfig, useConfigToggle, useModal, useScrollToTop } from 'rdmo/core/assets/js/hooks'
 import { formatDateTime } from 'rdmo/core/assets/js/utils/date'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
@@ -19,7 +19,7 @@ import CopyProjectModal from '../../common/components/CopyProjectModal'
 import ProjectDeleteModal from '../../project/components/areas/information/ProjectDeleteModal'
 import ProjectForm from '../../project/components/areas/information/ProjectForm'
 
-import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
+import { PendingInvitations, ProjectFilters, ProjectImport, SearchField, Table } from './helper'
 
 const Main = () => {
   const dispatch = useDispatch()
