@@ -212,7 +212,7 @@ const ExtendLink = ({ extend, onClick }) => {
 
   const title = extend ? gettext('Show less') : gettext('Show more')
 
-  return <Link className={className} title={title} onClick={onClick} />
+  return <LinkButton className={className} title={title} onClick={onClick} />
 }
 
 ExtendLink.propTypes = {
@@ -247,7 +247,13 @@ CodeLink.propTypes = {
 }
 
 const ErrorLink = ({ onClick }) => {
-  return <Link className="element-link bi bi-exclamation-triangle text-danger" onClick={onClick} />
+  return (
+    <LinkButton
+      className="element-link bi bi-exclamation-triangle text-danger"
+      title={gettext('Show errors')}
+      onClick={onClick}
+    />
+  )
 }
 
 ErrorLink.propTypes = {
@@ -255,7 +261,13 @@ ErrorLink.propTypes = {
 }
 
 const WarningLink = ({ onClick }) => {
-  return <Link className="element-link bi bi-exclamation-triangle text-warning" onClick={onClick} />
+  return (
+    <LinkButton
+      className="element-link bi bi-exclamation-triangle text-warning"
+      title={gettext('Show warnings')}
+      onClick={onClick}
+    />
+  )
 }
 
 WarningLink.propTypes = {
@@ -270,7 +282,7 @@ const ShowLink = ({ show = false, onClick }) => {
     'bi-chevron-up': show
   })
 
-  return <Link className={className} title={title} onClick={onClick} />
+  return <LinkButton className={className} title={title} onClick={onClick} />
 }
 
 ShowLink.propTypes = {
