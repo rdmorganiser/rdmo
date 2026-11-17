@@ -1,7 +1,7 @@
 import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pendingActions'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
-import { actions } from '../reducers/interviewSlice'
+import { actions } from '../reducers/progressSlice'
 import { actions as projectActions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 

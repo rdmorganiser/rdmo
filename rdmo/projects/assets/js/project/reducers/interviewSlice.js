@@ -7,8 +7,6 @@ const initialState = {
   page: null,
   continuation: null,
   providerOptions: {},
-  navigation: null,
-  progress: null,
   values: null,
   attributes: [],
   sets: []
@@ -19,21 +17,12 @@ const setValues = (state, action) => {
   state.sets = action.payload.sets
 }
 
-const setProgress = (state, action) => {
-  state.progress = action.payload
-}
-
 const keepState = state => state
 
 const interviewSlice = createSlice({
   name: 'interview',
   initialState,
   reducers: {
-    fetchNavigationSuccess(state, action) {
-      state.navigation = action.payload
-    },
-    fetchProgressSuccess: setProgress,
-    updateProgressSuccess: setProgress,
     fetchPageInit(state) {
       state.done = false
     },

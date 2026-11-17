@@ -9,10 +9,10 @@ import { selectPermissions } from '../../common/selectors/permissions'
 
 import { clearCurrentView, fetchAnswers, fetchProjectViews, fetchView } from './documentActions'
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
-import { fetchNavigation, fetchProgress } from './interviewNavigationActions'
 import { fetchProjectIssues } from './issueActions'
 import { setLocation } from './locationActions'
 import { fetchProjectInvites, fetchProjectMemberships } from './membershipActions'
+import { fetchNavigation, fetchProgress } from './progressActions'
 import { fetchCatalogs, fetchProjectHierarchy } from './projectActions'
 import { fetchProjectSnapshots } from './snapshotActions'
 
