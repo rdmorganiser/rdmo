@@ -53,6 +53,11 @@ from .filters import (
 )
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
+    HasProjectCreatePermission,
+    HasProjectExportModelPermission,
+    HasProjectExportObjectPermission,
+    HasProjectImportModelPermission,
+    HasProjectImportObjectPermission,
     HasProjectIssueSendModelPermission,
     HasProjectIssueSendObjectPermission,
     HasProjectLeavePermission,
@@ -116,6 +121,9 @@ from .utils import (
     get_issue_send_content,
     get_upload_accept,
     get_value_path,
+    handle_export,
+    handle_import,
+    handle_upload,
     render_attachments,
     send_contact_message,
     send_invite_email,
@@ -170,7 +178,7 @@ class ProjectViewSet(ModelViewSet):
             membership_queryset = membership_queryset.prefetch_related('user__socialaccount_set')
 
         queryset = Project.objects.filter_user(self.request.user, filter_for_user).distinct()
-        if self.action in ('navigation', 'answers'):
+        if self.action in ('navigation', 'answers', 'export', 'update_import', 'update_upload'):
             # these actions only need the project catalog and visibility before computing the answer tree.
             return queryset.select_related('catalog', 'visibility')
         elif self.action in ('resolve', 'resolve_post'):
@@ -730,6 +738,55 @@ class ProjectViewSet(ModelViewSet):
     def files_snapshot(self, request, pk, snapshot_id):
         # extra method since DRF does not officially support optional named parameters inside url_path
         return self.files(request, pk, snapshot_id)
+
+    @action(
+        detail=True,
+        methods=['get', 'post'],
+        url_path=r'export/(?P<key>[^/]+)',
+        permission_classes=(HasProjectExportModelPermission | HasProjectExportObjectPermission, )
+    )
+    def export(self, request, pk, key):
+        return handle_export(request, key, self.get_object())
+
+    @action(
+        detail=False,
+        methods=['get', 'post'],
+        url_path=r'import/(?P<key>[^/]+)',
+        url_name='create-import',
+        permission_classes=(HasProjectCreatePermission, )
+    )
+    def create_import(self, request, key):
+        return handle_import(request, key)
+
+    @action(
+        detail=False,
+        methods=['post'],
+        url_path=r'import',
+        url_name='create-upload',
+        permission_classes=(HasProjectCreatePermission, )
+    )
+    def create_upload(self, request):
+        return handle_upload(request)
+
+    @action(
+        detail=True,
+        methods=['get', 'post'],
+        url_path=r'import/(?P<key>[^/]+)',
+        url_name='update-import',
+        permission_classes=(HasProjectImportModelPermission | HasProjectImportObjectPermission, )
+    )
+    def update_import(self, request, pk, key):
+        return handle_import(request, key, self.get_object())
+
+    @action(
+        detail=True,
+        methods=['post'],
+        url_path=r'import',
+        url_name='update-upload',
+        permission_classes=(HasProjectImportModelPermission | HasProjectImportObjectPermission, )
+    )
+    def update_upload(self, request, pk):
+        return handle_upload(request, self.get_object())
 
     @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
     def upload_accept(self, request):
