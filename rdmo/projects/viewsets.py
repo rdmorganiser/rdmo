@@ -1293,13 +1293,15 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
     permission_classes = (HasModelPermission | HasProjectPagePermission, )
     serializer_class = PageSerializer
 
-    def get_queryset(self):
+    def check_catalog(self):
         if self.project.catalog_id is None:
             raise NotFound({
                 'detail': _('This project has no catalog.'),
                 'code': 'catalog_missing',
             })
 
+    def get_queryset(self):
+        self.check_catalog()
         self.project.prefetch_catalog()
         return (
             Page.objects
@@ -1346,7 +1348,8 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
-        self.get_queryset()
+        self.check_catalog()
+        self.project.prefetch_catalog()
         if not self.project.catalog.pages:
             return Response({
                 'detail': 'No Page matches the given query.',
