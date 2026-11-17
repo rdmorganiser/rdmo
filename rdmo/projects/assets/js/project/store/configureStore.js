@@ -35,7 +35,6 @@ import projectErrorsReducer from '../reducers/projectErrorsSlice'
 import projectReducer from '../reducers/projectSlice'
 import snapshotReducer from '../reducers/snapshotSlice'
 import { parseLocation } from '../utils/location'
-import { projectId } from '../utils/meta'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -113,7 +112,7 @@ export default function configureStore() {
       // visibility is rendered in sidebar
       if (permissions.can_view_visibility) {
         if (!isNil(project.visibility)) {
-          store.dispatch(projectActions.fetchProjectVisibility(projectId))
+          store.dispatch(projectActions.fetchProjectVisibility())
         }
       }
       // conditional rendering of Integrations link in sidebar depends on available providers
@@ -122,7 +121,7 @@ export default function configureStore() {
       }
       // integrations are used in the Integrations area and the Send task modal
       if (permissions.can_view_integration) {
-        store.dispatch(integrationActions.fetchProjectIntegrations(projectId))
+        store.dispatch(integrationActions.fetchProjectIntegrations())
       }
       initDashboardFromLocation()
     })
