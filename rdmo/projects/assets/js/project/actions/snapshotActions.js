@@ -10,7 +10,7 @@ import ProjectApi from '../api/ProjectApi'
 export function fetchProjectSnapshots() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectSnapshots'))
-    dispatch(projectActions.fetchProjectSnapshotsInit())
+    dispatch(actions.fetchProjectSnapshotsInit())
 
     return ProjectApi.fetchProjectSnapshots(projectId)
       .then(snapshots => {
@@ -18,7 +18,7 @@ export function fetchProjectSnapshots() {
         return snapshots
       })
       .catch(error => {
-        dispatch(projectActions.fetchProjectSnapshotsError(serializeError(error)))
+        dispatch(actions.fetchProjectSnapshotsError(serializeError(error)))
       })
       .finally(() => dispatch(removeFromPending('fetchProjectSnapshots')))
   }
@@ -27,7 +27,7 @@ export function fetchProjectSnapshots() {
 export function createSnapshot(data) {
   return function (dispatch) {
     dispatch(addToPending('createSnapshot'))
-    dispatch(projectActions.createSnapshotInit())
+    dispatch(actions.createSnapshotInit())
 
     return ProjectApi.createSnapshot(projectId, data)
       .then(snapshot => {
@@ -36,7 +36,7 @@ export function createSnapshot(data) {
       })
       .catch(error => {
         dispatch(removeFromPending('createSnapshot'))
-        dispatch(projectActions.createSnapshotError(serializeError(error)))
+        dispatch(actions.createSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -45,7 +45,7 @@ export function createSnapshot(data) {
 export function updateSnapshot(snapshotId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateSnapshot'))
-    dispatch(projectActions.updateSnapshotInit())
+    dispatch(actions.updateSnapshotInit())
 
     return ProjectApi.updateSnapshot(projectId, snapshotId, data)
       .then(snapshot => {
@@ -54,7 +54,7 @@ export function updateSnapshot(snapshotId, data) {
       })
       .catch(error => {
         dispatch(removeFromPending('updateSnapshot'))
-        dispatch(projectActions.updateSnapshotError(serializeError(error)))
+        dispatch(actions.updateSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -63,7 +63,7 @@ export function updateSnapshot(snapshotId, data) {
 export function deleteSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('deleteSnapshot'))
-    dispatch(projectActions.deleteSnapshotInit())
+    dispatch(actions.deleteSnapshotInit())
 
     return ProjectApi.deleteSnapshot(projectId, snapshotId)
       .then(() => {
@@ -72,7 +72,7 @@ export function deleteSnapshot(snapshotId) {
       })
       .catch(error => {
         dispatch(removeFromPending('deleteSnapshot'))
-        dispatch(projectActions.deleteSnapshotError(serializeError(error)))
+        dispatch(actions.deleteSnapshotError(serializeError(error)))
         throw error
       })
   }
@@ -81,7 +81,7 @@ export function deleteSnapshot(snapshotId) {
 export function rollbackSnapshot(snapshotId) {
   return function (dispatch) {
     dispatch(addToPending('rollbackSnapshot'))
-    dispatch(projectActions.rollbackSnapshotInit())
+    dispatch(actions.rollbackSnapshotInit())
 
     return ProjectApi.rollbackSnapshot(projectId, snapshotId)
       .then(() =>
@@ -95,7 +95,7 @@ export function rollbackSnapshot(snapshotId) {
         dispatch(projectActions.updateProjectSuccess({ project }))
       })
       .catch(error => {
-        dispatch(projectActions.rollbackSnapshotError(serializeError(error)))
+        dispatch(actions.rollbackSnapshotError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('rollbackSnapshot')))

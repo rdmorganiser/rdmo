@@ -31,6 +31,7 @@ import issueReducer from '../reducers/issueSlice'
 import locationReducer from '../reducers/locationSlice'
 import membershipReducer from '../reducers/membershipSlice'
 import progressReducer from '../reducers/progressSlice'
+import projectErrorsReducer from '../reducers/projectErrorsSlice'
 import projectReducer from '../reducers/projectSlice'
 import snapshotReducer from '../reducers/snapshotSlice'
 import { parseLocation } from '../utils/location'
@@ -62,6 +63,7 @@ export default function configureStore() {
       errors: errorsReducer,
       pending: pendingReducer,
       project: projectReducer,
+      projectErrors: projectErrorsReducer,
       progress: progressReducer,
       membership: membershipReducer,
       snapshot: snapshotReducer,

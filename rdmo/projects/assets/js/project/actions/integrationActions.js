@@ -3,7 +3,6 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/integrationSlice'
-import { actions as projectActions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -29,7 +28,7 @@ export function fetchProviders() {
 export function fetchProjectIntegrations() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectIntegrations'))
-    dispatch(projectActions.fetchProjectIntegrationsInit())
+    dispatch(actions.fetchProjectIntegrationsInit())
 
     return ProjectApi.fetchProjectIntegrations(projectId)
       .then(integrations => {
@@ -38,7 +37,7 @@ export function fetchProjectIntegrations() {
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProjectIntegrations'))
-        dispatch(projectActions.fetchProjectIntegrationsError(serializeError(error)))
+        dispatch(actions.fetchProjectIntegrationsError(serializeError(error)))
         throw error
       })
   }
@@ -47,7 +46,7 @@ export function fetchProjectIntegrations() {
 export function createProjectIntegration(data) {
   return function (dispatch) {
     dispatch(addToPending('createProjectIntegration'))
-    dispatch(projectActions.createProjectIntegrationInit())
+    dispatch(actions.createProjectIntegrationInit())
 
     return ProjectApi.createProjectIntegration(projectId, data)
       .then(integration => {
@@ -56,7 +55,7 @@ export function createProjectIntegration(data) {
       })
       .catch(error => {
         dispatch(removeFromPending('createProjectIntegration'))
-        dispatch(projectActions.createProjectIntegrationError(serializeError(error)))
+        dispatch(actions.createProjectIntegrationError(serializeError(error)))
         throw error
       })
   }
@@ -65,7 +64,7 @@ export function createProjectIntegration(data) {
 export function updateProjectIntegration(integrationId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectIntegration'))
-    dispatch(projectActions.updateProjectIntegrationInit())
+    dispatch(actions.updateProjectIntegrationInit())
 
     return ProjectApi.updateProjectIntegration(projectId, integrationId, data)
       .then(integration => {
@@ -74,7 +73,7 @@ export function updateProjectIntegration(integrationId, data) {
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectIntegration'))
-        dispatch(projectActions.updateProjectIntegrationError(serializeError(error)))
+        dispatch(actions.updateProjectIntegrationError(serializeError(error)))
         throw error
       })
   }
@@ -83,7 +82,7 @@ export function updateProjectIntegration(integrationId, data) {
 export function deleteProjectIntegration(integrationId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectIntegration'))
-    dispatch(projectActions.deleteProjectIntegrationInit())
+    dispatch(actions.deleteProjectIntegrationInit())
 
     return ProjectApi.deleteProjectIntegration(projectId, integrationId)
       .then(() => {
@@ -92,7 +91,7 @@ export function deleteProjectIntegration(integrationId) {
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectIntegration'))
-        dispatch(projectActions.deleteProjectIntegrationError(serializeError(error)))
+        dispatch(actions.deleteProjectIntegrationError(serializeError(error)))
         throw error
       })
   }

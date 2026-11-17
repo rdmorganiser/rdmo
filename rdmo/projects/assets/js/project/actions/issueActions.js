@@ -3,7 +3,6 @@ import { addToStale } from 'rdmo/core/assets/js/actions/staleActions'
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/issueSlice'
-import { actions as projectActions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -11,14 +10,14 @@ import ProjectApi from '../api/ProjectApi'
 export function fetchProjectIssues() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectIssues'))
-    dispatch(projectActions.fetchProjectIssuesInit())
+    dispatch(actions.fetchProjectIssuesInit())
 
     return ProjectApi.fetchProjectIssues(projectId)
       .then((issues) => {
         dispatch(actions.fetchProjectIssuesSuccess(issues))
       })
       .catch((error) => {
-        dispatch(projectActions.fetchProjectIssuesError(serializeError(error)))
+        dispatch(actions.fetchProjectIssuesError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectIssues')))
@@ -28,7 +27,7 @@ export function fetchProjectIssues() {
 export function updateProjectIssue(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectIssue'))
-    dispatch(projectActions.updateProjectIssueInit())
+    dispatch(actions.updateProjectIssueInit())
 
     return ProjectApi.updateProjectIssue(projectId, issueId, data)
       .then(() => dispatch(fetchProjectIssues()))
@@ -36,7 +35,7 @@ export function updateProjectIssue(issueId, data) {
         dispatch(actions.updateProjectIssueSuccess())
       })
       .catch((error) => {
-        dispatch(projectActions.updateProjectIssueError(serializeError(error)))
+        dispatch(actions.updateProjectIssueError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProjectIssue')))
@@ -46,7 +45,7 @@ export function updateProjectIssue(issueId, data) {
 export function sendProjectIssueEmail(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('sendProjectIssueEmail'))
-    dispatch(projectActions.sendProjectIssueEmailInit())
+    dispatch(actions.sendProjectIssueEmailInit())
 
     return ProjectApi.sendProjectIssueEmail(projectId, issueId, data)
       .then(() => {
@@ -55,7 +54,7 @@ export function sendProjectIssueEmail(issueId, data) {
         return dispatch(fetchProjectIssues())
           .catch(() => {})
       }, error => {
-        dispatch(projectActions.sendProjectIssueEmailError(serializeError(error)))
+        dispatch(actions.sendProjectIssueEmailError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('sendProjectIssueEmail')))
@@ -65,7 +64,7 @@ export function sendProjectIssueEmail(issueId, data) {
 export function sendProjectIssueIntegration(issueId, data) {
   return function (dispatch) {
     dispatch(addToPending('sendProjectIssueIntegration'))
-    dispatch(projectActions.sendProjectIssueIntegrationInit())
+    dispatch(actions.sendProjectIssueIntegrationInit())
 
     return ProjectApi.sendProjectIssueIntegration(projectId, issueId, data)
       .then((response) => {
@@ -81,7 +80,7 @@ export function sendProjectIssueIntegration(issueId, data) {
           .catch(() => {})
           .then(() => response)
       }, error => {
-        dispatch(projectActions.sendProjectIssueIntegrationError(serializeError(error)))
+        dispatch(actions.sendProjectIssueIntegrationError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('sendProjectIssueIntegration')))

@@ -4,7 +4,6 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/documentSlice'
-import { actions as projectActions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -12,7 +11,7 @@ import ProjectApi from '../api/ProjectApi'
 export function fetchProjectViews() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectViews'))
-    dispatch(projectActions.fetchProjectViewsInit())
+    dispatch(actions.fetchProjectViewsInit())
 
     return ProjectApi.fetchProjectViews(projectId)
       .then(views => {
@@ -20,7 +19,7 @@ export function fetchProjectViews() {
         return views
       })
       .catch(error => {
-        dispatch(projectActions.fetchProjectViewsError(serializeError(error)))
+        dispatch(actions.fetchProjectViewsError(serializeError(error)))
       })
       .finally(() => dispatch(removeFromPending('fetchProjectViews')))
   }
@@ -29,7 +28,7 @@ export function fetchProjectViews() {
 export function fetchProjectAnswers() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectAnswers'))
-    dispatch(projectActions.fetchProjectAnswersInit())
+    dispatch(actions.fetchProjectAnswersInit())
 
     return ProjectApi.fetchProjectAnswers(projectId)
       .then(answers => {
@@ -37,7 +36,7 @@ export function fetchProjectAnswers() {
         return answers
       })
       .catch(error => {
-        dispatch(projectActions.fetchProjectAnswersError(serializeError(error)))
+        dispatch(actions.fetchProjectAnswersError(serializeError(error)))
       })
       .finally(() => dispatch(removeFromPending('fetchProjectAnswers')))
   }
@@ -48,7 +47,7 @@ export function fetchAnswers(snapshotId, params = {}) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch(projectActions.fetchAnswersInit())
+    dispatch(actions.fetchAnswersInit())
 
     return ProjectApi.fetchProjectAnswers(projectId, snapshotId, params)
       .then(view => {
@@ -58,7 +57,7 @@ export function fetchAnswers(snapshotId, params = {}) {
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch(projectActions.fetchAnswersError(serializeError(error)))
+        dispatch(actions.fetchAnswersError(serializeError(error)))
       })
   }
 }
@@ -68,7 +67,7 @@ export function fetchView(snapshotId, viewId) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch(projectActions.fetchViewInit())
+    dispatch(actions.fetchViewInit())
 
     return ProjectApi.fetchProjectView(projectId, snapshotId, viewId)
       .then(view => {
@@ -77,7 +76,7 @@ export function fetchView(snapshotId, viewId) {
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch(projectActions.fetchViewError(serializeError(error)))
+        dispatch(actions.fetchViewError(serializeError(error)))
       })
   }
 }
@@ -87,7 +86,7 @@ export function fetchProjectFiles(snapshotId) {
 
   return function (dispatch) {
     dispatch(addToPending(pendingId))
-    dispatch(projectActions.fetchProjectFilesInit())
+    dispatch(actions.fetchProjectFilesInit())
 
     return ProjectApi.fetchProjectFiles(projectId, snapshotId)
       .then(files => {
@@ -96,7 +95,7 @@ export function fetchProjectFiles(snapshotId) {
       })
       .catch(error => {
         dispatch(removeFromPending(pendingId))
-        dispatch(projectActions.fetchProjectFilesError(serializeError(error)))
+        dispatch(actions.fetchProjectFilesError(serializeError(error)))
       })
   }
 }
@@ -104,11 +103,11 @@ export function fetchProjectFiles(snapshotId) {
 export function downloadAnswers(snapshotId, format, params = {}) {
   return function (dispatch) {
     dispatch(addToPending('downloadAnswers'))
-    dispatch(projectActions.downloadAnswersInit())
+    dispatch(actions.downloadAnswersInit())
 
     return ProjectApi.downloadProjectAnswers(projectId, snapshotId, format, params)
       .then(() => dispatch(actions.downloadAnswersSuccess()))
-      .catch(error => dispatch(projectActions.downloadAnswersError(serializeError(error))))
+      .catch(error => dispatch(actions.downloadAnswersError(serializeError(error))))
       .finally(() => dispatch(removeFromPending('downloadAnswers')))
   }
 }
@@ -116,11 +115,11 @@ export function downloadAnswers(snapshotId, format, params = {}) {
 export function downloadView(snapshotId, viewId, format) {
   return function (dispatch) {
     dispatch(addToPending('downloadView'))
-    dispatch(projectActions.downloadViewInit())
+    dispatch(actions.downloadViewInit())
 
     return ProjectApi.downloadProjectView(projectId, snapshotId, viewId, format)
       .then(() => dispatch(actions.downloadViewSuccess()))
-      .catch(error => dispatch(projectActions.downloadViewError(serializeError(error))))
+      .catch(error => dispatch(actions.downloadViewError(serializeError(error))))
       .finally(() => dispatch(removeFromPending('downloadView')))
   }
 }

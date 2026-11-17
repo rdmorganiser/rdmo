@@ -11,7 +11,7 @@ import ProjectApi from '../api/ProjectApi'
 export function fetchProjectMemberships() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectMemberships'))
-    dispatch(projectActions.fetchProjectMembershipsInit())
+    dispatch(actions.fetchProjectMembershipsInit())
 
     return Promise.all([
       ProjectApi.fetchProjectMemberships(projectId),
@@ -23,7 +23,7 @@ export function fetchProjectMemberships() {
         return allMemberships
       })
       .catch(error => {
-        dispatch(projectActions.fetchProjectMembershipsError(serializeError(error)))
+        dispatch(actions.fetchProjectMembershipsError(serializeError(error)))
       })
       .finally(() => dispatch(removeFromPending('fetchProjectMemberships')))
   }
@@ -32,7 +32,7 @@ export function fetchProjectMemberships() {
 export function fetchProjectInvites() {
   return function (dispatch) {
     dispatch(addToPending('fetchProjectInvites'))
-    dispatch(projectActions.fetchProjectInvitesInit())
+    dispatch(actions.fetchProjectInvitesInit())
 
     return ProjectApi.fetchProjectInvites(projectId)
       .then(invites => {
@@ -41,7 +41,7 @@ export function fetchProjectInvites() {
       })
       .catch(error => {
         dispatch(removeFromPending('fetchProjectInvites'))
-        dispatch(projectActions.fetchProjectInvitesError(serializeError(error)))
+        dispatch(actions.fetchProjectInvitesError(serializeError(error)))
       })
   }
 }
@@ -49,7 +49,7 @@ export function fetchProjectInvites() {
 export function createProjectMember(data) {
   return function (dispatch) {
     dispatch(addToPending('createProjectMember'))
-    dispatch(projectActions.createProjectMemberInit())
+    dispatch(actions.createProjectMemberInit())
 
     return ProjectApi.createMember(projectId, data)
       .then(member => {
@@ -58,7 +58,7 @@ export function createProjectMember(data) {
       })
       .catch(error => {
         dispatch(removeFromPending('createProjectMember'))
-        dispatch(projectActions.createProjectMemberError(serializeError(error)))
+        dispatch(actions.createProjectMemberError(serializeError(error)))
         throw error
       })
   }
@@ -67,7 +67,7 @@ export function createProjectMember(data) {
 export function updateProjectMember(membershipId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectMember'))
-    dispatch(projectActions.updateProjectMemberInit())
+    dispatch(actions.updateProjectMemberInit())
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
@@ -84,7 +84,7 @@ export function updateProjectMember(membershipId, data) {
           })
       })
       .catch(error => {
-        dispatch(projectActions.updateProjectMemberError(serializeError(error)))
+        dispatch(actions.updateProjectMemberError(serializeError(error)))
         throw error
       })
       .finally(() => dispatch(removeFromPending('updateProjectMember')))
@@ -94,7 +94,7 @@ export function updateProjectMember(membershipId, data) {
 export function deleteProjectMember(membershipId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectMember'))
-    dispatch(projectActions.deleteProjectMemberInit())
+    dispatch(actions.deleteProjectMemberInit())
 
     return ProjectApi.deleteMember(projectId, membershipId)
       .then(() => {
@@ -103,7 +103,7 @@ export function deleteProjectMember(membershipId) {
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectMember'))
-        dispatch(projectActions.deleteProjectMemberError(serializeError(error)))
+        dispatch(actions.deleteProjectMemberError(serializeError(error)))
         throw error
       })
   }
@@ -112,7 +112,7 @@ export function deleteProjectMember(membershipId) {
 export function sendProjectInvite(data) {
   return function (dispatch) {
     dispatch(addToPending('sendInvite'))
-    dispatch(projectActions.sendInviteInit())
+    dispatch(actions.sendInviteInit())
 
     return ProjectApi.sendInvite(projectId, data)
       .then(invite => {
@@ -121,7 +121,7 @@ export function sendProjectInvite(data) {
       })
       .catch(error => {
         dispatch(removeFromPending('sendInvite'))
-        dispatch(projectActions.sendInviteError(serializeError(error)))
+        dispatch(actions.sendInviteError(serializeError(error)))
         throw error
       })
   }
@@ -130,7 +130,7 @@ export function sendProjectInvite(data) {
 export function updateProjectInvite(inviteId, data) {
   return function (dispatch) {
     dispatch(addToPending('updateProjectInvite'))
-    dispatch(projectActions.updateProjectInviteInit())
+    dispatch(actions.updateProjectInviteInit())
 
     return ProjectApi.updateInvite(projectId, inviteId, data)
       .then(invite => {
@@ -139,7 +139,7 @@ export function updateProjectInvite(inviteId, data) {
       })
       .catch(error => {
         dispatch(removeFromPending('updateProjectInvite'))
-        dispatch(projectActions.updateProjectInviteError(serializeError(error)))
+        dispatch(actions.updateProjectInviteError(serializeError(error)))
         throw error
       })
   }
@@ -148,7 +148,7 @@ export function updateProjectInvite(inviteId, data) {
 export function deleteProjectInvite(inviteId) {
   return function (dispatch) {
     dispatch(addToPending('deleteProjectInvite'))
-    dispatch(projectActions.deleteProjectInviteInit())
+    dispatch(actions.deleteProjectInviteInit())
 
     return ProjectApi.deleteInvite(projectId, inviteId)
       .then(() => {
@@ -157,7 +157,7 @@ export function deleteProjectInvite(inviteId) {
       })
       .catch(error => {
         dispatch(removeFromPending('deleteProjectInvite'))
-        dispatch(projectActions.deleteProjectInviteError(serializeError(error)))
+        dispatch(actions.deleteProjectInviteError(serializeError(error)))
         throw error
       })
   }
@@ -166,7 +166,7 @@ export function deleteProjectInvite(inviteId) {
 export function leaveProject(membershipId, { redirect = false } = {}) {
   return function (dispatch) {
     dispatch(addToPending('leaveProject'))
-    dispatch(projectActions.leaveProjectInit())
+    dispatch(actions.leaveProjectInit())
 
     return ProjectApi.leaveProject(projectId)
       .then(() => {
@@ -179,7 +179,7 @@ export function leaveProject(membershipId, { redirect = false } = {}) {
       })
       .catch(error => {
         dispatch(removeFromPending('leaveProject'))
-        dispatch(projectActions.leaveProjectError(serializeError(error)))
+        dispatch(actions.leaveProjectError(serializeError(error)))
         throw error
       })
   }

@@ -9,15 +9,23 @@ const setProgress = (state, action) => {
   state.progress = action.payload
 }
 
+const keepState = state => state
+
 const progressSlice = createSlice({
   name: 'progress',
   initialState,
   reducers: {
+    fetchNavigationInit: keepState,
     fetchNavigationSuccess(state, action) {
       state.navigation = action.payload
     },
+    fetchNavigationError: keepState,
+    fetchProgressInit: keepState,
     fetchProgressSuccess: setProgress,
-    updateProgressSuccess: setProgress
+    fetchProgressError: keepState,
+    updateProgressInit: keepState,
+    updateProgressSuccess: setProgress,
+    updateProgressError: keepState
   }
 })
 

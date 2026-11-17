@@ -4,6 +4,7 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import CatalogApi from 'rdmo/projects/assets/js/common/api/CatalogApi'
 
+import { actions as projectErrorsActions } from '../reducers/projectErrorsSlice'
 import { actions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
@@ -174,5 +175,5 @@ export function deleteProjectVisibility() {
 }
 
 export function clearProjectErrors() {
-  return actions.clearProjectErrors()
+  return projectErrorsActions.clearProjectErrors()
 }

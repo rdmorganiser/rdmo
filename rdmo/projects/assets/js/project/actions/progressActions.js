@@ -2,7 +2,6 @@ import { addToPending, removeFromPending } from 'rdmo/core/assets/js/actions/pen
 import { serializeError } from 'rdmo/core/assets/js/utils/errors'
 
 import { actions } from '../reducers/progressSlice'
-import { actions as projectActions } from '../reducers/projectSlice'
 import { projectId } from '../utils/meta'
 
 import ProjectApi from '../api/ProjectApi'
@@ -12,7 +11,7 @@ export function fetchNavigation() {
 
   return (dispatch) => {
     dispatch(addToPending(pendingId))
-    dispatch(projectActions.fetchNavigationInit())
+    dispatch(actions.fetchNavigationInit())
 
     return ProjectApi.fetchProjectNavigation(projectId)
       .then((navigation) => {
@@ -21,7 +20,7 @@ export function fetchNavigation() {
       })
       .catch((error) => {
         dispatch(removeFromPending(pendingId))
-        dispatch(projectActions.fetchNavigationError(serializeError(error)))
+        dispatch(actions.fetchNavigationError(serializeError(error)))
       })
   }
 }
@@ -29,7 +28,7 @@ export function fetchNavigation() {
 export function fetchProgress() {
   return (dispatch) => {
     dispatch(addToPending('fetchProgress'))
-    dispatch(projectActions.fetchProgressInit())
+    dispatch(actions.fetchProgressInit())
 
     return ProjectApi.fetchProjectProgress(projectId)
       .then((progress) => {
@@ -38,7 +37,7 @@ export function fetchProgress() {
       })
       .catch((error) => {
         dispatch(removeFromPending('fetchProgress'))
-        dispatch(projectActions.fetchProgressError(serializeError(error)))
+        dispatch(actions.fetchProgressError(serializeError(error)))
       })
   }
 }
@@ -46,7 +45,7 @@ export function fetchProgress() {
 export function updateProgress() {
   return (dispatch) => {
     dispatch(addToPending('updateProgress'))
-    dispatch(projectActions.updateProgressInit())
+    dispatch(actions.updateProgressInit())
 
     return ProjectApi.updateProjectProgress(projectId)
       .then((progress) => {
@@ -55,7 +54,7 @@ export function updateProgress() {
       })
       .catch((error) => {
         dispatch(removeFromPending('updateProgress'))
-        dispatch(projectActions.updateProgressError(serializeError(error)))
+        dispatch(actions.updateProgressError(serializeError(error)))
       })
   }
 }
