@@ -439,11 +439,7 @@ class ProjectViewSet(ModelViewSet):
     def progress(self, request, pk=None):
         project = self.get_object()
         if project.catalog_id is None:
-            return Response({
-                'count': None,
-                'total': None,
-                'ratio': None,
-            })
+            return Response({})
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
             project.prefetch_catalog()

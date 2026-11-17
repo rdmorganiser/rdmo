@@ -71,7 +71,7 @@ def test_progress_get_without_catalog(db, client):
     client.login(username='owner', password='owner')
     response = client.get(reverse(urlnames['progress'], args=[project.pk]))
     assert response.status_code == 200
-    assert response.json() == {'count': None, 'total': None, 'ratio': None}
+    assert response.json() == {}
 
 
 @pytest.mark.parametrize('username,password', [('user', 'user'), ('anonymous', None)])
@@ -131,7 +131,7 @@ def test_progress_post_without_catalog(db, client):
     client.login(username='owner', password='owner')
     response = client.post(reverse(urlnames['progress'], args=[project.pk]))
     assert response.status_code == 200
-    assert response.json() == {'count': None, 'total': None, 'ratio': None}
+    assert response.json() == {}
 
 
 def test_progress_post_changed(db, client):
