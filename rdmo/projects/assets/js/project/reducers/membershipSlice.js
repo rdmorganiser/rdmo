@@ -42,7 +42,7 @@ const membershipSlice = createSlice({
     deleteProjectMemberError: keepState,
     sendInviteInit: keepState,
     sendInviteSuccess(state, action) {
-      state.invites.push(action.payload)
+      state.invites = [...(state.invites || []), action.payload]
     },
     sendInviteError: keepState,
     updateProjectInviteInit: keepState,
