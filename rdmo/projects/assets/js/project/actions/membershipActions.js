@@ -72,12 +72,16 @@ export function updateProjectMember(membershipId, data) {
 
     return ProjectApi.updateMember(projectId, membershipId, data)
       .then(member => {
+        dispatch(actions.updateProjectMemberSuccess({ ...member, id: membershipId }))
+
         // membership updates can lead to a permission change for owner <-> last owner cases
         // project with permissions needs to be fetched
         return ProjectApi.fetchProject(projectId)
           .then(project => {
-            dispatch(actions.updateProjectMemberSuccess({ ...member, id: membershipId }))
             dispatch(projectActions.updateProjectSuccess({ project }))
+          })
+          .catch(error => {
+            dispatch(projectActions.fetchProjectError(serializeError(error)))
           })
       })
       .catch(error => {
