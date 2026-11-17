@@ -88,11 +88,7 @@ def test_view_without_catalog(db, client, snapshot_id):
     args = [project.pk, snapshot_id] if snapshot_id is not None else [project.pk]
     response = client.get(reverse(urlname, args=args))
     assert response.status_code == 200
-    data = response.json()
-    assert data['id'] is None
-    assert data['show'] is False
-    assert data['elements'] == []
-    assert data['count'] == data['total'] == 0
+    assert response.json() == {}
 
 
 def test_view_empty_catalog(db, client):

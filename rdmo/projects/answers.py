@@ -17,14 +17,7 @@ class AnswerTree:
 
     def compute(self, values):
         if self.catalog is None:
-            return {
-                'id': None,
-                'model': 'questions.catalog',
-                'show': False,
-                'elements': [],
-                'count': 0,
-                'total': 0,
-            }
+            return {}
 
         # Main function of this class, which Computes the answer tree recursively.
         # First, it computes the catalog, section, and page nodes.
