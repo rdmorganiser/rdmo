@@ -374,8 +374,8 @@ def test_delete_set_without_catalog_preserves_values(db, client):
     original_ids = set(project.values.values_list('id', flat=True))
     client.login(username='owner', password='owner')
     response = client.delete(reverse(urlnames['delete-set'], args=[project.pk, value.pk]))
-    assert response.status_code == 400
-    assert 'catalog' in response.json()
+    assert response.status_code == 409
+    assert response.json() == {'detail': 'This project has no catalog.'}
     assert set(project.values.values_list('id', flat=True)) == original_ids
 
 

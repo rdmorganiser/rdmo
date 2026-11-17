@@ -906,8 +906,8 @@ def test_options_without_catalog(db, client):
     url = reverse(urlnames['options'], args=[project.pk])
     response = client.get(url)
 
-    assert response.status_code == 404
-    assert response.json()['code'] == 'catalog_missing'
+    assert response.status_code == 409
+    assert response.json() == {'detail': 'This project has no catalog.'}
     assert 'done' not in response.json()
 
 

@@ -3,16 +3,23 @@ import pytest
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
+from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.tests.utils import compute_checksum
 
 from ..models import Invite, Project, Value
 from ..utils import (
+    check_options,
     compute_set_prefix_from_set_value,
     compute_value_maps,
     copy_project,
     get_invite_email_project_path,
     render_attachments,
 )
+
+
+def test_check_options_without_catalog():
+    with pytest.raises(CatalogMissingException):
+        check_options(Project(catalog=None), Value())
 
 
 def test_compute_value_maps():

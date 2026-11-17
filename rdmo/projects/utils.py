@@ -9,7 +9,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
+from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
@@ -108,6 +110,9 @@ def check_conditions(conditions, attribute_values_map, set_prefix=None, set_inde
 
 
 def check_options(project, value):
+    if project.catalog is None:
+        raise CatalogMissingException(_('This project has no catalog.'))
+
     # loop over all values of a question and check if value.option matches the optionsets of the question
     for question in filter(lambda q: q.attribute == value.attribute, project.catalog.questions):
         question_options = [

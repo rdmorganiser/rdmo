@@ -1,8 +1,17 @@
 import pytest
 
+from rdmo.core.exceptions import CatalogMissingException
 from rdmo.domain.models import Attribute
 
 from ..models import Value
+
+
+def test_filter_set_without_catalog(db):
+    set_value = Value.objects.get(pk=85)
+    set_value.project.catalog = None
+
+    with pytest.raises(CatalogMissingException):
+        Value.objects.all().filter_set(set_value)
 
 
 @pytest.mark.parametrize('set_value_id', [85, 148])  # current values and snapshot 1

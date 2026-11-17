@@ -27,7 +27,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.exceptions import SendMailException
+from rdmo.core.exceptions import CatalogConflict, CatalogMissingException, SendMailException
 from rdmo.core.mail import send_mail
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugins
@@ -396,10 +396,7 @@ class ProjectViewSet(ModelViewSet):
     def options(self, request, pk=None):
         project = self.get_object()
         if project.catalog_id is None:
-            raise NotFound({
-                'detail': _('This project has no catalog.'),
-                'code': 'catalog_missing',
-            })
+            raise CatalogConflict()
 
         try:
             try:
@@ -1144,7 +1141,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def copy_set(self, request, parent_lookup_project, pk=None):
         if self.project.catalog_id is None:
-            raise ValidationError({'catalog': [_('This project has no catalog.')]})
+            raise CatalogConflict()
 
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -1157,10 +1154,13 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # look for the source value using the user's permissions
         copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
         if copy_value.project.catalog_id is None:
-            raise ValidationError({'copy_set_value': [_('The source project has no catalog.')]})
+            raise CatalogConflict(_('The source project has no catalog.'))
 
         # when the user can see this value, collect all values for this set and its descendants
-        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
+        try:
+            copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
+        except CatalogMissingException as e:
+            raise CatalogConflict(str(e)) from e
 
         # init list of values to return
         response_values = []
@@ -1176,7 +1176,10 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
             # collect all non-empty values for this set and all descendants and convert
             # them to a list to compare them later to the new values
-            set_values = self.get_queryset().filter_set(set_value)
+            try:
+                set_values = self.get_queryset().filter_set(set_value)
+            except CatalogMissingException as e:
+                raise CatalogConflict(str(e)) from e
             set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
             set_empty_values_list = set_values.filter_empty().values_list(
                 'attribute', 'set_prefix', 'set_index', 'collection_index'
@@ -1207,8 +1210,11 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
 
             # skip this value if value.option does not match the optionsets of its question
-            if not check_options(self.project, value):
-                continue
+            try:
+                if not check_options(self.project, value):
+                    continue
+            except CatalogMissingException as e:
+                raise CatalogConflict(str(e)) from e
 
             # check if the value already exists, we do not consider collection_index
             # since we do not want to import e.g. into partially filled checkboxes
@@ -1244,12 +1250,15 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         # for this value and the same set_prefix and set_index
         set_value = self.get_object()
         if self.project.catalog_id is None:
-            raise ValidationError({'catalog': [_('This project has no catalog.')]})
+            raise CatalogConflict()
 
         set_value.delete()
 
         # collect all values for this set and all descendants and delete them
-        values = self.get_queryset().filter_set(set_value)
+        try:
+            values = self.get_queryset().filter_set(set_value)
+        except CatalogMissingException as e:
+            raise CatalogConflict(str(e)) from e
         values.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
