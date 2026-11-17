@@ -1246,12 +1246,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     @action(detail=True, methods=['DELETE'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def delete_set(self, request, parent_lookup_project, pk=None):
-        # delete all values for questions in questionset collections with the attribute
-        # for this value and the same set_prefix and set_index
-        set_value = self.get_object()
         if self.project.catalog_id is None:
             raise CatalogConflict()
 
+        # delete all values for questions in questionset collections with the attribute
+        # for this value and the same set_prefix and set_index
+        set_value = self.get_object()
         set_value.delete()
 
         # collect all values for this set and all descendants and delete them
