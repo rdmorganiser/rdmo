@@ -25,20 +25,20 @@ export function fetchProjectViews() {
   }
 }
 
-export function fetchProjectAnswers() {
+export function fetchSendIssueAnswers() {
   return function (dispatch) {
-    dispatch(addToPending('fetchProjectAnswers'))
-    dispatch(actions.fetchProjectAnswersInit())
+    dispatch(addToPending('fetchSendIssueAnswers'))
+    dispatch(actions.fetchSendIssueAnswersInit())
 
     return ProjectApi.fetchProjectAnswers(projectId)
       .then(answers => {
-        dispatch(actions.fetchProjectAnswersSuccess(answers))
+        dispatch(actions.fetchSendIssueAnswersSuccess(answers))
         return answers
       })
       .catch(error => {
-        dispatch(actions.fetchProjectAnswersError(serializeError(error)))
+        dispatch(actions.fetchSendIssueAnswersError(serializeError(error)))
       })
-      .finally(() => dispatch(removeFromPending('fetchProjectAnswers')))
+      .finally(() => dispatch(removeFromPending('fetchSendIssueAnswers')))
   }
 }
 

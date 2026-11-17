@@ -18,7 +18,7 @@ const View = () => {
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
   const [includeHelp] = useConfig('document.includeHelp', false)
-  const { currentView } = useSelector((state) => state.document)
+  const { current } = useSelector((state) => state.document)
 
   const reloadView = () => {
     const area = snapshotId == null ? 'documents' : 'snapshots'
@@ -53,7 +53,7 @@ const View = () => {
     }
   }
 
-  return currentView && (
+  return current && (
     <div className="project-view">
       <div className="float-end d-flex gap-3">
         <button className="link" onClick={handleBack}>
@@ -67,7 +67,7 @@ const View = () => {
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
-      <Html html={currentView.html} />
+      <Html html={current.html} />
     </div>
   )
 }

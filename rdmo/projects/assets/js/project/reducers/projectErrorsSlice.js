@@ -25,8 +25,8 @@ const projectErrorsSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(documentActions.fetchProjectViewsInit, clearErrors)
     builder.addCase(documentActions.fetchProjectViewsError, appendError)
-    builder.addCase(documentActions.fetchProjectAnswersInit, clearErrors)
-    builder.addCase(documentActions.fetchProjectAnswersError, appendError)
+    builder.addCase(documentActions.fetchSendIssueAnswersInit, clearErrors)
+    builder.addCase(documentActions.fetchSendIssueAnswersError, appendError)
     builder.addCase(documentActions.fetchAnswersInit, clearErrors)
     builder.addCase(documentActions.fetchAnswersError, appendError)
     builder.addCase(documentActions.fetchViewInit, clearErrors)

@@ -4,11 +4,11 @@ const initialState = {
   views: null,
   answers: null,
   files: null,
-  currentView: null
+  current: null
 }
 
 const setCurrentView = (state, action) => {
-  state.currentView = action.payload
+  state.current = action.payload
 }
 
 const keepState = state => state
@@ -22,11 +22,11 @@ const documentSlice = createSlice({
       state.views = action.payload
     },
     fetchProjectViewsError: keepState,
-    fetchProjectAnswersInit: keepState,
-    fetchProjectAnswersSuccess(state, action) {
+    fetchSendIssueAnswersInit: keepState,
+    fetchSendIssueAnswersSuccess(state, action) {
       state.answers = action.payload
     },
-    fetchProjectAnswersError: keepState,
+    fetchSendIssueAnswersError: keepState,
     fetchAnswersInit: keepState,
     fetchAnswersSuccess: setCurrentView,
     fetchAnswersError: keepState,
@@ -45,7 +45,7 @@ const documentSlice = createSlice({
     downloadViewSuccess: keepState,
     downloadViewError: keepState,
     clearCurrentView(state) {
-      state.currentView = null
+      state.current = null
     },
     setProjectAnswers: setCurrentView
   }

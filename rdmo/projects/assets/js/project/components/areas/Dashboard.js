@@ -6,7 +6,7 @@ import { LinkButton } from 'rdmo/core/assets/js/components'
 import { useConfigToggle, useModal } from 'rdmo/core/assets/js/hooks'
 import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import { fetchProjectAnswers, fetchProjectFiles, fetchProjectViews } from '../../actions/documentActions'
+import { fetchProjectFiles, fetchProjectViews, fetchSendIssueAnswers } from '../../actions/documentActions'
 import { updateProjectIssue } from '../../actions/issueActions'
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors } from '../../actions/projectActions'
@@ -77,7 +77,7 @@ const Dashboard = () => {
 
   const handleSendIssue = (issue) => {
     dispatch(clearProjectErrors())
-    dispatch(fetchProjectAnswers())
+    dispatch(fetchSendIssueAnswers())
     dispatch(fetchProjectViews())
     dispatch(fetchProjectSnapshots())
     dispatch(fetchProjectFiles())
