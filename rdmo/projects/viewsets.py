@@ -1350,6 +1350,9 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
     def get_continue(self, request, pk=None, parent_lookup_project=None):
         self.check_catalog()
         self.project.prefetch_catalog()
+        if not self.project.catalog.elements:
+            raise NotFound(_('This catalog has no sections.'))
+
         if not self.project.catalog.pages:
             return Response({
                 'detail': 'No Page matches the given query.',

@@ -219,5 +219,4 @@ def test_continue_empty_catalog(db, client):
     response = client.get(url)
 
     assert response.status_code == 404
-    assert response.json()['done'] is True
-    assert 'code' not in response.json()
+    assert response.json() == {'detail': 'This catalog has no sections.'}
