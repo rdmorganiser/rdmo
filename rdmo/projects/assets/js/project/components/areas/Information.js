@@ -10,7 +10,7 @@ import ProjectForm from './information/ProjectForm'
 import ProjectVisibilityForm from './information/ProjectVisibilityForm'
 
 const Information = () => {
-  const { hierarchy, project, catalogs } = useSelector((state) => state.project) ?? {}
+  const { hierarchy, project, catalogs } = useSelector((state) => state.project)
   const perms = useSelector(selectPermissions)
 
   return catalogs && hierarchy && (
