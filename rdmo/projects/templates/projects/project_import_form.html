@@ -1,0 +1,31 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    {% if not current_project %}
+    <h1>
+        {% blocktrans %}Create project from {{ source_title }}{% endblocktrans %}
+    </h1>
+
+    {% else %}
+    <h1>
+        {% blocktrans %}Import from {{ source_title }}{% endblocktrans %}
+    </h1>
+    {% endif %}
+
+    <form method="post" class="mb-5">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        {% for field in form.visible_fields %}
+            {% bootstrap_form_field field %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">
+            {% trans 'Import values' %}
+        </button>
+    </form>
+
+{% endblock %}
