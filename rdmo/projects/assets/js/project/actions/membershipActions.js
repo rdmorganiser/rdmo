@@ -24,7 +24,6 @@ export function fetchProjectMemberships() {
       })
       .catch(error => {
         dispatch(projectActions.fetchProjectMembershipsError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectMemberships')))
   }

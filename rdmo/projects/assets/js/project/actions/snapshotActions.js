@@ -19,7 +19,6 @@ export function fetchProjectSnapshots() {
       })
       .catch(error => {
         dispatch(projectActions.fetchProjectSnapshotsError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectSnapshots')))
   }

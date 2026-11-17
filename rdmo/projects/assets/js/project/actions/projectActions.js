@@ -39,7 +39,6 @@ export function fetchProjectHierarchy() {
       })
       .catch(error => {
         dispatch(actions.fetchProjectHierarchyError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectHierarchy')))
   }
@@ -57,7 +56,6 @@ export function fetchCatalogs() {
       })
       .catch(error => {
         dispatch(actions.fetchCatalogsError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchCatalogs')))
   }

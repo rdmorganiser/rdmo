@@ -61,17 +61,17 @@ export function navigateDashboard(location, back = null) {
 
       switch (location.area) {
         case 'dashboard':
-          dispatch(fetchProjectIssues())
+          dispatch(fetchProjectIssues()).catch(() => {})
           break
         case 'information':
           dispatch(fetchProjectHierarchy())
           dispatch(fetchCatalogs())
           if (permissions.can_view_visibility) {
             if (state.settings.multisite && permissions.can_view_site) {
-              dispatch(sitesActions.fetchSites())
+              dispatch(sitesActions.fetchSites()).catch(() => {})
             }
             if (state.settings.groups && permissions.can_view_group) {
-              dispatch(groupsActions.fetchGroups())
+              dispatch(groupsActions.fetchGroups()).catch(() => {})
             }
           }
           break

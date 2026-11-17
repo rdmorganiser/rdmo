@@ -21,7 +21,6 @@ export function fetchProjectViews() {
       })
       .catch(error => {
         dispatch(projectActions.fetchProjectViewsError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectViews')))
   }
@@ -39,7 +38,6 @@ export function fetchProjectAnswers() {
       })
       .catch(error => {
         dispatch(projectActions.fetchProjectAnswersError(serializeError(error)))
-        throw error
       })
       .finally(() => dispatch(removeFromPending('fetchProjectAnswers')))
   }
@@ -61,7 +59,6 @@ export function fetchAnswers(snapshotId, params = {}) {
       .catch(error => {
         dispatch(removeFromPending(pendingId))
         dispatch(projectActions.fetchAnswersError(serializeError(error)))
-        throw error
       })
   }
 }
@@ -100,7 +97,6 @@ export function fetchProjectFiles(snapshotId) {
       .catch(error => {
         dispatch(removeFromPending(pendingId))
         dispatch(projectActions.fetchProjectFilesError(serializeError(error)))
-        throw error
       })
   }
 }
