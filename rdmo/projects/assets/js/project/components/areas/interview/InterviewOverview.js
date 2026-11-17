@@ -52,7 +52,7 @@ const InterviewOverview = () => {
           <div key={section.id} className="d-flex align-items-center gap-4 mb-4">
             <div className="d-none d-md-block">
               {
-                (section.count < section.total) ? (
+                (isEmpty(section.pages) || section.count < section.total) ? (
                   <div className="circle border border-secondary text-secondary bg-white">
                     {sectionIndex + 1}
                   </div>
@@ -65,8 +65,12 @@ const InterviewOverview = () => {
             </div>
 
             <div
-              className="card card-tile card-tile-border cursor-pointer flex-grow-1"
-              onClick={() => handleCardClick(section)}
+              className={
+                classNames('card card-tile card-tile-border flex-grow-1', {
+                  'cursor-pointer': !isEmpty(section.pages)
+                })
+              }
+              onClick={isEmpty(section.pages) ? undefined : () => handleCardClick(section)}
             >
               <div className="card-body d-flex flex-column">
                 <div className="row">
@@ -74,6 +78,11 @@ const InterviewOverview = () => {
                     <h3 className="mb-2">
                       <Html html={section.title} />
                     </h3>
+                    {
+                      isEmpty(section.pages) && (
+                        <div className="text-muted">{gettext('This section has no pages.')}</div>
+                      )
+                    }
                     {
                       !isEmpty(section.pages) && (
                         <ul className="list-unstyled font-small mb-0">

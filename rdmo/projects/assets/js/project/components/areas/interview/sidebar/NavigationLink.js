@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
@@ -9,7 +10,7 @@ const NavigationLink = ({ element }) => {
   const label = interpolate(gettext('(%s of %s)'), [element.count, element.total])
   const location = {area: 'interview', pageId: element?.first || element.id}
 
-  return element.show ? (
+  return element.show && (!element.pages || !isEmpty(element.pages)) ? (
     <LocationLink title={element.title} location={location}>
       <Html html={element.title} />
       {
