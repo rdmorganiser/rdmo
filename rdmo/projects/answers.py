@@ -49,15 +49,18 @@ class AnswerTree:
 
         if element_type in ('catalog', 'questionset'):
             fields['title'] = markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'section':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
         elif element_type == 'page':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'question':
             fields['text'] = markdown2html(element.text)
-            fields['help'] =  markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] =  markdown2html(element.help)
 
         self._fields_cache[element.id] = fields
         return self._fields_cache[element.id]
@@ -66,12 +69,14 @@ class AnswerTree:
         # recursive function, which will be called for each element
         element_type = element._meta.model_name
 
-        element_node = {
-            'id': element.id,
-            'model': element._meta.label_lower,
-            'show': True,  # init show flag
-            **self.get_verbose_fields(element),
-        }
+        if element.id not in self._fields_cache:
+            self._fields_cache[element.id] = {
+                'id': element.id,
+                'model': element._meta.label_lower,
+                'show': True,  # init show flag
+                **self.get_verbose_fields(element),
+            }
+        element_node = self._fields_cache[element.id].copy()
 
         if element_type in ('page', 'questionset', 'question'):
             # for pages, questionsets and questions evaluate conditions
