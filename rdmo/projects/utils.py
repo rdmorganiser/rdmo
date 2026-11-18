@@ -39,7 +39,7 @@ def render_attachments(request, project, data):
             request, attachments_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'answertree': project.get_answer_tree(verbose=ANSWERTREE_ALL_VERBOSE),
                 'include_answers': True,
             }
         )
