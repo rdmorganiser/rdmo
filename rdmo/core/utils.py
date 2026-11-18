@@ -17,7 +17,7 @@ from django.utils.translation import gettext_lazy as _
 
 import nh3
 from defusedcsv import csv
-from markdown import markdown
+from markdown import Markdown
 
 from .constants import HUMAN2BYTES_MAPPER
 from .pandoc import get_pandoc_content, get_pandoc_content_disposition
@@ -226,9 +226,12 @@ def is_truthy(value):
     return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
 
+md = Markdown()
+
 def markdown2html(markdown_string):
-    # adoption of the normal markdown function
-    html = markdown(force_str(markdown_string)).strip()
+    # use a module level Markdown instance for better performance
+    html = md.convert(force_str(markdown_string)).strip()
+    md.reset()
 
     # strip the outer paragraph
     html = re.sub(r'^<p>(.*?)</p>$',r'\1', html)
