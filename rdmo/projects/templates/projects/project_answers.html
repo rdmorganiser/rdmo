@@ -3,6 +3,7 @@
 
 
 {% if answertree and not node  %}
+    {# Here we initialize the recursion #}
     {% include 'projects/project_answers.html' with node=answertree %}
 {% endif %}
 
@@ -46,10 +47,12 @@
 {% endif %}
 
 {% for child_node in node.elements %}
+    {# Here recurse from catalog, section, page set entries, questionset set entries #}
     {% include 'projects/project_answers.html' with node=child_node %}
 {% endfor %}
 
 {% if node.sets %}
+    {# Here recurse from page, questionset #}
     {% if include_answers %}
         {% for child_node in node.sets %}
             {% if child_node.set_name %}
