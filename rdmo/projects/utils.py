@@ -14,7 +14,7 @@ from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 
-from .constants import ANSWERTREE_ALL_VERBOSE
+from .constants import ANSWERTREE_VERBOSE_TREE
 
 logger = logging.getLogger(__name__)
 

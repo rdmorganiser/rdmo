@@ -39,7 +39,7 @@ from rdmo.questions.prefetch import get_page_prefetch_lookups
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .constants import ANSWERTREE_ALL_VERBOSE, ROLE_CHOICES, ROLE_RANKS
+from .constants import ANSWERTREE_VERBOSE_TREE, ROLE_CHOICES, ROLE_RANKS
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -580,11 +580,18 @@ class ProjectViewSet(ModelViewSet):
         include_help = is_truthy(request.GET.get('include_help'))
         include_answers = is_truthy(request.GET.get('include_answers'))
 
+        verbose = ANSWERTREE_VERBOSE_TREE
+
+        if include_answers:
+            verbose = (*verbose, 'set', 'value')
+        if include_help:
+            verbose = (*verbose, 'help')
+
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=verbose),
                 'include_help': include_help,
                 'include_answers': include_answers,
             }),
@@ -620,10 +627,17 @@ class ProjectViewSet(ModelViewSet):
         include_help = is_truthy(request.GET.get('include_help'))
         include_answers = is_truthy(request.GET.get('include_answers'))
 
+        verbose = ANSWERTREE_VERBOSE_TREE
+
+        if include_answers:
+            verbose = (*verbose, 'set', 'value')
+        if include_help:
+            verbose = (*verbose, 'help')
+
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=ANSWERTREE_ALL_VERBOSE),
+                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=verbose),
                 'include_help': include_help,
                 'include_answers': include_answers,
             })

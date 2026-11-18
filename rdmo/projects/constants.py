@@ -18,4 +18,4 @@ ROLE_RANKS = {
     ROLE_GUEST: 0
 }
 
-ANSWERTREE_ALL_VERBOSE = ("catalog", "section", "page", "set", "questionset", "question", "value")
+ANSWERTREE_VERBOSE_TREE = ("catalog", "section", "page", "questionset", "question")

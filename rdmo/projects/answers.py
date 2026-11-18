@@ -45,15 +45,18 @@ class AnswerTree:
 
         if element_type in ('catalog', 'questionset'):
             fields['title'] = markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'section':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
         elif element_type == 'page':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'question':
             fields['text'] = markdown2html(element.text)
-            fields['help'] =  markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
 
         return fields
 
