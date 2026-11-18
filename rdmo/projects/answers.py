@@ -14,6 +14,7 @@ class AnswerTree:
         self.attribute_sets_map: dict
         self.attribute_set_values_map: dict
         self.resolved_conditions: dict
+        self._fields_cache = {}
 
     def compute(self, values):
         # Main function of this class, which Computes the answer tree recursively.
@@ -53,18 +54,22 @@ class AnswerTree:
         elif element_type == 'question':
             fields['text'] = markdown2html(element.text)
             fields['help'] =  markdown2html(element.help)
+
         return fields
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
         element_type = element._meta.model_name
 
-        element_node = {
-            'id': element.id,
-            'model': element._meta.label_lower,
-            'show': True,  # init show flag
-            **self.get_verbose_fields(element),
-        }
+        cache_key = (element.id, element_type)
+        if cache_key not in self._fields_cache:
+            self._fields_cache[cache_key] = {
+                'id': element.id,
+                'model': element._meta.label_lower,
+                'show': True,  # init show flag
+                **self.get_verbose_fields(element),
+            }
+        element_node = self._fields_cache[cache_key].copy()
 
         if element_type in ('page', 'questionset', 'question'):
             # for pages, questionsets and questions evaluate conditions
