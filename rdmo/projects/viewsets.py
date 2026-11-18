@@ -569,7 +569,7 @@ class ProjectViewSet(ModelViewSet):
         permission_classes=(HasModelPermission | HasProjectPermission, )
     )
     def answers(self, request, pk, snapshot_id=None):
-        project: Project = self.get_object()
+        project = self.get_object()
         project.catalog.prefetch_elements()
 
         try:
