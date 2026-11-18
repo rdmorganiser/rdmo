@@ -39,7 +39,7 @@ from rdmo.questions.prefetch import get_page_prefetch_lookups
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .constants import ROLE_CHOICES, ROLE_RANKS
+from .constants import ANSWERTREE_ALL_VERBOSE, ROLE_CHOICES, ROLE_RANKS
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -580,8 +580,6 @@ class ProjectViewSet(ModelViewSet):
         include_help = is_truthy(request.GET.get('include_help'))
         include_answers = is_truthy(request.GET.get('include_answers'))
 
-        ANSWERTREE_ALL_VERBOSE = ("catalog", "section", "page", "set", "questionset", "question", "value")
-
         serializer = ProjectAnswersSerializer({
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
@@ -621,8 +619,6 @@ class ProjectViewSet(ModelViewSet):
 
         include_help = is_truthy(request.GET.get('include_help'))
         include_answers = is_truthy(request.GET.get('include_answers'))
-
-        ANSWERTREE_ALL_VERBOSE = ("catalog", "page", "section", "questionset", "question", "value")
 
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
