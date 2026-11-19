@@ -263,14 +263,14 @@ const ProjectForm = ({
                 <input
                   type="radio"
                   className="form-check-input"
-                  id={`catalog-${opt.value}`}
+                  id={`${formId}-catalog-${opt.value}`}
                   name="catalog"
                   value={opt.value}
                   checked={formData.catalog === opt.value}
                   onChange={(e) => handleChange('catalog', Number(e.target.value))}
                   disabled={disabled || opt.isDisabled}
                 />
-                <label className="form-check-label" htmlFor={`catalog-${opt.value}`}>
+                <label className="form-check-label" htmlFor={`${formId}-catalog-${opt.value}`}>
                   {opt.label}
                 </label>
               </div>
