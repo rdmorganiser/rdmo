@@ -169,9 +169,9 @@ const ProjectForm = ({
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
-    ProjectApi.fetchProjects({ search })
-      .then(response => {
-        const options = response.results
+    ProjectApi.fetchProjectIndex({ search })
+      .then(results => {
+        const options = results
           .filter(p => mode !== 'edit' || p.id !== project.id)
           .map(project => ({
             value: project.id,
@@ -185,7 +185,8 @@ const ProjectForm = ({
   // Fetch a first page only when the menu is opened and nothing is selected/loaded yet
   const handleMenuOpen = () => {
     if (enableParent || submitMode === 'submit') {
-      ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
+      const params = { search: '', ordering: 'title', around: formData.parent ?? '' }
+      ProjectApi.fetchProjectIndex(params).then(results => {
         const options = results
           .filter(p => mode !== 'edit' || p.id !== project.id)
           .map(p => ({ value: p.id, label: p.title }))
