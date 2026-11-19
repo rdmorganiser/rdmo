@@ -1,14 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { LinkButton } from 'rdmo/core/assets/js/components'
+import { selectReadOnly } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
 import { copyValue } from '../../../../../actions/interviewActions'
 import { isEmptyValue } from '../../../../../utils/value'
 
 const QuestionCopyValues = ({ question, sets, values, siblings, currentSet }) => {
   const dispatch = useDispatch()
+  const readOnly = useSelector(selectReadOnly)
 
   const button = question.widget_type == 'checkbox' ? (
     <LinkButton
@@ -50,6 +52,7 @@ const QuestionCopyValues = ({ question, sets, values, siblings, currentSet }) =>
   })
 
   return (
+    !readOnly &&
     question.is_collection &&
     question.set_collection &&
     hasValues &&
