@@ -94,11 +94,14 @@ class OptionSetNestedSerializer(
             yield OptionNestedSerializer(element, context=self.context).data
 
 
-class OptionSetIndexSerializer(serializers.ModelSerializer):
+class OptionSetIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
+            'model',
             'uri'
         )

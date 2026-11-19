@@ -37,6 +37,7 @@ repos:
         additional_dependencies:
           - eslint@8.56.0
           - eslint-plugin-react@7.37.0
+          - eslint-plugin-simple-import-sort@12.1.1
           - react@18.3.1
   - repo: https://github.com/rdmorganiser/mirrors-typos
     rev: 795fa58d4aaa206970c0b0d3a25f7cf9fd6668dc  # frozen: v1.50.3

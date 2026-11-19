@@ -94,8 +94,8 @@
     "model": "views.view",
     "pk": 4,
     "fields": {
-      "uri": "https://foo.com/terms/views/foo-view",
-      "uri_prefix": "https://foo.com/terms",
+      "uri": "https://foo.example.com/terms/views/foo-view",
+      "uri_prefix": "https://foo.example.com/terms",
       "uri_path": "foo-view",
       "comment": "",
       "locked": false,
@@ -127,8 +127,8 @@
     "model": "views.view",
     "pk": 5,
     "fields": {
-      "uri": "https://bar.com/terms/views/bar-view",
-      "uri_prefix": "https://bar.com/terms",
+      "uri": "https://bar.example.com/terms/views/bar-view",
+      "uri_prefix": "https://bar.example.com/terms",
       "uri_path": "bar-view",
       "comment": "",
       "locked": false,

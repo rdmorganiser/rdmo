@@ -13,13 +13,13 @@ from .test_viewset_question import export_formats, urlnames
 
 STATUS_CODES = {
     'detail': {
-        'https://foo.com/terms/questions/foo-question': {
+        'https://foo.example.com/terms/questions/foo-question': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-question': {
+        'https://bar.example.com/terms/questions/bar-question': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -27,37 +27,37 @@ STATUS_CODES = {
         },
     },
     'create-with-parent': {
-        'https://foo.com/terms/questions/foo-page': {
+        'https://foo.example.com/terms/questions/foo-page': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-page': {
+        'https://bar.example.com/terms/questions/bar-page': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://foo.com/terms/questions/foo-questionset': {
+        'https://foo.example.com/terms/questions/foo-questionset': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-questionset': {
+        'https://bar.example.com/terms/questions/bar-questionset': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://foo.com/terms/questions/foo-questionset-parent': {
+        'https://foo.example.com/terms/questions/foo-questionset-parent': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-questionset-parent': {
+        'https://bar.example.com/terms/questions/bar-questionset-parent': {
             'user': 403, 'reviewer': 403, 'editor': 201,
             'example-reviewer': 403, 'example-editor': 403, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
@@ -65,13 +65,13 @@ STATUS_CODES = {
         },
     },
     'update': {
-        'https://foo.com/terms/questions/foo-question': {
+        'https://foo.example.com/terms/questions/foo-question': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-question': {
+        'https://bar.example.com/terms/questions/bar-question': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -79,13 +79,13 @@ STATUS_CODES = {
         },
     },
     'delete': {
-        'https://foo.com/terms/questions/foo-question': {
+        'https://foo.example.com/terms/questions/foo-question': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-question': {
+        'https://bar.example.com/terms/questions/bar-question': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -220,7 +220,7 @@ def test_create_page(db, client, username, password):
 
 
 def test_create_page_rejects_foreign_site_parent(db, client, sites):
-    sites.activate('bar.com')
+    sites.activate('bar.example.com')
     client.login(username='bar-editor', password='bar-editor')
 
     page = Page.objects.get(uri_path='foo-page')
@@ -229,7 +229,7 @@ def test_create_page_rejects_foreign_site_parent(db, client, sites):
 
     url = reverse(urlnames['list'])
     data = {
-        'uri_prefix': 'https://bar.com/terms',
+        'uri_prefix': 'https://bar.example.com/terms',
         'uri_path': 'bar-question-with-foo-page-denied',
         'is_collection': False,
         'text_en': 'Bar question with foo page denied',
@@ -297,7 +297,7 @@ def test_create_questionset(db, client, username, password):
 
 
 def test_create_questionset_rejects_foreign_site_parent(db, client, sites):
-    sites.activate('bar.com')
+    sites.activate('bar.example.com')
     client.login(username='bar-editor', password='bar-editor')
 
     questionset = QuestionSet.objects.get(uri_path='foo-questionset')
@@ -306,7 +306,7 @@ def test_create_questionset_rejects_foreign_site_parent(db, client, sites):
 
     url = reverse(urlnames['list'])
     data = {
-        'uri_prefix': 'https://bar.com/terms',
+        'uri_prefix': 'https://bar.example.com/terms',
         'uri_path': 'bar-question-with-foo-questionset-denied',
         'is_collection': False,
         'text_en': 'Bar question with foo questionset denied',

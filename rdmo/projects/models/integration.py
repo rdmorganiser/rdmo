@@ -14,6 +14,11 @@ class Integration(models.Model):
         verbose_name=_('Project'),
         help_text=_('The project for this integration.')
     )
+    title = models.CharField(
+        max_length=256,
+        verbose_name=_('Title'),
+        help_text=_('The title for this integration.')
+    )
     provider_key = models.TextField(
         verbose_name=_('Provider key'),
         help_text=_('The key of the provider for this integration.')
@@ -27,7 +32,7 @@ class Integration(models.Model):
         verbose_name_plural = _('Integrations')
 
     def __str__(self):
-        return f'{self.project.title} / {self.provider_key}'
+        return f'{self.project.title} / {self.title}'
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})

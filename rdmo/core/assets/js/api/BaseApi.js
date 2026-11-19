@@ -3,7 +3,9 @@ import isUndefined from 'lodash/isUndefined'
 
 import { baseUrl } from '../utils/meta'
 
+// Explicit error types remain stable when constructor names are minified.
 function ApiError(statusText, status) {
+  this.errorType = 'ApiError'
   this.status = status
   this.statusText = statusText
   this.errors = {
@@ -12,16 +14,19 @@ function ApiError(statusText, status) {
 }
 
 function ValidationError(errors) {
+  this.errorType = 'ValidationError'
   this.errors = errors
 }
 
 function BadRequestError(statusText, status, errors) {
+  this.errorType = 'BadRequestError'
   this.status = status
   this.statusText = statusText
   this.errors = errors
 }
 
 function NotFoundError(statusText, status, errors) {
+  this.errorType = 'NotFoundError'
   this.status = status
   this.statusText = statusText
   this.errors = errors
@@ -188,6 +193,37 @@ class BaseApi {
       } else {
         throw new ApiError(response.statusText, response.status)
       }
+    })
+  }
+
+  static download(url) {
+    let filename
+
+    return fetch(baseUrl + url).catch(error => {
+      throw new ApiError(error.message)
+    }).then(response => {
+      if (response.ok) {
+        const contentDisposition = response.headers.get('Content-Disposition')
+        filename = contentDisposition?.match(/filename="?([^"]+)"?/)?.[1] ?? 'download'
+        return response.blob()
+      } else if (response.status === 400) {
+        return response.json().then(errors => {
+          throw new BadRequestError(response.statusText, response.status, errors)
+        })
+      } else if (response.status === 404) {
+        return response.json().then(errors => {
+          throw new NotFoundError(response.statusText, response.status, errors)
+        })
+      } else {
+        throw new ApiError(response.statusText, response.status)
+      }
+    }).then((blob) => {
+      const objectUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = objectUrl
+      a.download = filename
+      a.click()
+      URL.revokeObjectURL(objectUrl)
     })
   }
 

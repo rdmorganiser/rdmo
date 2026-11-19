@@ -1,102 +1,116 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+import { useDispatch } from 'react-redux'
+import classNames from 'classnames'
+import { isEmpty } from 'lodash'
 
-import Link from 'rdmo/core/assets/js/components/Link'
+import { useConfig, useConfigToggle } from 'rdmo/core/assets/js/hooks'
 
+import { toggleDescendants } from '../../actions/elementActions'
 import { getUriPrefixes } from '../../utils/filter'
 
-import { FilterString, FilterUriPrefix } from '../common/Filter'
-import { Checkbox } from '../common/Checkboxes'
-import { BackButton } from '../common/Buttons'
 import { Drop } from '../common/DragAndDrop'
-
-import Section from '../element/Section'
+import { FilterString, FilterUriPrefix } from '../common/Filter'
 import Page from '../element/Page'
+import Section from '../element/Section'
 
-const NestedSection = ({ config, section, configActions, elementActions }) => {
+const NestedSection = ({ section }) => {
+  const dispatch = useDispatch()
 
-  const updateFilterString = (uri) => configActions.updateConfig('filter.section.search', uri)
-  const updateFilterUriPrefix = (uriPrefix) => configActions.updateConfig('filter.section.uri_prefix', uriPrefix)
+  const [filterString, setFilterString] = useConfig('filter.section.search', '')
+  const [filterUriPrefix, setFilterUriPrefix] = useConfig('filter.section.uri_prefix', '')
 
-  const togglePages = () => elementActions.toggleDescendants(section, 'pages')
-  const toggleQuestionSets = () => elementActions.toggleDescendants(section, 'questionsets')
+  const togglePages = () => dispatch(toggleDescendants(section, 'pages'))
+  const toggleQuestionSets = () => dispatch(toggleDescendants(section, 'questionsets'))
 
-  const updateDisplaySectionURI = (value) => configActions.updateConfig('display.uri.sections', value)
-  const updateDisplayPagesURI = (value) => configActions.updateConfig('display.uri.pages', value)
-  const updateDisplayQuestionSetsURI = (value) => configActions.updateConfig('display.uri.questionsets', value)
-  const updateDisplayQuestionsURI = (value) => configActions.updateConfig('display.uri.questions', value)
-  const updateDisplayAttributesURI = (value) => configActions.updateConfig('display.uri.attributes', value)
-  const updateDisplayConditionsURI = (value) => configActions.updateConfig('display.uri.conditions', value)
-  const updateDisplayOptionSetURI = (value) => configActions.updateConfig('display.uri.optionsets', value)
+  const [displayUriSections, toggleDisplayUriSections] = useConfigToggle('display.uri.sections', true)
+  const [displayUriPages, toggleDisplayUriPages] = useConfigToggle('display.uri.pages', true)
+  const [displayUriQuestionSets, toggleDisplayUriQuestionSets] = useConfigToggle('display.uri.questionsets', true)
+  const [displayUriQuestions, toggleDisplayUriQuestions] = useConfigToggle('display.uri.questions', true)
+  const [displayUriAttributes, toggleDisplayUriAttributes] = useConfigToggle('display.uri.attributes', true)
+  const [displayUriConditions, toggleDisplayUriConditions] = useConfigToggle('display.uri.conditions', true)
+  const [displayUriOptionSets, toggleDisplayUriOptionSets] = useConfigToggle('display.uri.optionsets', true)
+
+
+  const btnClass = (value) => classNames('btn border', value ? 'btn-light' : '')
 
   return (
     <>
-      <div className="panel panel-default panel-nested">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <BackButton />
-          </div>
-          <Section config={config} section={section}
-                   configActions={configActions} elementActions={elementActions} display="plain" />
+      <div className="card">
+        <div className="card-header">
+          <Section section={section} display="plain" backButton={true} />
         </div>
 
-        <div className="panel-body">
-          <div className="row">
-            <div className="col-sm-8">
-              <FilterString value={get(config, 'filter.section.search', '')} onChange={updateFilterString}
-                            label={gettext('Filter sections')} />
-            </div>
-            <div className="col-sm-4">
-              <FilterUriPrefix value={get(config, 'filter.section.uri_prefix', '')} onChange={updateFilterUriPrefix}
-                               options={getUriPrefixes(section.elements)} />
+        <div className="card-body">
+          <div className="mb-lg-2">
+            <div className="row">
+              <div className="col-sm-8">
+                <FilterString
+                  value={filterString} onChange={setFilterString}
+                  label={gettext('Filter sections')} />
+              </div>
+              <div className="col-sm-4">
+                <FilterUriPrefix
+                  value={filterUriPrefix} onChange={setFilterUriPrefix}
+                  options={getUriPrefixes(section.elements)} />
+              </div>
             </div>
           </div>
-          <div className="mt-10">
-            <span className="mr-10">{gettext('Show elements:')}</span>
-            <Link className="mr-10" onClick={togglePages}>{gettext('Pages')}</Link>
-            <Link className="mr-10" onClick={toggleQuestionSets}>{gettext('Question sets')}</Link>
+          <div className="input-group input-group-sm row-gap-1 mb-2">
+            <label className="input-group-text">{gettext('Show URIs')}</label>
+            <button type="button" onClick={toggleDisplayUriSections} className={btnClass(displayUriSections)}>
+              {gettext('Sections')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriPages} className={btnClass(displayUriPages)}>
+              {gettext('Pages')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriQuestionSets} className={btnClass(displayUriQuestionSets)}>
+              {gettext('Question sets')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriQuestions} className={btnClass(displayUriQuestions)}>
+              {gettext('Questions')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriAttributes} className={btnClass(displayUriAttributes)}>
+              {gettext('Attributes')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriConditions} className={btnClass(displayUriConditions)}>
+              {gettext('Conditions')}
+            </button>
+            <button type="button" onClick={toggleDisplayUriOptionSets} className={btnClass(displayUriOptionSets)}>
+              {gettext('Option sets')}
+            </button>
           </div>
-          <div className="checkboxes">
-            <span className="mr-10">{gettext('Show URIs:')}</span>
-            <Checkbox label={<code className="code-questions">{gettext('Sections')}</code>}
-                      value={get(config, 'config.display.uri.sections', true)} onChange={updateDisplaySectionURI} />
-            <Checkbox label={<code className="code-questions">{gettext('Pages')}</code>}
-                      value={get(config, 'config.display.uri.pages', true)} onChange={updateDisplayPagesURI} />
-            <Checkbox label={<code className="code-questions">{gettext('Question sets')}</code>}
-                      value={get(config, 'config.display.uri.questionsets', true)} onChange={updateDisplayQuestionSetsURI} />
-            <Checkbox label={<code className="code-questions">{gettext('Questions')}</code>}
-                      value={get(config, 'config.display.uri.questions', true)} onChange={updateDisplayQuestionsURI} />
-            <Checkbox label={<code className="code-domain">{gettext('Attributes')}</code>}
-                      value={get(config, 'config.display.uri.attributes', true)} onChange={updateDisplayAttributesURI} />
-            <Checkbox label={<code className="code-conditions">{gettext('Conditions')}</code>}
-                      value={get(config, 'config.display.uri.conditions', true)} onChange={updateDisplayConditionsURI} />
-            <Checkbox label={<code className="code-options">{gettext('Option sets')}</code>}
-                      value={get(config, 'config.display.uri.optionsets', true)} onChange={updateDisplayOptionSetURI} />
+          <div className="input-group input-group-sm row-gap-1">
+            <label className="input-group-text">{gettext('Toggle elements')}</label>
+            <button type="button" onClick={togglePages} className="btn btn-outline-primary border">
+              {gettext('Pages')}
+            </button>
+            <button type="button" onClick={toggleQuestionSets} className="btn btn-outline-primary border">
+              {gettext('Question sets')}
+            </button>
           </div>
         </div>
-      </div>
-      {
-        !isEmpty(section.elements) &&
-        <Drop element={section.elements[0]} elementActions={elementActions} indent={1} mode="before" />
-      }
-      {
-        section.elements.map((page, index) => (
-          <Page key={index} config={config} page={page}
-                configActions={configActions} elementActions={elementActions}
+
+        <div className="card-body border-top pt-0">
+          {
+            !isEmpty(section.elements) &&
+            <Drop element={section.elements[0]} indent={1} mode="before" />
+          }
+          {
+            section.elements.map((page, index) => (
+              <Page
+                key={index} page={page}
                 display="nested" filter="section" indent={1} />
-        ))
-      }
+            ))
+          }
+        </div>
+      </div>
     </>
   )
 }
 
 NestedSection.propTypes = {
-  config: PropTypes.object.isRequired,
-  section: PropTypes.object.isRequired,
-  configActions: PropTypes.object.isRequired,
-  elementActions: PropTypes.object.isRequired
+  section: PropTypes.object.isRequired
 }
 
 export default NestedSection

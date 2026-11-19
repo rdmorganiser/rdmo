@@ -1,0 +1,18 @@
+.dropzone {
+  cursor: pointer;
+
+  border: 2px dashed var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+/* Add additional styling for when files are being dragged over the dropzone */
+.dropzone.drag-active {
+  border-color: var(--rdmo-link-color);
+}
+
+/* Add styles for when the dropzone is disabled */
+.dropzone.disabled {
+  opacity: 0.6;
+}

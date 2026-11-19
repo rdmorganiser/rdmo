@@ -12,13 +12,13 @@ from .test_viewset_attribute import urlnames
 
 STATUS_CODES = {
     'nested': {
-        'https://foo.com/terms/domain/foo-attribute': {
+        'https://foo.example.com/terms/domain/foo-attribute': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/domain/bar-attribute': {
+        'https://bar.example.com/terms/domain/bar-attribute': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -26,13 +26,13 @@ STATUS_CODES = {
         },
     },
     'detail': {
-        'https://foo.com/terms/domain/foo-attribute': {
+        'https://foo.example.com/terms/domain/foo-attribute': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/domain/bar-attribute': {
+        'https://bar.example.com/terms/domain/bar-attribute': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -40,13 +40,13 @@ STATUS_CODES = {
         },
     },
     'update': {
-        'https://foo.com/terms/domain/foo-attribute': {
+        'https://foo.example.com/terms/domain/foo-attribute': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/domain/bar-attribute': {
+        'https://bar.example.com/terms/domain/bar-attribute': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -54,13 +54,13 @@ STATUS_CODES = {
         },
     },
     'delete': {
-        'https://foo.com/terms/domain/foo-attribute': {
+        'https://foo.example.com/terms/domain/foo-attribute': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/domain/bar-attribute': {
+        'https://bar.example.com/terms/domain/bar-attribute': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,

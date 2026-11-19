@@ -13,13 +13,13 @@ from .test_viewset_catalog import export_formats, urlnames
 
 STATUS_CODES = {
     'detail': {
-        'https://foo.com/terms/questions/foo-catalog': {
+        'https://foo.example.com/terms/questions/foo-catalog': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 200, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-catalog': {
+        'https://bar.example.com/terms/questions/bar-catalog': {
             'user': 404, 'reviewer': 200, 'editor': 200,
             'example-reviewer': 200, 'example-editor': 200, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -27,13 +27,13 @@ STATUS_CODES = {
         },
     },
     'update': {
-        'https://foo.com/terms/questions/foo-catalog': {
+        'https://foo.example.com/terms/questions/foo-catalog': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 200, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-catalog': {
+        'https://bar.example.com/terms/questions/bar-catalog': {
             'user': 404, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -41,13 +41,13 @@ STATUS_CODES = {
         },
     },
     'delete': {
-        'https://foo.com/terms/questions/foo-catalog': {
+        'https://foo.example.com/terms/questions/foo-catalog': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 403, 'foo-editor': 204, 'bar-user': 404,
             'bar-reviewer': 404, 'bar-editor': 404, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-catalog': {
+        'https://bar.example.com/terms/questions/bar-catalog': {
             'user': 404, 'reviewer': 403, 'editor': 204,
             'example-reviewer': 404, 'example-editor': 404, 'foo-user': 404,
             'foo-reviewer': 404, 'foo-editor': 404, 'bar-user': 404,
@@ -55,13 +55,13 @@ STATUS_CODES = {
         },
     },
     'toggle-site': {
-        'https://foo.com/terms/questions/foo-catalog': {
+        'https://foo.example.com/terms/questions/foo-catalog': {
             'user': 403, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 403, 'example-editor': 200, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,
             'bar-reviewer': 403, 'bar-editor': 403, 'anonymous': 401,
         },
-        'https://bar.com/terms/questions/bar-catalog': {
+        'https://bar.example.com/terms/questions/bar-catalog': {
             'user': 403, 'reviewer': 403, 'editor': 200,
             'example-reviewer': 403, 'example-editor': 200, 'foo-user': 403,
             'foo-reviewer': 403, 'foo-editor': 403, 'bar-user': 403,

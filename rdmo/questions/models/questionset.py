@@ -214,6 +214,7 @@ class QuestionSet(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'title': self.title,
+            'help': self.help,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'conditions': [condition.uri for condition in self.conditions.all()],

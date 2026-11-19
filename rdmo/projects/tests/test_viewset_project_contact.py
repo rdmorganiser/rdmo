@@ -163,7 +163,7 @@ def test_contact_post(db, client, username, password, project_id):
     if project_id in view_project_permission_map.get(username, []):
         assert response.status_code == 204
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == '[example.com] Test subject'
+        assert mail.outbox[0].subject == '[RDMO] Test subject'
         assert mail.outbox[0].body == 'Test message'
     else:
         if password:

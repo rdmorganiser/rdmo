@@ -1,0 +1,12 @@
+{% load static %}
+{% load socialaccount %}
+{% load accounts_tags %}
+
+    <a title="{% sign_in_text 'orcid' %}"
+       class="btn {{ button_class|default:'btn-primary' }} {{ provider.id }}-login"
+       href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <img src="{% static 'accounts/img/orcid-logo.png' %}" />
+            <span>{% sign_in_text 'ORCID' %}</span>
+        </div>
+    </a>
