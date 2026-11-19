@@ -591,7 +591,7 @@ class ProjectViewSet(ModelViewSet):
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=verbose),
+                'answertree': project.flat_answer_tree(snapshot=snapshot, verbose=verbose),
                 'include_help': include_help,
                 'include_answers': include_answers,
             }),
@@ -637,7 +637,7 @@ class ProjectViewSet(ModelViewSet):
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.get_answer_tree(snapshot=snapshot, verbose=verbose),
+                'answertree': project.flat_answer_tree(snapshot=snapshot, verbose=verbose),
                 'include_help': include_help,
                 'include_answers': include_answers,
             })

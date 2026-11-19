@@ -288,3 +288,21 @@ class AnswerTree:
             parts = descendant_set_prefix.split('|')
             if level < len(parts):
                 return ('|'.join(parts[:level]) if level else '', int(parts[level]))
+
+    @staticmethod
+    def flatten(treedata, prefix=''):
+        if 'model' in treedata:
+            yield {
+                'prefix': prefix,
+                **{x: treedata[x] for x in ["title", 'help', 'text', 'values', 'model']
+                    if x in treedata and ('show' not in treedata or treedata['show'])}
+            }
+
+        if 'elements' in treedata:
+            for child_node in treedata['elements']:
+                yield from AnswerTree.flatten(child_node, prefix)
+        if 'sets' in treedata:
+            for child_node in treedata['sets']:
+                if 'set_name' in child_node:
+                    prefix = f"[{child_node['set_name']}] {prefix}"
+                yield from AnswerTree.flatten(child_node, prefix)
