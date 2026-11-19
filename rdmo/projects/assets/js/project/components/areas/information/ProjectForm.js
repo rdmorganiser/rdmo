@@ -31,7 +31,7 @@ const ProjectForm = ({
   const [backendErrors, setBackendErrors] = useState({})
   const errors = useFieldErrors(backendErrors)
   const selectCatalog = useSelector((state) => state.settings?.project_select_catalog)
-  const storeData = useSelector((state) => state.project?.project)
+  const storeData = useSelector((state) => state.project)
 
   const project = mode === 'create' ? {} : currentProject ?? storeData?.project
   const catalogs = catalogsProp ?? storeData?.catalogs
@@ -172,7 +172,7 @@ const ProjectForm = ({
     ProjectApi.fetchProjects({ search })
       .then(response => {
         const options = response.results
-          .filter(p => !project.id || p.id !== project.id)
+          .filter(p => mode !== 'edit' || p.id !== project.id)
           .map(project => ({
             value: project.id,
             label: project.title
@@ -187,7 +187,7 @@ const ProjectForm = ({
     if (enableParent || submitMode === 'submit') {
       ProjectApi.fetchProjects({ search: '' }).then(({ results }) => {
         const options = results
-          .filter(p => !project.id || p.id !== project.id)
+          .filter(p => mode !== 'edit' || p.id !== project.id)
           .map(p => ({ value: p.id, label: p.title }))
         if (project.parent && !options.some(opt => opt.value === formData.parent)) {
           options.unshift({

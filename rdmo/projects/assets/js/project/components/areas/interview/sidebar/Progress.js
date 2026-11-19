@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
 const Progress = () => {
-  const progress = useSelector((state) => state.project.progress)
+  const progress = useSelector((state) => state.progress.progress)
 
   if (isNil(progress)) {
     return

@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 const ExportsDropdown = ({ onExport, align = 'end', dropdownLabel = gettext('Download') }) => {
 
-  const exportFormats = useSelector((state) => state.settings.export_formats) ?? {}
+  const exportFormats = useSelector((state) => state.settings.export_formats) ?? []
 
 
   const handleClick = (event, format) => {

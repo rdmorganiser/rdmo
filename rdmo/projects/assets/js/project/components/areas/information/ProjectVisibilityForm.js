@@ -14,7 +14,7 @@ import {
 const ProjectVisibilityForm = () => {
   const dispatch = useDispatch()
   const visibility = useSelector((state) => state.project.visibility)
-  const project = useSelector((state) => state.project.project.project) || {}
+  const project = useSelector((state) => state.project.project) || {}
   const groups = useSelector((state) => state.groups)
   const settings = useSelector((state) => state.settings)
   const sites = useSelector((state) => state.sites)

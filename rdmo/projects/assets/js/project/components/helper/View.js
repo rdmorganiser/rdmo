@@ -6,8 +6,8 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
+import { downloadAnswers, downloadView } from '../../actions/documentActions'
 import { navigateDashboard } from '../../actions/navigationActions'
-import { downloadAnswers, downloadView } from '../../actions/projectActions'
 
 import ExportsDropdown from './ExportsDropdown'
 import HelpTextToggle from './HelpTextToggle'
@@ -18,7 +18,7 @@ const View = () => {
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
   const [includeHelp] = useConfig('document.includeHelp', false)
-  const { currentView } = useSelector((state) => state.project)
+  const { current } = useSelector((state) => state.document)
 
   const reloadView = () => {
     const area = snapshotId == null ? 'documents' : 'snapshots'
@@ -53,7 +53,7 @@ const View = () => {
     }
   }
 
-  return currentView && (
+  return current && (
     <div className="project-view">
       <div className="float-end d-flex gap-3">
         <button className="link" onClick={handleBack}>
@@ -67,7 +67,7 @@ const View = () => {
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
-      <Html html={currentView.html} />
+      <Html html={current.html} />
     </div>
   )
 }

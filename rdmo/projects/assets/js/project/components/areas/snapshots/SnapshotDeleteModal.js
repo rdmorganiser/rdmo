@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import Html from 'rdmo/core/assets/js/components/Html'
 import Modal from 'rdmo/core/assets/js/components/Modal'
 
-import { deleteSnapshot } from '../../../actions/projectActions'
+import { deleteSnapshot } from '../../../actions/snapshotActions'
 import { useFieldErrors } from '../../../hooks'
 
 const SnapshotDeleteModal = ({ show, onClose, snapshot }) => {

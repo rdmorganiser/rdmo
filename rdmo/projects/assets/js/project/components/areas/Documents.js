@@ -2,8 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
+import { downloadAnswers, downloadView } from '../../actions/documentActions'
 import { navigateDashboard } from '../../actions/navigationActions'
-import { downloadAnswers, downloadView } from '../../actions/projectActions'
 
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
 import ViewTile from '../helper/ViewTile'
@@ -12,7 +12,7 @@ const Documents = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
-  const { views } = useSelector((state) => state.project.project) ?? {}
+  const views = useSelector((state) => state.document.views) ?? []
   const area = snapshotId ? 'snapshots' : 'documents'
 
   const handleSnapshotChange = (snapshot) => {

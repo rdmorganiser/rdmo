@@ -7,7 +7,6 @@ const initialState = {
   page: null,
   continuation: null,
   providerOptions: {},
-  navigation: null,
   values: null,
   attributes: [],
   sets: []

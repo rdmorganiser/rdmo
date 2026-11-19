@@ -13,8 +13,8 @@ import IntegrationTable from './integrations/IntegrationTable'
 
 const Integrations = () => {
   const perms = useSelector(selectPermissions)
-  const providers = useSelector((state) => state.project.providers) ?? {}
-  const integrations = useSelector((state) => state.project.integrations) ?? []
+  const providers = useSelector((state) => state.integration.providers) ?? {}
+  const integrations = useSelector((state) => state.integration.integrations) ?? []
 
   const [providerKey, setProviderKey] = useState(null)
   const [selectedIntegration, setSelectedIntegration] = useState(null)

@@ -5,7 +5,7 @@ const EMPTY_ERRORS = {}
 
 export const useFieldErrors = (backendErrors) => {
   const storedErrors = useSelector((state) =>
-    state.project?.errors?.[0]?.errors ||
+    state.projectErrors?.[0]?.errors ||
     state.projects?.errors?.[0]?.errors ||
     state.projects?.errors ||
     EMPTY_ERRORS
