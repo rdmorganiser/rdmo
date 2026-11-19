@@ -53,7 +53,7 @@ const MembershipInviteModal = ({ show, onClose }) => {
       show={show}
       onClose={onClose}
       onSubmit={() => { }} // render the Modal's submit button
-      submitLabel={gettext('Invite member')}
+      submitLabel={silently ? gettext('Add member') : gettext('Invite member')}
       submitProps={{ type: 'submit', form: 'invite-member-form' }}
       size="modal-lg"
     >
@@ -129,7 +129,6 @@ const MembershipInviteModal = ({ show, onClose }) => {
         {
           perms.can_add_membership && (
             <div>
-              <label className="form-label fw-bold">{gettext('Add member silently')}</label>
               <Template template="project_view_invite_member_silently_help" />
               <div className="form-check mt-1">
                 <input
