@@ -2,10 +2,12 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
+from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
@@ -186,6 +188,9 @@ class ValueQuerySet(models.QuerySet):
     def filter_set(self, set_value):
         # get the catalog and prefetch most elements of the catalog
         catalog = set_value.project.catalog
+        if catalog is None:
+            raise CatalogMissingException(_('This project has no catalog.'))
+
         catalog.prefetch_elements()
 
         # Get all attributes from matching elements and their descendants

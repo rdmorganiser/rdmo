@@ -85,7 +85,7 @@ class AnswersExportMixin:
 
     def get_data(self):
         # prefetch most elements of the catalog
-        self.project.catalog.prefetch_elements()
+        self.project.prefetch_catalog()
 
         # create project wrapper as for the views
         project_wrapper = ProjectWrapper(self.project, self.snapshot)

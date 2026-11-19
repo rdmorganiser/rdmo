@@ -4,6 +4,8 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.projects.models import Project
+
 from ..models import Catalog, Page, Question, QuestionSet
 
 users = (
@@ -234,6 +236,26 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+
+def test_delete_preserves_project_answers(db, client):
+    project = Project.objects.get(pk=1)
+    original_values = list(project.values.order_by('id').values())
+    assert original_values
+    assert project.values.filter(snapshot__isnull=False).exists()
+
+    client.login(username='admin', password='admin')
+    response = client.delete(reverse(urlnames['detail'], args=[project.catalog_id]))
+    assert response.status_code == 204
+
+    project.refresh_from_db()
+    assert project.catalog_id is None
+    assert list(project.values.order_by('id').values()) == original_values
+
+    client.login(username='owner', password='owner')
+    response = client.get(reverse('v1-projects:project-answers', args=[project.pk]))
+    assert response.status_code == 200
+    assert 'This project has no catalog.' in response.json()['html']
 
 
 @pytest.mark.parametrize('username,password', users)

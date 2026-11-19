@@ -70,6 +70,23 @@ def test_contact_get(db, client, username, password, project_id):
         else:
             assert response.status_code == 401
 
+
+def test_contact_get_without_catalog(db, client, settings):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    settings.PROJECT_CONTACT = True
+    value = project.values.filter(snapshot=None).first()
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['contact'], args=[project.pk]), {
+        'page': 1, 'questionset': 1, 'question': 1, 'values': [value.pk],
+    })
+    assert response.status_code == 200
+    assert response.json()['subject']
+    assert response.json()['message']
+
+
 def test_contact_get_page(db, client):
     client.login(username='guest', password='guest')
 

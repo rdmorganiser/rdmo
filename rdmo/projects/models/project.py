@@ -152,6 +152,10 @@ class Project(MPTTModel, Model):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
 
+    def prefetch_catalog(self):
+        if self.catalog is not None:
+            self.catalog.prefetch_elements()
+
     def get_answer_tree(self, snapshot=None, verbose=None):
         verbose = verbose or ()
         values = self.values.filter(snapshot=snapshot).order_by(

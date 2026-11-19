@@ -74,6 +74,19 @@ def test_list(db, client, username, password, project_id):
         assert response.status_code == 404
 
 
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_list_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['list'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('snapshot_id', snapshots)
 def test_detail(db, client, username, password, snapshot_id):

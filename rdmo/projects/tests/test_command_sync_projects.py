@@ -21,6 +21,16 @@ from rdmo.views.models import View
 PROJECT_SHOW_TEMPLATE = 'Project "{}" [id={}]:'
 
 
+def test_command_sync_projects_show_without_catalog(db, capsys):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+
+    call_command('sync_projects', '--show')
+
+    output = capsys.readouterr().out
+    assert f'Project "{project.title}" [id={project.pk}]:\n- Catalog: None\n' in output
+
+
 @pytest.mark.django_db
 def test_command_sync_projects_for_tasks(settings):
     settings.PROJECT_TASKS_SYNC = True

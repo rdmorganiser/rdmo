@@ -16,6 +16,9 @@ class AnswerTree:
         self.resolved_conditions: dict
 
     def compute(self, values):
+        if self.catalog is None:
+            return {}
+
         # Main function of this class, which Computes the answer tree recursively.
         # First, it computes the catalog, section, and page nodes.
         # Then, it alternates between (value)set and questionset nodes until it reaches

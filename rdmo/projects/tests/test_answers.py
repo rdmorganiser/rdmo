@@ -4,6 +4,7 @@ from rdmo.conditions.models import Condition
 from rdmo.projects.answers import AnswerTree
 from rdmo.questions.models import Page, Question, QuestionSet
 
+from ..exports import CSVCommaExport, JSONExport
 from ..models import Project, Value
 
 
@@ -288,3 +289,32 @@ def test_compute_child_set_prefix(parent_set, set_prefix):
 ])
 def test_compute_ancestor_set(descendant_set_prefix, level, ancestor_set):
     assert AnswerTree.compute_ancestor_set(descendant_set_prefix, level) == ancestor_set
+
+
+@pytest.mark.parametrize('unavailable_on_site', [False, True])
+def test_answer_tree_unavailable_catalog(db, settings, unavailable_on_site):
+    project = Project.objects.get(pk=1)
+    catalog = project.catalog
+    if unavailable_on_site:
+        settings.MULTISITE = True
+        catalog.sites.clear()
+    else:
+        catalog.available = False
+        catalog.save()
+    project.prefetch_catalog()
+    assert project.get_answer_tree()['elements']
+
+
+@pytest.mark.parametrize('export_class,key,label', [
+    (CSVCommaExport, 'csvcomma', 'CSV (comma separated)'),
+    (JSONExport, 'json', 'JSON'),
+])
+def test_questionnaire_export_without_catalog(db, export_class, key, label):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    class_name = f'{export_class.__module__}.{export_class.__name__}'
+    export = export_class(key, label, class_name)
+    export.project = project
+    assert export.get_data() == []

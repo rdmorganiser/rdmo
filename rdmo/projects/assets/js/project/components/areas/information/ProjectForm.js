@@ -70,6 +70,8 @@ const ProjectForm = ({
   const availableCatalogs = useMemo(() => (catalogs || []).filter(catalog => catalog.available), [catalogs])
 
   const [unavailableCatalog] = useState(() => {
+    if (project.catalog == null) return null
+
     const isAvailable = mode !== 'edit' || availableCatalogs.some(
       catalog => catalog.id === project.catalog
     )
@@ -275,6 +277,14 @@ const ProjectForm = ({
                 </label>
               </div>
             ))
+          )
+        }
+
+        {
+          mode === 'edit' && project.catalog == null && !disabled && (
+            <div className="form-text mt-2">
+              <Template template="project_view_missing_catalog_info" />
+            </div>
           )
         }
 
