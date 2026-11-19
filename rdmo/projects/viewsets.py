@@ -78,6 +78,7 @@ from .serializers.v1 import (
     ProjectCopySerializer,
     ProjectFileSerializer,
     ProjectHierarchySerializer,
+    ProjectIndexSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
@@ -178,6 +179,25 @@ class ProjectViewSet(ModelViewSet):
             # do not need the project prefetches or last_changed annotation.
             return queryset
 
+        # prepare subquery for last_changed
+        last_changed_subquery = Subquery(
+            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
+        )
+
+        # the 'updated' field from a Project always returns a valid DateTime value
+        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+        # when Greatest returns a value, then Coalesce will return this value
+        last_changed = Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+
+        if self.action == 'index':
+            queryset = queryset.values('id', 'title')
+            if self.request.query_params.get('ordering') == 'title' or not self.request.query_params.get('search'):
+                queryset = queryset.order_by('title', 'id')
+            else:
+                queryset = queryset.annotate(last_changed=last_changed).order_by('-last_changed')
+            self._cached_queryset = queryset
+            return queryset
+
         queryset = queryset.prefetch_related(
             'snapshots',
             'views',
@@ -207,11 +227,6 @@ class ProjectViewSet(ModelViewSet):
             .order_by('-role_rank')
         )
 
-        # prepare subquery for last_changed
-        last_changed_subquery = Subquery(
-            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
-        )
-
         # annotate the queryset with the subqueries
         queryset = queryset.annotate(
             current_role=current_role_subquery,
@@ -221,10 +236,7 @@ class ProjectViewSet(ModelViewSet):
             highest_role_project_id=Subquery(highest_role_membership_subquery.values('project_id')[:1]),
             highest_role_project_title=Subquery(highest_role_membership_subquery.values('project__title')[:1]),
             highest_role_membership_id=Subquery(highest_role_membership_subquery.values('id')[:1]),
-            # the 'updated' field from a Project always returns a valid DateTime value
-            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-            # when Greatest returns a value, then Coalesce will return this value
-            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
+            last_changed=last_changed
         )
 
         # order queryset by last_changed by default
@@ -237,8 +249,28 @@ class ProjectViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ['list', 'user']:
             return ProjectListSerializer
+        elif self.action == 'index':
+            return ProjectIndexSerializer
         else:
             return ProjectSerializer
+
+    @action(detail=False, filter_backends=(ProjectSearchFilterBackend, ))
+    def index(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        page_size = self.paginator.page_size
+        around = request.query_params.get('around')
+        offset = 0
+
+        if around and not request.query_params.get('search'):
+            project_id = serializers.IntegerField(min_value=1, max_value=2**63 - 1).run_validation(around)
+            project = queryset.filter(pk=project_id).first()
+            if project:
+                before = Q(title__lt=project['title']) | Q(title=project['title'], id__lt=project['id'])
+                # Leave a few preceding options visible above the selected project in the menu.
+                offset = max(0, queryset.filter(before).count() - min(3, page_size // 2))
+
+        projects = queryset[offset:offset + page_size]
+        return Response(self.get_serializer(projects, many=True).data)
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):

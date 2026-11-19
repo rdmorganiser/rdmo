@@ -51,6 +51,7 @@ delete_project_permission_map = {
 
 urlnames = {
     'list': 'v1-projects:project-list',
+    'index': 'v1-projects:project-index',
     'user': 'v1-projects:project-user',
     'detail': 'v1-projects:project-detail',
     'copy': 'v1-projects:project-copy',
@@ -112,6 +113,51 @@ def test_list(db, client, username, password):
             assert [item['id'] for item in response_data['results']] == project_ids[:page_size]
     else:
         assert response.status_code == 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_index(db, client, username, password):
+    client.login(username=username, password=password)
+    response = client.get(reverse(urlnames['index']))
+
+    if password:
+        expected = Project.objects.filter(pk__in=view_project_permission_map[username]).order_by('title', 'id')
+        assert response.status_code == 200
+        assert response.json() == list(expected.values('id', 'title')[:page_size])
+    else:
+        assert response.status_code == 401
+
+
+def test_index_around_project(db, client):
+    client.login(username='admin', password='admin')
+    ordered = list(Project.objects.order_by('title', 'id').values('id', 'title'))
+    selected = ordered[page_size]
+
+    response = client.get(reverse(urlnames['index']), {'around': selected['id']})
+
+    assert response.status_code == 200
+    assert response.json() == ordered[page_size - 2:2 * page_size - 2]
+
+
+def test_index_around_inaccessible_project(db, client):
+    client.login(username='manager', password='manager')
+    url = reverse(urlnames['index'])
+
+    response = client.get(url, {'around': parent_ancestors[0]})
+
+    assert response.status_code == 200
+    assert response.json() == client.get(url).json()
+
+
+def test_index_search(db, client):
+    client.login(username='owner', password='owner')
+    params = {'search': 'owner'}
+    response = client.get(reverse(urlnames['index']), params)
+    results = client.get(reverse(urlnames['list']), params).json()['results']
+
+    assert response.status_code == 200
+    assert results
+    assert response.json() == [{'id': project['id'], 'title': project['title']} for project in results]
 
 
 @pytest.mark.parametrize('username,password', users)

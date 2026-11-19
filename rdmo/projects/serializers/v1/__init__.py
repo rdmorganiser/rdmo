@@ -296,6 +296,13 @@ class ProjectListSerializer(ProjectSerializer):
         }
 
 
+class ProjectIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ('id', 'title')
+
+
 class ProjectCopySerializer(ProjectSerializer):
 
     class Meta:
