@@ -6,7 +6,8 @@ import { downloadAnswers, downloadView } from '../../actions/documentActions'
 import { navigateDashboard } from '../../actions/navigationActions'
 
 import SnapshotsDropdown from '../helper/SnapshotsDropdown'
-import ViewTile from '../helper/ViewTile'
+
+import DocumentTile from './documents/DocumentTile'
 
 const Documents = () => {
   const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const Documents = () => {
         {
           views.map((view) => (
             <div key={view.id} className="col-lg-6">
-              <ViewTile
+              <DocumentTile
                 title={view.title}
                 help={view.help}
                 onClick={() => dispatch(navigateDashboard({ area, snapshotId, viewId: view.id }))}
@@ -49,7 +50,7 @@ const Documents = () => {
       <h2>{gettext('Additional documents')}</h2>
       <div className="row mb-4">
         <div className="col-lg-6">
-          <ViewTile
+          <DocumentTile
             title={gettext('List all questions')}
             help={gettext('Overview of all questions. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'questions' }))}
@@ -57,7 +58,7 @@ const Documents = () => {
           />
         </div>
         <div className="col-lg-6">
-          <ViewTile
+          <DocumentTile
             title={gettext('List all answers')}
             help={gettext('Overview of all questions and answers. Optionally with help texts.')}
             onClick={() => dispatch(navigateDashboard({ area, snapshotId, detail: 'answers' }))}

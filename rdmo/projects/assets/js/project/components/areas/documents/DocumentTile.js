@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import Img from 'rdmo/core/assets/js/components/Img'
 import Truncate from 'rdmo/core/assets/js/components/Truncate'
 
-import ExportsDropdown from './ExportsDropdown'
+import ExportsDropdown from '../../helper/ExportsDropdown'
 
-const ViewTile = ({ title, help, onClick, onExport }) => (
+const DocumentTile = ({ title, help, onClick, onExport }) => (
   <div className="card card-tile cursor-pointer mb-4" onClick={onClick}>
     <div className="d-flex">
       <Img src="/core/img/document.png" className="img-fluid" alt={gettext('Document image')} />
@@ -27,11 +27,11 @@ const ViewTile = ({ title, help, onClick, onExport }) => (
   </div>
 )
 
-ViewTile.propTypes = {
+DocumentTile.propTypes = {
   title: PropTypes.string.isRequired,
   help: PropTypes.string,
   onClick: PropTypes.func,
   onExport: PropTypes.func
 }
 
-export default ViewTile
+export default DocumentTile

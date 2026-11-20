@@ -6,17 +6,17 @@ import Errors from 'rdmo/core/assets/js/components/Errors'
 
 import Dashboard from './areas/Dashboard'
 import Documents from './areas/Documents'
+import Document from './areas/documents/Document'
 import Information from './areas/Information'
 import Integrations from './areas/Integrations'
 import Interview from './areas/Interview'
 import Memberships from './areas/Memberships'
 import Snapshots from './areas/Snapshots'
-import View from './helper/View'
 
 const Main = () => {
   const { area, snapshotId, viewId, detail } = useSelector((state) => state.location)
   const { project } = useSelector((state) => state.project)
-  const showView = !isNil(viewId) || ['questions', 'answers'].includes(detail)
+  const showDocument = !isNil(viewId) || ['questions', 'answers'].includes(detail)
 
   const renderArea = () => {
     switch (area) {
@@ -25,9 +25,9 @@ const Main = () => {
       case 'interview':
         return <Interview />
       case 'documents':
-        return showView ? <View /> : <Documents />
+        return showDocument ? <Document /> : <Documents />
       case 'snapshots':
-        return showView ? <View /> : (snapshotId ? <Documents /> : <Snapshots />)
+        return showDocument ? <Document /> : (snapshotId ? <Documents /> : <Snapshots />)
       case 'information':
         return <Information />
       case 'memberships':

@@ -6,14 +6,14 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { downloadAnswers, downloadView } from '../../actions/documentActions'
-import { navigateDashboard } from '../../actions/navigationActions'
+import { downloadAnswers, downloadView } from '../../../actions/documentActions'
+import { navigateDashboard } from '../../../actions/navigationActions'
 
-import ExportsDropdown from './ExportsDropdown'
-import HelpTextToggle from './HelpTextToggle'
-import SnapshotsDropdown from './SnapshotsDropdown'
+import ExportsDropdown from '../../helper/ExportsDropdown'
+import HelpTextToggle from '../../helper/HelpTextToggle'
+import SnapshotsDropdown from '../../helper/SnapshotsDropdown'
 
-const View = () => {
+const Document = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
@@ -56,7 +56,7 @@ const View = () => {
   return current && (
     <div className="project-view">
       <div className="d-lg-flex justify-content-between align-items-center gap-3 mb-5">
-        <h1 className="flex-grow-1 mb-lg-0">{currentView.title}</h1>
+        <h1 className="flex-grow-1 mb-lg-0">{current.title}</h1>
         <button className="link" onClick={handleBack}>
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
@@ -84,4 +84,4 @@ const View = () => {
   )
 }
 
-export default View
+export default Document
