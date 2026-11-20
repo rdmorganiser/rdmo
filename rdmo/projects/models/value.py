@@ -94,6 +94,11 @@ class Value(Model):
         verbose_name=_('External id'),
         help_text=_('External id for this value.')
     )
+    disabled = models.BooleanField(
+        default=False,
+        verbose_name=_('Disabled'),
+        help_text=_('Designates whether this value is disabled for editing by users.')
+    )
 
     class Meta:
         ordering = ('project', 'snapshot', 'attribute', 'set_prefix', 'set_index', 'collection_index')

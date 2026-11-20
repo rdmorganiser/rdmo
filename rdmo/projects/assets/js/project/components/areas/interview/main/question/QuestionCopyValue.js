@@ -15,6 +15,7 @@ const QuestionCopyValue = ({ question, value, siblings }) => {
 
   return (
     !readOnly &&
+    !value.disabled &&
     question.set_collection &&
     !question.is_collection &&
     !isEmptyValue(value) &&

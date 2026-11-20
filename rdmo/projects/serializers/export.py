@@ -26,6 +26,7 @@ class ValueSerializer(serializers.ModelSerializer):
             'value_type',
             'unit',
             'external_id',
+            'disabled',
             'created',
             'updated'
         )

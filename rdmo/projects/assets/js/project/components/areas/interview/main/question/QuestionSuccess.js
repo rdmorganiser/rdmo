@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 const QuestionSuccess = ({ value }) => {
-  return (
+  return !value.disabled && (
     <div className={
       classNames('question-success text-success', {
         'show': value.success

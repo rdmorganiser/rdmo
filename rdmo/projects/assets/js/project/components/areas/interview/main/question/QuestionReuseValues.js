@@ -83,7 +83,7 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
     }
   }, [formValues, formValues.value])
 
-  return !readOnly && (
+  return !readOnly && !values.some((value) => value.disabled) && (
     <>
       <LinkButton
         className="question-reuse-values-button"

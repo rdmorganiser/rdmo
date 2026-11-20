@@ -729,7 +729,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'file_url',
             'value_type',
             'unit',
-            'external_id'
+            'external_id',
+            'disabled'
         )
         validators = (
             ValueConflictValidator(),
@@ -1102,7 +1103,8 @@ class ValueSerializer(serializers.ModelSerializer):
             'file_url',
             'value_type',
             'unit',
-            'external_id'
+            'external_id',
+            'disabled'
         )
 
 

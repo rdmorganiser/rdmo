@@ -72,7 +72,7 @@ const QuestionReuseValue = ({ question, value }) => {
     </>
   )
 
-  return !readOnly && (
+  return !readOnly && !value.disabled && (
     <>
       <LinkButton
         className="question-reuse-value-button"
