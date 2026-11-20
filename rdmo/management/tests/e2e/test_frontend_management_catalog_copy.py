@@ -42,3 +42,6 @@ def test_management_catalog_copy(page: Page) -> None:
     expect(page.get_by_role("link", name=copied_uri)).to_be_visible()
 
     assert Catalog.objects.filter(uri=copied_uri).exists()
+
+    # wait until no request is pending anymore
+    expect(page.locator(".fa-circle-o-notch.fa-spin")).to_have_count(0)
