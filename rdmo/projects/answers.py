@@ -154,7 +154,7 @@ class AnswerTree:
             key= (element.attribute_id, set_prefix, set_index)
             if key in self.attribute_set_values_map:
                 if value := self.attribute_set_values_map[key]:
-                    set_node.update({'set_name': value[0].text})
+                    set_node.update({'set_name': value[0].value})
 
         # compute the next level of nodes
         set_node['elements'] = [
