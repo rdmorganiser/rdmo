@@ -97,7 +97,7 @@ const ProjectForm = ({
             catalog.help && (
               <Tooltip title={<Html html={catalog.help} />} placement="right">
                 <i
-                  className="bi bi-info-circle ms-2"
+                  className="bi bi-info-circle ms-2 position-relative"
                   tabIndex={0}
                   role="img"
                   aria-label={gettext('Catalog help')}
