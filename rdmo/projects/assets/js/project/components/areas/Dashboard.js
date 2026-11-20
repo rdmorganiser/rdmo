@@ -11,11 +11,11 @@ import { updateProjectIssue } from '../../actions/issueActions'
 import { navigateDashboard } from '../../actions/navigationActions'
 import { clearProjectErrors } from '../../actions/projectActions'
 import { fetchProjectSnapshots } from '../../actions/snapshotActions'
-import { IssueTile } from '../helper'
 
 import IssueDate from '../../../common/components/IssueDate'
 
 import IssueModal from './dashboard/IssueModal'
+import IssueTile from './dashboard/IssueTile'
 import SendIssueModal from './dashboard/SendIssueModal'
 import ShowClosedIssues from './dashboard/ShowClosedIssues'
 

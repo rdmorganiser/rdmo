@@ -5,9 +5,8 @@ import { isNil } from 'lodash'
 import { downloadAnswers, downloadView } from '../../actions/documentActions'
 import { navigateDashboard } from '../../actions/navigationActions'
 
-import SnapshotsDropdown from '../helper/SnapshotsDropdown'
-
 import DocumentTile from './documents/DocumentTile'
+import SnapshotsDropdown from './documents/SnapshotsDropdown'
 
 const Documents = () => {
   const dispatch = useDispatch()

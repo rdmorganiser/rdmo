@@ -9,9 +9,9 @@ import Html from 'rdmo/core/assets/js/components/Html'
 import { downloadAnswers, downloadView } from '../../../actions/documentActions'
 import { navigateDashboard } from '../../../actions/navigationActions'
 
-import ExportsDropdown from '../../helper/ExportsDropdown'
-import HelpTextToggle from '../../helper/HelpTextToggle'
-import SnapshotsDropdown from '../../helper/SnapshotsDropdown'
+import ExportsDropdown from './ExportsDropdown'
+import HelpTextToggle from './HelpTextToggle'
+import SnapshotsDropdown from './SnapshotsDropdown'
 
 const Document = () => {
   const dispatch = useDispatch()

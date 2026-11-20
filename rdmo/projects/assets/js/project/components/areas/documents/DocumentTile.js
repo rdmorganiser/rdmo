@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Img from 'rdmo/core/assets/js/components/Img'
 import Truncate from 'rdmo/core/assets/js/components/Truncate'
 
-import ExportsDropdown from '../../helper/ExportsDropdown'
+import ExportsDropdown from './ExportsDropdown'
 
 const DocumentTile = ({ title, help, onClick, onExport }) => (
   <div className="card card-tile cursor-pointer mb-4" onClick={onClick}>
