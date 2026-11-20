@@ -36,7 +36,7 @@ const RadioWidget = ({ question, sets, values, siblings, currentSet }) => {
                   value={value}
                   currentSet={currentSet}
                   options={gatherOptions(question, currentSet, providerOptions)}
-                  disabled={readOnly || value.read_only}
+                  disabled={readOnly || value.disabled}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={
                     (

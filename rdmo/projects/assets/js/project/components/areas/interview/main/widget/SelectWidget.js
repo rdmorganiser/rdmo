@@ -37,7 +37,7 @@ const SelectWidget = ({ question, sets, values, siblings, creatable, currentSet 
                   currentSet={currentSet}
                   options={gatherOptions(question, currentSet, providerOptions)}
                   creatable={creatable}
-                  disabled={readOnly || value.read_only}
+                  disabled={readOnly || value.disabled}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={
                     (

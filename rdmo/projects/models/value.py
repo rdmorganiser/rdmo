@@ -94,10 +94,10 @@ class Value(Model):
         verbose_name=_('External id'),
         help_text=_('External id for this value.')
     )
-    read_only = models.BooleanField(
+    disabled = models.BooleanField(
         default=False,
-        verbose_name=_('Read only'),
-        help_text=_('Designates whether this value can be changed by users.')
+        verbose_name=_('Disabled'),
+        help_text=_('Designates whether this value is disabled for editing by users.')
     )
 
     class Meta:

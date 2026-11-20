@@ -245,7 +245,7 @@ def save_import_values(project, values, checked):
                     current_value.option = value.option
                     current_value.value_type = value.value_type
                     current_value.unit = value.unit
-                    current_value.read_only = value.read_only
+                    current_value.disabled = value.disabled
                     current_value.save()
 
                     if value.file:

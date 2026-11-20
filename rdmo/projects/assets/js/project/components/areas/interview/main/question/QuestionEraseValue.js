@@ -21,7 +21,7 @@ const QuestionEraseValue = ({ question, value }) => {
     dispatch(updateValue(value, {}))
   }
 
-  return !readOnly && !value.read_only && (
+  return !readOnly && !value.disabled && (
     <LinkButton
       className="question-erase-value-button"
       title={title}

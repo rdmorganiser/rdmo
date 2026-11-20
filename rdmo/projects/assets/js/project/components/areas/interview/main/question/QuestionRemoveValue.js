@@ -11,7 +11,7 @@ const QuestionRemoveValue = ({ question, values, value }) => {
   const dispatch = useDispatch()
   const readOnly = useSelector(selectReadOnly)
 
-  return !readOnly && !value.read_only && (question.is_collection || values.length > 1) && (
+  return !readOnly && !value.disabled && (question.is_collection || values.length > 1) && (
     <LinkButton
       className="question-remove-value-button"
       title={gettext('Remove answer')}

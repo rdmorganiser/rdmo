@@ -10,11 +10,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='value',
-            name='read_only',
+            name='disabled',
             field=models.BooleanField(
                 default=False,
-                help_text='Designates whether this value can be changed by users.',
-                verbose_name='Read only',
+                help_text='Designates whether this value is disabled for editing by users.',
+                verbose_name='Disabled',
             ),
         ),
     ]

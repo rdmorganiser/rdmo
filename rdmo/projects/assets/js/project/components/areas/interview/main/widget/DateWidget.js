@@ -33,7 +33,7 @@ const DateWidget = ({ question, sets, values, siblings, currentSet }) => {
                   question={question}
                   value={value}
                   currentSet={currentSet}
-                  disabled={readOnly || value.read_only}
+                  disabled={readOnly || value.disabled}
                   onChange={(value, attr) => dispatch(updateValue(value, attr))}
                   buttons={
                     (

@@ -730,7 +730,7 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'value_type',
             'unit',
             'external_id',
-            'read_only'
+            'disabled'
         )
         validators = (
             ValueConflictValidator(),
@@ -1104,7 +1104,7 @@ class ValueSerializer(serializers.ModelSerializer):
             'value_type',
             'unit',
             'external_id',
-            'read_only'
+            'disabled'
         )
 
 
