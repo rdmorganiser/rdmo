@@ -9,8 +9,6 @@ const IntegrationDetailsModal = ({ show, onClose, integration }) => {
       title={integration.title}
       show={show}
       onClose={onClose}
-      closeLabel={gettext('Close')}
-      size="modal-lg"
     >
       <p className="text-muted mb-4">{integration.provider.description}</p>
 

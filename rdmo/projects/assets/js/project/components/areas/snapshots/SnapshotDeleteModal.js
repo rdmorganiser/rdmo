@@ -28,7 +28,6 @@ const SnapshotDeleteModal = ({ show, onClose, snapshot }) => {
       onSubmit={handleSubmit}
       submitLabel={gettext('Delete')}
       submitProps={{ className: 'btn btn-danger' }}
-      size="modal-lg"
     >
       <Html
         html={

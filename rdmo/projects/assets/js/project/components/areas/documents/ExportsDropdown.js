@@ -23,14 +23,14 @@ const ExportsDropdown = ({ onExport, align = 'end', dropdownLabel = gettext('Dow
     <div className={classNames('dropdown', {'dropdown-menu-end': align == 'end'})}>
       <button
         type="button"
-        className="link text-nowrap"
+        className="link text-nowrap dropdown-toggle"
         data-bs-toggle="dropdown"
         data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
         onClick={(event) => event.stopPropagation()}
         title={dropdownLabel}
       >
-        {dropdownLabel} <i className="bi bi-caret-down-fill ms-1" />
+        {dropdownLabel}
       </button>
 
       <ul className="dropdown-menu">

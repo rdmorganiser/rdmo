@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import LocationLink from '../../../helper/LocationLink'
+import { LocationLink } from '../../../helper'
 
 const NavigationLink = ({ element }) => {
   const label = interpolate(gettext('(%s of %s)'), [element.count, element.total])

@@ -37,6 +37,7 @@ const QuestionCopySet = ({ questionset, sets, currentSet }) => {
       </LinkButton>
 
       <Modal
+        size="md"
         title={gettext('Copy block')} show={modal.show} submitLabel={gettext('Copy')}
         submitProps={{className: 'btn btn-info'}}
         onClose={modal.close} onSubmit={handleCopySet}>

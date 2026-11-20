@@ -45,7 +45,6 @@ const MembershipDeleteModal = ({
       }
       submitLabel={text}
       submitProps={{ className: 'btn btn-danger' }}
-      size="modal-md"
     >
       <Html
         html={

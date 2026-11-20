@@ -38,7 +38,6 @@ const IntegrationDeleteModal = ({ show, onClose, integration }) => {
       onSubmit={handleSubmit}
       submitLabel={gettext('Delete integration')}
       submitProps={{ className: 'btn btn-danger', disabled: isSubmitting }}
-      size="modal-lg"
     >
       <Html
         html={

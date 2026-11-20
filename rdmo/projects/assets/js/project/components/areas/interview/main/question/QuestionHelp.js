@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import Html from 'rdmo/core/assets/js/components/Html'
 
 const QuestionHelp = ({ question, show }) => {
-  const classnames = classNames('project-interview-question-help font-small text-muted mb-2', {
+  const classnames = classNames('project-interview-question-help help-text mb-2', {
     'd-none': !show
   })
 

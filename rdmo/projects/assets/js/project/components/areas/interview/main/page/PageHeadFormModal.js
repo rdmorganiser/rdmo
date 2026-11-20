@@ -58,7 +58,6 @@ const PageHeadFormModal = ({
       onSubmit={handleSubmit}
       onShown={() => inputRef.current?.focus()}
       disableSubmit={errors}
-      size="modal-lg"
     >
       {
         isNil(attribute) ? (

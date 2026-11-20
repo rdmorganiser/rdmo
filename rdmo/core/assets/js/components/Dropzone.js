@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-const Dropzone = ({ label, activeLabel, acceptedTypes, onDrop }) => {
+const Dropzone = ({ label, activeLabel, acceptedTypes, disabled = false, inputProps = {}, onDrop }) => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: acceptedTypes,
+    disabled,
     onDropAccepted: acceptedFiles => {
       if (acceptedFiles.length > 0) {
         onDrop(acceptedFiles[0])
@@ -20,8 +21,8 @@ const Dropzone = ({ label, activeLabel, acceptedTypes, onDrop }) => {
   })
 
   return (
-    <div {...getRootProps({className: classNames('dropzone', {'drag-active': isDragActive})})} >
-      <input {...getInputProps()} />
+    <div {...getRootProps({className: classNames('dropzone', {'drag-active': isDragActive, disabled})})} >
+      <input {...getInputProps(inputProps)} />
       {
         isDragActive ? (
           <div>
@@ -42,6 +43,8 @@ Dropzone.propTypes = {
   label: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   activeLabel: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   acceptedTypes: PropTypes.object,
+  disabled: PropTypes.bool,
+  inputProps: PropTypes.object,
   onDrop: PropTypes.func.isRequired,
 }
 

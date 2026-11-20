@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LocationLink from '../../../helper/LocationLink'
+import { LocationLink } from '../../../helper'
 
 const BackLink = () => (
   <div className="mb-2">

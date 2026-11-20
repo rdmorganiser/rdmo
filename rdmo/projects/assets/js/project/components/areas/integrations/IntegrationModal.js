@@ -103,10 +103,8 @@ const IntegrationModal = ({ show, onClose, providerKey, integration }) => {
       title={isEdit ? gettext('Update integration') : provider?.add_label ?? gettext('Add integration')}
       show={show}
       onClose={onClose}
-      onSubmit={() => { }} // render the Modal's submit button
       submitLabel={isEdit ? gettext('Update integration') : gettext('Add integration')}
-      submitProps={{ type: 'submit', form: formId }}
-      size="modal-lg"
+      formId={formId}
     >
       <form id={formId} onSubmit={handleSubmit}>
         <p className="text-muted">{provider?.description}</p>

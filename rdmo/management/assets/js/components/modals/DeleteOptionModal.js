@@ -11,7 +11,6 @@ const DeleteOptionModal = ({ option, info, show, onClose, onDelete }) => (
     onSubmit={onDelete}
     submitLabel={gettext('Delete')}
     submitProps={{ className: 'btn btn-danger' }}
-    size="modal-lg"
   >
     <p>
       {gettext('You are about to permanently delete the option:')}

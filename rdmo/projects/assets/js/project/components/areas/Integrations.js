@@ -4,11 +4,10 @@ import { useSelector } from 'react-redux'
 import { useModal } from 'rdmo/core/assets/js/hooks'
 import { selectPermissions } from 'rdmo/projects/assets/js/common/selectors/permissions'
 
-import IntegrationsDropdown from '../helper/IntegrationsDropdown'
-
 import IntegrationDeleteModal from './integrations/IntegrationDeleteModal'
 import IntegrationDetailsModal from './integrations/IntegrationDetailsModal'
 import IntegrationModal from './integrations/IntegrationModal'
+import IntegrationsDropdown from './integrations/IntegrationsDropdown'
 import IntegrationTable from './integrations/IntegrationTable'
 
 const Integrations = () => {

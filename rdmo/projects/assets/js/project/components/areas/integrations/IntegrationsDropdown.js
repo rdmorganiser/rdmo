@@ -17,7 +17,7 @@ const IntegrationsDropdown = ({ providers, onChange }) => {
     <div className="dropdown dropdown-menu-end">
       <button
         type="button"
-        className="link text-nowrap"
+        className="link text-nowrap dropdown-toggle"
         data-bs-toggle="dropdown"
         data-bs-popper-config='{"strategy":"fixed"}'
         aria-expanded="false"
@@ -26,7 +26,6 @@ const IntegrationsDropdown = ({ providers, onChange }) => {
       >
         <i className="bi bi-plus-lg me-1" aria-hidden="true" />
         <span>{gettext('Add integration')}</span>
-        <i className="bi bi-caret-down-fill ms-1" aria-hidden="true" />
       </button>
 
       <ul className="dropdown-menu">

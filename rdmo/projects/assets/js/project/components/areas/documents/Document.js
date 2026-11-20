@@ -6,14 +6,14 @@ import { useConfig } from 'rdmo/core/assets/js/hooks'
 
 import Html from 'rdmo/core/assets/js/components/Html'
 
-import { downloadAnswers, downloadView } from '../../actions/documentActions'
-import { navigateDashboard } from '../../actions/navigationActions'
+import { downloadAnswers, downloadView } from '../../../actions/documentActions'
+import { navigateDashboard } from '../../../actions/navigationActions'
 
 import ExportsDropdown from './ExportsDropdown'
 import HelpTextToggle from './HelpTextToggle'
 import SnapshotsDropdown from './SnapshotsDropdown'
 
-const View = () => {
+const Document = () => {
   const dispatch = useDispatch()
 
   const { snapshotId, viewId, detail } = useSelector((state) => state.location)
@@ -55,7 +55,8 @@ const View = () => {
 
   return current && (
     <div className="project-view">
-      <div className="float-end d-flex gap-3">
+      <div className="d-lg-flex justify-content-between align-items-center gap-3 mb-5">
+        <h1 className="flex-grow-1 mb-lg-0">{current.title}</h1>
         <button className="link" onClick={handleBack}>
           <i className="bi bi-arrow-left"></i> {gettext('Back')}
         </button>
@@ -67,9 +68,20 @@ const View = () => {
         <SnapshotsDropdown onChange={handleSnapshotChange}/>
         <ExportsDropdown onExport={handleExport} />
       </div>
-      <Html html={current.html} />
+      {
+        current.help && (
+          <div className="help-text mb-3">
+            <Html html={current.help} />
+          </div>
+        )
+      }
+      <div className="card card-tile">
+        <div className="card-body">
+          <Html html={current.html} />
+        </div>
+      </div>
     </div>
   )
 }
 
-export default View
+export default Document

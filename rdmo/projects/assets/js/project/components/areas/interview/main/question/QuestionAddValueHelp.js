@@ -13,7 +13,7 @@ const QuestionAddValueHelp = ({ question, show }) => {
   const readOnly = useSelector(selectReadOnly)
 
   return show && hasAddValueHelp(question, templates, readOnly) && (
-    <div className="font-small text-muted mb-2">
+    <div className="help-text mb-2">
       <Template template="project_interview_add_value_help" />
     </div>
   )

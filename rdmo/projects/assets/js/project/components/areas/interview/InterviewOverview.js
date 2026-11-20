@@ -6,8 +6,7 @@ import { isEmpty } from 'lodash'
 import { Html, LinkButton, Tooltip } from 'rdmo/core/assets/js/components'
 
 import { navigateDashboard } from '../../../actions/navigationActions'
-
-import LocationLink from '../../helper/LocationLink'
+import { LocationLink } from '../../helper'
 
 const InterviewOverview = () => {
   const dispatch = useDispatch()

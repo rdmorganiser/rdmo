@@ -192,18 +192,9 @@ const SendIssueModal = ({
       show
       title={gettext('Send task')}
       onClose={onClose}
-      closeLabel={gettext('Close')}
-      onSubmit={() => {}}
       submitLabel={submitLabel}
-      submitProps={
-        {
-          type: 'submit',
-          form: formId,
-          disabled: isSubmitting || isContentUnavailable,
-          hidden: !showSubmitButton
-        }
-      }
-      size="modal-lg"
+      submitProps={{ disabled: isSubmitting || isContentUnavailable }}
+      formId={showSubmitButton ? formId : undefined}
     >
       <form id={formId} onSubmit={handleSubmit}>
         {

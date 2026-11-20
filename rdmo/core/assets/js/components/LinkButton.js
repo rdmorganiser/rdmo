@@ -4,18 +4,18 @@ import classNames from 'classnames'
 
 const LinkButton = ({ className, disabled = false, stopPropagation = true, onClick, children, ...props }) => {
   const handleClick = (event) => {
-    event.preventDefault()
     if (stopPropagation) event.stopPropagation()
-    if (!disabled) onClick()
+    onClick(event)
   }
 
   return (
     <button
+      aria-label={children ? undefined : props.title}
       {...props}
       type="button"
       className={classNames('link', className)}
       disabled={disabled}
-      onClick={event => handleClick(event)}
+      onClick={handleClick}
     >
       {children}
     </button>
@@ -27,6 +27,7 @@ LinkButton.propTypes = {
   disabled: PropTypes.bool,
   stopPropagation: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
+  title: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
 }
 

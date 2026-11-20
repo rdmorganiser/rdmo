@@ -1,21 +1,20 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
+
+import { Dropzone } from 'rdmo/core/assets/js/components'
 
 import { getQuestionHelpId, getQuestionTextId } from '../../../../../utils/question'
 
 const FileInput = ({ question, value, currentSet, buttons, disabled, onChange }) => {
-  const onDrop = useCallback(acceptedFiles => {
-    if (acceptedFiles.length == 1) {
-      onChange(value, { file: acceptedFiles[0], unit: question.unit, value_type: question.value_type })
-    }
-  }, [value])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, disabled })
+  const handleDrop = (file) => {
+    onChange(value, { file, unit: question.unit, value_type: question.value_type })
+  }
 
-  const classnames = classNames('dropzone', {
-    'disabled': disabled
-  })
+  const inputProps = {
+    'aria-labelledby': getQuestionTextId(question, currentSet),
+    'aria-describedby': getQuestionHelpId(question, currentSet)
+  }
 
   return (
     <div className="project-interview-input file-input">
@@ -24,33 +23,24 @@ const FileInput = ({ question, value, currentSet, buttons, disabled, onChange })
         <div className="file-control">
           {
             value.file_name ? (
-              <div>
-                <span className={classNames({'text-muted': disabled})}>{gettext('Current file:')}</span>
+              <div className="mb-1">
+                <span className={classNames('me-1', {'text-muted': disabled})}>{gettext('Current file:')}</span>
                 <a href={value.file_url} onClick={(event) => event.stopPropagation()}>
                   {value.file_name}
                 </a>
               </div>
             ) : (
-              <div>{gettext('No file stored.')}</div>
+              <div className="mb-1">
+                {gettext('No file stored.')}
+              </div>
             )
           }
 
-          <div {...getRootProps({className: classnames})}>
-            <input
-              {...getInputProps()}
-              aria-labelledby={getQuestionTextId(question, currentSet)}
-              aria-describedby={getQuestionHelpId(question, currentSet)}
-            />
-            <div className="text-muted">
-              {
-                isDragActive ? (
-                  <span>{gettext('Drop the files here ...')}</span>
-                ) : (
-                  <span>{gettext('Drag \'n drop some files here, or click to select files.')}</span>
-                )
-              }
-            </div>
-          </div>
+          <Dropzone
+            disabled={disabled}
+            inputProps={inputProps}
+            onDrop={handleDrop}
+          />
         </div>
       </div>
     </div>
