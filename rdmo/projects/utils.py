@@ -13,7 +13,8 @@ from django.utils.timezone import now
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
-from rdmo.views.utils import ProjectWrapper
+
+from .constants import ANSWERTREE_VERBOSE_TREE
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,8 @@ def render_attachments(request, project, data):
             request, attachments_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'project_wrapper': ProjectWrapper(project, snapshot)
+                'answertree': project.flat_answer_tree(verbose=(*ANSWERTREE_VERBOSE_TREE, 'set', 'value')),
+                'include_answers': True,
             }
         )
         attachments.append((

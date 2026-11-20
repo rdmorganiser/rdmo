@@ -14,6 +14,7 @@ class AnswerTree:
         self.attribute_sets_map: dict
         self.attribute_set_values_map: dict
         self.resolved_conditions: dict
+        self._fields_cache = {}
 
     def compute(self, values):
         # Main function of this class, which Computes the answer tree recursively.
@@ -44,27 +45,33 @@ class AnswerTree:
 
         if element_type in ('catalog', 'questionset'):
             fields['title'] = markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'section':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
         elif element_type == 'page':
             fields['title'] = markdown2html(element.short_title) or markdown2html(element.title)
-            fields['help'] = markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] = markdown2html(element.help)
         elif element_type == 'question':
             fields['text'] = markdown2html(element.text)
-            fields['help'] =  markdown2html(element.help)
+            if 'help' in self.verbose:
+                fields['help'] =  markdown2html(element.help)
+
         return fields
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
         element_type = element._meta.model_name
 
-        element_node = {
-            'id': element.id,
-            'model': element._meta.label_lower,
-            'show': True,  # init show flag
-            **self.get_verbose_fields(element),
-        }
+        if element.id not in self._fields_cache:
+            self._fields_cache[element.id] = {
+                'id': element.id,
+                'model': element._meta.label_lower,
+                'show': True,  # init show flag
+                **self.get_verbose_fields(element),
+            }
+        element_node = self._fields_cache[element.id].copy()
 
         if element_type in ('page', 'questionset', 'question'):
             # for pages, questionsets and questions evaluate conditions
@@ -136,6 +143,13 @@ class AnswerTree:
             'set_prefix': set_prefix,
             'set_index': set_index
         }
+
+        # Include name for collection items (if present)
+        if 'set' in self.verbose and element.is_collection:
+            key= (element.attribute_id, set_prefix, set_index)
+            if key in self.attribute_set_values_map:
+                if value := self.attribute_set_values_map[key]:
+                    set_node.update({'set_name': value[0].value})
 
         # compute the next level of nodes
         set_node['elements'] = [
@@ -269,3 +283,21 @@ class AnswerTree:
             parts = descendant_set_prefix.split('|')
             if level < len(parts):
                 return ('|'.join(parts[:level]) if level else '', int(parts[level]))
+
+    @staticmethod
+    def flatten(treedata, prefix=''):
+        if 'model' in treedata:
+            yield {
+                'prefix': prefix,
+                **{x: treedata[x] for x in ["title", 'help', 'text', 'values', 'model']
+                    if x in treedata and ('show' not in treedata or treedata['show'])}
+            }
+
+        if 'elements' in treedata:
+            for child_node in treedata['elements']:
+                yield from AnswerTree.flatten(child_node, prefix)
+        if 'sets' in treedata:
+            for child_node in treedata['sets']:
+                if 'set_name' in child_node:
+                    prefix = f"[{child_node['set_name']}] {prefix}"
+                yield from AnswerTree.flatten(child_node, prefix)

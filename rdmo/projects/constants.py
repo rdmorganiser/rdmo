@@ -17,3 +17,5 @@ ROLE_RANKS = {
     ROLE_AUTHOR: 1,
     ROLE_GUEST: 0
 }
+
+ANSWERTREE_VERBOSE_TREE = ("catalog", "section", "page", "questionset", "question")

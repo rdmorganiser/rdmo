@@ -1,17 +1,40 @@
 {% load i18n %}
+{% load core_tags %}
 
-{% if hide_answers %}
-    <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
-{% else %}
-    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
-{% endif %}
 
-<p>
-    {% if not hide_answers %}
-    {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
-    {% else %}
-    {% trans 'In the following, you can find all questions from the current questionnaire for this project.' %}
+{% for node in answertree %}
+    {% if node.model %}
+        {% if node.model == "questions.catalog" %}
+            <h1>{{ node.title | safe }}</h1>
+            {% if include_answers %}
+                <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+            {% else %}
+                <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
+            {% endif %}
+        {% elif node.model == "questions.section" %}
+            <h2>{{ node.title | safe }}</h2>
+        {% elif node.model == "questions.page" %}
+            <h3>{{ node.title | safe }}</h3>
+        {% elif node.model == "questions.questionset" %}
+            <h4>{{ node.title | safe }}</h4>
+        {% elif node.model == "questions.question" %}
+            <h5>{{ node.prefix }}{{ node.text | safe }}</h5>
+        {% endif %}
+
+        {% if include_help and "help" in node and node.help %}
+            <div class="help-text text-muted mb-3">
+                {{node.help | safe}}
+            </div>
+        {% endif %}
+
+        {% if include_answers and node.model == "questions.question" %}
+            {% if node.values|length == 1 %}
+                {% include 'views/tags/value.html' with value=node.values|first %}
+            {% else %}
+            <ul>
+                {% include 'views/tags/value_list.html' with values=node.values %}
+            </ul>
+            {% endif %}
+        {% endif %}
     {% endif %}
-</p>
-
-{% include 'projects/project_answers_tree.html' %}
+{% endfor %}
