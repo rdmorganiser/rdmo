@@ -95,6 +95,37 @@ class HasProjectProgressObjectPermission(HasProjectPermission):
             return ('projects.view_project_object', )
 
 
+class HasProjectCreatePermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        # projects.add_project is also a rule (see rules.py), so this works for regular users as well
+        return ('projects.add_project', )
+
+
+class HasProjectExportModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        return ('projects.view_project', )
+
+
+class HasProjectExportObjectPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        return ('projects.export_project_object', )
+
+
+class HasProjectImportModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        return ('projects.change_project', )
+
+
+class HasProjectImportObjectPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        return ('projects.import_project_object', )
+
+
 class HasProjectIssueSendModelPermission(HasModelPermission):
 
     def get_required_permissions(self, method, model_cls):

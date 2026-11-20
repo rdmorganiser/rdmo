@@ -55,7 +55,7 @@ def bootstrap_form_field(field, **kwargs):
         'field': field
     }
 
-    if field.widget_type in ['text', 'email', 'password']:
+    if field.widget_type in ['text', 'email', 'password', 'url']:
         return render_to_string('core/forms/bootstrap_input.html', context)
     else:
         return render_to_string(f'core/forms/bootstrap_{field.widget_type}.html', context)

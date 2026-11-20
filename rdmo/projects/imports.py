@@ -49,18 +49,6 @@ class Import(Plugin):
         self.tasks = []
         self.views = []
 
-    def render(self):
-        raise NotImplementedError
-
-    def submit(self):
-        raise NotImplementedError
-
-    def check(self):
-        raise NotImplementedError
-
-    def process(self):
-        raise NotImplementedError
-
     def get_attribute(self, attribute_uri):
         try:
             return self._attributes.get(attribute_uri)
