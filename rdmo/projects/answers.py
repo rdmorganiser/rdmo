@@ -35,13 +35,9 @@ class AnswerTree:
     def get_verbose_fields(self, element):
         element_type = element._meta.model_name
 
-        if element.id in self._fields_cache:
-            return self._fields_cache[element.id]
-
         # optionally, add the rendered title, help and texts
         if element_type not in self.verbose:
-            self._fields_cache[element.id] = {}
-            return self._fields_cache[element.id]
+            return {}
 
         fields = {
             'uri': element.uri,
@@ -62,8 +58,7 @@ class AnswerTree:
             if 'help' in self.verbose:
                 fields['help'] =  markdown2html(element.help)
 
-        self._fields_cache[element.id] = fields
-        return self._fields_cache[element.id]
+        return fields
 
     def compute_element_node(self, element, parent_set=None):
         # recursive function, which will be called for each element
