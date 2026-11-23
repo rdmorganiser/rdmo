@@ -10,8 +10,8 @@ from rdmo.views.templatetags import view_tags
 from rdmo.views.utils import ProjectWrapper
 
 from .renderers import XMLRenderer
-from .serializers.export import ProjectSerializer as ProjectExportSerializer
-from .serializers.export import SnapshotSerializer as SnapshotExportSerializer
+from .serializers.exports import ProjectSerializer as ProjectExportSerializer
+from .serializers.exports import SnapshotSerializer as SnapshotExportSerializer
 
 
 class Export(Plugin):
