@@ -123,11 +123,14 @@ class CatalogNestedSerializer(
             yield SectionNestedSerializer(element, context=self.context).data
 
 
-class CatalogIndexSerializer(serializers.ModelSerializer):
+class CatalogIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = Catalog
         fields = (
             'id',
+            'model',
             'uri'
         )

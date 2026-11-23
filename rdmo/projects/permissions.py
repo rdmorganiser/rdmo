@@ -71,6 +71,12 @@ class HasProjectPagePermission(HasProjectPermission):
         return ('projects.view_page_object', )
 
 
+class HasProjectLeavePermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        return ('projects.leave_project_object', )
+
+
 class HasProjectProgressModelPermission(HasModelPermission):
 
     def get_required_permissions(self, method, model_cls):
@@ -87,6 +93,22 @@ class HasProjectProgressObjectPermission(HasProjectPermission):
             return ('projects.change_project_progress_object', )
         else:
             return ('projects.view_project_object', )
+
+
+class HasProjectIssueSendModelPermission(HasModelPermission):
+
+    def get_required_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_issue', )
+        return super().get_required_permissions(method, model_cls)
+
+
+class HasProjectIssueSendObjectPermission(HasProjectPermission):
+
+    def get_required_object_permissions(self, method, model_cls):
+        if method == 'POST':
+            return ('projects.change_issue_object', )
+        return super().get_required_object_permissions(method, model_cls)
 
 
 class HasProjectVisibilityModelPermission(HasModelPermission):

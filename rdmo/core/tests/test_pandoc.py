@@ -18,11 +18,8 @@ from ..pandoc import (
 
 rdmo_path = Path(apps.get_app_config('rdmo').path)
 
-testing_path = rdmo_path.parent / 'testing'
 reference_docx_path = rdmo_path / 'share' / 'reference.docx'
 reference_odt_path = rdmo_path / 'share' / 'reference.odt'
-static_root_path = testing_path / 'static_root'
-media_root_test_path = testing_path / 'media_root' / 'test'
 
 pandoc_versions = [
     '2.0.0',
@@ -40,29 +37,54 @@ export_formats = [
     'pdf'
 ]
 
-pandoc_args_map = {
-    '2.0.0': {
-        'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=xelatex', f'--resource-path={static_root_path}'],
-        'rtf': ['--standalone', f'--resource-path={static_root_path}'],
-        'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
-        'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
-        'other': [f'--resource-path={static_root_path}']
-    },
-    '3.0.0': {
-        'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=lualatex', f'--resource-path={static_root_path}'],
-        'rtf': ['--standalone', f'--resource-path={static_root_path}'],
-        'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
-        'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
-        'other': [f'--resource-path={static_root_path}']
-    },
-    '3.5.0': {
-        'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=lualatex', f'--resource-path={static_root_path}'],
-        'rtf': ['--standalone', f'--resource-path={static_root_path}'],
-        'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
-        'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
-        'other': [f'--resource-path={static_root_path}']
+
+@pytest.fixture(scope='session')
+def testing_path(pytestconfig):
+    return pytestconfig.rootpath / 'testing'
+
+
+@pytest.fixture
+def pandoc_args_map(testing_path):
+    static_root_path = testing_path / 'static_root'
+    return {
+        '2.0.0': {
+            'pdf': [
+                '-V',
+                'geometry:a4paper, margin=1in',
+                '--pdf-engine=xelatex',
+                f'--resource-path={static_root_path}',
+            ],
+            'rtf': ['--standalone', f'--resource-path={static_root_path}'],
+            'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
+            'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
+            'other': [f'--resource-path={static_root_path}'],
+        },
+        '3.0.0': {
+            'pdf': [
+                '-V',
+                'geometry:a4paper, margin=1in',
+                '--pdf-engine=lualatex',
+                f'--resource-path={static_root_path}',
+            ],
+            'rtf': ['--standalone', f'--resource-path={static_root_path}'],
+            'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
+            'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
+            'other': [f'--resource-path={static_root_path}'],
+        },
+        '3.5.0': {
+            'pdf': [
+                '-V',
+                'geometry:a4paper, margin=1in',
+                '--pdf-engine=lualatex',
+                f'--resource-path={static_root_path}',
+            ],
+            'rtf': ['--standalone', f'--resource-path={static_root_path}'],
+            'docx': [f'--reference-doc={reference_docx_path}', f'--resource-path={static_root_path}'],
+            'odt': [f'--reference-doc={reference_odt_path}', f'--resource-path={static_root_path}'],
+            'other': [f'--resource-path={static_root_path}'],
+        },
     }
-}
+
 
 class MockedView:
     uri = 'http://example.com/terms/views/view'
@@ -76,7 +98,7 @@ def test_get_pandoc_version(mocker, pandoc_version):
 
 @pytest.mark.parametrize('pandoc_version', pandoc_versions)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_get_pandoc_args(settings, mocker, pandoc_version, export_format):
+def test_get_pandoc_args(settings, mocker, pandoc_args_map, pandoc_version, export_format):
     mocker.patch('pypandoc.get_pandoc_version', return_value=pandoc_version)
     pandoc_args = pandoc_args_map[pandoc_version].get(export_format, pandoc_args_map[pandoc_version]['other'])
 
@@ -85,10 +107,10 @@ def test_get_pandoc_args(settings, mocker, pandoc_version, export_format):
 
 @pytest.mark.parametrize('pandoc_version', pandoc_versions)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_get_pandoc_args_resource_path(settings, mocker, pandoc_version, export_format):
+def test_get_pandoc_args_resource_path(settings, mocker, testing_path, pandoc_args_map, pandoc_version, export_format):
     mocker.patch('pypandoc.get_pandoc_version', return_value=pandoc_version)
+    media_root_test_path = testing_path / 'media_root' / 'test'
     pandoc_args = pandoc_args_map[pandoc_version].get(export_format, pandoc_args_map[pandoc_version]['other']).copy()
-
     assert get_pandoc_args(export_format, {'resource_path': 'test'}) == [
         pandoc_arg + os.pathsep + str(media_root_test_path) if pandoc_arg.startswith('--resource-path=') else pandoc_arg
         for pandoc_arg in pandoc_args

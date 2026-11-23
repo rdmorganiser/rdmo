@@ -1,33 +1,45 @@
 {% load i18n %}
+{% load core_tags %}
 
-{% if settings.SHIBBOLETH %}
-<p style="margin-bottom: 20px;">
-    <a class="btn btn-success extend" href="{% url 'shibboleth_login' %}">
-        {% trans 'Login with Shibboleth' %}
-    </a>
-</p>
-{% endif %}
+<div class="login-form">
+    <form method="post" action="{% url 'account_login' %}">
+        {% csrf_token %}
 
-{% if settings.LOGIN_FORM %}
-<form method="post" action="{% url 'account_login' %}">
-    {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% elif next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
 
-    {% if redirect_field_value %}
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% elif next %}
-    <input type="hidden" name="next" value="{{ next }}" />
+        {% for field in form.visible_fields %}
+            {% bootstrap_form_field field %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">
+            {% trans 'Login' %}
+        </button>
+
+        {% for error in form.non_field_errors %}
+        <ul class="text-danger list-unstyled mt-3 mb-0">
+            <li>{{ error }}</li>
+        </ul>
+        {% endfor %}
+    </form>
+
+    {% if settings.ACCOUNT %}
+    <div class="mt-3">
+        {% url 'account_reset_password' as reset_url %}
+        {% blocktrans trimmed %}
+        If you forgot your password and want to reset it, click <a href="{{ reset_url }}">here</a>.
+        {% endblocktrans %}
+    </div>
     {% endif %}
 
-    {% include 'core/bootstrap_form_fields.html' %}
-
-    <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
-</form>
-{% endif %}
-
-{% if settings.ACCOUNT %}
-{% include 'account/login_form_account.html' %}
-{% endif %}
-
-{% if settings.SOCIALACCOUNT %}
-{% include 'account/login_form_socialaccount.html' %}
-{% endif %}
+    {% if settings.ACCOUNT_SIGNUP %}
+    <div class="mt-3">
+        {% blocktrans trimmed %}
+        If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.
+        {% endblocktrans %}
+    </div>
+    {% endif %}
+</div>

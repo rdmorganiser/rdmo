@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import uniqueId from 'lodash/uniqueId'
-import FieldRow from './FieldRow'
 import isString from 'lodash/isString'
+
+import Field from './Field'
 
 const excludeKeys = [
   'import',
@@ -38,18 +38,20 @@ export const serializeValue = (value) => {
 const Fields = ({ element }) => {
 
   return (
-    <div className="mt-10">
-      {Object.entries(element)
-        .sort()
-        .map(([key, value]) => {
-          if (!excludeKeys.includes(key)) {
-            const serializedValue = serializeValue(value)
-            if (serializedValue !== '' || (element.changedFields?.includes(key))) {
-              return <FieldRow key={uniqueId()} element={element} keyName={key} value={serializedValue} />
+    <div>
+      {
+        Object.entries(element)
+          .sort()
+          .map(([key, value]) => {
+            if (!excludeKeys.includes(key)) {
+              const serializedValue = serializeValue(value)
+              if (serializedValue !== '' || (element.changedFields?.includes(key))) {
+                return <Field key={key} element={element} keyName={key} value={serializedValue} />
+              }
             }
-          }
-          return null
-        })}
+            return null
+          })
+      }
     </div>
   )
 }

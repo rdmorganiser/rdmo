@@ -1,30 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import isString from 'lodash/isString'
-
-const MainErrors = ({ errors }) => {
-  return (
-    <div className="errors">
-      <div className="panel panel-default">
-        <div className="panel-body text-danger">
-          <p>
-            <strong>{gettext('One or more errors occurred:')}</strong>
-          </p>
-          <ul className="mb-0">
-            { errors.map((error, index) => <li key={index}>{error}</li>) }
-          </ul>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-MainErrors.propTypes = {
-  errors: PropTypes.array
-}
+import { isEmpty, isString } from 'lodash'
 
 const ElementErrors = ({ element }) => {
-  if (element.errors) {
+  if (!isEmpty(element.errors)) {
     const errorList = Object.values(element.errors).flat().reduce((acc, cur) => {
       if (isString(cur)) {
         acc.push(cur)
@@ -37,7 +16,7 @@ const ElementErrors = ({ element }) => {
       return acc
     }, [])
 
-    return element.errors && (
+    return (
       <ul className="list-unstyled text-danger mb-0">
         {errorList.map((error, index) => <li key={index}>{error}</li>)}
       </ul>
@@ -51,4 +30,4 @@ ElementErrors.propTypes = {
   element: PropTypes.object.isRequired
 }
 
-export { MainErrors, ElementErrors }
+export { ElementErrors }

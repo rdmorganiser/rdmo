@@ -1,7 +1,7 @@
 import isNil from 'lodash/isNil'
 import isUndefined from 'lodash/isUndefined'
 
-import { elementTypes, elementModules } from '../constants/elements'
+import { elementModules, elementTypes } from '../constants/elements'
 
 const compareElements = (element1, element2) => {
   return element1.model == element2.model && element1.id == element2.id
@@ -43,7 +43,9 @@ function canMoveElement(dragElement, dropElement) {
 }
 
 function moveElement(element, dragElement, dropElement, mode) {
-  const dragParent = removeElement(element, dragElement)
+  let dragParent = removeElement(element, dragElement)
+  updateElementElements(dragParent)
+  element = updateElement(element, dragParent)
 
   let dropParent
   switch (mode) {
@@ -54,18 +56,19 @@ function moveElement(element, dragElement, dropElement, mode) {
       dropParent = insertAfterElement(element, dragElement, dropElement)
       break
     default:
-      dropParent = insertInElement(dragElement, dropElement)
+      dropParent = insertInElement(element, dragElement, dropElement)
       break
   }
 
-  updateElementElements(dragParent)
+  updateElementElements(dropParent)
+  element = updateElement(element, dropParent)
+
   if (compareElements(dragParent, dropParent)) {
+    dragParent = dropParent
     dropParent = null
-  } else {
-    updateElementElements(dropParent)
   }
 
-  return { dragParent, dropParent }
+  return { element, dragParent, dropParent }
 }
 
 function removeElement(element, dragElement) {
@@ -74,12 +77,13 @@ function removeElement(element, dragElement) {
   const dragIndex = element.elements.findIndex(el => compareElements(el, dragElement))
   if (dragIndex > -1) {
     // remove the element
-    element.elements.splice(dragIndex, 1)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dragIndex, 1)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => removeElement(el, dragElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
@@ -89,12 +93,13 @@ function insertBeforeElement(element, dragElement, dropElement) {
   const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
   if (dropIndex > -1) {
     // insert the dragElement before the dropElement
-    element.elements.splice(dropIndex, 0, dragElement)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dropIndex, 0, dragElement)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertBeforeElement(el, dragElement, dropElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
@@ -104,19 +109,24 @@ function insertAfterElement(element, dragElement, dropElement) {
   const dropIndex = element.elements.findIndex(el => compareElements(el, dropElement))
   if (dropIndex > -1) {
     // insert the dragElement after the dropElement
-    element.elements.splice(dropIndex + 1, 0, dragElement)
-    return element
+    const elements = [...element.elements]
+    elements.splice(dropIndex + 1, 0, dragElement)
+    return { ...element, elements }
   } else {
     // call the function recursively and return the first element which is not null
     return element.elements.map(el => insertAfterElement(el, dragElement, dropElement))
-                           .find(el => !isNil(el))
+      .find(el => !isNil(el))
   }
 }
 
-function insertInElement(dragElement, dropElement) {
-  const dropParent = dropElement
-  dropParent.elements = [dragElement, ...dropParent.elements]
-  return dropParent
+function insertInElement(element, dragElement, dropElement) {
+  if (compareElements(element, dropElement)) {
+    return { ...element, elements: [dragElement, ...element.elements] }
+  } else if (!isUndefined(element.elements)) {
+    return element.elements.map(el => insertInElement(el, dragElement, dropElement))
+      .find(el => !isNil(el))
+  }
+  return null
 }
 
 function updateElementElements(element) {
@@ -196,7 +206,7 @@ const buildUri = (element) => {
 const buildPathForAttribute = (key, parentUri) => {
   let path = key
   if (parentUri) {
-     if (parentUri.includes('/domain/')) {
+    if (parentUri.includes('/domain/')) {
       // construct the path using parentUri directly
       const parentPath = parentUri.split('/domain/')[1]
       path = parentPath ? `${parentPath}/${key}` : key
@@ -206,7 +216,14 @@ const buildPathForAttribute = (key, parentUri) => {
   return path
 }
 
-
-
-export { compareElements, updateElement, resetElement, canMoveElement, moveElement, findDescendants,
-         updateWarning, buildUri, buildPathForAttribute }
+export {
+  buildPathForAttribute,
+  buildUri,
+  canMoveElement,
+  compareElements,
+  findDescendants,
+  moveElement,
+  resetElement,
+  updateElement,
+  updateWarning
+}

@@ -239,6 +239,7 @@ class Page(Model, TranslationMixin):
             'uri': self.uri,
             'title': self.title,
             'short_title': self.short_title,
+            'help': self.help,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'conditions': [condition.uri for condition in self.conditions.all()],

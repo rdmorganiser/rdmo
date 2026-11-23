@@ -77,11 +77,14 @@ class ViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin,
         )
 
 
-class ViewIndexSerializer(serializers.ModelSerializer):
+class ViewIndexSerializer(ElementModelSerializerMixin, serializers.ModelSerializer):
+
+    model = serializers.SerializerMethodField()
 
     class Meta:
         model = View
         fields = (
             'id',
+            'model',
             'uri'
         )
