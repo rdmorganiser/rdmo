@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import threading
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -225,13 +226,14 @@ def human2bytes(string):
 def is_truthy(value):
     return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
-
-md = Markdown()
+thread_data = threading.local()
 
 def markdown2html(markdown_string):
+    if not hasattr(thread_data, 'md'):
+        thread_data.md = Markdown()
+
     # use a module level Markdown instance for better performance
-    html = md.convert(force_str(markdown_string)).strip()
-    md.reset()
+    html = thread_data.md.reset().convert(force_str(markdown_string)).strip()
 
     # strip the outer paragraph
     html = re.sub(r'^<p>(.*?)</p>$',r'\1', html)
