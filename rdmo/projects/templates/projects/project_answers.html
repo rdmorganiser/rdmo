@@ -1,29 +1,27 @@
 {% load i18n %}
-{% load core_tags %}
-
 
 {% for node in answer_tree_nodes %}
     {% if node.model %}
         {% if node.model == "questions.catalog" %}
-            <h1>{{ node.title | safe }}</h1>
+            <h1>{{ node.title|safe }}</h1>
             {% if include_answers %}
                 <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
             {% else %}
                 <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
             {% endif %}
         {% elif node.model == "questions.section" %}
-            <h2>{{ node.title | safe }}</h2>
+            <h2>{{ node.title|safe }}</h2>
         {% elif node.model == "questions.page" %}
-            <h3>{{ node.title | safe }}</h3>
+            <h3>{{ node.title|safe }}</h3>
         {% elif node.model == "questions.questionset" %}
-            <h4>{{ node.title | safe }}</h4>
+            <h4>{{ node.title|safe }}</h4>
         {% elif node.model == "questions.question" %}
-            <h5>{{ node.prefix }}{{ node.text | safe }}</h5>
+            <h5>{{ node.prefix }}{{ node.text|safe }}</h5>
         {% endif %}
 
         {% if include_help and "help" in node and node.help %}
             <div class="help-text text-muted mb-3">
-                {{node.help | safe}}
+                {{node.help|safe}}
             </div>
         {% endif %}
 

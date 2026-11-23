@@ -254,12 +254,13 @@ def test_answer_tree_verbose(db, verbose):
         else:
             assert EXPECTED_KEYS[element_type].isdisjoint(node.keys())
 
+
 @pytest.mark.parametrize('verbose', [
     (),
-    ('catalog', 'page', 'questionset', 'question','help',),
+    ('catalog', 'page', 'questionset', 'question', 'help',),
 ])
 def test_answer_tree_help(db, verbose):
-    EXPECT_HELP_IN = {
+    EXPECTED_HELP_IN = {
         'catalog',
         'page',
         'questionset',
@@ -273,10 +274,11 @@ def test_answer_tree_help(db, verbose):
         if 'model' not in node:
             continue
         element_type = node['model'].split('.')[1]
-        if element_type in EXPECT_HELP_IN:
+        if element_type in EXPECTED_HELP_IN:
             assert ('help' in node) == ('help' in verbose)
         else:
             assert 'help' not in node
+
 
 @pytest.mark.parametrize('verbose', [
     (),

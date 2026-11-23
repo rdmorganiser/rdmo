@@ -141,7 +141,7 @@ def test_view_snapshot_export_not_found(db, client, username, password):
 
 
 @pytest.mark.parametrize('include_answers', [True, False])
-def test_view_hides_answers(db, client, include_answers):
+def test_view_includes_answers(db, client, include_answers):
     project_id = projects[0]
     username, password = users[0]
 
@@ -158,7 +158,7 @@ def test_view_hides_answers(db, client, include_answers):
 
 @pytest.mark.parametrize('include_answers', [True, False])
 @pytest.mark.parametrize('export_format', export_formats)
-def test_view_export_hides_answers(db, client, export_format, include_answers):
+def test_view_export_includes_answers(db, client, export_format, include_answers):
     project_id = projects[0]
     username, password = users[0]
 

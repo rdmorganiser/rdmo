@@ -31,7 +31,7 @@ def flatten_answer_tree_data(treedata, prefix=''):
     if 'model' in treedata:
         yield {
             'prefix': prefix,
-            **{x: treedata[x] for x in ["title", 'help', 'text', 'values', 'model']
+            **{x: treedata[x] for x in ['title', 'help', 'text', 'values', 'model']
                 if x in treedata and ('show' not in treedata or treedata['show'])}
         }
 
