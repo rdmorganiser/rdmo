@@ -2,7 +2,7 @@
 {% load core_tags %}
 
 
-{% for node in answertree %}
+{% for node in answer_tree_nodes %}
     {% if node.model %}
         {% if node.model == "questions.catalog" %}
             <h1>{{ node.title | safe }}</h1>

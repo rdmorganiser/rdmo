@@ -165,12 +165,6 @@ class Project(MPTTModel, Model):
             verbose=verbose
         ).compute(values)
 
-    def flat_answer_tree(self, snapshot=None, verbose=None):
-        """
-        this is ugly?...
-        """
-        return AnswerTree.flatten(self.get_answer_tree(snapshot=snapshot, verbose=verbose))
-
     def get_cached_ancestors(self):
         # this caches the ancestors, different to a @cached_property, this is also done
         # in the __init__ of ProjectSerializer

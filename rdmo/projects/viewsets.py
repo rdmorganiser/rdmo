@@ -111,6 +111,7 @@ from .utils import (
     compute_set_prefix_from_set_value,
     compute_value_maps,
     copy_project,
+    flatten_answer_tree_data,
     get_contact_message,
     get_issue_send_content,
     get_upload_accept,
@@ -591,7 +592,8 @@ class ProjectViewSet(ModelViewSet):
             'html': render_to_string('projects/project_answers.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.flat_answer_tree(snapshot=snapshot, verbose=verbose),
+                'answer_tree_nodes': flatten_answer_tree_data(
+                    project.get_answer_tree(snapshot=snapshot, verbose=verbose)),
                 'include_help': include_help,
                 'include_answers': include_answers,
             }),
@@ -637,7 +639,8 @@ class ProjectViewSet(ModelViewSet):
         return render_to_format(self.request, export_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.flat_answer_tree(snapshot=snapshot, verbose=verbose),
+                'answer_tree_nodes': flatten_answer_tree_data(
+                    project.get_answer_tree(snapshot=snapshot, verbose=verbose)),
                 'include_help': include_help,
                 'include_answers': include_answers,
             })

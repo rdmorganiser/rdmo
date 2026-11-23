@@ -26,6 +26,26 @@ def get_value_path(project, snapshot=None):
         return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
 
 
+def flatten_answer_tree_data(treedata, prefix=''):
+    # compute flat list of nodes from tree, ordered by depth-first-traversal
+    if 'model' in treedata:
+        yield {
+            'prefix': prefix,
+            **{x: treedata[x] for x in ["title", 'help', 'text', 'values', 'model']
+                if x in treedata and ('show' not in treedata or treedata['show'])}
+        }
+
+    if 'elements' in treedata:
+        for child_node in treedata['elements']:
+            yield from flatten_answer_tree_data(child_node, prefix)
+    if 'sets' in treedata:
+        for child_node in treedata['sets']:
+            if 'set_name' in child_node:
+                yield from flatten_answer_tree_data(child_node, prefix=f"[{child_node['set_name']}] {prefix}")
+            else:
+                yield from flatten_answer_tree_data(child_node, prefix)
+
+
 def render_attachments(request, project, data):
     snapshot = data.get('attachments_snapshot')
     attachments_format = data.get('attachments_format')
@@ -39,8 +59,8 @@ def render_attachments(request, project, data):
             request, attachments_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'answertree': project.flat_answer_tree(
-                    snapshot=snapshot, verbose=(*ANSWERTREE_VERBOSE_TREE, 'set', 'value')),
+                'answer_tree_nodes': flatten_answer_tree_data(
+                    project.get_answer_tree(snapshot=snapshot, verbose=(*ANSWERTREE_VERBOSE_TREE, 'set', 'value'))),
                 'include_answers': True,
             }
         )
