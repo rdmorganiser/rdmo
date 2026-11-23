@@ -300,5 +300,6 @@ class AnswerTree:
         if 'sets' in treedata:
             for child_node in treedata['sets']:
                 if 'set_name' in child_node:
-                    prefix = f"[{child_node['set_name']}] {prefix}"
-                yield from AnswerTree.flatten(child_node, prefix)
+                    yield from AnswerTree.flatten(child_node, prefix=f"[{child_node['set_name']}] {prefix}")
+                else:
+                    yield from AnswerTree.flatten(child_node, prefix)
