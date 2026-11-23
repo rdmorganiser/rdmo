@@ -13,7 +13,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
 
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.mail import send_mail
@@ -506,10 +505,7 @@ def handle_upload(request, current_project=None):
 
     plugin.process()
 
-    return Response({
-        'key': plugin.key,
-        'label': plugin.label
-    })
+    return plugin.render()
 
 
 def find_import_plugin(request, file_name, current_project=None):

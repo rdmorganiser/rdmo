@@ -4,10 +4,13 @@ import logging
 import mimetypes
 
 from django import forms
-from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.http import Http404
 from django.shortcuts import redirect, render
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+
+from rest_framework.response import Response
 
 import requests
 
@@ -17,12 +20,11 @@ from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
-from rdmo.tasks.models import Task
-from rdmo.views.models import View
 
 from .models import Project, Snapshot, Value
+from .serializers.imports import ProjectSerializer as ProjectImportSerializer
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Import(Plugin):
@@ -32,46 +34,10 @@ class Import(Plugin):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.file_name = None
-        self.source_title = None
-        self.current_project = None
         self.project = None
-        self.catalog = None
-
-        self._attributes = {attribute.uri: attribute for attribute in Attribute.objects.all()}
-        self._options = {option.uri: option for option in Option.objects.all()}
-        self._tasks = {task.uri: task for task in Task.objects.all()}
-        self._views = {view.uri: view for view in View.objects.all()}
-
-        self.values = []
-        self.snapshots = []
-        self.tasks = []
-        self.views = []
-
-    def get_attribute(self, attribute_uri):
-        try:
-            return self._attributes.get(attribute_uri)
-        except KeyError:
-            log.info('Attribute %s not in db. Skipping.', attribute_uri)
-
-    def get_option(self, option_uri):
-        try:
-            return self._options.get(option_uri)
-        except KeyError:
-            log.info('Option %s not in db. Skipping.', option_uri)
-
-    def get_task(self, tasks_uri):
-        try:
-            return self._tasks.get(tasks_uri)
-        except KeyError:
-            log.info('Task %s not in db. Skipping.', tasks_uri)
-
-    def get_view(self, view_uri):
-        try:
-            return self._views.get(view_uri)
-        except KeyError:
-            log.info('View %s not in db. Skipping.', view_uri)
+        self.now = now()
+        self.attributes = {attribute.uri: attribute for attribute in Attribute.objects.all()}
+        self.options = {option.uri: option for option in Option.objects.all()}
 
 
 class RDMOXMLImport(Import):
@@ -79,6 +45,20 @@ class RDMOXMLImport(Import):
     accept = {
         'application/xml': ['.xml']
     }
+
+    def render(self):
+        if not self.project:
+            raise Http404
+
+        serializer = ProjectImportSerializer(self.project)
+        return Response(serializer.data)
+
+
+    def submit(self):
+        if not self.project:
+            raise Http404
+
+        return Response({})
 
     def check(self) -> bool:
         file_type, _encoding = mimetypes.guess_type(self.file_name)
@@ -89,133 +69,178 @@ class RDMOXMLImport(Import):
                 return True
         return False
 
-
     def process(self):
-        if self.current_project is None:
-            catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
+        self.project = Project()
+        self.project.title = self.get_title()
+        self.project.description = self.get_description()
+        self.project.created = self.get_created()
+        self.project.updated = self.get_updated()
+        self.project.catalog = self.get_catalog()
+        self.project._values = self.get_values()
+        self.project._snapshots = self.get_snapshots()
 
-            available_catalogs = Catalog.objects.filter_for_user(self.request.user)
+    def get_title(self):
+        return self.root.find('title').text or ''
 
-            try:
-                self.catalog = available_catalogs.get(uri=catalog_uri)
-            except Catalog.DoesNotExist:
-                log.info('Catalog with uri %s does not exists. Used first available catalog.', catalog_uri)
-                self.catalog = available_catalogs.first()
+    def get_description(self):
+        return self.root.find('description').text or ''
 
-            if self.catalog is None:
-                log.info('No catalog is available.')
-                raise ValidationError('No catalog is available.')
+    def get_created(self):
+        return self.root.find('created').text or self.now
 
-            self.project = Project()
-            self.project.title = self.root.find('title').text or ''
-            self.project.description = self.root.find('description').text or ''
-            self.project.created = self.root.find('created').text
-            self.project.catalog = self.catalog
-        else:
-            self.catalog = self.current_project.catalog
+    def get_updated(self):
+        return self.now
 
-        tasks_node = self.root.find('tasks')
-        if tasks_node is not None:
-            for task_node in tasks_node.findall('task'):
-                task_uri = get_uri(task_node, self.ns_map)
-                if task_uri:
-                    task = self.get_task(task_uri)
-                    if task:
-                        self.tasks.append(task)
+    def get_catalog(self):
+        catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
 
-        views_node = self.root.find('views')
-        if views_node is not None:
-            for view_node in views_node.findall('view'):
-                view_uri = get_uri(view_node, self.ns_map)
-                if view_uri:
-                    view = self.get_view(view_uri)
-                    if view:
-                        self.views.append(view)
+        available_catalogs = Catalog.objects.filter_for_user(self.request.user)
 
+        try:
+            return available_catalogs.get(uri=catalog_uri)
+        except Catalog.DoesNotExist:
+            logger.info('Catalog with uri %s does not exists. Used first available catalog.', catalog_uri)
+            return available_catalogs.first()
+
+    def get_values(self):
         values_node = self.root.find('values')
         if values_node is not None:
-            for value_node in values_node.findall('value'):
-                self.values.append(self.get_value(value_node))
+            return [
+                self.get_value(value_node)
+                for value_node in values_node.findall('value')
+            ]
+        else:
+            return []
 
+    def get_snapshots(self):
         snapshots_node = self.root.find('snapshots')
         if snapshots_node is not None:
-            for snapshot_index, snapshot_node in enumerate(snapshots_node.findall('snapshot')):
-                if snapshot_node is not None:
-                    snapshot = Snapshot()
-                    snapshot.title = snapshot_node.find('title').text or ''
-                    snapshot.description = snapshot_node.find('description').text or ''
-                    snapshot.created = snapshot_node.find('created').text
+            return [
+                self.get_snapshot(snapshot_index, snapshot_node)
+                for snapshot_index, snapshot_node in enumerate(snapshots_node.findall('snapshot'))
+            ]
+        else:
+            return []
 
-                    snapshot_values = []
-                    snapshot_values_node = snapshot_node.find('values')
-                    if snapshot_values_node is not None:
-                        for snapshot_value_node in snapshot_values_node.findall('value'):
-                            snapshot_values.append(self.get_value(snapshot_value_node))
+    def get_snapshot(self, snapshot_index, snapshot_node):
+        snapshot = Snapshot()
+        snapshot.title = self.get_snapshot_title(snapshot_node)
+        snapshot.description = self.get_snapshot_description(snapshot_node)
+        snapshot.created = self.get_snapshot_created(snapshot_node)
+        snapshot.updated = self.get_snapshot_updated(snapshot_node)
 
-                    snapshot.snapshot_index = snapshot_index
-                    snapshot.snapshot_values = snapshot_values
+        snapshot._index = snapshot_index
+        snapshot._values = self.get_snapshot_values(snapshot_node)
 
-                    self.snapshots.append(snapshot)
+        return snapshot
+
+    def get_snapshot_title(self, snapshot_node):
+        return snapshot_node.find('title').text or ''
+
+    def get_snapshot_description(self, snapshot_node):
+        return snapshot_node.find('description').text or ''
+
+    def get_snapshot_created(self, snapshot_node):
+        return snapshot_node.find('created').text or self.now
+
+    def get_snapshot_updated(self, snapshot_node):
+        return self.now
+
+    def get_snapshot_values(self, snapshot_node):
+        snapshot_values_node = snapshot_node.find('values')
+        if snapshot_values_node is not None:
+            return [
+                self.get_value(value_node)
+                for value_node in snapshot_values_node.findall('value')
+            ]
+        else:
+            return []
 
     def get_value(self, value_node):
         value = Value()
+        value.attribute = self.get_value_attribute(value_node)
+        value.set_prefix = self.get_value_set_prefix(value_node)
+        value.set_index = self.get_value_set_index(value_node)
+        value.set_collection = self.get_value_set_collection(value_node)
+        value.collection_index = self.get_value_collection_index(value_node)
+        value.text = self.get_value_text(value_node)
+        value.option = self.get_value_option(value_node)
+        value.external_id = self.get_value_external_id(value_node)
+        value._file_name, value._file = self.get_value_file(value_node)
+        value.value_type = self.get_value_value_type(value_node)
+        value.unit = self.get_value_unit(value_node)
+        value.created = self.get_value_created(value_node)
+        value.updated = self.get_value_updated(value_node)
+        return value
 
+    def get_value_attribute(self, value_node):
         attribute_uri = get_uri(value_node.find('attribute'), self.ns_map)
         if attribute_uri is not None:
-            value.attribute = self.get_attribute(attribute_uri)
+            return self.attributes.get(attribute_uri)
 
+    def get_value_set_prefix(self, value_node):
         try:
-            value.set_prefix = value_node.find('set_prefix').text or ''
+            return value_node.find('set_prefix').text or ''
         except AttributeError:
-            value.set_prefix = ''
+            return ''
 
-        value.set_index = int(value_node.find('set_index').text)
+    def get_value_set_index(self, value_node):
+        return int(value_node.find('set_index').text)
 
+    def get_value_set_collection(self, value_node):
         try:
             set_collection_text = value_node.find('set_collection').text
             if set_collection_text == 'True':
-                value.set_collection = True
+                return True
             elif set_collection_text == 'False':
-                value.set_collection = False
+                return False
             else:
-                value.set_collection = None
+                return None
         except AttributeError:
-            value.set_collection = None
+            return None
 
-        value.collection_index = int(value_node.find('collection_index').text)
+    def get_value_collection_index(self, value_node):
+        return int(value_node.find('collection_index').text)
 
-        value.text = value_node.find('text').text or ''
+    def get_value_text(self, value_node):
+        return value_node.find('text').text or ''
 
+    def get_value_option(self, value_node):
         option_uri = get_uri(value_node.find('option'), self.ns_map)
         if option_uri:
-            value.option = self.get_option(option_uri)
+            return self.options.get(option_uri)
 
-        value.file_import = None
+    def get_value_file(self, value_node):
         file_node = value_node.find('file')
         if file_node is not None:
             file_string = file_node.text
             if file_string is not None:
-                value.file_import = {
-                    'name': file_node.attrib.get('name', 'file.dat'),
-                    'file': File(io.BytesIO(base64.b64decode(file_string)))
-                }
+                return (
+                    file_node.attrib.get('name', 'file.dat'),
+                    File(io.BytesIO(base64.b64decode(file_string)))
+                )
+        return (None, None)
 
-        value_type_node = value_node.find('value_type')
-        if value_type_node is not None:
-            value.value_type = value_type_node.text or ''
-
-        unit_node = value_node.find('unit')
-        if unit_node is not None:
-            value.unit = unit_node.text or ''
-
+    def get_value_external_id(self, value_node):
         external_id_node = value_node.find('external_id')
         if external_id_node is not None:
-            value.external_id = external_id_node.text or ''
+            return external_id_node.text or ''
 
-        value.created = value_node.find('created').text
-        value.updated = value_node.find('updated').text
+    def get_value_value_type(self, value_node):
+        value_type_node = value_node.find('value_type')
+        if value_type_node is not None:
+            return value_type_node.text or ''
 
-        return value
+    def get_value_unit(self, value_node):
+        unit_node = value_node.find('unit')
+        if unit_node is not None:
+            return unit_node.text or ''
+
+    def get_value_created(self, value_node):
+        return value_node.find('created').text or self.now
+
+    def get_value_updated(self, value_node):
+        return value_node.find('updated').text or self.now
 
 
 class URLImport(RDMOXMLImport):

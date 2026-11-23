@@ -45,7 +45,7 @@ xml_file = 'testing/xml/project.xml'
 @pytest.mark.parametrize('username', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('plugin_key', plugin_keys)
-def test_get(db, client, login, username, project_id, plugin_key):
+def test_import_get(db, client, login, username, project_id, plugin_key):
     login(username)
 
     url = reverse(urlnames['import'], args=[project_id, plugin_key])
@@ -62,7 +62,7 @@ def test_get(db, client, login, username, project_id, plugin_key):
 @pytest.mark.parametrize('username', users)
 @pytest.mark.parametrize('project_id', projects)
 @pytest.mark.parametrize('plugin_key', plugin_keys)
-def test_post(db, client, login, username, project_id, plugin_key):
+def test_import_post(db, client, login, username, project_id, plugin_key):
     login(username)
 
     url = reverse(urlnames['import'], args=[project_id, plugin_key])
@@ -78,7 +78,7 @@ def test_post(db, client, login, username, project_id, plugin_key):
 
 @pytest.mark.parametrize('username', users)
 @pytest.mark.parametrize('project_id', projects)
-def test_upload(db, client, login, username, project_id):
+def test_upload_post(db, client, login, username, project_id):
     login(username)
 
     url = reverse(urlnames['upload'], args=[project_id])
@@ -89,12 +89,12 @@ def test_upload(db, client, login, username, project_id):
         assert response.status_code == 401
     elif project_id in import_project_permission_map.get(username, []):
         assert response.status_code == 200
-        assert response.json()['key'] == 'xml'
+        assert response.json().get('title') == 'Test'
     else:
         assert response.status_code == 404
 
 
-def test_upload_no_file(db, client, login):
+def test_upload_post_no_file(db, client, login):
     login('owner')
 
     url = reverse(urlnames['upload'], args=[1])
@@ -104,7 +104,7 @@ def test_upload_no_file(db, client, login):
     assert 'uploaded_file' in response.json()
 
 
-def test_upload_unknown_file(db, client, login):
+def test_upload_post_unknown_file(db, client, login):
     login('owner')
 
     url = reverse(urlnames['upload'], args=[1])

@@ -34,7 +34,7 @@ xml_file = 'testing/xml/project.xml'
 
 @pytest.mark.parametrize('username', users)
 @pytest.mark.parametrize('plugin_key', plugin_keys)
-def test_get(db, client, login, username, plugin_key):
+def test_import_get(db, client, login, username, plugin_key):
     login(username)
 
     url = reverse(urlnames['import'], args=[plugin_key])
@@ -48,7 +48,7 @@ def test_get(db, client, login, username, plugin_key):
 
 @pytest.mark.parametrize('username', users)
 @pytest.mark.parametrize('plugin_key', plugin_keys)
-def test_post(db, client, login, username, plugin_key):
+def test_import_post(db, client, login, username, plugin_key):
     login(username)
 
     url = reverse(urlnames['import'], args=[plugin_key])
@@ -61,7 +61,7 @@ def test_post(db, client, login, username, plugin_key):
 
 
 @pytest.mark.parametrize('username', users)
-def test_upload(db, client, login, username):
+def test_upload_post(db, client, login, username):
     login(username)
 
     url = reverse(urlnames['upload'])
@@ -72,10 +72,10 @@ def test_upload(db, client, login, username):
         assert response.status_code == 401
     else:
         assert response.status_code == 200
-        assert response.json()['key'] == 'xml'
+        assert response.json().get('title') == 'Test'
 
 
-def test_upload_no_file(db, client, login):
+def test_upload_post_no_file(db, client, login):
     login('user')
 
     url = reverse(urlnames['upload'])
@@ -85,7 +85,7 @@ def test_upload_no_file(db, client, login):
     assert 'uploaded_file' in response.json()
 
 
-def test_upload_unknown_file(db, client, login):
+def test_upload_post_unknown_file(db, client, login):
     login('user')
 
     url = reverse(urlnames['upload'])
@@ -95,7 +95,7 @@ def test_upload_unknown_file(db, client, login):
     assert 'uploaded_file' in response.json()
 
 
-def test_upload_restricted(db, client, login, settings):
+def test_upload_post_restricted(db, client, login, settings):
     settings.PROJECT_CREATE_RESTRICTED = True
     login('user')
 
