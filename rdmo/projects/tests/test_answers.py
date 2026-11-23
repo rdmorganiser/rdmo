@@ -235,11 +235,11 @@ def test_answer_tree_nested_collection_sets(db, parent_index, child_indexes, nes
 ])
 def test_answer_tree_verbose(db, verbose):
     EXPECTED_KEYS = {
-        'catalog': {'uri', 'title', 'help'},
+        'catalog': {'uri', 'title'},
         'section': {'uri', 'title'},
-        'page': {'uri', 'title', 'help'},
-        'questionset': {'uri', 'title', 'help'},
-        'question': {'uri', 'text', 'help'},
+        'page': {'uri', 'title'},
+        'questionset': {'uri', 'title'},
+        'question': {'uri', 'text'},
     }
 
     project = Project.objects.get(pk=1)
@@ -253,6 +253,41 @@ def test_answer_tree_verbose(db, verbose):
             assert EXPECTED_KEYS[element_type] <= node.keys()
         else:
             assert EXPECTED_KEYS[element_type].isdisjoint(node.keys())
+
+@pytest.mark.parametrize('verbose', [
+    (),
+    ('catalog', 'page', 'questionset', 'question','help',),
+])
+def test_answer_tree_help(db, verbose):
+    EXPECT_HELP_IN = {
+        'catalog',
+        'page',
+        'questionset',
+        'question',
+    }
+
+    project = Project.objects.get(pk=1)
+    answer_tree = project.get_answer_tree(verbose=verbose)
+
+    for node in iter_answer_tree_nodes(answer_tree):
+        if 'model' not in node:
+            continue
+        element_type = node['model'].split('.')[1]
+        if element_type in EXPECT_HELP_IN:
+            assert ('help' in node) == ('help' in verbose)
+        else:
+            assert 'help' not in node
+
+@pytest.mark.parametrize('verbose', [
+    (),
+    ('set',),
+])
+def test_answer_tree_collection_name(db, verbose):
+    project = Project.objects.get(pk=1)
+    answer_tree = project.get_answer_tree(verbose=verbose)
+
+    has_set_name = any('set_name' in node for node in iter_answer_tree_nodes(answer_tree))
+    assert has_set_name == ('set' in verbose)
 
 
 @pytest.mark.parametrize('parent_set, set_level', [
