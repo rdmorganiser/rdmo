@@ -35,6 +35,11 @@ const QuestionReuseValues = ({ question, values, onCreate, onUpdate, onDelete })
   )
 
   const handleSubmit = () => {
+    // do not reuse the answers while one of the values is stored
+    if (values.some((value) => value.pending)) {
+      return
+    }
+
     if (isEmpty(formValues.value)) {
       setFormErrors([gettext('No answer to reuse selected.')])
     } else {

@@ -54,14 +54,15 @@ const PageHead = ({ sets, values, currentSet }) => {
         text
       }))
     } else {
-      // TODO: check if this code is ever executed
-      dispatch(copySet(currentSet, copySetValue, {
+      if (!dispatch(copySet(currentSet, copySetValue, {
         attribute: page.attribute,
         set_index: generateSetIndex(sets, currentSet),
         set_collection: page.is_collection,
         element: page,
         text
-      }))
+      }))) {
+        return
+      }
     }
     createModal.close()
   }
@@ -72,24 +73,27 @@ const PageHead = ({ sets, values, currentSet }) => {
   }
 
   const handleDelete = () => {
-    dispatch(deleteSet(currentSet, currentSetValue))
-    deleteModal.close()
+    if (dispatch(deleteSet(currentSet, currentSetValue))) {
+      deleteModal.close()
+    }
   }
 
   const handleCopy = (text) => {
-    dispatch(copySet(currentSet, currentSetValue, {
+    if (dispatch(copySet(currentSet, currentSetValue, {
       attribute: page.attribute,
       set_index: generateSetIndex(sets, currentSet),
       set_collection: page.is_collection,
       element: page,
       text
-    }))
-    copyModal.close()
+    }))) {
+      copyModal.close()
+    }
   }
 
   const handleImport = (copySetValue) => {
-    dispatch(copySet(currentSet, copySetValue, currentSetValue))
-    importModal.close()
+    if (dispatch(copySet(currentSet, copySetValue, currentSetValue))) {
+      importModal.close()
+    }
   }
 
   return page.is_collection && (
