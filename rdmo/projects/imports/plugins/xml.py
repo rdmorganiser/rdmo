@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 class XMLImport(Import):
 
     accept = {
-        'application/xml': ['.xml']
+        'application/xml': ['.xml'],
+        'text/xml': ['.xml'],
     }
 
     def render(self):
@@ -43,7 +44,7 @@ class XMLImport(Import):
 
     def check(self) -> bool:
         file_type, _encoding = mimetypes.guess_type(self.file_name)
-        if file_type in ('application/xml', 'text/xml'):
+        if self.accept and file_type in self.accept:
             self.root = read_xml_file(self.file_name)
             if self.root is not None and self.root.tag == 'project':
                 self.ns_map = get_ns_map(self.root)
