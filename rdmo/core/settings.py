@@ -380,7 +380,7 @@ PROJECT_CONTACT = False
 PROJECT_CONTACT_RECIPIENTS = []
 
 PROJECT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
     ('csvcomma', _('CSV (comma separated)'), 'rdmo.projects.exports.CSVCommaExport'),
     ('csvsemicolon', _('CSV (semicolon separated)'), 'rdmo.projects.exports.CSVSemicolonExport'),
     ('json', _('JSON'), 'rdmo.projects.exports.JSONExport'),
@@ -389,7 +389,7 @@ PROJECT_EXPORTS = [
 PROJECT_SNAPSHOT_EXPORTS = []
 
 PROJECT_IMPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
+    ('xml', _('RDMO XML'), 'rdmo.projects.imports.XMLImport'),
 ]
 
 PROJECT_IMPORTS_LIST = []

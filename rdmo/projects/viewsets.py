@@ -41,6 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
+from .exports.utils import handle_export
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -51,6 +52,7 @@ from .filters import (
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
 )
+from .imports.utils import handle_import, handle_upload
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
     HasProjectCreatePermission,
@@ -121,9 +123,6 @@ from .utils import (
     get_issue_send_content,
     get_upload_accept,
     get_value_path,
-    handle_export,
-    handle_import,
-    handle_upload,
     render_attachments,
     send_contact_message,
     send_invite_email,

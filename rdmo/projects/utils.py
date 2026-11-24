@@ -6,17 +6,12 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 
-from rest_framework.exceptions import ValidationError
-
-from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugin, get_plugins
+from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 from rdmo.views.utils import ProjectWrapper
 
@@ -296,16 +291,6 @@ def save_import_snapshot_values(project, snapshots, checked):
                             pass
 
 
-def save_import_tasks(project, tasks):
-    for task in tasks:
-        project.tasks.add(task)
-
-
-def save_import_views(project, views):
-    for view in views:
-        project.views.add(view)
-
-
 def get_invite_email_project_path(request, invite):
     project_invite_path = reverse('project_join', args=[invite.token])
 
@@ -446,73 +431,3 @@ def send_contact_message(request, subject, message):
     send_mail(subject, message,
               to=settings.PROJECT_CONTACT_RECIPIENTS,
               cc=[request.user.email], reply_to=[request.user.email])
-
-
-def handle_export(request, plugin_key, project):
-    plugin = get_plugin('PROJECT_EXPORTS', plugin_key)
-    if plugin is None:
-        raise Http404
-
-    plugin.request = request
-    plugin.project = project
-
-    if request.method == 'GET':
-        if not hasattr(plugin, 'render'):
-            raise Http404
-
-        return plugin.render()
-    else:
-        if not hasattr(plugin, 'submit'):
-            raise Http404
-
-        return plugin.submit()
-
-
-def handle_import(request, plugin_key, current_project=None):
-    plugin = get_plugin('PROJECT_IMPORTS', plugin_key)
-    if plugin is None:
-        raise Http404
-
-    plugin.request = request
-    plugin.current_project = current_project
-
-    if request.method == 'GET':
-        if not hasattr(plugin, 'render'):
-            raise Http404
-
-        return plugin.render()
-    else:
-        if not hasattr(plugin, 'submit'):
-            raise Http404
-
-        return plugin.submit()
-
-
-def handle_upload(request, current_project=None):
-    try:
-        uploaded_file = request.FILES['uploaded_file']
-    except KeyError as e:
-        raise ValidationError({'uploaded_file': [_('This field may not be blank.')]}) from e
-
-    file_name = handle_uploaded_file(uploaded_file)
-
-    plugin = find_import_plugin(request, file_name, current_project)
-    if plugin is None:
-        raise ValidationError({'uploaded_file': [_('Files of this type cannot be imported.')]})
-
-    if not hasattr(plugin, 'process'):
-        raise Http404
-
-    plugin.process()
-
-    return plugin.render()
-
-
-def find_import_plugin(request, file_name, current_project=None):
-    for plugin in get_plugins('PROJECT_IMPORTS').values():
-        plugin.request = request
-        plugin.current_project = current_project
-        plugin.file_name = file_name
-
-        if hasattr(plugin, 'check') and plugin.check():
-            return plugin
