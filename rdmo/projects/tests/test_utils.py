@@ -3,9 +3,9 @@ import pytest
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
-from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.tests.utils import compute_checksum
 
+from ..exceptions import CatalogMissingException
 from ..models import Invite, Project, Value
 from ..utils import (
     check_options,

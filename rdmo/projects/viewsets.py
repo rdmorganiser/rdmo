@@ -27,7 +27,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.exceptions import CatalogConflict, CatalogMissingException, SendMailException
+from rdmo.core.exceptions import SendMailException
 from rdmo.core.mail import send_mail
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.plugins import get_plugins
@@ -41,6 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
+from .exceptions import CatalogConflict, CatalogMissingException
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,

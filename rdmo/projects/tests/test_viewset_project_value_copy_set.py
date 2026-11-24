@@ -5,11 +5,11 @@ import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from rdmo.core.exceptions import CatalogMissingException
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question
 
+from ..exceptions import CatalogMissingException
 from ..models import Membership, Project, Value
 
 urlnames = {

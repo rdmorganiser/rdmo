@@ -11,11 +11,12 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 from rdmo.views.utils import ProjectWrapper
+
+from .exceptions import CatalogMissingException
 
 logger = logging.getLogger(__name__)
 

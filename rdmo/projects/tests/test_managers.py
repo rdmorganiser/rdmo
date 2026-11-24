@@ -1,8 +1,8 @@
 import pytest
 
-from rdmo.core.exceptions import CatalogMissingException
 from rdmo.domain.models import Attribute
 
+from ..exceptions import CatalogMissingException
 from ..models import Value
 
 

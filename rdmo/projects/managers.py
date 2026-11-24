@@ -7,8 +7,9 @@ from django.utils.translation import gettext_lazy as _
 from mptt.models import TreeManager
 from mptt.querysets import TreeQuerySet
 
-from rdmo.core.exceptions import CatalogMissingException
 from rdmo.core.managers import CurrentSiteManagerMixin
+
+from .exceptions import CatalogMissingException
 
 
 class ProjectQuerySet(TreeQuerySet):
