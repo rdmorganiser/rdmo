@@ -9,7 +9,6 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question
 
-from ..exceptions import CatalogMissingException
 from ..models import Membership, Project, Value
 
 urlnames = {
@@ -179,25 +178,6 @@ def test_copy_set_without_catalog(db, client):
     assert response.status_code == 409
     assert response.json() == {'detail': 'This project has no catalog.'}
     assert set(project.values.values_list('id', flat=True)) == original_ids
-
-
-@pytest.mark.parametrize('helper', [
-    'rdmo.projects.managers.ValueQuerySet.filter_set',
-    'rdmo.projects.viewsets.check_options',
-])
-def test_copy_set_catalog_missing_error(db, client, mocker, helper):
-    mocked_helper = mocker.patch(helper, side_effect=CatalogMissingException('This project has no catalog.'))
-    set_value = Value.objects.get(pk=set_value_id)
-    client.login(username='owner', password='owner')
-
-    response = client.post(reverse(urlnames['copy-set'], args=[set_value.project_id]), {
-        'id': set_value.pk,
-        'copy_set_value': set_value.pk,
-    })
-
-    mocked_helper.assert_called()
-    assert response.status_code == 409
-    assert response.json() == {'detail': 'This project has no catalog.'}
 
 
 def test_reuse(db, client):

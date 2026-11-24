@@ -9,14 +9,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 from rdmo.views.utils import ProjectWrapper
-
-from .exceptions import CatalogMissingException
 
 logger = logging.getLogger(__name__)
 
@@ -110,12 +107,9 @@ def check_conditions(conditions, attribute_values_map, set_prefix=None, set_inde
     return False
 
 
-def check_options(project, value):
-    if project.catalog is None:
-        raise CatalogMissingException(_('This project has no catalog.'))
-
+def check_options(catalog, value):
     # loop over all values of a question and check if value.option matches the optionsets of the question
-    for question in filter(lambda q: q.attribute == value.attribute, project.catalog.questions):
+    for question in filter(lambda q: q.attribute == value.attribute, catalog.questions):
         question_options = [
             option.id
             for optionset in question.optionsets.all()

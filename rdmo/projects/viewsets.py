@@ -41,7 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
-from .exceptions import CatalogConflict, CatalogMissingException
+from .exceptions import CatalogConflict
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -1141,7 +1141,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def copy_set(self, request, parent_lookup_project, pk=None):
-        if self.project.catalog_id is None:
+        catalog = self.project.catalog
+        if catalog is None:
             raise CatalogConflict()
 
         # copy all values for questions in questionset collections with the attribute
@@ -1154,14 +1155,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # look for the source value using the user's permissions
         copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
-        if copy_value.project.catalog_id is None:
+        source_catalog = copy_value.project.catalog
+        if source_catalog is None:
             raise CatalogConflict(_('The source project has no catalog.'))
 
         # when the user can see this value, collect all values for this set and its descendants
-        try:
-            copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
-        except CatalogMissingException as e:
-            raise CatalogConflict(str(e)) from e
+        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value, source_catalog)
 
         # init list of values to return
         response_values = []
@@ -1177,10 +1176,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
             # collect all non-empty values for this set and all descendants and convert
             # them to a list to compare them later to the new values
-            try:
-                set_values = self.get_queryset().filter_set(set_value)
-            except CatalogMissingException as e:
-                raise CatalogConflict(str(e)) from e
+            set_values = self.get_queryset().filter_set(set_value, catalog)
             set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
             set_empty_values_list = set_values.filter_empty().values_list(
                 'attribute', 'set_prefix', 'set_index', 'collection_index'
@@ -1211,11 +1207,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
 
             # skip this value if value.option does not match the optionsets of its question
-            try:
-                if not check_options(self.project, value):
-                    continue
-            except CatalogMissingException as e:
-                raise CatalogConflict(str(e)) from e
+            if not check_options(catalog, value):
+                continue
 
             # check if the value already exists, we do not consider collection_index
             # since we do not want to import e.g. into partially filled checkboxes
@@ -1247,7 +1240,8 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     @action(detail=True, methods=['DELETE'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def delete_set(self, request, parent_lookup_project, pk=None):
-        if self.project.catalog_id is None:
+        catalog = self.project.catalog
+        if catalog is None:
             raise CatalogConflict()
 
         # delete all values for questions in questionset collections with the attribute
@@ -1256,10 +1250,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         set_value.delete()
 
         # collect all values for this set and all descendants and delete them
-        try:
-            values = self.get_queryset().filter_set(set_value)
-        except CatalogMissingException as e:
-            raise CatalogConflict(str(e)) from e
+        values = self.get_queryset().filter_set(set_value, catalog)
         values.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
