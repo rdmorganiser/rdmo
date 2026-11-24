@@ -185,7 +185,7 @@ const ProjectForm = ({
   // Fetch a first page only when the menu is opened and nothing is selected/loaded yet
   const handleMenuOpen = () => {
     if (enableParent || submitMode === 'submit') {
-      const params = { search: '', ordering: 'title', around: formData.parent ?? '' }
+      const params = { search: '', around: formData.parent ?? '' }
       ProjectApi.fetchProjectsIndex(params).then(results => {
         const options = results
           .filter(p => mode !== 'edit' || p.id !== project.id)

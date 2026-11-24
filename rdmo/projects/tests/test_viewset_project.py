@@ -153,7 +153,7 @@ def test_index_search(db, client):
     client.login(username='owner', password='owner')
     params = {'search': 'owner'}
     response = client.get(reverse(urlnames['index']), params)
-    results = client.get(reverse(urlnames['list']), params).json()['results']
+    results = client.get(reverse(urlnames['list']), {**params, 'ordering': 'title'}).json()['results']
 
     assert response.status_code == 200
     assert results

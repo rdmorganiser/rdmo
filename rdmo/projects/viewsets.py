@@ -179,24 +179,9 @@ class ProjectViewSet(ModelViewSet):
             # do not need the project prefetches or last_changed annotation.
             return queryset
 
-        # prepare subquery for last_changed
-        last_changed_subquery = Subquery(
-            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
-        )
-
-        # the 'updated' field from a Project always returns a valid DateTime value
-        # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
-        # when Greatest returns a value, then Coalesce will return this value
-        last_changed = Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
-
         if self.action == 'index':
-            queryset = queryset.values('id', 'title')
-            if self.request.query_params.get('ordering') == 'title' or not self.request.query_params.get('search'):
-                queryset = queryset.order_by('title', 'id')
-            else:
-                queryset = queryset.annotate(last_changed=last_changed).order_by('-last_changed')
-            self._cached_queryset = queryset
-            return queryset
+            self._cached_queryset = queryset.values('id', 'title').order_by('title', 'id')
+            return self._cached_queryset
 
         queryset = queryset.prefetch_related(
             'snapshots',
@@ -227,6 +212,11 @@ class ProjectViewSet(ModelViewSet):
             .order_by('-role_rank')
         )
 
+        # prepare subquery for last_changed
+        last_changed_subquery = Subquery(
+            Value.objects.filter(project=OuterRef('pk')).order_by('-updated').values('updated')[:1]
+        )
+
         # annotate the queryset with the subqueries
         queryset = queryset.annotate(
             current_role=current_role_subquery,
@@ -236,7 +226,10 @@ class ProjectViewSet(ModelViewSet):
             highest_role_project_id=Subquery(highest_role_membership_subquery.values('project_id')[:1]),
             highest_role_project_title=Subquery(highest_role_membership_subquery.values('project__title')[:1]),
             highest_role_membership_id=Subquery(highest_role_membership_subquery.values('id')[:1]),
-            last_changed=last_changed
+            # the 'updated' field from a Project always returns a valid DateTime value
+            # when Greatest returns null, then Coalesce will return the value for 'updated' as a fall-back
+            # when Greatest returns a value, then Coalesce will return this value
+            last_changed=Coalesce(Greatest(last_changed_subquery, 'updated'), 'updated')
         )
 
         # order queryset by last_changed by default
