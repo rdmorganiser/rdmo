@@ -95,5 +95,102 @@ def fetch_current_values(values, current_project, snapshot=None):
             )
 
 
-def import_project(project, current_project):
-    pass
+def save_project(import_project, current_project=None):
+    if import_project.pk is not None:
+        raise RuntimeError(f'Imported project {import_project.pk} is already saved.')
+
+    if current_project is None:
+        project = import_project
+    else:
+        project = current_project
+        project.title = import_project.title
+        project.description = import_project.description
+        project.catalog = import_project.catalog
+
+    # save the project
+    project.save()
+
+    # import the values
+    for value in getattr(import_project, '_values', []):
+        save_value(value, project)
+
+    # import the snapshots and their values
+    for snapshot in getattr(import_project, '_snapshots', []):
+        save_snapshot(snapshot, project)
+
+
+def save_snapshot(import_snapshot, project):
+    if import_snapshot.pk is not None:
+        raise RuntimeError(f'Imported snapshot {import_snapshot.pk} is already saved.')
+
+    current_snapshot = getattr(import_snapshot, '_current', None)
+
+    if current_snapshot is None:
+        snapshot = import_snapshot
+        snapshot.project = project
+    else:
+        if current_snapshot.pk is None or current_snapshot.project_id != project.id:
+            raise RuntimeError(f'Current snapshot {current_snapshot.pk} does not match the imported snapshot.')
+
+        snapshot = current_snapshot
+        snapshot.title = import_snapshot.title
+        snapshot.description = import_snapshot.description
+
+    # save the snapshot, but do not copy the current values of the project
+    snapshot.save(copy_values=False)
+
+    # import the values
+    for value in getattr(import_snapshot, '_values', []):
+        save_value(value, project, snapshot)
+
+
+def save_value(import_value, project, snapshot=None):
+    if import_value.pk is not None:
+        raise RuntimeError(f'Imported value {import_value.pk} is already saved.')
+
+    if import_value.attribute is None:
+        return  # skip values for attributes, which are not in the database
+
+    current_value = getattr(import_value, '_current', None)
+
+    if current_value is None:
+        value = import_value
+        value.project = project
+        value.snapshot = snapshot
+    else:
+        if (
+            current_value.pk is None
+            or current_value.project_id != project.id
+            or current_value.snapshot_id != (snapshot.id if snapshot else None)
+            or current_value.attribute_id != import_value.attribute_id
+            or current_value.set_prefix != import_value.set_prefix
+            or current_value.set_index != import_value.set_index
+            or current_value.collection_index != import_value.collection_index
+        ):
+            raise RuntimeError(f'Current value {current_value.pk} does not match the imported value.')
+
+        value = current_value
+        value.set_collection = import_value.set_collection
+        value.text = import_value.text
+        value.option = import_value.option
+        value.external_id = import_value.external_id
+        value.value_type = import_value.value_type
+        value.unit = import_value.unit
+
+    # save the value
+    value.save()
+
+    # import the file
+    if import_value.file:
+        if current_value is not None:
+            value.file.delete()
+        value.copy_file(import_value.file_name, import_value.file)
+    else:
+        try:
+            name = import_value.file_import.get('name')
+            file = import_value.file_import.get('file')
+            if current_value is not None:
+                value.file.delete()
+            value.file.save(name, file)
+        except AttributeError:
+            pass

@@ -13,7 +13,7 @@ from rdmo.questions.models import Catalog
 
 from ...models import Project, Snapshot, Value
 from ...serializers.imports import ProjectSerializer
-from ..utils import fetch_current_project, import_project
+from ..utils import fetch_current_project, save_project
 from . import Import
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ class XMLImport(Import):
 
         fetch_current_project(self.project, self.current_project)
 
-        import_project(self.project, self.current_project)
+        save_project(self.project)
 
         return Response({})
 
