@@ -13,6 +13,7 @@ from rdmo.questions.models import Catalog
 
 from ...models import Project, Snapshot, Value
 from ...serializers.imports import ProjectSerializer as ProjectImportSerializer
+from ..utils import fetch_current_values
 from . import Import
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,9 @@ class XMLImport(Import):
     def render(self):
         if not self.project:
             raise Http404
+
+        if self.current_project:
+            fetch_current_values(self.project._values, self.current_project)
 
         serializer = ProjectImportSerializer(self.project)
         return Response(serializer.data)

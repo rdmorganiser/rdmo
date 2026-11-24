@@ -48,8 +48,31 @@ class ProjectOptionSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectCurrentValueSerializer(serializers.ModelSerializer):
+    option = ProjectOptionSerializer()
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'set_prefix',
+            'set_index',
+            'set_collection',
+            'collection_index',
+            'text',
+            'option',
+            'external_id',
+            'file_name',
+            'value_type',
+            'unit',
+            'created',
+            'updated',
+        )
+
+
 class ProjectValueSerializer(serializers.ModelSerializer):
     file_name = serializers.CharField(source='_file_name')
+    current = ProjectCurrentValueSerializer(source='_current', read_only=True, default=None)
     attribute = ProjectAttributeSerializer()
     option = ProjectOptionSerializer()
 
@@ -70,6 +93,7 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'unit',
             'created',
             'updated',
+            'current',
         )
 
 

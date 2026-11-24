@@ -55,3 +55,18 @@ def find_import_plugin(request, file_name, current_project=None):
 
         if hasattr(plugin, 'check') and plugin.check():
             return plugin
+
+
+def fetch_current_values(values, current_project, snapshot=None):
+    # map the values of the current project to their attribute/set_prefix/set_index/collection_index
+    current_values = {
+        (value.attribute_id, value.set_prefix, value.set_index, value.collection_index): value
+        for value in current_project.values.filter(snapshot=snapshot).select_related('attribute', 'option')
+    }
+
+    # add the matching current value to each (unsaved) value, or None if there is no such value
+    for value in values:
+        if value.attribute_id is not None:
+            value._current = current_values.get(
+                (value.attribute_id, value.set_prefix, value.set_index, value.collection_index)
+            )
