@@ -250,19 +250,14 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=False, filter_backends=(ProjectSearchFilterBackend, ), pagination_class=None)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        page_size = settings.PROJECT_TABLE_PAGE_SIZE
         around = request.query_params.get('around')
-        offset = 0
 
         if around and not request.query_params.get('search'):
             project_id = serializers.IntegerField(min_value=1, max_value=2**63 - 1).run_validation(around)
-            project = queryset.filter(pk=project_id).first()
-            if project:
-                before = Q(title__lt=project['title']) | Q(title=project['title'], id__lt=project['id'])
-                # Leave a few preceding options visible above the selected project in the menu.
-                offset = max(0, queryset.filter(before).count() - min(3, page_size // 2))
+            projects = queryset.around(project_id)
+        else:
+            projects = queryset[:settings.PROJECT_TABLE_PAGE_SIZE]
 
-        projects = queryset[offset:offset + page_size]
         return Response(self.get_serializer(projects, many=True).data)
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
