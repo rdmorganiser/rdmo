@@ -89,6 +89,26 @@ def test_view_without_catalog_forbidden(db, client, username, password):
         assert response.status_code == 401
 
 
+def test_delete_preserves_project_answers(db, client):
+    project = Project.objects.get(pk=1)
+    original_values = list(project.values.order_by('id').values())
+    assert original_values
+    assert project.values.filter(snapshot__isnull=False).exists()
+
+    client.login(username='admin', password='admin')
+    response = client.delete(reverse('v1-questions:catalog-detail', args=[project.catalog_id]))
+    assert response.status_code == 204
+
+    project.refresh_from_db()
+    assert project.catalog_id is None
+    assert list(project.values.order_by('id').values()) == original_values
+
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['answers'], args=[project.pk]))
+    assert response.status_code == 200
+    assert 'This project has no catalog.' in response.json()['html']
+
+
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('snapshot_id', snapshots)
 def test_view_snapshot(db, client, username, password, snapshot_id):
