@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncSelect from 'react-select/async'
 import { useDebouncedCallback } from 'use-debounce'
+import { isNil } from 'lodash'
 
 import { Tooltip } from 'rdmo/core/assets/js/components'
 
@@ -281,7 +282,7 @@ const ProjectForm = ({
         }
 
         {
-          mode === 'edit' && project.catalog == null && !disabled && (
+          mode === 'edit' && isNil(project.catalog) && !disabled && (
             <div className="form-text mt-2">
               <Template template="project_view_missing_catalog_info" />
             </div>
