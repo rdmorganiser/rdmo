@@ -1342,7 +1342,7 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
             raise NotFound(_('This catalog has no sections.'))
 
         if not self.project.catalog.pages:
-            raise NotFound(_('This catalog has no pages.'))
+            return Response({})
 
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)

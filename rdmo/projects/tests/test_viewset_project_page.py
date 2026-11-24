@@ -204,8 +204,8 @@ def test_continue_catalog_without_pages(db, client):
     response = client.get(url)
 
     if project_id in view_questionset_permission_map.get(username, []):
-        assert response.status_code == 404
-        assert response.json() == {'detail': 'This catalog has no pages.'}
+        assert response.status_code == 200
+        assert response.json() == {}
 
 
 def test_continue_empty_catalog(db, client):
