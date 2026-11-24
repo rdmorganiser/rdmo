@@ -39,10 +39,8 @@ def handle_upload(request, current_project=None):
     if plugin is None:
         raise ValidationError({'uploaded_file': [_('Files of this type cannot be imported.')]})
 
-    if not hasattr(plugin, 'process'):
+    if not hasattr(plugin, 'render'):
         raise Http404
-
-    plugin.process()
 
     return plugin.render()
 
@@ -55,6 +53,31 @@ def find_import_plugin(request, file_name, current_project=None):
 
         if hasattr(plugin, 'check') and plugin.check():
             return plugin
+
+
+def fetch_current_project(project, current_project):
+    if current_project is None:
+        return
+
+    # add the current project to the (unsaved) project, and the current values to its values
+    project._current = current_project
+    fetch_current_values(project._values, current_project)
+    fetch_current_snapshots(project._snapshots, current_project)
+
+
+def fetch_current_snapshots(snapshots, current_project):
+    # match the snapshots by their index, the export uses the default ordering of the snapshots as well
+    current_snapshots = list(current_project.snapshots.all())
+
+    # add the matching current snapshot to each (unsaved) snapshot, or None if there is no such snapshot,
+    # and the current values of this snapshot to its values
+    for snapshot in snapshots:
+        if snapshot._index < len(current_snapshots):
+            current_snapshot = current_snapshots[snapshot._index]
+            snapshot._current = current_snapshot
+            fetch_current_values(snapshot._values, current_project, snapshot=current_snapshot)
+        else:
+            snapshot._current = None
 
 
 def fetch_current_values(values, current_project, snapshot=None):
@@ -70,3 +93,7 @@ def fetch_current_values(values, current_project, snapshot=None):
             value._current = current_values.get(
                 (value.attribute_id, value.set_prefix, value.set_index, value.collection_index)
             )
+
+
+def import_project(project, current_project):
+    pass

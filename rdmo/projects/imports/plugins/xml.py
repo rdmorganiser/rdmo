@@ -12,8 +12,8 @@ from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.questions.models import Catalog
 
 from ...models import Project, Snapshot, Value
-from ...serializers.imports import ProjectSerializer as ProjectImportSerializer
-from ..utils import fetch_current_values
+from ...serializers.imports import ProjectSerializer
+from ..utils import fetch_current_project, import_project
 from . import Import
 
 logger = logging.getLogger(__name__)
@@ -26,18 +26,29 @@ class XMLImport(Import):
         'text/xml': ['.xml'],
     }
 
-    def render(self):
-        if not self.project:
-            raise Http404
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_name = None
+        self.root = None
+        self.ns_map = None
 
+    def render(self):
         if self.file_name:
             self.session.set('file_name', self.file_name)
+        else:
+            self.file_name = self.session.get('file_name')
 
-        if self.current_project:
-            fetch_current_values(self.project._values, self.current_project)
+        if not self.file_name:
+            raise Http404
 
-        serializer = ProjectImportSerializer(self.project)
+        if self.root is None and not self.check():
+            raise Http404
 
+        self.project = self.get_project()
+
+        fetch_current_project(self.project, self.current_project)
+
+        serializer = ProjectSerializer(self.project)
         return Response({
             'key': self.key,
             **serializer.data
@@ -48,11 +59,15 @@ class XMLImport(Import):
         if not self.file_name or not self.check():
             raise Http404
 
-        self.process()
+        self.project = self.get_project()
+
+        fetch_current_project(self.project, self.current_project)
+
+        import_project(self.project, self.current_project)
 
         return Response({})
 
-    def check(self) -> bool:
+    def check(self):
         file_type, _encoding = mimetypes.guess_type(self.file_name)
         if self.accept and file_type in self.accept:
             self.root = read_xml_file(self.file_name)
@@ -61,15 +76,17 @@ class XMLImport(Import):
                 return True
         return False
 
-    def process(self):
-        self.project = Project()
-        self.project.title = self.get_title()
-        self.project.description = self.get_description()
-        self.project.created = self.get_created()
-        self.project.updated = self.get_updated()
-        self.project.catalog = self.get_catalog()
-        self.project._values = self.get_values()
-        self.project._snapshots = self.get_snapshots()
+    def get_project(self):
+        project = Project()
+        project.title = self.get_title()
+        project.description = self.get_description()
+        project.created = self.get_created()
+        project.updated = self.get_updated()
+        project.catalog = self.get_catalog()
+        project._values = self.get_values()
+        project._snapshots = self.get_snapshots()
+
+        return project
 
     def get_title(self):
         return self.root.find('title').text or ''
