@@ -10,6 +10,41 @@ class Plugin:
         self.label = label
         self.class_name = class_name
 
+    @property
+    def session(self):
+        return PluginSession(self)
+
+    def get_session_key(self, key):
+        return f'{self.class_name}.{self.key}.{key}'
+
+
+class PluginSession:
+
+    def __init__(self, plugin):
+        self.plugin = plugin
+
+    @property
+    def session(self):
+        return self.plugin.request.session
+
+    def get(self, key, default=None):
+        session_key = self.plugin.get_session_key(key)
+        return self.session.get(session_key, default)
+
+    def set(self, key, value):
+        session_key = self.plugin.get_session_key(key)
+        self.session[session_key] = value
+
+    def pop(self, key, default=None):
+        session_key = self.plugin.get_session_key(key)
+        return self.session.pop(session_key, default)
+
+    def drop(self):
+        # remove all keys of this plugin from the session
+        prefix = self.plugin.get_session_key('')
+        for session_key in [session_key for session_key in self.session.keys() if session_key.startswith(prefix)]:
+            del self.session[session_key]
+
 
 def get_plugins(plugin_settings):
     plugins = {}

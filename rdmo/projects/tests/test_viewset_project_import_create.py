@@ -1,3 +1,5 @@
+import shutil
+
 import pytest
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -61,7 +63,7 @@ def test_import_post(db, client, login, username, plugin_key):
 
 
 @pytest.mark.parametrize('username', users)
-def test_upload_post(db, client, login, username):
+def test_upload_post_render(db, client, login, username):
     login(username)
 
     url = reverse(urlnames['upload'])
@@ -72,7 +74,28 @@ def test_upload_post(db, client, login, username):
         assert response.status_code == 401
     else:
         assert response.status_code == 200
+        assert response.json().get('key') == 'xml'
         assert response.json().get('title') == 'Test'
+        assert client.session.get('rdmo.projects.imports.XMLImport.xml.file_name')
+
+
+@pytest.mark.parametrize('username', users)
+def test_import_post_submit(db, client, login, username, tmp_path):
+    login(username)
+
+    file_name = shutil.copy(xml_file, tmp_path)
+
+    session = client.session
+    session['rdmo.projects.imports.XMLImport.xml.file_name'] = str(file_name)
+    session.save()
+
+    url = reverse(urlnames['import'], args=['xml'])
+    response = client.post(url)
+
+    if username == 'anonymous':
+        assert response.status_code == 401
+    else:
+        assert response.status_code == 200
 
 
 def test_upload_post_no_file(db, client, login):

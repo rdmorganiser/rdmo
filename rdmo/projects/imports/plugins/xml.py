@@ -30,15 +30,25 @@ class XMLImport(Import):
         if not self.project:
             raise Http404
 
+        if self.file_name:
+            self.session.set('file_name', self.file_name)
+
         if self.current_project:
             fetch_current_values(self.project._values, self.current_project)
 
         serializer = ProjectImportSerializer(self.project)
-        return Response(serializer.data)
+
+        return Response({
+            'key': self.key,
+            **serializer.data
+        })
 
     def submit(self):
-        if not self.project:
+        self.file_name = self.session.get('file_name')
+        if not self.file_name or not self.check():
             raise Http404
+
+        self.process()
 
         return Response({})
 
