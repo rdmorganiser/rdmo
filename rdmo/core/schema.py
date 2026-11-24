@@ -145,6 +145,16 @@ class OptionViewSetExtension(OperationIdMixin, ExportViewSetMixin, ViewExtension
     operation_id_template = 'options_options_{}'
 
 
+class ProjectViewSetExtension(ViewExtension):
+    target_class = 'rdmo.projects.viewsets.ProjectViewSet'
+    actions = ('index', )
+
+    def get_extend_schema_args(self, action):
+        from rdmo.projects.serializers.v1 import ProjectIndexSerializer
+
+        return {'responses': ProjectIndexSerializer(many=True)}
+
+
 class ProjectIntegrationViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectIntegrationViewSet'
 
