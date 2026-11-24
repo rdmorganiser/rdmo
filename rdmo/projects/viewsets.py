@@ -41,7 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
-from .exceptions import CatalogConflict
+from .exceptions import CatalogMissingConflict, CatalogMissingNotFound
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -397,7 +397,7 @@ class ProjectViewSet(ModelViewSet):
     def options(self, request, pk=None):
         project = self.get_object()
         if project.catalog_id is None:
-            raise CatalogConflict()
+            raise CatalogMissingConflict()
 
         try:
             try:
@@ -1143,7 +1143,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     def copy_set(self, request, parent_lookup_project, pk=None):
         catalog = self.project.catalog
         if catalog is None:
-            raise CatalogConflict()
+            raise CatalogMissingConflict()
 
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -1157,7 +1157,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
         source_catalog = copy_value.project.catalog
         if source_catalog is None:
-            raise CatalogConflict(_('The source project has no catalog.'))
+            raise CatalogMissingConflict(_('The source project has no catalog.'))
 
         # when the user can see this value, collect all values for this set and its descendants
         copy_values = Value.objects.filter_user(request.user).filter_set(copy_value, source_catalog)
@@ -1242,7 +1242,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     def delete_set(self, request, parent_lookup_project, pk=None):
         catalog = self.project.catalog
         if catalog is None:
-            raise CatalogConflict()
+            raise CatalogMissingConflict()
 
         # delete all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
@@ -1287,10 +1287,7 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     def check_catalog(self):
         if self.project.catalog_id is None:
-            raise NotFound({
-                'detail': _('This project has no catalog.'),
-                'code': 'catalog_missing',
-            })
+            raise CatalogMissingNotFound()
 
     def get_queryset(self):
         self.check_catalog()

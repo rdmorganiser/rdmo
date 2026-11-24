@@ -64,8 +64,7 @@ def test_detail_without_catalog(db, client):
     response = client.get(url)
 
     assert response.status_code == 404
-    assert response.json()['code'] == 'catalog_missing'
-    assert 'done' not in response.json()
+    assert response.json() == {'detail': 'This project has no catalog.'}
 
 
 def test_detail_order_in_page(db, client):
@@ -173,8 +172,7 @@ def test_continue_without_catalog(db, client):
     response = client.get(url)
 
     assert response.status_code == 404
-    assert response.json()['code'] == 'catalog_missing'
-    assert 'done' not in response.json()
+    assert response.json() == {'detail': 'This project has no catalog.'}
 
 
 @pytest.mark.parametrize('unavailable_on_site', [False, True])
