@@ -247,10 +247,10 @@ class ProjectViewSet(ModelViewSet):
         else:
             return ProjectSerializer
 
-    @action(detail=False, filter_backends=(ProjectSearchFilterBackend, ))
+    @action(detail=False, filter_backends=(ProjectSearchFilterBackend, ), pagination_class=None)
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        page_size = self.paginator.page_size
+        page_size = settings.PROJECT_TABLE_PAGE_SIZE
         around = request.query_params.get('around')
         offset = 0
 
