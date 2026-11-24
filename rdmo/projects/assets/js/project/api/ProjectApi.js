@@ -58,7 +58,7 @@ export default class ProjectApi extends BaseApi {
     return this.get(`/api/v1/projects/projects/?${encodeParams(params)}`)
   }
 
-  static fetchProjectIndex(params) {
+  static fetchProjectsIndex(params) {
     return this.get(`/api/v1/projects/projects/index/?${encodeParams(params)}`)
   }
 

@@ -169,7 +169,7 @@ const ProjectForm = ({
   }
 
   const handleLoadProjects = useDebouncedCallback((search, callback) => {
-    ProjectApi.fetchProjectIndex({ search })
+    ProjectApi.fetchProjectsIndex({ search })
       .then(results => {
         const options = results
           .filter(p => mode !== 'edit' || p.id !== project.id)
@@ -186,7 +186,7 @@ const ProjectForm = ({
   const handleMenuOpen = () => {
     if (enableParent || submitMode === 'submit') {
       const params = { search: '', ordering: 'title', around: formData.parent ?? '' }
-      ProjectApi.fetchProjectIndex(params).then(results => {
+      ProjectApi.fetchProjectsIndex(params).then(results => {
         const options = results
           .filter(p => mode !== 'edit' || p.id !== project.id)
           .map(p => ({ value: p.id, label: p.title }))
