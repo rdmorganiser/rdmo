@@ -152,7 +152,15 @@ class ProjectViewSetExtension(ViewExtension):
     def get_extend_schema_args(self, action):
         from rdmo.projects.serializers.v1 import ProjectIndexSerializer
 
-        return {'responses': ProjectIndexSerializer(many=True)}
+        return {
+            'parameters': [
+                OpenApiParameter(
+                    'around', int,
+                    description='ID of the project to show with its alphabetical neighbors.'
+                )
+            ],
+            'responses': ProjectIndexSerializer(many=True)
+        }
 
 
 class ProjectIntegrationViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
