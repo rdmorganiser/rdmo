@@ -34,23 +34,24 @@ def get_answer_tree_verbose(include_answers=False, include_help=False):
 
     return verbose
 
-def flatten_answer_tree_data(treedata, prefix=''):
+def flatten_answer_tree_data(node, prefix=''):
     # compute flat list of nodes from tree, ordered by depth-first-traversal
-    if 'model' in treedata:
+    if 'model' in node and ('show' not in node or node['show']):
+        copy_fields = ('title', 'help', 'text', 'values', 'model')
         yield {
             'prefix': prefix,
-            **{x: treedata[x] for x in ['title', 'help', 'text', 'values', 'model']
-                if x in treedata and ('show' not in treedata or treedata['show'])}
+            **{field: node[field] for field in copy_fields if field in node}
         }
 
     # for catalog, section, valueset from page and questionset
-    if 'elements' in treedata:
-        for child_node in treedata['elements']:
+    if 'elements' in node:
+        for child_node in node['elements']:
             yield from flatten_answer_tree_data(child_node, prefix)
 
     # for page, questionset
-    if 'sets' in treedata:
-        for child_node in treedata['sets']:
+    if 'sets' in node:
+        for child_node in node['sets']:
+            # add name to data for named collections
             if 'set_name' in child_node:
                 yield from flatten_answer_tree_data(child_node, prefix=f"[{child_node['set_name']}] {prefix}")
             else:
