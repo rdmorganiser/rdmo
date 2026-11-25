@@ -29,7 +29,7 @@
         {% if include_answers and node.model == "questions.question" %}
             {% if node.values|is_not_empty|length == 1 %}
                 {% include 'views/tags/value.html' with value=node.values|is_not_empty|first %}
-            {% else %}
+            {% elif node.values|is_not_empty|length > 1 %}
             <ul>
                 {% include 'views/tags/value_list.html' with values=node.values|is_not_empty %}
             </ul>
