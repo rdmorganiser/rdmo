@@ -14,8 +14,6 @@ from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 
-from .constants import ANSWERTREE_VERBOSE_TREE
-
 logger = logging.getLogger(__name__)
 
 
@@ -26,6 +24,16 @@ def get_value_path(project, snapshot=None):
         return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
 
 
+def get_answer_tree_verbose(include_answers=False, include_help=False):
+    verbose = ('catalog', 'section', 'page', 'questionset', 'question')
+
+    if include_answers:
+        verbose = (*verbose, 'set', 'value')
+    if include_help:
+        verbose = (*verbose, 'help')
+
+    return verbose
+
 def flatten_answer_tree_data(treedata, prefix=''):
     # compute flat list of nodes from tree, ordered by depth-first-traversal
     if 'model' in treedata:
@@ -35,9 +43,12 @@ def flatten_answer_tree_data(treedata, prefix=''):
                 if x in treedata and ('show' not in treedata or treedata['show'])}
         }
 
+    # for catalog, section, valueset from page and questionset
     if 'elements' in treedata:
         for child_node in treedata['elements']:
             yield from flatten_answer_tree_data(child_node, prefix)
+
+    # for page, questionset
     if 'sets' in treedata:
         for child_node in treedata['sets']:
             if 'set_name' in child_node:
@@ -60,7 +71,7 @@ def render_attachments(request, project, data):
                 'project': project,
                 'snapshot': snapshot,
                 'answer_tree_nodes': flatten_answer_tree_data(
-                    project.get_answer_tree(snapshot=snapshot, verbose=(*ANSWERTREE_VERBOSE_TREE, 'set', 'value'))),
+                    project.get_answer_tree(snapshot=snapshot, verbose=get_answer_tree_verbose(include_answers=True))),
                 'include_answers': True,
             }
         )

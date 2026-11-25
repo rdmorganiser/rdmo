@@ -226,13 +226,15 @@ def human2bytes(string):
 def is_truthy(value):
     return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
+
 thread_data = threading.local()
 
+
 def markdown2html(markdown_string):
+
+    # use a thread local Markdown instance for better performance
     if not hasattr(thread_data, 'md'):
         thread_data.md = Markdown()
-
-    # use a module level Markdown instance for better performance
     html = thread_data.md.reset().convert(force_str(markdown_string)).strip()
 
     # strip the outer paragraph
