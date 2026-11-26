@@ -4,12 +4,13 @@
 {% for node in answer_tree_nodes %}
     {% if node.model %}
         {% if node.model == "questions.catalog" %}
-            <h1>{{ node.title|safe }}</h1>
+            <h1>{{ node.title|safe }}<br />
             {% if include_answers %}
-                <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+                {% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}
             {% else %}
-                <h1>{% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}</h1>
+                {% blocktrans with title=project.title %}Questions for <em>{{ title }}</em>{% endblocktrans %}
             {% endif %}
+            </h1>
         {% elif node.model == "questions.section" %}
             <h2>{{ node.title|safe }}</h2>
         {% elif node.model == "questions.page" %}
