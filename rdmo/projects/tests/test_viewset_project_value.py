@@ -379,6 +379,17 @@ def test_delete_set_without_catalog_preserves_values(db, client):
     assert set(project.values.values_list('id', flat=True)) == original_ids
 
 
+def test_delete_set_without_catalog_forbidden(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    value = project.values.filter(snapshot=None).first()
+
+    client.login(username='guest', password='guest')
+    response = client.delete(reverse(urlnames['delete-set'], args=[project.pk, value.pk]))
+
+    assert response.status_code == 403
+
+
 @pytest.mark.parametrize('set_prefix', ['10', '11'])
 def test_delete_set_preserves_sibling_prefix(db, client, set_prefix):
     # Arrange: select tab 2 (index 1) and add an answer in tab 11 or 12.
