@@ -67,6 +67,11 @@ button.link {
 
     &:hover {
         color: var(--rdmo-link-hover-color);
+        text-decoration: var(--rdmo-link-hover-decoration);
+
+        &:has(> .bi) {
+            text-decoration: none !important;
+        }
     }
 }
 
