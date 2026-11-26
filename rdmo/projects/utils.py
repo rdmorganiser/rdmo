@@ -13,7 +13,6 @@ from django.utils.timezone import now
 from rdmo.core.mail import send_mail
 from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
-from rdmo.views.utils import ProjectWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +22,40 @@ def get_value_path(project, snapshot=None):
         return Path('projects') / str(project.id) / 'values'
     else:
         return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
+
+
+def get_answer_tree_verbose(include_answers=False, include_help=False):
+    verbose = ('catalog', 'section', 'page', 'questionset', 'question')
+
+    if include_answers:
+        verbose = (*verbose, 'set', 'value')
+    if include_help:
+        verbose = (*verbose, 'help')
+
+    return verbose
+
+def flatten_answer_tree_data(node, prefix=''):
+    # compute flat list of nodes from tree, ordered by depth-first-traversal
+    if 'model' in node and ('show' not in node or node['show']):
+        copy_fields = ('title', 'help', 'text', 'values', 'model')
+        yield {
+            'prefix': prefix,
+            **{field: node[field] for field in copy_fields if field in node}
+        }
+
+    # for catalog, section, valueset from page and questionset
+    if 'elements' in node:
+        for child_node in node['elements']:
+            yield from flatten_answer_tree_data(child_node, prefix)
+
+    # for page, questionset
+    if 'sets' in node:
+        for child_node in node['sets']:
+            # add name to data for named collections
+            if 'set_name' in child_node:
+                yield from flatten_answer_tree_data(child_node, prefix=f"[{child_node['set_name']}] {prefix}")
+            else:
+                yield from flatten_answer_tree_data(child_node, prefix)
 
 
 def render_attachments(request, project, data):
@@ -38,7 +71,9 @@ def render_attachments(request, project, data):
             request, attachments_format, project.title, 'projects/project_answers_export.html', {
                 'project': project,
                 'snapshot': snapshot,
-                'project_wrapper': ProjectWrapper(project, snapshot)
+                'answer_tree_nodes': flatten_answer_tree_data(
+                    project.get_answer_tree(snapshot=snapshot, verbose=get_answer_tree_verbose(include_answers=True))),
+                'include_answers': True,
             }
         )
         attachments.append((

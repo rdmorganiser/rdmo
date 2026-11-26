@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import threading
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -17,7 +18,7 @@ from django.utils.translation import gettext_lazy as _
 
 import nh3
 from defusedcsv import csv
-from markdown import markdown
+from markdown import Markdown
 
 from .constants import HUMAN2BYTES_MAPPER
 from .pandoc import get_pandoc_content, get_pandoc_content_disposition
@@ -226,9 +227,15 @@ def is_truthy(value):
     return value is not None and (value is True or value.lower() in ['1', 't', 'true'])
 
 
+thread_data = threading.local()
+
+
 def markdown2html(markdown_string):
-    # adoption of the normal markdown function
-    html = markdown(force_str(markdown_string)).strip()
+
+    # use a thread local Markdown instance for better performance
+    if not hasattr(thread_data, 'md'):
+        thread_data.md = Markdown()
+    html = thread_data.md.reset().convert(force_str(markdown_string)).strip()
 
     # strip the outer paragraph
     html = re.sub(r'^<p>(.*?)</p>$',r'\1', html)
