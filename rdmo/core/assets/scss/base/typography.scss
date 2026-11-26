@@ -65,9 +65,13 @@ button.link {
     cursor: pointer;
     text-decoration: var(--rdmo-link-decoration);
 
-    &:not(:has(> .bi)):hover {
+    &:hover {
         color: var(--rdmo-link-hover-color);
         text-decoration: var(--rdmo-link-hover-decoration);
+
+        &:has(> .bi) {
+            text-decoration: none !important;
+        }
     }
 }
 
