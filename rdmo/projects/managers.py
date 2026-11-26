@@ -12,7 +12,6 @@ from rdmo.core.managers import CurrentSiteManagerMixin
 class ProjectQuerySet(TreeQuerySet):
 
     def around(self, project_id):
-        # The queryset must be ordered by title and ID.
         page_size = settings.PROJECT_TABLE_PAGE_SIZE
         offset = 0
         project = self.filter(pk=project_id).values('id', 'title').first()
@@ -21,7 +20,7 @@ class ProjectQuerySet(TreeQuerySet):
             # Leave a few preceding options visible above the selected project in the menu.
             offset = max(0, self.filter(before).count() - min(3, page_size // 2))
 
-        return self[offset:offset + page_size]
+        return self.order_by('title', 'id')[offset:offset + page_size]
 
     def filter_user(self, user, filter_for_user=False):
         if user.is_authenticated:

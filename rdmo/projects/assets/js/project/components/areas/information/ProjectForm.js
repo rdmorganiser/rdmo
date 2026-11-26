@@ -182,7 +182,7 @@ const ProjectForm = ({
       })
   }, 500)
 
-  // Fetch a first page only when the menu is opened and nothing is selected/loaded yet
+  // Load parent options near the selected parent when available.
   const handleMenuOpen = () => {
     if (enableParent || submitMode === 'submit') {
       const params = { search: '', around: formData.parent ?? '' }
