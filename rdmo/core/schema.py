@@ -145,6 +145,33 @@ class OptionViewSetExtension(OperationIdMixin, ExportViewSetMixin, ViewExtension
     operation_id_template = 'options_options_{}'
 
 
+class ProjectViewSetExtension(ViewExtension):
+    target_class = 'rdmo.projects.viewsets.ProjectViewSet'
+    actions = ('index', )
+
+    def get_extend_schema_args(self, action):
+        from rdmo.projects.serializers.v1 import ProjectIndexSerializer
+
+        return {
+            'description': (
+                'Returns only the ID and title of each project in the result.  \n'
+                'Without query parameters, returns the first page of accessible projects in title order.'
+            ),
+            'parameters': [
+                OpenApiParameter(
+                    'around', int,
+                    description=(
+                        'ID of the project to show with its alphabetical neighbors.  \n'
+                        'If the project is unavailable, returns the first page.  \n'
+                        'Ignored when search is non-empty.'
+                    )
+                ),
+                OpenApiParameter('search', str, description='Filter by project title or owner details.')
+            ],
+            'responses': ProjectIndexSerializer(many=True)
+        }
+
+
 class ProjectIntegrationViewSetExtension(ParentLookupIdMixin, ModelViewSetMixin, ViewExtension):
     target_class = 'rdmo.projects.viewsets.ProjectIntegrationViewSet'
 

@@ -78,6 +78,7 @@ from .serializers.v1 import (
     ProjectCopySerializer,
     ProjectFileSerializer,
     ProjectHierarchySerializer,
+    ProjectIndexSerializer,
     ProjectIntegrationSerializer,
     ProjectInviteCreateSerializer,
     ProjectInviteSerializer,
@@ -178,6 +179,10 @@ class ProjectViewSet(ModelViewSet):
             # do not need the project prefetches or last_changed annotation.
             return queryset
 
+        if self.action == 'index':
+            self._cached_queryset = queryset.values('id', 'title').order_by('title', 'id')
+            return self._cached_queryset
+
         queryset = queryset.prefetch_related(
             'snapshots',
             'views',
@@ -237,8 +242,23 @@ class ProjectViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ['list', 'user']:
             return ProjectListSerializer
+        elif self.action == 'index':
+            return ProjectIndexSerializer
         else:
             return ProjectSerializer
+
+    @action(detail=False, filter_backends=(ProjectSearchFilterBackend, ), pagination_class=None)
+    def index(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        around = request.query_params.get('around')
+
+        if around and not request.query_params.get('search'):
+            project_id = serializers.IntegerField(min_value=1, max_value=2**63 - 1).run_validation(around)
+            projects = queryset.around(project_id)
+        else:
+            projects = queryset[:settings.PROJECT_TABLE_PAGE_SIZE]
+
+        return Response(self.get_serializer(projects, many=True).data)
 
     @action(detail=False, methods=['GET'], permission_classes=(HasModelPermission | HasProjectsPermission, ))
     def user(self, request, *args, **kwargs):
