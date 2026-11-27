@@ -128,7 +128,9 @@ const Main = () => {
   )
 
   const getProgressString = (row) => {
-    return (row.progress_total ? interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total]) : null)
+    if (!row.catalog || !row.progress_total) return null
+
+    return interpolate(gettext('%s of %s'), [row.progress_count ?? 0, row.progress_total])
   }
 
   const isAdminOrSiteManager = currentUser.is_superuser || currentUser.is_site_manager
