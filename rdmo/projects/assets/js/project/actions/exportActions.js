@@ -26,7 +26,13 @@ export function fetchExport(key) {
     dispatch(actions.fetchExportInit())
 
     return ProjectApi.fetchProjectExport(projectId, key)
-      .then(response => dispatch(actions.fetchExportSuccess({ key, ...response })))
+      .then(response => {
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
+        }
+
+        dispatch(actions.fetchExportSuccess({ key, ...response }))
+      })
       .catch(error => dispatch(errorActions.setError('export', error, gettext('Export'))))
       .finally(() => dispatch(removeFromPending('fetchExport')))
   }
@@ -53,6 +59,10 @@ export function submitExport(key, formData) {
 
     return ProjectApi.submitProjectExport(projectId, key, formData)
       .then(response => {
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
+        }
+
         dispatch(actions.submitExportSuccess({ key, ...response }))
         return response
       })

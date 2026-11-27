@@ -1,6 +1,15 @@
 {% load i18n %}
 {% load core_tags %}
 
+{% if project %}
+<dl>
+    <dt>{% trans 'Title' %}</dt>
+    <dd>{{ project.title }}</dd>
+    <dt>{% trans 'Description' %}</dt>
+    <dd>{{ project.description }}</dd>
+</dl>
+{% endif %}
+
 <form method="post" class="mb-5">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ next }}" />

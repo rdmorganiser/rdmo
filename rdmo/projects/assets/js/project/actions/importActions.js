@@ -42,7 +42,13 @@ export function fetchImport(key) {
     dispatch(actions.fetchImportInit())
 
     return ProjectApi.fetchProjectImport(projectId, key)
-      .then(response => dispatch(actions.fetchImportSuccess({ key, ...response })))
+      .then(response => {
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
+        }
+
+        dispatch(actions.fetchImportSuccess({ key, ...response }))
+      })
       .catch(error => dispatch(errorActions.setError('import', error, gettext('Import'))))
       .finally(() => dispatch(removeFromPending('fetchImport')))
   }
@@ -56,6 +62,10 @@ export function submitImport(key, formData) {
 
     return ProjectApi.submitProjectImport(projectId, key, formData)
       .then(response => {
+        if (response?.redirect_url) {
+          window.location.href = response.redirect_url
+        }
+
         dispatch(actions.submitImportSuccess({ key, ...response }))
         return response
       })

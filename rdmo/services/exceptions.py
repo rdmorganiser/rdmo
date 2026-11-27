@@ -1,0 +1,2 @@
+class OauthAuthorizationRequired(Exception):
+    pass

@@ -13,8 +13,13 @@ PROVIDER_TYPES = [
 def oauth_callback(request, provider_key):
     for provider_type in PROVIDER_TYPES:
         provider = get_plugin(provider_type, provider_key)
-        if provider and provider.get_from_session(request, 'state'):
-            return provider.callback(request)
+        if provider is None:
+            continue
+
+        provider.request = request
+
+        if hasattr(provider, 'client') and provider.client.is_pending():
+            return provider.client.callback()
 
     return render(request, 'core/error.html', {
         'title': _('Integration Error'),
