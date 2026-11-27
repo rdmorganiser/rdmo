@@ -177,6 +177,9 @@ class Project(MPTTModel, Model):
             self.catalog.prefetch_elements()
 
     def get_answer_tree(self, snapshot=None, verbose=None):
+        if self.catalog is None:
+            return {}
+
         verbose = verbose or ()
         values = self.values.filter(snapshot=snapshot).order_by(
             'attribute_id', 'set_prefix', 'set_index', 'collection_index'
