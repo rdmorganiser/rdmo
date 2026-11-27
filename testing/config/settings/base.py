@@ -80,7 +80,7 @@ PROJECT_SEND_ISSUE = True
 PROJECT_SEND_INVITE = True
 
 PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
 ]
 
 EMAIL_RECIPIENTS_CHOICES = [
