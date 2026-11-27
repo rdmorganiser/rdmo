@@ -1,5 +1,4 @@
 import logging
-import mimetypes
 from collections import defaultdict
 from pathlib import Path
 
@@ -11,7 +10,6 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 from rdmo.views.utils import ProjectWrapper
 
@@ -239,28 +237,6 @@ def send_invite_email(request, invite):
 
     # send the email
     send_mail(subject, message, to=[invite.email])
-
-
-def get_upload_accept():
-    accept = defaultdict(set)
-    for import_plugin in get_plugins('PROJECT_IMPORTS').values():
-        if isinstance(import_plugin.accept, dict):
-            for mime_type, suffixes in import_plugin.accept.items():
-                accept[mime_type].update(suffixes)
-
-        elif isinstance(import_plugin.accept, str):
-            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
-            suffix = import_plugin.accept
-            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
-            if mime_type:
-                accept[mime_type].update([suffix])
-
-        elif import_plugin.upload is True:
-            # if one of the plugins does not have the accept field, but is marked as upload plugin
-            # all file types are allowed
-            return {}
-
-    return accept
 
 
 def compute_set_prefix_from_set_value(set_value, value):

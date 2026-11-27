@@ -5,6 +5,7 @@ import mimetypes
 
 from django.core.files import File
 from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 
@@ -19,62 +20,11 @@ from . import Import
 logger = logging.getLogger(__name__)
 
 
-class XMLImport(Import):
-
-    accept = {
-        'application/xml': ['.xml'],
-        'text/xml': ['.xml'],
-    }
-
+class XMLImportMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.file_name = None
         self.root = None
         self.ns_map = None
-
-    def render(self):
-        if self.file_name:
-            self.session.set('file_name', self.file_name)
-        else:
-            self.file_name = self.session.get('file_name')
-
-        if not self.file_name:
-            raise Http404
-
-        if self.root is None and not self.check():
-            raise Http404
-
-        self.project = self.get_project()
-
-        fetch_current_project(self.project, self.current_project)
-
-        serializer = ProjectSerializer(self.project)
-        return Response({
-            'key': self.key,
-            **serializer.data
-        })
-
-    def submit(self):
-        self.file_name = self.session.get('file_name')
-        if not self.file_name or not self.check():
-            raise Http404
-
-        self.project = self.get_project()
-
-        fetch_current_project(self.project, self.current_project)
-
-        save_project(self.project)
-
-        return Response({})
-
-    def check(self):
-        file_type, _encoding = mimetypes.guess_type(self.file_name)
-        if self.accept and file_type in self.accept:
-            self.root = read_xml_file(self.file_name)
-            if self.root is not None and self.root.tag == 'project':
-                self.ns_map = get_ns_map(self.root)
-                return True
-        return False
 
     def get_project(self):
         project = Project()
@@ -250,3 +200,63 @@ class XMLImport(Import):
 
     def get_value_updated(self, value_node):
         return value_node.find('updated').text or self.now
+
+
+class XMLImport(XMLImportMixin, Import):
+    label = _('RDMO XML')
+    description = _('Import a project from an RDMO XML file.')
+
+    upload = True
+    accept = {
+        'application/xml': ['.xml'],
+        'text/xml': ['.xml'],
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_name = None
+
+    def render(self):
+        if self.file_name:
+            self.session.set('file_name', self.file_name)
+            return Response({'key': self.key})
+
+        self.file_name = self.session.get('file_name')
+        if not self.file_name:
+            raise Http404
+
+        if self.root is None and not self.check():
+            raise Http404
+
+        self.project = self.get_project()
+
+        fetch_current_project(self.project, self.current_project)
+
+        serializer = ProjectSerializer(self.project)
+        return Response(serializer.data)
+
+    def submit(self):
+        self.file_name = self.session.get('file_name')
+        if not self.file_name or not self.check():
+            raise Http404
+
+        self.project = self.get_project()
+
+        fetch_current_project(self.project, self.current_project)
+
+        save_project(self.project)
+
+        return Response({
+            'location': {
+                'area': 'dashboard'
+            }
+        })
+
+    def check(self):
+        file_type, _encoding = mimetypes.guess_type(self.file_name)
+        if self.accept and file_type in self.accept:
+            self.root = read_xml_file(self.file_name)
+            if self.root is not None and self.root.tag == 'project':
+                self.ns_map = get_ns_map(self.root)
+                return True
+        return False

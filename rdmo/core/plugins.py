@@ -4,10 +4,12 @@ from .utils import import_class
 
 
 class Plugin:
+    label = None
+    description = None
 
     def __init__(self, key, label, class_name):
         self.key = key
-        self.label = label
+        self.label = label or self.label or key
         self.class_name = class_name
 
     @property

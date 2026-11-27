@@ -51,8 +51,20 @@ def find_import_plugin(request, file_name, current_project=None):
         plugin.current_project = current_project
         plugin.file_name = file_name
 
-        if hasattr(plugin, 'check') and plugin.check():
+        if plugin.upload and plugin.check():
             return plugin
+
+
+def get_imports():
+    return {
+        key: {
+            'label': plugin.label,
+            'description': plugin.description,
+            'upload': plugin.upload,
+            'accept': plugin.accept
+        }
+        for key, plugin in get_plugins('PROJECT_IMPORTS').items()
+    }
 
 
 def fetch_current_project(project, current_project):

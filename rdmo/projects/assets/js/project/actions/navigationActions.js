@@ -8,6 +8,8 @@ import * as rolesActions from '../../common/actions/rolesActions'
 import { selectPermissions } from '../../common/selectors/permissions'
 
 import { clearCurrentView, fetchAnswers, fetchProjectViews, fetchView } from './documentActions'
+import { fetchExport, fetchExports } from './exportActions'
+import { fetchImport, fetchImports } from './importActions'
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { fetchProjectIssues } from './issueActions'
 import { setLocation } from './locationActions'
@@ -33,7 +35,6 @@ export function navigateDashboard(location, back = null) {
     return storeDefaults().then(() => {
       // for the interview, the location and store are updated after the page is fetched, since pages might be skipped
       if (location.area == 'interview') {
-        // /interview/
         if (isNil(location.pageId)) {
           dispatch(fetchContinue())
           dispatch(fetchNavigation())
@@ -90,6 +91,15 @@ export function navigateDashboard(location, back = null) {
           dispatch(fetchProjectSnapshots())
           if (!isNil(location.snapshotId)) {
             dispatch(fetchProjectViews())
+          }
+          break
+        case 'transfer':
+          dispatch(fetchExports())
+          dispatch(fetchImports())
+          if (!isNil(location.exportKey)) {
+            dispatch(fetchExport(location.exportKey))
+          } else if (!isNil(location.importKey)) {
+            dispatch(fetchImport(location.importKey))
           }
           break
       }

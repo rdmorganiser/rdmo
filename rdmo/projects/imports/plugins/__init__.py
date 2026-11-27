@@ -6,9 +6,8 @@ from rdmo.options.models import Option
 
 
 class Import(Plugin):
-
-    accept = None
-    upload = True
+    upload = False
+    accept = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

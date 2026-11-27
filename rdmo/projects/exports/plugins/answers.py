@@ -1,5 +1,7 @@
 import re
 
+from django.utils.translation import gettext_lazy as _
+
 from rdmo.core.utils import render_to_csv, render_to_json
 from rdmo.views.templatetags import view_tags
 from rdmo.views.utils import ProjectWrapper
@@ -8,6 +10,7 @@ from . import Export
 
 
 class AnswersExportMixin:
+    download = True
 
     def get_data(self):
         # prefetch most elements of the catalog
@@ -57,7 +60,6 @@ class AnswersExportMixin:
 
 
 class CSVExport(AnswersExportMixin, Export):
-
     delimiter = ','
 
     def render(self):
@@ -66,14 +68,22 @@ class CSVExport(AnswersExportMixin, Export):
 
 
 class CSVCommaExport(CSVExport):
+    label = _('CSV (comma separated)')
+    description = _('Export the answers of the project as a CSV file with comma separated values.')
+
     delimiter = ','
 
 
 class CSVSemicolonExport(CSVExport):
+    label = _('CSV (semicolon separated)')
+    description = _('Export the answers of the project as a CSV file with semicolon separated values.')
+
     delimiter = ';'
 
 
 class JSONExport(AnswersExportMixin, Export):
+    label = _('JSON')
+    description = _('Export the answers of the project as a JSON file.')
 
     def render(self):
         return render_to_json(self.project.title, self.get_data())

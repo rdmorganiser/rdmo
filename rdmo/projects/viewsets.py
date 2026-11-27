@@ -41,7 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
-from .exports.utils import handle_export
+from .exports.utils import get_exports, handle_export
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -52,7 +52,7 @@ from .filters import (
     ProjectUserFilterBackend,
     SnapshotFilterBackend,
 )
-from .imports.utils import handle_import, handle_upload
+from .imports.utils import get_imports, handle_import, handle_upload
 from .models import Continuation, Integration, Invite, Issue, Membership, Project, Snapshot, Value, Visibility
 from .permissions import (
     HasProjectCreatePermission,
@@ -121,7 +121,6 @@ from .utils import (
     copy_project,
     get_contact_message,
     get_issue_send_content,
-    get_upload_accept,
     get_value_path,
     render_attachments,
     send_contact_message,
@@ -741,7 +740,7 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=['get', 'post'],
-        url_path=r'export/(?P<key>[^/]+)',
+        url_path=r'exports/(?P<key>[^/]+)',
         permission_classes=(HasProjectExportModelPermission | HasProjectExportObjectPermission, )
     )
     def export(self, request, pk, key):
@@ -750,7 +749,7 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=False,
         methods=['get', 'post'],
-        url_path=r'import/(?P<key>[^/]+)',
+        url_path=r'imports/(?P<key>[^/]+)',
         url_name='create-import',
         permission_classes=(HasProjectCreatePermission, )
     )
@@ -760,7 +759,7 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=False,
         methods=['post'],
-        url_path=r'import',
+        url_path=r'imports',
         url_name='create-upload',
         permission_classes=(HasProjectCreatePermission, )
     )
@@ -770,7 +769,7 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=['get', 'post'],
-        url_path=r'import/(?P<key>[^/]+)',
+        url_path=r'imports/(?P<key>[^/]+)',
         url_name='update-import',
         permission_classes=(HasProjectImportModelPermission | HasProjectImportObjectPermission, )
     )
@@ -780,26 +779,12 @@ class ProjectViewSet(ModelViewSet):
     @action(
         detail=True,
         methods=['post'],
-        url_path=r'import',
+        url_path=r'imports',
         url_name='update-upload',
         permission_classes=(HasProjectImportModelPermission | HasProjectImportObjectPermission, )
     )
     def update_upload(self, request, pk):
         return handle_upload(request, self.get_object())
-
-    @action(detail=False, url_path='upload-accept', permission_classes=(IsAuthenticated, ))
-    def upload_accept(self, request):
-        return Response(get_upload_accept())
-
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def imports(self, request):
-        # TODO: update after import refactoring
-        return Response([{
-            'key': key,
-            'label': label,
-            'class_name': class_name,
-            'href': ""
-        } for key, label, class_name in settings.PROJECT_IMPORTS if key in settings.PROJECT_IMPORTS_LIST] )
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def providers(self, request):
@@ -1577,6 +1562,20 @@ class CatalogViewSet(ListModelMixin, GenericViewSet):
             queryset.filter(Q(pk__in=availability_subquery) | Q(projects__user=self.request.user))
             .order_by('-available', 'order', 'id').distinct()
         )
+
+
+class ExportViewSet(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    def list(self, request, *args, **kwargs):
+        return Response(get_exports())
+
+
+class ImportViewSet(GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    def list(self, request, *args, **kwargs):
+        return Response(get_imports())
 
 
 class RoleViewSet(ChoicesViewSet):

@@ -1,6 +1,6 @@
 from django.http import Http404
 
-from rdmo.core.plugins import get_plugin
+from rdmo.core.plugins import get_plugin, get_plugins
 
 
 def handle_export(request, plugin_key, project):
@@ -21,3 +21,14 @@ def handle_export(request, plugin_key, project):
             raise Http404
 
         return plugin.submit()
+
+
+def get_exports():
+    return {
+        key: {
+            'label': plugin.label,
+            'description': plugin.description,
+            'download': plugin.download
+        }
+        for key, plugin in get_plugins('PROJECT_EXPORTS').items()
+    }

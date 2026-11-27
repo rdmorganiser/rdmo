@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { isEmpty } from 'lodash'
 
 import { encodeParams } from 'rdmo/core/assets/js/utils/api'
 import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
@@ -26,11 +27,30 @@ class ProjectsApi extends BaseApi {
   }
 
   static fetchAllowedFileTypes() {
-    return this.get('/api/v1/projects/projects/upload-accept/')
+    return this.get('/api/v1/projects/imports/').then(imports => {
+      const uploadImports = Object.values(imports).filter(({ upload }) => upload)
+
+      // an upload plugin without accept allows all file types
+      if (uploadImports.some(({ accept }) => isEmpty(accept))) {
+        return {}
+      }
+
+      return uploadImports.reduce((allowedTypes, { accept }) => {
+        Object.entries(accept).forEach(([mimeType, suffixes]) => {
+          allowedTypes[mimeType] = [...new Set([...(allowedTypes[mimeType] ?? []), ...suffixes])]
+        })
+        return allowedTypes
+      }, {})
+    })
   }
 
   static fetchDirectImportUrls() {
-    return this.get('/api/v1/projects/projects/imports/')
+    // TODO: update after import refactoring
+    return this.get('/api/v1/projects/imports/').then(imports => (
+      Object.entries(imports)
+        .filter(([, { upload }]) => !upload)
+        .map(([key, { label }]) => ({ key, label, href: '' }))
+    ))
   }
 
   static fetchInvites() {
