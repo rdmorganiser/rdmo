@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 
+from rdmo.core.plugins import PluginSession
 from rdmo.projects.exports import Export
 from rdmo.services.client import OauthClient
 from rdmo.services.exceptions import OauthAuthorizationRequired
@@ -24,6 +25,10 @@ class SetExportForm(forms.Form):
 class SetExport(Export):
     label = _('Dataset')
     description = _('Export a single dataset of the project, which can be selected in a form.')
+
+    @property
+    def session(self):
+        return PluginSession(self)
 
     def render(self):
         datasets = self.get_set('set/id')

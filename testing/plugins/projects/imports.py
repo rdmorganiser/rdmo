@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 
+from rdmo.core.plugins import PluginSession
 from rdmo.projects.imports import Import
 from rdmo.services.client import OauthClient
 from rdmo.services.exceptions import OauthAuthorizationRequired
@@ -23,6 +24,10 @@ class SetImport(Import):
             super().__init__(*args, **kwargs)
 
             self.fields['dataset'].widget = forms.RadioSelect(choices=dataset_choices)
+
+    @property
+    def session(self):
+        return PluginSession(self)
 
     def get_sets(self, path):
         return (

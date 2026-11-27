@@ -13,6 +13,8 @@ from rest_framework.response import Response
 
 import requests
 
+from rdmo.core.plugins import PluginSession
+
 from .exceptions import OauthAuthorizationRequired
 
 logger = logging.getLogger(__name__)
@@ -59,7 +61,7 @@ class OauthClient:
 
     @property
     def session(self):
-        return self.plugin.session
+        return PluginSession(self.plugin)
 
     @property
     def request(self):

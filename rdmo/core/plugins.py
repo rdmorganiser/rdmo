@@ -12,38 +12,43 @@ class Plugin:
         self.label = label or self.label or key
         self.class_name = class_name
 
-    @property
-    def session(self):
-        return PluginSession(self)
-
-    def get_session_key(self, key):
-        return f'{self.class_name}.{self.key}.{key}'
-
 
 class PluginSession:
+    '''
+    Stores data for a plugin in the session of the current request, the keys are prefixed with
+    the class name and the key of the plugin (or the given prefix), so that different plugins
+    do not interfere:
 
-    def __init__(self, plugin):
+        class ExamplePlugin(Plugin):
+
+            @property
+            def session(self):
+                return PluginSession(self)
+    '''
+
+    def __init__(self, plugin, prefix=None):
         self.plugin = plugin
+        self.prefix = prefix or f'{plugin.class_name}.{plugin.key}'
 
     @property
     def session(self):
         return self.plugin.request.session
 
+    def get_session_key(self, key):
+        return f'{self.prefix}.{key}'
+
     def get(self, key, default=None):
-        session_key = self.plugin.get_session_key(key)
-        return self.session.get(session_key, default)
+        return self.session.get(self.get_session_key(key), default)
 
     def set(self, key, value):
-        session_key = self.plugin.get_session_key(key)
-        self.session[session_key] = value
+        self.session[self.get_session_key(key)] = value
 
     def pop(self, key, default=None):
-        session_key = self.plugin.get_session_key(key)
-        return self.session.pop(session_key, default)
+        return self.session.pop(self.get_session_key(key), default)
 
     def drop(self):
         # remove all keys of this plugin from the session
-        prefix = self.plugin.get_session_key('')
+        prefix = self.get_session_key('')
         for session_key in [session_key for session_key in self.session.keys() if session_key.startswith(prefix)]:
             del self.session[session_key]
 
