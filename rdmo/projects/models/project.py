@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -6,6 +5,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
@@ -90,9 +90,29 @@ class Project(MPTTModel, Model):
         return reverse('project', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields')
+        if update_fields is not None:
+            update_fields = set(update_fields)
+            # MPTT can expand an empty set into a full save.
+            if not update_fields:
+                return
+            kwargs['update_fields'] = update_fields
+
         # ensure that the project hierarchy is not disturbed
         if self.id and self.parent in self.get_descendants(include_self=True):
             raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
+
+        self._catalog_changed = (
+            self.pk is not None
+            and (update_fields is None or bool(update_fields & {'catalog', 'catalog_id'}))
+            and Project.objects.filter(pk=self.pk).exclude(catalog_id=self.catalog_id).exists()
+        )
+        if self._catalog_changed:
+            self.progress_count = None
+            self.progress_total = None
+            if update_fields is not None:
+                # Persist the cache reset alongside the catalog change in partial saves.
+                update_fields.update(('progress_count', 'progress_total'))
 
         super().save(*args, **kwargs)
 
@@ -171,6 +191,16 @@ class Project(MPTTModel, Model):
             self.catalog,
             verbose=verbose
         ).compute(values)
+
+    def update_progress(self, progress_count, progress_total):
+        updated = now()
+        # Another request may change the catalog while progress is being calculated.
+        if Project.objects.filter(pk=self.pk, catalog_id=self.catalog_id).update(
+            progress_count=progress_count, progress_total=progress_total, updated=updated,
+        ):
+            self.progress_count = progress_count
+            self.progress_total = progress_total
+            self.updated = updated
 
     def get_cached_ancestors(self):
         # this caches the ancestors, different to a @cached_property, this is also done

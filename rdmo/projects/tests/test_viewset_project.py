@@ -641,15 +641,36 @@ def test_update(db, client, username, password, project_id):
         assert Project.objects.get(id=project_id).description == project.description
 
 
-def test_update_replacement_catalog(db, client):
+@pytest.mark.parametrize('stale_progress', [False, True])
+def test_update_replacement_catalog(db, client, stale_progress):
     project = Project.objects.get(pk=1)
-    project.catalog.delete()
-    project.refresh_from_db()
-
-    catalog = Catalog.objects.create(uri_path='replacement', title_lang1='Replacement catalog')
-    catalog.sites.add(Site.objects.get_current())
     original_ids = set(project.values.values_list('id', flat=True))
     client.login(username='owner', password='owner')
+    progress_url = reverse('v1-projects:project-progress', args=[project.pk])
+    response = client.post(progress_url)
+    assert response.status_code == 200
+    original_progress = response.json()
+    assert 0 < original_progress['count'] <= original_progress['total']
+
+    project.catalog.delete()
+    project.refresh_from_db()
+    assert project.catalog_id is None
+    assert project.progress_count is None
+    assert project.progress_total is None
+
+    if stale_progress:
+        # Simulate a project whose catalog was deleted before cache invalidation was added.
+        Project.objects.filter(pk=project.pk).update(
+            progress_count=original_progress['count'], progress_total=original_progress['total']
+        )
+
+    response = client.get(progress_url)
+    assert response.status_code == 200
+    assert response.json() == {}
+
+    catalog = Catalog.objects.get(uri_path='catalog2')
+    catalog.available = True
+    catalog.save(update_fields=('available',))
     response = client.patch(
         reverse(urlnames['detail'], args=[project.pk]),
         {'catalog': catalog.pk},
@@ -658,13 +679,15 @@ def test_update_replacement_catalog(db, client):
     assert response.status_code == 200
     project.refresh_from_db()
     assert project.catalog_id == catalog.pk
+    assert project.progress_count is None
+    assert project.progress_total is None
     assert set(project.values.values_list('id', flat=True)) == original_ids
 
     response = client.get(reverse('v1-projects:project-answers', args=[project.pk]))
     assert response.status_code == 200
     assert 'This project has no catalog.' not in response.json()['html']
 
-    response = client.post(reverse('v1-projects:project-progress', args=[project.pk]))
+    response = client.get(progress_url)
     assert response.status_code == 200
     assert response.json() == {'count': 0, 'total': 0, 'ratio': 0}
 
