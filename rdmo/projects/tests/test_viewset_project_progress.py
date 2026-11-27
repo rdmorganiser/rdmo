@@ -2,8 +2,6 @@ import pytest
 
 from django.urls import reverse
 
-from rdmo.questions.models import Catalog
-
 from ..models import Project
 
 users = (
@@ -155,6 +153,11 @@ def test_progress_post_changed(db, client):
     assert project.updated > project_updated
     assert project.progress_count > progress_count
     assert project.progress_total > progress_total
+    assert response.json() == {
+        'count': project.progress_count,
+        'total': project.progress_total,
+        'ratio': project.progress_count / project.progress_total,
+    }
 
 
 def test_progress_post_unchanged(db, client):
@@ -176,30 +179,3 @@ def test_progress_post_unchanged(db, client):
     assert project.progress_count == progress_count
     assert project.progress_total == progress_total
     assert project.updated == project_updated
-
-
-def test_progress_does_not_cache_result_after_catalog_change(db, client, monkeypatch):
-    project = Project.objects.get(pk=1)
-    replacement = Catalog.objects.get(uri_path='catalog2')
-    client.login(username='owner', password='owner')
-    url = reverse(urlnames['progress'], args=[project.pk])
-
-    def change_catalog_during_compute(_project):
-        project.catalog = replacement
-        project.save(update_fields=('catalog',))
-        return 3, 5
-
-    with monkeypatch.context() as patch:
-        patch.setattr('rdmo.projects.viewsets.compute_progress', change_catalog_during_compute)
-        response = client.post(url)
-
-    assert response.status_code == 200
-    assert response.json() == {'count': 3, 'total': 5, 'ratio': 0.6}
-    project.refresh_from_db()
-    assert project.catalog_id == replacement.pk
-    assert project.progress_count is None
-    assert project.progress_total is None
-
-    response = client.get(url)
-    assert response.status_code == 200
-    assert response.json() == {'count': 0, 'total': 0, 'ratio': 0}

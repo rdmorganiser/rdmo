@@ -12,8 +12,8 @@ from ..sync import sync_tasks_or_views_for_project
 
 @receiver(pre_delete, sender=Catalog)
 def clear_progress_for_deleted_catalog(sender, instance, **kwargs):
-    # SET_NULL clears the catalog without calling Project.save().
-    Project.objects.filter(catalog_id=instance.pk).update(progress_count=None, progress_total=None)
+    # Find affected projects before SET_NULL clears their catalog IDs without calling Project.save().
+    Project.objects.filter(catalog_id=instance.id).update(progress_count=None, progress_total=None)
 
 
 @receiver(post_save, sender=Project)

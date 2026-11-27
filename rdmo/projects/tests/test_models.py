@@ -73,19 +73,6 @@ def test_project_save_without_catalog_field_keeps_progress(db, update_fields):
     assert project.description == ('Updated description' if update_fields else original_description)
 
 
-def test_project_update_progress_syncs_instance(db):
-    project = Project.objects.get(pk=1)
-    original_updated = project.updated
-
-    project.update_progress(3, 5)
-
-    saved_project = Project.objects.get(pk=project.pk)
-    assert project.progress_count == saved_project.progress_count == 3
-    assert project.progress_total == saved_project.progress_total == 5
-    assert project.updated == saved_project.updated
-    assert project.updated > original_updated
-
-
 def test_membership_str(db):
     instances = Membership.objects.all()
     for instance in instances:

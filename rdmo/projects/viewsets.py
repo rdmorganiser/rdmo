@@ -439,23 +439,23 @@ class ProjectViewSet(ModelViewSet):
         if project.catalog_id is None:
             return Response({})
 
-        progress_count, progress_total = project.progress_count, project.progress_total
-        if request.method == 'POST' or progress_count is None or progress_total is None:
+        if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
             project.prefetch_catalog()
 
-            # compute the progress, but store it only, if it has changed
             progress_count, progress_total = compute_progress(project)
             if progress_count != project.progress_count or progress_total != project.progress_total:
-                project.update_progress(progress_count, progress_total)
+                project.progress_count = progress_count
+                project.progress_total = progress_total
+                project.save(update_fields=('progress_count', 'progress_total', 'updated'))
 
         try:
-            ratio = progress_count / progress_total
+            ratio = project.progress_count / project.progress_total
         except ZeroDivisionError:
             ratio = 0
 
         return Response({
-            'count': progress_count,
-            'total': progress_total,
+            'count': project.progress_count,
+            'total': project.progress_total,
             'ratio': ratio
         })
 
