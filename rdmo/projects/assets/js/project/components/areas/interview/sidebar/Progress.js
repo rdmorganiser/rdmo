@@ -5,7 +5,7 @@ import { isNil } from 'lodash'
 const Progress = () => {
   const progress = useSelector((state) => state.progress.progress)
 
-  if (isNil(progress)) {
+  if (isNil(progress) || isNil(progress.total)) {
     return
   }
 

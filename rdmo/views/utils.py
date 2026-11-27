@@ -70,12 +70,19 @@ class ProjectWrapper:
             conditions[condition.uri] = conditions[condition.uri_path] = self._resolve_condition(condition)
         return conditions
 
+    @property
+    def has_catalog(self):
+        return self._catalog is not None
+
     @cached_property
     def catalog(self):
-        return self._catalog.to_dict()
+        return self._catalog.to_dict() if self.has_catalog else None
 
     @cached_property
     def questions(self):
+        if not self.has_catalog:
+            return []
+
         def walk(elements):
             questions = []
             for element in elements:

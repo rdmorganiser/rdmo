@@ -67,3 +67,30 @@ def test_navigation_get(db, client, username, password, project_id):
                 assert response.status_code == 404
             else:
                 assert response.status_code == 401
+
+
+def test_navigation_get_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    response = client.get(reverse(urlnames['navigation'], args=[project.pk]))
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+@pytest.mark.parametrize('username,password', [('user', 'user'), ('anonymous', None)])
+def test_navigation_get_without_catalog_forbidden(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['navigation'], args=[project.pk])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401

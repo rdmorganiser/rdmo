@@ -2,6 +2,10 @@ import pytest
 
 from django.urls import reverse
 
+from rdmo.questions.models import Catalog
+
+from ..models import Project
+
 users = (
     ('owner', 'owner'),
     ('manager', 'manager'),
@@ -48,6 +52,19 @@ def test_detail(db, client, username, password, project_id, page_id):
         assert response.json().get('id') == page_id
     else:
         assert response.status_code == 404
+
+
+def test_detail_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['detail'], args=[project.pk, 1])
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'This project has no catalog.'}
 
 
 def test_detail_order_in_page(db, client):
@@ -145,6 +162,36 @@ def test_continue(db, client, username, password, project_id):
         assert response.status_code == 404
 
 
+def test_continue_without_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['continue'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'This project has no catalog.'}
+
+
+@pytest.mark.parametrize('unavailable_on_site', [False, True])
+def test_continue_unavailable_catalog(db, client, unavailable_on_site, settings):
+    project = Project.objects.get(pk=1)
+    catalog = project.catalog
+    if unavailable_on_site:
+        settings.MULTISITE = True
+        catalog.sites.clear()
+    else:
+        catalog.available = False
+        catalog.save()
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['continue'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
 def test_continue_catalog_without_pages(db, client):
     from rdmo.questions.models.page import Page
     project_id = 1
@@ -157,4 +204,18 @@ def test_continue_catalog_without_pages(db, client):
     response = client.get(url)
 
     if project_id in view_questionset_permission_map.get(username, []):
-        assert response.status_code == 404
+        assert response.status_code == 200
+        assert response.json() == {}
+
+
+def test_continue_empty_catalog(db, client):
+    project = Project.objects.get(pk=1)
+    catalog = Catalog.objects.create(uri_path='empty', title_lang1='Empty catalog')
+    project.catalog = catalog
+    project.save()
+    client.login(username='owner', password='owner')
+    url = reverse(urlnames['continue'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 404
+    assert response.json() == {'detail': 'This catalog has no sections.'}

@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
 
-from ..models import Issue
+from ..models import Issue, Project
 
 users = (
     ('owner', 'owner'),
@@ -82,6 +82,35 @@ def test_list(db, client, username, password, project_id):
         assert all(isinstance(item['dates'], list) for item in response_items)
     else:
         assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', [('owner', 'owner'), ('guest', 'guest')])
+def test_list_without_catalog(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['list'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert project.issues.exists()
+    assert response.json()
+    assert all(issue['questions'] == [] for issue in response.json())
+
+
+@pytest.mark.parametrize('username,password', [('user', 'user'), ('anonymous', None)])
+def test_list_without_catalog_forbidden(db, client, username, password):
+    project = Project.objects.get(pk=1)
+    project.catalog.delete()
+    project.refresh_from_db()
+
+    client.login(username=username, password=password)
+    url = reverse(urlnames['list'], args=[project.pk])
+    response = client.get(url)
+
+    assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)

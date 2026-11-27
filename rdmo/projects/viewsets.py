@@ -41,6 +41,7 @@ from rdmo.views.models import View
 from rdmo.views.utils import ProjectWrapper
 
 from .constants import ROLE_CHOICES, ROLE_RANKS
+from .exceptions import CatalogMissingConflict, CatalogMissingNotFound
 from .filters import (
     AttributeFilterBackend,
     OptionFilterBackend,
@@ -274,7 +275,7 @@ class ProjectViewSet(ModelViewSet):
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def navigation(self, request, pk=None, section_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         # compute navigation from the answer tree
         navigation = compute_navigation(project)
@@ -395,6 +396,9 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=True, permission_classes=(HasModelPermission | HasProjectPermission, ))
     def options(self, request, pk=None):
         project = self.get_object()
+        if project.catalog_id is None:
+            raise CatalogMissingConflict()
+
         try:
             try:
                 optionset_id = request.GET.get('optionset')
@@ -403,7 +407,7 @@ class ProjectViewSet(ModelViewSet):
                 raise NotFound() from e
 
             # check if the optionset belongs to this catalog and if it has a provider
-            project.catalog.prefetch_elements()
+            project.prefetch_catalog()
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
                 options = []
@@ -432,15 +436,17 @@ class ProjectViewSet(ModelViewSet):
             permission_classes=(HasProjectProgressModelPermission | HasProjectProgressObjectPermission, ))
     def progress(self, request, pk=None):
         project = self.get_object()
+        if project.catalog_id is None:
+            return Response({})
 
         if request.method == 'POST' or project.progress_count is None or project.progress_total is None:
-            project.catalog.prefetch_elements()
+            project.prefetch_catalog()
 
-            # compute the progress, but store it only, if it has changed
             progress_count, progress_total = compute_progress(project)
             if progress_count != project.progress_count or progress_total != project.progress_total:
-                project.progress_count, project.progress_total = progress_count, progress_total
-                project.save()
+                project.progress_count = progress_count
+                project.progress_total = progress_total
+                project.save(update_fields=('progress_count', 'progress_total', 'updated'))
 
         try:
             ratio = project.progress_count / project.progress_total
@@ -523,7 +529,7 @@ class ProjectViewSet(ModelViewSet):
                         'message': [_('This field may not be blank.')] if not message else []
                     })
             else:
-                project.catalog.prefetch_elements()
+                project.prefetch_catalog()
                 return Response(get_contact_message(request, project))
         else:
             raise Http404
@@ -545,7 +551,7 @@ class ProjectViewSet(ModelViewSet):
     )
     def answers_tree(self, request, pk, snapshot_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
@@ -571,7 +577,7 @@ class ProjectViewSet(ModelViewSet):
     )
     def answers(self, request, pk, snapshot_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
@@ -612,7 +618,7 @@ class ProjectViewSet(ModelViewSet):
     )
     def answers_export(self, request, pk, export_format, snapshot_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         try:
             snapshot = project.snapshots.get(pk=snapshot_id) if snapshot_id else None
@@ -651,7 +657,7 @@ class ProjectViewSet(ModelViewSet):
             url_path=r'views/(?P<view_id>\d+)')
     def view(self, request, pk, view_id, snapshot_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         try:
             view = project.views.get(pk=view_id)
@@ -679,7 +685,7 @@ class ProjectViewSet(ModelViewSet):
             url_path=r'views/(?P<view_id>\d+)/export/(?P<export_format>[a-z]+)')
     def view_export(self, request, pk, view_id, export_format, snapshot_id=None):
         project = self.get_object()
-        project.catalog.prefetch_elements()
+        project.prefetch_catalog()
 
         try:
             view = project.views.get(pk=view_id)
@@ -1135,6 +1141,10 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     @action(detail=False, methods=['POST'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def copy_set(self, request, parent_lookup_project, pk=None):
+        catalog = self.project.catalog
+        if catalog is None:
+            raise CatalogMissingConflict()
+
         # copy all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
 
@@ -1145,9 +1155,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
         # look for the source value using the user's permissions
         copy_value = get_object_or_404(Value.objects.filter_user(request.user), id=copy_value_id)
+        source_catalog = copy_value.project.catalog
+        if source_catalog is None:
+            raise CatalogMissingConflict(_('The source project has no catalog.'))
 
         # when the user can see this value, collect all values for this set and its descendants
-        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value)
+        copy_values = Value.objects.filter_user(request.user).filter_set(copy_value, source_catalog)
 
         # init list of values to return
         response_values = []
@@ -1163,7 +1176,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
             # collect all non-empty values for this set and all descendants and convert
             # them to a list to compare them later to the new values
-            set_values = self.get_queryset().filter_set(set_value)
+            set_values = self.get_queryset().filter_set(set_value, catalog)
             set_values_list = set_values.exclude_empty().values_list('attribute', 'set_prefix', 'set_index')
             set_empty_values_list = set_values.filter_empty().values_list(
                 'attribute', 'set_prefix', 'set_index', 'collection_index'
@@ -1194,7 +1207,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
                 value.set_prefix = compute_set_prefix_from_set_value(set_value, value)
 
             # skip this value if value.option does not match the optionsets of its question
-            if not check_options(self.project, value):
+            if not check_options(catalog, value):
                 continue
 
             # check if the value already exists, we do not consider collection_index
@@ -1227,13 +1240,18 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     @action(detail=True, methods=['DELETE'], url_path='set',
             permission_classes=(HasModelPermission | HasProjectPermission, ))
     def delete_set(self, request, parent_lookup_project, pk=None):
+        set_value = self.get_object()
+
+        catalog = self.project.catalog
+        if catalog is None:
+            raise CatalogMissingConflict()
+
         # delete all values for questions in questionset collections with the attribute
         # for this value and the same set_prefix and set_index
-        set_value = self.get_object()
         set_value.delete()
 
         # collect all values for this set and all descendants and delete them
-        values = self.get_queryset().filter_set(set_value)
+        values = self.get_queryset().filter_set(set_value, catalog)
         values.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -1268,8 +1286,13 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
     permission_classes = (HasModelPermission | HasProjectPagePermission, )
     serializer_class = PageSerializer
 
+    def check_catalog(self):
+        if self.project.catalog_id is None:
+            raise CatalogMissingNotFound()
+
     def get_queryset(self):
-        self.project.catalog.prefetch_elements()
+        self.check_catalog()
+        self.project.prefetch_catalog()
         return (
             Page.objects
             .filter_by_catalog(self.project.catalog)
@@ -1315,11 +1338,12 @@ class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericV
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasProjectPagePermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
+        self.check_catalog()
+        if not self.project.catalog.elements:
+            raise NotFound(_('This catalog has no sections.'))
+
         if not self.project.catalog.pages:
-            return Response({
-                'detail': 'No Page matches the given query.',
-                'done': True
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response({})
 
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)

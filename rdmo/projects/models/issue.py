@@ -105,6 +105,9 @@ class Issue(models.Model):
 
     @property
     def questions(self):
+        if self.project.catalog is None:
+            return []
+
         # collect all source_ids from all conditions of the task of this issue
         source_ids = {
             condition.source_id

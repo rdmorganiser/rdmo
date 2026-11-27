@@ -1,9 +1,12 @@
 import io
+from collections import Counter
 
 import pytest
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
+
+from defusedxml import ElementTree
 
 from rdmo.projects.models import Project
 
@@ -75,3 +78,30 @@ def test_prune_projects_remove(db, settings):
 
     assert stdout.getvalue() == "No projects without ['owner']\n"
     assert not stderr.getvalue()
+
+
+def test_export_projects_without_catalog_preserves_values(db, files, tmp_path):
+    project = Project.objects.get(pk=1)
+
+    live_values = Counter(
+        text or '' for text in project.values.filter(snapshot=None).values_list('text', flat=True)
+    )
+    snapshot_value_rows = project.values.filter(snapshot__isnull=False).values_list('snapshot__title', 'text')
+    snapshot_values = Counter((title, text or '') for title, text in snapshot_value_rows)
+    assert live_values
+    assert snapshot_values
+    snapshot_count = project.snapshots.count()
+
+    project.catalog.delete()
+    call_command('export_projects', path=str(tmp_path), stdout=io.StringIO())
+
+    (exported,) = (tmp_path / str(project.pk)).glob('*.xml')
+    root = ElementTree.fromstring(exported.read_bytes())
+    assert root.find('catalog').attrib == {}
+    assert Counter(value.findtext('text') for value in root.findall('./values/value')) == live_values
+    snapshots = root.findall('./snapshots/snapshot')
+    assert len(snapshots) == snapshot_count
+    assert Counter(
+        (snapshot.findtext('title'), value.findtext('text'))
+        for snapshot in snapshots for value in snapshot.findall('./values/value')
+    ) == snapshot_values

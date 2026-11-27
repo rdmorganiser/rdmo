@@ -17,7 +17,7 @@ def test_filter_set_excludes_sibling_prefix(db, set_value_id, set_prefix):
     )
 
     # Act: collect the selected tab's answers.
-    values = Value.objects.all().filter_set(set_value)
+    values = Value.objects.all().filter_set(set_value, set_value.project.catalog)
 
     # Assert: a matching string prefix must not include a sibling's answer.
     assert not values.filter(id=sibling_value.id).exists()

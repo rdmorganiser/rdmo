@@ -1,5 +1,9 @@
 {% load core_tags %}
 
+{% if not project.catalog %}
+    {% include 'projects/project_view_missing_catalog_info.html' %}
+{% endif %}
+
 {% for section in project_wrapper.catalog.sections %}
 
     <h2>{{ section.title|markdown }}</h2>

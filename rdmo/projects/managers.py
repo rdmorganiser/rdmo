@@ -183,9 +183,7 @@ class ValueQuerySet(models.QuerySet):
         optional_values = self.filter(attribute__in=[q.attribute for q in catalog.optional_questions])
         return self.exclude(id__in=optional_values.filter_empty().values_list('id', flat=True))
 
-    def filter_set(self, set_value):
-        # get the catalog and prefetch most elements of the catalog
-        catalog = set_value.project.catalog
+    def filter_set(self, set_value, catalog):
         catalog.prefetch_elements()
 
         # Get all attributes from matching elements and their descendants

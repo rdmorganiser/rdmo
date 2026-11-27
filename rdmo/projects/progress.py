@@ -1,8 +1,10 @@
 def compute_navigation(project):
     # compute navigation from answer tree
-    navigation = []
     answer_tree = project.get_answer_tree(verbose=('section', 'page'))
+    if not answer_tree:
+        return []
 
+    navigation = []
     for section_node in answer_tree['elements']:
         navigation_section = {
             key: section_node.get(key)
@@ -25,17 +27,24 @@ def compute_navigation(project):
 
 def compute_progress(project):
     answer_tree = project.get_answer_tree()
+    if not answer_tree:
+        return 0, 0
+
     return answer_tree['count'], answer_tree['total']
 
 
 def compute_page(project, requested_page, direction):
+    answer_tree = project.get_answer_tree()
+    if not answer_tree:
+        return None
+
     page_already_found = False
 
-    answer_tree = project.get_answer_tree()
-
-    section_iter = answer_tree['elements'] if direction == 'next' else reversed(answer_tree['elements'])
+    sections = answer_tree['elements']
+    section_iter = sections if direction == 'next' else reversed(sections)
     for section_node in section_iter:
-        page_iter = section_node['elements'] if direction == 'next' else reversed(section_node['elements'])
+        pages = section_node['elements']
+        page_iter = pages if direction == 'next' else reversed(pages)
         for page_node in page_iter:
             if page_node['id'] == requested_page.id:
                 # if the page is the requested page, check if it hidden

@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
@@ -89,12 +88,29 @@ class Project(MPTTModel, Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, update_fields=None, **kwargs):
+        if update_fields is not None:
+            update_fields = set(update_fields)
+            # An empty update_fields should skip the save. MPTT can expand it and persist pending changes.
+            if not update_fields:
+                return
+
         # ensure that the project hierarchy is not disturbed
         if self.id and self.parent in self.get_descendants(include_self=True):
             raise RuntimeError('A project may not be moved to be a child of itself or one of its descendants.')
 
-        super().save(*args, **kwargs)
+        self._catalog_changed = False
+        if self.id is not None and (update_fields is None or update_fields & {'catalog', 'catalog_id'}):
+            self._catalog_changed = Project.objects.filter(id=self.id).exclude(catalog_id=self.catalog_id).exists()
+
+        if self._catalog_changed:
+            self.progress_count = None
+            self.progress_total = None
+            if update_fields is not None:
+                # Persist the cache reset alongside the catalog change in partial saves.
+                update_fields.update(('progress_count', 'progress_total'))
+
+        super().save(*args, update_fields=update_fields, **kwargs)
 
     @property
     def catalog_uri(self) -> str | None:
@@ -152,7 +168,14 @@ class Project(MPTTModel, Model):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
 
+    def prefetch_catalog(self):
+        if self.catalog is not None:
+            self.catalog.prefetch_elements()
+
     def get_answer_tree(self, snapshot=None, verbose=None):
+        if self.catalog is None:
+            return {}
+
         verbose = verbose or ()
         values = self.values.filter(snapshot=snapshot).order_by(
             'attribute_id', 'set_prefix', 'set_index', 'collection_index'

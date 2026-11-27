@@ -60,7 +60,7 @@ class Command(BaseCommand):
             view_uris = sorted(project.views.values_list("uri", flat=True))
 
             self.stdout.write(f'Project "{project.title}" [id={project.id}]:')
-            self.stdout.write(f'- Catalog: {project.catalog.uri}')
+            self.stdout.write(f'- Catalog: {project.catalog_uri}')
 
             if task_uris:
                 self.stdout.write("- Tasks:")
