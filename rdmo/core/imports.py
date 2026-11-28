@@ -4,6 +4,7 @@ import time
 from collections import defaultdict
 from enum import Enum
 from os.path import join as pj
+from pathlib import Path
 from random import randint
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -32,24 +33,25 @@ class ImportElementFields(str, Enum):
 
 
 def handle_uploaded_file(filedata):
-    tempfilename = generate_tempfile_name()
+    # keep the suffix of the uploaded file, so that import plugins can check the file type
+    tempfilename = generate_tempfile_name(Path(filedata.name).suffix.lower())
     with open(tempfilename, 'wb+') as destination:
         for chunk in filedata.chunks():
             destination.write(chunk)
     return tempfilename
 
 
-def handle_fetched_file(filedata):
-    tempfilename = generate_tempfile_name()
+def handle_fetched_file(filedata, suffix='.xml'):
+    tempfilename = generate_tempfile_name(suffix)
     with open(tempfilename, 'wb+') as destination:
         destination.write(filedata)
     return tempfilename
 
 
-def generate_tempfile_name():
+def generate_tempfile_name(suffix='.xml'):
     t = round(time.time() * 1000)
     r = randint(10000, 99999)
-    fn = pj(tempfile.gettempdir(), 'upload_' + str(t) + '_' + str(r) + '.xml')
+    fn = pj(tempfile.gettempdir(), 'upload_' + str(t) + '_' + str(r) + suffix)
     return fn
 
 
