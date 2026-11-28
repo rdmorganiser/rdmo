@@ -2,12 +2,14 @@ from django import forms
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 
 from rdmo.core.plugins import PluginSession
 from rdmo.projects.imports import Import
+from rdmo.projects.plugins import ProjectValues
 from rdmo.services.client import OauthClient
 from rdmo.services.exceptions import OauthAuthorizationRequired
 
@@ -29,17 +31,12 @@ class SetImport(Import):
     def session(self):
         return PluginSession(self)
 
-    def get_sets(self, path):
-        if self.current_project is None:
-            return []
-
-        return (
-            self.current_project.values.filter(snapshot=None, attribute__path=path)
-            .order_by('set_index', 'collection_index')
-        )
+    @cached_property
+    def values(self):
+        return ProjectValues(self.current_project)
 
     def render(self):
-        datasets = self.get_sets('set/id')
+        datasets = self.values.get_set('set/id') if self.current_project else []
         dataset_choices = [(dataset.set_index, dataset.value) for dataset in datasets]
         self.session.set('dataset_choices', dataset_choices)
 
