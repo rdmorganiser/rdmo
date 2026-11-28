@@ -101,12 +101,22 @@ PROJECT_ISSUE_PROVIDERS = [
 
 PROJECT_EXPORTS += [
     ('set', _('Export Set'), 'plugins.projects.exports.SetExport'),
+    ('oauth', _('Export to external service'), 'plugins.projects.exports.OAuthExport'),
 ]
 
 PROJECT_IMPORTS += [
     ('set', _('Import set'), 'plugins.projects.imports.SetImport'),
     ('url', _('Import from URL'), 'plugins.projects.imports.URLImport'),
 ]
+
+OAUTH_PROVIDER = {
+    'authorize_url': 'http://example.com/default/authorize',
+    'token_url': 'http://example.com/default/token',
+    'client_id': 'rdmo',
+    'client_secret': 'secret',
+    'scope': 'openid',
+}
+OAUTH_PROVIDER_URL = 'http://example.com/default/userinfo'
 
 PROJECT_VALUES_VALIDATION = True
 
