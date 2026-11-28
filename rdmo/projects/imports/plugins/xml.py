@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework.response import Response
 
-from rdmo.core.plugins import PluginSession
+from rdmo.core.plugins import PluginResponse, PluginSession
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.questions.models import Catalog
 
@@ -221,6 +221,10 @@ class XMLImport(XMLImportMixin, Import):
     def session(self):
         return PluginSession(self)
 
+    @property
+    def response(self):
+        return PluginResponse(self)
+
     def render(self):
         if self.file_name:
             self.session.set('file_name', self.file_name)
@@ -251,7 +255,7 @@ class XMLImport(XMLImportMixin, Import):
 
         save_project(self.project, self.current_project)
 
-        return Response({'success': True})
+        return self.response.success()
 
     def check(self):
         file_type, _encoding = mimetypes.guess_type(self.file_name)

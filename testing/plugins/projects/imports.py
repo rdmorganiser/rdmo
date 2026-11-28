@@ -1,16 +1,12 @@
 from django import forms
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-
 import requests
 
-from rdmo.core.plugins import PluginSession
+from rdmo.core.plugins import PluginResponse, PluginSession
 from rdmo.projects.imports import Import
 from rdmo.projects.imports.utils import create_project
 from rdmo.projects.plugins import ProjectValues
@@ -35,6 +31,10 @@ class SetImport(Import):
     def session(self):
         return PluginSession(self)
 
+    @property
+    def response(self):
+        return PluginResponse(self)
+
     @cached_property
     def values(self):
         return ProjectValues(self.current_project)
@@ -46,12 +46,9 @@ class SetImport(Import):
 
         form = self.Form(dataset_choices=dataset_choices)
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Import'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Import'),
         })
 
     def submit(self):
@@ -59,17 +56,14 @@ class SetImport(Import):
         form = self.Form(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:
-            return Response({'success': True})
+            return self.response.success()
 
         if form.is_valid():
-            return Response({'success': True})
+            return self.response.success()
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Import'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Import'),
         })
 
 
@@ -80,31 +74,29 @@ class URLImport(Import):
     class Form(forms.Form):
         url = forms.URLField(label=_('Import answers from this URL'), required=True)
 
+    @property
+    def response(self):
+        return PluginResponse(self)
+
     def render(self):
         form = self.Form()
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Import'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Import'),
         })
 
     def submit(self):
         form = self.Form(self.request.POST)
 
         if 'cancel' in self.request.POST:
-            return Response({'success': True})
+            return self.response.success()
 
         if form.is_valid():
-            return Response({'success': True})
+            return self.response.success()
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Import'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Import'),
         })
 
 
@@ -121,6 +113,10 @@ class OAuthImport(Import):
         return PluginSession(self)
 
     @property
+    def response(self):
+        return PluginResponse(self)
+
+    @property
     def next_url(self):
         if self.current_project is None:
             return reverse('projects_import', args=[self.key])
@@ -133,28 +129,25 @@ class OAuthImport(Import):
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
         except (requests.RequestException, ValueError) as e:
-            raise ValidationError({
+            raise self.response.error({
                 'external_service': [_('The request to the external service failed: %s') % e]
             }) from e
 
         self.session.set('project', project)
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'project': project,
-                'submit_label': _('Import'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'project': project,
+            'submit_label': _('Import'),
         })
 
     def submit(self):
         if 'cancel' in self.request.POST:
             self.session.pop('project')
-            return Response({'success': True})
+            return self.response.success()
 
         project = self.session.pop('project')
         if project is None:
-            raise ValidationError({'project': [_('Please fetch the data from the service first.')]})
+            raise self.response.error({'project': [_('Please fetch the data from the service first.')]})
 
         if self.current_project is None:
             new_project = create_project(
@@ -163,14 +156,14 @@ class OAuthImport(Import):
                 description=project.get('description') or '',
                 catalog_uri=project.get('catalog')
             )
-            return Response({'redirect_url': reverse('project', args=[new_project.id])})
+            return self.response.redirect(reverse('project', args=[new_project.id]))
 
         # keep the current values, if the service does not provide them
         self.current_project.title = project.get('title') or self.current_project.title
         self.current_project.description = project.get('description') or self.current_project.description
         self.current_project.save()
 
-        return Response({'success': True})
+        return self.response.success()
 
     def fetch_project(self):
         response = self.client.get(settings.OAUTH_PROVIDER_URL)

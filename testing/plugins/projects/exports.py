@@ -1,16 +1,12 @@
 from django import forms
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-
 import requests
 
-from rdmo.core.plugins import PluginSession
+from rdmo.core.plugins import PluginResponse, PluginSession
 from rdmo.projects.exports import Export
 from rdmo.projects.plugins import ProjectValues
 from rdmo.services.client import OauthClient
@@ -35,6 +31,10 @@ class SetExport(Export):
     def session(self):
         return PluginSession(self)
 
+    @property
+    def response(self):
+        return PluginResponse(self)
+
     @cached_property
     def values(self):
         return ProjectValues(self.project, self.snapshot)
@@ -47,12 +47,9 @@ class SetExport(Export):
 
         form = SetExportForm(dataset_choices=dataset_choices)
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Export'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Export'),
         })
 
     def submit(self):
@@ -60,17 +57,14 @@ class SetExport(Export):
         form = SetExportForm(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:
-            return Response({'success': True})
+            return self.response.success()
 
         if form.is_valid():
-            return Response({'success': True})
+            return self.response.success()
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'form': form,
-                'submit_label': _('Export'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'form': form,
+            'submit_label': _('Export'),
         })
 
 
@@ -83,6 +77,10 @@ class OAuthExport(Export):
         return OauthClient(self, **settings.OAUTH_PROVIDER)
 
     @property
+    def response(self):
+        return PluginResponse(self)
+
+    @property
     def next_url(self):
         return reverse('project_export', args=[self.project.id, self.key])
 
@@ -92,21 +90,18 @@ class OAuthExport(Export):
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
         except (requests.RequestException, ValueError) as e:
-            raise ValidationError({
+            raise self.response.error({
                 'external_service': [_('The request to the external service failed: %s') % e]
             }) from e
 
-        return Response({
-            'html': render_to_string('plugins/form.html', {
-                'project': self.project,
-                'submit_label': _('Export'),
-            },
-            request=self.request)
+        return self.response.html('plugins/form.html', {
+            'project': self.project,
+            'submit_label': _('Export'),
         })
 
     def submit(self):
         if 'cancel' in self.request.POST:
-            return Response({'success': True})
+            return self.response.success()
 
         try:
             self.client.post(settings.OAUTH_PROVIDER_URL, json={
@@ -116,8 +111,8 @@ class OAuthExport(Export):
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
         except (requests.RequestException, ValueError) as e:
-            raise ValidationError({
+            raise self.response.error({
                 'external_service': [_('The request to the external service failed: %s') % e]
             }) from e
 
-        return Response({'success': True})
+        return self.response.success()

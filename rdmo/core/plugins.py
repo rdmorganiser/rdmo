@@ -1,4 +1,8 @@
 from django.conf import settings
+from django.template.loader import render_to_string
+
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 
 from .utils import import_class
 
@@ -51,6 +55,35 @@ class PluginSession:
         prefix = self.get_session_key('')
         for session_key in [session_key for session_key in self.session.keys() if session_key.startswith(prefix)]:
             del self.session[session_key]
+
+
+
+class PluginResponse:
+    '''
+    Creates the responses of a plugin, which are understood by the frontend:
+
+        class ExamplePlugin(Plugin):
+            @property
+            def response(self):
+                return PluginResponse(self)
+    '''
+
+    def __init__(self, plugin):
+        self.plugin = plugin
+
+    def html(self, template_name, context=None):
+        return Response({
+            'html': render_to_string(template_name, context, request=self.plugin.request)
+        })
+
+    def success(self):
+        return Response({'success': True})
+
+    def redirect(self, url):
+        return Response({'redirect_url': url})
+
+    def error(self, errors):
+        return ValidationError(errors)
 
 
 def get_plugins(plugin_settings):
