@@ -1,3 +1,4 @@
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from rdmo.core.plugins import Plugin
@@ -13,5 +14,11 @@ class Import(Plugin):
         super().__init__(*args, **kwargs)
         self.project = None
         self.now = now()
-        self.attributes = {attribute.uri: attribute for attribute in Attribute.objects.all()}
-        self.options = {option.uri: option for option in Option.objects.all()}
+
+    @cached_property
+    def attributes(self):
+        return {attribute.uri: attribute for attribute in Attribute.objects.all()}
+
+    @cached_property
+    def options(self):
+        return {option.uri: option for option in Option.objects.all()}
