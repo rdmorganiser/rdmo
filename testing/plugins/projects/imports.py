@@ -1,10 +1,12 @@
 from django import forms
 from django.conf import settings
+from django.http import Http404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from rdmo.core.plugins import PluginSession
@@ -106,24 +108,30 @@ class URLImport(Import):
 
 class OAuthImport(Import):
     label = _('Import from external service')
-    description = _('Import answers from an external service.')
+    description = _('Import the title and description of the project from an external service.')
 
     @property
     def client(self):
         return OauthClient(self, **settings.OAUTH_PROVIDER)
 
     @property
+    def session(self):
+        return PluginSession(self)
+
+    @property
     def next_url(self):
         return reverse('project', args=[self.current_project.id]) + f'transfer/import/{self.key}/'
 
     def render(self):
+        if self.current_project is None:
+            raise Http404
+
         try:
-            response = self.client.get(settings.OAUTH_PROVIDER_URL)
-            response.raise_for_status()
+            project = self.fetch_project()
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
 
-        project = response.json().get('project', {})
+        self.session.set('project', project)
 
         return Response({
             'html': render_to_string('plugins/form.html', {
@@ -134,19 +142,27 @@ class OAuthImport(Import):
         })
 
     def submit(self):
+        if self.current_project is None:
+            raise Http404
+
         if 'cancel' in self.request.POST:
+            self.session.pop('project')
             return Response({'location': {'area': 'transfer'}})
 
-        try:
-            response = self.client.get(settings.OAUTH_PROVIDER_URL)
-            response.raise_for_status()
-        except OauthAuthorizationRequired:
-            return self.client.redirect(self.next_url)
+        project = self.session.pop('project')
+        if project is None:
+            raise ValidationError({'project': [_('Please fetch the data from the service first.')]})
 
-        project = response.json().get('project', {})
-
-        self.current_project.title = project.get('title')
-        self.current_project.description = project.get('description')
+        # keep the current values, if the service does not provide them
+        self.current_project.title = project.get('title') or self.current_project.title
+        self.current_project.description = project.get('description') or self.current_project.description
         self.current_project.save()
 
         return Response({'location': {'area': 'transfer'}})
+
+    def fetch_project(self):
+        response = self.client.get(settings.OAUTH_PROVIDER_URL)
+        response.raise_for_status()
+
+        project = response.json().get('project')
+        return project if isinstance(project, dict) else {}

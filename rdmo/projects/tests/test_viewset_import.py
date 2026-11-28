@@ -22,6 +22,7 @@ plugin_keys = [
     'xml',
     'set',
     'url',
+    'oauth',
 ]
 
 @pytest.mark.parametrize('username', users)

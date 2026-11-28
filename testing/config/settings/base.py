@@ -107,6 +107,7 @@ PROJECT_EXPORTS += [
 PROJECT_IMPORTS += [
     ('set', _('Import set'), 'plugins.projects.imports.SetImport'),
     ('url', _('Import from URL'), 'plugins.projects.imports.URLImport'),
+    ('oauth', _('Import from external service'), 'plugins.projects.imports.OAuthImport'),
 ]
 
 OAUTH_PROVIDER = {

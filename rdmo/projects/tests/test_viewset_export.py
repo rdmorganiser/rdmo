@@ -24,6 +24,7 @@ plugin_keys = [
     'csvsemicolon',
     'json',
     'set',
+    'oauth',
 ]
 
 @pytest.mark.parametrize('username', users)

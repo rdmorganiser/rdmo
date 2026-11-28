@@ -102,7 +102,10 @@ class OAuthExport(Export):
             return Response({'location': {'area': 'transfer'}})
 
         try:
-            self.client.post(settings.OAUTH_PROVIDER_URL, json={}).raise_for_status()
+            self.client.post(settings.OAUTH_PROVIDER_URL, json={
+                'title': self.project.title,
+                'description': self.project.description
+            }).raise_for_status()
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
 
