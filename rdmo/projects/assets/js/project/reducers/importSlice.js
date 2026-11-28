@@ -23,6 +23,9 @@ const importSlice = createSlice({
     uploadImportError(state, action) {
       state.uploadError = action.payload
     },
+    clearUploadError(state) {
+      state.uploadError = null
+    },
     fetchImportInit(state) {
       state.current = null
     },

@@ -13,7 +13,7 @@ import Errors from 'rdmo/core/assets/js/components/Errors'
 
 import { combineUploadAccept } from '../../common/utils/import'
 import { combinePermissions } from '../../common/utils/permissions'
-import { navigateImport, uploadImport } from '../actions/importActions'
+import { clearUploadError, navigateImport, uploadImport } from '../actions/importActions'
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 
@@ -169,6 +169,11 @@ const Main = () => {
         dispatch(navigateImport(response.key))
       }
     })
+  }
+
+  const handleOpenImport = () => {
+    dispatch(clearUploadError())
+    openImport()
   }
 
   const handleImport = (key) => {
@@ -382,7 +387,7 @@ const Main = () => {
                 </button>
               )
             }
-            <button type="button" className="link font-small" onClick={openImport}>
+            <button type="button" className="link font-small" onClick={handleOpenImport}>
               <i className="bi bi-download" aria-hidden="true"></i> {gettext('Import project')}
             </button>
             <button type="button" className="link font-small" onClick={openCreate}>

@@ -9,7 +9,7 @@ import { selectPermissions } from '../../common/selectors/permissions'
 
 import { clearCurrentView, fetchAnswers, fetchProjectViews, fetchView } from './documentActions'
 import { fetchExport, fetchExports } from './exportActions'
-import { fetchImport, fetchImports } from './importActions'
+import { clearUploadError, fetchImport, fetchImports } from './importActions'
 import { fetchContinue, fetchPage, storeDefaultValues } from './interviewActions'
 import { fetchProjectIssues } from './issueActions'
 import { setLocation } from './locationActions'
@@ -94,6 +94,7 @@ export function navigateDashboard(location, back = null) {
           }
           break
         case 'transfer':
+          dispatch(clearUploadError())
           dispatch(fetchExports())
           dispatch(fetchImports())
           if (!isNil(location.exportKey)) {

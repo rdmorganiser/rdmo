@@ -73,3 +73,7 @@ export function submitImport(key, formData) {
       .finally(() => dispatch(removeFromPending('submitImport')))
   }
 }
+
+export function clearUploadError() {
+  return actions.clearUploadError()
+}
