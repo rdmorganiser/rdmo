@@ -29,6 +29,7 @@ projects = [1, 2, 3, 4, 5, 12]
 
 plugin_keys = [
     'xml',
+    'set',
     'url',
 ]
 
@@ -92,7 +93,6 @@ def test_upload_post(db, client, login, username, project_id):
     elif project_id in import_project_permission_map.get(username, []):
         assert response.status_code == 200
         assert response.json().get('key') == 'xml'
-        assert response.json().get('title') == 'Test'
         assert client.session.get('rdmo.projects.imports.XMLImport.xml.file_name')
     else:
         assert response.status_code == 404

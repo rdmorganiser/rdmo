@@ -30,6 +30,9 @@ class SetImport(Import):
         return PluginSession(self)
 
     def get_sets(self, path):
+        if self.current_project is None:
+            return []
+
         return (
             self.current_project.values.filter(snapshot=None, attribute__path=path)
             .order_by('set_index', 'collection_index')
@@ -51,7 +54,7 @@ class SetImport(Import):
         })
 
     def submit(self):
-        dataset_choices = self.session.get('dataset_choices')
+        dataset_choices = self.session.get('dataset_choices', [])
         form = self.Form(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:

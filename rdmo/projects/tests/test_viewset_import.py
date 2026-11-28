@@ -18,6 +18,12 @@ urlnames = {
     'list': 'v1-projects:import-list'
 }
 
+plugin_keys = [
+    'xml',
+    'set',
+    'url',
+]
+
 @pytest.mark.parametrize('username', users)
 def test_list(db, client, login, username):
     login(username)
@@ -29,7 +35,8 @@ def test_list(db, client, login, username):
         assert response.status_code == 401
     else:
         assert response.status_code == 200
-        assert list(response.json().keys()) == ['xml', 'url']
+        assert list(response.json().keys()) == plugin_keys
+
         assert response.json()['xml']['label']
         assert response.json()['xml']['description']
         assert response.json()['xml']['upload'] is True

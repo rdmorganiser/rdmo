@@ -47,7 +47,7 @@ class SetExport(Export):
         })
 
     def submit(self):
-        dataset_choices = self.session.get('dataset_choices')
+        dataset_choices = self.session.get('dataset_choices', [])
         form = SetExportForm(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:

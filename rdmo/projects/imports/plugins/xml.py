@@ -249,7 +249,7 @@ class XMLImport(XMLImportMixin, Import):
 
         fetch_current_project(self.project, self.current_project)
 
-        save_project(self.project)
+        save_project(self.project, self.current_project)
 
         return Response({
             'location': {

@@ -89,6 +89,8 @@ EMAIL_RECIPIENTS_CHOICES = [
 
 EMAIL_RECIPIENTS_INPUT = True
 
+INSTALLED_APPS += ['plugins']
+
 OPTIONSET_PROVIDERS = [
     ('simple', _('Simple provider'), 'rdmo.options.providers.SimpleProvider')
 ]
@@ -97,11 +99,14 @@ PROJECT_ISSUE_PROVIDERS = [
     ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
 ]
 
-PROJECT_IMPORTS += [
-    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
+PROJECT_EXPORTS += [
+    ('set', _('Export Set'), 'plugins.projects.exports.SetExport'),
 ]
 
-PROJECT_IMPORTS_LIST = ['url']
+PROJECT_IMPORTS += [
+    ('set', _('Import set'), 'plugins.projects.imports.SetImport'),
+    ('url', _('Import from URL'), 'plugins.projects.imports.URLImport'),
+]
 
 PROJECT_VALUES_VALIDATION = True
 

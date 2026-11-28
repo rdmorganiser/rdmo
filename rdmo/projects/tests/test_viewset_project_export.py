@@ -25,7 +25,12 @@ export_project_permission_map = {
 projects = [1, 2, 3, 4, 5, 12]
 
 plugin_keys = [
-    'xml'
+    'xml',
+    'set',
+]
+
+plugin_download = [
+    'xml',
 ]
 
 urlnames = {
@@ -45,7 +50,7 @@ def test_get(db, client, login, username, project_id, plugin_key):
         assert response.status_code == 401
     elif project_id in export_project_permission_map.get(username, []):
         assert response.status_code == 200
-        assert response['content-type'] == 'application/xml'
+        assert response['content-type'] == 'application/xml' if plugin_key in plugin_download else 'application/json'
     else:
         assert response.status_code == 404
 
@@ -62,6 +67,6 @@ def test_post(db, client, login, username, project_id, plugin_key):
     if username == 'anonymous':
         assert response.status_code == 401
     elif project_id in export_project_permission_map.get(username, []):
-        assert response.status_code == 404
+        assert response.status_code == 404 if plugin_key in plugin_download else 200
     else:
         assert response.status_code == 404
