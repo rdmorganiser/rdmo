@@ -129,6 +129,13 @@ class OauthClient:
                 self.clear_token()
                 raise OauthAuthorizationRequired
 
+        if response.status_code == 403 and 'insufficient_scope' in response.headers.get('WWW-Authenticate', ''):
+            # the access token does not have the required scope (RFC 6750), e.g. if the scope of the plugin
+            # was changed, a refreshed token would have the same scope, so the authorization starts again
+            logger.warning('%s insufficient scope: %s (%s)', method, response.content, response.status_code)
+            self.clear_token()
+            raise OauthAuthorizationRequired
+
         return response
 
     def send_request(self, method, url, **kwargs):
