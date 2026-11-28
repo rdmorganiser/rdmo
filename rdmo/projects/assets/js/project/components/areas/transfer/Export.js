@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { isNil } from 'lodash'
 
+import { Html } from 'rdmo/core/assets/js/components'
+
 import { submitExport } from '../../../actions/exportActions'
 import { navigateDashboard } from '../../../actions/navigationActions'
 
@@ -33,7 +35,9 @@ const Export = () => {
         <h1 className="mb-0">{label}</h1>
       </div>
 
-      <div onSubmit={handleSubmit} dangerouslySetInnerHTML={{ __html: current.html }} />
+      <div onSubmit={handleSubmit}>
+        <Html html={current.html} />
+      </div>
     </div>
   )
 }
