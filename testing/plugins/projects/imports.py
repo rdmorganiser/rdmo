@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings
-from django.http import Http404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -13,6 +12,7 @@ import requests
 
 from rdmo.core.plugins import PluginSession
 from rdmo.projects.imports import Import
+from rdmo.projects.imports.utils import create_project
 from rdmo.projects.plugins import ProjectValues
 from rdmo.services.client import OauthClient
 from rdmo.services.exceptions import OauthAuthorizationRequired
@@ -59,10 +59,10 @@ class SetImport(Import):
         form = self.Form(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:
-            return Response({'location': {'area': 'transfer'}})
+            return Response({'success': True})
 
         if form.is_valid():
-            return Response({'location': {'area': 'dashboard'}})
+            return Response({'success': True})
 
         return Response({
             'html': render_to_string('plugins/form.html', {
@@ -94,10 +94,10 @@ class URLImport(Import):
         form = self.Form(self.request.POST)
 
         if 'cancel' in self.request.POST:
-            return Response({'location': {'area': 'transfer'}})
+            return Response({'success': True})
 
         if form.is_valid():
-            return Response({'location': {'area': 'dashboard'}})
+            return Response({'success': True})
 
         return Response({
             'html': render_to_string('plugins/form.html', {
@@ -122,12 +122,12 @@ class OAuthImport(Import):
 
     @property
     def next_url(self):
-        return reverse('project', args=[self.current_project.id]) + f'transfer/import/{self.key}/'
+        if self.current_project is None:
+            return reverse('projects_import', args=[self.key])
+        else:
+            return reverse('project_import', args=[self.current_project.id, self.key])
 
     def render(self):
-        if self.current_project is None:
-            raise Http404
-
         try:
             project = self.fetch_project()
         except OauthAuthorizationRequired:
@@ -148,23 +148,29 @@ class OAuthImport(Import):
         })
 
     def submit(self):
-        if self.current_project is None:
-            raise Http404
-
         if 'cancel' in self.request.POST:
             self.session.pop('project')
-            return Response({'location': {'area': 'transfer'}})
+            return Response({'success': True})
 
         project = self.session.pop('project')
         if project is None:
             raise ValidationError({'project': [_('Please fetch the data from the service first.')]})
+
+        if self.current_project is None:
+            new_project = create_project(
+                self.request,
+                title=project.get('title') or _('Imported project'),
+                description=project.get('description') or '',
+                catalog_uri=project.get('catalog')
+            )
+            return Response({'redirect_url': reverse('project', args=[new_project.id])})
 
         # keep the current values, if the service does not provide them
         self.current_project.title = project.get('title') or self.current_project.title
         self.current_project.description = project.get('description') or self.current_project.description
         self.current_project.save()
 
-        return Response({'location': {'area': 'transfer'}})
+        return Response({'success': True})
 
     def fetch_project(self):
         response = self.client.get(settings.OAUTH_PROVIDER_URL)

@@ -19,9 +19,9 @@ const Export = () => {
 
     dispatch(submitExport(current.key, formData))
       .then((response) => {
-        // the plugin can return a location to navigate to, e.g. after a successful export
-        if (response?.location) {
-          dispatch(navigateDashboard(response.location))
+        // the export is done (or was cancelled)
+        if (response?.success) {
+          dispatch(navigateDashboard({ area: 'transfer' }))
         }
       })
   }

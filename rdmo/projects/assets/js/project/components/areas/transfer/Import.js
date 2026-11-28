@@ -22,11 +22,10 @@ const Import = () => {
 
     dispatch(submitImport(current.key, formData))
       .then((response) => {
-        // the plugin can return a location to navigate to, e.g. after a successful import,
-        // in this case the import is done and the project might have changed
-        if (response?.location) {
+        // the import is done (or was cancelled), the project might have changed
+        if (response?.success) {
           dispatch(fetchProject()).catch(() => {})
-          dispatch(navigateDashboard(response.location))
+          dispatch(navigateDashboard({ area: 'transfer' }))
         }
       })
   }

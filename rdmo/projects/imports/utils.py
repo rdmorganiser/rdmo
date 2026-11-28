@@ -1,3 +1,4 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +7,9 @@ from rest_framework.exceptions import ValidationError
 
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
+from rdmo.questions.models import Catalog
+
+from ..models import Membership, Project
 
 
 def handle_import(request, plugin_key, current_project=None):
@@ -106,6 +110,24 @@ def fetch_current_values(values, current_project, snapshot=None):
             value._current = current_values.get(
                 (value.attribute_id, value.set_prefix, value.set_index, value.collection_index)
             )
+
+
+@transaction.atomic
+def create_project(request, title, description='', catalog_uri=None):
+    available_catalogs = Catalog.objects.filter_for_user(request.user)
+    catalog = available_catalogs.filter(uri=catalog_uri).first() or available_catalogs.first()
+
+    project = Project.objects.create(
+        title=title,
+        description=description,
+        catalog=catalog,
+        site=get_current_site(request)
+    )
+
+    # add the current user as owner
+    Membership.objects.create(project=project, user=request.user, role='owner')
+
+    return project
 
 
 @transaction.atomic

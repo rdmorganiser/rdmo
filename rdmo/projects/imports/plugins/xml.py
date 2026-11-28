@@ -251,11 +251,7 @@ class XMLImport(XMLImportMixin, Import):
 
         save_project(self.project, self.current_project)
 
-        return Response({
-            'location': {
-                'area': 'dashboard'
-            }
-        })
+        return Response({'success': True})
 
     def check(self):
         file_type, _encoding = mimetypes.guess_type(self.file_name)

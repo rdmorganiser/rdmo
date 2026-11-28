@@ -11,7 +11,9 @@ import { baseUrl } from 'rdmo/core/assets/js/utils/meta'
 
 import Errors from 'rdmo/core/assets/js/components/Errors'
 
+import { combineUploadAccept } from '../../common/utils/import'
 import { combinePermissions } from '../../common/utils/permissions'
+import { navigateImport, uploadImport } from '../actions/importActions'
 import * as projectsActions from '../actions/projectsActions'
 import { HEADER_FORMATTERS, SORTABLE_COLUMNS } from '../utils'
 
@@ -20,6 +22,7 @@ import ProjectDeleteModal from '../../project/components/areas/information/Proje
 import ProjectForm from '../../project/components/areas/information/ProjectForm'
 
 import { PendingInvitations, ProjectFilters, ProjectImport, Table } from './helper'
+import Import from './Import'
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -27,6 +30,7 @@ const Main = () => {
   const projectsObject = useSelector(state => state.projects)
   const currentUserObject = useSelector(state => state.currentUser)
   const isFetchingProjects = useSelector(state => state.pending.items.includes('fetchProjects'))
+  const { importKey, importList, uploadError } = useSelector(state => state.import)
 
   const [selectedProject, setSelectedProject] = useState(null)
 
@@ -45,8 +49,9 @@ const Main = () => {
   const [ordering, setOrdering] = useConfig('params.ordering')
   const [page, setPage] = useConfig('params.page', 1)
 
+  if (importKey) return <Import />
   if (!projectsObject.ready) return <Errors />
-  const { allowedTypes, catalogs, importUrls, invites, projects, projectsCount, hasNext } = projectsObject
+  const { catalogs, invites, projects, projectsCount, hasNext } = projectsObject
   const { currentUser } = currentUserObject
   const userPerms = currentUser.permissions ?? {}
 
@@ -152,8 +157,23 @@ const Main = () => {
     dispatch(projectsActions.fetchProjects())
   }
 
-  const handleImport = (file) => {
-    dispatch(projectsActions.uploadProject('/projects/import/', file))
+  // plugins with upload are used with the dropzone, the other plugins are opened directly
+  const formImports = Object.entries(importList ?? {}).filter(([, { upload }]) => !upload)
+  const uploadImports = Object.entries(importList ?? {}).filter(([, { upload }]) => upload)
+
+  const handleUpload = (file) => {
+    dispatch(uploadImport(file)).then((response) => {
+      // the upload returns the key of the plugin, which accepted the file
+      if (response?.key) {
+        closeImport()
+        dispatch(navigateImport(response.key))
+      }
+    })
+  }
+
+  const handleImport = (key) => {
+    closeImport()
+    dispatch(navigateImport(key))
   }
 
   const buildAncestorLink = (ancestors) => {
@@ -410,9 +430,11 @@ const Main = () => {
 
           <Modal {...importModalProps}>
             <ProjectImport
-              allowedTypes={allowedTypes}
-              handleImport={handleImport}
-              importUrls={importUrls ?? []} />
+              uploadAccept={combineUploadAccept(uploadImports)}
+              formImports={formImports}
+              uploadError={uploadError}
+              onUpload={handleUpload}
+              onImport={handleImport} />
           </Modal>
           <Modal {...editModalProps}>
             {

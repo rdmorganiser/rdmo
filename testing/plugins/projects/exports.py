@@ -60,10 +60,10 @@ class SetExport(Export):
         form = SetExportForm(self.request.POST, dataset_choices=dataset_choices)
 
         if 'cancel' in self.request.POST:
-            return Response({'location': {'area': 'transfer'}})
+            return Response({'success': True})
 
         if form.is_valid():
-            return Response({'location': {'area': 'dashboard'}})
+            return Response({'success': True})
 
         return Response({
             'html': render_to_string('plugins/form.html', {
@@ -84,7 +84,7 @@ class OAuthExport(Export):
 
     @property
     def next_url(self):
-        return reverse('project', args=[self.project.id]) + f'transfer/export/{self.key}/'
+        return reverse('project_export', args=[self.project.id, self.key])
 
     def render(self):
         try:
@@ -106,7 +106,7 @@ class OAuthExport(Export):
 
     def submit(self):
         if 'cancel' in self.request.POST:
-            return Response({'location': {'area': 'transfer'}})
+            return Response({'success': True})
 
         try:
             self.client.post(settings.OAUTH_PROVIDER_URL, json={
@@ -120,4 +120,4 @@ class OAuthExport(Export):
                 'external_service': [_('The request to the external service failed: %s') % e]
             }) from e
 
-        return Response({'location': {'area': 'transfer'}})
+        return Response({'success': True})

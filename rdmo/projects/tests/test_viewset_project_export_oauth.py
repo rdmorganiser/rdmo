@@ -63,7 +63,7 @@ def test_oauth_post(db, client, login, mocker):
     response = client.post(url)
 
     assert response.status_code == 200
-    assert response.json() == {'location': {'area': 'transfer'}}
+    assert response.json() == {'success': True}
 
     project = Project.objects.get(id=project_id)
 
@@ -84,6 +84,6 @@ def test_oauth_post_cancel(db, client, login, mocker):
     response = client.post(url, {'cancel': ''})
 
     assert response.status_code == 200
-    assert response.json() == {'location': {'area': 'transfer'}}
+    assert response.json() == {'success': True}
 
     mocked_request.assert_not_called()

@@ -1,44 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
+
+import { getErrorMessages } from 'rdmo/core/assets/js/utils/errors'
 
 import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 
-const ProjectImport = ({ allowedTypes, handleImport, importUrls }) => {
-
-  const renderDirectImportLinks = () => {
-    return (
-      <div className="mt-3">
-        <label className="form-label">{gettext('Import directly')}</label>
-        <ul className="list-unstyled mb-0">
-          {
-            importUrls.map((url) => (
-              <li key={url.key}>
-                <a href={url.href} target="_blank" rel="noopener noreferrer">
-                  {url.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    )
-  }
-
+const ProjectImport = ({ uploadAccept, formImports, uploadError, onUpload, onImport }) => {
   return (
     <>
       <label className="form-label">{gettext('Import from file')}</label>
       <Dropzone
-        acceptedTypes={allowedTypes}
-        onDrop={handleImport} />
-      {importUrls.length > 0 && renderDirectImportLinks()}
+        acceptedTypes={uploadAccept}
+        onDrop={onUpload} />
+      {
+        getErrorMessages(uploadError).map((message, index) => (
+          <div key={index} className="alert alert-danger mt-2 mb-0">{message}</div>
+        ))
+      }
+      {
+        !isEmpty(formImports) && (
+          <div className="mt-3">
+            <label className="form-label">{gettext('Import directly')}</label>
+            <ul className="list-unstyled mb-0">
+              {
+                formImports.map(([key, { label }]) => (
+                  <li key={key}>
+                    <button type="button" className="link" onClick={() => onImport(key)}>
+                      {label}
+                    </button>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        )
+      }
     </>
   )
 }
 
 ProjectImport.propTypes = {
-  allowedTypes: PropTypes.object,
-  handleImport: PropTypes.func.isRequired,
-  importUrls: PropTypes.arrayOf(PropTypes.object).isRequired
+  uploadAccept: PropTypes.object,
+  formImports: PropTypes.array.isRequired,
+  uploadError: PropTypes.object,
+  onUpload: PropTypes.func.isRequired,
+  onImport: PropTypes.func.isRequired
 }
 
 export default ProjectImport

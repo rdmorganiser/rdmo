@@ -6,10 +6,10 @@ import { getErrorMessages } from 'rdmo/core/assets/js/utils/errors'
 
 import Dropzone from 'rdmo/core/assets/js/components/Dropzone'
 
+import { combineUploadAccept } from '../../../common/utils/import'
 import { downloadExport } from '../../actions/exportActions'
 import { uploadImport } from '../../actions/importActions'
 import { navigateDashboard } from '../../actions/navigationActions'
-import { combineUploadAccept } from '../../utils/import'
 import { IssueTile } from '../helper'
 
 const Transfer = () => {
