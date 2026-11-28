@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
 
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from rdmo.core.plugins import PluginSession
 
@@ -100,6 +101,11 @@ class OauthClient:
     def delete(self, url, **kwargs):
         return self.send('delete', url, **kwargs)
 
+    def upload(self, url, files, data=None, method='post', **kwargs):
+        # upload files as multipart/form-data, files maps the field names to tuples of
+        # (file_name, file_or_bytes, content_type), data contains additional form fields
+        return self.send(method, url, multipart={**(data or {}), **files}, **kwargs)
+
     def send(self, method, url, **kwargs):
         # send a request to the upstream service, the kwargs are passed to requests,
         # raises OauthAuthorizationRequired if there is no (valid) access token,
@@ -130,6 +136,19 @@ class OauthClient:
 
         headers = {**self.get_authorization_headers(), **kwargs.pop('headers', {})}
         kwargs.setdefault('timeout', self.timeout)
+
+        multipart = kwargs.pop('multipart', None)
+        if multipart is not None:
+            # the encoder is consumed by the request, so it is created for every attempt,
+            # and files are rewound, so that the request can be repeated after a refresh
+            for value in multipart.values():
+                file = value[1] if isinstance(value, tuple) else value
+                if hasattr(file, 'seek'):
+                    file.seek(0)
+
+            encoder = MultipartEncoder(fields=multipart)
+            headers['Content-Type'] = encoder.content_type
+            kwargs['data'] = encoder
 
         return requests.request(method, url, headers=headers, **kwargs)
 

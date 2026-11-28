@@ -1,3 +1,4 @@
+import io
 from urllib.parse import parse_qs, urlparse
 
 import pytest
@@ -8,6 +9,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from rdmo.core.plugins import Plugin
 from rdmo.services.client import OauthClient
@@ -206,6 +208,53 @@ def test_send_refresh_error(plugin, oauth_client, scoped_session, mocker):
     assert scoped_session.get('oauth_refresh_token') is None
     assert scoped_session.get('oauth_expires_at') is None
 
+
+
+def test_upload(plugin, oauth_client, scoped_session, mocker):
+    scoped_session.set('oauth_access_token', 'access_token')
+
+    mocked_request = mocker.patch('rdmo.services.client.requests.request')
+    mocked_request.return_value.status_code = 200
+
+    oauth_client.upload(api_url, {'file': ('example.txt', b'file content', 'text/plain')}, data={'title': 'Title'})
+
+    args, kwargs = mocked_request.call_args
+    assert args == ('post', api_url)
+    assert kwargs['headers']['Authorization'] == 'Bearer access_token'
+    assert kwargs['headers']['Content-Type'].startswith('multipart/form-data; boundary=')
+
+    # the files and the additional fields are sent in the multipart body
+    assert isinstance(kwargs['data'], MultipartEncoder)
+    body = kwargs['data'].to_string()
+    assert b'name="title"' in body
+    assert b'filename="example.txt"' in body
+    assert b'file content' in body
+
+
+def test_upload_unauthorized_refresh(plugin, oauth_client, scoped_session, mocker):
+    scoped_session.set('oauth_access_token', 'access_token')
+    scoped_session.set('oauth_refresh_token', 'refresh_token')
+
+    mocked_post = mocker.patch('rdmo.services.client.requests.post')
+    mocked_post.return_value = mock_token_response(mocker, json={'access_token': 'new_access_token'})
+
+    # the fake request reads the body, like requests would do
+    bodies = []
+    responses = [mocker.Mock(status_code=401, content=b''), mocker.Mock(status_code=200)]
+
+    def fake_request(method, url, **kwargs):
+        bodies.append(kwargs['data'].to_string())
+        return responses.pop(0)
+
+    mocker.patch('rdmo.services.client.requests.request', side_effect=fake_request)
+
+    response = oauth_client.upload(api_url, {'file': ('example.txt', io.BytesIO(b'file content'), 'text/plain')})
+
+    # the repeated request has the complete body again, since the file was rewound
+    assert response.status_code == 200
+    assert len(bodies) == 2
+    assert b'file content' in bodies[0]
+    assert b'file content' in bodies[1]
 
 def test_authorize(plugin, oauth_client, scoped_session):
     url = oauth_client.authorize('/next/')
