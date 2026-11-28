@@ -11,12 +11,26 @@ PROVIDER_TYPES = [
 
 
 def oauth_callback(request, provider_key):
+    found = False
     for provider_type in PROVIDER_TYPES:
         provider = get_plugin(provider_type, provider_key)
-        if provider and provider.get_from_session(request, 'state'):
-            return provider.callback(request)
+        if provider is None:
+            continue
 
+        found = True
+        provider.request = request
+
+        if hasattr(provider, 'client') and provider.client.is_pending():
+            return provider.client.callback()
+
+    if not found:
+        return render(request, 'core/error.html', {
+            'title': _('OAuth authorization not successful'),
+            'errors': [_('The service could not be found.')]
+        }, status=404)
+
+    # e.g. if the callback is opened again after the authorization was completed
     return render(request, 'core/error.html', {
-        'title': _('Integration Error'),
-        'errors': [_('Something went wrong. Please contact support.')]
-    }, status=500)
+        'title': _('OAuth authorization not successful'),
+        'errors': [_('No authorization was started for this service, or it was already completed.')]
+    }, status=400)

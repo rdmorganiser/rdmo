@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load core_tags %}
+
+{% if project %}
+<dl>
+    <dt>{% trans 'Title' %}</dt>
+    <dd>{{ project.title }}</dd>
+    <dt>{% trans 'Description' %}</dt>
+    <dd>{{ project.description }}</dd>
+</dl>
+{% endif %}
+
+<form method="post" class="mb-5">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+
+    {% for field in form.visible_fields %}
+        {% bootstrap_form_field field %}
+    {% endfor %}
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            {{ submit_label }}
+        </button>
+        <button type="submit" name="cancel" class="btn btn-outline-secondary" formnovalidate>
+            {% trans 'Cancel' %}
+        </button>
+    </div>
+</form>

@@ -11,10 +11,13 @@ import Integrations from './areas/Integrations'
 import Interview from './areas/Interview'
 import Memberships from './areas/Memberships'
 import Snapshots from './areas/Snapshots'
+import Transfer from './areas/Transfer'
+import Export from './areas/transfer/Export'
+import Import from './areas/transfer/Import'
 import View from './helper/View'
 
 const Main = () => {
-  const { area, snapshotId, viewId, detail } = useSelector((state) => state.location)
+  const { area, snapshotId, viewId, detail, exportKey, importKey } = useSelector((state) => state.location)
   const { project } = useSelector((state) => state.project)
   const showView = !isNil(viewId) || ['questions', 'answers'].includes(detail)
 
@@ -32,6 +35,8 @@ const Main = () => {
         return <Information />
       case 'memberships':
         return <Memberships />
+      case 'transfer':
+        return !isNil(exportKey) ? <Export /> : (!isNil(importKey) ? <Import /> : <Transfer />)
       case 'integrations':
         return <Integrations />
       default:

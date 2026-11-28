@@ -39,25 +39,12 @@ const projectsSlice = createSlice({
       state.catalogs = action.payload
     },
     fetchCatalogsError: setErrors,
-    fetchAllowedFileTypesInit: clearErrors,
-    fetchAllowedFileTypesSuccess(state, action) {
-      state.allowedTypes = action.payload
-    },
-    fetchAllowedFileTypesError: setErrors,
-    fetchImportUrlsInit: clearErrors,
-    fetchImportUrlsSuccess(state, action) {
-      state.importUrls = action.payload
-    },
-    fetchImportUrlsError: setErrors,
     createProjectInit: clearErrors,
     createProjectSuccess: keepState,
     createProjectError: setErrors,
     copyProjectInit: clearErrors,
     copyProjectSuccess: keepState,
-    copyProjectError: setErrors,
-    uploadProjectInit: keepState,
-    uploadProjectSuccess: keepState,
-    uploadProjectError: keepState
+    copyProjectError: setErrors
   }
 })
 

@@ -25,6 +25,8 @@ import * as navigationActions from '../actions/navigationActions'
 import * as projectActions from '../actions/projectActions'
 import contactReducer from '../reducers/contactSlice'
 import documentReducer from '../reducers/documentSlice'
+import exportReducer from '../reducers/exportSlice'
+import importReducer from '../reducers/importSlice'
 import integrationReducer from '../reducers/integrationSlice'
 import interviewReducer from '../reducers/interviewSlice'
 import issueReducer from '../reducers/issueSlice'
@@ -69,6 +71,8 @@ export default function configureStore() {
       document: documentReducer,
       issue: issueReducer,
       integration: integrationReducer,
+      export: exportReducer,
+      import: importReducer,
       settings: settingsReducer,
       templates: templateReducer,
       user: userReducer,

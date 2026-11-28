@@ -35,7 +35,8 @@ const Sidebar = () => {
       items: [
         { area: 'information', name: gettext('Project information'), icon: 'bi-info-square' },
         { area: 'memberships', name: gettext('Membership'), icon: 'bi-people' },
-        { area: 'integrations', name: gettext('Integrations'), icon: 'bi-wrench' },
+        { area: 'transfer', name: gettext('Export / Import'), icon: 'bi-arrow-down-up' },
+        { area: 'integrations', name: gettext('Integrations'), icon: 'bi-wrench'},
       ],
     },
   ]

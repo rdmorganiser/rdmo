@@ -15,8 +15,11 @@ import { checkStoreId } from 'rdmo/core/assets/js/utils/store'
 
 import * as rolesActions from '../../common/actions/rolesActions'
 import rolesReducer from '../../common/reducers/rolesSlice'
+import * as importActions from '../actions/importActions'
 import * as projectsActions from '../actions/projectsActions'
+import importReducer from '../reducers/importSlice'
 import projectsReducer from '../reducers/projectsSlice'
+import { parseLocation } from '../utils/location'
 
 export default function configureStore() {
   // empty localStorage in new session
@@ -46,6 +49,7 @@ export default function configureStore() {
       currentUser: userReducer,
       pending: pendingReducer,
       projects: projectsReducer,
+      import: importReducer,
       settings: settingsReducer,
       templates: templateReducer,
       roles: rolesReducer
@@ -69,9 +73,16 @@ export default function configureStore() {
     ]).then(() => {
       store.dispatch(projectsActions.fetchProjects())
       store.dispatch(projectsActions.fetchInvitations())
-      store.dispatch(projectsActions.fetchAllowedFileTypes())
-      store.dispatch(projectsActions.fetchImportUrls())
+      store.dispatch(importActions.fetchImports())
     })
+
+    // /projects/import/<key>/ opens the import directly, e.g. after an OAuth authorization
+    store.dispatch(importActions.navigateImport(parseLocation().importKey))
+  })
+
+  // this event is triggered when the forward/back buttons are used
+  window.addEventListener('popstate', () => {
+    store.dispatch(importActions.navigateImport(parseLocation().importKey))
   })
 
   return store

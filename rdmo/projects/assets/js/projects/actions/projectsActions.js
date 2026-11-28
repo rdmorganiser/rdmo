@@ -151,64 +151,6 @@ export function fetchCatalogsError(error) {
   return actions.fetchCatalogsError(serializeError(error))
 }
 
-export function fetchAllowedFileTypes() {
-  const pendingId = 'fetchAllowedFileTypes'
-
-  return function (dispatch) {
-    dispatch(addToPending(pendingId))
-    dispatch(fetchAllowedFileTypesInit())
-
-    const action = (dispatch) => ProjectsApi.fetchAllowedFileTypes().then(allowedTypes => {
-      dispatch(fetchAllowedFileTypesSuccess(allowedTypes))
-    })
-
-    return dispatch(action)
-      .catch(error => dispatch(fetchAllowedFileTypesError(error)))
-      .finally(() => dispatch(removeFromPending(pendingId)))
-  }
-}
-
-export function fetchAllowedFileTypesInit() {
-  return actions.fetchAllowedFileTypesInit()
-}
-
-export function fetchAllowedFileTypesSuccess(allowedTypes) {
-  return actions.fetchAllowedFileTypesSuccess(allowedTypes)
-}
-
-export function fetchAllowedFileTypesError(error) {
-  return actions.fetchAllowedFileTypesError(serializeError(error))
-}
-
-export function fetchImportUrls() {
-  const pendingId = 'fetchImportUrls'
-
-  return function (dispatch) {
-    dispatch(addToPending(pendingId))
-    dispatch(fetchImportUrlsInit())
-
-    const action = (dispatch) => ProjectsApi.fetchDirectImportUrls().then(importUrls => {
-      dispatch(fetchImportUrlsSuccess(importUrls))
-    })
-
-    return dispatch(action)
-      .catch(error => dispatch(fetchImportUrlsError(error)))
-      .finally(() => dispatch(removeFromPending(pendingId)))
-  }
-}
-
-export function fetchImportUrlsInit() {
-  return actions.fetchImportUrlsInit()
-}
-
-export function fetchImportUrlsSuccess(importUrls) {
-  return actions.fetchImportUrlsSuccess(importUrls)
-}
-
-export function fetchImportUrlsError(error) {
-  return actions.fetchImportUrlsError(serializeError(error))
-}
-
 export function fetchInvitations() {
   const pendingId = 'fetchInvitations'
 
@@ -236,30 +178,4 @@ export function fetchInvitationsSuccess(invites) {
 
 export function fetchInvitationsError(error) {
   return actions.fetchInvitationsError(serializeError(error))
-}
-
-export function uploadProject(url, file) {
-  const pendingId = 'uploadProject'
-
-  return function (dispatch) {
-    dispatch(addToPending(pendingId))
-    dispatch(uploadProjectInit())
-
-    return ProjectsApi.uploadProject(url, file)
-      .then(project => dispatch(uploadProjectSuccess(project)))
-      .catch(error => dispatch(uploadProjectError(error)))
-      .finally(() => dispatch(removeFromPending(pendingId)))
-  }
-}
-
-export function uploadProjectInit() {
-  return actions.uploadProjectInit()
-}
-
-export function uploadProjectSuccess(project) {
-  return actions.uploadProjectSuccess(project)
-}
-
-export function uploadProjectError(error) {
-  return actions.uploadProjectError(serializeError(error))
 }

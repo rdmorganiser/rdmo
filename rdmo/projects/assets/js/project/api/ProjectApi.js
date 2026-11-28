@@ -174,6 +174,40 @@ export default class ProjectApi extends BaseApi {
     }
   }
 
+  static fetchExports() {
+    return this.get('/api/v1/projects/exports/')
+  }
+
+  static fetchProjectExport(projectId, key) {
+    return this.get(`/api/v1/projects/projects/${projectId}/exports/${key}/`)
+  }
+
+  static downloadProjectExport(projectId, key) {
+    return this.download(`/api/v1/projects/projects/${projectId}/exports/${key}/`)
+  }
+
+  static submitProjectExport(projectId, key, formData) {
+    return this.postFormData(`/api/v1/projects/projects/${projectId}/exports/${key}/`, formData)
+  }
+
+  static fetchImports() {
+    return this.get('/api/v1/projects/imports/')
+  }
+
+  static uploadProjectImport(projectId, file) {
+    const formData = new FormData()
+    formData.append('uploaded_file', file)
+    return this.postFormData(`/api/v1/projects/projects/${projectId}/imports/`, formData)
+  }
+
+  static fetchProjectImport(projectId, key) {
+    return this.get(`/api/v1/projects/projects/${projectId}/imports/${key}/`)
+  }
+
+  static submitProjectImport(projectId, key, formData) {
+    return this.postFormData(`/api/v1/projects/projects/${projectId}/imports/${key}/`, formData)
+  }
+
   static fetchProviders() {
     return this.get('/api/v1/projects/projects/providers/')
   }

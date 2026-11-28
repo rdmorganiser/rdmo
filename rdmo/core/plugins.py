@@ -1,14 +1,89 @@
 from django.conf import settings
+from django.template.loader import render_to_string
+
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 
 from .utils import import_class
 
 
 class Plugin:
+    label = None
+    description = None
 
     def __init__(self, key, label, class_name):
         self.key = key
-        self.label = label
+        self.label = label or self.label or key
         self.class_name = class_name
+
+
+class PluginSession:
+    '''
+    Stores data for a plugin in the session of the current request, the keys are prefixed with
+    the class name and the key of the plugin (or the given prefix), so that different plugins
+    do not interfere:
+
+        class ExamplePlugin(Plugin):
+
+            @property
+            def session(self):
+                return PluginSession(self)
+    '''
+
+    def __init__(self, plugin, prefix=None):
+        self.plugin = plugin
+        self.prefix = prefix or f'{plugin.class_name}.{plugin.key}'
+
+    @property
+    def session(self):
+        return self.plugin.request.session
+
+    def get_session_key(self, key):
+        return f'{self.prefix}.{key}'
+
+    def get(self, key, default=None):
+        return self.session.get(self.get_session_key(key), default)
+
+    def set(self, key, value):
+        self.session[self.get_session_key(key)] = value
+
+    def pop(self, key, default=None):
+        return self.session.pop(self.get_session_key(key), default)
+
+    def drop(self):
+        # remove all keys of this plugin from the session
+        prefix = self.get_session_key('')
+        for session_key in [session_key for session_key in self.session.keys() if session_key.startswith(prefix)]:
+            del self.session[session_key]
+
+
+
+class PluginResponse:
+    '''
+    Creates the responses of a plugin, which are understood by the frontend:
+
+        class ExamplePlugin(Plugin):
+            @property
+            def response(self):
+                return PluginResponse(self)
+    '''
+
+    def __init__(self, plugin):
+        self.plugin = plugin
+
+    def html(self, template_name, context=None):
+        return Response({
+            'html': render_to_string(template_name, context, request=self.plugin.request)
+        })
+
+    def success(self):
+        return Response({'success': True})
+
+    def redirect(self, url):
+        return Response({'redirect_url': url})
+
+    def error(self, errors):
+        return ValidationError(errors)
 
 
 def get_plugins(plugin_settings):

@@ -80,7 +80,7 @@ PROJECT_SEND_ISSUE = True
 PROJECT_SEND_INVITE = True
 
 PROJECT_SNAPSHOT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
 ]
 
 EMAIL_RECIPIENTS_CHOICES = [
@@ -88,6 +88,8 @@ EMAIL_RECIPIENTS_CHOICES = [
 ]
 
 EMAIL_RECIPIENTS_INPUT = True
+
+INSTALLED_APPS += ['plugins']
 
 OPTIONSET_PROVIDERS = [
     ('simple', _('Simple provider'), 'rdmo.options.providers.SimpleProvider')
@@ -97,11 +99,25 @@ PROJECT_ISSUE_PROVIDERS = [
     ('simple', _('Simple provider'), 'rdmo.projects.providers.SimpleIssueProvider')
 ]
 
-PROJECT_IMPORTS += [
-    ('url', _('from URL'), 'rdmo.projects.imports.URLImport'),
+PROJECT_EXPORTS += [
+    ('set', _('Export Set'), 'plugins.projects.exports.SetExport'),
+    ('oauth', _('Export to external service'), 'plugins.projects.exports.OAuthExport'),
 ]
 
-PROJECT_IMPORTS_LIST = ['url']
+PROJECT_IMPORTS += [
+    ('set', _('Import set'), 'plugins.projects.imports.SetImport'),
+    ('url', _('Import from URL'), 'plugins.projects.imports.URLImport'),
+    ('oauth', _('Import from external service'), 'plugins.projects.imports.OAuthImport'),
+]
+
+OAUTH_PROVIDER = {
+    'authorize_url': 'http://example.com/default/authorize',
+    'token_url': 'http://example.com/default/token',
+    'client_id': 'rdmo',
+    'client_secret': 'secret',
+    'scope': 'openid',
+}
+OAUTH_PROVIDER_URL = 'http://example.com/default/userinfo'
 
 PROJECT_VALUES_VALIDATION = True
 

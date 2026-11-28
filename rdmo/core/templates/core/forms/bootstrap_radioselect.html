@@ -1,0 +1,24 @@
+<div class="mb-3">
+    <label class="mb-1 text-bold">{{ field.label }}</label>
+
+    {% if field.help_text %}
+    <p id="{{ field.id_for_label }}-help" class="form-text text-muted mt-0 mb-1">
+        {{ field.help_text }}
+    </p>
+    {% endif %}
+
+    {% for radio in field.subwidgets %}
+    <div class="form-check">
+        <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" id="{{ radio.id_for_label }}"
+               {% if radio.data.selected %}checked{% endif %}
+               class="form-check-input {% if field.errors %}is-invalid{% endif %}"
+               aria-describedby="{{ field.id_for_label }}-help">
+
+        <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+    </div>
+    {% endfor %}
+
+    {% for error in field.errors %}
+    <div class="invalid-feedback d-block">{{ error }}</div>
+    {% endfor %}
+</div>

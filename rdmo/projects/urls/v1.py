@@ -4,6 +4,8 @@ from rest_framework_extensions.routers import ExtendedDefaultRouter
 
 from ..viewsets import (
     CatalogViewSet,
+    ExportViewSet,
+    ImportViewSet,
     IntegrationViewSet,
     InviteViewSet,
     IssueViewSet,
@@ -46,6 +48,8 @@ router.register(r'issues', IssueViewSet, basename='issue')
 router.register(r'snapshots', SnapshotViewSet, basename='snapshot')
 router.register(r'values', ValueViewSet, basename='value')
 router.register(r'catalogs', CatalogViewSet, basename='catalog')
+router.register(r'exports', ExportViewSet, basename='export')
+router.register(r'imports', ImportViewSet, basename='import')
 router.register(r'roles', RoleViewSet, basename='role')
 
 urlpatterns = [

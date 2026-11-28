@@ -1,5 +1,4 @@
 import logging
-import mimetypes
 from collections import defaultdict
 from pathlib import Path
 
@@ -11,7 +10,6 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from rdmo.core.mail import send_mail
-from rdmo.core.plugins import get_plugins
 from rdmo.core.utils import remove_double_newlines, render_to_format
 from rdmo.views.utils import ProjectWrapper
 
@@ -206,101 +204,6 @@ def copy_project(instance, site, owners):
     return project
 
 
-def save_import_values(project, values, checked):
-    for value in values:
-        if value.attribute:
-            value_key = f'{value.attribute.uri}[{value.set_prefix}][{value.set_index}][{value.collection_index}]'
-
-            if value_key in checked:
-                current_value = value.current
-                if current_value is None:
-                    # assert that this is a new value
-                    assert value.pk is None
-
-                    value.project = project
-                    value.save()
-
-                    if value.file:
-                        value.copy_file(value.file_name, value.file)
-                    else:
-                        try:
-                            name = value.file_import.get('name')
-                            file = value.file_import.get('file')
-                            value.file.save(name, file)
-                        except AttributeError:
-                            pass
-
-                else:
-                    # make sure we have the correct value
-                    assert current_value.snapshot is None
-                    assert current_value.attribute == value.attribute
-                    assert current_value.set_prefix == value.set_prefix
-                    assert current_value.set_index == value.set_index
-                    assert current_value.collection_index == value.collection_index
-
-                    # assert that this is an new value
-                    assert current_value.pk is not None
-
-                    current_value.text = value.text
-                    current_value.option = value.option
-                    current_value.value_type = value.value_type
-                    current_value.unit = value.unit
-                    current_value.save()
-
-                    if value.file:
-                        current_value.file.delete()
-                        current_value.copy_file(value.file_name, value.file)
-                    else:
-                        try:
-                            name = value.file_import.get('name')
-                            file = value.file_import.get('file')
-                            current_value.file.delete()
-                            current_value.file.save(name, file)
-                        except AttributeError:
-                            pass
-
-
-def save_import_snapshot_values(project, snapshots, checked):
-    for snapshot in snapshots:
-        # assert that this is a new snapshot
-        assert snapshot.pk is None
-
-        snapshot.project = project
-        snapshot.save(copy_values=False)
-
-        for value in snapshot.snapshot_values:
-            if value.attribute:
-                value_key = f"{value.attribute.uri}[{snapshot.snapshot_index}][{value.set_prefix}][{value.set_index}][{value.collection_index}]" # noqa: E501
-
-                if value_key in checked:
-                    # assert that this is a new value
-                    assert value.pk is None
-
-                    value.project = project
-                    value.snapshot = snapshot
-                    value.save()
-
-                    if value.file:
-                        value.copy_file(value.file_name, value.file)
-                    else:
-                        try:
-                            name = value.file_import.get('name')
-                            file = value.file_import.get('file')
-                            value.file.save(name, file)
-                        except AttributeError:
-                            pass
-
-
-def save_import_tasks(project, tasks):
-    for task in tasks:
-        project.tasks.add(task)
-
-
-def save_import_views(project, views):
-    for view in views:
-        project.views.add(view)
-
-
 def get_invite_email_project_path(request, invite):
     project_invite_path = reverse('project_join', args=[invite.token])
 
@@ -334,28 +237,6 @@ def send_invite_email(request, invite):
 
     # send the email
     send_mail(subject, message, to=[invite.email])
-
-
-def get_upload_accept():
-    accept = defaultdict(set)
-    for import_plugin in get_plugins('PROJECT_IMPORTS').values():
-        if isinstance(import_plugin.accept, dict):
-            for mime_type, suffixes in import_plugin.accept.items():
-                accept[mime_type].update(suffixes)
-
-        elif isinstance(import_plugin.accept, str):
-            # legacy fallback for pre 2.3.0 RDMO, e.g. `accept = '.xml'`
-            suffix = import_plugin.accept
-            mime_type, _encoding = mimetypes.guess_type(f'example{suffix}')
-            if mime_type:
-                accept[mime_type].update([suffix])
-
-        elif import_plugin.upload is True:
-            # if one of the plugins does not have the accept field, but is marked as upload plugin
-            # all file types are allowed
-            return {}
-
-    return accept
 
 
 def compute_set_prefix_from_set_value(set_value, value):
