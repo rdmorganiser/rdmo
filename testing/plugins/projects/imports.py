@@ -9,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+import requests
+
 from rdmo.core.plugins import PluginSession
 from rdmo.projects.imports import Import
 from rdmo.projects.plugins import ProjectValues
@@ -130,6 +132,10 @@ class OAuthImport(Import):
             project = self.fetch_project()
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
+        except (requests.RequestException, ValueError) as e:
+            raise ValidationError({
+                'external_service': [_('The request to the external service failed: %s') % e]
+            }) from e
 
         self.session.set('project', project)
 

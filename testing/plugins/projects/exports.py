@@ -5,7 +5,10 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+
+import requests
 
 from rdmo.core.plugins import PluginSession
 from rdmo.projects.exports import Export
@@ -88,6 +91,10 @@ class OAuthExport(Export):
             self.client.get(settings.OAUTH_PROVIDER_URL).raise_for_status()
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
+        except (requests.RequestException, ValueError) as e:
+            raise ValidationError({
+                'external_service': [_('The request to the external service failed: %s') % e]
+            }) from e
 
         return Response({
             'html': render_to_string('plugins/form.html', {
@@ -108,5 +115,9 @@ class OAuthExport(Export):
             }).raise_for_status()
         except OauthAuthorizationRequired:
             return self.client.redirect(self.next_url)
+        except (requests.RequestException, ValueError) as e:
+            raise ValidationError({
+                'external_service': [_('The request to the external service failed: %s') % e]
+            }) from e
 
         return Response({'location': {'area': 'transfer'}})
