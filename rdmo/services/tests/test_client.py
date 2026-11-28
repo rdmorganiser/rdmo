@@ -210,6 +210,40 @@ def test_send_refresh_error(plugin, oauth_client, scoped_session, mocker):
 
 
 
+
+def test_send_insufficient_scope(plugin, oauth_client, scoped_session, mocker):
+    scoped_session.set('oauth_access_token', 'access_token')
+    scoped_session.set('oauth_refresh_token', 'refresh_token')
+
+    mocked_post = mocker.patch('rdmo.services.client.requests.post')
+
+    mocked_request = mocker.patch('rdmo.services.client.requests.request')
+    mocked_request.return_value = mocker.Mock(status_code=403, content=b'', headers={
+        'WWW-Authenticate': 'Bearer error="insufficient_scope", scope="write"'
+    })
+
+    # the tokens are removed and the authorization starts again, without a refresh
+    with pytest.raises(OauthAuthorizationRequired):
+        oauth_client.get(api_url)
+
+    mocked_post.assert_not_called()
+    assert scoped_session.get('oauth_access_token') is None
+    assert scoped_session.get('oauth_refresh_token') is None
+
+
+def test_send_forbidden(plugin, oauth_client, scoped_session, mocker):
+    scoped_session.set('oauth_access_token', 'access_token')
+
+    mocked_request = mocker.patch('rdmo.services.client.requests.request')
+    mocked_request.return_value = mocker.Mock(status_code=403, content=b'', headers={})
+
+    # any other 403 is returned to the plugin and the token is kept
+    response = oauth_client.get(api_url)
+
+    assert response.status_code == 403
+    assert scoped_session.get('oauth_access_token') == 'access_token'
+
+
 def test_upload(plugin, oauth_client, scoped_session, mocker):
     scoped_session.set('oauth_access_token', 'access_token')
 

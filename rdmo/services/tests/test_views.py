@@ -1,3 +1,5 @@
+import pytest
+
 from django.http import HttpResponse
 from django.urls import reverse
 
@@ -22,6 +24,29 @@ def test_oauth_callback(db, client, mocker):
     assert response.content == b'callback'
     mocked_callback.assert_called_once()
 
+
+
+@pytest.mark.parametrize('class_name', [
+    'plugins.projects.exports.OAuthExport',
+    'plugins.projects.imports.OAuthImport'
+])
+def test_oauth_callback_same_key(db, client, mocker, class_name):
+    # the oauth export and the oauth import from testing/config/settings/base.py both use the key oauth,
+    # only the plugin with the pending authorization handles the callback
+    session = client.session
+    session[f'{class_name}.oauth.oauth_state'] = 'state'
+    session.save()
+
+    mocked_callback = mocker.patch.object(OauthClient, 'callback', autospec=True, return_value=HttpResponse())
+
+    url = reverse('oauth_callback', args=['oauth'])
+    response = client.get(url, {'state': 'state', 'code': 'code'})
+
+    assert response.status_code == 200
+    mocked_callback.assert_called_once()
+
+    oauth_client = mocked_callback.call_args.args[0]
+    assert oauth_client.plugin.class_name == class_name
 
 def test_oauth_callback_not_pending(db, client, mocker):
     mocked_callback = mocker.patch.object(OauthClient, 'callback')
