@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
@@ -107,6 +108,7 @@ def fetch_current_values(values, current_project, snapshot=None):
             )
 
 
+@transaction.atomic
 def save_project(import_project, current_project=None):
     if import_project.pk is not None:
         raise RuntimeError(f'Imported project {import_project.pk} is already saved.')
@@ -131,6 +133,7 @@ def save_project(import_project, current_project=None):
         save_snapshot(snapshot, project)
 
 
+@transaction.atomic
 def save_snapshot(import_snapshot, project):
     if import_snapshot.pk is not None:
         raise RuntimeError(f'Imported snapshot {import_snapshot.pk} is already saved.')
@@ -192,7 +195,9 @@ def save_value(import_value, project, snapshot=None):
     # save the value
     value.save()
 
-    # import the file
+    # import the file, note that the file operations are not part of the database transaction
+    # of save_project or save_snapshot: if the import fails, deleted files are not restored
+    # and new files are not removed
     if import_value.file:
         if current_value is not None:
             value.file.delete()
